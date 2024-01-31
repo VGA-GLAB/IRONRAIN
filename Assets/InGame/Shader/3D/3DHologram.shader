@@ -12,6 +12,11 @@ Shader "Custom/3DHologram"
         _ScanDistance ("Distance", Float) = 1
         _ScanWidth("Width", Range(0, 1)) = 0.2
         _ScanSpeed("Scroll Speed", Float) = 2.0
+        
+        [Header(Glitch)]
+        _FrameRate ("FrameRate", Range(0.1, 30)) = 15
+        _Frequency ("Frequency", Range(0, 1)) = 0.1
+        _GlitchStrength ("Strengh", Range(0, 1)) = 0.1
     }
     SubShader
     {
@@ -28,9 +33,9 @@ Shader "Custom/3DHologram"
             Tags { "LightMode"="UniversalForward" }
             
             Blend SrcAlpha OneMinusSrcAlpha
-            Cull Back
+            Cull Off
             ZWrite On
-            ZTest LEqual
+            ZTest Less
             
             HLSLPROGRAM
             #pragma vertex vert
@@ -72,8 +77,35 @@ Shader "Custom/3DHologram"
             float _ScanDistance;
             float _ScanWidth;
             float _ScanSpeed;
+
+            float _FrameRate;
+            float _Frequency;
+            float _GlitchStrength;
             
             CBUFFER_END
+
+            float rand(float2 co)
+            {
+                return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
+            }
+
+            
+            float perlinNoise(float2 st)
+            {
+                float2 p = floor(st);
+                float2 f = frac(st);
+                float2 u = f * f * (3.0 - 2.0 * f);
+
+                float v00 = rand(p + float2(0, 0));
+                float v10 = rand(p + float2(1, 0));
+                float v01 = rand(p + float2(0, 1));
+                float v11 = rand(p + float2(1, 1));
+
+                return lerp(lerp(dot(v00, f - float2(0, 0)), dot(v10, f - float2(1, 0)), u.x),
+                            lerp(dot(v01, f - float2(0, 1)), dot(v11, f - float2(1, 1)), u.x),
+                            u.y) + 0.5f;
+            }
+
 
             Varyings vert (Attributes input)
             {
@@ -84,7 +116,28 @@ Shader "Custom/3DHologram"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
                 output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
-                output.positionHCS = TransformWorldToHClip(output.positionWS);
+                
+                float3 positionVS = TransformWorldToView(output.positionWS);
+
+
+                // vertex Glitch
+                float seed1 = floor(frac(perlinNoise(_SinTime.xy) * 10) / (1 / _FrameRate)) * (1 / _FrameRate);
+                float seed2 = floor(frac(perlinNoise(_SinTime.xy) * 5) / (1 / _FrameRate)) * (1 / _FrameRate);
+                
+                float noiseX = (2.0 * rand(seed1) - 1.0F) * _GlitchStrength;
+
+                float frequency = step(rand(seed2), _Frequency);
+                noiseX *= frequency;
+
+                float noiseY = 2.0 * rand(seed1) - 0.5;
+
+                float glitchLine1 = step(frac(positionVS.y) - noiseY, rand(noiseY));
+                float glitchLine2 = step(frac(positionVS.y) + noiseY, noiseY);
+                float glitch = saturate(glitchLine1 - glitchLine2);
+
+                positionVS.x = lerp(positionVS.x, positionVS.x + noiseX, glitch);
+
+                output.positionHCS = TransformWViewToHClip(positionVS);
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
                 output.uv = UnityStereoTransformScreenSpaceTex(input.uv);
                 
@@ -103,7 +156,7 @@ Shader "Custom/3DHologram"
                 float3 view = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 float NdotV = dot(normal, view);
                 
-                col *= pow(1 - saturate(NdotV), _RimPower);
+                col *= pow(1 - abs(NdotV), _RimPower);
 
                 // Scanline
                 float height = input.positionWS.y + _Time.x * _ScanSpeed;
@@ -112,6 +165,8 @@ Shader "Custom/3DHologram"
                 
                 col *= step(height, _ScanWidth);
 
+                clip(col.a - 0.01);
+                
                 col.rgb *= col.a;
                 
                 return col;
