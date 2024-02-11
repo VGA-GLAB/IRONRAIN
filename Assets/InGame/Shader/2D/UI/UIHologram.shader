@@ -1,8 +1,8 @@
-Shader "Custom/2DHologram"
+Shader "Custom/UI/Hologram"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        [PerRendererData]_MainTex ("Texture", 2D) = "white" {}
         
         [Header(Glitch)]
         _FrameRate ("FrameRate", Range(0.1, 30)) = 15
@@ -11,16 +11,47 @@ Shader "Custom/2DHologram"
         
         [Header(Noise)]
         [HDR]_NoiseColor ("Color", Color) = (1, 1, 1, 1)
-        _NoisePower ("Power", Range(0, 5)) = 1
+        _NoisePower ("Power", Range(1, 5)) = 1
         _NoiseStrength ("Strength", Float) = 1
         _NoiseScale ("Scale", Float) = 2
         _NoiseScrollSpeed ("ScrollSpeed", Float) = 2
         _NoiseDistance ("Distance", Range(0, 1)) = 0
+        
+        [HideInInspector]_StencilComp ("Stencil Comparison", Float) = 8
+        [HideInInspector]_Stencil ("Stencil ID", Float) = 0
+        [HideInInspector]_StencilOp ("Stencil Operation", Float) = 0
+        [HideInInspector]_StencilWriteMask ("Stencil Write Mask", Float) = 255
+        [HideInInspector]_StencilReadMask ("Stencil Read Mask", Float) = 255
+
+        [HideInInspector]_ColorMask ("Color Mask", Float) = 15
+
+        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
+        Tags
+        {
+            "Queue" = "Transparent"
+            "IgnoreProjector" = "True"
+            "RenderType" = "Transparent"
+            "PreviewType"="Plane"
+        }
+
+        Stencil
+        {
+            Ref [_Stencil]
+            Comp [_StencilComp]
+            Pass [_StencilOp]
+            ReadMask [_StencilReadMask]
+            WriteMask [_StencilWriteMask]
+        }
+
+        Cull Off
+        Lighting Off
+        ZWrite Off
+        ZTest [unity_GUIZTestMode]
+        Blend SrcAlpha OneMinusSrcAlpha
+        ColorMask [_ColorMask]
 
         Pass
         {
@@ -32,8 +63,8 @@ Shader "Custom/2DHologram"
             #pragma multi_compile_instancing
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "../Library/Glitch.hlsl"
-            #include "../Library/Macro.hlsl"
+            #include "Assets/InGame/Shader/Library/Glitch.hlsl"
+            #include "Assets/InGame/Shader/Library/Macro.hlsl"
 
             struct Attributes
             {
@@ -103,7 +134,6 @@ Shader "Custom/2DHologram"
                 noise = pow(saturate(noise), _NoisePower);
                 noise *= _NoiseStrength;
                 
-                col.rgb *= saturate(1 - noise);
                 col.rgb += _NoiseColor * noise;
 
                 return col;
