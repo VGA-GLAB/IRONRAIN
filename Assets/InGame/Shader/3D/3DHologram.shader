@@ -44,6 +44,7 @@ Shader "Custom/3DHologram"
             #pragma multi_compile_instancing
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "../Library/Glitch.hlsl"
 
             struct Attributes
             {
@@ -60,7 +61,8 @@ Shader "Custom/3DHologram"
                 float3 normalWS : NORMAL;
                 float2 uv : TEXCOORD0;
                 float3 positionWS : TEXCOORD1;
-
+                
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -84,29 +86,6 @@ Shader "Custom/3DHologram"
             
             CBUFFER_END
 
-            float rand(float2 co)
-            {
-                return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
-            }
-
-            
-            float perlinNoise(float2 st)
-            {
-                float2 p = floor(st);
-                float2 f = frac(st);
-                float2 u = f * f * (3.0 - 2.0 * f);
-
-                float v00 = rand(p + float2(0, 0));
-                float v10 = rand(p + float2(1, 0));
-                float v01 = rand(p + float2(0, 1));
-                float v11 = rand(p + float2(1, 1));
-
-                return lerp(lerp(dot(v00, f - float2(0, 0)), dot(v10, f - float2(1, 0)), u.x),
-                            lerp(dot(v01, f - float2(0, 1)), dot(v11, f - float2(1, 1)), u.x),
-                            u.y) + 0.5f;
-            }
-
-
             Varyings vert (Attributes input)
             {
                 Varyings output = (Varyings)0;
@@ -121,21 +100,7 @@ Shader "Custom/3DHologram"
 
 
                 // vertex Glitch
-                float seed1 = floor(frac(perlinNoise(_SinTime.xy) * 10) / (1 / _FrameRate)) * (1 / _FrameRate);
-                float seed2 = floor(frac(perlinNoise(_SinTime.xy) * 5) / (1 / _FrameRate)) * (1 / _FrameRate);
-                
-                float noiseX = (2.0 * rand(seed1) - 1.0F) * _GlitchStrength;
-
-                float frequency = step(rand(seed2), _Frequency);
-                noiseX *= frequency;
-
-                float noiseY = 2.0 * rand(seed1) - 0.5;
-
-                float glitchLine1 = step(frac(positionVS.y) - noiseY, rand(noiseY));
-                float glitchLine2 = step(frac(positionVS.y) + noiseY, noiseY);
-                float glitch = saturate(glitchLine1 - glitchLine2);
-
-                positionVS.x = lerp(positionVS.x, positionVS.x + noiseX, glitch);
+                positionVS.xy = Glitch(positionVS.xy, _FrameRate, _Frequency, _GlitchStrength);
 
                 output.positionHCS = TransformWViewToHClip(positionVS);
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
