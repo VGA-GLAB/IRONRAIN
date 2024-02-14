@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField, Tooltip("体の部位")] GameObject[] _bodyList;
     [SerializeField, Tooltip("点滅させるパネル")] GameObject _panelObj;
     [SerializeField, Tooltip("点滅させる最大のアルファ値")] float _panelA = 0.5f;
-    [SerializeField, Tooltip("点滅するインターバル")] float _flashInterval = 3.0f;
+    [SerializeField, Tooltip("点滅するインターバル")] float _flashInterval = 10.0f;
     [SerializeField, Tooltip("点滅させる損傷率")] int _flashDamage = 30;
     /// <summary>各部位の損傷率 </summary>
     int[] _damageArray;
@@ -62,12 +62,11 @@ public class UIManager : MonoBehaviour
                 //DOTween.To(() => _damageArray[index], num => _damageArray[index] -= num, value, 1.0f)
                 //    .OnUpdate();
                 _totalDamage += damage;
-                //_damageArray[index] -= damage;
                 //損傷率の判定をする
                 if (_totalDamage >= _flashDamage && !IsDanger)
                 {
-                    //PanelFlash();
                     IsDanger = true;
+                    PanelFlash();
                 }
                 break;
             }   //損傷箇所が0以上になら
@@ -77,10 +76,10 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// UIを赤く点滅させる
     /// </summary>
-    //void PanelFlash()
-    //{
-    //    Image panel = _panelObj.GetComponent<Image>();
-    //    //panel.DOFade(_panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
-    //    DOTween.ToAlpha(() => panel.color, color => panel.color = color, _panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
-    //}
+    void PanelFlash()
+    {
+        Image panel = _panelObj.GetComponent<Image>();
+        panel.DOFade(_panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
+        //DOTween.ToAlpha(() => panel.color, color => panel.color = color, _panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
+    }
 }
