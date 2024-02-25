@@ -11,17 +11,17 @@ public class UiZoom : MonoBehaviour
     [SerializeField, Tooltip("部位ごとのRectTransform")] private RectTransform[] _rectTransforms;
     [SerializeField, Tooltip("初期状態のパネル")] private RectTransform _normalPanelSize;
     /// <summary>パネルが現在ズーム状態かの判定 </summary>
-    private bool IsZoom = false;
+    private bool _isZoom = false;
 
     public void OnButtom(int num)
     {
         //ズーム状態かにより、条件分岐
         //ズーム状態ならもとに戻し、それ以外ならズームする
-        if (IsZoom)
+        if (_isZoom)
             NormalUi();
         else
             ZoomUi(num);
-        IsZoom = !IsZoom;
+        _isZoom = !_isZoom;
     }
 
     /// <summary>
