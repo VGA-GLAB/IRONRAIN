@@ -31,7 +31,7 @@ public class UiZoom : MonoBehaviour
     private void ZoomUi(int num)
     {
         //Sequenceの生成
-        var sequence = DOTween.Sequence();
+        var sequence = DOTween.Sequence().SetLink(_zoomPanel.gameObject);
         //RectTransformでパネルを移動させる
         sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(_rectTransforms[num].anchoredPosition.x, _rectTransforms[num].anchoredPosition.y), _zoomTime));
         //ズームさせる
@@ -45,7 +45,7 @@ public class UiZoom : MonoBehaviour
     private void NormalUi()
     {
         //Sequenceの生成
-        var sequence = DOTween.Sequence();
+        var sequence = DOTween.Sequence().SetLink(_zoomPanel.gameObject);
         //RectTransformでパネルを移動させる
         sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(_normalPanelSize.anchoredPosition.x, _normalPanelSize.anchoredPosition.y), _zoomTime));
         //スケールを元に戻す
