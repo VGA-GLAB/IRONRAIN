@@ -1,6 +1,5 @@
-﻿using Enemy.DebugUse;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Enemy.Control;
+using Enemy.Extensions;
 using UnityEngine;
 
 namespace Enemy.DebugUse
@@ -13,6 +12,10 @@ namespace Enemy.DebugUse
         [Header("操作設定")]
         [SerializeField] private float _moveSpeed = 10.0f;
         [SerializeField] private float _rotationSpeed = 10.0f;
+        [Header("攻撃設定")]
+        [SerializeField] private float _forwardOffset;
+        [SerializeField] private int _damage = 1;
+        [SerializeField] private int _range = 10;
         [Header("カメラ制御を行う")]
         [SerializeField] private Transform _camera;
 
@@ -51,6 +54,38 @@ namespace Enemy.DebugUse
             // 回転
             float deltaRot = rot * mag * _rotationSpeed * Time.deltaTime;
             _transform.Rotate(new Vector3(0, deltaRot, 0));
+
+            // 遠距離攻撃
+            if (Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerRangeWeaponName);
+            // 近接攻撃
+            if (Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
+        }
+
+        // レイキャストで攻撃
+        private void Attack(string weapon)
+        {
+            (Vector3 origin, Vector3 end) p = AttackRange();
+            if(Physics.Raycast(p.origin, _transform.forward, out RaycastHit hit, _range))
+            {
+                // 当たり判定が別のオブジェクトになっている。
+                IDamageable damage = hit.collider.GetComponentInParent<IDamageable>();
+                if (damage == null) return;
+
+                damage.Damage(_damage, weapon);
+
+                // 攻撃のヒットをギズモに描画
+                Debug.DrawLine(p.origin, p.end, Color.red);
+            }
+        }
+
+        // 攻撃範囲
+        private (Vector3, Vector3) AttackRange()
+        {
+            Transform t = _transform != null ? _transform : transform;
+
+            Vector3 p = t.position + t.forward * _forwardOffset;
+            Vector3 q = p + t.forward * _range;
+            return (p, q);
         }
 
         // カメラをプレイヤーの正面を捉えるように制御する
@@ -64,8 +99,14 @@ namespace Enemy.DebugUse
 
         private void OnDrawGizmos()
         {
-            Vector3 f = transform.position + transform.forward * 3;
-            GizmosUtils.Line(transform.position, f, Color.red);
+            DrawAttackRange();
+        }
+
+        // 攻撃範囲
+        private void DrawAttackRange()
+        {
+            (Vector3, Vector3) p = AttackRange();
+            GizmosUtils.Line(p.Item1, p.Item2, ColorExtensions.ThinRed);
         }
     }
 }

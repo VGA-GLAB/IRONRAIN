@@ -1156,9 +1156,9 @@ GameObject:
   - component: {fileID: 1758061611}
   - component: {fileID: 1758061610}
   - component: {fileID: 1758061609}
-  - component: {fileID: 1758061612}
   - component: {fileID: 1758061613}
   - component: {fileID: 1758061614}
+  - component: {fileID: 1758061612}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1223,14 +1223,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1758061607}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.11736405, z: 0, w: 0.99308896}
   m_LocalPosition: {x: 0.37, y: 0, z: -12.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 13.48, z: 0}
 --- !u!114 &1758061612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1245,6 +1245,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 10
   _rotationSpeed: 55
+  _forwardOffset: 1
+  _damage: 236
+  _range: 10
   _camera: {fileID: 1227665478}
 --- !u!135 &1758061613
 SphereCollider:

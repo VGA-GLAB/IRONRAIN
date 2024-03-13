@@ -196,11 +196,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 330464802066110198}
-  _idleName: Idle
-  _leftName: Left
-  _rightName: Right
-  _attackName: Attack
-  _brokenName: Broken
+  _idle:
+    Name: Idle
+    PlayTime: 0
+  _left:
+    Name: Left
+    PlayTime: 0
+  _right:
+    Name: Right
+    PlayTime: 0
+  _attack:
+    Name: Attack
+    PlayTime: 1
+  _broken:
+    Name: Broken
+    PlayTime: 2
 --- !u!114 &8254871389620750563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,10 +224,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forward: {fileID: 1589240007602075323}
-  _entryPath: []
   _entrySpeed: 1
+  _entryPath: []
   _approachSpeed: 10
   _chaseSpeed: 5
+  _fireRate: 0.5
 --- !u!1 &5058381942122353513
 GameObject:
   m_ObjectHideFlags: 0

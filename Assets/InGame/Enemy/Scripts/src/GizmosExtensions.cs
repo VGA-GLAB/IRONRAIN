@@ -1,8 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Utils {
-	public static class GizmosExtensions {
+namespace Utils
+{
+    public static class GizmosExtensions {
 	   
 		/// <summary>
 		/// Draws a wire cube with a given rotation 
