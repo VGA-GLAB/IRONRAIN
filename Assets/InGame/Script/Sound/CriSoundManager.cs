@@ -22,7 +22,10 @@ public class CriSoundManager : MonoBehaviour
     /// <summary>ボリュームのインターフェース</summary>
     public interface IVolume
     {
-        /// <summary>音量が変更された際の処理</summary>
+        /// <summary>音量のプロパティ</summary>
+        public float Value { get; set; }
+
+        /// <summary>音量が変更された際のイベント</summary>
         public event Action<float> OnVolumeChanged;
 
         /// <summary>演算子のオーバーロード</summary>
@@ -35,7 +38,23 @@ public class CriSoundManager : MonoBehaviour
         /// <summary>音量</summary>
         private float _value = 1.0f;
 
-        /// <summary>音量が変更された際の処理</summary>
+        /// <summary>音量のプロパティ</summary>
+        public float Value
+        {
+            get => _value;
+            set
+            {
+                value = Mathf.Clamp01(value);
+                // 音量の変化量が閾値を超えていた場合
+                if (_value + DIFF < value || _value - DIFF > value)
+                {
+                    _onVolumeChanged?.Invoke(value);
+                    _value = value;
+                }
+            }
+        }
+
+        /// <summary>音量が変更された際のイベント</summary>
         private event Action<float> _onVolumeChanged = default;
 
         public event Action<float> OnVolumeChanged
@@ -44,17 +63,8 @@ public class CriSoundManager : MonoBehaviour
             remove => OnVolumeChanged -= value;
         }
 
-        /// <summary>暗黙的な演算子</summary>
-        public float Value
-        {
-            get => _value;
-            set
-            {
-                value = Mathf.Clamp01(value);
-
-
-            }
-        }
+        /// <summary>イベントが呼ばれる際の閾値</summary>
+        private const float DIFF = 0.01F;
 
         /// <summary>暗黙的な演算子</summary>
         public static implicit operator float(Volume volume) => volume.Value;
