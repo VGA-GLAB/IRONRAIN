@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace Enemy.Control
 {
     /// <summary>
-    /// Brain‚©‚çAction‚Öƒ[ƒvæ‚ğ“n‚·B
+    /// Brainã‹ã‚‰Actionã¸ãƒ¯ãƒ¼ãƒ—å…ˆã‚’æ¸¡ã™ã€‚
     /// </summary>
-    public struct DeltaWarp
+    public struct WarpPlan
     {
         public Choice Choice;
         public Vector3 Position;

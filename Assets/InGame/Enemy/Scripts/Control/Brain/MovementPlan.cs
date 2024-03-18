@@ -5,7 +5,7 @@ namespace Enemy.Control
     /// <summary>
     /// BrainからActionへ移動量を渡す。
     /// </summary>
-    public struct DeltaMovement
+    public struct MovementPlan
     {
         public Choice Choice;
         public Vector3 Direction;

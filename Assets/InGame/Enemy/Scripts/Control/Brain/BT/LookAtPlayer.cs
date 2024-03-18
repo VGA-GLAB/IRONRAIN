@@ -5,6 +5,15 @@
     /// </summary>
     public class LookAtPlayer : Node
     {
+        private Choice _choice;
+        private BlackBoard _blackBoard;
+
+        public LookAtPlayer(Choice choice, BlackBoard blackBoard)
+        {
+            _choice = choice;
+            _blackBoard = blackBoard;
+        }
+
         protected override void OnBreak()
         {
         }
@@ -19,7 +28,10 @@
 
         protected override State Stay()
         {
-            return State.Running; // テスト用
+            // 前方向の値を変更することでプレイヤーの方向を向かせる。
+            _blackBoard.AddForwardOption(_choice, _blackBoard.TransformToPlayerDirection);
+
+            return State.Success;
         }
     }
 }

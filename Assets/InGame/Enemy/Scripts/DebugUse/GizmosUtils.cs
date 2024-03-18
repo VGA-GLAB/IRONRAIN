@@ -51,5 +51,14 @@ namespace Enemy.DebugUse
             Gizmos.color = color;
             Utils.GizmosExtensions.DrawArrow(a, b, arrowHeadLength: 2.0f);
         }
+
+        /// <summary>
+        /// 平面の描画
+        /// </summary>
+        public static void Plane(Vector3 center, float width, float height, Color color)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawCube(center, new Vector3(width, height, 0.01f));
+        }
     }
 }

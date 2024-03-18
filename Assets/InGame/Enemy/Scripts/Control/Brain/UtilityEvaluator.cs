@@ -1,5 +1,6 @@
 ﻿using Enemy.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Enemy.Control
 {
@@ -11,6 +12,7 @@ namespace Enemy.Control
         Idle,   // 何もしない
         Chase,  // プレイヤーを追跡
         Attack, // 攻撃
+        Broken,  // 死亡
     }
 
     /// <summary>
@@ -18,27 +20,32 @@ namespace Enemy.Control
     /// </summary>
     public class UtilityEvaluator
     {
-        private Choice[] _order;
+        private BlackBoard _blackBoard;
+
+        private List<Choice> _order;
         
-        public UtilityEvaluator()
+        public UtilityEvaluator(BlackBoard blackBoard)
         {
-            _order = new Choice[EnumExtensions.Length<Choice>()];
+            _blackBoard = blackBoard;
+            _order = new List<Choice>(EnumExtensions.Length<Choice>());
         }
         
         /// <summary>
         /// 行動を評価して優先度順にソートして返す。
         /// </summary>
-        public Choice[] Evaluate()
+        public IReadOnlyList<Choice> Evaluate()
         {
-            Array.Clear(_order, 0, _order.Length);
+            _order.Clear();
 
-            // 本来はここに優先度付け処理
-            //  攻撃のタイミングなら攻撃したい
-            //  プレイヤーが移動していたら移動したい
-            //  どちらも満たしていない場合は何もしない
-            _order[0] = Choice.Chase;
-            _order[1] = Choice.Attack;
-            _order[2] = Choice.Idle;
+            // 死亡している場合は死亡が最優先
+            if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
+
+            // プレイヤーが移動していたら移動したい
+            _order.Add(Choice.Chase);
+            // 攻撃のタイミングなら攻撃したい
+            _order.Add(Choice.Attack);
+            // どちらも満たしていない場合は何もしない
+            _order.Add(Choice.Idle);
 
             return _order;
         }

@@ -20,6 +20,27 @@
         public const string PlayerRangeWeaponName = "Range";
 
         /// <summary>
+        /// アイドル状態に再生するアニメーション名
+        /// </summary>
+        public const string IdleAnimationName = "Idle";
+        /// <summary>
+        /// 攻撃時に再生するアニメーション名
+        /// </summary>
+        public const string AttackAnimationName = "Attack";
+        /// <summary>
+        /// 撃破された際に再生するアニメーション名
+        /// </summary>
+        public const string BrokenAnimationName = "Broken";
+        /// <summary>
+        /// 左に移動する際に再生するアニメーション名
+        /// </summary>
+        public const string LeftAnimationName = "Left";
+        /// <summary>
+        /// 右に移動する際に再生するアニメーション名
+        /// </summary>
+        public const string RightAnimationName = "Right";
+
+        /// <summary>
         /// ダメージ判定用のタグ一覧
         /// </summary>
         public static readonly string[] DamageTags =

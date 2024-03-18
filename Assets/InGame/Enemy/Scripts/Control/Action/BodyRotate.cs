@@ -13,5 +13,13 @@ namespace Enemy.Control
         {
             _rotate = rotate;
         }
+
+        /// <summary>
+        /// 前方向を変更する。
+        /// </summary>
+        public void Forward(in Vector3 forward)
+        {
+            _rotate.forward = forward;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Enemy.Control
         /// <summary>
         /// オブジェクトの座標を変更する。
         /// </summary>
-        public void Warp(Vector3 position)
+        public void Warp(in Vector3 position)
         {
             _transform.position = position;
         }
@@ -25,7 +25,7 @@ namespace Enemy.Control
         /// <summary>
         /// オブジェクトをdeltaTimeぶんだけ移動させる。
         /// </summary>
-        public void Walk(Vector3 velocity)
+        public void Move(in Vector3 velocity)
         {
             _transform.position += velocity * Time.deltaTime;
         }

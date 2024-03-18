@@ -10,8 +10,8 @@ namespace Enemy.Control
     public enum BulletKey
     {
         Dummy,
-        Rifle,
-        Bazooka,
+        MachineGun,
+        Launcher,
         // ここに追加
     }
 
