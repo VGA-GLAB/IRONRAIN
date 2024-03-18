@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Buffers;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,7 +14,7 @@ namespace Enemy.Extensions
         /// <summary>
         /// OverlapSphereNonAllocメソッドのラッパー。
         /// </summary>
-        public static void OverlapShere(in Vector3 origin, float radius, UnityAction<Collider> action, int capacity = Capacity)
+        public static void OverlapSphere(in Vector3 origin, float radius, UnityAction<Collider> action, int capacity = Capacity)
         {
             Collider[] results = ArrayPool<Collider>.Shared.Rent(capacity);
 
