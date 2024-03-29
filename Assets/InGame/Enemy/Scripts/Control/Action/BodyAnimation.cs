@@ -11,7 +11,8 @@ namespace Enemy.Control
         Left, 
         Right, 
         Attack, 
-        Broken 
+        Broken,
+        Approach,
     };
 
     /// <summary>
@@ -64,7 +65,8 @@ namespace Enemy.Control
                 { AnimationKey.Left, new Param(Const.LeftAnimationName) },
                 { AnimationKey.Right, new Param(Const.RightAnimationName) },
                 { AnimationKey.Attack, new Param(Const.AttackAnimationName) },
-                { AnimationKey.Broken, new Param(Const.BrokenAnimationName) }
+                { AnimationKey.Broken, new Param(Const.BrokenAnimationName) },
+                { AnimationKey.Approach, new Param(Const.ApproachAnimationName) }
             };
         }   
 
@@ -81,9 +83,10 @@ namespace Enemy.Control
                 param.Callback = null;
                 param.Callback = callback;
 
-                // 現状再生時間が必要なのは攻撃と破壊のみ。
+                // 一部のアニメーションにのみ再生時間が必要。
                 if (key == AnimationKey.Attack) param.PlayTime = EnemyParams.Debug.AttackAnimationPlayTime;
                 else if (key == AnimationKey.Broken) param.PlayTime = EnemyParams.Debug.BrokenAnimationPlayTime;
+                else if (key == AnimationKey.Approach) param.PlayTime = EnemyParams.Debug.ApproachAnimationPlayTime;
                 else param.PlayTime = 0;
 
                 // 現状アニメーションはどれか1つしか再生しないので

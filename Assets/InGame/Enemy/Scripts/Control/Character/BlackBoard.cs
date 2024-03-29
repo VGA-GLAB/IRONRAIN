@@ -10,6 +10,7 @@ namespace Enemy.Control
     {
         public BlackBoard()
         {
+            PlayerInput = new Queue<PlayerInputMessage>();
             ActionOptions = new Queue<ActionPlan>();
             WarpOptions = new Queue<WarpPlan>();
             MovementOptions = new Queue<MovementPlan>();
@@ -19,7 +20,8 @@ namespace Enemy.Control
             FovExit = new HashSet<Collider>();
         }
 
-        // ビヘイビアツリーの各ノードがキューイング、Action側で制御完了時にクリアされる。
+        // ビヘイビアツリーの各ノードがキューイングする。
+        // Updateで書きこまれ、LateUpdateで消える。
         public Queue<ActionPlan> ActionOptions { get; private set; }
         public Queue<WarpPlan> WarpOptions { get; private set; }
         public Queue<MovementPlan> MovementOptions { get; private set; }
@@ -42,6 +44,14 @@ namespace Enemy.Control
             ForwardOptions.Enqueue(new ForwardPlan { Choice = choice, Value = forward });
         }
 
+        // レベルの調整メッセージをセンサーで受信した場合は更新される。
+        // Updateで書き込まれる。
+        public LevelAdjustMessage LevelAdjust { get; set; }
+
+        // そのフレームでプレイヤーが入力したキーのメッセージをセンサーがキューイングしていく。
+        // Updateで書き込まれ、LateUpdateで消える。
+        public Queue<PlayerInputMessage> PlayerInput { get; private set; }
+
         // 視界センサーが書き込む。
         // Updateで書きこまれ、LateUpdateで消える。
         public HashSet<Collider> FovEnter { get; private set; }
@@ -61,11 +71,12 @@ namespace Enemy.Control
         public Vector3 PlayerPosition { get; set; }
         public Vector3 TransformToPlayerDirection { get; set; }
         public float TransformToPlayerDistance { get; set; }
+        public bool IsApproachCompleted { get; set; }
 
         // センサー側で次の攻撃タイミングを書き込む。
         // Updateで値が更新される。
         public float NextAttackTime;
-        // 攻撃した際にこの値をTimeに書き換えることで、次の攻撃タイミングが更新される。
+        // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
         public float LastAttackTime;
 
         // 自身の状態をチェックするセンサーが書き込む。

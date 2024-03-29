@@ -14,6 +14,8 @@ namespace Enemy.Control
         [SerializeField] private Animator _animator;
         [SerializeField] private EnemyParams _enemyParams;
         [SerializeField] private Effect[] _effects;
+        [Header("他人が作った機能への参照")]
+        [SerializeField] private GameObject _approach; // まだ仕様が決まっていないのでとりあえずGameObjectで参照する。
 
         private Transform _transform;
         private Perception _perception;
@@ -28,11 +30,15 @@ namespace Enemy.Control
 
         private void Awake()
         {
+            // まだ仕様が決まっていないので、とりあえずインターフェースを噛ませておく。
+            // タイムラインやアニメーションになるかもしれない。
+            IApproach approach = _approach != null ? _approach.GetComponent<IApproach>() : null;
+
             _transform = transform;
             _blackBoard = new BlackBoard();
             _perception = new Perception(_transform, _rotate, _player, _enemyParams, _blackBoard, _surroundingPool);
-            _brain = new Brain(_transform, _rotate, _enemyParams, _blackBoard);
-            _action = new Action(_transform, _offset, _rotate, _animator, _blackBoard, _effects, GetComponent<IWeapon>());
+            _brain = new Brain(_transform, _rotate, _enemyParams, _blackBoard, approach);
+            _action = new Action(_transform, _offset, _rotate, _animator, _blackBoard, _enemyParams, _effects, GetComponent<IWeapon>());
             _debugStatusUI = new DebugStatusUI(_transform, _enemyParams, _blackBoard);
         }
 
@@ -70,12 +76,13 @@ namespace Enemy.Control
         private void LateUpdate()
         {
             _perception.LateUpdateEvent();
-            _action.LateUpdateEvent();
+            _brain.LateUpdateEvent();
         }
 
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
+            _brain.OnPreCleanup();
             _action.OnPreCleanup();
          
             // 次フレームのUpdateの後まで待つ。

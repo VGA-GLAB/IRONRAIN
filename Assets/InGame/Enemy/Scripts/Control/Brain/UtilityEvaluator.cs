@@ -1,5 +1,4 @@
 ﻿using Enemy.Extensions;
-using System;
 using System.Collections.Generic;
 
 namespace Enemy.Control
@@ -9,10 +8,12 @@ namespace Enemy.Control
     /// </summary>
     public enum Choice
     {
-        Idle,   // 何もしない
-        Chase,  // プレイヤーを追跡
-        Attack, // 攻撃
-        Broken,  // 死亡
+        Idle,     // 何もしない
+        Approach, // 生成~指定位置まで接近
+        Chase,    // プレイヤーを追跡
+        Attack,   // 攻撃
+        Broken,   // 死亡
+        Escape,   // 撤退
     }
 
     /// <summary>
@@ -21,12 +22,14 @@ namespace Enemy.Control
     public class UtilityEvaluator
     {
         private BlackBoard _blackBoard;
+        private IApproach _approach;
 
         private List<Choice> _order;
-        
-        public UtilityEvaluator(BlackBoard blackBoard)
+
+        public UtilityEvaluator(BlackBoard blackBoard, IApproach approach)
         {
             _blackBoard = blackBoard;
+            _approach = approach;
             _order = new List<Choice>(EnumExtensions.Length<Choice>());
         }
         
@@ -40,10 +43,30 @@ namespace Enemy.Control
             // 死亡している場合は死亡が最優先
             if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
 
-            // プレイヤーが移動していたら移動したい
-            _order.Add(Choice.Chase);
-            // 攻撃のタイミングなら攻撃したい
-            _order.Add(Choice.Attack);
+            // 接近中の場合はインターフェースを実装したクラス側で制御するので何もしない。
+            if (_approach != null && !_approach.IsCompleted()) { /*実装まだ*/ }
+
+            // 接近が完了したフラグで判定。
+            // 攻撃中にプレイヤーを追跡していると、離れることで接近の条件を満たすのを防ぐ。
+            if (_approach == null && !_blackBoard.IsApproachCompleted)
+            {
+                _order.Add(Choice.Approach);
+            }
+            else
+            {
+                if (_blackBoard.LifeTime <= 0)
+                {
+                    // 時間が0以下の場合は撤退
+                    _order.Add(Choice.Escape);
+                }
+                else
+                {
+                    // それ以外は移動しつつ攻撃
+                    _order.Add(Choice.Chase);
+                    _order.Add(Choice.Attack);
+                }
+            }
+
             // どちらも満たしていない場合は何もしない
             _order.Add(Choice.Idle);
 

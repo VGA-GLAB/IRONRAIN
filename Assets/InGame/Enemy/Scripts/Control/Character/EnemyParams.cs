@@ -48,8 +48,12 @@ namespace Enemy.Control
             [Tooltip("登場後、この速さでプレイヤーに追従する")]
             [Min(1.0f)]
             [SerializeField] private float _chaseSpeed = 6.0f;
+            [Header("先頭から撤退する際の速さ")]
+            [Min(1.0f)]
+            [SerializeField] private float _escapeSpeed = 6.0f;
 
             public float ChaseSpeed => _chaseSpeed;
+            public float EscapeSpeed => _escapeSpeed;
         }
 
         // 戦闘
@@ -92,6 +96,7 @@ namespace Enemy.Control
             public static float HomingPower = 0.5f;
             public static float AttackAnimationPlayTime = 1.0f;
             public static float BrokenAnimationPlayTime = 1.0f;
+            public static float ApproachAnimationPlayTime = float.MaxValue / 2;
         }
 
         [Header("視界の設定")]

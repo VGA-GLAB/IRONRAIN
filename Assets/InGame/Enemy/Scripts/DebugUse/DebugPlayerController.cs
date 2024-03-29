@@ -7,7 +7,7 @@ namespace Enemy.DebugUse
     /// <summary>
     /// デバッグ用のプレイヤー制御。
     /// </summary>
-    public class DebugPlayerController : MonoBehaviour
+    public class DebugPlayerController : MonoBehaviour, IDamageable
     {
         [Header("操作設定")]
         [SerializeField] private float _moveSpeed = 10.0f;
@@ -30,22 +30,22 @@ namespace Enemy.DebugUse
         {
             // 前後左右の移動
             Vector3 move = Vector3.zero;
-            if (Input.GetKey(KeyCode.W)) move += _transform.forward;
-            if (Input.GetKey(KeyCode.S)) move -= _transform.forward;
-            if (Input.GetKey(KeyCode.A)) move -= _transform.right;
-            if (Input.GetKey(KeyCode.D)) move += _transform.right;
+            if (UnityEngine.Input.GetKey(KeyCode.W)) move += _transform.forward;
+            if (UnityEngine.Input.GetKey(KeyCode.S)) move -= _transform.forward;
+            if (UnityEngine.Input.GetKey(KeyCode.A)) move -= _transform.right;
+            if (UnityEngine.Input.GetKey(KeyCode.D)) move += _transform.right;
             // 上下の移動
-            if (Input.GetKey(KeyCode.Q)) move += Vector3.up;
-            if (Input.GetKey(KeyCode.E)) move += Vector3.down;
+            if (UnityEngine.Input.GetKey(KeyCode.Q)) move += Vector3.up;
+            if (UnityEngine.Input.GetKey(KeyCode.E)) move += Vector3.down;
 
             // 左右に回転
             float rot = 0;
-            if (Input.GetKey(KeyCode.LeftArrow)) rot--;
-            if (Input.GetKey(KeyCode.RightArrow)) rot++;
+            if (UnityEngine.Input.GetKey(KeyCode.LeftArrow)) rot--;
+            if (UnityEngine.Input.GetKey(KeyCode.RightArrow)) rot++;
 
             // 高速化
             float mag = 1;
-            if (Input.GetKey(KeyCode.LeftShift)) mag++;
+            if (UnityEngine.Input.GetKey(KeyCode.LeftShift)) mag++;
 
             // 移動
             Vector3 deltaMove = move.normalized * mag * _moveSpeed * Time.deltaTime;
@@ -56,9 +56,9 @@ namespace Enemy.DebugUse
             _transform.Rotate(new Vector3(0, deltaRot, 0));
 
             // 遠距離攻撃
-            if (Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerRangeWeaponName);
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerRangeWeaponName);
             // 近接攻撃
-            if (Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
         }
 
         // レイキャストで攻撃
@@ -107,6 +107,11 @@ namespace Enemy.DebugUse
         {
             (Vector3, Vector3) p = AttackRange();
             GizmosUtils.Line(p.Item1, p.Item2, ColorExtensions.ThinRed);
+        }
+
+        public void Damage(int value, string weapon = "")
+        {
+            // ダメージ処理
         }
     }
 }

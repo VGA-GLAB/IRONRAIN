@@ -1,24 +1,22 @@
-using Enemy.DebugUse;
+ï»¿using Enemy.DebugUse;
 using Enemy.Extensions;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace Enemy.Tool
 {
     /// <summary>
-    /// “G‚ªËŒ‚‚µ‚ÄUŒ‚‚·‚éƒ^ƒCƒ~ƒ“ƒO‚ğ“ü—Í‚©‚çì¬‚·‚éB
-    /// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Åo—Í‚³‚ê‚éB
+    /// æ•µãŒå°„æ’ƒã—ã¦æ”»æ’ƒã™ã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’å…¥åŠ›ã‹ã‚‰ä½œæˆã™ã‚‹ã€‚
+    /// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã§å‡ºåŠ›ã•ã‚Œã‚‹ã€‚
     /// </summary>
     public class FireTimingAssetGenerator : MonoBehaviour
     {
-        [Header("Assets‚©‚ç‚Ì‘Š‘ÎƒpƒX")]
+        [Header("Assetsã‹ã‚‰ã®ç›¸å¯¾ãƒ‘ã‚¹")]
         [SerializeField] private string _directoryPath = "InGame/Enemy/";
-        [Header("•Û‘¶‚·‚éƒtƒ@ƒCƒ‹–¼")]
+        [Header("ä¿å­˜ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å")]
         [SerializeField] private string _fileName = "InputBuffer_Debug";
-        [Header("ƒMƒYƒ‚‚Ö‚Ì•`‰æİ’è")]
+        [Header("ã‚®ã‚ºãƒ¢ã¸ã®æç”»è¨­å®š")]
         [SerializeField] private float _drawOffset;
 
         private GUIStyle _style = new GUIStyle();
@@ -47,7 +45,7 @@ namespace Enemy.Tool
             if (Input.GetKeyUp(KeyCode.Q))
             {
                 Print();
-                // ÅŒã‚ÌUŒ‚ƒ^ƒCƒ~ƒ“ƒOˆÈ~‚É‰Ÿ‚µ‚Ä‚¢‚½•ª‚Ì’·‚³‚ğƒJƒbƒg
+                // æœ€å¾Œã®æ”»æ’ƒã‚¿ã‚¤ãƒŸãƒ³ã‚°ä»¥é™ã«æŠ¼ã—ã¦ã„ãŸåˆ†ã®é•·ã•ã‚’ã‚«ãƒƒãƒˆ
                 _elapsed = _q.Count > 0 ? _q[^1] : 0;
 
                 _isRecording = false;
@@ -55,7 +53,7 @@ namespace Enemy.Tool
 
             if(Input.GetKey(KeyCode.Q))
             {
-                // UŒ‚ƒ^ƒCƒ~ƒ“ƒO‚Æ‚µ‚Ä‹L˜^
+                // æ”»æ’ƒã‚¿ã‚¤ãƒŸãƒ³ã‚°ã¨ã—ã¦è¨˜éŒ²
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     _q.Add(_elapsed);
@@ -65,7 +63,7 @@ namespace Enemy.Tool
             }
         }
 
-        // ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Æ‚µ‚Äo—Í
+        // ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦å‡ºåŠ›
         private void Print()
         {
             string path = $"{Application.dataPath}/{_directoryPath}{_fileName}.txt";
@@ -80,31 +78,31 @@ namespace Enemy.Tool
 
         private void OnGUI()
         {
-            GUILayout.Label("QƒL[‰Ÿ‰º’†ASpaceƒL[‚ğ‰Ÿ‚µ‚½ƒ^ƒCƒ~ƒ“ƒO‚ğ‹L˜^", _style);
+            GUILayout.Label("Qã‚­ãƒ¼æŠ¼ä¸‹ä¸­ã€Spaceã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’è¨˜éŒ²", _style);
 
             if (_isRecording)
             {
-                GUILayout.Label("‹L˜^’†c", _style);
+                GUILayout.Label("è¨˜éŒ²ä¸­â€¦", _style);
             }
         }
 
         private void OnDrawGizmos()
         {
-            // cü‚Ì’·‚³A“K“–
+            // ç¸¦ç·šã®é•·ã•ã€é©å½“
             float len = 1.5f;
-            // •”wŒi
+            // é»’èƒŒæ™¯
             GizmosUtils.Plane(Vector3.zero, 1920.0f, 1080.0f, Color.black);
-            // ŠÔ‚ğ•\‚·ü(”’)
+            // æ™‚é–“ã‚’è¡¨ã™ç·š(ç™½)
             GizmosUtils.Line(new Vector2(_drawOffset, 0), new Vector2(1920.0f, 0), ColorExtensions.ThinWhite);
-            // ŠJnˆÊ’u(—Î)
+            // é–‹å§‹ä½ç½®(ç·‘)
             GizmosUtils.Line(new Vector2(_drawOffset, -len), new Vector2(_drawOffset, len), Color.green);
-            // UŒ‚ƒ^ƒCƒ~ƒ“ƒO(Ô)
+            // æ”»æ’ƒã‚¿ã‚¤ãƒŸãƒ³ã‚°(èµ¤)
             foreach (float f in _q)
             {
                 float p = f + _drawOffset;
                 GizmosUtils.Line(new Vector2(p, -len), new Vector2(p, len), Color.red);
             }
-            // ‹L˜^ŠÔ(ƒVƒAƒ“)
+            // è¨˜éŒ²æ™‚é–“(ã‚·ã‚¢ãƒ³)
             GizmosUtils.Line(new Vector2(_drawOffset, 0), new Vector2(_elapsed + _drawOffset, 0), Color.cyan);
         }
     }

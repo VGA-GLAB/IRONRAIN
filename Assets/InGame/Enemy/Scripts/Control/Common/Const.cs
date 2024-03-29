@@ -39,6 +39,10 @@
         /// 右に移動する際に再生するアニメーション名
         /// </summary>
         public const string RightAnimationName = "Right";
+        /// <summary>
+        /// 接近時に再生するアニメーション名
+        /// </summary>
+        public const string ApproachAnimationName = "Advance";
 
         /// <summary>
         /// ダメージ判定用のタグ一覧

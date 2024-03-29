@@ -14,11 +14,11 @@ namespace Enemy.DebugUse
         {
             if (_pool == null) return;
 
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Z))
             {
                 if (_pool.TryRent(out Slot s)) _q.Enqueue(s);
             }
-            if (Input.GetKeyDown(KeyCode.X))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.X))
             {
                 if (_q.TryDequeue(out Slot s)) _pool.Return(s);
             }

@@ -7,7 +7,9 @@ namespace Enemy.Control
     /// </summary>
     public class Perception : LifeCycle
     {
-        private AttackControl _fireControl;
+        private LevelAdjust _levelAdjust;
+        private PlayerInput _playerInput;
+        private FireRate _fireRate;
         private PositionRelationship _position;
         private FovSensor _fovSensor;
         private ConditionCheck _conditionCheck;
@@ -16,7 +18,9 @@ namespace Enemy.Control
         public Perception(Transform transform, Transform rotate, Transform player, EnemyParams enemyParams, 
             BlackBoard blackBoard, SurroundingPool pool)
         {
-            _fireControl = new AttackControl(enemyParams, blackBoard);
+            _levelAdjust = new LevelAdjust(transform, blackBoard);
+            _playerInput = new PlayerInput(transform, blackBoard);
+            _fireRate = new FireRate(enemyParams, blackBoard);
             _position = new PositionRelationship(transform, rotate, player, pool, enemyParams);
             _fovSensor = new FovSensor(transform, rotate, enemyParams);
             _conditionCheck = new ConditionCheck(enemyParams, blackBoard);
@@ -48,11 +52,16 @@ namespace Enemy.Control
 
         public override Result UpdateEvent()
         {
+            // 黒板への読み書きに使う様々なパラメータを増減させる可能性があるので
+            // メッセージの受信は一番最初に実行しておく。
+            _levelAdjust.Write();
+            _playerInput.Write();
+
             _fovSensor.CheckFOV();
             _position.AreaFix();
             _position.PlayerWith(_blackBoard);
             _position.SlotWith(_blackBoard);
-            _fireControl.NextTiming();
+            _fireRate.NextTiming();
             _conditionCheck.Check();
 
             return Result.Running;
@@ -60,6 +69,8 @@ namespace Enemy.Control
 
         public override Result LateUpdateEvent()
         {
+            _playerInput.Clear();
+
             // Updateで登録したコールバックが呼ばれる事が前提条件。
             // 黒板に書き込んだ内容をフレームを跨ぐ前に全て消す。
             _blackBoard.FovEnter.Clear();
@@ -80,6 +91,11 @@ namespace Enemy.Control
         public override void OnDamaged(int value, string weapon)
         {
             _conditionCheck.Damage(value, weapon);
+        }
+
+        public override void OnPreCleanup()
+        {
+            _levelAdjust.Dispose();
         }
 
         private void Enter(Collider collider)

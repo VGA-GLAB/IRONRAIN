@@ -101,6 +101,12 @@ namespace Enemy.Control
             // エリアとスロット
             blackBoard.AreaToSlotDirection = (_slot.Point - _area.Point).normalized;
             blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
+
+            // スロットに到着した際に接近完了フラグを立てる。
+            if (Mathf.Approximately(blackBoard.AreaToSlotSqrDistance, 0))
+            {
+                blackBoard.IsApproachCompleted = true;
+            }
         }
 
         /// <summary>

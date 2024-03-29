@@ -7,10 +7,10 @@ namespace Enemy.Control
     /// </summary>
     public enum Armor
     {
-        None,
-        Melee,
-        Range,
-        Invincible,
+        None,       // 耐性なし
+        Melee,      // 近接攻撃に耐性
+        Range,      // 遠距離攻撃に耐性
+        Invincible, // 無敵の人
     }
 
     /// <summary>

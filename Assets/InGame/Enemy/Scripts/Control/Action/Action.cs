@@ -8,6 +8,7 @@ namespace Enemy.Control
     public class Action : LifeCycle
     {
         private BlackBoard _blackBoard;
+        private EnemyParams _params;
         private BodyMove _move;
         private OffsetMove _offsetMove;
         private BodyRotate _rotate;
@@ -20,9 +21,10 @@ namespace Enemy.Control
         private bool _isDisable;
 
         public Action(Transform transform, Transform offset, Transform rotate, Animator animator, BlackBoard blackBoard,
-            Effect[] effects, IWeapon weapon)
+            EnemyParams enemyParams, Effect[] effects, IWeapon weapon)
         {
             _blackBoard = blackBoard;
+            _params = enemyParams;
             _move = new BodyMove(transform);
             _offsetMove = new OffsetMove(offset);
             _rotate = new BodyRotate(rotate);
@@ -40,25 +42,29 @@ namespace Enemy.Control
             // 死亡もしくは退場済みなので完了を返す。
             if (_isDisable) return Result.Complete;
 
-            // deltaTimeぶんの移動を上書きする恐れがあるので、座標を直接書き換える処理を先にしておく。
-            while (_blackBoard.WarpOptions.Count > 0)
+            // 行動の先頭に死亡が入っていないかチェック
+            if (_blackBoard.ActionOptions.TryPeek(out ActionPlan p) && p.Choice != Choice.Broken)
             {
-                WarpPlan plan = _blackBoard.WarpOptions.Dequeue();
-                _move.Warp(plan.Position);
-            }
+                // deltaTimeぶんの移動を上書きする恐れがあるので、座標を直接書き換える処理を先にしておく。
+                while (_blackBoard.WarpOptions.Count > 0)
+                {
+                    WarpPlan plan = _blackBoard.WarpOptions.Dequeue();
+                    _move.Warp(plan.Position);
+                }
 
-            // deltaTimeぶんの移動
-            while (_blackBoard.MovementOptions.Count > 0)
-            {
-                MovementPlan plan = _blackBoard.MovementOptions.Dequeue();
-                _move.Move(plan.Direction * plan.Speed);
-            }
+                // deltaTimeぶんの移動
+                while (_blackBoard.MovementOptions.Count > 0)
+                {
+                    MovementPlan plan = _blackBoard.MovementOptions.Dequeue();
+                    _move.Move(plan.Direction * plan.Speed);
+                }
 
-            // 前方向を変更
-            while (_blackBoard.ForwardOptions.Count > 0)
-            {
-                ForwardPlan plan = _blackBoard.ForwardOptions.Dequeue();
-                _rotate.Forward(plan.Value);
+                // 前方向を変更
+                while (_blackBoard.ForwardOptions.Count > 0)
+                {
+                    ForwardPlan plan = _blackBoard.ForwardOptions.Dequeue();
+                    _rotate.Forward(plan.Value);
+                }
             }
 
             // 各アニメーションの再生時間を計算
@@ -68,6 +74,16 @@ namespace Enemy.Control
             while (_blackBoard.ActionOptions.Count > 0)
             {
                 ActionPlan plan = _blackBoard.ActionOptions.Dequeue();
+
+                // 撤退
+                if (plan.Choice == Choice.Escape)
+                {
+                    // 1度この分岐に入ったら以降は入らない様なフラグが必要。
+                    // アニメーション再生(移動のアニメーションと同じ？)
+                    // 指定箇所まで移動？一定時間上もしくは下に移動？
+                    //  ビヘイビアツリーで移動量とか決める。
+                    // 消す。
+                }
 
                 // 死亡
                 // 他のアニメーションが再生されていても強制的に死亡アニメーションを再生
@@ -89,7 +105,11 @@ namespace Enemy.Control
 
                     // 武器毎の攻撃処理
                     // アニメーションの任意のタイミングで攻撃判定が未実装。
-                    if (_weapon != null) _weapon.Attack();
+                    if (_weapon != null)
+                    {
+                        _weapon.Attack();
+                        _blackBoard.LastAttackTime = Time.time;
+                    }
                 }
 
                 // 死亡以下の優先度(キューの追加順)の行動はすべてキャンセルされる。
@@ -102,19 +122,12 @@ namespace Enemy.Control
             return Result.Running;
         }
 
-        public override Result LateUpdateEvent()
-        {
-            // このフレームで行う行動が完了したので全て削除
-            _blackBoard.ActionOptions.Clear();
-            _blackBoard.WarpOptions.Clear();
-            _blackBoard.MovementOptions.Clear();
-            _blackBoard.ForwardOptions.Clear();
-
-            return Result.Running;
-        }
-
         public override void OnPreCleanup()
         {
+            // 残りの生存時間から死ぬまでの生存を計算
+            float lt = _params.Tactical.LifeTime - _blackBoard.LifeTime;
+            CombatDesigner.ExitReport(lt, isDead: _blackBoard.Hp <= 0);
+
             _animation.Cleaningup();
         }
     }
