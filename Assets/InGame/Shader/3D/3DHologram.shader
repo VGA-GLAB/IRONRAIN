@@ -45,6 +45,7 @@ Shader "Custom/3DHologram"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "../Library/Glitch.hlsl"
+            #include "../Library/Scanline.hlsl"
 
             struct Attributes
             {
@@ -124,11 +125,7 @@ Shader "Custom/3DHologram"
                 col *= pow(1 - abs(NdotV), _RimPower);
 
                 // Scanline
-                float height = input.positionWS.y + _Time.x * _ScanSpeed;
-
-                height = (sin(height * TWO_PI * _ScanDistance) + 1) / 2;
-                
-                col *= step(height, _ScanWidth);
+                col.a *= Scanline(input.positionWS.y, _ScanSpeed, _ScanDistance, _ScanWidth);
 
                 clip(col.a - 0.01);
                 
