@@ -4,7 +4,7 @@ Shader "Custom/3DGround"
     {
         [SingleLineTexture]_ModelNormalTex("Model NormalMap", 2D) = "bump" {}
         [KeywordEnum(Planar, Triplanar)] _Mapping("MappingMode", Int) = 0
-        _PlanarWeight ("Weight", Range(1, 64)) = 1
+        _PlanarWeight ("Weight", int) = 1
         _PlanarScaleOffset ("Planar Mapping Scale Offset", Vector) = (1, 1, 0, 0)
         [Space(10)]
         
