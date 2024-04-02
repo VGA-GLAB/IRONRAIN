@@ -5,10 +5,9 @@ using CriWare;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks; 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 /// <summary>サウンドを管理するクラス</summary>
 public class CriSoundManager : MonoBehaviour
@@ -19,8 +18,7 @@ public class CriSoundManager : MonoBehaviour
     /// <summary>インスタンスのプロパティ</summary>
     public static CriSoundManager Instance { get { _instance ??= new CriSoundManager(); return _instance; } }
 
-    /// <summary>コンストラクタ</summary>
-    private CriSoundManager()
+    private void Start()
     {
         _masterVolume = new Volume();
         _bgm = new CriSingleChannel(_masterVolume);
@@ -78,8 +76,8 @@ public class CriSoundManager : MonoBehaviour
 
         public event Action<float> OnVolumeChanged
         {
-            add => OnVolumeChanged += value;
-            remove => OnVolumeChanged -= value;
+            add => _onVolumeChanged += value;
+            remove => _onVolumeChanged -= value;
         }
 
         /// <summary>暗黙的な演算子</summary>
