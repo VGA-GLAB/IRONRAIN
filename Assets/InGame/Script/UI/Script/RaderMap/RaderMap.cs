@@ -111,7 +111,7 @@ public class RaderMap : MonoBehaviour
     }
 
     /// <summary>
-    /// エネミーが生成された時に呼ぶスクリプト
+    /// エネミーが生成された時に呼ぶメソッド
     /// </summary>
     /// <param name="enemy">エネミーオブジェクト</param>
     public void GenerateEnemy(GameObject enemy)
