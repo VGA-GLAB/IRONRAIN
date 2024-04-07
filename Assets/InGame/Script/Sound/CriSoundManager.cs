@@ -5,19 +5,13 @@ using CriWare;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks; 
+using Cysharp.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 /// <summary>サウンドを管理するクラス</summary>
-public class CriSoundManager : MonoBehaviour
+public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 {
-    /// <summary>インスタンスを格納する変数</summary>
-    private static CriSoundManager _instance = null;
-
-    /// <summary>インスタンスのプロパティ</summary>
-    public static CriSoundManager Instance { get { _instance ??= new CriSoundManager(); return _instance; } }
-
     private void Start()
     {
         _masterVolume = new Volume();
@@ -33,6 +27,15 @@ public class CriSoundManager : MonoBehaviour
 
     /// <summary>SEを流すチャンネル</summary>
     private CriMultiChannel _se = default;
+
+    /// <summary>マスターのボリューム</summary>
+    public IVolume MasterVolume => _masterVolume;
+
+    /// <summary>BGMのチャンネル</summary>
+    public ICustomChannel BGM => _bgm;
+
+    /// <summary>SEのチャンネル</summary>
+    public ICustomChannel SE => _se;
 
     /// <summary>ボリュームのインターフェース</summary>
     public interface IVolume
@@ -519,6 +522,24 @@ public class CriSoundManager : MonoBehaviour
             _player.Set3dListener(listener.nativeListener);
             _player.Update(_cueData[index].Playback);
         }
+
+        /// <summary>カスタム構造体を返すメソッド</summary>
+        /// <param name="playerData">カスタム構造体を保持しているプレイヤー情報</param>
+        public CriAtomCustomStruct GetCustomStruct(CriPlayerData playerData) => playerData.CustomStruct;
+
+        /// <summary>再生終了を待つ（Unitask）</summary>
+        public async UniTask WaitPlayingEnd(CancellationToken token, CriAtomCustomStruct customStruct)
+        {
+            // Trueを返すまで待つ
+            await UniTask.WaitUntil(customStruct.CheckPlayingEnd, default, token, false);
+        }
+
+        /// <summary>再生終了を待つ（Coroutine）</summary>
+        public System.Collections.IEnumerator WaitPlayingEndCor(CriAtomCustomStruct customStruct)
+        {
+            // Trueを返すまで待つ
+            yield return new WaitUntil(customStruct.CheckPlayingEnd);
+        }
     }
 
     /// <summary>SEなどに使用する、複数の音を出力するチャンネル</summary>
@@ -666,38 +687,22 @@ public class CriSoundManager : MonoBehaviour
             _player.Update(_cueData[index].Playback);
         }
 
-        ///<summary>再生終了を待ってから再生を停止する（Unitask）</summary>
-        public async UniTask StopPlayingEnd(int index)
+        /// <summary>カスタム構造体を返すメソッド</summary>
+        /// <param name="playerData">カスタム構造体を保持しているプレイヤー情報</param>
+        public CriAtomCustomStruct GetCustomStruct(CriPlayerData playerData) => playerData.CustomStruct;
+
+        /// <summary>再生終了を待つ（Unitask）</summary>
+        public async UniTask WaitPlayingEnd(CancellationToken token, CriAtomCustomStruct customStruct)
         {
-            if (index <= -1) return;
-
-            await UniTask.WaitUntil(_cueData[index].CustomStruct.CheckPlayingEnd, default, _cueData[index].CancellationTokenSource.Token, false);
-            _cueData[index].Playback.Stop(false);
-
-            if (_cueData.Remove(index, out CriPlayerData outData))
-            {
-                _removedCueDataIndex.Add(index);
-                outData.Playback.Stop(false);
-                outData.Source?.Dispose();
-                outData.CancellationTokenSource?.Cancel();
-            }
+            // Trueを返すまで待つ
+            await UniTask.WaitUntil(customStruct.CheckPlayingEnd, default, token, false);
         }
 
-        ///<summary>再生終了を待ってから再生を停止する（Coroutine）</summary>
-        public System.Collections.IEnumerator StopPlayingEndCor(int index)
+        /// <summary>再生終了を待つ（Coroutine）</summary>
+        public System.Collections.IEnumerator WaitPlayingEndCor(CriAtomCustomStruct customStruct)
         {
-            if (index <= -1) yield break;
-
-            yield return new WaitUntil(_cueData[index].CustomStruct.CheckPlayingEnd);
-            _cueData[index].Playback.Stop(false);
-
-            if (_cueData.Remove(index, out CriPlayerData outData))
-            {
-                _removedCueDataIndex.Add(index);
-                outData.Playback.Stop(false);
-                outData.Source?.Dispose();
-                outData.CancellationTokenSource?.Cancel();
-            }
+            // Trueを返すまで待つ
+            yield return new WaitUntil(customStruct.CheckPlayingEnd);
         }
     }
 
@@ -724,20 +729,6 @@ public class CriSoundManager : MonoBehaviour
 #if CRIWARE_ENABLE_HEADLESS_MODE
             this._dummyStatus = Status.Prep;
 #endif
-        }
-
-        /// <summary>再生終了を待つ（Unitask）</summary>
-        public async UniTask WaitPlayingEnd(CancellationToken token)
-        {
-            // Trueを返すまで待つ
-            await UniTask.WaitUntil(CheckPlayingEnd, default, token, false);
-        }
-
-        /// <summary>再生終了を待つ（Coroutine）</summary>
-        public System.Collections.IEnumerator WaitPlayingEndCor()
-        {
-            // Trueを返すまで待つ
-            yield return new WaitUntil(CheckPlayingEnd);
         }
 
         /// <summary>再生ステータスの取得</summary>
@@ -875,6 +866,44 @@ public class CriSoundManager : MonoBehaviour
             Playback.StopWithoutReleaseTime();
         }
         public void Pause(bool sw) { Playback.Pause(sw); }
+    }
+}
+
+/// <summary>MonoBehaviourを継承したシングルトン</summary>
+public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
+{
+    /// <summary>インスタンス</summary>
+    private static T _instance;
+
+    /// <summary>インスタンスのプロパティ</summary>
+    public static T Instance
+    {
+        get
+        {
+            // インスタンスがnullの場合
+            if (_instance == null)
+            {
+                // CriSoundManagerオブジェクトがシーン上に存在しない場合
+                if (FindObjectOfType<T>() == null)
+                {
+                    // 新しいゲームオブジェクトを生成し、CriSoundManagerを付与する
+                    GameObject singleton = new GameObject();
+                    singleton.name = typeof(T).ToString();
+                    _instance = singleton.AddComponent<T>();
+
+                    // シーン変更時に破棄しないようにする
+                    DontDestroyOnLoad(singleton);
+                }
+                // CriSoundManagerオブジェクトがシーン上に存在するがインスタンスがnullの場合
+                _instance = FindObjectOfType<T>();
+            }
+
+            return _instance;
+        }
+        private set
+        {
+            _instance = value;
+        }
     }
 }
 #endif
