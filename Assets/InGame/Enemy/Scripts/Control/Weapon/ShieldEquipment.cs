@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 近距離攻撃
+    /// 盾持ちの敵の装備
     /// </summary>
-    public class MeleeWeapon : MonoBehaviour, IWeapon
+    public class ShieldEquipment : MonoBehaviour, IEquipment
     {
         [Header("向きの基準")]
         [SerializeField] private Transform _rotate;
@@ -16,16 +16,30 @@ namespace Enemy.Control
         [SerializeField] private float _heightOffset;
         [SerializeField] private float _radius = 3.0f;
 
-        /// <summary>
-        /// 球状の当たり判定を出して攻撃
-        /// </summary>
-        public void Attack()
+        // 毎フレーム攻撃のアニメーションをトリガーしないようにフラグで管理
+        private bool _isAttackAnimationPlaying;
+
+        void IEquipment.Attack()
         {
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
             RaycastExtensions.OverlapSphere(Origin(), _radius, col =>
             {
                 // ダメージ用のインターフェースなどで判定
             });
+        }
+
+        void IEquipment.PlayAttackAnimation(BodyAnimation animation)
+        {
+            if (_isAttackAnimationPlaying) return;
+
+            _isAttackAnimationPlaying = true;
+            animation.SetTrigger(Const.AnimationParam.AttackTrigger);
+        }
+
+        void IEquipment.PlayAttackEndAnimation(BodyAnimation animation)
+        {
+            animation.SetTrigger(Const.AnimationParam.AttackEndTrigger);
+            _isAttackAnimationPlaying = false;
         }
 
         // 攻撃の基準となる座標を返す

@@ -15,6 +15,11 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// 位置
+        /// </summary>
+        public Vector3 TransformPosition => _transform.position;
+
+        /// <summary>
         /// オブジェクトの座標を変更する。
         /// </summary>
         public void Warp(in Vector3 position)

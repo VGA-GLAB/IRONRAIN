@@ -18,14 +18,16 @@ namespace Enemy.Control
     /// </summary>
     public class ConditionCheck
     {
+        private Transform _transform;
         private EnemyParams _params;
         private BlackBoard _blackBoard;
 
         // Updateで黒板に反映し、毎フレーム0に戻る。
         private int _damageBuffer;
 
-        public ConditionCheck(EnemyParams enemyParams, BlackBoard blackBoard)
+        public ConditionCheck(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
+            _transform = transform;
             _params = enemyParams;
             _blackBoard = blackBoard;
         }
@@ -36,6 +38,8 @@ namespace Enemy.Control
         /// </summary>
         public void Setup()
         {
+            _blackBoard.Name = _transform.name;
+
             _blackBoard.Hp = _params.Tactical.MaxHp;
             _blackBoard.IsDying = false;
             _blackBoard.LifeTime = _params.Tactical.LifeTime;

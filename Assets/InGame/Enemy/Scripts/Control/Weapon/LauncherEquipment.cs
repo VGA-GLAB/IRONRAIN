@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 遠距離攻撃
+    /// ランチャーの敵の装備
     /// </summary>
-    public class RangeWeapon : MonoBehaviour, IWeapon
+    public class LauncherEquipment : MonoBehaviour, IEquipment
     {
         [Header("飛ばす弾の設定")]
         [SerializeField] private Transform _muzzle;
@@ -16,10 +16,10 @@ namespace Enemy.Control
         [SerializeField] private Transform _target;
         [SerializeField] private bool _isTargeting;
 
-        /// <summary>
-        /// 弾を発射して攻撃
-        /// </summary>
-        public void Attack()
+        // 毎フレーム攻撃のアニメーションをトリガーしないようにフラグで管理
+        private bool _isAttackAnimationPlaying;
+
+        void IEquipment.Attack()
         {
             if (_muzzle == null) return;
 
@@ -32,6 +32,20 @@ namespace Enemy.Control
             {
                 BulletPool.Fire(_key, _muzzle.position, _muzzle.forward);
             }
+        }
+
+        void IEquipment.PlayAttackAnimation(BodyAnimation animation)
+        {
+            if (_isAttackAnimationPlaying) return;
+
+            _isAttackAnimationPlaying = true;
+            animation.SetTrigger(Const.AnimationParam.AttackTrigger);
+        }
+
+        void IEquipment.PlayAttackEndAnimation(BodyAnimation animation)
+        {
+            animation.SetTrigger(Const.AnimationParam.AttackEndTrigger);
+            _isAttackAnimationPlaying = false;
         }
 
         private void OnDrawGizmos()

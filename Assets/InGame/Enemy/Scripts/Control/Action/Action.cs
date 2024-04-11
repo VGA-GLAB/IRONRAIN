@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Enemy.Control
 {
@@ -14,31 +15,34 @@ namespace Enemy.Control
         private BodyRotate _rotate;
         private BodyAnimation _animation;
         private Effector _effector;
-        private IWeapon _weapon;
+        private StateMachine _stateMachine;
 
-        // 死亡もしくは退場のアニメーションもしくはが終了し、非表示になったフラグ。
+        // 死亡もしくは退場のアニメーションが終了し、非表示になったフラグ。
         // このフラグが立った次のフレーム以降はこのクラスの処理を行わない。
         private bool _isDisable;
 
-        public Action(Transform transform, Transform offset, Transform rotate, Animator animator, BlackBoard blackBoard,
-            EnemyParams enemyParams, Effect[] effects, IWeapon weapon)
+        public Action(Transform transform, Transform offset, Transform rotate, Animator animator, 
+            AnimationEvent animationEvent, BlackBoard blackBoard,EnemyParams enemyParams, Effect[] effects, 
+            IEquipment equipment)
         {
             _blackBoard = blackBoard;
             _params = enemyParams;
             _move = new BodyMove(transform);
             _offsetMove = new OffsetMove(offset);
             _rotate = new BodyRotate(rotate);
-            _animation = new BodyAnimation(animator);
+            _animation = new BodyAnimation(animator, animationEvent);
             _effector = new Effector(effects);
-
-            if (weapon == null) Debug.LogWarning($"武器無し: {transform.name}");
-            else _weapon = weapon;
+            _stateMachine = new StateMachine(blackBoard, _move, _rotate, _animation, equipment);
 
             _isDisable = false;
         }
 
         public override Result UpdateEvent()
         {
+            _stateMachine.Update();
+
+            return Result.Running;
+
             // 死亡もしくは退場済みなので完了を返す。
             if (_isDisable) return Result.Complete;
 
@@ -68,7 +72,7 @@ namespace Enemy.Control
             }
 
             // 各アニメーションの再生時間を計算
-            _animation.PlayTime();
+            //_animation.PlayTime();
 
             // 移動と回転以外の行動を実行
             while (_blackBoard.ActionOptions.Count > 0)
@@ -87,29 +91,29 @@ namespace Enemy.Control
 
                 // 死亡
                 // 他のアニメーションが再生されていても強制的に死亡アニメーションを再生
-                if (plan.Choice == Choice.Broken && !_animation.IsPlaying(AnimationKey.Broken))
-                {
-                    // 再生終了後のコールバックで非表示にするフラグを立てる。
-                    // コールバックが呼び出され、次のこのメソッドの呼び出し時は何も処理をせず完了を返す。
-                    _animation.Play(AnimationKey.Broken, () => _isDisable = true);
-                }
+                //if (plan.Choice == Choice.Broken && !_animation.IsPlaying(AnimationKey.Broken))
+                //{
+                //    // 再生終了後のコールバックで非表示にするフラグを立てる。
+                //    // コールバックが呼び出され、次のこのメソッドの呼び出し時は何も処理をせず完了を返す。
+                //   // _animation.Play(AnimationKey.Broken, () => _isDisable = true);
+                //}
 
                 // 攻撃
                 if (plan.Choice == Choice.Attack)
                 {
                     // 死亡もしくは攻撃アニメーションが再生中でなければアニメーションを再生                    
-                    if (!_animation.IsPlaying(AnimationKey.Broken) && !_animation.IsPlaying(AnimationKey.Attack))
-                    {
-                        _animation.Play(AnimationKey.Attack);
-                    }
+                    //if (!_animation.IsPlaying(AnimationKey.Broken) && !_animation.IsPlaying(AnimationKey.Attack))
+                    //{
+                    //    _animation.Play(AnimationKey.Attack);
+                    //}
 
                     // 武器毎の攻撃処理
                     // アニメーションの任意のタイミングで攻撃判定が未実装。
-                    if (_weapon != null)
-                    {
-                        _weapon.Attack();
-                        _blackBoard.LastAttackTime = Time.time;
-                    }
+                    //if (_weapon != null)
+                    //{
+                    //    _weapon.Attack();
+                    //    _blackBoard.LastAttackTime = Time.time;
+                    //}
                 }
 
                 // 死亡以下の優先度(キューの追加順)の行動はすべてキャンセルされる。
@@ -129,6 +133,13 @@ namespace Enemy.Control
             CombatDesigner.ExitReport(lt, isDead: _blackBoard.Hp <= 0);
 
             _animation.Cleaningup();
+            _stateMachine.Destroy();
+        }
+
+        public override void OnDestroyEvent()
+        {
+            // 死亡もしくは撤退前にゲームが終了した場合に後始末がされないのを防ぐ
+            OnPreCleanup();
         }
     }
 }

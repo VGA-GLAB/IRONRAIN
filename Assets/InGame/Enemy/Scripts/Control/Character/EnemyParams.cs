@@ -97,6 +97,7 @@ namespace Enemy.Control
             public static float AttackAnimationPlayTime = 1.0f;
             public static float BrokenAnimationPlayTime = 1.0f;
             public static float ApproachAnimationPlayTime = float.MaxValue / 2;
+            public static float BlendTreeParameterMag = 100.0f;
         }
 
         [Header("視界の設定")]

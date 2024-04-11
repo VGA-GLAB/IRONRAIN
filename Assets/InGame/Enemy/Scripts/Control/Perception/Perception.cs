@@ -23,7 +23,7 @@ namespace Enemy.Control
             _fireRate = new FireRate(enemyParams, blackBoard);
             _position = new PositionRelationship(transform, rotate, player, pool, enemyParams);
             _fovSensor = new FovSensor(transform, rotate, enemyParams);
-            _conditionCheck = new ConditionCheck(enemyParams, blackBoard);
+            _conditionCheck = new ConditionCheck(transform, enemyParams, blackBoard);
             _blackBoard = blackBoard;
         }
 
