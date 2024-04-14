@@ -12,6 +12,7 @@ namespace Enemy.Control
         private FireRate _fireRate;
         private PositionRelationship _position;
         private FovSensor _fovSensor;
+        private ApproachSensor _approachSensor;
         private ConditionCheck _conditionCheck;
         private BlackBoard _blackBoard;
 
@@ -23,6 +24,7 @@ namespace Enemy.Control
             _fireRate = new FireRate(enemyParams, blackBoard);
             _position = new PositionRelationship(transform, rotate, player, pool, enemyParams);
             _fovSensor = new FovSensor(transform, rotate, enemyParams);
+            _approachSensor = new ApproachSensor(transform, enemyParams);
             _conditionCheck = new ConditionCheck(transform, enemyParams, blackBoard);
             _blackBoard = blackBoard;
         }
@@ -58,9 +60,8 @@ namespace Enemy.Control
             _playerInput.Write();
 
             _fovSensor.CheckFOV();
-            _position.AreaFix();
-            _position.PlayerWith(_blackBoard);
-            _position.SlotWith(_blackBoard);
+            _approachSensor.Update(_blackBoard);
+            _position.Update(_blackBoard);
             _fireRate.NextTiming();
             _conditionCheck.Check();
 
@@ -83,6 +84,7 @@ namespace Enemy.Control
         public override void OnDrawGizmosEvent()
         {
             _fovSensor.DrawViewRange();
+            _approachSensor.DrawRange();
             _position.DrawArea();
 
             // LateUpdateで書き込んだ内容を消しているので、黒板の情報は正常に描画されない。

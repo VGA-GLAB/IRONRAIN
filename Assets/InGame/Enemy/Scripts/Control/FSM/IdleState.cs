@@ -35,6 +35,8 @@ namespace Enemy.Control.FSM
                 if (plan.Choice == Choice.Approach) TryChangeState(stateTable[StateKey.Approach]);
                 if (plan.Choice == Choice.Chase) TryChangeState(stateTable[StateKey.Battle]);
                 if (plan.Choice == Choice.Attack) TryChangeState(stateTable[StateKey.Battle]);
+                if (plan.Choice == Choice.Escape) TryChangeState(stateTable[StateKey.Escape]);
+                if (plan.Choice == Choice.Broken) TryChangeState(stateTable[StateKey.Broken]);
             }
         }
     }

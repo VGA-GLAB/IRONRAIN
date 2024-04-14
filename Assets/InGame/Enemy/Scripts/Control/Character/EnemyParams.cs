@@ -3,62 +3,33 @@
 namespace Enemy.Control
 {
     /// <summary>
-    /// 敵キャラクター毎のパラメータを一括で管理する。
-    /// 必要に応じて各クラスに注入する。
+    /// 敵キャラクター個体毎のパラメータ。
+    /// プランナーが弄る。
     /// </summary>
-    [CreateAssetMenu(fileName ="EnemyParams_" ,menuName ="Enemy/Params")]
-    public class EnemyParams : ScriptableObject
+    [System.Serializable]
+    public class EnemyParams
     {
-        // 視界
+        // 接近
         [System.Serializable]
-        public class FovSettings
+        public class AdvanceSettings
         {
-            [Header("半径")]
-            [Min(0)]
-            [SerializeField] private float _radius = 4.0f;
-            [Header("中心位置のオフセット")]
-            [SerializeField] private Vector3 _offset;
-
-            public float Radius => _radius;
-            public Vector3 Offset => _offset;
-        }
-
-        // 位置取りを決めるエリア
-        [System.Serializable]
-        public class AreaSettings 
-        {
-            [Header("キャラクターの範囲の半径")]
-            [Tooltip("この範囲内にプレイヤーを侵入させないように動く")]
+            [Header("レーンの位置")]
+            [SerializeField] private SlotPlace _slot;
+            [Header("検知距離")]
             [Min(1.0f)]
-            [SerializeField] private float _radius = 2.0f;
-            [Header("プレイヤーの範囲の半径")]
-            [Tooltip("この範囲内にキャラクターは侵入しないように動く")]
+            [SerializeField] private float _distance = 33.0f;
+            [Header("移動速度")]
             [Min(1.0f)]
-            [SerializeField] private float _playerRadius = 2.7f;
+            [SerializeField] private float _moveSpeed = 12.0f;
 
-            public float Radius => _radius;
-            public float PlayerRadius=> _playerRadius;
-        }
-
-        // 移動
-        [System.Serializable]
-        public class MoveSettings
-        {
-            [Header("プレイヤーに向かう速さ")]
-            [Tooltip("登場後、この速さでプレイヤーに追従する")]
-            [Min(1.0f)]
-            [SerializeField] private float _chaseSpeed = 6.0f;
-            [Header("先頭から撤退する際の速さ")]
-            [Min(1.0f)]
-            [SerializeField] private float _escapeSpeed = 6.0f;
-
-            public float ChaseSpeed => _chaseSpeed;
-            public float EscapeSpeed => _escapeSpeed;
+            public SlotPlace Slot => _slot;
+            public float Distance => _distance;
+            public float MoveSpeed => _moveSpeed;
         }
 
         // 戦闘
         [System.Serializable]
-        public class TacticalSettings
+        public class BattleSettings
         {
             [Header("最大体力")]
             [Min(1)]
@@ -68,7 +39,7 @@ namespace Enemy.Control
             [SerializeField] private float _dying = 0.2f;
             [Header("生存時間(秒)")]
             [Min(1)]
-            [SerializeField] private float _lifeTime;
+            [SerializeField] private float _lifeTime = 60.0f;
             [Header("攻撃タイミングを記述したファイル")]
             [Tooltip("記述されたタイミングをループする。")]
             [SerializeField] private TextAsset _inputBufferAsset;
@@ -76,9 +47,18 @@ namespace Enemy.Control
             [SerializeField] private bool _useInputBuffer;
             [Header("ファイルを使用しない場合の攻撃間隔")]
             [Min(0.01f)]
-            [SerializeField] private float _attackRate;
-            [Header("ダメージ耐性")]
-            [SerializeField] private Armor _armor;
+            [SerializeField] private float _attackRate = 0.01f;
+            [Header("プレイヤーに向かう速さ")]
+            [Tooltip("登場後、この速さでプレイヤーに追従する")]
+            [Min(1.0f)]
+            [SerializeField] private float _chaseSpeed = 6.0f;
+            [Header("戦闘から撤退する際の速さ")]
+            [Min(1.0f)]
+            [SerializeField] private float _escapeSpeed = 6.0f;
+            [Header("視界の半径")]
+            [Tooltip("この範囲にプレイヤーを捉えると攻撃してくる。")]
+            [Min(0)]
+            [SerializeField] private float _fovRadius = 8.0f;
 
             public int MaxHp => _maxHp;
             public float Dying => _dying;
@@ -86,32 +66,33 @@ namespace Enemy.Control
             public TextAsset InputBufferAsset => _inputBufferAsset;
             public bool UseInputBuffer => _useInputBuffer;
             public float AttackRate => _attackRate;
-            public Armor Armor => _armor;
+            public float ChaseSpeed => _chaseSpeed;
+            public float EscapeSpeed => _escapeSpeed;
+            public float FovRadius => _fovRadius;
         }
 
         // デバッグ用
         // 必要に応じてプランナー用に外出しする。
         public static class Debug
         {
+            // プレイヤーに接近する際のホーミング力
             public static float HomingPower = 0.5f;
-            public static float AttackAnimationPlayTime = 1.0f;
-            public static float BrokenAnimationPlayTime = 1.0f;
-            public static float ApproachAnimationPlayTime = float.MaxValue / 2;
+            // 前後左右に移動するアニメーションのブレンドする強さ
             public static float BlendTreeParameterMag = 100.0f;
+            // 接近完了とみなす距離の閾値
+            public static float ApproachCompleteThreshold = 0.1f;
         }
 
-        [Header("視界の設定")]
-        [SerializeField] private FovSettings _fov;
-        [Header("侵入不可能な範囲の設定")]
-        [SerializeField] private AreaSettings _area;
-        [Header("移動の設定")]
-        [SerializeField] private MoveSettings _move;
-        [Header("戦闘の設定")]
-        [SerializeField] private TacticalSettings _tactical;
+        [Header("生成~直進状態の設定")]
+        [SerializeField] private AdvanceSettings _advance;
+        [Header("戦闘状態の設定")]
+        [SerializeField] private BattleSettings _battle;
+        [Header("種類ごとに共通したパラメータ")]
+        [Tooltip("例外的なキャラクターがいない場合はこの項目は弄らなくて良い。")]
+        [SerializeField] private CommonParams _common;
 
-        public FovSettings FOV => _fov;
-        public AreaSettings Area => _area;
-        public MoveSettings Move => _move;
-        public TacticalSettings Tactical => _tactical;
+        public AdvanceSettings Advance => _advance;
+        public BattleSettings Battle => _battle;
+        public CommonParams Common => _common;
     }
 }

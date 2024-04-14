@@ -51,7 +51,7 @@ namespace Enemy.Control
             _current.Clear();
 
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
-            RaycastExtensions.OverlapSphere(Origin(), _params.FOV.Radius, col =>
+            RaycastExtensions.OverlapSphere(Origin(), _params.Battle.FovRadius, col =>
             {
                 // 前フレームと比較するため、視界に捉えたオブジェクトを識別。
                 if (col.CompareTags(Const.ViewTags)) _current.Add(col);
@@ -78,7 +78,7 @@ namespace Enemy.Control
         // オフセット込みの位置
         private Vector3 Origin()
         {
-            return _transform.OffsetPosition(_rotate, _params.FOV.Offset);
+            return _transform.OffsetPosition(_rotate, _params.Common.FOV.Offset);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Enemy.Control
         /// </summary>
         public void DrawViewRange()
         {
-            GizmosUtils.WireSphere(Origin(), _params.FOV.Radius, Color.green);
+            GizmosUtils.WireSphere(Origin(), _params.Battle.FovRadius, Color.green);
         }
     }
 }

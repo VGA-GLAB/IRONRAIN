@@ -12,6 +12,7 @@ namespace Enemy.Control.FSM
         Approach,
         Battle,
         Broken,
+        Escape,
         Idle,
     }
 

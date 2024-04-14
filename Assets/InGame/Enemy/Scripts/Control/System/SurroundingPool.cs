@@ -6,6 +6,18 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
+    /// スロットの位置を指定する用の列挙型
+    /// </summary>
+    public enum SlotPlace
+    {
+        Left,
+        MiddleLeft,
+        Middle,
+        MiddleRight,
+        Right,
+    }
+
+    /// <summary>
     /// 敵を配置する箇所。
     /// </summary>
     public class Slot : CircleArea
@@ -37,11 +49,12 @@ namespace Enemy.Control
     /// </summary>
     public class SurroundingPool : MonoBehaviour
     {
+        // スロット数は仕様で決まっている。
+        private const int Capacity = 5;
+
         [Header("プレイヤーを基準にする")]
         [SerializeField] private Transform _player;
         [Header("生成時の設定")]
-        [Tooltip("スロット数")]
-        [SerializeField] private int _capacity = 3;
         [Tooltip("プレイヤーの位置から前方向のオフセット")]
         [SerializeField] private float _forwardOffset = 1.0f;
         [Tooltip("スロット同士の間隔")]
@@ -75,8 +88,8 @@ namespace Enemy.Control
         {
             if (_player == null) return;
 
-            _pool = new Slot[_capacity];
-            EmptySlotCount = _capacity;
+            _pool = new Slot[Capacity];
+            EmptySlotCount = Capacity;
 
             foreach ((Vector3 point, int index) value in SlotPoints())
             {
@@ -99,11 +112,11 @@ namespace Enemy.Control
         {
             // プレイヤーの向きに準ずるため、プレイヤーの前と右方向を基準に決める。
             Vector3 forward = _player.forward * _forwardOffset;
-            Vector3 left = -_player.right * (_capacity - 1) * (_radius + _space / 2);
+            Vector3 left = -_player.right * (Capacity - 1) * (_radius + _space / 2);
             Vector3 diameter = _player.right * _radius * 2;
             Vector3 space = _player.right * _space;
 
-            for (int i = 0; i < _capacity; i++)
+            for (int i = 0; i < Capacity; i++)
             {
                 // 左から順に位置を返していく。
                 yield return (_player.position + forward + left + (diameter + space) * i, i);
@@ -128,6 +141,15 @@ namespace Enemy.Control
 
             slot = null;
             return false;
+        }
+
+        /// <summary>
+        /// スロットを借りる。
+        /// 既に使われている場合でも借りることが出来る。
+        /// </summary>
+        public Slot Rent(SlotPlace place)
+        {
+            return _pool[(int)place];
         }
 
         /// <summary>

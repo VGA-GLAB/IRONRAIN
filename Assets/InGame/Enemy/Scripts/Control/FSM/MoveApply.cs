@@ -9,13 +9,16 @@ namespace Enemy.Control.FSM
     /// </summary>
     public class MoveApply
     {
+        private Choice _choice;
         private BlackBoard _blackBoard;
         private BodyMove _move;
         private BodyRotate _rotate;
         private BodyAnimation _animation;
 
-        public MoveApply(BlackBoard blackBoard, BodyMove move, BodyRotate rotate, BodyAnimation animation)
+        public MoveApply(Choice choice, BlackBoard blackBoard, BodyMove move, BodyRotate rotate, 
+            BodyAnimation animation)
         {
+            _choice = choice;
             _blackBoard = blackBoard;
             _move = move;
             _rotate = rotate;
@@ -34,7 +37,7 @@ namespace Enemy.Control.FSM
             // deltaTimeぶんの移動を上書きする恐れがあるので移動より先。
             while (_blackBoard.WarpOptions.TryDequeue(out WarpPlan plan))
             {
-                if (plan.Choice != Choice.Chase) continue;
+                if (plan.Choice != _choice) continue;
 
                 _move.Warp(plan.Position);
             }
@@ -42,7 +45,7 @@ namespace Enemy.Control.FSM
             // 移動
             while (_blackBoard.MovementOptions.TryDequeue(out MovementPlan plan))
             {
-                if (plan.Choice != Choice.Chase) continue;
+                if (plan.Choice != _choice) continue;
 
                 _move.Move(plan.Direction * plan.Speed);
             }
@@ -50,7 +53,7 @@ namespace Enemy.Control.FSM
             // 回転
             while (_blackBoard.ForwardOptions.TryDequeue(out ForwardPlan plan))
             {
-                if (plan.Choice != Choice.Chase) continue;
+                if (plan.Choice != _choice) continue;
 
                 _rotate.Forward(plan.Value);
             }

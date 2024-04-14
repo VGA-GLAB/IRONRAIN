@@ -129,7 +129,7 @@ namespace Enemy.Control
         public override void OnPreCleanup()
         {
             // 残りの生存時間から死ぬまでの生存を計算
-            float lt = _params.Tactical.LifeTime - _blackBoard.LifeTime;
+            float lt = _params.Battle.LifeTime - _blackBoard.LifeTime;
             CombatDesigner.ExitReport(lt, isDead: _blackBoard.Hp <= 0);
 
             _animation.Cleaningup();

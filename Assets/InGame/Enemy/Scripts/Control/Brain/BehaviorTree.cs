@@ -18,7 +18,6 @@ namespace Enemy.Control
 
         public BehaviorTree(Transform transform, Transform rotate, EnemyParams enemyParams, BlackBoard blackBoard)
         {
-            // 現状、移動と全く同じ内容。接近時は追跡時より移動速度が速いはずなので対応させる。
             _approach = new Sequence(
                 "ApproachSequence",
                 new MoveToPlayer(Choice.Approach, transform, rotate, blackBoard, enemyParams),

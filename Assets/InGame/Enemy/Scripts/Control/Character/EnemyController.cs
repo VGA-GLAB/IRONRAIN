@@ -6,12 +6,13 @@ namespace Enemy.Control
 {
     public class EnemyController : MonoBehaviour, IDamageable
     {
+        [Header("プランナーが弄る値")]
+        [SerializeField] private EnemyParams _enemyParams;
         [Header("子やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
         [SerializeField] private Animator _animator;
         [SerializeField] private AnimationEvent _animationEvent;
-        [SerializeField] private EnemyParams _enemyParams;
         [SerializeField] private Effect[] _effects;
         [Header("他人が作った機能への参照")]
         [SerializeField] private GameObject _approach; // まだ仕様が決まっていないのでとりあえずGameObjectで参照する。

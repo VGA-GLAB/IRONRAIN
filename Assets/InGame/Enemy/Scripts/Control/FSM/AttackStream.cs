@@ -63,6 +63,7 @@ namespace Enemy.Control.FSM
             void Attack()
             {
                 if (_equipment == null) return;
+                if (!_blackBoard.IsAlive()) return;
 
                 _equipment.Attack();
                 _blackBoard.UpdateAttackTime();

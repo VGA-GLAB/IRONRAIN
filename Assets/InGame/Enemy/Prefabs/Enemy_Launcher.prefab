@@ -79,13 +79,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c64c125d33c714697c38ed8bccb297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  _surroundingPool: {fileID: 0}
+  _enemyParams:
+    _advance:
+      _slot: 0
+      _distance: 33
+      _moveSpeed: 30
+    _battle:
+      _maxHp: 10
+      _dying: 0.2
+      _lifeTime: 60
+      _inputBufferAsset: {fileID: 0}
+      _useInputBuffer: 0
+      _attackRate: 0.01
+      _chaseSpeed: 35
+      _escapeSpeed: 44
+      _fovRadius: 8
+    _common: {fileID: 11400000, guid: d7b1915fc8482f641b62d9faea0a0286, type: 2}
   _offset: {fileID: 5998904034082580316}
   _rotate: {fileID: 5998904032262117972}
   _animator: {fileID: 4744671737184664089}
   _animationEvent: {fileID: 4346500607311222974}
-  _enemyParams: {fileID: 11400000, guid: 2422456657b67f149b82f6edda9b745a, type: 2}
   _effects:
   - {fileID: 4707357978914907934}
   _approach: {fileID: 0}

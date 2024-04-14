@@ -20,7 +20,8 @@ namespace Enemy.Control
             {
                 { StateKey.Approach, new ApproachState(blackBoard, move, rotate, animation) },
                 { StateKey.Battle, new BattleState(blackBoard, move, rotate, animation, equipment) },
-                { StateKey.Broken, new BrokenState() },
+                { StateKey.Broken, new BrokenState(animation) },
+                { StateKey.Escape, new EscapeState(blackBoard, move, rotate, animation) },
                 { StateKey.Idle, new IdleState(blackBoard) },
             };
 
