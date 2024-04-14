@@ -26,6 +26,7 @@ public class PlayerMoveModel : IPlayerStateModel
     private PlayerEnvroment _playerEnvroment;
     private Vector2 _dir = new();
     private Transform _transform;
+    private float _startθ;
 
 
     public void SetUp(PlayerEnvroment env, CancellationToken token)
@@ -39,6 +40,7 @@ public class PlayerMoveModel : IPlayerStateModel
     public void Start()
     {
         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+        Sumθ();
     }
     public void FixedUpdate()
     {
@@ -47,7 +49,6 @@ public class PlayerMoveModel : IPlayerStateModel
 
     public void Update()
     {
-        Debug.Log(_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster));
         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
     }
 
@@ -61,13 +62,13 @@ public class PlayerMoveModel : IPlayerStateModel
         _dir = new Vector2(_leftController.ControllerDir.z, _rightController.ControllerDir.z);
 
         //前進
-        if (_leftController.ControllerDir.z == 1)
+        if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z == 1)
         {
             _rb.velocity = _transform.forward * _threeGearSpeed;
             //_moveState = MoveState.Forward;
         }
         //後退
-        else if (_leftController.ControllerDir.z == -1)
+        else if (_leftController.ControllerDir.z == -1 && _rightController.ControllerDir.z == -1)
         {
             _rb.velocity = _transform.forward * _oneGearSpeed;
             //_moveState = MoveState.Back;
@@ -80,9 +81,12 @@ public class PlayerMoveModel : IPlayerStateModel
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
                 var nextPoint = NextThrusterMovePoint(_thrusterMoveNum * -1);
+                Debug.Log("左スラスター");
                 UniTask.Create(async () =>
                 {
-                    await _playerEnvroment.PlayerTransform.DOMove(nextPoint, _thrusterMoveTime);
+                    await _playerEnvroment.PlayerTransform
+                    .DOMove(nextPoint, _thrusterMoveTime)
+                    .OnComplete(() => _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
                 });
@@ -98,7 +102,9 @@ public class PlayerMoveModel : IPlayerStateModel
                 var nextPoint = NextThrusterMovePoint(_thrusterMoveNum);
                 UniTask.Create(async () =>
                 {
-                    await _playerEnvroment.PlayerTransform.DOMove(nextPoint, _thrusterMoveTime);
+                    await _playerEnvroment.PlayerTransform
+                    .DOMove(nextPoint, _thrusterMoveTime)
+                    .OnComplete(()=> _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
                 });
@@ -115,14 +121,27 @@ public class PlayerMoveModel : IPlayerStateModel
     /// </summary>
     private Vector3 NextThrusterMovePoint(float moveDistance) 
     {
-        _totalThrusterMove += moveDistance;
-        var distance = Vector3.Distance(_centerPoint.position, _playerEnvroment.PlayerTransform.position);
-        var θ = (_totalThrusterMove / distance) * Mathf.Deg2Rad;
+        var playerPos = _playerEnvroment.PlayerTransform.position;
+        playerPos.y = 0;
+        var r = Vector3.Distance(_centerPoint.position, playerPos);
+        var θ = (moveDistance / r);
+        Debug.Log($"θ:{θ}r:{r}");
 
-        var x = Mathf.Cos(θ) * distance;
-        var z = Mathf.Sin(θ) * distance;
+       _totalThrusterMove += θ;
+        var cos = Mathf.Cos(_totalThrusterMove + _startθ);
+        var x = cos * r;
+        var z = Mathf.Sin(_totalThrusterMove + _startθ) * r;
 
         var position = new Vector3 (x + _centerPoint.position.x, _playerEnvroment.PlayerTransform.position.y, z + _centerPoint.position.z);
+        //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
         return position;
+    }
+
+    private void Sumθ() 
+    {
+        var r = Vector3.Distance(_centerPoint.position, _playerEnvroment.PlayerTransform.position);
+        var aDir = (_playerEnvroment.PlayerTransform.position - _centerPoint.position).normalized;
+        var bDir = (new Vector3(_centerPoint.position.x + r, _centerPoint.position.y, _centerPoint.position.z) - _centerPoint.position).normalized;
+        _startθ = Vector3.Angle(aDir, bDir) * Mathf.Deg2Rad;
     }
 }

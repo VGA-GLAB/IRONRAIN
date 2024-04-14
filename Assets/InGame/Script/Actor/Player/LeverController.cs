@@ -12,6 +12,7 @@ public class LeverController : MonoBehaviour
     public Vector3 ControllerDir => _controllerDir;
 
     [SerializeField] private InputActionProperty _playerHandTriggerInput;
+    [SerializeField] private InputActionProperty _leverInput;
     [SerializeField] private Transform _playerHandTransfrom;
     [Header("ÉåÉoÅ[ÇÃä¥ìxê›íË")]
     [SerializeField] private float _moveSpeed = 5;
@@ -25,6 +26,7 @@ public class LeverController : MonoBehaviour
     [SerializeField] private float _neutralRange;
 
     private bool _isLeverMove = false;
+    private Vector2 _leverDir;
     private Vector3 _playerHandSavePos;
     private Vector3 _controllerDir = new();
     private Vector3 _controllerMoveDir = new();
@@ -39,6 +41,11 @@ public class LeverController : MonoBehaviour
     void Update()
     {
         _isLeverMove = Convert.ToBoolean(_playerHandTriggerInput.action.ReadValue<float>());
+        _leverDir = _leverInput.action.ReadValue<Vector2>();
+        if (_playerSetting.IsKeyBoard && _leverDir != Vector2.zero) 
+        {
+            _isLeverMove = true;
+        }
         LeverMove();
     }
 
@@ -102,7 +109,7 @@ public class LeverController : MonoBehaviour
     private void SetControllerDir() 
     {
 
-        if (!_playerSetting.IsKeyBoard) 
+        if (!_playerSetting.IsKeyBoard)
         {
             if (transform.localPosition.z > _neutralPos.localPosition.z + _neutralRange)
             {
@@ -112,11 +119,25 @@ public class LeverController : MonoBehaviour
             {
                 _controllerDir.z = -1;
             }
+            else
+            {
+                _controllerDir.z = 0;
+            }
+        }
+        else
+        {
+            if (1 <= _leverDir.y)
+            {
+                _controllerDir.z = 1;
+            }
+            else if (_leverDir.y < 0)
+            {
+                _controllerDir.z = -1;
+            }
             else 
             {
                 _controllerDir.z = 0;
             }
         }
-        
     }
 }
