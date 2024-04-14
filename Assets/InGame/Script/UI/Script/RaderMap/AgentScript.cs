@@ -14,5 +14,22 @@ public class AgentScript : MonoBehaviour
     /// <summary> マップに表示するイメージ</summary>
     [SerializeField] public Image Image;
     /// <summary>ロックオン状態 </summary>
-    public bool IsLockon = false;   
+    public bool IsLockon = false;
+
+    private void Awake()
+    {
+        //レーダーテストを検索する
+        RaderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
+    }
+
+    private void Start()
+    {
+        RaderMap.GenerateEnemy(this.gameObject);
+    }
+
+    public void EnemyDestory()
+    {
+        RaderMap.DestroyEnemy(this.gameObject);
+        Destroy(this.gameObject);
+    }
 }
