@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class RobotShot : MonoBehaviour
+public class RobotShotMock : MonoBehaviour
 {
     [SerializeField] private InputActionProperty _fireInput;
     [SerializeField] private GameObject _bulletPrefab;
