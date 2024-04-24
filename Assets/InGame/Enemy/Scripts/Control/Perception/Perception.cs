@@ -17,7 +17,7 @@ namespace Enemy.Control
         private BlackBoard _blackBoard;
 
         public Perception(Transform transform, Transform rotate, Transform player, EnemyParams enemyParams, 
-            BlackBoard blackBoard, SurroundingPool pool)
+            BlackBoard blackBoard, SlotPool pool)
         {
             _levelAdjust = new LevelAdjust(transform, blackBoard);
             _playerInput = new PlayerInput(transform, blackBoard);

@@ -15,7 +15,7 @@ namespace Enemy.Mockup
         /// </summary>
         public event UnityAction OnSlotStay;
 
-        [SerializeField] private SurroundingPool _pool;
+        [SerializeField] private SlotPool _pool;
         [SerializeField] private Transform _player;
         [SerializeField] private Transform _forward;
         [Header("接近する距離の設定")]

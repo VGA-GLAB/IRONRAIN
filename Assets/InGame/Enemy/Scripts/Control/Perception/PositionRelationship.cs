@@ -13,7 +13,7 @@ namespace Enemy.Control
         private Transform _transform;
         private Transform _rotate;
         private Transform _player;
-        private SurroundingPool _pool;
+        private SlotPool _pool;
         private EnemyParams _params;
 
         private CircleArea _area;
@@ -21,7 +21,7 @@ namespace Enemy.Control
         // スロットの位置の変更はこのクラスでは行わず、貸し出す側が行う。
         private Slot _slot;
 
-        public PositionRelationship(Transform transform, Transform rotate, Transform player, SurroundingPool pool, 
+        public PositionRelationship(Transform transform, Transform rotate, Transform player, SlotPool pool, 
             EnemyParams enemyParams)
         {
             _transform = transform;

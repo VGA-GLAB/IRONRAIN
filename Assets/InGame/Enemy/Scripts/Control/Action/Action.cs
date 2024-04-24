@@ -32,7 +32,7 @@ namespace Enemy.Control
             _rotate = new BodyRotate(rotate);
             _animation = new BodyAnimation(animator, animationEvent);
             _effector = new Effector(effects);
-            _stateMachine = new StateMachine(blackBoard, _move, _rotate, _animation, equipment);
+            _stateMachine = new StateMachine(blackBoard, _move, _rotate, _animation, _effector, equipment);
 
             _isDisable = false;
         }

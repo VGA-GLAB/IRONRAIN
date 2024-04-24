@@ -44,21 +44,24 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// プレイヤーの周囲に敵を配置するスロットを作成し管理する。
+    /// Z軸を前方向として敵を配置するスロットを作成し管理する。
     /// プレイヤーがY軸以外で回転すると破綻する可能性がある。
     /// </summary>
-    public class SurroundingPool : MonoBehaviour
+    [DefaultExecutionOrder(-1)]
+    public class SlotPool : MonoBehaviour
     {
         // スロット数は仕様で決まっている。
         private const int Capacity = 5;
 
+        [Header("レーンの設定")]
+        [SerializeField] private Vector3 _origin;
         [Header("プレイヤーを基準にする")]
         [SerializeField] private Transform _player;
         [Header("生成時の設定")]
         [Tooltip("プレイヤーの位置から前方向のオフセット")]
         [SerializeField] private float _forwardOffset = 1.0f;
         [Tooltip("スロット同士の間隔")]
-        [SerializeField] private float _space;
+        [SerializeField] private float _space = 10.0f;
         [Tooltip("スロットの半径")]
         [Min(1.0f)]
         [SerializeField] private float _radius = 1.0f;
@@ -68,20 +71,30 @@ namespace Enemy.Control
         /// <summary>
         /// 空きスロットの数
         /// </summary>
-        public int EmptySlotCount { get; private set; }
+        public int EmptyCount { get; private set; }
         /// <summary>
         /// 空きスロットが存在するか
         /// </summary>
-        public bool IsExistEmptySlot => EmptySlotCount > 0;
+        public bool IsExistEmpty => EmptyCount > 0;
 
-        private void Awake()
+        private void Start()
         {
             CreatePool();
         }
 
         private void Update()
         {
-            UpdateAllSlotPoint();
+            UpdateSlot();
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (_pool != null)
+            {
+                foreach (Slot s in _pool) s.DrawOnGizmos();
+            }
+
+            DrawLane();
         }
 
         private void CreatePool()
@@ -89,42 +102,32 @@ namespace Enemy.Control
             if (_player == null) return;
 
             _pool = new Slot[Capacity];
-            EmptySlotCount = Capacity;
-
-            foreach ((Vector3 point, int index) value in SlotPoints())
+            for (int i = 0; i < _pool.Length; i++)
             {
-                _pool[value.index] = new Slot(value.point, _radius);
+                Vector3 left = Vector3.left * (Capacity - 1) * (_radius + _space / 2);
+                Vector3 diameter = Vector3.right * _radius * 2;
+                Vector3 space = Vector3.right * _space;
+                _pool[i] = new Slot(_origin + left + (diameter + space) * i, _radius);
             }
+
+            EmptyCount = Capacity;
         }
 
-        private void UpdateAllSlotPoint()
+        private void UpdateSlot()
         {
             if (_player == null || _pool == null) return;
 
-            foreach ((Vector3 point, int index) value in SlotPoints())
+            foreach (Slot s in _pool)
             {
-                _pool[value.index].Point = value.point;
-            }
-        }
+                Vector3 p = s.Point;
+                p.z = _player.position.z + _forwardOffset;
 
-        // 各スロットの位置と添え字を返す。
-        private IEnumerable<(Vector3, int)> SlotPoints()
-        {
-            // プレイヤーの向きに準ずるため、プレイヤーの前と右方向を基準に決める。
-            Vector3 forward = _player.forward * _forwardOffset;
-            Vector3 left = -_player.right * (Capacity - 1) * (_radius + _space / 2);
-            Vector3 diameter = _player.right * _radius * 2;
-            Vector3 space = _player.right * _space;
-
-            for (int i = 0; i < Capacity; i++)
-            {
-                // 左から順に位置を返していく。
-                yield return (_player.position + forward + left + (diameter + space) * i, i);
+                s.Point = p;
             }
         }
         
         /// <summary>
-        /// スロットを借りる
+        /// スロットを借りる。
         /// </summary>
         public bool TryRent(out Slot slot)
         {
@@ -132,7 +135,7 @@ namespace Enemy.Control
             {
                 if (!s.IsUsing)
                 {
-                    EmptySlotCount--;
+                    EmptyCount--;
                     s.IsUsing = true;
                     slot = s;
                     return true;
@@ -144,8 +147,7 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// スロットを借りる。
-        /// 既に使われている場合でも借りることが出来る。
+        /// 既に使われている場合でもスロットを借りる。
         /// </summary>
         public Slot Rent(SlotPlace place)
         {
@@ -160,14 +162,25 @@ namespace Enemy.Control
             if (slot == null) return;
 
             slot.IsUsing = false;
-            EmptySlotCount++;
+            EmptyCount++;
         }
 
-        private void OnDrawGizmos()
+        // レーンを描画
+        void DrawLane()
         {
-            if (_pool != null)
+            if (_pool == null) return;
+
+            // 描画用なので適当な値
+            const float Half = 500;
+
+            foreach (Slot s in _pool)
             {
-                foreach (Slot s in _pool) s.DrawOnGizmos();
+                Vector3 side = Vector3.right * (_radius * 2 + _space);
+                Vector3 a = s.Point - side;
+                Vector3 b = s.Point + side;
+
+                GizmosUtils.Line(a + Vector3.forward * Half, a + Vector3.back * Half, ColorExtensions.ThinWhite);
+                GizmosUtils.Line(b + Vector3.forward * Half, b + Vector3.back * Half, ColorExtensions.ThinWhite);
             }
         }
     }

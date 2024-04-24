@@ -13,7 +13,7 @@ namespace Enemy.Control
         [System.Serializable]
         public class AdvanceSettings
         {
-            [Header("レーンの位置")]
+            [Header("移動レーンの位置")]
             [SerializeField] private SlotPlace _slot;
             [Header("検知距離")]
             [Min(1.0f)]

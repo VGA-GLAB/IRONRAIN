@@ -6,8 +6,9 @@ namespace Enemy.Control
 {
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [Header("プランナーが弄る値")]
+        [Header("----------プランナーが弄る値----------")]
         [SerializeField] private EnemyParams _enemyParams;
+        [Header("------------------------------------")]
         [Header("子やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
@@ -19,7 +20,7 @@ namespace Enemy.Control
 
         // 注入する依存関係
         private Transform _player;
-        private SurroundingPool _surroundingPool;
+        private SlotPool _surroundingPool;
 
         private Transform _transform;
         private Perception _perception;
@@ -33,7 +34,7 @@ namespace Enemy.Control
         private bool _isCleanupRunning;
 
         [Inject]
-        private void Construct(Transform player, SurroundingPool pool)
+        private void Construct(Transform player, SlotPool pool)
         {
             _player = player;
             _surroundingPool = pool;
