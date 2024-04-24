@@ -4,7 +4,7 @@ using VContainer;
 
 namespace Enemy.Control
 {
-    public class EnemyController : MonoBehaviour, IDamageable
+    public class EnemyController : MonoBehaviour, IDamageable, IEnemyTypeReader
     {
         [Header("----------プランナーが弄る値----------")]
         [SerializeField] private EnemyParams _enemyParams;
@@ -32,6 +32,11 @@ namespace Enemy.Control
         // 非表示にする非同期処理を実行中フラグ。
         // 二重に処理を呼ばないために必要。
         private bool _isCleanupRunning;
+
+        /// <summary>
+        /// 敵の種類を判定する値を返す。
+        /// </summary>
+        EnemyType IEnemyTypeReader.Type => _enemyParams == null ? EnemyType.Dummy : _enemyParams.Common.Type;
 
         [Inject]
         private void Construct(Transform player, SlotPool pool)

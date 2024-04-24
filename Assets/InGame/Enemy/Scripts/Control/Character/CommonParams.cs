@@ -48,10 +48,12 @@ namespace Enemy.Control
             public Armor Armor => _armor;
         }
 
+        [SerializeField] private EnemyType _type;
         [SerializeField] private FovSettings _fov;
         [SerializeField] private AreaSettings _area;
         [SerializeField] private TacticalSettings _tactical;
 
+        public EnemyType Type => _type;
         public FovSettings FOV => _fov;
         public AreaSettings Area => _area;
         public TacticalSettings Tactical => _tactical;
