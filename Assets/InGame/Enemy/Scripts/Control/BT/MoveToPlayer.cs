@@ -67,7 +67,7 @@ namespace Enemy.Control.BT
 
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
-            Vector3 delta = toSlot * (_speed + order) * Time.deltaTime;
+            Vector3 delta = toSlot * (_speed + order) * BlackBoard.DeltaTime;
             if (delta.sqrMagnitude >= _blackBoard.AreaToSlotSqrDistance)
             {
                 _blackBoard.AddWarpOption(_choice, _blackBoard.PlayerHeightSlotPoint());

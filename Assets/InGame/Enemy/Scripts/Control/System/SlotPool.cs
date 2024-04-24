@@ -44,17 +44,15 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// Z軸を前方向として敵を配置するスロットを作成し管理する。
+    /// 敵を配置するスロットを作成し管理する。
     /// プレイヤーがY軸以外で回転すると破綻する可能性がある。
     /// </summary>
     [DefaultExecutionOrder(-1)]
     public class SlotPool : MonoBehaviour
     {
-        // スロット数は仕様で決まっている。
-        private const int Capacity = 5;
-
-        [Header("レーンの設定")]
-        [SerializeField] private Vector3 _origin;
+        [Header("フィールドの中心点")]
+        [SerializeField] private Vector3 _center;
+        [SerializeField] private int _piece = 12;
         [Header("プレイヤーを基準にする")]
         [SerializeField] private Transform _player;
         [Header("生成時の設定")]
@@ -101,16 +99,23 @@ namespace Enemy.Control
         {
             if (_player == null) return;
 
-            _pool = new Slot[Capacity];
-            for (int i = 0; i < _pool.Length; i++)
+            float a = 2 * Mathf.PI / _piece;
+            for(int i = 0; i < _piece; i++)
             {
-                Vector3 left = Vector3.left * (Capacity - 1) * (_radius + _space / 2);
-                Vector3 diameter = Vector3.right * _radius * 2;
-                Vector3 space = Vector3.right * _space;
-                _pool[i] = new Slot(_origin + left + (diameter + space) * i, _radius);
+                float sin = Mathf.Sin(a * i);
+                float cos = Mathf.Cos(a * i);
             }
 
-            EmptyCount = Capacity;
+            //_pool = new Slot[Capacity];
+            //for (int i = 0; i < _pool.Length; i++)
+            //{
+            //    Vector3 left = Vector3.left * (Capacity - 1) * (_radius + _space / 2);
+            //    Vector3 diameter = Vector3.right * _radius * 2;
+            //    Vector3 space = Vector3.right * _space;
+            //    _pool[i] = new Slot(_origin + left + (diameter + space) * i, _radius);
+            //}
+
+            //EmptyCount = Capacity;
         }
 
         private void UpdateSlot()
@@ -124,6 +129,19 @@ namespace Enemy.Control
 
                 s.Point = p;
             }
+        }
+
+        private IEnumerable<Vector3> SlotPoint()
+        {
+            yield break;
+
+            // 円状のフィールドでプレイヤーに直線移動で向かっていく。
+            // 1レーンにつき1体？
+            // 左右移動したときについてこない
+            // 複数体がプレイヤーを検知したときにどうなる？
+
+            // 中心点からプレイヤーの距離を半径とする円を描く。
+            // 円周上を目指す。
         }
         
         /// <summary>

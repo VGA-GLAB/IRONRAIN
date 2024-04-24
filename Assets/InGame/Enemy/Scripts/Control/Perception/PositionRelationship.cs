@@ -49,10 +49,7 @@ namespace Enemy.Control
             // スロット確保
             if (_pool == null)
             {
-                if (!EnemyParams.Debug.IsDecoyTargetMode)
-                {
-                    Debug.LogError($"敵を配置するスロットの確保に失敗: {_transform.name}");
-                }
+                Debug.LogError($"敵を配置するスロットの確保に失敗: {_transform.name}");
             }
             else
             {

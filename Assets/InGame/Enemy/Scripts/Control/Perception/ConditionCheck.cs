@@ -52,7 +52,7 @@ namespace Enemy.Control
         {
             _blackBoard.Hp -= _damageBuffer;
             _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
-            _blackBoard.LifeTime -= Time.deltaTime;
+            _blackBoard.LifeTime -= BlackBoard.DeltaTime;
 
             // 反映後は必要ないので0に戻す
             _damageBuffer = 0;

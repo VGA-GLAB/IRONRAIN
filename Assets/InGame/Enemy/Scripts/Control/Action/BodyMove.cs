@@ -32,7 +32,7 @@ namespace Enemy.Control
         /// </summary>
         public void Move(in Vector3 velocity)
         {
-            _transform.position += velocity * Time.deltaTime;
+            _transform.position += velocity * BlackBoard.DeltaTime;
         }
     }
 }
