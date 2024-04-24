@@ -81,6 +81,9 @@ namespace Enemy.Control
             public static float BlendTreeParameterMag = 100.0f;
             // 接近完了とみなす距離の閾値
             public static float ApproachCompleteThreshold = 0.1f;
+
+            // デバッグ用:プールがない状態で動作させる。移動しなくなるだけで他の動作は正常に行う。
+            public static bool IsDecoyTargetMode = true;
         }
 
         [Header("生成~直進状態の設定")]
