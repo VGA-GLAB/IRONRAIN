@@ -13,7 +13,7 @@ namespace Enemy.DebugUse
         public static void WireCircle(Vector3 position, float radius, Color color)
         {
             Gizmos.color = color;
-            Utils.GizmosExtensions.DrawWireCircle(position, radius);
+            //Utils.GizmosExtensions.DrawWireCircle(position, radius);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Enemy.DebugUse
         public static void Arrow(Vector3 a, Vector3 b, Color color)
         {
             Gizmos.color = color;
-            Utils.GizmosExtensions.DrawArrow(a, b, arrowHeadLength: 2.0f);
+            //Utils.GizmosExtensions.DrawArrow(a, b, arrowHeadLength: 2.0f);
         }
 
         /// <summary>
