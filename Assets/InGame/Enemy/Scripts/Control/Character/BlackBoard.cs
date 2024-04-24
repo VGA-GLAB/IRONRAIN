@@ -27,23 +27,6 @@ namespace Enemy.Control
         public Queue<MovementPlan> MovementOptions { get; private set; }
         public Queue<ForwardPlan> ForwardOptions { get; private set; }
 
-        public void AddActionOptions(Choice choice)
-        {
-            ActionOptions.Enqueue(new ActionPlan { Choice = choice });
-        }
-        public void AddWarpOption(Choice choice, Vector3 position)
-        {
-            WarpOptions.Enqueue(new WarpPlan { Choice = choice, Position = position });
-        }
-        public void AddMovementOption(Choice choice, Vector3 direction, float speed)
-        {
-            MovementOptions.Enqueue(new MovementPlan { Choice = choice, Direction = direction, Speed = speed });
-        }
-        public void AddForwardOption(Choice choice, Vector3 forward)
-        {
-            ForwardOptions.Enqueue(new ForwardPlan { Choice = choice, Value = forward });
-        }
-
         // レベルの調整メッセージをセンサーで受信した場合は更新される。
         // Updateで書き込まれる。
         public LevelAdjustMessage LevelAdjust { get; set; }
@@ -73,20 +56,67 @@ namespace Enemy.Control
         public float TransformToPlayerDistance { get; set; }
         public bool IsApproachCompleted { get; set; }
 
+        // 接近範囲を調べるセンサーが書き込む。
+        // Updateで値が更新される。
+        public bool IsPlayerDetected { get; set; }
+
         // センサー側で次の攻撃タイミングを書き込む。
         // Updateで値が更新される。
-        public float NextAttackTime;
+        public float NextAttackTime { get; set; }
         // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
-        public float LastAttackTime;
+        public float LastAttackTime { get; private set; }
 
         // 自身の状態をチェックするセンサーが書き込む。
+        // Startの1回のみ。
+        public string Name { get; set; }
         // Updateで値が更新される。
         public int Hp { get; set; }
         public bool IsDying { get; set; }
         public float LifeTime { get; set; }
 
-        public bool IsAlive() => Hp > 0;
-        public bool IsFine() => !IsDying;
-        public bool IsInTime() => LifeTime > 0;
+        // 何処からも書き込んでいない。後々スロー状態に対応するためこちらを使う。
+        public float DeltaTime => Time.deltaTime;
+
+        // 操作用のメソッド群
+        public Vector3 PlayerHeightSlotPoint()
+        {
+            return new Vector3(Slot.Point.x, PlayerPosition.y, Slot.Point.z);
+        }
+        public Vector3 PlayerHeightAreaPoint()
+        {
+            return new Vector3(Area.Point.x, PlayerPosition.y, Area.Point.z);
+        }
+        public void AddActionOptions(Choice choice)
+        {
+            ActionOptions.Enqueue(new ActionPlan { Choice = choice });
+        }
+        public void AddWarpOption(Choice choice, Vector3 position)
+        {
+            WarpOptions.Enqueue(new WarpPlan { Choice = choice, Position = position });
+        }
+        public void AddMovementOption(Choice choice, Vector3 direction, float speed)
+        {
+            MovementOptions.Enqueue(new MovementPlan { Choice = choice, Direction = direction, Speed = speed });
+        }
+        public void AddForwardOption(Choice choice, Vector3 forward)
+        {
+            ForwardOptions.Enqueue(new ForwardPlan { Choice = choice, Value = forward });
+        }
+        public bool IsAlive()
+        {
+            return Hp > 0;
+        }
+        public bool IsFine()
+        {
+            return !IsDying;
+        }
+        public bool IsInTime()
+        {
+            return LifeTime > 0;
+        }
+        public void UpdateAttackTime()
+        {
+            LastAttackTime = Time.time;
+        }
     }
 }

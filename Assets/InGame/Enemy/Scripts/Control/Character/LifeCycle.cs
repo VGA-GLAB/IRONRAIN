@@ -18,6 +18,7 @@
         public virtual void OnStartEvent() { }
         public virtual void OnEnableEvent() { }
         public virtual void OnDisableEvent() { }
+        public virtual void OnDestroyEvent() { }
         public virtual Result UpdateEvent() { return Result.Running; }
         public virtual Result LateUpdateEvent() { return Result.Running; }
         public virtual void OnDrawGizmosEvent() { }

@@ -27,11 +27,11 @@ namespace Enemy.Control
         {
             List<float> timing = new List<float>();
 
-            if (enemyParams.Tactical.UseInputBuffer &&
-                enemyParams.Tactical.InputBufferAsset)
+            if (enemyParams.Battle.UseInputBuffer &&
+                enemyParams.Battle.InputBufferAsset)
             {
                 // テキストファイルの文字列から攻撃タイミングを作成
-                string text = enemyParams.Tactical.InputBufferAsset.ToString();
+                string text = enemyParams.Battle.InputBufferAsset.ToString();
                 foreach (string s in text.Split("\n"))
                 {
                     if (s == "") continue;
@@ -43,7 +43,7 @@ namespace Enemy.Control
             else
             {
                 // 一定間隔で攻撃
-                timing.Add(enemyParams.Tactical.AttackRate);
+                timing.Add(enemyParams.Battle.AttackRate);
             }
 
             // 最初の攻撃タイミングを設定

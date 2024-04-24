@@ -43,6 +43,13 @@ namespace Enemy.Control
             // 死亡している場合は死亡が最優先
             if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
 
+            // 接近検知範囲外の場合は何もしない
+            if (!_blackBoard.IsPlayerDetected) 
+            { 
+                _order.Add(Choice.Idle); 
+                return _order; 
+            }
+
             // 接近中の場合はインターフェースを実装したクラス側で制御するので何もしない。
             if (_approach != null && !_approach.IsCompleted()) { /*実装まだ*/ }
 
@@ -66,9 +73,6 @@ namespace Enemy.Control
                     _order.Add(Choice.Attack);
                 }
             }
-
-            // どちらも満たしていない場合は何もしない
-            _order.Add(Choice.Idle);
 
             return _order;
         }

@@ -1,21 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
+using VContainer;
 
 namespace Enemy.Control
 {
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [Header("ヒエラルキー上の別オブジェクトへの参照")]
-        [SerializeField] private Transform _player;
-        [SerializeField] private SurroundingPool _surroundingPool;
+        [Header("----------プランナーが弄る値----------")]
+        [SerializeField] private EnemyParams _enemyParams;
+        [Header("------------------------------------")]
         [Header("子やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
         [SerializeField] private Animator _animator;
-        [SerializeField] private EnemyParams _enemyParams;
+        [SerializeField] private AnimationEvent _animationEvent;
         [SerializeField] private Effect[] _effects;
         [Header("他人が作った機能への参照")]
         [SerializeField] private GameObject _approach; // まだ仕様が決まっていないのでとりあえずGameObjectで参照する。
+
+        // 注入する依存関係
+        private Transform _player;
+        private SlotPool _surroundingPool;
 
         private Transform _transform;
         private Perception _perception;
@@ -28,8 +33,24 @@ namespace Enemy.Control
         // 二重に処理を呼ばないために必要。
         private bool _isCleanupRunning;
 
+        [Inject]
+        private void Construct(Transform player, SlotPool pool)
+        {
+            _player = player;
+            _surroundingPool = pool;
+        }
+
         private void Awake()
         {
+            // 識別用にランダムな名前を付ける。
+            gameObject.RandomName();
+
+            // 依存関係をチェック
+            if (_player == null || _surroundingPool == null)
+            {
+                Debug.LogWarning($"依存関係の構築に失敗: Player:{_player}, SurroundingPool:{_surroundingPool}");
+            }
+
             // まだ仕様が決まっていないので、とりあえずインターフェースを噛ませておく。
             // タイムラインやアニメーションになるかもしれない。
             IApproach approach = _approach != null ? _approach.GetComponent<IApproach>() : null;
@@ -38,7 +59,7 @@ namespace Enemy.Control
             _blackBoard = new BlackBoard();
             _perception = new Perception(_transform, _rotate, _player, _enemyParams, _blackBoard, _surroundingPool);
             _brain = new Brain(_transform, _rotate, _enemyParams, _blackBoard, approach);
-            _action = new Action(_transform, _offset, _rotate, _animator, _blackBoard, _enemyParams, _effects, GetComponent<IWeapon>());
+            _action = new Action(_transform, _offset, _rotate, _animator, _animationEvent, _blackBoard, _enemyParams, _effects, GetComponent<IEquipment>());
             _debugStatusUI = new DebugStatusUI(_transform, _enemyParams, _blackBoard);
         }
 
@@ -55,7 +76,11 @@ namespace Enemy.Control
         private void OnDisable()
         {
             _perception.OnDisableEvent();
-            _action.OnDisableEvent();
+        }
+
+        private void OnDestroy()
+        {
+            _action.OnDestroyEvent();
         }
 
         private void Update()
