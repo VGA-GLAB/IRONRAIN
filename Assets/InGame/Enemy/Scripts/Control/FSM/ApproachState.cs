@@ -10,15 +10,13 @@ namespace Enemy.Control.FSM
     public class ApproachState : State
     {
         private BlackBoard _blackBoard;
-        private BodyMove _move;
-        private BodyRotate _rotate;
+        private Body _body;
         private BodyAnimation _animation;
 
-        public ApproachState(BlackBoard blackBoard, BodyMove move, BodyRotate rotate, BodyAnimation animation)
+        public ApproachState(BlackBoard blackBoard, Body body, BodyAnimation animation)
         {
             _blackBoard = blackBoard;
-            _move = move;
-            _rotate = rotate;
+            _body = body;
             _animation = animation;
         }
 
@@ -46,7 +44,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != Choice.Approach) continue;
 
-                _move.Warp(plan.Position);
+                _body.Warp(plan.Position);
                 isApproaching = true;
             }
 
@@ -55,7 +53,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != Choice.Approach) continue;
 
-                _move.Move(plan.Direction * plan.Speed);
+                _body.Move(plan.Direction * plan.Speed);
                 isApproaching = true;
             }
 
@@ -64,7 +62,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != Choice.Approach) continue;
 
-                _rotate.Forward(plan.Value);
+                _body.Forward(plan.Value);
                 isApproaching = true;
             }
 

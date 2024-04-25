@@ -13,16 +13,17 @@ namespace Enemy.Control
         private Dictionary<StateKey, State> _stateTable;
         private State _currentState;
 
-        public StateMachine(BlackBoard blackBoard, BodyMove move, BodyRotate rotate, BodyAnimation animation,
-            Effector effector, IEquipment equipment)
+        public StateMachine(BlackBoard blackBoard, Body body, BodyAnimation animation, Effector effector, 
+            IEquipment equipment)
         {
             _stateTable = new Dictionary<StateKey, State>
             {
-                { StateKey.Approach, new ApproachState(blackBoard, move, rotate, animation) },
-                { StateKey.Battle, new BattleState(blackBoard, move, rotate, animation, equipment) },
+                { StateKey.Approach, new ApproachState(blackBoard, body, animation) },
+                { StateKey.Battle, new BattleState(blackBoard, body, animation, equipment) },
                 { StateKey.Broken, new BrokenState(animation, effector) },
-                { StateKey.Escape, new EscapeState(blackBoard, move, rotate, animation) },
+                { StateKey.Escape, new EscapeState(blackBoard, body, animation) },
                 { StateKey.Idle, new IdleState(blackBoard) },
+                { StateKey.Hide, new HideState(blackBoard, body) },
             };
 
             _currentState = _stateTable[StateKey.Idle];

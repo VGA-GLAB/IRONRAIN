@@ -53,7 +53,7 @@ namespace Enemy.Control
             }
             else
             {
-                _slot = _pool.Rent(_params.Advance.Slot);
+                _pool.TryRent(_transform.position, out _slot);
             }
 
             // 参照させ、AreaFixメソッドで位置を書き換えていく。

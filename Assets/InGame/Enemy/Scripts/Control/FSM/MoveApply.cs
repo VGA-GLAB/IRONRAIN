@@ -11,17 +11,14 @@ namespace Enemy.Control.FSM
     {
         private Choice _choice;
         private BlackBoard _blackBoard;
-        private BodyMove _move;
-        private BodyRotate _rotate;
+        private Body _body;
         private BodyAnimation _animation;
 
-        public MoveApply(Choice choice, BlackBoard blackBoard, BodyMove move, BodyRotate rotate, 
-            BodyAnimation animation)
+        public MoveApply(Choice choice, BlackBoard blackBoard, Body body, BodyAnimation animation)
         {
             _choice = choice;
             _blackBoard = blackBoard;
-            _move = move;
-            _rotate = rotate;
+            _body = body;
             _animation = animation;
         }
 
@@ -31,7 +28,7 @@ namespace Enemy.Control.FSM
         /// </summary>
         public void Run()
         {
-            Vector3 before = _move.TransformPosition;
+            Vector3 before = _body.TransformPosition;
 
             // 座標を直接書き換える。
             // deltaTimeぶんの移動を上書きする恐れがあるので移動より先。
@@ -39,7 +36,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != _choice) continue;
 
-                _move.Warp(plan.Position);
+                _body.Warp(plan.Position);
             }
 
             // 移動
@@ -47,7 +44,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != _choice) continue;
 
-                _move.Move(plan.Direction * plan.Speed);
+                _body.Move(plan.Direction * plan.Speed);
             }
 
             // 回転
@@ -55,10 +52,10 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != _choice) continue;
 
-                _rotate.Forward(plan.Value);
+                _body.Forward(plan.Value);
             }
 
-            Vector3 after = _move.TransformPosition;
+            Vector3 after = _body.TransformPosition;
             
             // BlendTreeで前後左右の移動のアニメーションをブレンドする。
             // 値は -1~1 の範囲をとり、そのままだと変化量が微々たるものなのでn倍する。

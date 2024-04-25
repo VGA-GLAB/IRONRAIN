@@ -5,17 +5,19 @@ using UnityEngine;
 
 namespace Enemy.Control
 {
+    #region 円周上に配置するために未使用
     /// <summary>
     /// スロットの位置を指定する用の列挙型
     /// </summary>
-    public enum SlotPlace
-    {
-        Left,
-        MiddleLeft,
-        Middle,
-        MiddleRight,
-        Right,
-    }
+    //public enum SlotPlace
+    //{
+    //    Left,
+    //    MiddleLeft,
+    //    Middle,
+    //    MiddleRight,
+    //    Right,
+    //}
+    #endregion
 
     /// <summary>
     /// 敵を配置する箇所。
@@ -50,15 +52,13 @@ namespace Enemy.Control
     [DefaultExecutionOrder(-1)]
     public class SlotPool : MonoBehaviour
     {
-        [Header("フィールドの中心点")]
-        [SerializeField] private Vector3 _center;
-        [SerializeField] private int _piece = 36;
-        [Header("プレイヤーを基準にする")]
+        [Header("プレイヤーの前方向を基準にする")]
         [SerializeField] private Transform _player;
-        [Header("生成時の設定")]
-        [Tooltip("プレイヤーの位置から前方向のオフセット")]
+        [Header("生成の設定")]
+        [SerializeField] private int _quantity = 5;
         [SerializeField] private float _forwardOffset = 1.0f;
-        [Tooltip("スロットの半径")]
+        [SerializeField] private float _space = 1.0f;
+        [Header("スロットの設定")]
         [Min(1.0f)]
         [SerializeField] private float _radius = 1.0f;
 
@@ -89,15 +89,13 @@ namespace Enemy.Control
             {
                 foreach (Slot s in _pool) s.DrawOnGizmos();
             }
-
-            DrawLane();
         }
 
         private void CreatePool()
         {
             if (_player == null) return;
 
-            _pool = new Slot[_piece];
+            _pool = new Slot[_quantity];
 
             // 中心点からプレイヤーの距離を半径とする円
             foreach ((Vector3 point, int index) s in SlotPoint())
@@ -105,7 +103,7 @@ namespace Enemy.Control
                 _pool[s.index] = new Slot(s.point, _radius);
             }
 
-            EmptyCount = _piece;
+            EmptyCount = _quantity;
         }
 
         private void UpdateSlot()
@@ -120,44 +118,39 @@ namespace Enemy.Control
 
         private IEnumerable<(Vector3, int)> SlotPoint()
         {
-            float a = 2 * Mathf.PI / _piece;
-            float r = (_center - _player.position).magnitude - _forwardOffset;
-            for (int i = 0; i < _piece; i++)
+            for (int i = 0; i < _quantity; i++)
             {
-                float sin = Mathf.Sin(a * i);
-                float cos = Mathf.Cos(a * i);
-                Vector3 p = _center + new Vector3(cos, 0, sin) * r;
+                // プレイヤーを基準に左右均等に配置する。
+                Vector3 p = _player.position + _player.forward * _forwardOffset;
+                Vector3 left = -_player.right * _space * i;
+                left += _player.right * (_quantity / 2) * _space;
+                if (_quantity % 2 == 0) left += -_player.right * _space / 2;
 
-                yield return (p, i);
+                yield return (p + left, i);
             }
         }
-        
+
         /// <summary>
-        /// スロットを借りる。
+        /// 引数の位置に一番近いスロットを借りる。
         /// </summary>
-        public bool TryRent(out Slot slot)
+        public bool TryRent(Vector3 p, out Slot slot)
         {
+            slot = null;
+
+            if (_pool == null) { return false; }
+
+            float min = float.MaxValue;
             foreach (Slot s in _pool)
             {
-                if (!s.IsUsing)
+                float d = (s.Point - p).sqrMagnitude;
+                if (d < min)
                 {
-                    EmptyCount--;
-                    s.IsUsing = true;
+                    min = d;
                     slot = s;
-                    return true;
                 }
             }
 
-            slot = null;
-            return false;
-        }
-
-        /// <summary>
-        /// 既に使われている場合でもスロットを借りる。
-        /// </summary>
-        public Slot Rent(SlotPlace place)
-        {
-            return _pool[(int)place];
+            return true;
         }
 
         /// <summary>
@@ -169,19 +162,6 @@ namespace Enemy.Control
 
             slot.IsUsing = false;
             EmptyCount++;
-        }
-
-        // レーンを描画
-        void DrawLane()
-        {
-            if (_pool == null) return;
-
-            foreach (Slot s in _pool)
-            {
-                GizmosUtils.Line(_center, s.Point, Color.white);
-            }
-
-            GizmosUtils.WireCircle(_center, (_center - _player.position).magnitude, Color.white);
         }
     }
 }

@@ -13,8 +13,6 @@ namespace Enemy.Control
         [System.Serializable]
         public class AdvanceSettings
         {
-            [Header("移動レーンの位置")]
-            [SerializeField] private SlotPlace _slot;
             [Header("検知距離")]
             [Min(1.0f)]
             [SerializeField] private float _distance = 33.0f;
@@ -22,7 +20,6 @@ namespace Enemy.Control
             [Min(1.0f)]
             [SerializeField] private float _moveSpeed = 12.0f;
 
-            public SlotPlace Slot => _slot;
             public float Distance => _distance;
             public float MoveSpeed => _moveSpeed;
         }

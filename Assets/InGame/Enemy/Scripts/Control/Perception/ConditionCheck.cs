@@ -64,7 +64,6 @@ namespace Enemy.Control
         /// </summary>
         public void Damage(int value, string weapon)
         {
-            Debug.Log($"敵キャラクターがダメージを受けた:{_transform.name}");
             // 無敵
             if (_params.Common.Tactical.Armor == Armor.Invincible) return;
 

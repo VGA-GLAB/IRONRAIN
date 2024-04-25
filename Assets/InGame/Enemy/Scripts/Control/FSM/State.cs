@@ -14,6 +14,7 @@ namespace Enemy.Control.FSM
         Broken,
         Escape,
         Idle,
+        Hide,
     }
 
     /// <summary>
