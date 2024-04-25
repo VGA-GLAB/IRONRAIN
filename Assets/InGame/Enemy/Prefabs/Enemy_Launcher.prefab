@@ -82,7 +82,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyParams:
     _advance:
-      _slot: 0
       _distance: 33
       _moveSpeed: 30
     _battle:
@@ -98,6 +97,10 @@ MonoBehaviour:
     _common: {fileID: 11400000, guid: d7b1915fc8482f641b62d9faea0a0286, type: 2}
   _offset: {fileID: 5998904034082580316}
   _rotate: {fileID: 5998904032262117972}
+  _renderers:
+  - {fileID: 195412458539208427}
+  - {fileID: 5998904034083047273}
+  - {fileID: 5998904033144163179}
   _animator: {fileID: 4744671737184664089}
   _animationEvent: {fileID: 4346500607311222974}
   _effects:
@@ -331,6 +334,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bazooka
       objectReference: {fileID: 0}
+    - target: {fileID: 7076256933538203177, guid: 0951bb77d4d933f4cb0cbb82a2890ed7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -339,6 +346,16 @@ PrefabInstance:
 --- !u!4 &5998904032858670474 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7076256932346856650, guid: 0951bb77d4d933f4cb0cbb82a2890ed7, type: 3}
+  m_PrefabInstance: {fileID: 3563342771427017024}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5998904033144163179 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7076256932598270507, guid: 0951bb77d4d933f4cb0cbb82a2890ed7, type: 3}
+  m_PrefabInstance: {fileID: 3563342771427017024}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5998904034083047273 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7076256933538203177, guid: 0951bb77d4d933f4cb0cbb82a2890ed7, type: 3}
   m_PrefabInstance: {fileID: 3563342771427017024}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4147919157602309359
@@ -823,6 +840,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4346500607311222974}
   m_SourcePrefab: {fileID: 100100000, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
+--- !u!137 &195412458539208427 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5906011277973393745, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
+  m_PrefabInstance: {fileID: 5998904033004511162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1804025727263729008 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5352893985396112074, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
