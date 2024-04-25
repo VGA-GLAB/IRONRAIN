@@ -52,14 +52,12 @@ namespace Enemy.Control
     {
         [Header("フィールドの中心点")]
         [SerializeField] private Vector3 _center;
-        [SerializeField] private int _piece = 12;
+        [SerializeField] private int _piece = 36;
         [Header("プレイヤーを基準にする")]
         [SerializeField] private Transform _player;
         [Header("生成時の設定")]
         [Tooltip("プレイヤーの位置から前方向のオフセット")]
         [SerializeField] private float _forwardOffset = 1.0f;
-        [Tooltip("スロット同士の間隔")]
-        [SerializeField] private float _space = 10.0f;
         [Tooltip("スロットの半径")]
         [Min(1.0f)]
         [SerializeField] private float _radius = 1.0f;
@@ -99,49 +97,39 @@ namespace Enemy.Control
         {
             if (_player == null) return;
 
-            float a = 2 * Mathf.PI / _piece;
-            for(int i = 0; i < _piece; i++)
+            _pool = new Slot[_piece];
+
+            // 中心点からプレイヤーの距離を半径とする円
+            foreach ((Vector3 point, int index) s in SlotPoint())
             {
-                float sin = Mathf.Sin(a * i);
-                float cos = Mathf.Cos(a * i);
+                _pool[s.index] = new Slot(s.point, _radius);
             }
 
-            //_pool = new Slot[Capacity];
-            //for (int i = 0; i < _pool.Length; i++)
-            //{
-            //    Vector3 left = Vector3.left * (Capacity - 1) * (_radius + _space / 2);
-            //    Vector3 diameter = Vector3.right * _radius * 2;
-            //    Vector3 space = Vector3.right * _space;
-            //    _pool[i] = new Slot(_origin + left + (diameter + space) * i, _radius);
-            //}
-
-            //EmptyCount = Capacity;
+            EmptyCount = _piece;
         }
 
         private void UpdateSlot()
         {
             if (_player == null || _pool == null) return;
 
-            foreach (Slot s in _pool)
+            foreach ((Vector3 point, int index) s in SlotPoint())
             {
-                Vector3 p = s.Point;
-                p.z = _player.position.z + _forwardOffset;
-
-                s.Point = p;
+                _pool[s.index].Point = s.point;
             }
         }
 
-        private IEnumerable<Vector3> SlotPoint()
+        private IEnumerable<(Vector3, int)> SlotPoint()
         {
-            yield break;
+            float a = 2 * Mathf.PI / _piece;
+            float r = (_center - _player.position).magnitude - _forwardOffset;
+            for (int i = 0; i < _piece; i++)
+            {
+                float sin = Mathf.Sin(a * i);
+                float cos = Mathf.Cos(a * i);
+                Vector3 p = _center + new Vector3(cos, 0, sin) * r;
 
-            // 円状のフィールドでプレイヤーに直線移動で向かっていく。
-            // 1レーンにつき1体？
-            // 左右移動したときについてこない
-            // 複数体がプレイヤーを検知したときにどうなる？
-
-            // 中心点からプレイヤーの距離を半径とする円を描く。
-            // 円周上を目指す。
+                yield return (p, i);
+            }
         }
         
         /// <summary>
@@ -188,18 +176,12 @@ namespace Enemy.Control
         {
             if (_pool == null) return;
 
-            // 描画用なので適当な値
-            const float Half = 500;
-
             foreach (Slot s in _pool)
             {
-                Vector3 side = Vector3.right * (_radius * 2 + _space);
-                Vector3 a = s.Point - side;
-                Vector3 b = s.Point + side;
-
-                GizmosUtils.Line(a + Vector3.forward * Half, a + Vector3.back * Half, ColorExtensions.ThinWhite);
-                GizmosUtils.Line(b + Vector3.forward * Half, b + Vector3.back * Half, ColorExtensions.ThinWhite);
+                GizmosUtils.Line(_center, s.Point, Color.white);
             }
+
+            GizmosUtils.WireCircle(_center, (_center - _player.position).magnitude, Color.white);
         }
     }
 }
