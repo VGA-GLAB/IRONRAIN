@@ -163,6 +163,15 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// 再生速度を0~1の間で変更
+        /// </summary>
+        public void PlaySpeed(float value)
+        {
+            value = Mathf.Clamp01(value);
+            _animator.SetFloat(Const.AnimationParam.PlaySpeed, value);
+        }
+
+        /// <summary>
         /// ステート開始時のコールバックを登録/解除
         /// </summary>
         public void EnterCallback(string stateName, UnityAction callback, CallBackControl control)

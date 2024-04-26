@@ -35,6 +35,7 @@ namespace Enemy.Control
 
         public override Result UpdateEvent()
         {
+            _animation.PlaySpeed(ProvidePlayerInformation.TimeScale);
             _stateMachine.Update();
 
             return Result.Running;
