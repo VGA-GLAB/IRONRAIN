@@ -1,5 +1,6 @@
 ﻿using Enemy.Extensions;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Enemy.Control
 {
@@ -14,6 +15,7 @@ namespace Enemy.Control
         Attack,   // 攻撃
         Broken,   // 死亡
         Escape,   // 撤退
+        Hide,     // 生成後、画面から隠す
     }
 
     /// <summary>
@@ -43,10 +45,10 @@ namespace Enemy.Control
             // 死亡している場合は死亡が最優先
             if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
 
-            // 接近検知範囲外の場合は何もしない
+            // 接近検知範囲外の場合は画面から隠す
             if (!_blackBoard.IsPlayerDetected) 
-            { 
-                _order.Add(Choice.Idle); 
+            {
+                _order.Add(Choice.Hide); 
                 return _order; 
             }
 

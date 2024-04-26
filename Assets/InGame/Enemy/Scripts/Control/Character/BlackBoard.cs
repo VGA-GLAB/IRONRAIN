@@ -8,6 +8,9 @@ namespace Enemy.Control
     /// </summary>
     public class BlackBoard
     {
+        // プレイヤー側でQTEの制御を行う際に変更される。
+        public static float DeltaTime => Time.deltaTime * ProvidePlayerInformation.TimeScale;
+
         public BlackBoard()
         {
             PlayerInput = new Queue<PlayerInputMessage>();
@@ -73,9 +76,6 @@ namespace Enemy.Control
         public int Hp { get; set; }
         public bool IsDying { get; set; }
         public float LifeTime { get; set; }
-
-        // 何処からも書き込んでいない。後々スロー状態に対応するためこちらを使う。
-        public float DeltaTime => Time.deltaTime;
 
         // 操作用のメソッド群
         public Vector3 PlayerHeightSlotPoint()

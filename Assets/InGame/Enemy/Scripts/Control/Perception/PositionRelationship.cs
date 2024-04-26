@@ -49,14 +49,11 @@ namespace Enemy.Control
             // スロット確保
             if (_pool == null)
             {
-                if (!EnemyParams.Debug.IsDecoyTargetMode)
-                {
-                    Debug.LogError($"敵を配置するスロットの確保に失敗: {_transform.name}");
-                }
+                Debug.LogError($"敵を配置するスロットの確保に失敗: {_transform.name}");
             }
             else
             {
-                _slot = _pool.Rent(_params.Advance.Slot);
+                _pool.TryRent(_transform.position, out _slot);
             }
 
             // 参照させ、AreaFixメソッドで位置を書き換えていく。

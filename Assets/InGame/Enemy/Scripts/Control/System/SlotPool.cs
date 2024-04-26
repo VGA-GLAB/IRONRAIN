@@ -5,17 +5,19 @@ using UnityEngine;
 
 namespace Enemy.Control
 {
+    #region 円周上に配置するために未使用
     /// <summary>
     /// スロットの位置を指定する用の列挙型
     /// </summary>
-    public enum SlotPlace
-    {
-        Left,
-        MiddleLeft,
-        Middle,
-        MiddleRight,
-        Right,
-    }
+    //public enum SlotPlace
+    //{
+    //    Left,
+    //    MiddleLeft,
+    //    Middle,
+    //    MiddleRight,
+    //    Right,
+    //}
+    #endregion
 
     /// <summary>
     /// 敵を配置する箇所。
@@ -44,25 +46,19 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// Z軸を前方向として敵を配置するスロットを作成し管理する。
+    /// 敵を配置するスロットを作成し管理する。
     /// プレイヤーがY軸以外で回転すると破綻する可能性がある。
     /// </summary>
     [DefaultExecutionOrder(-1)]
     public class SlotPool : MonoBehaviour
     {
-        // スロット数は仕様で決まっている。
-        private const int Capacity = 5;
-
-        [Header("レーンの設定")]
-        [SerializeField] private Vector3 _origin;
-        [Header("プレイヤーを基準にする")]
+        [Header("プレイヤーの前方向を基準にする")]
         [SerializeField] private Transform _player;
-        [Header("生成時の設定")]
-        [Tooltip("プレイヤーの位置から前方向のオフセット")]
+        [Header("生成の設定")]
+        [SerializeField] private int _quantity = 5;
         [SerializeField] private float _forwardOffset = 1.0f;
-        [Tooltip("スロット同士の間隔")]
-        [SerializeField] private float _space = 10.0f;
-        [Tooltip("スロットの半径")]
+        [SerializeField] private float _space = 1.0f;
+        [Header("スロットの設定")]
         [Min(1.0f)]
         [SerializeField] private float _radius = 1.0f;
 
@@ -93,65 +89,68 @@ namespace Enemy.Control
             {
                 foreach (Slot s in _pool) s.DrawOnGizmos();
             }
-
-            DrawLane();
         }
 
         private void CreatePool()
         {
             if (_player == null) return;
 
-            _pool = new Slot[Capacity];
-            for (int i = 0; i < _pool.Length; i++)
+            _pool = new Slot[_quantity];
+
+            // 中心点からプレイヤーの距離を半径とする円
+            foreach ((Vector3 point, int index) s in SlotPoint())
             {
-                Vector3 left = Vector3.left * (Capacity - 1) * (_radius + _space / 2);
-                Vector3 diameter = Vector3.right * _radius * 2;
-                Vector3 space = Vector3.right * _space;
-                _pool[i] = new Slot(_origin + left + (diameter + space) * i, _radius);
+                _pool[s.index] = new Slot(s.point, _radius);
             }
 
-            EmptyCount = Capacity;
+            EmptyCount = _quantity;
         }
 
         private void UpdateSlot()
         {
             if (_player == null || _pool == null) return;
 
-            foreach (Slot s in _pool)
+            foreach ((Vector3 point, int index) s in SlotPoint())
             {
-                Vector3 p = s.Point;
-                p.z = _player.position.z + _forwardOffset;
-
-                s.Point = p;
+                _pool[s.index].Point = s.point;
             }
         }
-        
-        /// <summary>
-        /// スロットを借りる。
-        /// </summary>
-        public bool TryRent(out Slot slot)
+
+        private IEnumerable<(Vector3, int)> SlotPoint()
         {
+            for (int i = 0; i < _quantity; i++)
+            {
+                // プレイヤーを基準に左右均等に配置する。
+                Vector3 p = _player.position + _player.forward * _forwardOffset;
+                Vector3 left = -_player.right * _space * i;
+                left += _player.right * (_quantity / 2) * _space;
+                if (_quantity % 2 == 0) left += -_player.right * _space / 2;
+
+                yield return (p + left, i);
+            }
+        }
+
+        /// <summary>
+        /// 引数の位置に一番近いスロットを借りる。
+        /// </summary>
+        public bool TryRent(Vector3 p, out Slot slot)
+        {
+            slot = null;
+
+            if (_pool == null) { return false; }
+
+            float min = float.MaxValue;
             foreach (Slot s in _pool)
             {
-                if (!s.IsUsing)
+                float d = (s.Point - p).sqrMagnitude;
+                if (d < min)
                 {
-                    EmptyCount--;
-                    s.IsUsing = true;
+                    min = d;
                     slot = s;
-                    return true;
                 }
             }
 
-            slot = null;
-            return false;
-        }
-
-        /// <summary>
-        /// 既に使われている場合でもスロットを借りる。
-        /// </summary>
-        public Slot Rent(SlotPlace place)
-        {
-            return _pool[(int)place];
+            return true;
         }
 
         /// <summary>
@@ -163,25 +162,6 @@ namespace Enemy.Control
 
             slot.IsUsing = false;
             EmptyCount++;
-        }
-
-        // レーンを描画
-        void DrawLane()
-        {
-            if (_pool == null) return;
-
-            // 描画用なので適当な値
-            const float Half = 500;
-
-            foreach (Slot s in _pool)
-            {
-                Vector3 side = Vector3.right * (_radius * 2 + _space);
-                Vector3 a = s.Point - side;
-                Vector3 b = s.Point + side;
-
-                GizmosUtils.Line(a + Vector3.forward * Half, a + Vector3.back * Half, ColorExtensions.ThinWhite);
-                GizmosUtils.Line(b + Vector3.forward * Half, b + Vector3.back * Half, ColorExtensions.ThinWhite);
-            }
         }
     }
 }

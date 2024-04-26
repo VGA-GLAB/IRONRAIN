@@ -12,6 +12,7 @@ namespace Enemy.Control
         [Header("子やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
+        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Animator _animator;
         [SerializeField] private AnimationEvent _animationEvent;
         [SerializeField] private Effect[] _effects;
@@ -64,7 +65,8 @@ namespace Enemy.Control
             _blackBoard = new BlackBoard();
             _perception = new Perception(_transform, _rotate, _player, _enemyParams, _blackBoard, _surroundingPool);
             _brain = new Brain(_transform, _rotate, _enemyParams, _blackBoard, approach);
-            _action = new Action(_transform, _offset, _rotate, _animator, _animationEvent, _blackBoard, _enemyParams, _effects, GetComponent<IEquipment>());
+            _action = new Action(_transform, _offset, _rotate, _animator, _renderers, 
+                _animationEvent, _blackBoard, _enemyParams, _effects, GetComponent<IEquipment>());
             _debugStatusUI = new DebugStatusUI(_transform, _enemyParams, _blackBoard);
         }
 

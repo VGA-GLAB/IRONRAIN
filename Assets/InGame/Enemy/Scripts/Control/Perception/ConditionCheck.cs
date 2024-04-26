@@ -52,7 +52,7 @@ namespace Enemy.Control
         {
             _blackBoard.Hp -= _damageBuffer;
             _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
-            _blackBoard.LifeTime -= Time.deltaTime;
+            _blackBoard.LifeTime -= BlackBoard.DeltaTime;
 
             // 反映後は必要ないので0に戻す
             _damageBuffer = 0;
@@ -64,7 +64,6 @@ namespace Enemy.Control
         /// </summary>
         public void Damage(int value, string weapon)
         {
-            Debug.Log($"敵キャラクターがダメージを受けた:{_transform.name}");
             // 無敵
             if (_params.Common.Tactical.Armor == Armor.Invincible) return;
 

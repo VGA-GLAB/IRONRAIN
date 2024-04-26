@@ -11,9 +11,9 @@ namespace Enemy.Control.FSM
     {
         private MoveApply _moveApply;
 
-        public EscapeState(BlackBoard blackBoard, BodyMove move, BodyRotate rotate, BodyAnimation animation)
+        public EscapeState(BlackBoard blackBoard, Body body, BodyAnimation animation)
         {
-            _moveApply = new MoveApply(Choice.Escape, blackBoard, move, rotate, animation);
+            _moveApply = new MoveApply(Choice.Escape, blackBoard, body, animation);
         }
 
         public override StateKey Key => StateKey.Escape;

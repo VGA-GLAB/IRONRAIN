@@ -181,6 +181,10 @@ PrefabInstance:
       propertyPath: _enemyParams._advance._slot
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 978102174, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 74849210414920447, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _aimMode
       value: 1
@@ -191,7 +195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -36.2
+      value: -41
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -199,7 +203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -445
+      value: -24.700012
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -550,9 +554,13 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 1707658032, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 34.4
+      value: 29.600002
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -560,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -417.3
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -593,6 +601,10 @@ PrefabInstance:
     - target: {fileID: 3771377507711898171, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_Name
       value: Enemy_Shield (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323066487951058141, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -667,11 +679,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1715052796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -867.7, y: 515.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 6.5999756, y: 176.9}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &885511667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,7 +717,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u4F7F\u3044\u65B9:\n\tSlotPool: Player\u3092\u5272\u308A\u5F53\u3066\u308B\u3002\n\tLifetimeScope:
+  m_Text: "\u64CD\u4F5C:\n\tASDW: \u524D\u5F8C\u5DE6\u53F3\u79FB\u52D5\n\tSpace:
+    \u9060\u8DDD\u96E2\u653B\u6483\n\tEnter: \u8FD1\u8DDD\u96E2\u653B\u6483\n\t\u2190/\u2192:
+    \u5DE6\u53F3\u306B\u56DE\u8EE2\n\u4F7F\u3044\u65B9:\n\tSlotPool: Player\u3092\u5272\u308A\u5F53\u3066\u308B\u3002\n\tLifetimeScope:
     Player\u3068\u30B7\u30FC\u30F3\u4E0A\u306B\u914D\u7F6E\u3055\u308C\u305F\u6575\u3092\u5272\u308A\u5F53\u3066\u308B\u3002"
 --- !u!222 &885511668
 CanvasRenderer:
@@ -736,6 +750,10 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 978102174, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 74849210414920447, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _aimMode
       value: 1
@@ -746,7 +764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -31.999998
+      value: -36.799995
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -754,7 +772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -397.6
+      value: 22.699982
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -815,9 +833,13 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 1707658032, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 29.3
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -825,7 +847,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -470.8
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1515,7 +1537,7 @@ Transform:
   m_GameObject: {fileID: 1758061607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.37, y: 8.03, z: -524}
+  m_LocalPosition: {x: 0.37, y: 8.03, z: -101}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1608,6 +1630,10 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 978102174, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 74849210414920447, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _aimMode
       value: 1
@@ -1618,7 +1644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -50.7
+      value: 16.5
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1626,7 +1652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -341.7
+      value: 9.4
       objectReference: {fileID: 0}
     - target: {fileID: 5448234366258911459, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1800,9 +1826,13 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 1707658032, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 29.3
+      value: 30.8
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1810,7 +1840,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -361.4
+      value: 16.6
       objectReference: {fileID: 0}
     - target: {fileID: 3771377507711898164, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1870,13 +1900,17 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 574555572, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
       value: Enemy_Launcher (2)
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -36.2
+      value: 36.6
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1884,7 +1918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -360.9
+      value: 31.1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1976,6 +2010,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain
       objectReference: {fileID: 0}
+    - target: {fileID: 1925108599318260434, guid: 721ca2332b1142e4895f36b3161e9441, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1997,13 +2035,17 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 99
       objectReference: {fileID: 0}
+    - target: {fileID: 574555572, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
       value: Enemy_Launcher (1)
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 34
+      value: 6.6
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2011,7 +2053,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -395
+      value: -25.4
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2067,13 +2109,17 @@ PrefabInstance:
       propertyPath: _enemyParams._battle._lifeTime
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 574555572, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _enemyParams._battle._chaseSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
       value: Enemy_Launcher
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -36.2
+      value: -1.1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2081,7 +2127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -470.3
+      value: -70.8
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2130,6 +2176,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 498121015047598534, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+      propertyPath: _piece
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 498121015047598534, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+      propertyPath: _space
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 498121015047598534, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
       propertyPath: _player
       value: 
       objectReference: {fileID: 1758061611}
@@ -2138,8 +2192,12 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 498121015047598534, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+      propertyPath: _quantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 498121015047598534, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
       propertyPath: _forwardOffset
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2074662522697631684, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
       propertyPath: _player

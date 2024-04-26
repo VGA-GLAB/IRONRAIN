@@ -13,8 +13,6 @@ namespace Enemy.Control
         [System.Serializable]
         public class AdvanceSettings
         {
-            [Header("移動レーンの位置")]
-            [SerializeField] private SlotPlace _slot;
             [Header("検知距離")]
             [Min(1.0f)]
             [SerializeField] private float _distance = 33.0f;
@@ -22,7 +20,6 @@ namespace Enemy.Control
             [Min(1.0f)]
             [SerializeField] private float _moveSpeed = 12.0f;
 
-            public SlotPlace Slot => _slot;
             public float Distance => _distance;
             public float MoveSpeed => _moveSpeed;
         }
@@ -81,9 +78,6 @@ namespace Enemy.Control
             public static float BlendTreeParameterMag = 100.0f;
             // 接近完了とみなす距離の閾値
             public static float ApproachCompleteThreshold = 0.1f;
-
-            // デバッグ用:プールがない状態で動作させる。移動しなくなるだけで他の動作は正常に行う。
-            public static bool IsDecoyTargetMode = true;
         }
 
         [Header("生成~直進状態の設定")]

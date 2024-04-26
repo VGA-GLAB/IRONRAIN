@@ -15,11 +15,11 @@ namespace Enemy.Control.FSM
         private MoveApply _moveApply;
         private AttackStream _attackStream;
 
-        public BattleState(BlackBoard blackBoard, BodyMove move, BodyRotate rotate, BodyAnimation animation, 
+        public BattleState(BlackBoard blackBoard, Body body, BodyAnimation animation, 
             IEquipment weapon)
         {
             _blackBoard = blackBoard;
-            _moveApply = new MoveApply(Choice.Chase, blackBoard, move, rotate, animation);
+            _moveApply = new MoveApply(Choice.Chase, blackBoard, body, animation);
             _attackStream = new AttackStream(blackBoard, animation, weapon);
         }
 
@@ -35,7 +35,7 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            if (StateExtensions.IsExit(_blackBoard))
+            if (IsExit())
             {
                 TryChangeState(stateTable[StateKey.Idle]);
             }
@@ -49,6 +49,20 @@ namespace Enemy.Control.FSM
         public override void Destroy()
         {
             _attackStream.ReleaseCallback();
+        }
+
+        // 死亡もしくは撤退をチェックする。
+        private bool IsExit()
+        {
+            foreach (ActionPlan plan in _blackBoard.ActionOptions)
+            {
+                if (plan.Choice == Choice.Broken || plan.Choice == Choice.Escape)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Enemy.Mockup
                 _playerArea = new CircleArea(_player.position, _playerAreaRadius);
             }
 
-            if (_pool != null && !_pool.TryRent(out _slot))
+            if (_pool != null && !_pool.TryRent(transform.position, out _slot))
             {
                 Debug.LogError($"敵を配置するスロットの確保に失敗: {name}");
             }

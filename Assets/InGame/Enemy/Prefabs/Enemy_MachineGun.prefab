@@ -148,7 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyParams:
     _advance:
-      _slot: 0
       _distance: 33
       _moveSpeed: 30
     _battle:
@@ -158,12 +157,16 @@ MonoBehaviour:
       _inputBufferAsset: {fileID: 0}
       _useInputBuffer: 0
       _attackRate: 0.01
-      _chaseSpeed: 35
+      _chaseSpeed: 8
       _escapeSpeed: 44
       _fovRadius: 12
     _common: {fileID: 11400000, guid: db5a251b150fd1d428e98f5b5258031e, type: 2}
   _offset: {fileID: 5448234365850151367}
   _rotate: {fileID: 5448234366035877079}
+  _renderers:
+  - {fileID: 1903432462469289167}
+  - {fileID: 5448234365278661825}
+  - {fileID: 5448234365976160108}
   _animator: {fileID: 6414272571457249341}
   _animationEvent: {fileID: 8357249222482679970}
   _effects:
@@ -182,10 +185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef6e6fd573f27a418ee1ba9f0587acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _aimMode: 0
   _muzzle: {fileID: 503237666098712288}
   _key: 1
   _target: {fileID: 0}
-  _isTargeting: 0
 --- !u!1001 &1774732712451321490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -333,9 +336,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70970c728119f8e48b07b58d32c2597d, type: 3}
+--- !u!23 &5448234365278661825 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7838775025725844791, guid: 70970c728119f8e48b07b58d32c2597d, type: 3}
+  m_PrefabInstance: {fileID: 2834145224045167094}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5448234365683245735 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7838775025325122385, guid: 70970c728119f8e48b07b58d32c2597d, type: 3}
+  m_PrefabInstance: {fileID: 2834145224045167094}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5448234365976160108 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7838775025078412954, guid: 70970c728119f8e48b07b58d32c2597d, type: 3}
   m_PrefabInstance: {fileID: 2834145224045167094}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3908787089917077382
@@ -574,6 +587,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 5906011277973393745, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8940231716242114777, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -649,6 +666,11 @@ MonoBehaviour:
 --- !u!4 &451053610724064616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5611048168511682806, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
+  m_PrefabInstance: {fileID: 5448234365696066974}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1903432462469289167 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5906011277973393745, guid: 64b10a4ad0681d543a34634dbc462f43, type: 3}
   m_PrefabInstance: {fileID: 5448234365696066974}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4003155994290490695 stripped
