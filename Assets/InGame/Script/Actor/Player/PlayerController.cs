@@ -6,22 +6,23 @@ using Cysharp.Threading.Tasks;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private List<PlayerStateBase> _playerStateList = new();
+    [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
     [SerializeField] private PlayerSetting _playerSetting;
+    [SerializeField] private RaderMap _playerMap;
 
     private PlayerEnvroment _playerEnvroment;
 
     private void Awake()
     {
-        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting);
+        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap);
+        for (int i = 0; i < _playerStateList.Count; i++)
+        {
+            _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());
+        }
     }
 
     private void Start()
     {
-        for (int i = 0; i < _playerStateList.Count; i++) 
-        {
-            _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());
-        }
     }
 
     private void OnDestroy()

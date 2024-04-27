@@ -10,13 +10,18 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _rightInput;
     [SerializeField] private Text _leftInput;
     [SerializeField] private Text _moveState;
+    [SerializeField] private Text _currentWeapon;
+    [SerializeField] private Text _currentBullet;
+    [SerializeField] private Text _maxBullet;
 
     private PlayerMove _playerMove;
+    private PlayerWeaponController _weaponCon;
     private bool _active = false;
 
     private void Start()
     {
         _playerMove = _robotController.SeachState<PlayerMove>();
+        _weaponCon = _robotController.SeachState<PlayerWeaponController>();
     }
 
     private void Update()
@@ -36,6 +41,9 @@ public class RobotInputDebug : MonoBehaviour
 
         _leftInput.text = _playerMove.MoveModel.Dir.x.ToString();
         _rightInput.text = _playerMove.MoveModel.Dir.y.ToString();
+        _maxBullet.text = _weaponCon.CurrentWeapon.MagazineSize.ToString();
+        _currentBullet.text = _weaponCon.CurrentWeapon.CurrentBullets.ToString();
+        _currentWeapon.text = _weaponCon.CurrentWeapon.ToString();
 
         //if (_robotController.MoveState == MoveState.Forward)
         //{

@@ -5,14 +5,15 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 using System;
 using DG.Tweening;
+using UnityEngine.UI;
+using UniRx;
+using Cysharp.Threading.Tasks;
 
 public class LeverController : MonoBehaviour
 {
     /// <summary>コントローラーの向いている方向</summary>
     public Vector3 ControllerDir => _controllerDir;
 
-    [SerializeField] private InputActionProperty _playerHandTriggerInput;
-    [SerializeField] private InputActionProperty _leverInput;
     [SerializeField] private Transform _playerHandTransfrom;
     [Header("レバーの感度設定")]
     [SerializeField] private float _moveSpeed = 5;
@@ -24,6 +25,9 @@ public class LeverController : MonoBehaviour
     [SerializeField] private Transform _neutralPos;
     [Header("ニュートラルの範囲")]
     [SerializeField] private float _neutralRange;
+    [SerializeField] private LeverType _leverType;
+    [SerializeField] private MyButton _rightButton1;
+    [SerializeField] private MyButton _rightButton2;
 
     private bool _isLeverMove = false;
     private Vector2 _leverDir;
@@ -35,18 +39,36 @@ public class LeverController : MonoBehaviour
 
     private void Start()
     {
-       
+        if (_leverType == LeverType.Right)
+        {
+            _rightButton1?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.RightButton1));
+            _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton1));
+            _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.RightButton2));
+            _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton2));
+        }
     }
 
     void Update()
     {
-        _isLeverMove = Convert.ToBoolean(_playerHandTriggerInput.action.ReadValue<float>());
-        _leverDir = _leverInput.action.ReadValue<Vector2>();
+      
         if (_playerSetting.IsKeyBoard && _leverDir != Vector2.zero) 
         {
             _isLeverMove = true;
         }
         LeverMove();
+
+        if (_leverType == LeverType.Left)
+        {
+            _isLeverMove = InputProvider.Instance.IsLeftLeverMove;
+            InputProvider.Instance.LeftLeverDir = _controllerDir;
+            _leverDir = InputProvider.Instance.LeftLeverInputDir;
+        }
+        else if (_leverType == LeverType.Right)
+        {
+            _isLeverMove = InputProvider.Instance.IsRightLeverMove;
+            InputProvider.Instance.RightLeverDir = _controllerDir;
+            _leverDir = InputProvider.Instance.RightLeverInputDir;
+        }
     }
 
     public void SetUp(PlayerSetting playerSetting) 
@@ -139,5 +161,11 @@ public class LeverController : MonoBehaviour
                 _controllerDir.z = 0;
             }
         }
+    }
+
+    private enum LeverType 
+    {
+        Left,
+        Right,
     }
 }
