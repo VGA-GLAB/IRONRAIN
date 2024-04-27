@@ -141,7 +141,7 @@ public class RaderMap : MonoBehaviour
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
     /// </summary>
     /// <returns>最も近い敵を返す</returns>
-    public GameObject NearEnemy()
+    public (GameObject obj,float) NearEnemy()
     {
         float nearDistance = float.MaxValue;
         
@@ -155,7 +155,7 @@ public class RaderMap : MonoBehaviour
                 _nearEnemy = _enemys[i].gameObject;
             }
         }
-        return _nearEnemy;
+        return (_nearEnemy, nearDistance);
     }
 
     /// <summary>
@@ -170,7 +170,7 @@ public class RaderMap : MonoBehaviour
             agent.IsLockon = false;
         }
         
-        var nearEnemy = NearEnemy();
+        var nearEnemy = NearEnemy().obj;
         AgentScript agentScript = nearEnemy.GetComponent<AgentScript>();
         agentScript.IsLockon = true;
     }

@@ -39,27 +39,10 @@ public class RobotInputDebug : MonoBehaviour
     {
         if (!_active) return;
 
-        _leftInput.text = _playerMove.MoveModel.Dir.x.ToString();
-        _rightInput.text = _playerMove.MoveModel.Dir.y.ToString();
-        _maxBullet.text = _weaponCon.CurrentWeapon.MagazineSize.ToString();
+        _leftInput.text = InputProvider.Instance.LeftLeverDir.z.ToString();
+        _rightInput.text = InputProvider.Instance.RightLeverDir.z.ToString();
+        _maxBullet.text = _weaponCon.CurrentWeapon.WeaponParam.MagazineSize.ToString();
         _currentBullet.text = _weaponCon.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.CurrentWeapon.ToString();
-
-        //if (_robotController.MoveState == MoveState.Forward)
-        //{
-        //    _moveState.text = "ëOêi";
-        //}
-        //else if (_robotController.MoveState == MoveState.Back)
-        //{
-        //    _moveState.text = "å„ëﬁ";
-        //}
-        //else if (_robotController.MoveState == MoveState.Right)
-        //{
-        //    _moveState.text = "âEê˘âÒ";
-        //}
-        //else if (_robotController.MoveState == MoveState.Left)
-        //{
-        //    _moveState.text = "ç∂ê˘âÒ";
-        //}
     }
 }

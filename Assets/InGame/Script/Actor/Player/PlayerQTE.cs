@@ -8,9 +8,6 @@ using Enemy.Control;
 
 public class PlayerQTE : PlayerComponentBase
 {
-    [Header("QTEの時間制限")]
-    [SerializeField] private float _qteTimeLimit;
-
     protected override void Start()
     {
         
@@ -47,7 +44,6 @@ public class PlayerQTE : PlayerComponentBase
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
             Debug.Log("QTEモード");
-            _playerEnvroment.PlayerTimeSpeed = 0.2f;
             ProvidePlayerInformation.TimeScale = 0.2f;
             ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
             //右レバーボタン1を押したまま右レバーを引く
@@ -62,7 +58,6 @@ public class PlayerQTE : PlayerComponentBase
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton2), PlayerLoopTiming.Update, startToken);
             Debug.Log("その3");
 
-            _playerEnvroment.PlayerTimeSpeed = 1f;
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
@@ -77,10 +72,9 @@ public class PlayerQTE : PlayerComponentBase
     /// <returns></returns>
     private async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken) 
     {
-        await UniTask.WaitForSeconds(_qteTimeLimit, true, PlayerLoopTiming.Update, endToken);
+        await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
         Debug.Log("QTE終了");
         ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Failure);
-        _playerEnvroment.PlayerTimeSpeed = 1f;
         ProvidePlayerInformation.TimeScale = 1f;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
         startCts.Cancel();

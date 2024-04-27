@@ -7,30 +7,22 @@ using DG.Tweening;
 
 public class PlayerMoveModel : IPlayerStateModel
 {
-    public Vector2 Dir => _dir;
-
     [SerializeField] LeverController _leftController;
     [SerializeField] LeverController _rightController;
     [SerializeField] Rigidbody _rb;
-    [SerializeField] private float _oneGearSpeed;
-    [SerializeField] private float _twoGearSpeed;
-    [SerializeField] private float _threeGearSpeed;
-    [Header("１回のスラスターの移動量")]
-    [SerializeField] private float _thrusterMoveNum;
-    [Header("何秒間でスラスターで移動するか")]
-    [SerializeField] private int _thrusterMoveTime;
     [SerializeField] private Transform _centerPoint;
     [SerializeField] private Transform _insPos;
 
     private float _totalThrusterMove;
     private PlayerEnvroment _playerEnvroment;
-    private Vector2 _dir = new();
+    private PlayerSetting.PlayerParams _params;
     private Transform _transform;
     private float _startθ;
 
     public void SetUp(PlayerEnvroment env, CancellationToken token)
     {
         _playerEnvroment = env;
+        _params = env.PlayerSetting.PlayerParamsData;
         _leftController.SetUp(env.PlayerSetting);
         _rightController.SetUp(env.PlayerSetting);  
         _transform = _playerEnvroment.PlayerTransform;
@@ -65,19 +57,15 @@ public class PlayerMoveModel : IPlayerStateModel
 
     private void Move()
     {
-        _dir = new Vector2(_leftController.ControllerDir.z, _rightController.ControllerDir.z);
-
-        //前進
+        //３ギア
         if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z == 1)
         {
-            _rb.velocity =_transform.forward * _threeGearSpeed * _playerEnvroment.PlayerTimeSpeed;
-            //_moveState = MoveState.Forward;
+            _rb.velocity =_transform.forward * _params.ThreeGearSpeed * ProvidePlayerInformation.TimeScale;
         }
-        //後退
+        //１ギア
         else if (_leftController.ControllerDir.z == -1 && _rightController.ControllerDir.z == -1)
         {
-            _rb.velocity = _transform.forward * _oneGearSpeed * _playerEnvroment.PlayerTimeSpeed;
-            //_moveState = MoveState.Back;
+            _rb.velocity = _transform.forward * _params.OneGearSpeed * ProvidePlayerInformation.TimeScale;
         }
         //左スラスター
         else if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z != 1)
@@ -86,12 +74,12 @@ public class PlayerMoveModel : IPlayerStateModel
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
-                var nextPoint = NextThrusterMovePoint(_thrusterMoveNum * -1);
+                var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
                 Debug.Log("左スラスター");
                 UniTask.Create(async () =>
                 {
                     await _playerEnvroment.PlayerTransform
-                    .DOMove(nextPoint, _thrusterMoveTime * _playerEnvroment.PlayerTimeSpeed)
+                    .DOMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
                     .OnComplete(() => _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
@@ -105,21 +93,21 @@ public class PlayerMoveModel : IPlayerStateModel
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
-                var nextPoint = NextThrusterMovePoint(_thrusterMoveNum);
+                var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum);
                 UniTask.Create(async () =>
                 {
                     await _playerEnvroment.PlayerTransform
-                    .DOMove(nextPoint, _thrusterMoveTime * _playerEnvroment.PlayerTimeSpeed)
+                    .DOMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
                     .OnComplete(()=> _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
                 });
             }
         }
+        //２ギア
         else if (_leftController.ControllerDir.z == 0 && _rightController.ControllerDir.z == 0)
         {
-            Debug.Log(_playerEnvroment.PlayerTimeSpeed);
-            _rb.velocity = _transform.forward * _twoGearSpeed * _playerEnvroment.PlayerTimeSpeed;
+            _rb.velocity = _transform.forward * _params.TwoGearSpeed * ProvidePlayerInformation.TimeScale;
         }
     }
 

@@ -5,23 +5,17 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerWeaponBase : MonoBehaviour
 {
-    public int MagazineSize => _magazineSize;
+    public PlayerWeaponParams WeaponParam => _params;
     public int CurrentBullets => _currentBullets;
 
     [Header("弾のPrefab")]
     [SerializeField] protected GameObject _bulletPrefab;
     [SerializeField] protected Transform _bulletInsPos;
-    [Header("連射速度")]
-    [SerializeField] protected float _shotRate;
-    [Header("マガジンのサイズ")]
-    [SerializeField] protected int _magazineSize;
-    [Header("与えるダメージ量")]
-    [SerializeField] protected int _shotDamege;
+    [SerializeField] protected PlayerWeaponParams _params;
 
     protected bool _isShotInput;
     [Tooltip("現在の弾数")]
     protected int _currentBullets;
-
     private float _currentTime;
     [Tooltip("射撃中かどうか")]
     private bool _isFire;
@@ -36,14 +30,14 @@ public abstract class PlayerWeaponBase : MonoBehaviour
 
     protected virtual void Start()
     {
-        _currentBullets = _magazineSize;
+        _currentBullets = _params.MagazineSize;
     }
 
     private void Update()
     {
         //次の発射までの計算
         _currentTime += Time.deltaTime;
-        if (_currentTime > _shotRate)
+        if (_currentTime > _params.ShotRate)
         {
             _isFire = true;
         }
@@ -55,7 +49,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         {
             //後でオブジェクトプールに
             var obj = Instantiate(_bulletPrefab, _bulletInsPos);
-            obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.NearEnemy().obj, _shotDamege);
+            obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.NearEnemy().obj, _params.ShotDamage);
             _isFire = false;
             _currentTime = 0;
             _currentBullets--;
@@ -75,7 +69,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     {
         _isReload = true;
         //アニメーション挟む
-        _currentBullets = _magazineSize;
+        _currentBullets = _params.MagazineSize;
         _isReload = false;
     }
 
