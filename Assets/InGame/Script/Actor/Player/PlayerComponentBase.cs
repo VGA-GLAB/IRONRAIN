@@ -7,34 +7,29 @@ using System;
 
 public abstract class PlayerComponentBase : MonoBehaviour, IDisposable
 {
-    public IPlayerStateModel PlayerStateModel => _playerStateModel;
-    public IPlayerStateView PlayerStateView => _playerStateView;
-
-    [SubclassSelector, SerializeReference]
-    protected IPlayerStateModel _playerStateModel;
-    protected IPlayerStateView _playerStateView;
     protected PlayerEnvroment _playerEnvroment;
+    protected PlayerSetting.PlayerParams _playerParams;
 
     public void SetUp(PlayerEnvroment playerEnvroment, CancellationToken token) 
     {
         _playerEnvroment = playerEnvroment;
-        _playerStateModel?.SetUp(playerEnvroment, token);
-        _playerStateView?.SetUp(playerEnvroment, token);
+        _playerParams = _playerEnvroment.PlayerSetting.PlayerParamsData;
+
     }
 
     protected virtual void Start()
     {
-        _playerStateModel?.Start();
+   
     }
 
     protected virtual void FixedUpdate() 
     {
-        _playerStateModel?.FixedUpdate();
+      
     }
 
     protected virtual void Update() 
     {
-        _playerStateModel?.Update();
+
     }
 
     public abstract void Dispose();

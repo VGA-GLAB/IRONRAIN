@@ -8,7 +8,6 @@ public class PlayerEnvroment
     public PlayerSetting PlayerSetting => _setting;
     public PlayerStateType PlayerState => _playerState;
     public RaderMap RaderMap => _raderMap;
-    public float PlayerTimeSpeed = 1;
 
     private PlayerSetting _setting;
     private Transform _playerTransform;

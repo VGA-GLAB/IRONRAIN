@@ -30,7 +30,7 @@ public class LeverController : MonoBehaviour
     [SerializeField] private MyButton _rightButton2;
 
     private bool _isLeverMove = false;
-    private Vector2 _leverDir;
+    private Vector2 _leverDir = new();
     private Vector3 _playerHandSavePos;
     private Vector3 _controllerDir = new();
     private Vector3 _controllerMoveDir = new();
@@ -118,7 +118,6 @@ public class LeverController : MonoBehaviour
         || _xMin > xPos + (dir.z * _moveSpeed)) 
         {
             _controllerMoveDir.z = 0;
-            Debug.Log("ˆÚ“®ƒ_ƒ");
         }
 
         _controllerMoveDir.x = 0;

@@ -6,15 +6,18 @@ using System;
 
 public class ProvidePlayerInformation
 {
-    public static Subject<Unit> StartQte = new();
-    public static Subject<QTEResultType> EndQte = new();
+    public static ISubject<Unit> StartQte => _startQte;
+    private static Subject<Unit> _startQte = new();
+    public static ISubject<QTEResultType> EndQte => _endQte;
+    private static Subject<QTEResultType> _endQte = new();
     public static float TimeScale { get => _timeScale; set => _timeScale = value; }
+    
     private static float _timeScale = 1;
 
     ~ProvidePlayerInformation() 
     {
-        StartQte.Dispose();
-        EndQte.Dispose();
+        _startQte.Dispose();
+        _endQte.Dispose();
     }
 }
 
