@@ -11,4 +11,6 @@ public enum PlayerStateType
     RepairMode = 4,
     /// <summary>‘€ì•s”\</summary>
     Inoperable = 8,
+    /// <summary>•ŠíØ‚è‘Ö‚¦</summary>
+    SwitchingArms = 16,
 }

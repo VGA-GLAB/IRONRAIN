@@ -28,7 +28,6 @@ public class PlayerMoveModel : IPlayerStateModel
     private Transform _transform;
     private float _startθ;
 
-
     public void SetUp(PlayerEnvroment env, CancellationToken token)
     {
         _playerEnvroment = env;
@@ -44,7 +43,14 @@ public class PlayerMoveModel : IPlayerStateModel
     }
     public void FixedUpdate()
     {
-        Move();
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        {
+            Move();
+        }
+        else 
+        {
+            _rb.velocity = Vector2.zero;
+        }
     }
 
     public void Update()
@@ -64,13 +70,13 @@ public class PlayerMoveModel : IPlayerStateModel
         //前進
         if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z == 1)
         {
-            _rb.velocity = _transform.forward * _threeGearSpeed;
+            _rb.velocity =_transform.forward * _threeGearSpeed * _playerEnvroment.PlayerTimeSpeed;
             //_moveState = MoveState.Forward;
         }
         //後退
         else if (_leftController.ControllerDir.z == -1 && _rightController.ControllerDir.z == -1)
         {
-            _rb.velocity = _transform.forward * _oneGearSpeed;
+            _rb.velocity = _transform.forward * _oneGearSpeed * _playerEnvroment.PlayerTimeSpeed;
             //_moveState = MoveState.Back;
         }
         //左スラスター
@@ -85,7 +91,7 @@ public class PlayerMoveModel : IPlayerStateModel
                 UniTask.Create(async () =>
                 {
                     await _playerEnvroment.PlayerTransform
-                    .DOMove(nextPoint, _thrusterMoveTime)
+                    .DOMove(nextPoint, _thrusterMoveTime * _playerEnvroment.PlayerTimeSpeed)
                     .OnComplete(() => _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
@@ -103,7 +109,7 @@ public class PlayerMoveModel : IPlayerStateModel
                 UniTask.Create(async () =>
                 {
                     await _playerEnvroment.PlayerTransform
-                    .DOMove(nextPoint, _thrusterMoveTime)
+                    .DOMove(nextPoint, _thrusterMoveTime * _playerEnvroment.PlayerTimeSpeed)
                     .OnComplete(()=> _playerEnvroment.PlayerTransform.position = nextPoint);
                     _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                     _playerEnvroment.RemoveState(PlayerStateType.Thruster);
@@ -112,7 +118,8 @@ public class PlayerMoveModel : IPlayerStateModel
         }
         else if (_leftController.ControllerDir.z == 0 && _rightController.ControllerDir.z == 0)
         {
-            _rb.velocity = _transform.forward * _twoGearSpeed;
+            Debug.Log(_playerEnvroment.PlayerTimeSpeed);
+            _rb.velocity = _transform.forward * _twoGearSpeed * _playerEnvroment.PlayerTimeSpeed;
         }
     }
 
@@ -133,7 +140,7 @@ public class PlayerMoveModel : IPlayerStateModel
         var z = Mathf.Sin(_totalThrusterMove + _startθ) * r;
 
         var position = new Vector3 (x + _centerPoint.position.x, _playerEnvroment.PlayerTransform.position.y, z + _centerPoint.position.z);
-        //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
+        Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
         return position;
     }
 

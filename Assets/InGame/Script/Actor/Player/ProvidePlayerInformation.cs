@@ -20,6 +20,6 @@ public class ProvidePlayerInformation
 
 public enum QTEResultType 
 {
-    success,
-    failure
+    Success,
+    Failure
 }
