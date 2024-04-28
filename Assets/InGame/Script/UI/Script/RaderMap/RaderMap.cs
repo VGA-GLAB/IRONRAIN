@@ -99,7 +99,7 @@ public class RaderMap : MonoBehaviour
             enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
 
             //赤点の位置を決める
-            _agent.RectTransform.anchoredPosition = new Vector2(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y);
+            _agent.RectTransform.anchoredPosition = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _center.rectTransform.position.z);
 
             //ロックオンされている場合の処理
             Image image = _agent.RectTransform.GetComponent<Image>();
