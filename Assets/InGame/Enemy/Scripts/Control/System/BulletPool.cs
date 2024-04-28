@@ -16,7 +16,7 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// 弾のプーリング
+    /// 弾のプーリングする。
     /// </summary>
     public class BulletPool : MonoBehaviour
     {

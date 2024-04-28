@@ -13,7 +13,7 @@ namespace Enemy.Control
         private Transform _transform;
         private Transform _rotate;
         private Transform _player;
-        private SurroundingPool _pool;
+        private SlotPool _pool;
         private EnemyParams _params;
 
         private CircleArea _area;
@@ -21,7 +21,7 @@ namespace Enemy.Control
         // スロットの位置の変更はこのクラスでは行わず、貸し出す側が行う。
         private Slot _slot;
 
-        public PositionRelationship(Transform transform, Transform rotate, Transform player, SurroundingPool pool, 
+        public PositionRelationship(Transform transform, Transform rotate, Transform player, SlotPool pool, 
             EnemyParams enemyParams)
         {
             _transform = transform;
@@ -38,18 +38,22 @@ namespace Enemy.Control
         public void Setup(BlackBoard blackBoard)
         {
             // このキャラクターのエリアを作成
-            _area = new CircleArea(_transform.position, _params.Area.Radius);
+            _area = new CircleArea(_transform.position, _params.Common.Area.Radius);
 
             // プレイヤーのエリアを作成
             if (_player != null)
             {
-                _playerArea = new CircleArea(_player.position, _params.Area.PlayerRadius);
+                _playerArea = new CircleArea(_player.position, _params.Common.Area.PlayerRadius);
             }
 
             // スロット確保
-            if (_pool != null && !_pool.TryRent(out _slot)) 
+            if (_pool == null)
             {
                 Debug.LogError($"敵を配置するスロットの確保に失敗: {_transform.name}");
+            }
+            else
+            {
+                _pool.TryRent(_transform.position, out _slot);
             }
 
             // 参照させ、AreaFixメソッドで位置を書き換えていく。
@@ -61,9 +65,17 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// 自身とプレイヤーのエリアが被らないように位置を修正する。
+        /// 各値を更新
         /// </summary>
-        public void AreaFix()
+        public void Update(BlackBoard blackBoard)
+        {
+            AreaFix();
+            PlayerWith(blackBoard);
+            SlotWith(blackBoard);
+        }
+
+        // 自身とプレイヤーのエリアが被らないように位置を修正する。
+        void AreaFix()
         {
             if (_player == null) return;
 
@@ -75,10 +87,8 @@ namespace Enemy.Control
             if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
         }
 
-        /// <summary>
-        /// プレイヤーとの位置関係を更新する。
-        /// </summary>
-        public void PlayerWith(BlackBoard blackBoard)
+        // プレイヤーとの位置関係を更新する。
+        void PlayerWith(BlackBoard blackBoard)
         {
             if (_player == null) return;
 
@@ -91,10 +101,8 @@ namespace Enemy.Control
             blackBoard.TransformToPlayerDistance = toPlayer.magnitude;
         }
 
-        /// <summary>
-        /// スロットとの位置関係を更新する。
-        /// </summary>
-        public void SlotWith(BlackBoard blackBoard)
+        // スロットとの位置関係を更新する。
+        void SlotWith(BlackBoard blackBoard)
         {
             if (_slot == null) return;
 
@@ -103,7 +111,7 @@ namespace Enemy.Control
             blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
 
             // スロットに到着した際に接近完了フラグを立てる。
-            if (Mathf.Approximately(blackBoard.AreaToSlotSqrDistance, 0))
+            if (blackBoard.AreaToSlotSqrDistance < EnemyParams.Debug.ApproachCompleteThreshold)
             {
                 blackBoard.IsApproachCompleted = true;
             }

@@ -27,7 +27,7 @@ namespace Enemy.Control.BT
         protected override State Stay()
         {
             // 上に逃げる。
-            _blackBoard.AddMovementOption(Choice.Escape, Vector3.up, _params.Move.EscapeSpeed);
+            _blackBoard.AddMovementOption(Choice.Escape, Vector3.up, _params.Battle.EscapeSpeed);
 
             return State.Success;
         }
