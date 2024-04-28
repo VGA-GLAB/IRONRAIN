@@ -92,6 +92,10 @@ public class InputProvider
         _inputMap.XRIRightHandInteraction.Select.canceled += context => IsRightLeverMove = false;
         _inputMap.XRILeftHandInteraction.Select.performed += context => IsLeftLeverMove = true;
         _inputMap.XRILeftHandInteraction.Select.canceled += context => IsLeftLeverMove = false;
+        _inputMap.XRIRightHandInteraction.OneButton.performed += context => ExecuteInput(InputType.RightButton1, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.OneButton.canceled += context => ExecuteInput(InputType.RightButton1, InputMode.Exit);
+        _inputMap.XRIRightHandInteraction.TwoButton.performed += context => ExecuteInput(InputType.RightButton2, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.TwoButton.canceled += context => ExecuteInput(InputType.RightButton2, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Activate.performed += context => ExecuteInput(InputType.Shot, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.Shot, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.ActivateValue.performed += context => ExecuteInput(InputType.WeaponChenge, InputMode.Enter);
@@ -140,6 +144,7 @@ public class InputProvider
         switch (type)
         {
             case InputMode.Enter:
+                Debug.Log($"{input}‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
                 //“ü—ÍŠJnˆ—‚ğÀs‚·‚é
                 SetStayInput(input, true);
                 _onEnterInputDic[input]?.Invoke();
