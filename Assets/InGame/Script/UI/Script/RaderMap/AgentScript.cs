@@ -1,5 +1,7 @@
 ﻿using System;
-using UniRx;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +14,7 @@ public class AgentScript : MonoBehaviour
     /// <summary> マップに表示するイメージ</summary>
     [SerializeField] public Image Image;
     /// <summary>ロックオン状態 </summary>
-    public bool IsRockon = false;
-    /// <summary>マップに表示するイメージのデフォルトの色 </summary>
-    [SerializeField] public Color _defultColor;
-    /// <summary>マップに表示するイメージのロックオン時の色 </summary>
-    [SerializeField] public Color _rockonColor;
+    public bool IsLockon = false;
 
     private void Awake()
     {
@@ -27,15 +25,6 @@ public class AgentScript : MonoBehaviour
     private void Start()
     {
         RaderMap.GenerateEnemy(this.gameObject);
-        Image.color = _defultColor;
-    }
-
-    private void Update()
-    {
-        if(IsRockon)
-            Image.color = _rockonColor;
-        else
-            Image.color = _defultColor;
     }
 
     public void EnemyDestory()
