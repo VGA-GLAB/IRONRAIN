@@ -1,7 +1,4 @@
-﻿using Cysharp.Threading.Tasks.Triggers;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +17,7 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Tooltip("UIの真ん中")] private Image _center;
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
+    [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
     [SerializeField, Tooltip("マルチロック距離")] private float _multilockDis = 10f;
     /// <summary>
     /// Centerからのオフセット
@@ -102,6 +100,10 @@ public class RaderMap : MonoBehaviour
         //エネミーとの距離を判定する
         for (int i = 0; i < _enemys.Count; i++)
         {
+            //視野角内にいるのかを判定する
+            if (!IsVisible(_enemys[i].gameObject))
+                continue;
+
             float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
             if (distance < nearDistance)
             {
@@ -110,6 +112,30 @@ public class RaderMap : MonoBehaviour
             }
         }
         return (_nearEnemy, nearDistance);
+    }
+
+    [SerializeField, Tooltip("視野角の基準点")] private Transform _origin;
+    [SerializeField, Tooltip("視野角（度数法）")] private float _sightAngle;
+    /// <summary>
+    /// ターゲットが視野角内にいるかを判定するメソッド
+    /// </summary>
+    /// <param name="enemy">検索したい敵</param>
+    /// <returns></returns>
+    private bool IsVisible(GameObject enemy)
+    {
+        //自身の向き（正規化したベクトル）
+        var selfDir = _origin.forward;
+        //ターゲットまでのベクトルと距離
+        var targetDir = enemy.transform.position - _origin.position;
+        var targetDis = targetDir.magnitude;
+        //視野角（の半分）の余弦
+        float cosHalfSight = Mathf.Cos(_sightAngle / 2 * Mathf.Deg2Rad);
+        // 自身とターゲットへの向きの内積計算
+        // ターゲットへの向きベクトルを正規化する必要があることに注意
+        float cosTarget = Vector3.Dot(selfDir, targetDir.normalized);
+
+        //視野角の判定
+        return cosTarget > cosHalfSight && targetDis < _rockonDis;
     }
 
     /// <summary>
@@ -126,7 +152,7 @@ public class RaderMap : MonoBehaviour
         }
         var nearEnemy = NearEnemy();
 
-        AgentScript agentScript = nearEnemy.GetComponent<AgentScript>();
+        AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
         agentScript.IsRockon = true;
         _enemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
     }
@@ -153,5 +179,11 @@ public class RaderMap : MonoBehaviour
                 agentScript.IsRockon = true;
             }
         }
+    }
+
+    //視野角をギズモ化
+    private void OnDrawGizmos()
+    {
+
     }
 }
