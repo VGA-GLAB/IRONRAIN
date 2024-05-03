@@ -184,6 +184,14 @@ public class RaderMap : MonoBehaviour
     //視野角をギズモ化
     private void OnDrawGizmos()
     {
-
+        // 視界の範囲（正面及び左右の端）をギズモとして描く
+        Vector3 selfDir = _origin.forward;
+        Vector3 rightBorder = Quaternion.Euler(0, _sightAngle / 2, 0) * selfDir; //右端
+        Vector3 leftBorder = Quaternion.Euler(0, -1 * _sightAngle / 2, 0) * selfDir; //左端
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(_origin.transform.position, selfDir * _rockonDis);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawRay(_origin.transform.position, rightBorder * _rockonDis);
+        Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
     }
 }
