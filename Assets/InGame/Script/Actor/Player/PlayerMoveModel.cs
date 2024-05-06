@@ -11,7 +11,6 @@ public class PlayerMoveModel : IPlayerStateModel
     [SerializeField] LeverController _rightController;
     [SerializeField] Rigidbody _rb;
     [SerializeField] private Transform _centerPoint;
-    [SerializeField] private Transform _insPos;
 
     private float _totalThrusterMove;
     private PlayerEnvroment _playerEnvroment;
@@ -118,7 +117,9 @@ public class PlayerMoveModel : IPlayerStateModel
     {
         var playerPos = _playerEnvroment.PlayerTransform.position;
         playerPos.y = 0;
-        var r = Vector3.Distance(_centerPoint.position, playerPos);
+        var centerPosition = _centerPoint.position;
+        centerPosition.y = 0;
+        var r = Vector3.Distance(centerPosition, playerPos);
         var ƒÆ = (moveDistance / r);
         Debug.Log($"ƒÆ:{ƒÆ}r:{r}");
 
@@ -128,15 +129,20 @@ public class PlayerMoveModel : IPlayerStateModel
         var z = Mathf.Sin(_totalThrusterMove + _startƒÆ) * r;
 
         var position = new Vector3 (x + _centerPoint.position.x, _playerEnvroment.PlayerTransform.position.y, z + _centerPoint.position.z);
-        Debug.Log($"ˆÚ“®‚µ‚Ü‚µ‚½X:{position.x}:Z{position.z}r:{r}");
+        //Debug.Log($"ˆÚ“®‚µ‚Ü‚µ‚½X:{position.x}:Z{position.z}r:{r}");
         return position;
     }
 
     private void SumƒÆ() 
     {
-        var r = Vector3.Distance(_centerPoint.position, _playerEnvroment.PlayerTransform.position);
-        var aDir = (_playerEnvroment.PlayerTransform.position - _centerPoint.position).normalized;
-        var bDir = (new Vector3(_centerPoint.position.x + r, _centerPoint.position.y, _centerPoint.position.z) - _centerPoint.position).normalized;
+        var playerPos = _playerEnvroment.PlayerTransform.position;
+        playerPos.y = 0;
+        var centerPosition = _centerPoint.position;
+        centerPosition.y = 0;
+
+        var r = Vector3.Distance(centerPosition, playerPos);
+        var aDir = (playerPos - centerPosition).normalized;
+        var bDir = (new Vector3(_centerPoint.position.x + r, 0, _centerPoint.position.z) - centerPosition).normalized;
         _startƒÆ = Vector3.Angle(aDir, bDir) * Mathf.Deg2Rad;
     }
 }
