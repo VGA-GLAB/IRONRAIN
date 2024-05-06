@@ -6,58 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerWeaponController : PlayerComponentBase
 {
-    public PlayerWeaponBase CurrentWeapon => _playerWeaponList[_currentWeaponIndex];
+    public PlayerWeaponModel WeaponModel { get; private set; }
 
-    [SerializeField] private InputActionProperty _shotInput;
-    [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
-
-    private bool _isWeaponChenge;
-    private bool _isShot;
-    //0énÇ‹ÇË
-    private int _currentWeaponIndex;
-
-    protected override void Start()
+    private void Awake()
     {
-        base.Start();
-        InputProvider.Instance.SetEnterInput(InputProvider.InputType.WeaponChenge, WeaponChenge);
-        InputProvider.Instance.SetEnterInput(InputProvider.InputType.Shot, Shot);
-
-        for (int i = 0; i < _playerWeaponList.Count; i++) 
-        {
-            _playerWeaponList[i].SetUp(_playerEnvroment);
-        }
-    }
-
-
-    protected override void Update()
-    {
-        if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
-            && _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)) return;
-    }
-
-    /// <summary>
-    /// ïêäÌêÿÇËë÷Ç¶
-    /// </summary>
-    private void WeaponChenge() 
-    {
-        if (_currentWeaponIndex + 1 < _playerWeaponList.Count)
-        {
-            _currentWeaponIndex++;
-        }
-        else 
-        {
-            _currentWeaponIndex = 0;
-        }
-        Debug.Log($"åªç›ÇÃïêäÌÇÕ{_playerWeaponList[_currentWeaponIndex]}");
-    }
-
-    private void Shot() 
-    {
-        _playerWeaponList[_currentWeaponIndex].Shot();
-    }
-
-    public override void Dispose()
-    {
-
+        WeaponModel = _playerStateModel as PlayerWeaponModel;
     }
 }

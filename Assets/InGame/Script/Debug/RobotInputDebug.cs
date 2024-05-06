@@ -16,12 +16,14 @@ public class RobotInputDebug : MonoBehaviour
 
     private PlayerMove _playerMove;
     private PlayerWeaponController _weaponCon;
+    private PlayerQTE _playerQTE;
     private bool _active = false;
 
     private void Start()
     {
         _playerMove = _robotController.SeachState<PlayerMove>();
         _weaponCon = _robotController.SeachState<PlayerWeaponController>();
+        _playerQTE = _robotController.SeachState<PlayerQTE>();
     }
 
     private void Update()
@@ -41,8 +43,9 @@ public class RobotInputDebug : MonoBehaviour
 
         _leftInput.text = InputProvider.Instance.LeftLeverDir.z.ToString();
         _rightInput.text = InputProvider.Instance.RightLeverDir.z.ToString();
-        _maxBullet.text = _weaponCon.CurrentWeapon.WeaponParam.MagazineSize.ToString();
-        _currentBullet.text = _weaponCon.CurrentWeapon.CurrentBullets.ToString();
-        _currentWeapon.text = _weaponCon.CurrentWeapon.ToString();
+        _maxBullet.text = _weaponCon.WeaponModel.CurrentWeapon.WeaponParam.MagazineSize.ToString();
+        _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
+        _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString();
+        _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
     }
 }
