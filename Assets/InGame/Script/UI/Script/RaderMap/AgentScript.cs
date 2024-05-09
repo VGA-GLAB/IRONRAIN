@@ -17,6 +17,8 @@ public class AgentScript : MonoBehaviour
     [SerializeField] public Color _defultColor;
     /// <summary>マップに表示するイメージのロックオン時の色 </summary>
     [SerializeField] public Color _rockonColor;
+    /// <summary>マップに表示するイメージのロックオン時の色 </summary>
+    public bool IsDefault = true;
 
     private void Awake()
     {

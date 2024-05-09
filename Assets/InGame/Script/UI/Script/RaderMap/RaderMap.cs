@@ -12,7 +12,7 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// 敵UIのリスト
     /// </summary>
-    private Dictionary<GameObject, Image> _enemyMaps = new Dictionary<GameObject, Image>();
+    public Dictionary<GameObject, Image> EnemyMaps = new Dictionary<GameObject, Image>();
     [SerializeField, Tooltip("プレイヤーの位置")] private Transform _player;
     [SerializeField, Tooltip("UIの真ん中")] private Image _center;
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
@@ -23,23 +23,11 @@ public class RaderMap : MonoBehaviour
     /// Centerからのオフセット
     /// </summary>
     private Vector3 _offset;
-    /// <summary>
-    /// 一番近い敵のゲームオブジェクト
-    /// </summary>
-    private GameObject _nearEnemy;
+    
+   
     // Start is called before the first frame update
     void Start()
     {
-        ////敵をすべて取得する
-        //GameObject[] objects = GameObject.FindGameObjectsWithTag("Enemy");
-        //foreach(GameObject obj in objects)
-        //{
-        //    AgentScript _agent = obj.GetComponent<AgentScript>();
-        //    _agent.RaderMap = this;
-        //    _agent.RectTransform = Instantiate(_agent.Image, _center.transform.parent).GetComponent<RectTransform>();
-        //    _enemys.Add(obj.GetComponent<AgentScript>());
-        //}//エネミーを取得する
-
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
     }
 
@@ -72,9 +60,10 @@ public class RaderMap : MonoBehaviour
         agent.RaderMap = this;
         //エネミーのUIを登録
         var enemyUi = Instantiate(agent.Image, _center.transform.parent);
-        _enemyMaps.Add(enemy, enemyUi);
+        var uiObj = enemyUi.gameObject.GetComponent<EnemyUi>();
+        uiObj.Enemy = enemy;
+        EnemyMaps.Add(enemy, enemyUi);
         agent.RectTransform = enemyUi.GetComponent<RectTransform>();
-        //_enemys.Add(enemy.GetComponent<AgentScript>());
         _enemys.Add(enemy);
     }
 
@@ -84,10 +73,15 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        Destroy(_enemyMaps[enemy].gameObject);
-        _enemyMaps.Remove(enemy);
+        Destroy(EnemyMaps[enemy].gameObject);
+        EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
     }
+
+    /// <summary>
+    /// 一番近い敵のゲームオブジェクト
+    /// </summary>
+    private GameObject _nearEnemy;
 
     /// <summary>
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
@@ -148,13 +142,14 @@ public class RaderMap : MonoBehaviour
         {
             var agent = enemy.GetComponent<AgentScript>();
             agent.IsRockon = false;
-            _enemyMaps[enemy].color = agent._defultColor;
+            EnemyMaps[enemy].color = agent._defultColor;
         }
         var nearEnemy = NearEnemy();
 
         AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
+        float nearEnemyDis = nearEnemy.Item2;
         agentScript.IsRockon = true;
-        _enemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
     }
 
     /// <summary>
@@ -179,6 +174,15 @@ public class RaderMap : MonoBehaviour
                 agentScript.IsRockon = true;
             }
         }
+    }
+
+    /// <summary>
+    /// Panelを押したときのロックオン処理
+    /// </summary>
+    /// <param name="enemyUi"></param>
+    public void PanelRock(GameObject enemyUi)
+    {
+
     }
 
     //視野角をギズモ化
