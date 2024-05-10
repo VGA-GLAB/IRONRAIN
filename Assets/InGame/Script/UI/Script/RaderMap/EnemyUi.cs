@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +7,12 @@ using UnityEngine.EventSystems;
 public class EnemyUi : MonoBehaviour, IPointerDownHandler
 {
     public GameObject Enemy;
-    /// <summary>•\¦‚·‚éƒŒ[ƒ_[ƒ}ƒbƒv </summary>
+    /// <summary>è¡¨ç¤ºã™ã‚‹ãƒ¬ãƒ¼ãƒ€ãƒ¼ãƒãƒƒãƒ— </summary>
     [NonSerialized] public RaderMap RaderMap;
 
     private void Awake()
     {
-        //ƒŒ[ƒ_[ƒeƒXƒg‚ğŒŸõ‚·‚é
+        //ãƒ¬ãƒ¼ãƒ€ãƒ¼ãƒ†ã‚¹ãƒˆã‚’æ¤œç´¢ã™ã‚‹
         RaderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
     }
     public void OnPointerDown(PointerEventData eventData)
