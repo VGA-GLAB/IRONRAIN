@@ -49,6 +49,17 @@ Shader "Custom/3DGround"
             
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+            #pragma multi_compile _ SHADOWS_SHADOWMASK
+
+            // Unity keywords
+            #pragma multi_compile _ DIRLIGHTMAP_COMBINED
+            #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile_fog
 
             #pragma multi_compile _MAPPING_PLANAR _MAPPING_TRIPLANAR
             #pragma multi_compile _BIAS_VERTEX _BIAS_FRAGMENT
@@ -59,6 +70,7 @@ Shader "Custom/3DGround"
                 float3 normalOS : NORMAL;
                 float4 tangentOS : TANGENT;
                 float2 uv : TEXCOORD0;
+                float2 lightmapUv : TEXCOORD1;
 
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -86,7 +98,8 @@ Shader "Custom/3DGround"
                 float2 triplanarUvZ : TEXCOORD10;
                 #endif
 
-
+                DECLARE_LIGHTMAP_OR_SH(lightmapUv, vertexSH, 11);
+                
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -151,6 +164,9 @@ Shader "Custom/3DGround"
                 output.normalWS = normalInput.normalWS;
                 output.tangentWS = normalInput.tangentWS;
                 output.bitangentWS = normalInput.bitangentWS;
+
+                OUTPUT_LIGHTMAP_UV(input.lightmapUv, unity_LightmapST, output.lightmapUv);
+                OUTPUT_SH(output.normalWS, output.vertexSH);
 
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
                 output.shadowCoord = GetShadowCoord(vertexInput);
@@ -234,9 +250,9 @@ Shader "Custom/3DGround"
                 InputData inputData = (InputData)0;
                 inputData.fogCoord = input.fogFactor;
                 inputData.shadowCoord = input.shadowCoord;
-                inputData.shadowMask = 0;
+                inputData.shadowMask = SAMPLE_SHADOWMASK(input.lightmapUv);
                 inputData.vertexLighting = input.vertexLight;
-                inputData.bakedGI = 0.5;
+                inputData.bakedGI = SAMPLE_GI(input.lightmapUv, input.vertexSH, input.normalWS);
                 inputData.normalWS = normalMapNormalWS;
                 inputData.positionCS = input.positionHCS;
                 inputData.tangentToWorld = half3x3(input.tangentWS, input.bitangentWS, input.normalWS);
