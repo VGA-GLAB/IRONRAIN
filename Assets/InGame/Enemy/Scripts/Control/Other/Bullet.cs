@@ -33,7 +33,10 @@ namespace Enemy.Control
         
         private void Update()
         {
-            _elapsed += Time.deltaTime;
+            // QTEでスローになるのを考慮
+            float deltaTime = Time.deltaTime * ProvidePlayerInformation.TimeScale;
+
+            _elapsed += deltaTime;
 
             if (_elapsed > _lifeTime)
             {
@@ -42,7 +45,7 @@ namespace Enemy.Control
             }
             else
             {
-                _transform.position += _direction * Time.deltaTime * _speed;
+                _transform.position += _direction * deltaTime * _speed;
             }
         }
 

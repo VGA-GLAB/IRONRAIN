@@ -18,14 +18,16 @@ namespace Enemy.Control
     /// </summary>
     public class ConditionCheck
     {
+        private Transform _transform;
         private EnemyParams _params;
         private BlackBoard _blackBoard;
 
         // Updateで黒板に反映し、毎フレーム0に戻る。
         private int _damageBuffer;
 
-        public ConditionCheck(EnemyParams enemyParams, BlackBoard blackBoard)
+        public ConditionCheck(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
+            _transform = transform;
             _params = enemyParams;
             _blackBoard = blackBoard;
         }
@@ -36,9 +38,11 @@ namespace Enemy.Control
         /// </summary>
         public void Setup()
         {
-            _blackBoard.Hp = _params.Tactical.MaxHp;
+            _blackBoard.Name = _transform.name;
+
+            _blackBoard.Hp = _params.Battle.MaxHp;
             _blackBoard.IsDying = false;
-            _blackBoard.LifeTime = _params.Tactical.LifeTime;
+            _blackBoard.LifeTime = _params.Battle.LifeTime;
         }
 
         /// <summary>
@@ -47,8 +51,8 @@ namespace Enemy.Control
         public void Check()
         {
             _blackBoard.Hp -= _damageBuffer;
-            _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Tactical.MaxHp <= _params.Tactical.Dying;
-            _blackBoard.LifeTime -= Time.deltaTime;
+            _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
+            _blackBoard.LifeTime -= BlackBoard.DeltaTime;
 
             // 反映後は必要ないので0に戻す
             _damageBuffer = 0;
@@ -61,14 +65,14 @@ namespace Enemy.Control
         public void Damage(int value, string weapon)
         {
             // 無敵
-            if (_params.Tactical.Armor == Armor.Invincible) return;
+            if (_params.Common.Tactical.Armor == Armor.Invincible) return;
 
             // 近接攻撃無効化
-            if (_params.Tactical.Armor == Armor.Melee &&
+            if (_params.Common.Tactical.Armor == Armor.Melee &&
                 weapon == Const.PlayerMeleeWeaponName) return;
 
             // 遠距離攻撃無効化
-            if (_params.Tactical.Armor == Armor.Range &&
+            if (_params.Common.Tactical.Armor == Armor.Range &&
                 weapon == Const.PlayerRangeWeaponName) return;
 
             _damageBuffer += value;

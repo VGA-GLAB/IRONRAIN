@@ -10,13 +10,20 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _rightInput;
     [SerializeField] private Text _leftInput;
     [SerializeField] private Text _moveState;
+    [SerializeField] private Text _currentWeapon;
+    [SerializeField] private Text _currentBullet;
+    [SerializeField] private Text _maxBullet;
 
     private PlayerMove _playerMove;
+    private PlayerWeaponController _weaponCon;
+    private PlayerQTE _playerQTE;
     private bool _active = false;
 
     private void Start()
     {
         _playerMove = _robotController.SeachState<PlayerMove>();
+        _weaponCon = _robotController.SeachState<PlayerWeaponController>();
+        _playerQTE = _robotController.SeachState<PlayerQTE>();
     }
 
     private void Update()
@@ -34,24 +41,11 @@ public class RobotInputDebug : MonoBehaviour
     {
         if (!_active) return;
 
-        _leftInput.text = _playerMove.MoveModel.Dir.x.ToString();
-        _rightInput.text = _playerMove.MoveModel.Dir.y.ToString();
-
-        //if (_robotController.MoveState == MoveState.Forward)
-        //{
-        //    _moveState.text = "ëOêi";
-        //}
-        //else if (_robotController.MoveState == MoveState.Back)
-        //{
-        //    _moveState.text = "å„ëﬁ";
-        //}
-        //else if (_robotController.MoveState == MoveState.Right)
-        //{
-        //    _moveState.text = "âEê˘âÒ";
-        //}
-        //else if (_robotController.MoveState == MoveState.Left)
-        //{
-        //    _moveState.text = "ç∂ê˘âÒ";
-        //}
+        _leftInput.text = InputProvider.Instance.LeftLeverDir.z.ToString();
+        _rightInput.text = InputProvider.Instance.RightLeverDir.z.ToString();
+        _maxBullet.text = _weaponCon.WeaponModel.CurrentWeapon.WeaponParam.MagazineSize.ToString();
+        _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
+        _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString();
+        _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
     }
 }

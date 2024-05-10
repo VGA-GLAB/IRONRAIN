@@ -11,6 +11,7 @@ namespace Enemy.Control
         Dummy,
         Dying,
         Fire,
+        Destroyed,
     }
 
     /// <summary>

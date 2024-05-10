@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,7 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// Centerからのオフセット
     /// </summary>
-    private Vector2 _offset;
+    private Vector3 _offset;
     /// <summary>
     /// 一番近い敵のゲームオブジェクト
     /// </summary>
@@ -41,48 +42,8 @@ public class RaderMap : MonoBehaviour
         //    _enemys.Add(obj.GetComponent<AgentScript>());
         //}//エネミーを取得する
 
-        _offset = _center.GetComponent<RectTransform>().anchoredPosition;
+        _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
     }
-
-    //void Update()
-    //{
-    //    for(int i = 0; i < _enemys.Count; i++)
-    //    {
-    //        AgentScript _agent = _enemy[i]GetComponent<AgentScript>();
-    //        //Imageがなければ生成
-    //        if (!_enemys[i].RectTransform)
-    //            _enemys[i].RectTransform = Instantiate(_enemys[i].Image, _center.transform.parent).GetComponent<RectTransform>();
-
-    //        Vector3 enemyDir = _enemys[i].transform.position;
-    //        //敵の高さとプレイヤーの高さを合わせる
-    //        enemyDir.y = _player.position.y;
-    //        enemyDir = _enemys[i].transform.position - _player.position;
-
-    //        enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
-    //        enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
-
-    //        //赤点の位置を決める
-    //        _enemys[i].RectTransform.anchoredPosition = new Vector2(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y);
-
-    //        //ロックオンされている場合の処理
-    //        Image image = _enemys[i].RectTransform.GetComponent<Image>();
-    //        if (_enemys[i].IsLockon)
-    //            image.color = Color.blue;
-    //        else
-    //            image.color = Color.red;
-    //    }
-
-
-    //Vector3 enemyDir = _enemy.position;
-    ////敵の高さとプレイヤーの高さを合わせる
-    //enemyDir.y = _player.position.y;
-    //enemyDir = _enemy.position - _player.position;
-
-    //enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir;
-    //enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength);
-
-    //_rectTransform.anchoredPosition = new Vector2(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y);
-    // }
 
     void Update()
     {
@@ -99,14 +60,7 @@ public class RaderMap : MonoBehaviour
             enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
 
             //赤点の位置を決める
-            _agent.RectTransform.anchoredPosition = new Vector2(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y);
-
-            //ロックオンされている場合の処理
-            Image image = _agent.RectTransform.GetComponent<Image>();
-            if (_agent.IsLockon)
-                image.color = Color.blue;
-            else
-                image.color = Color.red;
+            _agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
         }
     }
 
@@ -141,10 +95,10 @@ public class RaderMap : MonoBehaviour
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
     /// </summary>
     /// <returns>最も近い敵を返す</returns>
-    public GameObject NearEnemy()
+    public (GameObject obj,float) NearEnemy()
     {
         float nearDistance = float.MaxValue;
-        
+
         //エネミーとの距離を判定する
         for (int i = 0; i < _enemys.Count; i++)
         {
@@ -155,7 +109,7 @@ public class RaderMap : MonoBehaviour
                 _nearEnemy = _enemys[i].gameObject;
             }
         }
-        return _nearEnemy;
+        return (_nearEnemy, nearDistance);
     }
 
     /// <summary>
@@ -164,15 +118,17 @@ public class RaderMap : MonoBehaviour
     public void NearEnemyLockon()
     {
         //全てのエネミーのロックオンを外す
-        foreach(var enemy in _enemys)
+        foreach (var enemy in _enemys)
         {
             var agent = enemy.GetComponent<AgentScript>();
-            agent.IsLockon = false;
+            agent.IsRockon = false;
+            _enemyMaps[enemy].color = agent._defultColor;
         }
-        
         var nearEnemy = NearEnemy();
+
         AgentScript agentScript = nearEnemy.GetComponent<AgentScript>();
-        agentScript.IsLockon = true;
+        agentScript.IsRockon = true;
+        _enemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
     }
 
     /// <summary>
@@ -184,7 +140,7 @@ public class RaderMap : MonoBehaviour
         foreach (var enemy in _enemys)
         {
             var agent = enemy.GetComponent<AgentScript>();
-            agent.IsLockon = false;
+            agent.IsRockon = false;
         }
 
         //エネミーとの距離を判定する
@@ -194,7 +150,7 @@ public class RaderMap : MonoBehaviour
             if (distance < _multilockDis)
             {
                 AgentScript agentScript = _enemys[i].GetComponent<AgentScript>();
-                agentScript.IsLockon = true;
+                agentScript.IsRockon = true;
             }
         }
     }

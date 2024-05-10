@@ -6,13 +6,14 @@ using System;
 public class PlayerHp : MonoBehaviour, IDamageable
 {
     public event Action OnDownEvent;
-    [SerializeField] private int _hp;
 
+    private int _hp;
     private PlayerEnvroment _playerEnvroment;
 
     public void Setup(PlayerEnvroment playerEnvroment) 
     {
         _playerEnvroment = playerEnvroment;
+        _hp = _playerEnvroment.PlayerSetting.PlayerParamsData.Hp;
     }
 
     public void Damage(int value, string weapon = "")
