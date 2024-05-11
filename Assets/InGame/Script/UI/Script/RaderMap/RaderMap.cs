@@ -22,8 +22,16 @@ public class RaderMap : MonoBehaviour
     private Vector3 _offset;
     /// <summary>現在ロックされているエネミー</summary>
     private GameObject _nowRockEnemy;
-
-
+    public GameObject GetRockEnemy
+    {
+        get { return _nowRockEnemy; }
+    }
+    /// <summary> </summary>
+    private float _enemyDistance;
+    public float GetEnemyDis
+    {
+        get { return _enemyDistance; }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -153,6 +161,7 @@ public class RaderMap : MonoBehaviour
         agentScript.IsRockon = true;
         EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
         _nowRockEnemy = nearEnemy.obj;
+        _enemyDistance = nearEnemyDis;
     }
 
     /// <summary>
@@ -178,6 +187,7 @@ public class RaderMap : MonoBehaviour
             enemyAgent.IsRockon = true;
             EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
             _nowRockEnemy = enemyAgent.gameObject;
+            _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
         }  
     }
 
