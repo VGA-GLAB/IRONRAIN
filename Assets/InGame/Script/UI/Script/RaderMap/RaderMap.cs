@@ -83,6 +83,7 @@ public class RaderMap : MonoBehaviour
         Destroy(EnemyMaps[enemy].gameObject);
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
+        NearEnemyLockon(); 
     }
 
     /// <summary>
@@ -94,8 +95,9 @@ public class RaderMap : MonoBehaviour
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
     /// </summary>
     /// <returns>最も近い敵を返す</returns>
-    public (GameObject obj,float) NearEnemy()
+    private (GameObject obj,float) NearEnemy()
     {
+        _nearEnemy = null;
         float nearDistance = float.MaxValue;
 
         //エネミーとの距離を判定する
@@ -155,6 +157,11 @@ public class RaderMap : MonoBehaviour
         //全てのエネミーのロックオンを外す
         ResetUi();
         var nearEnemy = NearEnemy();
+        if(nearEnemy.obj is null)
+        {
+            _enemyDistance = float.MaxValue;
+            return;
+        }
 
         AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
         float nearEnemyDis = nearEnemy.Item2;
