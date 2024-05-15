@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -228,23 +229,19 @@ public class RaderMap : MonoBehaviour
 
     //---------------------ここから下は、読まなくていいです--------------------------
 
-    /// <summary>
-    /// マルチロックオン処理
-    /// </summary>
-    //public void MaltiLockon()
-    //{
-    //    //全てのエネミーのロックオンを外す
-    //    ResetUi();
+    // <summary>
+    // マルチロックオン処理
+    // </summary>
+    public void MultiLockon(List<GameObject> enemys)
+    {
+        //全てのエネミーのロックオンを外す
+        ResetUi();
 
-    //    //エネミーとの距離を判定する
-    //    for (int i = 0; i < _enemys.Count; i++)
-    //    {
-    //        float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
-    //        if (distance < _multilockDis)
-    //        {
-    //            AgentScript agentScript = _enemys[i].GetComponent<AgentScript>();
-    //            agentScript.IsRockon = true;
-    //        }
-    //    }
-    //}
+        foreach(var enemy in enemys)
+        {
+            var agentScript = enemy.GetComponent<AgentScript>();
+            agentScript.IsRockon = true;
+            EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        }
+    }
 }
