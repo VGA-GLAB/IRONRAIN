@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.XR.CoreUtils;
@@ -14,7 +15,15 @@ public class MultilockSystem : MonoBehaviour
     /// <summary>敵のUIリスト（テスト用） </summary>
     public List<GameObject> LockOnEnemy;
     [SerializeField, Tooltip("Rayのレイヤーマスク")] LayerMask _layerMask;
-    
+    /// <summary>レーダーマップ </summary>
+    private RaderMap _raderMap;
+
+    private void Awake()
+    {
+        //レーダーテストを検索する
+        _raderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -24,10 +33,12 @@ public class MultilockSystem : MonoBehaviour
         }
         else if(Input.GetMouseButton(0))//マウスが押されている間
         {
-
+            SerchEnemy();
         }
         else if(Input.GetMouseButtonUp(0))//マウスが離れた時
         {
+            MultilockAction();
+            LockOnEnemy.Clear();
             IsMultilock = false;
         }
     }
@@ -52,8 +63,10 @@ public class MultilockSystem : MonoBehaviour
         }
     }
 
-    private void MultiLock()
+    private void MultilockAction()
     {
+        //格納したエネミーで同じものを削除する
         LockOnEnemy = LockOnEnemy.Distinct().ToList();
+        _raderMap.MultiLockon(LockOnEnemy);
     }
 }
