@@ -98,6 +98,7 @@ public class PlayerQTEModel : IPlayerStateModel
         Debug.Log("QTEèIóπ");
         ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Failure);
         ProvidePlayerInformation.TimeScale = 1f;
+        _qteType.Value = QTEState.QTENone;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
         startCts.Cancel();
     }

@@ -41,8 +41,6 @@ public class PlayerWeaponModel : IPlayerStateModel
 
     public void Update()
     {
-        if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
-           && _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)) return;
     }
 
     /// <summary>
@@ -63,6 +61,9 @@ public class PlayerWeaponModel : IPlayerStateModel
 
     private void Shot()
     {
+        if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
+   || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
+   || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)) return;
         _playerWeaponList[_currentWeaponIndex].Shot();
     }
 
