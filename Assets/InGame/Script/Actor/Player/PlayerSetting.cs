@@ -20,6 +20,10 @@ public class PlayerSetting : ScriptableObject
         public float ThreeGearSpeed => _threeGearSpeed;
         public float ThrusterMoveNum => _thrusterMoveNum;
         public int ThrusterMoveTime => _thrusterMoveTime;
+        public int RestrictionLane => _restrictionLane;
+        //public float ReturnLaneStrengthMagnification => _returnLaneStrengthMagnification;
+        public float ReturnLaneStrength => _returnLaneStrength;
+        public float MaxReturnLaneStrength => _maxReturnLaneStrength;
         public float QteTimeLimit => _qteTimeLimit;
         public int Hp => _hp;
 
@@ -36,6 +40,14 @@ public class PlayerSetting : ScriptableObject
         [SerializeField] private float _thrusterMoveNum;
         [Header("何秒間でスラスターで移動するか")]
         [SerializeField] private int _thrusterMoveTime;
+        [Header("どのレーンから制限をかけるか")]
+        [SerializeField] private int _restrictionLane;
+        //[Header("レーンに戻そうとする力の倍率")]
+        //[SerializeField] private float _returnLaneStrengthMagnification;
+        [Header("レーンに戻そうとする力の強さ")]
+        [SerializeField] private float _returnLaneStrength;
+        [Header("レーンに戻そうとする力の強さの最大値")]
+        [SerializeField] private float _maxReturnLaneStrength;
 
         [Header("===QTEの設定===")]
         [Header("QTEの時間制限")]
