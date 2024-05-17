@@ -781,24 +781,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "OneButton",
-                    "type": "Button",
-                    "id": "0c892624-84c1-4c1f-8712-2899d7f042bd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "TwoButton",
-                    "type": "Button",
-                    "id": "9e3b59a1-eab1-40df-a846-437c15a37f9f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -964,28 +946,6 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "Generic XR Controller",
                     "action": "Scale Delta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "14c988fd-f661-4325-860b-3c3ea8d66b3c",
-                    "path": "<XRController>{LeftHand}/{PrimaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OneButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "14afdec2-a151-4f0c-a03e-334c4ff0fca7",
-                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TwoButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1621,7 +1581,7 @@
                 {
                     "name": "OneButton",
                     "type": "Button",
-                    "id": "3495654f-c437-4b69-9344-290d13b26edb",
+                    "id": "f2dee34b-eed0-44f9-b63d-4dda69aee4bb",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1630,7 +1590,7 @@
                 {
                     "name": "TwoButton",
                     "type": "Button",
-                    "id": "8a9603f0-8ef6-4ae3-9af1-db208f3ec37d",
+                    "id": "8e090885-ee94-434a-bb65-e643ac690424",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1695,7 +1655,7 @@
                 },
                 {
                     "name": "",
-                    "id": "2923e7da-1b48-4202-94ff-c61767e01be8",
+                    "id": "39fffe4a-cd68-4f61-a387-016a9aa12ee5",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -1711,17 +1671,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
-                    "action": "Activate Value",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68467233-8ec3-4ea8-a2d6-5ea465748677",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
                     "action": "Activate Value",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1827,7 +1776,7 @@
                 },
                 {
                     "name": "",
-                    "id": "c29e8d34-c20f-4b33-bd87-d7af37f45518",
+                    "id": "649f5116-7716-448e-b164-bd31c47cf6cc",
                     "path": "<XRController>{RightHand}/{PrimaryButton}",
                     "interactions": "",
                     "processors": "",
@@ -1838,7 +1787,7 @@
                 },
                 {
                     "name": "",
-                    "id": "369d4c8b-c695-43ec-8d98-65ecf141edb3",
+                    "id": "2c734370-e3be-40b6-8fae-12125a8d73b8",
                     "path": "<XRController>{RightHand}/{SecondaryButton}",
                     "interactions": "",
                     "processors": "",
@@ -2573,7 +2522,7 @@
                     "name": "",
                     "id": "fea81b99-07f5-426a-beba-5e0832c14855",
                     "path": "<TouchscreenGestureInputController>/tapStartPosition",
-                    "interactions": "Tap",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Tap Start Position",
@@ -2705,21 +2654,21 @@
         },
         {
             "name": "Lever",
-            "id": "35f1bbbd-b4e1-48c3-901a-bb5c05a19b83",
+            "id": "32494b24-0cee-4d41-8e95-929ebff9ae50",
             "actions": [
                 {
-                    "name": "Arrow",
+                    "name": "WASD",
                     "type": "Value",
-                    "id": "e3f470db-59a1-4036-8395-b8336252aafd",
+                    "id": "b99a9123-d8e8-4875-ac55-e669ed0e1b63",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "WASD",
+                    "name": "Arrow",
                     "type": "Value",
-                    "id": "333a47a4-5fb0-4abc-8e1a-cb8fb1ab8702",
+                    "id": "14f54a9e-6fad-4cd4-bef7-71eb69bbacd1",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -2728,7 +2677,7 @@
                 {
                     "name": "RightButton",
                     "type": "Value",
-                    "id": "df3c632f-846c-47b2-b499-d2b6950f0b76",
+                    "id": "8104017d-35e5-4f03-8c52-d0791ec5e70d",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -2737,64 +2686,9 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "b4cb327b-91cd-4793-a960-7fb6e59d2b38",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Arrow",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Arrow",
-                    "id": "57af3ab9-22aa-4ea4-b6e5-b5bc50bab239",
-                    "path": "Dpad",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Arrow",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "e2db321a-91c0-44f7-beda-e78573fe4ae7",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Arrow",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "6173137d-831a-4f6b-b33d-cdeb490e7a04",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Arrow",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "62e267da-ecd9-4fcd-8246-5bdfe190b72f",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WASD",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "WASD",
-                    "id": "eec21300-4945-4471-bb90-2c9dff16a71a",
-                    "path": "Dpad",
+                    "id": "6c19320d-9e1b-4adc-8ae6-162aa430c8ff",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -2804,7 +2698,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "1f5b0e3f-4e0b-421b-b997-870b62e0f876",
+                    "id": "23694b34-19a8-4ab7-877c-7d7c8b6120b2",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -2815,7 +2709,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "395ece7e-a9eb-4384-b956-91f5ccbfcac2",
+                    "id": "8e913ba1-1cd3-477e-9ab8-c31a505f1324",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -2826,7 +2720,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "d3e45808-f343-4b0a-8aa1-7d453c8ebd25",
+                    "id": "77935c5a-f6f2-4421-bd9b-515a21a10348",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -2837,7 +2731,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "ac4e7b7b-5ef3-451f-87ce-02d4d14abcd9",
+                    "id": "f8c56b68-a215-4258-b24d-e04cc1041e00",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -2847,30 +2741,63 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "63399a7d-3fed-4930-859a-6e95c17704b6",
-                    "path": "<XRController>/{Primary2DAxis}",
+                    "name": "Arrow",
+                    "id": "3c2937b3-6240-488a-a0ee-8c4de0b790d6",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "WASD",
-                    "isComposite": false,
+                    "action": "Arrow",
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "cd9b278a-81e6-4e8e-833d-cfa787041601",
-                    "path": "<Joystick>/stick",
+                    "name": "up",
+                    "id": "467a90ef-fef6-40a5-ac4f-15dc024121ab",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "WASD",
+                    "action": "Arrow",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "653d013a-ca83-4396-8531-b340ae1dc400",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Arrow",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "5a280325-5194-4bc7-8c56-27855468c4b9",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Arrow",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "7bc025c1-9b11-4e03-a7fe-10aff0dcb963",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Arrow",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "e94b9297-dca7-4d49-b4d3-1ca2419fef93",
+                    "id": "4ba2aa89-3aec-4e64-bf5a-67d7b44bddb5",
                     "path": "",
                     "interactions": "",
                     "processors": "",
@@ -2880,9 +2807,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Arrow",
-                    "id": "e8a10668-e095-470f-950e-9d2f4a18ffb0",
-                    "path": "Dpad",
+                    "name": "RightButton",
+                    "id": "49142aba-c507-40ae-be97-eb9dc99ce76e",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -2891,8 +2818,30 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "up",
+                    "id": "abebe89f-06ba-4fde-8061-026ce0954267",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightButton",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "ab24df7b-7cf8-4905-96c9-484cae54b12e",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightButton",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "left",
-                    "id": "d4b86ce9-f315-4914-9523-61d0143e4c18",
+                    "id": "a556f984-949f-4e22-b780-7e61797f3df4",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -2903,7 +2852,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "00470fe5-74ee-4b01-971c-12468e6b9876",
+                    "id": "2359ac1f-df80-4e37-bbda-847b19184ed2",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
