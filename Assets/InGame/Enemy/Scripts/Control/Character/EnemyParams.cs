@@ -78,6 +78,8 @@ namespace Enemy.Control
             public static float BlendTreeParameterMag = 100.0f;
             // 接近完了とみなす距離の閾値
             public static float ApproachCompleteThreshold = 0.1f;
+            // 戦闘時に上下移動する際の速さ
+            public static float VerticalMoveSpeed = 1.5f;
         }
 
         [Header("生成~直進状態の設定")]
