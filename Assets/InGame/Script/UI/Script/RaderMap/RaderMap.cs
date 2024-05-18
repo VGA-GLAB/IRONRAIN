@@ -27,12 +27,20 @@ public class RaderMap : MonoBehaviour
     {
         get { return _nowRockEnemy; }
     }
-    /// <summary> </summary>
+    /// <summary>一番近い敵 </summary>
     private float _enemyDistance;
     public float GetEnemyDis
     {
         get { return _enemyDistance; }
     }
+
+    /// <summary>マルチロック時のエネミー </summary>
+    private List<GameObject> _multiLockEnemys = new List<GameObject>();
+    public List<GameObject> MultiLockEnemys
+    {
+        get { return _multiLockEnemys; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -227,7 +235,6 @@ public class RaderMap : MonoBehaviour
         Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
     }
 
-    //---------------------ここから下は、読まなくていいです--------------------------
 
     // <summary>
     // マルチロックオン処理
@@ -236,10 +243,13 @@ public class RaderMap : MonoBehaviour
     {
         //全てのエネミーのロックオンを外す
         ResetUi();
+        if(_multiLockEnemys != null)
+            _multiLockEnemys.Clear();
 
-        foreach(var enemy in enemys)
+        foreach (var enemy in enemys)
         {
             var agentScript = enemy.GetComponent<AgentScript>();
+            _multiLockEnemys.Add(enemy);
             agentScript.IsRockon = true;
             EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
         }

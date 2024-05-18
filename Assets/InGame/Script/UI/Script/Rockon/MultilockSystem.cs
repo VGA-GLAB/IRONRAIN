@@ -22,25 +22,28 @@ public class MultilockSystem : MonoBehaviour
     {
         //レーダーテストを検索する
         _raderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
+        IsMultilock = false;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0)) //マウスを押した瞬間
+        if(IsMultilock)
         {
-            IsMultilock = true;
-        }
-        else if(Input.GetMouseButton(0))//マウスが押されている間
-        {
-            SerchEnemy();
-        }
-        else if(Input.GetMouseButtonUp(0))//マウスが離れた時
-        {
-            MultilockAction();
-            LockOnEnemy.Clear();
-            IsMultilock = false;
-        }
+            if (Input.GetMouseButtonDown(0)) //マウスを押した瞬間
+            {
+                
+            }
+            else if (Input.GetMouseButton(0))//マウスが押されている間
+            {
+                SerchEnemy();
+            }
+            else if (Input.GetMouseButtonUp(0))//マウスが離れた時
+            {
+                MultilockAction();
+                LockOnEnemy.Clear();
+            }
+        }    
     }
 
     /// <summary>
@@ -67,6 +70,15 @@ public class MultilockSystem : MonoBehaviour
     {
         //格納したエネミーで同じものを削除する
         LockOnEnemy = LockOnEnemy.Distinct().ToList();
-        _raderMap.MultiLockon(LockOnEnemy);
+        if(LockOnEnemy.Count > 0)
+        {
+            _raderMap.MultiLockon(LockOnEnemy);
+            IsMultilock = false;
+        }
+    }
+
+    public void MultilockOn()
+    {
+        IsMultilock = true;
     }
 }
