@@ -100,6 +100,10 @@ public class InputProvider
         _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.Shot, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.ActivateValue.performed += context => ExecuteInput(InputType.WeaponChenge, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.ActivateValue.canceled += context => ExecuteInput(InputType.WeaponChenge, InputMode.Exit);
+        _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightTrigger, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.Select.canceled += context => ExecuteInput(InputType.RightTrigger, InputMode.Exit);
+        _inputMap.XRILeftHandInteraction.Select.performed += context => ExecuteInput(InputType.LeftTrigger, InputMode.Enter);
+        _inputMap.XRILeftHandInteraction.Select.canceled += context => ExecuteInput(InputType.LeftTrigger, InputMode.Exit);
         _inputMap.XRILeftHandInteraction.Select.performed += context => ExecuteInput(InputType.LeftLeverMove, InputMode.Enter);
         _inputMap.XRILeftHandInteraction.Select.canceled += context => ExecuteInput(InputType.LeftLeverMove, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightLeverMove, InputMode.Enter);
@@ -273,5 +277,9 @@ public class InputProvider
         RightButton1,
         /// <summary>右ボタンその2</summary>
         RightButton2,
+        /// <summary>右手のトリガー</summary>
+        RightTrigger,
+        /// <summary>左手のトリガー</summary>
+        LeftTrigger,
     }
 }

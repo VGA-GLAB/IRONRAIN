@@ -1,7 +1,4 @@
-﻿using Cysharp.Threading.Tasks.Triggers;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,38 +7,34 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// 敵のリスト
     /// </summary>
-    //private List<AgentScript> _enemys = new List<AgentScript> ();
     private List<GameObject> _enemys = new List<GameObject>();
     /// <summary>
     /// 敵UIのリスト
     /// </summary>
-    private Dictionary<GameObject, Image> _enemyMaps = new Dictionary<GameObject, Image>();
+    public Dictionary<GameObject, Image> EnemyMaps = new Dictionary<GameObject, Image>();
     [SerializeField, Tooltip("プレイヤーの位置")] private Transform _player;
     [SerializeField, Tooltip("UIの真ん中")] private Image _center;
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
+    [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
     [SerializeField, Tooltip("マルチロック距離")] private float _multilockDis = 10f;
-    /// <summary>
-    /// Centerからのオフセット
-    /// </summary>
+    /// <summary>Centerからのオフセット</summary>
     private Vector3 _offset;
-    /// <summary>
-    /// 一番近い敵のゲームオブジェクト
-    /// </summary>
-    private GameObject _nearEnemy;
+    /// <summary>現在ロックされているエネミー</summary>
+    private GameObject _nowRockEnemy;
+    public GameObject GetRockEnemy
+    {
+        get { return _nowRockEnemy; }
+    }
+    /// <summary> </summary>
+    private float _enemyDistance;
+    public float GetEnemyDis
+    {
+        get { return _enemyDistance; }
+    }
     // Start is called before the first frame update
     void Start()
     {
-        ////敵をすべて取得する
-        //GameObject[] objects = GameObject.FindGameObjectsWithTag("Enemy");
-        //foreach(GameObject obj in objects)
-        //{
-        //    AgentScript _agent = obj.GetComponent<AgentScript>();
-        //    _agent.RaderMap = this;
-        //    _agent.RectTransform = Instantiate(_agent.Image, _center.transform.parent).GetComponent<RectTransform>();
-        //    _enemys.Add(obj.GetComponent<AgentScript>());
-        //}//エネミーを取得する
-
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
     }
 
@@ -74,9 +67,10 @@ public class RaderMap : MonoBehaviour
         agent.RaderMap = this;
         //エネミーのUIを登録
         var enemyUi = Instantiate(agent.Image, _center.transform.parent);
-        _enemyMaps.Add(enemy, enemyUi);
+        var uiObj = enemyUi.gameObject.GetComponent<EnemyUi>();
+        uiObj.Enemy = enemy;
+        EnemyMaps.Add(enemy, enemyUi);
         agent.RectTransform = enemyUi.GetComponent<RectTransform>();
-        //_enemys.Add(enemy.GetComponent<AgentScript>());
         _enemys.Add(enemy);
     }
 
@@ -86,10 +80,15 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        Destroy(_enemyMaps[enemy].gameObject);
-        _enemyMaps.Remove(enemy);
+        Destroy(EnemyMaps[enemy].gameObject);
+        EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
     }
+
+    /// <summary>
+    /// 一番近い敵のゲームオブジェクト
+    /// </summary>
+    private GameObject _nearEnemy;
 
     /// <summary>
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
@@ -102,6 +101,10 @@ public class RaderMap : MonoBehaviour
         //エネミーとの距離を判定する
         for (int i = 0; i < _enemys.Count; i++)
         {
+            //視野角内にいるのかを判定する
+            if (!IsVisible(_enemys[i].gameObject))
+                continue;
+
             float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
             if (distance < nearDistance)
             {
@@ -112,46 +115,129 @@ public class RaderMap : MonoBehaviour
         return (_nearEnemy, nearDistance);
     }
 
+    [SerializeField, Tooltip("視野角の基準点")] private Transform _origin;
+    [SerializeField, Tooltip("視野角（度数法）")] private float _sightAngle;
+    /// <summary>
+    /// ターゲットが視野角内にいるかを判定するメソッド
+    /// </summary>
+    /// <param name="enemy">検索したい敵</param>
+    /// <returns></returns>
+    private bool IsVisible(GameObject enemy)
+    {
+        //自身の向き（正規化したベクトル）
+        var selfDir = _origin.forward;
+        //ターゲットまでのベクトルと距離
+        var targetDir = enemy.transform.position - _origin.position;
+        var targetDis = targetDir.magnitude;
+        //視野角（の半分）の余弦
+        float cosHalfSight = Mathf.Cos(_sightAngle / 2 * Mathf.Deg2Rad);
+        // 自身とターゲットへの向きの内積計算
+        // ターゲットへの向きベクトルを正規化する必要があることに注意
+        float cosTarget = Vector3.Dot(selfDir, targetDir.normalized);
+
+        //視野角の判定
+        return cosTarget > cosHalfSight && targetDis < _rockonDis;
+    }
+
     /// <summary>
     /// 一番近い敵をロックオンする
     /// </summary>
     public void NearEnemyLockon()
     {
-        //全てのエネミーのロックオンを外す
-        foreach (var enemy in _enemys)
+        //タッチパネルロックオンの判定
+        if(_nowRockEnemy != null)
         {
-            var agent = enemy.GetComponent<AgentScript>();
-            agent.IsRockon = false;
-            _enemyMaps[enemy].color = agent._defultColor;
+            var agent = _nowRockEnemy.GetComponent<AgentScript>();
+            if (!agent.IsDefault)
+                return;
         }
+
+        //全てのエネミーのロックオンを外す
+        ResetUi();
         var nearEnemy = NearEnemy();
 
-        AgentScript agentScript = nearEnemy.GetComponent<AgentScript>();
+        AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
+        float nearEnemyDis = nearEnemy.Item2;
         agentScript.IsRockon = true;
-        _enemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        _nowRockEnemy = nearEnemy.obj;
+        _enemyDistance = nearEnemyDis;
     }
 
     /// <summary>
-    /// マルチロックオン処理
+    /// Panelを押したときのロックオン処理
     /// </summary>
-    public void MaltiLockon()
+    /// <param name="enemyUi"></param>
+    public void PanelRock(GameObject enemyUi)
+    {
+        //var ui = enemyUi.GetComponent<EnemyUi>();
+        var enemyObj = enemyUi.gameObject;
+        var enemyAgent = enemyObj.GetComponent<AgentScript>();
+        if(!enemyAgent.IsDefault)
+        {
+            //全てのエネミーのロックオンを外す
+            ResetUi();
+        }
+        else
+        {
+            //全てのエネミーのロックオンを外す
+            ResetUi();
+            //パネルタッチでのロックオン状態にする
+            enemyAgent.IsDefault = false;
+            enemyAgent.IsRockon = true;
+            EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
+            _nowRockEnemy = enemyAgent.gameObject;
+            _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
+        }  
+    }
+
+    /// <summary>
+    /// すべてのUIをリセットする
+    /// </summary>
+    private void ResetUi()
     {
         //全てのエネミーのロックオンを外す
         foreach (var enemy in _enemys)
         {
             var agent = enemy.GetComponent<AgentScript>();
             agent.IsRockon = false;
-        }
-
-        //エネミーとの距離を判定する
-        for (int i = 0; i < _enemys.Count; i++)
-        {
-            float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
-            if (distance < _multilockDis)
-            {
-                AgentScript agentScript = _enemys[i].GetComponent<AgentScript>();
-                agentScript.IsRockon = true;
-            }
+            agent.IsDefault = true;
+            EnemyMaps[enemy].color = agent._defultColor;
         }
     }
+    //視野角をギズモ化
+    private void OnDrawGizmos()
+    {
+        // 視界の範囲（正面及び左右の端）をギズモとして描く
+        Vector3 selfDir = _origin.forward;
+        Vector3 rightBorder = Quaternion.Euler(0, _sightAngle / 2, 0) * selfDir; //右端
+        Vector3 leftBorder = Quaternion.Euler(0, -1 * _sightAngle / 2, 0) * selfDir; //左端
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(_origin.transform.position, selfDir * _rockonDis);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawRay(_origin.transform.position, rightBorder * _rockonDis);
+        Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
+    }
+
+    //---------------------ここから下は、読まなくていいです--------------------------
+
+    /// <summary>
+    /// マルチロックオン処理
+    /// </summary>
+    //public void MaltiLockon()
+    //{
+    //    //全てのエネミーのロックオンを外す
+    //    ResetUi();
+
+    //    //エネミーとの距離を判定する
+    //    for (int i = 0; i < _enemys.Count; i++)
+    //    {
+    //        float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
+    //        if (distance < _multilockDis)
+    //        {
+    //            AgentScript agentScript = _enemys[i].GetComponent<AgentScript>();
+    //            agentScript.IsRockon = true;
+    //        }
+    //    }
+    //}
 }
