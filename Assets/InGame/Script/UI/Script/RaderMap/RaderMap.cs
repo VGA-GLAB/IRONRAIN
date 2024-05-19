@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,12 +27,20 @@ public class RaderMap : MonoBehaviour
     {
         get { return _nowRockEnemy; }
     }
-    /// <summary> </summary>
+    /// <summary>一番近い敵 </summary>
     private float _enemyDistance;
     public float GetEnemyDis
     {
         get { return _enemyDistance; }
     }
+
+    /// <summary>マルチロック時のエネミー </summary>
+    private List<GameObject> _multiLockEnemys = new List<GameObject>();
+    public List<GameObject> MultiLockEnemys
+    {
+        get { return _multiLockEnemys; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,6 +92,7 @@ public class RaderMap : MonoBehaviour
         Destroy(EnemyMaps[enemy].gameObject);
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
+        NearEnemyLockon(); 
     }
 
     /// <summary>
@@ -94,8 +104,9 @@ public class RaderMap : MonoBehaviour
     /// プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド
     /// </summary>
     /// <returns>最も近い敵を返す</returns>
-    public (GameObject obj,float) NearEnemy()
+    private (GameObject obj,float) NearEnemy()
     {
+        _nearEnemy = null;
         float nearDistance = float.MaxValue;
 
         //エネミーとの距離を判定する
@@ -155,6 +166,11 @@ public class RaderMap : MonoBehaviour
         //全てのエネミーのロックオンを外す
         ResetUi();
         var nearEnemy = NearEnemy();
+        if(nearEnemy.obj is null)
+        {
+            _enemyDistance = float.MaxValue;
+            return;
+        }
 
         AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
         float nearEnemyDis = nearEnemy.Item2;
@@ -219,25 +235,23 @@ public class RaderMap : MonoBehaviour
         Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
     }
 
-    //---------------------ここから下は、読まなくていいです--------------------------
 
-    /// <summary>
-    /// マルチロックオン処理
-    /// </summary>
-    //public void MaltiLockon()
-    //{
-    //    //全てのエネミーのロックオンを外す
-    //    ResetUi();
+    // <summary>
+    // マルチロックオン処理
+    // </summary>
+    public void MultiLockon(List<GameObject> enemys)
+    {
+        //全てのエネミーのロックオンを外す
+        ResetUi();
+        if(_multiLockEnemys != null)
+            _multiLockEnemys.Clear();
 
-    //    //エネミーとの距離を判定する
-    //    for (int i = 0; i < _enemys.Count; i++)
-    //    {
-    //        float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
-    //        if (distance < _multilockDis)
-    //        {
-    //            AgentScript agentScript = _enemys[i].GetComponent<AgentScript>();
-    //            agentScript.IsRockon = true;
-    //        }
-    //    }
-    //}
+        foreach (var enemy in enemys)
+        {
+            var agentScript = enemy.GetComponent<AgentScript>();
+            _multiLockEnemys.Add(enemy);
+            agentScript.IsRockon = true;
+            EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        }
+    }
 }
