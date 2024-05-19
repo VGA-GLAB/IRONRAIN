@@ -61,21 +61,30 @@ namespace Enemy.Control.BT
                 EnemyParams.Debug.HomingPower
                 );
 
-            // レベルの調整
+            // レベルの調整した速さ
             // -1から1の値を速さに乗算し、この値を速さに足すことで、0から基準値の2倍の範囲で加速減速を表現する。
-            float order = _speed * _blackBoard.LevelAdjust.MoveSpeed;
-
+            float orderedSpeed = _speed + _speed * _blackBoard.LevelAdjust.MoveSpeed;
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
-            Vector3 delta = toSlot * (_speed + order) * BlackBoard.DeltaTime;
+            Vector3 delta = toSlot * orderedSpeed * BlackBoard.DeltaTime;
+
+            Vector3 warp;
             if (delta.sqrMagnitude >= _blackBoard.AreaToSlotSqrDistance)
             {
-                _blackBoard.AddWarpOption(_choice, _blackBoard.PlayerHeightSlotPoint());
+                warp = _blackBoard.Slot.Point;
             }
             else
             {
-                _blackBoard.AddWarpOption(_choice, _blackBoard.PlayerHeightAreaPoint() + delta);
+                warp = _blackBoard.Area.Point + delta;
             }
+            // y座標はプレイヤーの位置に少しずつ移動する。
+            warp.y = Mathf.Lerp(
+                _transform.position.y, 
+                _blackBoard.PlayerPosition.y, 
+                EnemyParams.Debug.VerticalMoveSpeed * BlackBoard.DeltaTime
+                );
+
+            _blackBoard.AddWarpOption(_choice, warp);
 
             return State.Success;
         }
