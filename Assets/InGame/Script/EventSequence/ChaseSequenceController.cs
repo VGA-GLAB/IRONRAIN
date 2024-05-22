@@ -21,9 +21,6 @@ public class ChaseSequnceController : SequenceControllerBase
             _firstAnnounceSequence, _avoidanceSequence, _attackSequence, _touchPanelSequence, _leverSequence,
             _qteTutorialSequence, _multiBattleSequence, _purgeSequence
         };
-
-        _currentSequence = _firstAnnounceSequence;
-        _firstAnnounceSequence.OnSequenceStartEvent?.Invoke();
     }
     
     [Serializable] public sealed class FirstAnnounceSequence : EventSequenceBase { }
