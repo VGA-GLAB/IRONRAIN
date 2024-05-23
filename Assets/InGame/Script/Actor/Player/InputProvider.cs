@@ -1,4 +1,4 @@
-//“ú–{Œê‘Î‰
+ï»¿//æ—¥æœ¬èªå¯¾å¿œ
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,36 +7,39 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
-/// Input‚Ìî•ñ‚ğ’ñ‹Ÿ‚·‚éƒNƒ‰ƒX
+/// Inputã®æƒ…å ±ã‚’æä¾›ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class InputProvider
 {
-    /// <summary>‰EƒŒƒo[‚ÌŒü‚«</summary>
+    /// <summary>å³ãƒ¬ãƒãƒ¼ã®å‘ã</summary>
     public Vector3 RightLeverDir { get; set; }
-    /// <summary>¶ƒŒƒo[‚ÌŒü‚«</summary>
+    /// <summary>å·¦ãƒ¬ãƒãƒ¼ã®å‘ã</summary>
     public Vector3 LeftLeverDir { get; set; }
-    /// <summary>‰EƒŒƒo[‚É‰Á‚í‚Á‚Ä‚¢‚é“ü—Í‚Ì•ûŒü</summary>
+    /// <summary>å³ãƒ¬ãƒãƒ¼ã«åŠ ã‚ã£ã¦ã„ã‚‹å…¥åŠ›ã®æ–¹å‘</summary>
     public Vector3 RightLeverInputDir { get; private set; }
-    /// <summary>¶ƒŒƒo[‚É‰Á‚í‚Á‚Ä‚¢‚é“ü—Í‚Ì•ûŒü</summary>
+    /// <summary>å·¦ãƒ¬ãƒãƒ¼ã«åŠ ã‚ã£ã¦ã„ã‚‹å…¥åŠ›ã®æ–¹å‘</summary>
     public Vector3 LeftLeverInputDir { get; private set; }
-    /// <summary>‰EƒŒƒo[‚ª“®‚©‚¹‚é‚©</summary>
+    /// <summary>å³ãƒ¬ãƒãƒ¼ãŒå‹•ã‹ã›ã‚‹ã‹</summary>
     public bool IsRightLeverMove { get; private set; }    
-    /// <summary>¶ƒŒƒo[‚ª“®‚©‚¹‚é‚©</summary>
+    /// <summary>å·¦ãƒ¬ãƒãƒ¼ãŒå‹•ã‹ã›ã‚‹ã‹</summary>
     public bool IsLeftLeverMove { get; private set; }
     public static InputProvider Instance => _instance;
 
-    [Tooltip("InputSystem‚Å¶¬‚µ‚½ƒNƒ‰ƒX")]
+    [Tooltip("InputSystemã§ç”Ÿæˆã—ãŸã‚¯ãƒ©ã‚¹")]
     private XRIDefaultInputActions _inputMap;
-    [Tooltip("“ü—Í’¼Œã")]
+    [Tooltip("å…¥åŠ›ç›´å¾Œ")]
     private Dictionary<InputType, Action> _onEnterInputDic = new Dictionary<InputType, Action>();
-    [Tooltip("“ü—Í’¼Œã(Async)")]
+    [Tooltip("å…¥åŠ›ç›´å¾Œ(Async)")]
     private Dictionary<InputType, Func<UniTaskVoid>> _onEnterInputAsyncDic = new Dictionary<InputType, Func<UniTaskVoid>>();
-    [Tooltip("“ü—Í‰ğœ")]
+    [Tooltip("å…¥åŠ›è§£é™¤")]
     private Dictionary<InputType, Action> _onExitInputDic = new Dictionary<InputType, Action>();
-    [Tooltip("“ü—Í’¼Œã(Async)")]
+    [Tooltip("å…¥åŠ›ç›´å¾Œ(Async)")]
     private Dictionary<InputType, Func<UniTaskVoid>> _onExitInputAsyncDic = new Dictionary<InputType, Func<UniTaskVoid>>();
-    [Tooltip("“ü—Í’†")]
+    [Tooltip("å…¥åŠ›ä¸­")]
     private Dictionary<InputType, bool> _isStayInputDic = new Dictionary<InputType, bool>();
+
+    private Vector2 _rightFry;
+    private float _throttle;
 
     private bool _isInstanced = false;
     private static InputProvider _instance = new InputProvider();
@@ -51,7 +54,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// ‰Šú‰»ˆ—
+    /// åˆæœŸåŒ–å‡¦ç†
     /// </summary>
     private void Initialize()
     {
@@ -62,6 +65,15 @@ public class InputProvider
         _inputMap.Lever.Arrow.canceled += context => RightLeverInputDir = Vector2.zero;
         _inputMap.Lever.WASD.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
         _inputMap.Lever.WASD.canceled += context => LeftLeverInputDir = Vector2.zero;
+        _inputMap.XRIRightHand.FryStick.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.XRIRightHand.FryStick.canceled += context => RightLeverInputDir = Vector2.zero;
+        _inputMap.XRILeftHand.Throttle.performed += context => 
+        {
+            _throttle = context.ReadValue<float>();
+            LeftLeverInputDir = new Vector2(0,_throttle * -1);
+        };
+        _inputMap.XRILeftHand.Throttle.canceled += context => RightLeverInputDir = Vector2.zero;
+
         _inputMap.Lever.RightButton.performed += context =>
         {
             var dir = context.ReadValue<Vector2>();
@@ -96,8 +108,8 @@ public class InputProvider
         _inputMap.XRIRightHandInteraction.OneButton.canceled += context => ExecuteInput(InputType.RightButton1, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.TwoButton.performed += context => ExecuteInput(InputType.RightButton2, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.TwoButton.canceled += context => ExecuteInput(InputType.RightButton2, InputMode.Exit);
-        _inputMap.XRIRightHandInteraction.Activate.performed += context => ExecuteInput(InputType.Shot, InputMode.Enter);
-        _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.Shot, InputMode.Exit);
+        _inputMap.XRIRightHandInteraction.Activate.performed += context => ExecuteInput(InputType.RightButton1, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.RightButton1, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.ActivateValue.performed += context => ExecuteInput(InputType.WeaponChenge, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.ActivateValue.canceled += context => ExecuteInput(InputType.WeaponChenge, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightTrigger, InputMode.Enter);
@@ -113,7 +125,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// “ü—Íˆ—‚Ì‰Šú‰»‚ğs‚¤
+    /// å…¥åŠ›å‡¦ç†ã®åˆæœŸåŒ–ã‚’è¡Œã†
     /// </summary>
     private void InirializeInput()
     {
@@ -140,7 +152,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// “ü—ÍŠJn“ü—Í‰ğœ‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éŠÖ”
+    /// å…¥åŠ›é–‹å§‹å…¥åŠ›è§£é™¤ã—ãŸã¨ãã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
     /// </summary>
     /// <param name="input"></param>
     private void ExecuteInput(InputType input, InputMode type)
@@ -148,14 +160,14 @@ public class InputProvider
         switch (type)
         {
             case InputMode.Enter:
-                Debug.Log($"{input}‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½");
-                //“ü—ÍŠJnˆ—‚ğÀs‚·‚é
+                Debug.Log($"{input}ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ");
+                //å…¥åŠ›é–‹å§‹å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹
                 SetStayInput(input, true);
                 _onEnterInputDic[input]?.Invoke();
                 _onEnterInputAsyncDic[input]?.Invoke();
                 break;
             case InputMode.Exit:
-                // “ü—Í‰ğœˆ—‚ğÀs‚·‚é
+                // å…¥åŠ›è§£é™¤å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹
                 SetStayInput(input, false);
                 _onExitInputDic[input]?.Invoke();
                 _onExitInputAsyncDic[input]?.Invoke();
@@ -166,7 +178,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// ‚»‚ÌInputType‚ª“ü—Í’†‚©‚Ç‚¤‚©ƒtƒ‰ƒO‚ğ•Ô‚·
+    /// ãã®InputTypeãŒå…¥åŠ›ä¸­ã‹ã©ã†ã‹ãƒ•ãƒ©ã‚°ã‚’è¿”ã™
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -176,7 +188,7 @@ public class InputProvider
     }
 
     /// <summary>
-    ///“Á’è‚Ì“ü—Í‚ÅŒÄ‚Ño‚·Action‚ğ“o˜^‚·‚é
+    ///ç‰¹å®šã®å…¥åŠ›ã§å‘¼ã³å‡ºã™Actionã‚’ç™»éŒ²ã™ã‚‹
     /// </summary>
     public void SetEnterInput(InputType type, Action action)
     {
@@ -189,7 +201,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// “Á’è‚Ì“ü—Í‚ğŒÄ‚Ño‚·
+    /// ç‰¹å®šã®å…¥åŠ›ã‚’å‘¼ã³å‡ºã™
     /// </summary>
     public void CallEnterInput(InputType inputType) 
     {
@@ -197,7 +209,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// “Á’è‚Ì“ü—Í‰ğœ‚ğŒÄ‚Ño‚·
+    /// ç‰¹å®šã®å…¥åŠ›è§£é™¤ã‚’å‘¼ã³å‡ºã™
     /// </summary>
     public void CallExitInput(InputType inputType)
     {
@@ -210,7 +222,7 @@ public class InputProvider
     }
 
     /// <summary>
-    ///“Á’è‚Ì“ü—ÍI‚í‚Á‚½‚ÉŒÄ‚Ño‚·Action‚ğ“o˜^‚·‚é
+    ///ç‰¹å®šã®å…¥åŠ›çµ‚ã‚ã£ãŸæ™‚ã«å‘¼ã³å‡ºã™Actionã‚’ç™»éŒ²ã™ã‚‹
     /// </summary>
     public void SetExitInput(InputType type, Action action)
     {
@@ -223,7 +235,7 @@ public class InputProvider
     }
 
     /// <summary>
-    /// “Á’è‚Ì“ü—Í‚ÅŒÄ‚Ño‚³‚ê‚é“o˜^‚µ‚½Action‚ğíœ‚·‚é
+    /// ç‰¹å®šã®å…¥åŠ›ã§å‘¼ã³å‡ºã•ã‚Œã‚‹ç™»éŒ²ã—ãŸActionã‚’å‰Šé™¤ã™ã‚‹
     /// </summary>
     public void LiftEnterInput(InputType type, Action action)
     {
@@ -236,7 +248,7 @@ public class InputProvider
     }
 
     /// <summary>
-    ///“Á’è‚Ì“ü—ÍI‚í‚Á‚½‚ÉŒÄ‚Ño‚³‚ê‚é“o˜^‚µ‚½Action‚ğíœ‚·‚é
+    ///ç‰¹å®šã®å…¥åŠ›çµ‚ã‚ã£ãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ç™»éŒ²ã—ãŸActionã‚’å‰Šé™¤ã™ã‚‹
     /// </summary>
     public void LiftExitInput(InputType type, Action action)
     {
@@ -250,36 +262,36 @@ public class InputProvider
 
 
     /// <summary>
-    /// “ü—Í‚Ìƒ^ƒCƒ~ƒ“ƒO
+    /// å…¥åŠ›ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°
     /// </summary>
     public enum InputMode
     {
-        /// <summary>“ü—Í</summary>
+        /// <summary>å…¥åŠ›æ™‚</summary>
         Enter,
-        /// <summary>“ü—ÍI—¹</summary>
+        /// <summary>å…¥åŠ›çµ‚äº†æ™‚</summary>
         Exit,
     }
 
     /// <summary>
-    /// “ü—Í‚Ìí—Ş
+    /// å…¥åŠ›ã®ç¨®é¡
     /// </summary>
     public enum InputType
     {
-        /// <summary>ËŒ‚</summary>
+        /// <summary>å°„æ’ƒ</summary>
         Shot,
-        /// <summary>•ŠíØ‚è‘Ö‚¦</summary>
+        /// <summary>æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆ</summary>
         WeaponChenge,
-        /// <summary>‰EƒŒƒo[‚ª“®‚¢‚Ä‚¢‚é‚©</summary>
+        /// <summary>å³ãƒ¬ãƒãƒ¼ãŒå‹•ã„ã¦ã„ã‚‹ã‹</summary>
         RightLeverMove,     
-        /// <summary>¶ƒŒƒo[‚ª“®‚¢‚Ä‚¢‚é‚©</summary>
+        /// <summary>å·¦ãƒ¬ãƒãƒ¼ãŒå‹•ã„ã¦ã„ã‚‹ã‹</summary>
         LeftLeverMove,
-        /// <summary>‰Eƒ{ƒ^ƒ“‚»‚Ì1</summary>
+        /// <summary>å³ãƒœã‚¿ãƒ³ãã®1</summary>
         RightButton1,
-        /// <summary>‰Eƒ{ƒ^ƒ“‚»‚Ì2</summary>
+        /// <summary>å³ãƒœã‚¿ãƒ³ãã®2</summary>
         RightButton2,
-        /// <summary>‰Eè‚ÌƒgƒŠƒK[</summary>
+        /// <summary>å³æ‰‹ã®ãƒˆãƒªã‚¬ãƒ¼</summary>
         RightTrigger,
-        /// <summary>¶è‚ÌƒgƒŠƒK[</summary>
+        /// <summary>å·¦æ‰‹ã®ãƒˆãƒªã‚¬ãƒ¼</summary>
         LeftTrigger,
     }
 }

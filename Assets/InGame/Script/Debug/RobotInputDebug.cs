@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +21,7 @@ public class RobotInputDebug : MonoBehaviour
 
     private void Start()
     {
-        _playerMove = _robotController.SeachState<PlayerMove>();
+        //_playerMove = _robotController.SeachState<PlayerMove>();
         _weaponCon = _robotController.SeachState<PlayerWeaponController>();
         _playerQTE = _robotController.SeachState<PlayerQTE>();
     }

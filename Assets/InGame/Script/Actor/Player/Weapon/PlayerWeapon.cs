@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,18 +8,18 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     public PlayerWeaponParams WeaponParam => _params;
     public int CurrentBullets => _currentBullets;
 
-    [Header("’e‚ÌPrefab")]
+    [Header("å¼¾ã®Prefab")]
     [SerializeField] protected GameObject _bulletPrefab;
     [SerializeField] protected Transform _bulletInsPos;
     [SerializeField] protected PlayerWeaponParams _params;
 
     protected bool _isShotInput;
-    [Tooltip("Œ»İ‚Ì’e”")]
+    [Tooltip("ç¾åœ¨ã®å¼¾æ•°")]
     protected int _currentBullets;
     private float _currentTime;
-    [Tooltip("ËŒ‚’†‚©‚Ç‚¤‚©")]
+    [Tooltip("å°„æ’ƒä¸­ã‹ã©ã†ã‹")]
     private bool _isFire;
-    [Tooltip("ƒŠƒ[ƒh’†‚©‚Ç‚¤‚©")]
+    [Tooltip("ãƒªãƒ­ãƒ¼ãƒ‰ä¸­ã‹ã©ã†ã‹")]
     private bool _isReload;
     private PlayerEnvroment _playerEnvroment;
 
@@ -35,7 +35,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
 
     private void Update()
     {
-        //Ÿ‚Ì”­Ë‚Ü‚Å‚ÌŒvZ
+        _playerEnvroment.RaderMap.NearEnemyLockon();
+        //æ¬¡ã®ç™ºå°„ã¾ã§ã®è¨ˆç®—
         _currentTime += Time.deltaTime;
         if (_currentTime > _params.ShotRate)
         {
@@ -47,13 +48,13 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     {
         if (_isFire && 0 < _currentBullets && !_isReload)
         {
-            //Œã‚ÅƒIƒuƒWƒFƒNƒgƒv[ƒ‹‚É
+            //å¾Œã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ—ãƒ¼ãƒ«ã«
             var obj = Instantiate(_bulletPrefab, _bulletInsPos);
-            obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.NearEnemy().obj, _params.ShotDamage);
+            obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.GetRockEnemy, _params.ShotDamage);
             _isFire = false;
             _currentTime = 0;
             _currentBullets--;
-            Debug.Log("’e‚ğ‘Å‚Á‚½");
+            Debug.Log("å¼¾ã‚’æ‰“ã£ãŸ");
         }
 
         if (_currentBullets == 0)
@@ -63,12 +64,12 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒŠƒ[ƒh‚Ìˆ—
+    /// ãƒªãƒ­ãƒ¼ãƒ‰ã®å‡¦ç†
     /// </summary>
     protected virtual void Reload()
     {
         _isReload = true;
-        //ƒAƒjƒ[ƒVƒ‡ƒ“‹²‚Ş
+        //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æŒŸã‚€
         _currentBullets = _params.MagazineSize;
         _isReload = false;
     }
