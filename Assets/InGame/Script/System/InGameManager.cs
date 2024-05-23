@@ -13,6 +13,8 @@ public sealed class InGameManager : MonoBehaviour
     [SerializeField, Tooltip("IProvidePlayerInformationInjectableを実装したComponentをアタッチしてください")]
     private Component[] _providePlayerInjectableComponents = default;
 
+    public IProvidePlayerInformation PlayerInformation { get; } = new ProvidePlayerInformation();
+
     public interface IProvidePlayerInformation
     {
         public ISubject<Unit> StartQTE { get; }
@@ -35,12 +37,10 @@ public sealed class InGameManager : MonoBehaviour
 
     private void Awake()
     {
-        var providePlayerInformation = new ProvidePlayerInformation();
-        
         foreach (var n in _providePlayerInjectableComponents)
         {
             var temp = n as IProvidePlayerInformationInjectable;
-            temp?.InjectProProvidePlayerInformation(providePlayerInformation);
+            temp?.InjectProProvidePlayerInformation(PlayerInformation);
         }
     }
 

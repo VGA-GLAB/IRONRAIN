@@ -82,7 +82,7 @@ public class SequenceControllerBase : MonoBehaviour
     /// <typeparam name="T">次のSequence</typeparam>
     public void ChangeSequence<T>() where T : EventSequenceBase
     {
-        _currentSequence.OnSequenceEndEvent?.Invoke();
+        _currentSequence?.OnSequenceEndEvent?.Invoke();
         _currentSequence = GetSequenceBase<T>();
         _currentSequence.OnSequenceStartEvent?.Invoke();
     }
