@@ -465,6 +465,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Throttle"",
+                    ""type"": ""Value"",
+                    ""id"": ""52b68949-7351-42b8-9bca-a71d3dbe5453"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -698,6 +707,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""Grip Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e9f4cb0-c2b1-45d2-a96d-b24c898edab6"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -803,6 +823,24 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ThirdButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""b783e2e6-bd40-47d3-9ed1-1997116c68ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Force Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""05891b01-5a55-441b-ab55-b64038b6a006"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -968,6 +1006,28 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": ""ScaleVector2(x=0),StickDeadzone"",
                     ""groups"": ""Generic XR Controller"",
                     ""action"": ""Scale Delta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7091cdc-754e-4503-997c-40a901e4f305"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThirdButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""067b2204-22bf-4f2e-ba04-184bd3710615"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Force Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1261,6 +1321,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FryStick"",
+                    ""type"": ""Value"",
+                    ""id"": ""a5f98398-2715-4409-b618-d52fedf1343b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1492,6 +1561,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": ""Generic XR Controller"",
                     ""action"": ""Grip Rotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ec4003c-f752-4a84-b3d7-fca0369fa199"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FryStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1809,8 +1889,30 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3bebece0-9a2c-49b6-b52d-4e5f0e92814a"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OneButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2c734370-e3be-40b6-8fae-12125a8d73b8"",
                     ""path"": ""<XRController>{RightHand}/{SecondaryButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TwoButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f43b0b7-d7a7-4797-ae7a-9aff4bd222ce"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2972,6 +3074,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRILeftHand_PokeRotation = m_XRILeftHand.FindAction("Poke Rotation", throwIfNotFound: true);
         m_XRILeftHand_GripPosition = m_XRILeftHand.FindAction("Grip Position", throwIfNotFound: true);
         m_XRILeftHand_GripRotation = m_XRILeftHand.FindAction("Grip Rotation", throwIfNotFound: true);
+        m_XRILeftHand_Throttle = m_XRILeftHand.FindAction("Throttle", throwIfNotFound: true);
         // XRI LeftHand Interaction
         m_XRILeftHandInteraction = asset.FindActionMap("XRI LeftHand Interaction", throwIfNotFound: true);
         m_XRILeftHandInteraction_Select = m_XRILeftHandInteraction.FindAction("Select", throwIfNotFound: true);
@@ -2985,6 +3088,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRILeftHandInteraction_TranslateAnchor = m_XRILeftHandInteraction.FindAction("Translate Anchor", throwIfNotFound: true);
         m_XRILeftHandInteraction_ScaleToggle = m_XRILeftHandInteraction.FindAction("Scale Toggle", throwIfNotFound: true);
         m_XRILeftHandInteraction_ScaleDelta = m_XRILeftHandInteraction.FindAction("Scale Delta", throwIfNotFound: true);
+        m_XRILeftHandInteraction_ThirdButton = m_XRILeftHandInteraction.FindAction("ThirdButton", throwIfNotFound: true);
+        m_XRILeftHandInteraction_ForceButton = m_XRILeftHandInteraction.FindAction("Force Button", throwIfNotFound: true);
         // XRI LeftHand Locomotion
         m_XRILeftHandLocomotion = asset.FindActionMap("XRI LeftHand Locomotion", throwIfNotFound: true);
         m_XRILeftHandLocomotion_TeleportSelect = m_XRILeftHandLocomotion.FindAction("Teleport Select", throwIfNotFound: true);
@@ -3010,6 +3115,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_XRIRightHand_PokeRotation = m_XRIRightHand.FindAction("Poke Rotation", throwIfNotFound: true);
         m_XRIRightHand_GripPosition = m_XRIRightHand.FindAction("Grip Position", throwIfNotFound: true);
         m_XRIRightHand_GripRotation = m_XRIRightHand.FindAction("Grip Rotation", throwIfNotFound: true);
+        m_XRIRightHand_FryStick = m_XRIRightHand.FindAction("FryStick", throwIfNotFound: true);
         // XRI RightHand Interaction
         m_XRIRightHandInteraction = asset.FindActionMap("XRI RightHand Interaction", throwIfNotFound: true);
         m_XRIRightHandInteraction_Select = m_XRIRightHandInteraction.FindAction("Select", throwIfNotFound: true);
@@ -3237,6 +3343,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_XRILeftHand_PokeRotation;
     private readonly InputAction m_XRILeftHand_GripPosition;
     private readonly InputAction m_XRILeftHand_GripRotation;
+    private readonly InputAction m_XRILeftHand_Throttle;
     public struct XRILeftHandActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -3254,6 +3361,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @PokeRotation => m_Wrapper.m_XRILeftHand_PokeRotation;
         public InputAction @GripPosition => m_Wrapper.m_XRILeftHand_GripPosition;
         public InputAction @GripRotation => m_Wrapper.m_XRILeftHand_GripRotation;
+        public InputAction @Throttle => m_Wrapper.m_XRILeftHand_Throttle;
         public InputActionMap Get() { return m_Wrapper.m_XRILeftHand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3302,6 +3410,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @GripRotation.started += instance.OnGripRotation;
             @GripRotation.performed += instance.OnGripRotation;
             @GripRotation.canceled += instance.OnGripRotation;
+            @Throttle.started += instance.OnThrottle;
+            @Throttle.performed += instance.OnThrottle;
+            @Throttle.canceled += instance.OnThrottle;
         }
 
         private void UnregisterCallbacks(IXRILeftHandActions instance)
@@ -3345,6 +3456,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @GripRotation.started -= instance.OnGripRotation;
             @GripRotation.performed -= instance.OnGripRotation;
             @GripRotation.canceled -= instance.OnGripRotation;
+            @Throttle.started -= instance.OnThrottle;
+            @Throttle.performed -= instance.OnThrottle;
+            @Throttle.canceled -= instance.OnThrottle;
         }
 
         public void RemoveCallbacks(IXRILeftHandActions instance)
@@ -3377,6 +3491,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_XRILeftHandInteraction_TranslateAnchor;
     private readonly InputAction m_XRILeftHandInteraction_ScaleToggle;
     private readonly InputAction m_XRILeftHandInteraction_ScaleDelta;
+    private readonly InputAction m_XRILeftHandInteraction_ThirdButton;
+    private readonly InputAction m_XRILeftHandInteraction_ForceButton;
     public struct XRILeftHandInteractionActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -3392,6 +3508,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @TranslateAnchor => m_Wrapper.m_XRILeftHandInteraction_TranslateAnchor;
         public InputAction @ScaleToggle => m_Wrapper.m_XRILeftHandInteraction_ScaleToggle;
         public InputAction @ScaleDelta => m_Wrapper.m_XRILeftHandInteraction_ScaleDelta;
+        public InputAction @ThirdButton => m_Wrapper.m_XRILeftHandInteraction_ThirdButton;
+        public InputAction @ForceButton => m_Wrapper.m_XRILeftHandInteraction_ForceButton;
         public InputActionMap Get() { return m_Wrapper.m_XRILeftHandInteraction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3434,6 +3552,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @ScaleDelta.started += instance.OnScaleDelta;
             @ScaleDelta.performed += instance.OnScaleDelta;
             @ScaleDelta.canceled += instance.OnScaleDelta;
+            @ThirdButton.started += instance.OnThirdButton;
+            @ThirdButton.performed += instance.OnThirdButton;
+            @ThirdButton.canceled += instance.OnThirdButton;
+            @ForceButton.started += instance.OnForceButton;
+            @ForceButton.performed += instance.OnForceButton;
+            @ForceButton.canceled += instance.OnForceButton;
         }
 
         private void UnregisterCallbacks(IXRILeftHandInteractionActions instance)
@@ -3471,6 +3595,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @ScaleDelta.started -= instance.OnScaleDelta;
             @ScaleDelta.performed -= instance.OnScaleDelta;
             @ScaleDelta.canceled -= instance.OnScaleDelta;
+            @ThirdButton.started -= instance.OnThirdButton;
+            @ThirdButton.performed -= instance.OnThirdButton;
+            @ThirdButton.canceled -= instance.OnThirdButton;
+            @ForceButton.started -= instance.OnForceButton;
+            @ForceButton.performed -= instance.OnForceButton;
+            @ForceButton.canceled -= instance.OnForceButton;
         }
 
         public void RemoveCallbacks(IXRILeftHandInteractionActions instance)
@@ -3607,6 +3737,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_XRIRightHand_PokeRotation;
     private readonly InputAction m_XRIRightHand_GripPosition;
     private readonly InputAction m_XRIRightHand_GripRotation;
+    private readonly InputAction m_XRIRightHand_FryStick;
     public struct XRIRightHandActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -3624,6 +3755,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @PokeRotation => m_Wrapper.m_XRIRightHand_PokeRotation;
         public InputAction @GripPosition => m_Wrapper.m_XRIRightHand_GripPosition;
         public InputAction @GripRotation => m_Wrapper.m_XRIRightHand_GripRotation;
+        public InputAction @FryStick => m_Wrapper.m_XRIRightHand_FryStick;
         public InputActionMap Get() { return m_Wrapper.m_XRIRightHand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3672,6 +3804,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @GripRotation.started += instance.OnGripRotation;
             @GripRotation.performed += instance.OnGripRotation;
             @GripRotation.canceled += instance.OnGripRotation;
+            @FryStick.started += instance.OnFryStick;
+            @FryStick.performed += instance.OnFryStick;
+            @FryStick.canceled += instance.OnFryStick;
         }
 
         private void UnregisterCallbacks(IXRIRightHandActions instance)
@@ -3715,6 +3850,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @GripRotation.started -= instance.OnGripRotation;
             @GripRotation.performed -= instance.OnGripRotation;
             @GripRotation.canceled -= instance.OnGripRotation;
+            @FryStick.started -= instance.OnFryStick;
+            @FryStick.performed -= instance.OnFryStick;
+            @FryStick.canceled -= instance.OnFryStick;
         }
 
         public void RemoveCallbacks(IXRIRightHandActions instance)
@@ -4303,6 +4441,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnPokeRotation(InputAction.CallbackContext context);
         void OnGripPosition(InputAction.CallbackContext context);
         void OnGripRotation(InputAction.CallbackContext context);
+        void OnThrottle(InputAction.CallbackContext context);
     }
     public interface IXRILeftHandInteractionActions
     {
@@ -4317,6 +4456,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnTranslateAnchor(InputAction.CallbackContext context);
         void OnScaleToggle(InputAction.CallbackContext context);
         void OnScaleDelta(InputAction.CallbackContext context);
+        void OnThirdButton(InputAction.CallbackContext context);
+        void OnForceButton(InputAction.CallbackContext context);
     }
     public interface IXRILeftHandLocomotionActions
     {
@@ -4344,6 +4485,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnPokeRotation(InputAction.CallbackContext context);
         void OnGripPosition(InputAction.CallbackContext context);
         void OnGripRotation(InputAction.CallbackContext context);
+        void OnFryStick(InputAction.CallbackContext context);
     }
     public interface IXRIRightHandInteractionActions
     {
