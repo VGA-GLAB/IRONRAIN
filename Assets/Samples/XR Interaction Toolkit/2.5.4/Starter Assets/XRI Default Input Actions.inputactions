@@ -443,6 +443,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Throttle",
+                    "type": "Value",
+                    "id": "52b68949-7351-42b8-9bca-a71d3dbe5453",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -676,6 +685,17 @@
                     "action": "Grip Rotation",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e9f4cb0-c2b1-45d2-a96d-b24c898edab6",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -781,6 +801,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ThirdButton",
+                    "type": "Button",
+                    "id": "b783e2e6-bd40-47d3-9ed1-1997116c68ae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Force Button",
+                    "type": "Button",
+                    "id": "05891b01-5a55-441b-ab55-b64038b6a006",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -946,6 +984,28 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "Generic XR Controller",
                     "action": "Scale Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7091cdc-754e-4503-997c-40a901e4f305",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/button5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThirdButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "067b2204-22bf-4f2e-ba04-184bd3710615",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/button9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Force Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1239,6 +1299,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "FryStick",
+                    "type": "Value",
+                    "id": "a5f98398-2715-4409-b618-d52fedf1343b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1470,6 +1539,17 @@
                     "processors": "",
                     "groups": "Generic XR Controller",
                     "action": "Grip Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ec4003c-f752-4a84-b3d7-fca0369fa199",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FryStick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1787,8 +1867,30 @@
                 },
                 {
                     "name": "",
+                    "id": "3bebece0-9a2c-49b6-b52d-4e5f0e92814a",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OneButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2c734370-e3be-40b6-8fae-12125a8d73b8",
                     "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TwoButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f43b0b7-d7a7-4797-ae7a-9aff4bd222ce",
+                    "path": "<HID::Thrustmaster T.Flight Hotas 4>/button2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
