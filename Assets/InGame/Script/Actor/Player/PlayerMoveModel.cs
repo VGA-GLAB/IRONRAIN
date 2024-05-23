@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -11,13 +11,12 @@ public class PlayerMoveModel : IPlayerStateModel
     [SerializeField] LeverController _rightController;
     [SerializeField] Rigidbody _rb;
     [SerializeField] private Transform _centerPoint;
-    [SerializeField] private Transform _insPos;
 
     private float _totalThrusterMove;
     private PlayerEnvroment _playerEnvroment;
     private PlayerSetting.PlayerParams _params;
     private Transform _transform;
-    private float _startÉ∆;
+    private float _startTheta;
 
     public void SetUp(PlayerEnvroment env, CancellationToken token)
     {
@@ -31,7 +30,7 @@ public class PlayerMoveModel : IPlayerStateModel
     public void Start()
     {
         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
-        SumÉ∆();
+        SumTheta();
     }
     public void FixedUpdate()
     {
@@ -57,25 +56,25 @@ public class PlayerMoveModel : IPlayerStateModel
 
     private void Move()
     {
-        //ÇRÉMÉA
+        //Ôºì„ÇÆ„Ç¢
         if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z == 1)
         {
             _rb.velocity =_transform.forward * _params.ThreeGearSpeed * ProvidePlayerInformation.TimeScale;
         }
-        //ÇPÉMÉA
+        //Ôºë„ÇÆ„Ç¢
         else if (_leftController.ControllerDir.z == -1 && _rightController.ControllerDir.z == -1)
         {
             _rb.velocity = _transform.forward * _params.OneGearSpeed * ProvidePlayerInformation.TimeScale;
         }
-        //ç∂ÉXÉâÉXÉ^Å[
+        //Â∑¶„Çπ„É©„Çπ„Çø„Éº
         else if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z != 1)
         {
-            //ÉXÉâÉXÉ^Å[íÜÇ≈ÇÕÇ»Ç©Ç¡ÇΩèÍçá
+            //„Çπ„É©„Çπ„Çø„Éº‰∏≠„Åß„ÅØ„Å™„Åã„Å£„ÅüÂ†¥Âêà
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
                 var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
-                Debug.Log("ç∂ÉXÉâÉXÉ^Å[");
+                Debug.Log("Â∑¶„Çπ„É©„Çπ„Çø„Éº");
                 UniTask.Create(async () =>
                 {
                     await _playerEnvroment.PlayerTransform
@@ -86,10 +85,10 @@ public class PlayerMoveModel : IPlayerStateModel
                 });
             }
         }
-        //âEÉXÉâÉXÉ^Å[
+        //Âè≥„Çπ„É©„Çπ„Çø„Éº
         else if (_leftController.ControllerDir.z != 1 && _rightController.ControllerDir.z == 1)
         {
-            //ÉXÉâÉXÉ^Å[íÜÇ≈ÇÕÇ»Ç©Ç¡ÇΩèÍçá
+            //„Çπ„É©„Çπ„Çø„Éº‰∏≠„Åß„ÅØ„Å™„Åã„Å£„ÅüÂ†¥Âêà
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
@@ -104,7 +103,7 @@ public class PlayerMoveModel : IPlayerStateModel
                 });
             }
         }
-        //ÇQÉMÉA
+        //Ôºí„ÇÆ„Ç¢
         else if (_leftController.ControllerDir.z == 0 && _rightController.ControllerDir.z == 0)
         {
             _rb.velocity = _transform.forward * _params.TwoGearSpeed * ProvidePlayerInformation.TimeScale;
@@ -112,31 +111,38 @@ public class PlayerMoveModel : IPlayerStateModel
     }
 
     /// <summary>
-    /// éüÇ…ÉXÉâÉXÉ^Å[Ç≈à⁄ìÆÇ∑ÇÈÉ|ÉCÉìÉg
+    /// Ê¨°„Å´„Çπ„É©„Çπ„Çø„Éº„ÅßÁßªÂãï„Åô„Çã„Éù„Ç§„É≥„Éà
     /// </summary>
     private Vector3 NextThrusterMovePoint(float moveDistance) 
     {
         var playerPos = _playerEnvroment.PlayerTransform.position;
         playerPos.y = 0;
-        var r = Vector3.Distance(_centerPoint.position, playerPos);
-        var É∆ = (moveDistance / r);
-        Debug.Log($"É∆:{É∆}r:{r}");
+        var centerPosition = _centerPoint.position;
+        centerPosition.y = 0;
+        var r = Vector3.Distance(centerPosition, playerPos);
+        var theta = (moveDistance / r);
+        Debug.Log($"Œ∏:{theta}r:{r}");
 
-       _totalThrusterMove += É∆;
-        var cos = Mathf.Cos(_totalThrusterMove + _startÉ∆);
+       _totalThrusterMove += theta;
+        var cos = Mathf.Cos(_totalThrusterMove + _startTheta);
         var x = cos * r;
-        var z = Mathf.Sin(_totalThrusterMove + _startÉ∆) * r;
+        var z = Mathf.Sin(_totalThrusterMove + _startTheta) * r;
 
         var position = new Vector3 (x + _centerPoint.position.x, _playerEnvroment.PlayerTransform.position.y, z + _centerPoint.position.z);
-        Debug.Log($"à⁄ìÆÇµÇ‹ÇµÇΩX:{position.x}:Z{position.z}r:{r}");
+        //Debug.Log($"ÁßªÂãï„Åó„Åæ„Åó„ÅüX:{position.x}:Z{position.z}r:{r}");
         return position;
     }
 
-    private void SumÉ∆() 
+    private void SumTheta() 
     {
-        var r = Vector3.Distance(_centerPoint.position, _playerEnvroment.PlayerTransform.position);
-        var aDir = (_playerEnvroment.PlayerTransform.position - _centerPoint.position).normalized;
-        var bDir = (new Vector3(_centerPoint.position.x + r, _centerPoint.position.y, _centerPoint.position.z) - _centerPoint.position).normalized;
-        _startÉ∆ = Vector3.Angle(aDir, bDir) * Mathf.Deg2Rad;
+        var playerPos = _playerEnvroment.PlayerTransform.position;
+        playerPos.y = 0;
+        var centerPosition = _centerPoint.position;
+        centerPosition.y = 0;
+
+        var r = Vector3.Distance(centerPosition, playerPos);
+        var aDir = (playerPos - centerPosition).normalized;
+        var bDir = (new Vector3(_centerPoint.position.x + r, 0, _centerPoint.position.z) - centerPosition).normalized;
+        _startTheta = Vector3.Angle(aDir, bDir) * Mathf.Deg2Rad;
     }
 }

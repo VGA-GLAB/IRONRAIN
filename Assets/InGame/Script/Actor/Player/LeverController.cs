@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -11,19 +11,19 @@ using Cysharp.Threading.Tasks;
 
 public class LeverController : MonoBehaviour
 {
-    /// <summary>ƒRƒ“ƒgƒ[ƒ‰[‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü</summary>
+    /// <summary>ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘</summary>
     public Vector3 ControllerDir => _controllerDir;
 
     [SerializeField] private Transform _playerHandTransfrom;
-    [Header("ƒŒƒo[‚ÌŠ´“xİ’è")]
+    [Header("ãƒ¬ãƒãƒ¼ã®æ„Ÿåº¦è¨­å®š")]
     [SerializeField] private float _moveSpeed = 5;
-    [Header("XˆÚ“®§ŒÀ")]
+    [Header("Xç§»å‹•åˆ¶é™")]
     [SerializeField] private float _xMax, _xMin;
-    [Header("ZˆÚ“®§ŒÀ")]
+    [Header("Zç§»å‹•åˆ¶é™")]
     [SerializeField] private float _zMax, _zMin;
-    [Header("ƒjƒ…[ƒgƒ‰ƒ‹‚ÌˆÊ’u")]
+    [Header("ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ©ãƒ«ã®ä½ç½®")]
     [SerializeField] private Transform _neutralPos;
-    [Header("ƒjƒ…[ƒgƒ‰ƒ‹‚Ì”ÍˆÍ")]
+    [Header("ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ©ãƒ«ã®ç¯„å›²")]
     [SerializeField] private float _neutralRange;
     [SerializeField] private LeverType _leverType;
     [SerializeField] private MyButton _rightButton1;
@@ -45,6 +45,11 @@ public class LeverController : MonoBehaviour
             _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton1));
             _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.RightButton2));
             _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton2));
+            _isLeverMove = InputProvider.Instance.GetStayInput(InputProvider.InputType.RightTrigger);
+        }
+        else
+        {
+            _isLeverMove = InputProvider.Instance.GetStayInput(InputProvider.InputType.LeftTrigger);
         }
     }
 
@@ -77,7 +82,7 @@ public class LeverController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒŒƒo[‚ğ§Œä‚·‚éŠÖ”
+    /// ãƒ¬ãƒãƒ¼ã‚’åˆ¶å¾¡ã™ã‚‹é–¢æ•°
     /// </summary>
     private void LeverMove()
     {
@@ -92,7 +97,7 @@ public class LeverController : MonoBehaviour
         {
             if (_tween == null & transform.localPosition != _neutralPos.localPosition) 
             {
-                //ƒjƒ…[ƒgƒ‰ƒ‹‚É–ß‚·
+                //ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ©ãƒ«ã«æˆ»ã™
                 _tween = transform
                     .DOLocalMoveZ(_neutralPos.localPosition.z, 0.2f)
                     .OnComplete(() => _tween = null)
@@ -107,12 +112,12 @@ public class LeverController : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®‚Ì§ŒÀ‚ğ‚Â‚¯‚éŠÖ”
+    /// ç§»å‹•ã®åˆ¶é™ã‚’ã¤ã‘ã‚‹é–¢æ•°
     /// </summary>
     private void MoveLimit(Vector3 dir) 
     {
         _controllerMoveDir = dir;
-        //‰ŠúˆÊ’u‚©‚ç‚Ç‚Ì‚­‚ç‚¢ƒŒƒo[‚ª“®‚¢‚½‚ç
+        //åˆæœŸä½ç½®ã‹ã‚‰ã©ã®ãã‚‰ã„ãƒ¬ãƒãƒ¼ãŒå‹•ã„ãŸã‚‰
         var xPos = transform.localPosition.z - _neutralPos.transform.localPosition.z;
         if (_xMax < xPos + (dir.z * _moveSpeed)
         || _xMin > xPos + (dir.z * _moveSpeed)) 
@@ -125,7 +130,7 @@ public class LeverController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒRƒ“ƒgƒ[ƒ‰‚Ì•ûŒü‚ğŒˆ‚ß‚é
+    /// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®æ–¹å‘ã‚’æ±ºã‚ã‚‹
     /// </summary>
     private void SetControllerDir() 
     {
@@ -147,11 +152,11 @@ public class LeverController : MonoBehaviour
         }
         else
         {
-            if (1 <= _leverDir.y)
+            if (0.95f <= _leverDir.y)
             {
                 _controllerDir.z = 1;
             }
-            else if (_leverDir.y < 0)
+            else if (_leverDir.y < -0.95f)
             {
                 _controllerDir.z = -1;
             }

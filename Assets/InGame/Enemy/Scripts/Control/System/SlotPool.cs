@@ -56,8 +56,8 @@ namespace Enemy.Control
         [SerializeField] private Transform _player;
         [Header("生成の設定")]
         [SerializeField] private int _quantity = 5;
-        [SerializeField] private float _forwardOffset = 1.0f;
-        [SerializeField] private float _space = 1.0f;
+        [SerializeField] private float _forwardOffset = 6.0f;
+        [SerializeField] private float _space = 3.0f;
         [Header("スロットの設定")]
         [Min(1.0f)]
         [SerializeField] private float _radius = 1.0f;

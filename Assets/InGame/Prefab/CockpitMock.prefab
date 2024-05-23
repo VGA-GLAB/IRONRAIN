@@ -136,6 +136,7 @@ MonoBehaviour:
   _playerStateList:
   - {fileID: 3816907529553828524}
   _playerSetting: {fileID: 11400000, guid: 4a65326a60e74df42b1640c452cc088c, type: 2}
+  _playerMap: {fileID: 0}
 --- !u!54 &1772744234638001957
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -186,11 +187,6 @@ MonoBehaviour:
         _leftController: {fileID: 7954912166478028513}
         _rightController: {fileID: 2563651602767918663}
         _rb: {fileID: 1772744234638001957}
-        _oneGearSpeed: 2
-        _twoGearSpeed: 4
-        _threeGearSpeed: 6
-        _thrusterMoveNum: 0
-        _thrusterMoveTime: 0
         _centerPoint: {fileID: 0}
         _insPos: {fileID: 0}
 --- !u!114 &1704847509538781561
@@ -2918,30 +2914,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d13d3a75b162b43aeb0d19ca919fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerHandTriggerInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Player Hand Trigger Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: d74dfe52-b8d3-46f4-a224-06f8e056e13d
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  _leverInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: 
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 147c27db-e06a-482e-b660-43c2b3f429a2
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
   _playerHandTransfrom: {fileID: 1765253084840532198}
   _moveSpeed: 1
   _xMax: 0.1
@@ -2950,6 +2922,9 @@ MonoBehaviour:
   _zMin: -0.1
   _neutralPos: {fileID: 5631954747809323559}
   _neutralRange: 0.01
+  _leverType: 0
+  _rightButton1: {fileID: 0}
+  _rightButton2: {fileID: 0}
 --- !u!1 &3291172956378300925
 GameObject:
   m_ObjectHideFlags: 0
@@ -5028,6 +5003,9 @@ MonoBehaviour:
   _rightInput: {fileID: 5424787848557297891}
   _leftInput: {fileID: 7129767545225554813}
   _moveState: {fileID: 1584025841282517289}
+  _currentWeapon: {fileID: 0}
+  _currentBullet: {fileID: 0}
+  _maxBullet: {fileID: 0}
 --- !u!1 &4383929679832346887
 GameObject:
   m_ObjectHideFlags: 0
@@ -8165,30 +8143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d13d3a75b162b43aeb0d19ca919fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerHandTriggerInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Player Hand Trigger Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 451d0468-e441-4bf9-9515-5402b6f71787
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -6131295136447488360, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  _leverInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: 
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 87cd4ef6-fa7f-4763-a286-94b590237f4d
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
   _playerHandTransfrom: {fileID: 3730903451103403109}
   _moveSpeed: 1
   _xMax: 0.1
@@ -8197,6 +8151,9 @@ MonoBehaviour:
   _zMin: -0.1
   _neutralPos: {fileID: 5431070697654390696}
   _neutralRange: 0.01
+  _leverType: 0
+  _rightButton1: {fileID: 0}
+  _rightButton2: {fileID: 0}
 --- !u!1 &7846533091321158712
 GameObject:
   m_ObjectHideFlags: 0
