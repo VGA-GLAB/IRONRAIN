@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseSequnceController : SequenceControllerBase
+public class ChaseSequenceController : SequenceControllerBase
 {
     [SerializeField] private FirstAnnounceSequence _firstAnnounceSequence = default;
     [SerializeField] private AvoidanceSequence _avoidanceSequence = default;
@@ -21,9 +21,6 @@ public class ChaseSequnceController : SequenceControllerBase
             _firstAnnounceSequence, _avoidanceSequence, _attackSequence, _touchPanelSequence, _leverSequence,
             _qteTutorialSequence, _multiBattleSequence, _purgeSequence
         };
-
-        _currentSequence = _firstAnnounceSequence;
-        _firstAnnounceSequence.OnSequenceStartEvent?.Invoke();
     }
     
     [Serializable] public sealed class FirstAnnounceSequence : EventSequenceBase { }
