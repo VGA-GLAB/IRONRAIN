@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -12,7 +12,7 @@ public class PlayerWeaponModel : IPlayerStateModel
 
     private bool _isWeaponChenge;
     private bool _isShot;
-    //0n‚Ü‚è
+    //0å§‹ã¾ã‚Š
     private int _currentWeaponIndex;
     private PlayerEnvroment _playerEnvroment;
     private CancellationToken _rootCancellOnDestroy;
@@ -26,8 +26,6 @@ public class PlayerWeaponModel : IPlayerStateModel
     public void Start()
     {
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.WeaponChenge, WeaponChenge);
-        InputProvider.Instance.SetEnterInput(InputProvider.InputType.Shot, Shot);
-
         for (int i = 0; i < _playerWeaponList.Count; i++)
         {
             _playerWeaponList[i].SetUp(_playerEnvroment);
@@ -36,15 +34,16 @@ public class PlayerWeaponModel : IPlayerStateModel
 
     public void FixedUpdate()
     {
-       
+
     }
 
     public void Update()
     {
+        Shot();
     }
 
     /// <summary>
-    /// •ŠíØ‚è‘Ö‚¦
+    /// æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆ
     /// </summary>
     private void WeaponChenge()
     {
@@ -56,19 +55,22 @@ public class PlayerWeaponModel : IPlayerStateModel
         {
             _currentWeaponIndex = 0;
         }
-        Debug.Log($"Œ»İ‚Ì•Ší‚Í{_playerWeaponList[_currentWeaponIndex]}");
+        Debug.Log($"ç¾åœ¨ã®æ­¦å™¨ã¯{_playerWeaponList[_currentWeaponIndex]}");
     }
 
     private void Shot()
     {
+        _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton1);
         if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
-   || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
-   || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)) return;
+            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
+            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
+            || !_isShot) return;
+        
         _playerWeaponList[_currentWeaponIndex].Shot();
     }
 
     public void Dispose()
     {
-        
+
     }
 }
