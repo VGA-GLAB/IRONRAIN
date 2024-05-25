@@ -4,7 +4,8 @@ Shader "Custom/3DGround"
     {
         [SingleLineTexture]_ModelNormalTex("Model NormalMap", 2D) = "bump" {}
         [KeywordEnum(Planar, Triplanar)] _Mapping("MappingMode", Int) = 0
-        _PlanarWeight ("Weight", int) = 1
+        [KeywordEnum(Vertex, Fragment)] _Bias("BiasCulcStage", Int) = 0
+        _PlanarWeight ("Weight", Range(0, 120)) = 0.5
         _PlanarScaleOffset ("Planar Mapping Scale Offset", Vector) = (1, 1, 0, 0)
         [Space(10)]
         
@@ -48,8 +49,20 @@ Shader "Custom/3DGround"
             
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+            #pragma multi_compile _ SHADOWS_SHADOWMASK
+
+            // Unity keywords
+            #pragma multi_compile _ DIRLIGHTMAP_COMBINED
+            #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile_fog
 
             #pragma multi_compile _MAPPING_PLANAR _MAPPING_TRIPLANAR
+            #pragma multi_compile _BIAS_VERTEX _BIAS_FRAGMENT
             
             struct Attributes
             {
@@ -57,6 +70,7 @@ Shader "Custom/3DGround"
                 float3 normalOS : NORMAL;
                 float4 tangentOS : TANGENT;
                 float2 uv : TEXCOORD0;
+                float2 lightmapUv : TEXCOORD1;
 
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -72,8 +86,10 @@ Shader "Custom/3DGround"
                 float4 shadowCoord : TEXCOORD3;
                 half fogFactor : TEXCOORD5;
                 float3 vertexLight : TEXCOORD6;
+                
+                #if defined(_BIAS_VERTEX)
                 float3 normalBias : TEXCOORD7;
-
+                #endif
                 #if defined(_MAPPING_PLANAR)
                 float2 planarUv : TEXCOORD8;
                 #else
@@ -82,7 +98,8 @@ Shader "Custom/3DGround"
                 float2 triplanarUvZ : TEXCOORD10;
                 #endif
 
-
+                DECLARE_LIGHTMAP_OR_SH(lightmapUv, vertexSH, 11);
+                
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -115,6 +132,18 @@ Shader "Custom/3DGround"
             float _PlanarWeight;
             CBUFFER_END
 
+            float3 CulcBias(float3 absNormal, float weight)
+            {
+                float4 temp = lerp(
+                    float4(1, 0, 0, absNormal.x),
+                    float4(0, 1, 0, absNormal.y),
+                    step(absNormal.x, absNormal.y));
+
+                temp = lerp(temp, float4(0, 0, 1, 0), step(temp.w, absNormal.z));
+
+                return normalize(lerp(absNormal, temp.xyz, weight));
+            }
+
             Varyings vert (Attributes input)
             {
                 Varyings output = (Varyings)0;
@@ -136,12 +165,16 @@ Shader "Custom/3DGround"
                 output.tangentWS = normalInput.tangentWS;
                 output.bitangentWS = normalInput.bitangentWS;
 
+                OUTPUT_LIGHTMAP_UV(input.lightmapUv, unity_LightmapST, output.lightmapUv);
+                OUTPUT_SH(output.normalWS, output.vertexSH);
+
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
                 output.shadowCoord = GetShadowCoord(vertexInput);
 
+                #if defined(_BIAS_VERTEX)
                 output.normalBias = pow(abs(output.normalWS), _PlanarWeight);
                 output.normalBias = output.normalBias / (output.normalBias.x + output.normalBias.y + output.normalBias.z);
-
+                #endif
                 #if defined(_MAPPING_PLANAR)
 
                 output.planarUv = output.positionWS.xz * _PlanarScaleOffset.xy + _PlanarScaleOffset.zw;
@@ -162,7 +195,12 @@ Shader "Custom/3DGround"
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 
+                #if defined(_BIAS_VERTEX)
                 float3 normalBias = input.normalBias;
+                #else
+                float3 normalBias = pow(abs(input.normalWS), _PlanarWeight);
+                normalBias = normalBias / (normalBias.x + normalBias.y + normalBias.z);
+                #endif
                 float3 modelNormal = UnpackNormal(SAMPLE_TEXTURE2D(_ModelNormalTex, sampler_ModelNormalTex, input.uv));
                 modelNormal = input.tangentWS * modelNormal.x + input.bitangentWS * modelNormal.y + input.normalWS * modelNormal.z;
                 
@@ -212,9 +250,9 @@ Shader "Custom/3DGround"
                 InputData inputData = (InputData)0;
                 inputData.fogCoord = input.fogFactor;
                 inputData.shadowCoord = input.shadowCoord;
-                inputData.shadowMask = 0;
+                inputData.shadowMask = SAMPLE_SHADOWMASK(input.lightmapUv);
                 inputData.vertexLighting = input.vertexLight;
-                inputData.bakedGI = 0.5;
+                inputData.bakedGI = SAMPLE_GI(input.lightmapUv, input.vertexSH, input.normalWS);
                 inputData.normalWS = normalMapNormalWS;
                 inputData.positionCS = input.positionHCS;
                 inputData.tangentToWorld = half3x3(input.tangentWS, input.bitangentWS, input.normalWS);

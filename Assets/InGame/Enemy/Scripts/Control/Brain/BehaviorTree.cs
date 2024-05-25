@@ -14,11 +14,11 @@ namespace Enemy.Control
         private Sequence _idle;
         private Sequence _escape;
         private Sequence _broken;
+        private Sequence _hide;
         private BlackBoard _blackBoard;
 
         public BehaviorTree(Transform transform, Transform rotate, EnemyParams enemyParams, BlackBoard blackBoard)
         {
-            // 現状、移動と全く同じ内容。接近時は追跡時より移動速度が速いはずなので対応させる。
             _approach = new Sequence(
                 "ApproachSequence",
                 new MoveToPlayer(Choice.Approach, transform, rotate, blackBoard, enemyParams),
@@ -49,6 +49,10 @@ namespace Enemy.Control
                 "BrokenSequence",
                 new WriteActionPlan(Choice.Broken, blackBoard));
 
+            _hide = new Sequence(
+                "HideSequence",
+                new WriteActionPlan(Choice.Hide, blackBoard));
+
             _blackBoard = blackBoard;
         }
 
@@ -63,6 +67,7 @@ namespace Enemy.Control
             if (choice == Choice.Attack) _attack.Update();
             if (choice == Choice.Escape) _escape.Update();
             if (choice == Choice.Broken) _broken.Update();
+            if (choice == Choice.Hide) _hide.Update();
 
             // NOTE:ツリーを実行しても必ず行動として選択されるとは限らないのでノードの実行のたびに値を変化させるとバグる。
             //      Updateで更新しているのなら、LateUpdateで諸々を消す？

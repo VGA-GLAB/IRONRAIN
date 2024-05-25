@@ -30,7 +30,7 @@ namespace Enemy.Control
 
         private void Update()
         {
-            _lifeTime -= Time.deltaTime;
+            _lifeTime -= BlackBoard.DeltaTime;
             _lifeTime = Mathf.Max(0, _max);
         }
 

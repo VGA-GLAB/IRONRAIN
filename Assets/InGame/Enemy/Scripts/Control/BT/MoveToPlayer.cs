@@ -1,4 +1,5 @@
 ﻿using Enemy.Extensions;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Enemy.Control.BT
@@ -14,6 +15,8 @@ namespace Enemy.Control.BT
         private BlackBoard _blackBoard;
         private EnemyParams _params;
 
+        private float _speed;
+
         public MoveToPlayer(Choice choice, Transform transform, Transform rotate, BlackBoard blackBoard, 
             EnemyParams enemyParams)
         {
@@ -22,6 +25,10 @@ namespace Enemy.Control.BT
             _rotate = rotate;
             _blackBoard = blackBoard;
             _params = enemyParams;
+
+            // 接近か否かで速さが変わる。
+            // 現状、接近か戦闘しかないのでこれで十分。
+            _speed = choice == Choice.Approach ? enemyParams.Advance.MoveSpeed : enemyParams.Battle.ChaseSpeed;
         }
 
         protected override void OnBreak()
@@ -54,21 +61,30 @@ namespace Enemy.Control.BT
                 EnemyParams.Debug.HomingPower
                 );
 
-            // レベルの調整
+            // レベルの調整した速さ
             // -1から1の値を速さに乗算し、この値を速さに足すことで、0から基準値の2倍の範囲で加速減速を表現する。
-            float order = _params.Move.ChaseSpeed * _blackBoard.LevelAdjust.MoveSpeed;
-
+            float orderedSpeed = _speed + _speed * _blackBoard.LevelAdjust.MoveSpeed;
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
-            Vector3 delta = toSlot * (_params.Move.ChaseSpeed + order) * Time.deltaTime;
+            Vector3 delta = toSlot * orderedSpeed * BlackBoard.DeltaTime;
+
+            Vector3 warp;
             if (delta.sqrMagnitude >= _blackBoard.AreaToSlotSqrDistance)
             {
-                _blackBoard.AddWarpOption(_choice, _blackBoard.Slot.Point);
+                warp = _blackBoard.Slot.Point;
             }
             else
             {
-                _blackBoard.AddWarpOption(_choice, _blackBoard.Area.Point + delta);
+                warp = _blackBoard.Area.Point + delta;
             }
+            // y座標はプレイヤーの位置に少しずつ移動する。
+            warp.y = Mathf.Lerp(
+                _transform.position.y, 
+                _blackBoard.PlayerPosition.y, 
+                EnemyParams.Debug.VerticalMoveSpeed * BlackBoard.DeltaTime
+                );
+
+            _blackBoard.AddWarpOption(_choice, warp);
 
             return State.Success;
         }
