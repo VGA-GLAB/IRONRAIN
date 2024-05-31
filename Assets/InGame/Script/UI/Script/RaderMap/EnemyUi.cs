@@ -22,12 +22,4 @@ public class EnemyUi : MonoBehaviour, IPointerDownHandler
     {
         RaderMap.PanelRock(Enemy);
     }
-
-    /// <summary>
-    /// マルチロック時に呼び出される処理
-    /// </summary>
-    public void MultiLock()
-    {
-        
-    }
 }
