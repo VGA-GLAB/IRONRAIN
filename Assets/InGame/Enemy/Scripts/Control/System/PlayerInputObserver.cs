@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UniRx;
 
 namespace Enemy.Control
 {
     /// <summary>
-    /// “ü—Í‹@Ší‚Ì•Ï‰»‚É‘Î‰‚³‚¹‚é‚½‚ßAƒvƒŒƒCƒ„[‚Ì“ü—Í‚ğ‚±‚Ì—ñ‹“Œ^‚É•R‚Ã‚¯A‘—M‚·‚éB
+    /// å…¥åŠ›æ©Ÿå™¨ã®å¤‰åŒ–ã«å¯¾å¿œã•ã›ã‚‹ãŸã‚ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¥åŠ›ã‚’ã“ã®åˆ—æŒ™å‹ã«ç´ã¥ã‘ã€é€ä¿¡ã™ã‚‹ã€‚
     /// </summary>
     public enum PlayerActionMap
     {
@@ -13,7 +13,7 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì“ü—Í‚ğ“GƒLƒƒƒ‰ƒNƒ^[‚É‹¤—L‚·‚éƒƒbƒZ[ƒW‚Ì\‘¢‘Ì
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¥åŠ›ã‚’æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«å…±æœ‰ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æ§‹é€ ä½“
     /// </summary>
     public struct PlayerInputMessage
     {
@@ -21,17 +21,16 @@ namespace Enemy.Control
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì“ü—Í‚ğŠÄ‹‚µA“GƒLƒƒƒ‰ƒNƒ^[‚É‹¤—L‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¥åŠ›ã‚’ç›£è¦–ã—ã€æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«å…±æœ‰ã™ã‚‹ã€‚
     /// </summary>
     public class PlayerInputObserver : MonoBehaviour
     {
         private void Update()
         {
-            // ƒL[ƒ{[ƒh‚Å‚à‚»‚êˆÈŠO‚Å‚à‘Î‰‰Â”\
-            if (Input.GetKeyDown(KeyCode.Space)) Publish(PlayerActionMap.Attack);
+            // ä»»æ„ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§Publishãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã¶ã€‚
         }
 
-        // ƒƒbƒZ[ƒWƒ“ƒO
+        // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ³ã‚°
         private void Publish(PlayerActionMap map)
         {
             MessageBroker.Default.Publish(new PlayerInputMessage { Map = map });

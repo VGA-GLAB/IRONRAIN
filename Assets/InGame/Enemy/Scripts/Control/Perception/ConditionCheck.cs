@@ -51,6 +51,7 @@ namespace Enemy.Control
         public void Check()
         {
             _blackBoard.Hp -= _damageBuffer;
+            _blackBoard.CurrentFrameDamage = _damageBuffer;
             _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
 
             // プレイヤーを発見していない状態では生存時間を減らさない。

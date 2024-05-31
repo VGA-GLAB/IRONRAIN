@@ -15,6 +15,7 @@ namespace Enemy.Control
         private Sequence _escape;
         private Sequence _broken;
         private Sequence _hide;
+        private Sequence _damaged;
         private BlackBoard _blackBoard;
 
         public BehaviorTree(Transform transform, Transform rotate, EnemyParams enemyParams, BlackBoard blackBoard)
@@ -53,6 +54,10 @@ namespace Enemy.Control
                 "HideSequence",
                 new WriteActionPlan(Choice.Hide, blackBoard));
 
+            _damaged = new Sequence(
+                "DamagedSequence",
+                new WriteActionPlan(Choice.Damaged, blackBoard));
+
             _blackBoard = blackBoard;
         }
 
@@ -63,11 +68,12 @@ namespace Enemy.Control
         public void Run(Choice choice)
         {
             if (choice == Choice.Approach) _approach.Update();
-            if (choice == Choice.Chase) _chase.Update();
-            if (choice == Choice.Attack) _attack.Update();
-            if (choice == Choice.Escape) _escape.Update();
-            if (choice == Choice.Broken) _broken.Update();
-            if (choice == Choice.Hide) _hide.Update();
+            else if (choice == Choice.Chase) _chase.Update();
+            else if (choice == Choice.Attack) _attack.Update();
+            else if (choice == Choice.Escape) _escape.Update();
+            else if (choice == Choice.Broken) _broken.Update();
+            else if (choice == Choice.Hide) _hide.Update();
+            else if (choice == Choice.Damaged) _damaged.Update();
 
             // NOTE:ツリーを実行しても必ず行動として選択されるとは限らないのでノードの実行のたびに値を変化させるとバグる。
             //      Updateで更新しているのなら、LateUpdateで諸々を消す？

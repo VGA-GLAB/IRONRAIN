@@ -1,23 +1,73 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 namespace Enemy.Control.Boss
 {
     public class BossController : MonoBehaviour
     {
-        // í«ê’Ç©ÇÁÉ{ÉXÇÃÉtÉBÅ[ÉãÉhÇ…à⁄ìÆÇ∑ÇÈââèoÅB
-        // É{ÉXÇíÜêSÇ∆ÇµÇΩâ~å`ÇÃÉtÉBÅ[ÉãÉhÇ…ÉvÉåÉCÉÑÅ[Ç‡èÊÇ¡Ç©ÇÈÅB
-        // í èÌêÌì¨ -> QTEêÌì¨
+        [Header("----------„Éó„É©„É≥„Éä„Éº„ÅåÂºÑ„ÇãÂÄ§----------")]
+        [SerializeField] private BossParams _bossParams;
+        [Header("------------------------------------")]
 
-        void Start()
+        // Ê≥®ÂÖ•„Åô„Çã‰æùÂ≠òÈñ¢‰øÇ
+        private BossStage _stage;
+        private Transform _player;
+
+        private Transform _transform;
+        private List<FunnelController> _funnels;
+        private BlackBoard _blackBoard;
+        private Perception _perception;
+        private Brain _brain;
+        private Action _action;
+
+        [Inject]
+        private void Construct(BossStage stage, Transform player)
         {
-
+            _stage = stage;
+            _player = player;
         }
 
-        void Update()
+        private void Awake()
         {
+            _transform = transform;
+            _funnels = new List<FunnelController>();
+            _blackBoard = new BlackBoard();
+            _perception = new Perception(_transform, _player, _blackBoard, _stage);
+            _brain = new Brain(_blackBoard);
+            _action = new Action(_blackBoard, _transform, _funnels);
+        }
 
+        private void Start()
+        {
+            // „Éï„Ç°„É≥„Éç„É´„Å®Áõ∏‰∫í„Å´ÂèÇÁÖß„Åï„Åõ„Çã„ÄÇ
+            FunnelController.RegisterOwner(this, _funnels);
+
+            _perception.OnStartEvent();
+            _action.OnStartEvent();
+        }
+
+        private void Update()
+        {
+            _perception.UpdateEvent();
+            _brain.UpdateEvent();
+            _action.UpdateEvent();
+        }
+
+        private void LateUpdate()
+        {
+            _brain.LateUpdateEvent();
+        }
+
+        private void OnDisable()
+        {
+            _perception.OnDisableEvent();
+        }
+
+        private void OnDrawGizmos()
+        {
+            _perception?.OnDrawGizmosEvent();
         }
     }
 }
