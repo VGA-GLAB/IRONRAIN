@@ -11,16 +11,17 @@ namespace Enemy.Control.FSM
     {
         private BlackBoard _blackBoard;
 
+        private DamageApply _damageApply;
         // 移動と攻撃の両方がアニメーションを再生し、アバターマスクで組み合わさる。
         private MoveApply _moveApply;
-        private AttackStream _attackStream;
+        private AttackApply _attackApply;
 
         public BattleState(BlackBoard blackBoard, Body body, BodyAnimation animation, 
             IEquipment weapon)
         {
             _blackBoard = blackBoard;
             _moveApply = new MoveApply(Choice.Chase, blackBoard, body, animation);
-            _attackStream = new AttackStream(blackBoard, animation, weapon);
+            _attackApply = new AttackApply(blackBoard, animation, weapon);
         }
 
         public override StateKey Key => StateKey.Battle;
@@ -34,7 +35,11 @@ namespace Enemy.Control.FSM
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
-        {
+        {      
+            // ダメージを受けてアニメーションを再生中は、死亡したり移動や攻撃をしない。
+            // NOTE:ダメージ用のアニメーションが無いので、一通り動くまで作ったがテストできない。
+            //if (_damageApply.IsPlaying()) return;
+
             if (IsExit())
             {
                 TryChangeState(stateTable[StateKey.Idle]);
@@ -42,13 +47,13 @@ namespace Enemy.Control.FSM
             else
             {
                 _moveApply.Run();
-                _attackStream.Update();
+                _attackApply.Update();
             }
         }
 
         public override void Destroy()
         {
-            _attackStream.ReleaseCallback();
+            _attackApply.ReleaseCallback();
         }
 
         // 死亡もしくは撤退をチェックする。

@@ -7,13 +7,13 @@ namespace Enemy.Control.FSM
     /// <summary>
     /// アニメーション含めた攻撃の流れを制御する。
     /// </summary>
-    public class AttackStream
+    public class AttackApply
     {
         private BlackBoard _blackBoard;
         private BodyAnimation _animation;
         private IEquipment _equipment;
 
-        public AttackStream(BlackBoard blackBoard, BodyAnimation animation, IEquipment equipment)
+        public AttackApply(BlackBoard blackBoard, BodyAnimation animation, IEquipment equipment)
         {
             _blackBoard = blackBoard;
             _animation = animation;
@@ -21,7 +21,7 @@ namespace Enemy.Control.FSM
             if (equipment == null) Debug.LogWarning($"装備無し: {blackBoard.Name}");
             else _equipment = equipment;
 
-            FireEventCallback(BodyAnimation.CallBackControl.Add);
+            FireAnimationEventCallback(BodyAnimation.CallBackControl.Add);
             FireAnimationEndCallback(BodyAnimation.CallBackControl.Add);
         }
 
@@ -46,12 +46,12 @@ namespace Enemy.Control.FSM
         /// </summary>
         public void ReleaseCallback()
         {
-            FireEventCallback(BodyAnimation.CallBackControl.Remove);
+            FireAnimationEventCallback(BodyAnimation.CallBackControl.Remove);
             FireAnimationEndCallback(BodyAnimation.CallBackControl.Remove);
         }
 
         // アニメーションイベントに攻撃処理のコールバックを登録/解除
-        private void FireEventCallback(BodyAnimation.CallBackControl control)
+        private void FireAnimationEventCallback(BodyAnimation.CallBackControl control)
         {
             _animation.AnimationEventCallback(
                 AnimationEvent.Key.Fire, 
@@ -63,10 +63,10 @@ namespace Enemy.Control.FSM
             void Attack()
             {
                 if (_equipment == null) return;
-                if (!_blackBoard.IsAlive()) return;
+                if (!_blackBoard.IsAlive) return;
 
                 _equipment.Attack();
-                _blackBoard.UpdateAttackTime();
+                _blackBoard.LastAttackTime = Time.time;
             }
         }
 

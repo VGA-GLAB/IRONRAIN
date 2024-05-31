@@ -16,6 +16,7 @@ namespace Enemy.Control
         Broken,   // 死亡
         Escape,   // 撤退
         Hide,     // 生成後、画面から隠す
+        Damaged,  // ダメージを受ける
     }
 
     /// <summary>
@@ -67,6 +68,11 @@ namespace Enemy.Control
                 {
                     // 時間が0以下の場合は撤退
                     _order.Add(Choice.Escape);
+                }
+                else if (_blackBoard.CurrentFrameDamage > 0)
+                {
+                    // ダメージを受けた場合は怯む
+                    _order.Add(Choice.Damaged);
                 }
                 else
                 {

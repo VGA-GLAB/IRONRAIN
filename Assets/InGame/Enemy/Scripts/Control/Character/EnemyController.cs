@@ -38,6 +38,10 @@ namespace Enemy.Control
         /// 敵の種類を判定する値を返す。
         /// </summary>
         EnemyType IEnemyTypeReader.Type => _enemyParams == null ? EnemyType.Dummy : _enemyParams.Common.Type;
+        /// <summary>
+        /// 敵の状態を参照する。
+        /// </summary>
+        public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
         [Inject]
         private void Construct(Transform player, SlotPool pool)
@@ -72,6 +76,7 @@ namespace Enemy.Control
 
         private void Start()
         {
+            EnemyManager.Register(this);
             _perception.OnStartEvent();
         }
 
@@ -87,6 +92,7 @@ namespace Enemy.Control
 
         private void OnDestroy()
         {
+            EnemyManager.Release(this);
             _action.OnDestroyEvent();
         }
 

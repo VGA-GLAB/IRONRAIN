@@ -15,10 +15,6 @@ namespace Enemy.Control
         private Effector _effector;
         private StateMachine _stateMachine;
 
-        // 死亡もしくは退場のアニメーションが終了し、非表示になったフラグ。
-        // このフラグが立った次のフレーム以降はこのクラスの処理を行わない。
-        private bool _isDisable;
-
         public Action(Transform transform, Transform offset, Transform rotate, Animator animator, 
             Renderer[] renderers, AnimationEvent animationEvent, BlackBoard blackBoard,
             EnemyParams enemyParams, Effect[] effects, IEquipment equipment)
@@ -29,8 +25,6 @@ namespace Enemy.Control
             _animation = new BodyAnimation(animator, animationEvent);
             _effector = new Effector(effects);
             _stateMachine = new StateMachine(blackBoard, _body, _animation, _effector, equipment);
-
-            _isDisable = false;
         }
 
         public override Result UpdateEvent()

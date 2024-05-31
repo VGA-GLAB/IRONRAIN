@@ -6,7 +6,7 @@ namespace Enemy.Control
     /// <summary>
     /// キャラクターの情報を各層で共有する。
     /// </summary>
-    public class BlackBoard
+    public class BlackBoard : IReadonlyBlackBoard
     {
         // プレイヤー側でQTEの制御を行う際に変更される。
         public static float DeltaTime => Time.deltaTime * ProvidePlayerInformation.TimeScale;
@@ -67,56 +67,40 @@ namespace Enemy.Control
         // Updateで値が更新される。
         public float NextAttackTime { get; set; }
         // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
-        public float LastAttackTime { get; private set; }
+        public float LastAttackTime { get; set; }
 
         // 自身の状態をチェックするセンサーが書き込む。
         // Startの1回のみ。
         public string Name { get; set; }
         // Updateで値が更新される。
         public int Hp { get; set; }
+        public int CurrentFrameDamage { get; set; }
         public bool IsDying { get; set; }
         public float LifeTime { get; set; }
+        
+        public bool IsAlive
+        {
+            get => Hp > 0;
+        }
 
-        // 操作用のメソッド群
-        public Vector3 PlayerHeightSlotPoint()
-        {
-            return new Vector3(Slot.Point.x, PlayerPosition.y, Slot.Point.z);
-        }
-        public Vector3 PlayerHeightAreaPoint()
-        {
-            return new Vector3(Area.Point.x, PlayerPosition.y, Area.Point.z);
-        }
         public void AddActionOptions(Choice choice)
         {
             ActionOptions.Enqueue(new ActionPlan { Choice = choice });
         }
+
         public void AddWarpOption(Choice choice, Vector3 position)
         {
             WarpOptions.Enqueue(new WarpPlan { Choice = choice, Position = position });
         }
+
         public void AddMovementOption(Choice choice, Vector3 direction, float speed)
         {
             MovementOptions.Enqueue(new MovementPlan { Choice = choice, Direction = direction, Speed = speed });
         }
+
         public void AddForwardOption(Choice choice, Vector3 forward)
         {
             ForwardOptions.Enqueue(new ForwardPlan { Choice = choice, Value = forward });
-        }
-        public bool IsAlive()
-        {
-            return Hp > 0;
-        }
-        public bool IsFine()
-        {
-            return !IsDying;
-        }
-        public bool IsInTime()
-        {
-            return LifeTime > 0;
-        }
-        public void UpdateAttackTime()
-        {
-            LastAttackTime = Time.time;
         }
     }
 }

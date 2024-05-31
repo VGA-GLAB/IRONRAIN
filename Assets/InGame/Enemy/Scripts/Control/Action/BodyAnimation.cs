@@ -215,7 +215,7 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// アニメーションのトリガーを引く
+        /// アニメーションのトリガーを設定する。
         /// </summary>
         public void SetTrigger(string name)
         {

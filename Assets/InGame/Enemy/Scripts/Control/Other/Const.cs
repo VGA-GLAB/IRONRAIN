@@ -100,6 +100,10 @@
             /// アバターマスクで攻撃アニメーションのループを終了するトリガー名
             /// </summary>
             public const string AttackEndTrigger = "AttackEndTrigger";
+            /// <summary>
+            /// ダメージアニメーションに遷移するトリガー名
+            /// </summary>
+            public const string DamagedTrigger = "DamagedTrigger";
         }
     }
 }

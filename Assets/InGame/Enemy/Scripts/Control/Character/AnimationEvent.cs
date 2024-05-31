@@ -8,12 +8,14 @@ namespace Enemy.Control
     /// </summary>
     public class AnimationEvent : MonoBehaviour
     {
-        public enum Key { Fire, FireAnimationEnd }
+        public enum Key { Fire, FireAnimationEnd, DamageAnimationEnd }
 
         // 攻撃アニメーション中、弾や判定を出すタイミングで呼ばれる。
         UnityAction OnFire;
-        // 攻撃アニメーション中、弾や判定を出すタイミングで呼ばれる。
+        // 攻撃アニメーションが終了したタイミングで呼ばれる。
         UnityAction OnFireAnimationEnd;
+        // ダメージアニメーションが終了したタイミングで呼ばれる。
+        UnityAction OnDamageAnimationEnd;
 
         private void OnDestroy()
         {
@@ -29,6 +31,7 @@ namespace Enemy.Control
         {
             if (key == Key.Fire) OnFire += action;
             if (key == Key.FireAnimationEnd) OnFireAnimationEnd += action;
+            if (key == Key.DamageAnimationEnd) OnDamageAnimationEnd += action;
         }
 
         /// <summary>
@@ -38,6 +41,7 @@ namespace Enemy.Control
         {
             if (key == Key.Fire) OnFire -= action;
             if (key == Key.FireAnimationEnd) OnFireAnimationEnd -= action;
+            if (key == Key.DamageAnimationEnd) OnDamageAnimationEnd -= action;
         }
 
         /// <summary>
@@ -56,6 +60,15 @@ namespace Enemy.Control
         public void FireAnimationEnd()
         {
             OnFireAnimationEnd?.Invoke();
+        }
+
+        /// <summary>
+        /// ダメージアニメーションの再生終了タイミング。
+        /// アニメーションイベントとして割り当てる。
+        /// </summary>
+        public void DamageAnimationEnd()
+        {
+            OnDamageAnimationEnd?.Invoke();
         }
     }
 }
