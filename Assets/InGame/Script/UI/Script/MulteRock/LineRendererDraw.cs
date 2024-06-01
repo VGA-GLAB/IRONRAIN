@@ -11,7 +11,6 @@ public class LineRendererDraw : MonoBehaviour
     [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
     [SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
     [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
-    [SerializeField, Tooltip("PanelのZ座標")] private GameObject _panel;
 
     /// <summary>頂点の数 </summary>
     private int _posCount = 0;
@@ -40,8 +39,9 @@ public class LineRendererDraw : MonoBehaviour
         if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
         {
             var pos = hit.point;
-            pos.z = _panel.transform.position.z;
-            SetPosition(Camera.main.ScreenToWorldPoint(pos));
+            //pos.z = _panel.transform.position.z;
+            //SetPosition(Camera.main.ScreenToWorldPoint(pos));
+            SetPosition(pos);
             Debug.Log("線を書く");
         }
     }
@@ -80,26 +80,6 @@ public class LineRendererDraw : MonoBehaviour
             return false;
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        Vector3 pos = eventData.position;
-        pos.z = _panel.transform.position.z;
-        SetPosition(Camera.main.ScreenToWorldPoint(pos));
-
-        //if (Mouse.current.leftButton.IsPressed() || IsInput)
-        //    //Rayを飛ばすスタート位置を決める
-        //    var rayStartPosition = _origin.transform.position;
-        ////マウスでRayを飛ばす方向を決める
-        //var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        ////Hitしたオブジェクト格納用
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit, Mathf.Infinity, _layerMask))
-        //{
-        //    SetPosition(hit.point);
-        //    Debug.Log("線を書く");
-        //}
-    }
-
     private void LineStart()
     {
         IsInput = true;
@@ -114,11 +94,4 @@ public class LineRendererDraw : MonoBehaviour
         Debug.Log("線を消す");
     }
 
-    //public void OnEndDrag(PointerEventData eventData)
-    //{
-    //    //ラインレンダラーを初期化
-    //    _lineRenderer.positionCount = 0;
-    //    _posCount = 0;
-    //    Debug.Log("線を消す");
-    //}
 }
