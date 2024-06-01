@@ -21,16 +21,27 @@ namespace Enemy.Control.Boss
         /// <summary>
         /// 点Pの位置。
         /// </summary>
-        public Vector3 PointP => _p != null ? _p.position : Vector3.zero;
+        public Transform PointP
+        {
+            get
+            {
+                if (_p == null) CreateTempPivot();
+                return _p;
+            }
+        }
         /// <summary>
         /// 円状に配置されたレーン。
         /// 各レーンはインデックスを指定することで取得できる。
         /// </summary>
         public IReadonlyLane[] Lanes => _lanes;
 
-        private void Start()
+        private void Awake()
         {
             CreateTempPivot();
+        }
+
+        private void Start()
+        {
             CreateLanes();
         }
 
