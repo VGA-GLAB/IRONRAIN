@@ -11,6 +11,8 @@ namespace Enemy.Control.Boss
         [SerializeField] private int _laneQuantity = 36;
         [Header("ステージの半径")]
         [SerializeField] private float _radius = 30;
+        [Header("ギズモへ描画")]
+        [SerializeField] private bool _isDrawGizmos = false;
 
         private Lane[] _lanes;
         // 動くこと前提で、この点を中心とした円形のレーンを作る。
@@ -63,7 +65,7 @@ namespace Enemy.Control.Boss
 
         private void OnDrawGizmos()
         {
-            DrawLanes();
+            if (_isDrawGizmos) DrawLanes();
         }
 
         private void DrawLanes()
