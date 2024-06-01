@@ -16,6 +16,8 @@ public sealed class PrepareSequenceController : SequenceControllerBase
         {
             _prepareStartSequence, _startUpSequence, _prepareSortieSequence, _sortieSequence
         };
+        
+        ChangeSequence<PrepareStartSequence>();
     }
 
     [Serializable] public sealed class PrepareStartSequence : EventSequenceBase { }

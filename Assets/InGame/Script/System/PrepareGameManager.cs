@@ -8,6 +8,7 @@ using UnityEngine;
 public sealed class PrepareGameManager : MonoBehaviour
 {
     [SerializeField] private PrepareSequenceController _prepareSequenceController = default;
+    [SerializeField] private PrepareStartController _prepareStartController = default;
 
     private async void Start()
     {
@@ -16,18 +17,14 @@ public sealed class PrepareGameManager : MonoBehaviour
 
     private async UniTask ManagePrepareAsync(CancellationToken cancellationToken)
     {
-        await PrepareStartSeqAsync(cancellationToken);
+        await _prepareStartController.PrepareStartAsync(cancellationToken);
+        _prepareSequenceController.ChangeSequence<PrepareSequenceController.StartUpSequence>();
 
         await StartUpSeqAsync(cancellationToken);
 
         await PrepareSortieSeqAsync(cancellationToken);
 
         await SortieSeqAsync(cancellationToken);
-    }
-
-    private async UniTask PrepareStartSeqAsync(CancellationToken cancellationToken)
-    {
-
     }
 
     private async UniTask StartUpSeqAsync(CancellationToken cancellationToken)

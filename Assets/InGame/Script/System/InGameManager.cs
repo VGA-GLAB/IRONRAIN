@@ -9,6 +9,8 @@ using UnityEngine;
 public sealed class InGameManager : MonoBehaviour
 {
     [SerializeField] private ChaseSequenceController _chaseSequenceController = default;
+    [SerializeField] private FirstAnnounceSeqController _firstAnnounceSeqController = default;
+    [SerializeField] private AvoidanceSeqController _avoidanceSeqController = default;
     [SerializeField] private GameObject _attackSeqEnemy = default;
     [SerializeField, Tooltip("IProvidePlayerInformationInjectableを実装したComponentをアタッチしてください")]
     private Component[] _providePlayerInjectableComponents = default;
@@ -73,10 +75,7 @@ public sealed class InGameManager : MonoBehaviour
         // FirstAttackSequence
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.FirstAnnounceSequence>();
 
-        // Todo:アナウンスの処理が出来上がった場合修正する
-        Debug.Log("オペレーターアナウンス中");
-        await UniTask.WaitForSeconds(10F, cancellationToken: cancellationToken);
-        Debug.Log("アナウンス終了");
+        await _firstAnnounceSeqController.FirstAnnounceTaskSeqAsync(cancellationToken);
     }
 
     private async UniTask AvoidanceSequence(CancellationToken cancellationToken)
@@ -84,10 +83,7 @@ public sealed class InGameManager : MonoBehaviour
         // AvoidanceSequence
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.AvoidanceSequence>();
 
-        // Todo:回避チュートリアルが出来上がった場合修正する
-        Debug.Log("回避のチュートリアル中");
-        await UniTask.WaitForSeconds(5F, cancellationToken: cancellationToken);
-        Debug.Log("回避のチュートリアル終了");
+        await _avoidanceSeqController.AvoidanceSeqAsync(cancellationToken);
     }
 
     private async UniTask AttackSequence(CancellationToken cancellationToken)
