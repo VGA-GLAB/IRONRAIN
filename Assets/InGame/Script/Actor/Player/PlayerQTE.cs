@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -27,9 +27,9 @@ public class PlayerQTE : PlayerComponentBase
     private void OnTriggerEnter(Collider other)
     {
         if(QTEModel == null) return;
-        var enemyTypeReader = other.GetComponentsInParent<IEnemyTypeReader>();
+        var enemyTypeReader = other.GetComponentsInParent<IReadonlyEnemyParams>();
         if (enemyTypeReader.Length == 0) return;
-        //‚‚¿‚Ì“G‚ª“ü‚Á‚Ä‚«‚½‚ç
+        //ç›¾æŒã¡ã®æ•µãŒå…¥ã£ã¦ããŸã‚‰
         if (enemyTypeReader[0].Type == EnemyType.Shield)
         {
             QTEModel.StartQTE();
