@@ -6,11 +6,8 @@ namespace Enemy.Control
     /// <summary>
     /// キャラクターの情報を各層で共有する。
     /// </summary>
-    public class BlackBoard : IReadonlyBlackBoard
+    public class BlackBoard : IReadonlyBlackBoard, IOwnerTime
     {
-        // プレイヤー側でQTEの制御を行う際に変更される。
-        public static float DeltaTime => Time.deltaTime * ProvidePlayerInformation.TimeScale;
-
         public BlackBoard()
         {
             PlayerInput = new Queue<PlayerInputMessage>();
@@ -22,6 +19,11 @@ namespace Enemy.Control
             FovStay = new HashSet<Collider>();
             FovExit = new HashSet<Collider>();
         }
+
+        // 外部からポーズの処理を呼ぶと反映される。
+        // プレイヤー側でQTEの制御を行う際にタイムスケールが変更される。
+        public float PausableDeltaTime => Time.deltaTime * PausableTimeScale;
+        public float PausableTimeScale => ProvidePlayerInformation.TimeScale * (IsExternalPause ? 0 : 1);
 
         // ビヘイビアツリーの各ノードがキューイングする。
         // Updateで書きこまれ、LateUpdateで消える。
@@ -78,6 +80,11 @@ namespace Enemy.Control
         public bool IsDying { get; set; }
         public float LifeTime { get; set; }
         
+        // 外部からの処理の呼び出しで操作をする場合に使うフラグ。
+        // センサー側がUpdateで値を更新する。
+        public bool ExternalAttackTrigger { get; set; }
+        public bool IsExternalPause { get; set; }
+
         public bool IsAlive
         {
             get => Hp > 0;

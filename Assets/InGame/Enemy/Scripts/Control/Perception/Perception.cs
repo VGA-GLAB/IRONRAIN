@@ -14,6 +14,7 @@ namespace Enemy.Control
         private FovSensor _fovSensor;
         private ApproachSensor _approachSensor;
         private ConditionCheck _conditionCheck;
+        private ExternalTiming _externalTiming;
         private BlackBoard _blackBoard;
 
         public Perception(Transform transform, Transform rotate, Transform player, EnemyParams enemyParams, 
@@ -26,6 +27,7 @@ namespace Enemy.Control
             _fovSensor = new FovSensor(transform, rotate, enemyParams);
             _approachSensor = new ApproachSensor(transform, enemyParams);
             _conditionCheck = new ConditionCheck(transform, enemyParams, blackBoard);
+            _externalTiming = new ExternalTiming(blackBoard);
             _blackBoard = blackBoard;
         }
 
@@ -37,16 +39,16 @@ namespace Enemy.Control
 
         public override void OnEnableEvent()
         {
-            _fovSensor.OnCaptureEnter += Enter;
-            _fovSensor.OnCaptureStay += Stay;
-            _fovSensor.OnCaptureExit += Exit;
+            _fovSensor.OnCaptureEnter += FovCaptureEnter;
+            _fovSensor.OnCaptureStay += FovCaptureStay;
+            _fovSensor.OnCaptureExit += FovCaptureExit;
         }
 
         public override void OnDisableEvent()
         {
-            _fovSensor.OnCaptureEnter -= Enter;
-            _fovSensor.OnCaptureStay -= Stay;
-            _fovSensor.OnCaptureExit -= Exit;
+            _fovSensor.OnCaptureEnter -= FovCaptureEnter;
+            _fovSensor.OnCaptureStay -= FovCaptureStay;
+            _fovSensor.OnCaptureExit -= FovCaptureExit;
 
             // 撃破演出後に無効化して画面から消す想定。
             _position.Erase(_blackBoard);
@@ -64,6 +66,9 @@ namespace Enemy.Control
             _position.Update(_blackBoard);
             _fireRate.NextTiming();
             _conditionCheck.Check();
+
+            // 外部からの操作によってポーズするフラグも黒板に反映している。
+            _externalTiming.Update();
 
             return Result.Running;
         }
@@ -100,17 +105,32 @@ namespace Enemy.Control
             _levelAdjust.Dispose();
         }
 
-        private void Enter(Collider collider)
+        public override void OnAttackEvent()
+        {
+            _externalTiming.AttackTrigger();
+        }
+
+        public override void OnPauseEvent()
+        {
+            _externalTiming.Pause();
+        }
+
+        public override void OnResumeEvent()
+        {
+            _externalTiming.Resume();
+        }
+
+        private void FovCaptureEnter(Collider collider)
         {
             _blackBoard.FovEnter.Add(collider);
         }
 
-        private void Stay(Collider collider)
+        private void FovCaptureStay(Collider collider)
         {
             _blackBoard.FovStay.Add(collider);
         }
 
-        private void Exit(Collider collider)
+        private void FovCaptureExit(Collider collider)
         {
             _blackBoard.FovExit.Add(collider);
         }

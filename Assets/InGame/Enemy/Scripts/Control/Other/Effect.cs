@@ -15,6 +15,8 @@ namespace Enemy.Control
         [Header("再生する音")]
         [SerializeField] private string _audioName;
 
+        // 自身を再生したオブジェクトの時間
+        IOwnerTime _ownerTime;
         // 再生する度に再生時間をリセットして計測する。
         private float _max = 0;
         private float _lifeTime = 0;
@@ -30,15 +32,18 @@ namespace Enemy.Control
 
         private void Update()
         {
-            _lifeTime -= BlackBoard.DeltaTime;
+            _lifeTime -= _ownerTime != null ? _ownerTime.PausableDeltaTime : Time.deltaTime;
             _lifeTime = Mathf.Max(0, _max);
         }
 
         /// <summary>
-        /// 演出を再生
+        /// 演出を再生する。
+        /// 自身を再生したオブジェクトの時間の流れに合わせる。
         /// </summary>
-        public void Play()
+        public void Play(IOwnerTime ownerTime)
         {
+            _ownerTime = ownerTime;
+
             // 音を再生する処理ｺｺ
 
             if (_particles == null) return;
@@ -65,6 +70,9 @@ namespace Enemy.Control
         /// </summary>
         public void Stop()
         {
+            // 自身を再生したオブジェクトとの関連付けを消す。
+            _ownerTime = null;
+
             if (_particles == null) return;
 
             foreach (ParticleSystem p in _particles) p.Stop();

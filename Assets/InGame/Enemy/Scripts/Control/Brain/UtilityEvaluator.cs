@@ -25,13 +25,15 @@ namespace Enemy.Control
     public class UtilityEvaluator
     {
         private BlackBoard _blackBoard;
+        private EnemyParams _enemyParams;
         private IApproach _approach;
 
         private List<Choice> _order;
 
-        public UtilityEvaluator(BlackBoard blackBoard, IApproach approach)
+        public UtilityEvaluator(BlackBoard blackBoard, EnemyParams enemyParams, IApproach approach)
         {
             _blackBoard = blackBoard;
+            _enemyParams = enemyParams;
             _approach = approach;
             _order = new List<Choice>(EnumExtensions.Length<Choice>());
         }
@@ -73,6 +75,13 @@ namespace Enemy.Control
                 {
                     // ダメージを受けた場合は怯む
                     _order.Add(Choice.Damaged);
+                }
+                else if (_enemyParams.Other.IsTutorial)
+                {
+                    _order.Add(Choice.Chase);
+
+                    // チュートリアル用の敵の場合は、外部から攻撃処理を呼び出すことで攻撃する。                    
+                    if (_blackBoard.ExternalAttackTrigger) _order.Add(Choice.Attack);
                 }
                 else
                 {

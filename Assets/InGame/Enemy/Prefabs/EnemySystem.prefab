@@ -61,7 +61,6 @@ MonoBehaviour:
   - {fileID: 0}
   _player: {fileID: 0}
   _slotPool: {fileID: 498121015047598534}
-  _bossStage: {fileID: 6085656654808869788}
 --- !u!1 &2074662523174345179
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +137,7 @@ Transform:
   - {fileID: 2074662522697631685}
   - {fileID: 2074662523174345178}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2074662524510200475
 GameObject:
@@ -152,7 +151,6 @@ GameObject:
   - component: {fileID: 7980481993630760504}
   - component: {fileID: 498121015047598534}
   - component: {fileID: 2074662524510200551}
-  - component: {fileID: 6085656654808869788}
   m_Layer: 0
   m_Name: Core
   m_TagString: Untagged
@@ -222,17 +220,3 @@ MonoBehaviour:
   - Prefab: {fileID: 1453080357284972515, guid: 896247b178359b042a52b72f2c001a03, type: 3}
     Key: 2
   _poolCapacity: 10
---- !u!114 &6085656654808869788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2074662524510200475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 456e333e4a3675b4f9cd5f91db637963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _laneQuantity: 36
-  _radius: 30

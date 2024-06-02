@@ -46,11 +46,11 @@ namespace Enemy.Control
         /// <summary>
         /// 演出を再生。
         /// </summary>
-        public void Play(EffectKey key)
+        public void Play(EffectKey key, IOwnerTime ownerTime)
         {
             if (_effects.TryGetValue(key, out var e) && !e.IsPlaying)
             {
-                e.Play();
+                e.Play(ownerTime);
             }
         }
 

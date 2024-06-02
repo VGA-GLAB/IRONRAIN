@@ -13,13 +13,15 @@ namespace Enemy.Control
         private Transform _offset;
         private Transform _rotate;
         private Renderer[] _renderers;
+        private BlackBoard _blackBoard;
 
-        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers)
+        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers, BlackBoard blackBoard)
         {
             _transform = transform;
             _offset = offset;
             _rotate = rotate;
             _renderers = renderers;
+            _blackBoard = blackBoard;
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace Enemy.Control
         /// </summary>
         public void Move(in Vector3 velocity)
         {
-            _transform.position += velocity * BlackBoard.DeltaTime;
+            _transform.position += velocity * _blackBoard.PausableDeltaTime;
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace Enemy.Control
         /// </summary>
         public void OffsetMove(in Vector3 velocity)
         {
-            _offset.position += velocity * BlackBoard.DeltaTime;
+            _offset.position += velocity * _blackBoard.PausableDeltaTime;
         }
 
         /// <summary>

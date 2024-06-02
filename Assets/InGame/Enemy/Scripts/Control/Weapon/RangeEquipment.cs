@@ -35,7 +35,7 @@ namespace Enemy.Control
             _player = player;
         }
 
-        void IEquipment.Attack()
+        void IEquipment.Attack(IOwnerTime ownerTime)
         {
             if (_muzzle == null) return;
 
@@ -55,14 +55,14 @@ namespace Enemy.Control
             // 前方に撃つ
             void FireToForward()
             {
-                BulletPool.Fire(_key, _muzzle.position, _muzzle.forward);
+                BulletPool.Fire(ownerTime, _key, _muzzle.position, _muzzle.forward);
             }
 
             // 目標に向けて撃つ
             void FireToTarget(Transform target)
             {
                 Vector3 f = (target.position - _muzzle.position).normalized;
-                BulletPool.Fire(_key, _muzzle.position, f);
+                BulletPool.Fire(ownerTime,_key, _muzzle.position, f);
             }
         }
 

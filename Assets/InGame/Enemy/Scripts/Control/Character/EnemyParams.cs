@@ -3,11 +3,22 @@
 namespace Enemy.Control
 {
     /// <summary>
+    /// 敵の種類を判定するための列挙型。
+    /// </summary>
+    public enum EnemyType
+    {
+        Dummy,      // 未割当の場合に返る値
+        MachineGun, // 銃持ち
+        Launcher,   // ランチャー持ち
+        Shield,     // シールド持ち
+    }
+
+    /// <summary>
     /// 敵キャラクター個体毎のパラメータ。
     /// プランナーが弄る。
     /// </summary>
     [System.Serializable]
-    public class EnemyParams
+    public class EnemyParams : IReadonlyEnemyParams
     {
         // 接近
         [System.Serializable]
@@ -68,6 +79,16 @@ namespace Enemy.Control
             public float FovRadius => _fovRadius;
         }
 
+        // その他の設定
+        [System.Serializable]
+        public class OtherSettings
+        {
+            [Header("チュートリアルの敵として扱う")]
+            [SerializeField] private bool _isTutorial;
+
+            public bool IsTutorial => _isTutorial;
+        }
+
         // デバッグ用
         // 必要に応じてプランナー用に外出しする。
         public static class Debug
@@ -86,12 +107,18 @@ namespace Enemy.Control
         [SerializeField] private AdvanceSettings _advance;
         [Header("戦闘状態の設定")]
         [SerializeField] private BattleSettings _battle;
+        [Header("その他の設定")]
+        [SerializeField] private OtherSettings _other;
         [Header("種類ごとに共通したパラメータ")]
         [Tooltip("例外的なキャラクターがいない場合はこの項目は弄らなくて良い。")]
         [SerializeField] private CommonParams _common;
 
         public AdvanceSettings Advance => _advance;
         public BattleSettings Battle => _battle;
+        public OtherSettings Other => _other;
         public CommonParams Common => _common;
+
+        // インターフェースで外部から参照する。
+        public EnemyType Type => _common != null ? _common.Type : EnemyType.Dummy;
     }
 }

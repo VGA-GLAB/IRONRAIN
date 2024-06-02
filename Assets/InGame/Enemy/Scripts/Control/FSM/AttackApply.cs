@@ -64,8 +64,8 @@ namespace Enemy.Control.FSM
             {
                 if (_equipment == null) return;
                 if (!_blackBoard.IsAlive) return;
-
-                _equipment.Attack();
+                
+                _equipment.Attack(_blackBoard);
                 _blackBoard.LastAttackTime = Time.time;
             }
         }

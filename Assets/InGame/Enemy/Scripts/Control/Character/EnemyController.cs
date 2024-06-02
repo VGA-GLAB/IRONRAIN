@@ -4,7 +4,7 @@ using VContainer;
 
 namespace Enemy.Control
 {
-    public class EnemyController : MonoBehaviour, IDamageable, IEnemyTypeReader
+    public class EnemyController : MonoBehaviour, IDamageable
     {
         [Header("----------プランナーが弄る値----------")]
         [SerializeField] private EnemyParams _enemyParams;
@@ -23,7 +23,6 @@ namespace Enemy.Control
         private Transform _player;
         private SlotPool _surroundingPool;
 
-        private Transform _transform;
         private Perception _perception;
         private Brain _brain;
         private Action _action;
@@ -35,11 +34,11 @@ namespace Enemy.Control
         private bool _isCleanupRunning;
 
         /// <summary>
-        /// 敵の種類を判定する値を返す。
+        /// 敵の種類を判定する値を返す。実行中に変化しない値はこっち。
         /// </summary>
-        EnemyType IEnemyTypeReader.Type => _enemyParams == null ? EnemyType.Dummy : _enemyParams.Common.Type;
+        public IReadonlyEnemyParams Params => _enemyParams;
         /// <summary>
-        /// 敵の状態を参照する。
+        /// 敵の状態を参照する。実行中に変化する値はこっち。
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
@@ -65,13 +64,12 @@ namespace Enemy.Control
             // タイムラインやアニメーションになるかもしれない。
             IApproach approach = _approach != null ? _approach.GetComponent<IApproach>() : null;
 
-            _transform = transform;
             _blackBoard = new BlackBoard();
-            _perception = new Perception(_transform, _rotate, _player, _enemyParams, _blackBoard, _surroundingPool);
-            _brain = new Brain(_transform, _rotate, _enemyParams, _blackBoard, approach);
-            _action = new Action(_transform, _offset, _rotate, _animator, _renderers, 
+            _perception = new Perception(transform, _rotate, _player, _enemyParams, _blackBoard, _surroundingPool);
+            _brain = new Brain(transform, _rotate, _enemyParams, _blackBoard, approach);
+            _action = new Action(transform, _offset, _rotate, _animator, _renderers, 
                 _animationEvent, _blackBoard, _enemyParams, _effects, GetComponent<IEquipment>());
-            _debugStatusUI = new DebugStatusUI(_transform, _enemyParams, _blackBoard);
+            _debugStatusUI = new DebugStatusUI(transform, _enemyParams, _blackBoard);
         }
 
         private void Start()
@@ -137,6 +135,30 @@ namespace Enemy.Control
         void IDamageable.Damage(int value, string weapon)
         {
             _perception.OnDamaged(value, weapon);
+        }
+
+        /// <summary>
+        /// 任意のタイミングで攻撃する。
+        /// </summary>
+        public void Attack()
+        {
+            _perception.OnAttackEvent();
+        }
+
+        /// <summary>
+        /// 任意のタイミングでポーズする。
+        /// </summary>
+        public void Pause()
+        {
+            _perception.OnPauseEvent();
+        }
+
+        /// <summary>
+        /// 任意のタイミングでポーズ解除する。
+        /// </summary>
+        public void Resume()
+        {
+            _perception.OnResumeEvent();
         }
     }
 }

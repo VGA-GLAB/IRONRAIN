@@ -22,6 +22,7 @@ namespace Enemy.Control
     {
         private struct Message
         {
+            public IOwnerTime OwnerTime;
             public BulletKey Key;
             public Vector3 Muzzle;
             public Vector3 Forward;
@@ -87,16 +88,17 @@ namespace Enemy.Control
 
             // 弾の発射処理
             item.transform.position = msg.Muzzle;
-            bullet.Shoot(msg.Forward);
+            bullet.Shoot(msg.Forward, msg.OwnerTime);
         }
 
         /// <summary>
         /// プールから取り出した弾を飛ばす。
         /// </summary>
-        public static void Fire(BulletKey key, Vector3 muzzle, Vector3 forward)
+        public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Vector3 forward)
         {
             MessageBroker.Default.Publish(new Message 
             {
+                OwnerTime = ownerTime,
                 Key = key, 
                 Muzzle = muzzle, 
                 Forward = forward

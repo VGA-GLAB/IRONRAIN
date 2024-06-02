@@ -65,7 +65,7 @@ namespace Enemy.Control.BT
             float orderedSpeed = _speed + _speed * _blackBoard.LevelAdjust.MoveSpeed;
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
-            Vector3 delta = toSlot * orderedSpeed * BlackBoard.DeltaTime;
+            Vector3 delta = toSlot * orderedSpeed * _blackBoard.PausableDeltaTime;
 
             Vector3 warp;
             if (delta.sqrMagnitude >= _blackBoard.AreaToSlotSqrDistance)
@@ -80,7 +80,7 @@ namespace Enemy.Control.BT
             warp.y = Mathf.Lerp(
                 _transform.position.y, 
                 _blackBoard.PlayerPosition.y, 
-                EnemyParams.Debug.VerticalMoveSpeed * BlackBoard.DeltaTime
+                EnemyParams.Debug.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
                 );
 
             _blackBoard.AddWarpOption(_choice, warp);
