@@ -100,6 +100,7 @@ public class InputProvider
                 ExecuteInput(InputType.RightButton1, InputMode.Exit);
             }
         };
+
         _inputMap.XRIRightHandInteraction.Select.performed += context => IsRightLeverMove = true; 
         _inputMap.XRIRightHandInteraction.Select.canceled += context => IsRightLeverMove = false;
         _inputMap.XRILeftHandInteraction.Select.performed += context => IsLeftLeverMove = true;
@@ -120,6 +121,18 @@ public class InputProvider
         _inputMap.XRILeftHandInteraction.Select.canceled += context => ExecuteInput(InputType.LeftLeverMove, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightLeverMove, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.Select.canceled += context => ExecuteInput(InputType.RightLeverMove, InputMode.Exit);
+        _inputMap.Toggle.Toggle1.performed += context => ExecuteInput(InputType.Toggle1, InputMode.Enter);
+        _inputMap.Toggle.Toggle1.canceled += context => ExecuteInput(InputType.Toggle1, InputMode.Exit);        
+        _inputMap.Toggle.Toggle2.performed += context => ExecuteInput(InputType.Toggle2, InputMode.Enter);
+        _inputMap.Toggle.Toggle2.canceled += context => ExecuteInput(InputType.Toggle2, InputMode.Exit);        
+        _inputMap.Toggle.Toggle3.performed += context => ExecuteInput(InputType.Toggle3, InputMode.Enter);
+        _inputMap.Toggle.Toggle3.canceled += context => ExecuteInput(InputType.Toggle3, InputMode.Exit);        
+        _inputMap.Toggle.Toggle4.performed += context => ExecuteInput(InputType.Toggle4, InputMode.Enter);
+        _inputMap.Toggle.Toggle4.canceled += context => ExecuteInput(InputType.Toggle4, InputMode.Exit);        
+        _inputMap.Toggle.Toggle5.performed += context => ExecuteInput(InputType.Toggle5, InputMode.Enter);
+        _inputMap.Toggle.Toggle5.canceled += context => ExecuteInput(InputType.Toggle5, InputMode.Exit);        
+        _inputMap.Toggle.Toggle6.performed += context => ExecuteInput(InputType.Toggle6, InputMode.Enter);
+        _inputMap.Toggle.Toggle6.canceled += context => ExecuteInput(InputType.Toggle6, InputMode.Exit);
 
         _isInstanced = true;
     }
@@ -293,5 +306,17 @@ public class InputProvider
         RightTrigger,
         /// <summary>左手のトリガー</summary>
         LeftTrigger,
+        /// <summary>toggleボタンその１</summary>
+        Toggle1,
+        /// <summary>toggleボタンその2</summary>
+        Toggle2,        
+        /// <summary>toggleボタンその3</summary>
+        Toggle3,        
+        /// <summary>toggleボタンその4</summary>
+        Toggle4,        
+        /// <summary>toggleボタンその5</summary>
+        Toggle5,        
+        /// <summary>toggleボタンその6</summary>
+        Toggle6,
     }
 }
