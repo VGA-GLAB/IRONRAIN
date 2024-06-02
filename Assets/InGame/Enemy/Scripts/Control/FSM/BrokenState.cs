@@ -11,14 +11,16 @@ namespace Enemy.Control.FSM
     {
         private BodyAnimation _bodyAnimation;
         private Effector _effector;
+        private BlackBoard _blackBoard;
 
         // 一度だけアニメーションを再生するためのフラグ
         private bool _isAnimationPlaying;
 
-        public BrokenState(BodyAnimation bodyAnimation, Effector effector)
+        public BrokenState(BodyAnimation bodyAnimation, Effector effector, BlackBoard blackBoard)
         {
             _bodyAnimation = bodyAnimation;
             _effector = effector;
+            _blackBoard = blackBoard;
         }
 
         public override StateKey Key => StateKey.Broken;
@@ -40,7 +42,7 @@ namespace Enemy.Control.FSM
                 _isAnimationPlaying = true;
                 _bodyAnimation.Play(Const.AnimationName.Broken);
 
-                _effector.Play(EffectKey.Destroyed);
+                _effector.Play(EffectKey.Destroyed, _blackBoard);
 
                 // 現状、アバターマスクが機能していないので、BaseLayerのアニメーションが再生されない。
             }

@@ -15,7 +15,7 @@ namespace Enemy.Control
         public Brain(Transform transform, Transform rotate, EnemyParams enemyParams, BlackBoard blackBoard,
             IApproach approach)
         {
-            _evaluator = new UtilityEvaluator(blackBoard, approach);
+            _evaluator = new UtilityEvaluator(blackBoard, enemyParams, approach);
             _tree = new BehaviorTree(transform, rotate, enemyParams, blackBoard);
             _blackBoard = blackBoard;
         }

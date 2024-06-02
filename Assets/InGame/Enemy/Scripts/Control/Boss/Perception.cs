@@ -32,7 +32,7 @@ namespace Enemy.Control.Boss
         public override Result UpdateEvent()
         {
             // 点Pの位置
-            _blackBoard.PointP = _stage.PointP;
+            _blackBoard.PointP = _stage.PointP.position;
 
             // エリアの位置をそれぞれの対象の位置に更新
             _playerArea.Point = _player.position;

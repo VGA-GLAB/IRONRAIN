@@ -19,7 +19,7 @@ namespace Enemy.Control
         // 毎フレーム攻撃のアニメーションをトリガーしないようにフラグで管理
         private bool _isAttackAnimationPlaying;
 
-        void IEquipment.Attack()
+        void IEquipment.Attack(IOwnerTime ownerTime)
         {
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
             RaycastExtensions.OverlapSphere(Origin(), _radius, col =>

@@ -6,7 +6,7 @@ namespace Enemy.Mockup
     /// <summary>
     /// ダメージ判定のある弾を飛ばす遠距離攻撃
     /// </summary>
-    public class RangeAttack : MonoBehaviour, IAttack
+    public class RangeAttack : MonoBehaviour
     {
         [Header("飛ばす弾の設定")]
         [SerializeField] private Transform _muzzle;
@@ -26,11 +26,11 @@ namespace Enemy.Mockup
             if (_isTargeting && _target != null)
             {
                 Vector3 f = (_target.position - _muzzle.position).normalized;
-                BulletPool.Fire(_key, _muzzle.position, f);
+                //BulletPool.Fire(_key, _muzzle.position, f);
             }
             else if (_forward != null)
             {
-                BulletPool.Fire(_key, _muzzle.position, _forward.forward);
+                //BulletPool.Fire(_key, _muzzle.position, _forward.forward);
             }
         }
     }

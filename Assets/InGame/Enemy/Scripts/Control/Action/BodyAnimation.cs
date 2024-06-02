@@ -3,7 +3,6 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.XR.Hands.XRHandSubsystemDescriptor;
 
 namespace Enemy.Control
 {

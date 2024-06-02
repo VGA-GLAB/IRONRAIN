@@ -55,7 +55,7 @@ namespace Enemy.Control
             _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
 
             // プレイヤーを発見していない状態では生存時間を減らさない。
-            if (_blackBoard.IsPlayerDetected) _blackBoard.LifeTime -= BlackBoard.DeltaTime;
+            if (_blackBoard.IsPlayerDetected) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
 
             // 反映後は必要ないので0に戻す
             _damageBuffer = 0;

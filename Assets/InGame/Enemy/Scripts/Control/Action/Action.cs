@@ -21,7 +21,7 @@ namespace Enemy.Control
         {
             _blackBoard = blackBoard;
             _params = enemyParams;
-            _body = new Body(transform, offset, rotate, renderers);
+            _body = new Body(transform, offset, rotate, renderers, blackBoard);
             _animation = new BodyAnimation(animator, animationEvent);
             _effector = new Effector(effects);
             _stateMachine = new StateMachine(blackBoard, _body, _animation, _effector, equipment);
@@ -29,7 +29,7 @@ namespace Enemy.Control
 
         public override Result UpdateEvent()
         {
-            _animation.PlaySpeed(ProvidePlayerInformation.TimeScale);
+            _animation.PlaySpeed(_blackBoard.PausableTimeScale);
             _stateMachine.Update();
 
             return Result.Running;

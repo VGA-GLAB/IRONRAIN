@@ -1,4 +1,5 @@
-﻿namespace Enemy.Mockup
+﻿
+namespace Enemy.Mockup
 {
     /// <summary>
     /// 攻撃処理のインターフェース

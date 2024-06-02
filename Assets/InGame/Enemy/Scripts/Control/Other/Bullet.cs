@@ -16,6 +16,7 @@ namespace Enemy.Control
         [SerializeField] private float _speed = 10.0f;
         [SerializeField] private int _damage = 1;
 
+        private IOwnerTime _ownerTime;
         private Transform _transform;
         private Vector3 _direction;
         private float _elapsed;
@@ -33,14 +34,14 @@ namespace Enemy.Control
         
         private void Update()
         {
-            // QTEでスローになるのを考慮
-            float deltaTime = Time.deltaTime * ProvidePlayerInformation.TimeScale;
+            float deltaTime = _ownerTime != null ? _ownerTime.PausableDeltaTime : Time.deltaTime;
 
             _elapsed += deltaTime;
 
             if (_elapsed > _lifeTime)
             {
                 CombatDesigner.FireReport(isHit: false);
+                _ownerTime = null;
                 gameObject.SetActive(false);
             }
             else
@@ -63,9 +64,10 @@ namespace Enemy.Control
         /// 弾を撃ちだす。
         /// 一定時間経過で非アクティブになる。
         /// </summary>
-        public void Shoot(Vector3 direction)
+        public void Shoot(Vector3 direction, IOwnerTime ownerTime)
         {
             _direction = direction.normalized;
+            _ownerTime = ownerTime;
             _elapsed = 0;
         }
     }

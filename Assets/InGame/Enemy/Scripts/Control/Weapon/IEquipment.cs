@@ -9,7 +9,7 @@
         /// <summary>
         /// 攻撃判定
         /// </summary>
-        public void Attack();
+        public void Attack(IOwnerTime ownerTime);
         /// <summary>
         /// 攻撃のアニメーションを再生
         /// Brain側が攻撃を選択したフレームの間呼び出され続ける。

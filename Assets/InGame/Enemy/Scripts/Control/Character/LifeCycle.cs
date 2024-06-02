@@ -28,5 +28,11 @@
 
         // このメソッドを呼んだ次のフレームで非表示になる
         public virtual void OnPreCleanup() { }
+
+        // チュートリアルで外部から任意のタイミングで制御する。
+        // Updateのタイミングで呼び出されるとは限らない。
+        public virtual void OnAttackEvent() { }
+        public virtual void OnPauseEvent() { }
+        public virtual void OnResumeEvent() { }
     }
 }

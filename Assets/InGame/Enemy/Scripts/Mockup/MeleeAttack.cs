@@ -7,7 +7,7 @@ namespace Enemy.Mockup
     /// <summary>
     /// 当たり判定のレイキャストを用いた近距離攻撃
     /// </summary>
-    public class MeleeAttack : MonoBehaviour, IAttack
+    public class MeleeAttack : MonoBehaviour
     {
         [Header("範囲の設定")]
         [SerializeField] private Transform _forward;
