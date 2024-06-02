@@ -3,7 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class FirstAnnounceSeqController : MonoBehaviour
+public sealed class FirstAnnounceSeqController : MonoBehaviour
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [Header("最初の待ち時間")]
