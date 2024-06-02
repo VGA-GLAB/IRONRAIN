@@ -15,7 +15,7 @@ public class MultilockSystem : MonoBehaviour
     public bool IsMultilock;
 
     /// <summary>敵のUIリスト </summary>
-    public List<GameObject> LockOnEnemy;
+    private List<GameObject> LockOnEnemy;
 
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
