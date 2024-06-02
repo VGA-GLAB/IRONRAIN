@@ -68,6 +68,26 @@ public sealed class InGameManager : MonoBehaviour
         await MultiBattleSequence(cancellationToken);
 
         await PurgeSequence(cancellationToken);
+
+        await FallSequence(cancellationToken);
+
+        await BossStartSequence(cancellationToken);
+
+        await FirstFunnelSequence(cancellationToken);
+
+        await ToggleButtonSequence(cancellationToken);
+
+        await SecondFunnelSequence(cancellationToken);
+
+        await BossAgainSequence(cancellationToken);
+
+        await BreakLeftArmSequence(cancellationToken);
+
+        await FirstBossQTESequence(cancellationToken);
+
+        await SecondQTESequence(cancellationToken);
+
+        await BossEndSequence(cancellationToken);
     }
 
     private async UniTask FirstAnnounceSequence(CancellationToken cancellationToken)
@@ -139,6 +159,94 @@ public sealed class InGameManager : MonoBehaviour
     private async UniTask PurgeSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.PurgeSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+
+    private async UniTask FallSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.FallSequence>();
+
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+    }
+    
+    private async UniTask BossStartSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.BossStartSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask FirstFunnelSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.FirstFunnelSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask ToggleButtonSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.ToggleButtonSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask SecondFunnelSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.SecondFunnelSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask BossAgainSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.BossAgainSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask BreakLeftArmSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.BreakLeftArmSequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask FirstBossQTESequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.FirstBossQTESequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask SecondQTESequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.SecondQTESequence>();
+        
+        Debug.Log("Purge中");
+        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        Debug.Log("Purge終了");
+    }
+    
+    private async UniTask BossEndSequence(CancellationToken cancellationToken)
+    {
+        _chaseSequenceController.ChangeSequence<ChaseSequenceController.BossEndSequence>();
         
         Debug.Log("Purge中");
         await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
