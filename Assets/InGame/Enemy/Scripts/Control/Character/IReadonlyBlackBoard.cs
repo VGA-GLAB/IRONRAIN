@@ -14,5 +14,11 @@
         /// プレイヤーを検知しているかを判定。
         /// </summary>
         public bool IsPlayerDetected { get; }
+
+        /// <summary>
+        /// プレイヤーへの接近が完了したかを判定。
+        /// これ以降、攻撃処理を外部から呼ぶことで、任意のタイミングで攻撃させることが出来る。
+        /// </summary>
+        public bool IsApproachCompleted { get; }
     }
 }

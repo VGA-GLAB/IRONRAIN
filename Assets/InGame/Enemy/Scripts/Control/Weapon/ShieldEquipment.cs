@@ -24,7 +24,9 @@ namespace Enemy.Control
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
             RaycastExtensions.OverlapSphere(Origin(), _radius, col =>
             {
-                // ダメージ用のインターフェースなどで判定
+                if (!GetComponent<Collider>().TryGetComponent(out IDamageable damageable)) return;
+
+                damageable.Damage(1); // ダメージ量は適当
             });
         }
 
