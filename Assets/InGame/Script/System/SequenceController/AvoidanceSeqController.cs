@@ -1,11 +1,12 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Enemy.Control;
 using UnityEngine;
 
-public class AvoidanceSeqController : MonoBehaviour
+public sealed class AvoidanceSeqController : MonoBehaviour
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
-    [SerializeField] private GameObject _tutorialEnemy = default;
+    [SerializeField] private EnemyController _tutorialEnemy = default;
     [SerializeField] private float _shootWaitSec = 2F;
     
     [Header("テキストボックスに関する値")]
@@ -21,7 +22,12 @@ public class AvoidanceSeqController : MonoBehaviour
     public async UniTask AvoidanceSeqAsync(CancellationToken cancellationToken)
     {
         // 敵を生成
-        var enemy = Instantiate(_tutorialEnemy);
+        var enemy = Instantiate(_tutorialEnemy.gameObject);
+
+        if (enemy.TryGetComponent(out EnemyController enemyController))
+        {
+            
+        }
         
         // todo: エネミーが完成次第そのコンポーネントを取得して弾を撃たせる処理を追記
 
