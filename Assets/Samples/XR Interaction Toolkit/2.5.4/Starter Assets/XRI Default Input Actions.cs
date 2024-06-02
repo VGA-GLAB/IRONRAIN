@@ -2986,6 +2986,134 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Toggle"",
+            ""id"": ""7f4381dc-4809-4fea-9d0f-4246848e767f"",
+            ""actions"": [
+                {
+                    ""name"": ""Toggle1"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b69621c-6ad4-4979-a401-09391ce24b4a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle2"",
+                    ""type"": ""Button"",
+                    ""id"": ""08d6a69c-4ad7-4af7-959e-9daee5f280c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle3"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7373ba0-07d4-442d-82a4-6844263557a7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle4"",
+                    ""type"": ""Button"",
+                    ""id"": ""b27e665e-9ff6-48aa-8031-f7b408c7152e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle5"",
+                    ""type"": ""Button"",
+                    ""id"": ""8eee21e3-a0a2-4aca-813b-856b7b976ead"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle6"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb5d803c-6050-44da-88f2-66eff2f032b5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1b965166-e412-409b-a154-61746899e9c1"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2be84bdf-ed30-45d0-bbe9-c2f28bed64a8"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea13d8ca-dcfa-48b8-b622-af37c194fa5b"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b5c8c03-99b6-48c0-8580-e326ca65f4a2"",
+                    ""path"": ""<Keyboard>/f4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c711e10-1834-4366-a683-08ddc4499fe0"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4e3619b-6151-4ea0-b579-bb876ba53089"",
+                    ""path"": ""<Keyboard>/f6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -3167,6 +3295,14 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_Lever_WASD = m_Lever.FindAction("WASD", throwIfNotFound: true);
         m_Lever_Arrow = m_Lever.FindAction("Arrow", throwIfNotFound: true);
         m_Lever_RightButton = m_Lever.FindAction("RightButton", throwIfNotFound: true);
+        // Toggle
+        m_Toggle = asset.FindActionMap("Toggle", throwIfNotFound: true);
+        m_Toggle_Toggle1 = m_Toggle.FindAction("Toggle1", throwIfNotFound: true);
+        m_Toggle_Toggle2 = m_Toggle.FindAction("Toggle2", throwIfNotFound: true);
+        m_Toggle_Toggle3 = m_Toggle.FindAction("Toggle3", throwIfNotFound: true);
+        m_Toggle_Toggle4 = m_Toggle.FindAction("Toggle4", throwIfNotFound: true);
+        m_Toggle_Toggle5 = m_Toggle.FindAction("Toggle5", throwIfNotFound: true);
+        m_Toggle_Toggle6 = m_Toggle.FindAction("Toggle6", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -4388,6 +4524,92 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         }
     }
     public LeverActions @Lever => new LeverActions(this);
+
+    // Toggle
+    private readonly InputActionMap m_Toggle;
+    private List<IToggleActions> m_ToggleActionsCallbackInterfaces = new List<IToggleActions>();
+    private readonly InputAction m_Toggle_Toggle1;
+    private readonly InputAction m_Toggle_Toggle2;
+    private readonly InputAction m_Toggle_Toggle3;
+    private readonly InputAction m_Toggle_Toggle4;
+    private readonly InputAction m_Toggle_Toggle5;
+    private readonly InputAction m_Toggle_Toggle6;
+    public struct ToggleActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public ToggleActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Toggle1 => m_Wrapper.m_Toggle_Toggle1;
+        public InputAction @Toggle2 => m_Wrapper.m_Toggle_Toggle2;
+        public InputAction @Toggle3 => m_Wrapper.m_Toggle_Toggle3;
+        public InputAction @Toggle4 => m_Wrapper.m_Toggle_Toggle4;
+        public InputAction @Toggle5 => m_Wrapper.m_Toggle_Toggle5;
+        public InputAction @Toggle6 => m_Wrapper.m_Toggle_Toggle6;
+        public InputActionMap Get() { return m_Wrapper.m_Toggle; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ToggleActions set) { return set.Get(); }
+        public void AddCallbacks(IToggleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ToggleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ToggleActionsCallbackInterfaces.Add(instance);
+            @Toggle1.started += instance.OnToggle1;
+            @Toggle1.performed += instance.OnToggle1;
+            @Toggle1.canceled += instance.OnToggle1;
+            @Toggle2.started += instance.OnToggle2;
+            @Toggle2.performed += instance.OnToggle2;
+            @Toggle2.canceled += instance.OnToggle2;
+            @Toggle3.started += instance.OnToggle3;
+            @Toggle3.performed += instance.OnToggle3;
+            @Toggle3.canceled += instance.OnToggle3;
+            @Toggle4.started += instance.OnToggle4;
+            @Toggle4.performed += instance.OnToggle4;
+            @Toggle4.canceled += instance.OnToggle4;
+            @Toggle5.started += instance.OnToggle5;
+            @Toggle5.performed += instance.OnToggle5;
+            @Toggle5.canceled += instance.OnToggle5;
+            @Toggle6.started += instance.OnToggle6;
+            @Toggle6.performed += instance.OnToggle6;
+            @Toggle6.canceled += instance.OnToggle6;
+        }
+
+        private void UnregisterCallbacks(IToggleActions instance)
+        {
+            @Toggle1.started -= instance.OnToggle1;
+            @Toggle1.performed -= instance.OnToggle1;
+            @Toggle1.canceled -= instance.OnToggle1;
+            @Toggle2.started -= instance.OnToggle2;
+            @Toggle2.performed -= instance.OnToggle2;
+            @Toggle2.canceled -= instance.OnToggle2;
+            @Toggle3.started -= instance.OnToggle3;
+            @Toggle3.performed -= instance.OnToggle3;
+            @Toggle3.canceled -= instance.OnToggle3;
+            @Toggle4.started -= instance.OnToggle4;
+            @Toggle4.performed -= instance.OnToggle4;
+            @Toggle4.canceled -= instance.OnToggle4;
+            @Toggle5.started -= instance.OnToggle5;
+            @Toggle5.performed -= instance.OnToggle5;
+            @Toggle5.canceled -= instance.OnToggle5;
+            @Toggle6.started -= instance.OnToggle6;
+            @Toggle6.performed -= instance.OnToggle6;
+            @Toggle6.canceled -= instance.OnToggle6;
+        }
+
+        public void RemoveCallbacks(IToggleActions instance)
+        {
+            if (m_Wrapper.m_ToggleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IToggleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ToggleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ToggleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ToggleActions @Toggle => new ToggleActions(this);
     private int m_GenericXRControllerSchemeIndex = -1;
     public InputControlScheme GenericXRControllerScheme
     {
@@ -4542,5 +4764,14 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnWASD(InputAction.CallbackContext context);
         void OnArrow(InputAction.CallbackContext context);
         void OnRightButton(InputAction.CallbackContext context);
+    }
+    public interface IToggleActions
+    {
+        void OnToggle1(InputAction.CallbackContext context);
+        void OnToggle2(InputAction.CallbackContext context);
+        void OnToggle3(InputAction.CallbackContext context);
+        void OnToggle4(InputAction.CallbackContext context);
+        void OnToggle5(InputAction.CallbackContext context);
+        void OnToggle6(InputAction.CallbackContext context);
     }
 }
