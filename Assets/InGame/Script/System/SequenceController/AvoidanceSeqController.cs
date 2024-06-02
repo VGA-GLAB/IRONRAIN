@@ -21,25 +21,27 @@ public sealed class AvoidanceSeqController : MonoBehaviour
     
     public async UniTask AvoidanceSeqAsync(CancellationToken cancellationToken)
     {
-        // 敵を生成
-        var enemy = Instantiate(_tutorialEnemy.gameObject);
 
-        if (enemy.TryGetComponent(out EnemyController enemyController))
-        {
-            
-        }
+        await UniTask.WaitForSeconds(2F, cancellationToken: cancellationToken);
+
+        await UniTask.WaitUntil(() => _tutorialEnemy.BlackBoard.IsApproachCompleted, cancellationToken: cancellationToken);
         
-        // todo: エネミーが完成次第そのコンポーネントを取得して弾を撃たせる処理を追記
-
-        // todo: 弾を射出して数秒たったら敵とPlayerの動きを停止させて入力を待つ
+        
+        Debug.Log("Shooooooooot!");
+        _tutorialEnemy.Attack();
+        
         await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
-
+        
+        _tutorialEnemy.Pause();
+        
         Debug.Log("レバーかスペースキーを押してください");
         // 特定の入力を受けたらPauseを回避する
         await UniTask.WaitUntil(() =>
             InputProvider.Instance.LeftLeverDir != Vector3.zero ||
             InputProvider.Instance.RightLeverDir != Vector3.zero ||
-            UnityEngine.InputSystem.Keyboard.current.spaceKey.isPressed);
+            UnityEngine.InputSystem.Keyboard.current.spaceKey.isPressed, cancellationToken: cancellationToken);
+        
+        _tutorialEnemy.Resume();
         
         await Announce(cancellationToken);
     }
