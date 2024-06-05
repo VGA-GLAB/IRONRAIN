@@ -6,23 +6,22 @@ using Cysharp.Threading.Tasks;
 
 public class PlayerController : MonoBehaviour
 {
+    public PlayerEnvroment PlayerEnvroment => _playerEnvroment;
+
     [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
     [SerializeField] private PlayerSetting _playerSetting;
     [SerializeField] private RaderMap _playerMap;
+    [SerializeField] private PlayerAnimation _playerAnimation;
 
     private PlayerEnvroment _playerEnvroment;
 
     private void Awake()
     {
-        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap);
+        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap, _playerStateList, _playerAnimation);
         for (int i = 0; i < _playerStateList.Count; i++)
         {
             _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());
         }
-    }
-
-    private void Start()
-    {
     }
 
     private void OnDestroy()
@@ -38,19 +37,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <typeparam name="T">検索されたState</typeparam>
     /// <returns></returns>
-    public T SeachState<T>() where T : class
+    public T SeachState<T>() where T : PlayerComponentBase
     {
-        for (int i = 0; i < _playerStateList.Count; i++)
-        {
-            if (_playerStateList[i] is T)
-            {
-                return _playerStateList[i] as T;
-            }
-        }
-        Debug.LogError("指定されたステートが見つかりませんでした");
-        return default;
+       return _playerEnvroment.SeachState<T>();
     }
-
-
-
 }
