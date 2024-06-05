@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,18 +9,17 @@ public class PlayerQTEView : MonoBehaviour
 
     public void SetQteStateText(QTEState qteState) 
     {
-        Debug.Log("QTE‚«‚ç");
         if (qteState == QTEState.QTE1)
         {
-            _qteText.text = "QTEMode\n‰EƒŒƒo[ƒ{ƒ^ƒ“1‚ğ‰Ÿ‚µ‚½‚Ü‚Ü‰EƒŒƒo[‚ğˆø‚¢‚½ó‘Ô‚É‚·‚é";
+            _qteText.text = "QTEMode\nå³ãƒ¬ãƒãƒ¼ãƒœã‚¿ãƒ³1ã‚’æŠ¼ã—ãŸã¾ã¾å³ãƒ¬ãƒãƒ¼ã‚’å¼•ã„ãŸçŠ¶æ…‹ã«ã™ã‚‹";
         }
         else if (qteState == QTEState.QTE2)
         {
-            _qteText.text = "QTEMode\n‰EƒŒƒo[ƒ{ƒ^ƒ“1‚ğ‰Ÿ‚µ‚½‚Ü‚Ü‰EƒŒƒo[‚ğ‘O‚É‰Ÿ‚µo‚·";
+            _qteText.text = "QTEMode\nå³ãƒ¬ãƒãƒ¼ãƒœã‚¿ãƒ³1ã‚’æŠ¼ã—ãŸã¾ã¾å³ãƒ¬ãƒãƒ¼ã‚’å‰ã«æŠ¼ã—å‡ºã™";
         }
         else if (qteState == QTEState.QTE3) 
         {
-            _qteText.text = "QTEMode\n‰EƒŒƒo[ƒ{ƒ^ƒ“2‚ğ‰Ÿ‚·";
+            _qteText.text = "QTEMode\nå³ãƒ¬ãƒãƒ¼ãƒœã‚¿ãƒ³2ã‚’æŠ¼ã™";
         }
         else
         {
