@@ -19,7 +19,6 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     private int _currentLane;
     private Vector3 _savePos;
     private bool _isRetunRale;
-    private bool _isGoal;
 
     protected override void Start()
     {
@@ -34,7 +33,8 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     protected override void FixedUpdate()
     {        
         base.FixedUpdate();
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) 
+            && !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
         {
             Move();
         }
@@ -47,7 +47,6 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     protected override void Update()
     {
         base.Update();
-        GoalCenterPoint();
     }
 
     public override void Dispose()
@@ -146,22 +145,5 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
                 _isRetunRale = true;
             }
         });
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void GoalCenterPoint()
-    {
-        //Debug.Log($"ぷらす：{_centerPoint.position.z < _playerEnvroment.PlayerTransform.position.z}" +
-            //$"マイナス：{_centerPoint.position.z + 40 > _playerEnvroment.PlayerTransform.position.z}");
-        if (_playerEnvroment.PlayerTransform.position.z + 50 < _playerEnvroment.PlayerTransform.position.z
-            && _playerEnvroment.PlayerTransform.position.z - 50 > _playerEnvroment.PlayerTransform.position.z
-            && !_isGoal)
-        {
-            Debug.Log("ゴール");
-            _isGoal = true;
-            //IronRain.SceneManagement.SceneManager.Activation("BossScene");
-        }
     }
 }

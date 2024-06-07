@@ -63,20 +63,25 @@ public class PlayerQTEModel : IPlayerStateModel
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
-            Debug.Log("QTEモード");
+
             ProvidePlayerInformation.TimeScale = 0.2f;
             ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
             _qteType.Value = QTEState.QTE1;
-            //右レバーボタン1を押したまま右レバーを引く
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を手前に引いた状態にしろ", 0.5f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
-            && InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton), PlayerLoopTiming.Update, startToken);
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を奥に押し出すように傾けろ", 0.5f, startToken);
             _qteType.Value = QTEState.QTE2;
-            //右レバーボタン1を押したまま右レバーを押す
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
-            && InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton), PlayerLoopTiming.Update, startToken);
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン④を押せ", 0.5f, startToken); 
             _qteType.Value = QTEState.QTE3;
-            //右レバーボタン2を押す
-            await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.TwoButton), PlayerLoopTiming.Update, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
             _qteType.Value = QTEState.QTENone;
 
             ProvidePlayerInformation.TimeScale = 1f;

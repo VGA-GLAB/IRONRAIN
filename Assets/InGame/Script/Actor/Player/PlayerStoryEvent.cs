@@ -5,8 +5,8 @@ using Cysharp.Threading.Tasks;
 
 public class PlayerStoryEvent : PlayerComponentBase
 {
-    [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
     [SerializeField] private Transform _bossBattleStartPos;
+    [SerializeField] private Transform _centerPoint;
 
     /// <summary>
     /// ジェットパックをパージ
@@ -14,19 +14,20 @@ public class PlayerStoryEvent : PlayerComponentBase
     /// <returns></returns>
     public async UniTask StartJetPackPurge()
     {
+        var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
         var token = this.GetCancellationTokenOnDestroy();
         _playerEnvroment.ClearState();
         _playerEnvroment.AddState(PlayerStateType.Inoperable);
-        await _tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, token);
-        await _tutorialTextBoxController.DoTextChangeAsync("toggle3を押せ", 0.5f, token);
+        await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("toggle3を押せ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle3), PlayerLoopTiming.Update, token);
-        await _tutorialTextBoxController.DoTextChangeAsync("toggle4を押せ", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("toggle4を押せ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), PlayerLoopTiming.Update, token);
         //右レバーボタン1を押したまま右レバーを押す
-        await _tutorialTextBoxController.DoTextChangeAsync("両方のレバーを前に上げろ", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("両方のレバーを前に上げろ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeLever), PlayerLoopTiming.Update, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
-        await _tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, token);
+        await tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, token);
         Debug.Log("パージ成功");
         //await _playerAnimation.JetpackPurgeAnim();
     }
@@ -49,5 +50,18 @@ public class PlayerStoryEvent : PlayerComponentBase
         _playerEnvroment.SeachState<PlayerMove>().enabled = true;
         _playerEnvroment.ClearState();
         _playerEnvroment.PlayerTransform.position = _bossBattleStartPos.position;
+    }
+
+    /// <summary>
+    /// 真ん中についたかどうか
+    /// </summary>
+    public bool GoalCenterPoint()
+    {
+        if (_playerEnvroment.PlayerTransform.position.z - 40 < _centerPoint.position.z
+            && _playerEnvroment.PlayerTransform.position.z + 20 > _centerPoint.position.z)
+        {
+            return true;
+        }
+        return false;
     }
 }
