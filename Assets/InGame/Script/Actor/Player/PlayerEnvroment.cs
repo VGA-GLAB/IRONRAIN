@@ -1,32 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerEnvroment
 {
-    public Transform PlayerTransform => _playerTransform;
-    public PlayerSetting PlayerSetting => _setting;
-    public PlayerStateType PlayerState => _playerState;
-    public RaderMap RaderMap => _raderMap;
-    public PlayerAnimation PlayerAnimation => _playerAnimation;
-    public List<PlayerComponentBase> playerComponentList => _playerComponentList;
+    public Transform PlayerTransform { get; private set; }
+    public PlayerSetting PlayerSetting { get; private set; }
+    public PlayerStateType PlayerState { get; private set; }
+    public RaderMap RaderMap { get; private set; }
+    public PlayerAnimation PlayerAnimation { get; private set; }
+    public TutorialTextBoxController TutorialTextBoxCon { get; private set; }
 
-    private PlayerSetting _setting;
-    private Transform _playerTransform;
-    private PlayerStateType _playerState;
-    private RaderMap _raderMap;
     private List<PlayerComponentBase> _playerComponentList;
-    private PlayerAnimation _playerAnimation;
 
     public PlayerEnvroment(Transform playerTransform, PlayerSetting playerSetting, 
         RaderMap raderMap, List<PlayerComponentBase> playerComponentList,
-        PlayerAnimation playerAnimation) 
+        PlayerAnimation playerAnimation, TutorialTextBoxController tutorialTextBoxController) 
     {
-        _playerTransform = playerTransform;
-        _setting = playerSetting;
-        _raderMap = raderMap;
+        PlayerTransform = playerTransform;
+        PlayerSetting = playerSetting;
+        RaderMap = raderMap;
         _playerComponentList = playerComponentList;
-        _playerAnimation = playerAnimation;
+        PlayerAnimation = playerAnimation;
+        TutorialTextBoxCon = tutorialTextBoxController;
     }
 
     /// <summary>
@@ -35,7 +30,7 @@ public class PlayerEnvroment
     /// <param name="state">追加する状態</param>
     public void AddState(PlayerStateType state)
     {
-        _playerState |= state;
+        PlayerState |= state;
     }
 
     /// <summary>
@@ -44,7 +39,7 @@ public class PlayerEnvroment
     /// <param name="state">削除する状態</param>
     public void RemoveState(PlayerStateType state)
     {
-        _playerState &= ~state;
+        PlayerState &= ~state;
     }
 
     /// <summary>
@@ -52,7 +47,7 @@ public class PlayerEnvroment
     /// </summary>
     public void ClearState() 
     {
-        _playerState &= 0;
+        PlayerState &= 0;
     }
 
     /// <summary>

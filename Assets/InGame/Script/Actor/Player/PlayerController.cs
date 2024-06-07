@@ -11,13 +11,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
     [SerializeField] private PlayerSetting _playerSetting;
     [SerializeField] private RaderMap _playerMap;
+    [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
     [SerializeField] private PlayerAnimation _playerAnimation;
 
     private PlayerEnvroment _playerEnvroment;
 
     private void Awake()
     {
-        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap, _playerStateList, _playerAnimation);
+        _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap, 
+            _playerStateList, _playerAnimation, _tutorialTextBoxController);
+
         for (int i = 0; i < _playerStateList.Count; i++)
         {
             _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());

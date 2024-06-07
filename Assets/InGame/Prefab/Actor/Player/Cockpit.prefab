@@ -247,8 +247,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerStateModel:
     rid: -2
-  _tutorialTextBoxController: {fileID: 8926079807533078586}
   _bossBattleStartPos: {fileID: 0}
+  _centerPoint: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -666,6 +666,7 @@ MonoBehaviour:
   - {fileID: 3339484400665279174}
   _playerSetting: {fileID: 11400000, guid: 4a65326a60e74df42b1640c452cc088c, type: 2}
   _playerMap: {fileID: 7647433741230936233}
+  _tutorialTextBoxController: {fileID: 0}
   _playerAnimation: {fileID: 3276513942593533337}
 --- !u!114 &6532391545746031580
 MonoBehaviour:
@@ -679,6 +680,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe778b8227779a41ac5ba05279ea8ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 0}
+  _time: 0
+  _strength: 0
 --- !u!54 &1107243933184653244
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13804,17 +13808,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4414678146644269849, guid: de85de4e663dd0c428cb9493114bc17b, type: 3}
   m_PrefabInstance: {fileID: 2288088274761104260}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8926079807533078586 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7214522938196026302, guid: de85de4e663dd0c428cb9493114bc17b, type: 3}
-  m_PrefabInstance: {fileID: 2288088274761104260}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874c356511d5b6f41b0cf3ff7dfa2956, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2716641432952177569
 PrefabInstance:
   m_ObjectHideFlags: 0

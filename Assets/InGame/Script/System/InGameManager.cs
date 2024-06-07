@@ -160,8 +160,9 @@ public sealed class InGameManager : MonoBehaviour
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.MultiBattleSequence>();
 
+        var storyEvent = _playerController.SeachState<PlayerStoryEvent>();
         //Debug.Log("道中戦の途中");
-        await UniTask.WaitForSeconds(1F, cancellationToken: cancellationToken);
+        await UniTask.WaitUntil(storyEvent.GoalCenterPoint, cancellationToken: cancellationToken);
         //Debug.Log("道中戦終了");
     }
 
