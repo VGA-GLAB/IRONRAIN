@@ -1,6 +1,11 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEditor.Recorder.Input;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor.Recorder;
+#endif
 
 public sealed class PrepareStartController : MonoBehaviour
 {
@@ -19,8 +24,10 @@ public sealed class PrepareStartController : MonoBehaviour
     
     public async UniTask PrepareStartAsync(CancellationToken cancellationToken)
     {
+        Debug.Log("Test");
+        
         await UniTask.WaitForSeconds(_firstDelayTime, cancellationToken: cancellationToken);
-
+        
         await Announce(cancellationToken);
     }
     
