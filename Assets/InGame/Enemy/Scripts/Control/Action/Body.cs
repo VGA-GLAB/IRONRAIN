@@ -10,18 +10,18 @@ namespace Enemy.Control
     public class Body
     {
         private Transform _transform;
+        private BlackBoard _blackBoard;
         private Transform _offset;
         private Transform _rotate;
         private Renderer[] _renderers;
-        private BlackBoard _blackBoard;
 
-        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers, BlackBoard blackBoard)
+        public Body(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, Renderer[] renderers)
         {
             _transform = transform;
+            _blackBoard = blackBoard;
             _offset = offset;
             _rotate = rotate;
             _renderers = renderers;
-            _blackBoard = blackBoard;
         }
 
         /// <summary>

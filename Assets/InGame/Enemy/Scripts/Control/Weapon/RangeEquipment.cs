@@ -6,7 +6,8 @@ using VContainer;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 遠距離攻撃の装備
+    /// 遠距離攻撃の装備。
+    /// 装備者への参照を渡してもらい、発射自体はアニメーションイベントにフック。
     /// </summary>
     public class RangeEquipment : MonoBehaviour, IEquipment
     {
@@ -17,6 +18,8 @@ namespace Enemy.Control
             Target,  // 任意のターゲットに向ける。
         }
 
+        [Header("アニメーションイベントに処理をフック")]
+        [SerializeField] private AnimationEvent _animationEvent;
         [Header("射撃方法")]
         [SerializeField] private AimMode _aimMode;
         [Header("飛ばす弾の設定")]
@@ -26,8 +29,7 @@ namespace Enemy.Control
         [SerializeField] private Transform _target;
 
         private Transform _player;
-        // 毎フレーム攻撃のアニメーションをトリガーしないようにフラグで管理
-        private bool _isAttackAnimationPlaying;
+        private IOwnerTime _ownerTime;
 
         [Inject]
         private void Construct(Transform player)
@@ -35,10 +37,30 @@ namespace Enemy.Control
             _player = player;
         }
 
-        void IEquipment.Attack(IOwnerTime ownerTime)
+        private void OnEnable()
+        {
+            _animationEvent.OnFireStart += Shoot;
+        }
+
+        private void OnDisable()
+        {
+            _animationEvent.OnFireStart -= Shoot;
+        }
+
+        // 発射する前に装備者への参照が必要。
+        void IEquipment.RegisterOwner(IOwnerTime ownerTime)
+        {
+            _ownerTime = ownerTime;
+        }
+
+        // 弾を発射する。
+        // アニメーションイベントに登録して呼んでもらう。
+        private void Shoot()
         {
             if (_muzzle == null) return;
+            if (_ownerTime == null) { Debug.LogWarning("弾を発射する前に装備者への参照が必要。"); return; }
 
+            // 射撃モード
             switch (_aimMode)
             {
                 case AimMode.Forward:
@@ -55,33 +77,20 @@ namespace Enemy.Control
             // 前方に撃つ
             void FireToForward()
             {
-                BulletPool.Fire(ownerTime, _key, _muzzle.position, _muzzle.forward);
+                BulletPool.Fire(_ownerTime, _key, _muzzle.position, _muzzle.forward);
             }
 
             // 目標に向けて撃つ
             void FireToTarget(Transform target)
             {
                 Vector3 f = (target.position - _muzzle.position).normalized;
-                BulletPool.Fire(ownerTime,_key, _muzzle.position, f);
+                BulletPool.Fire(_ownerTime,_key, _muzzle.position, f);
             }
-        }
-
-        void IEquipment.PlayAttackAnimation(BodyAnimation animation)
-        {
-            if (_isAttackAnimationPlaying) return;
-
-            _isAttackAnimationPlaying = true;
-            animation.SetTrigger(Const.AnimationParam.AttackTrigger);
-        }
-
-        void IEquipment.PlayAttackEndAnimation(BodyAnimation animation)
-        {
-            animation.SetTrigger(Const.AnimationParam.AttackEndTrigger);
-            _isAttackAnimationPlaying = false;
         }
 
         private void OnDrawGizmos()
         {
+            // 弾道。
             Vector3 f = _muzzle.position + _muzzle.forward * 10.0f; // 適当な長さ
             GizmosUtils.Line(_muzzle.position, f, ColorExtensions.ThinRed);
         }

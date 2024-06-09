@@ -40,7 +40,6 @@ namespace Enemy.Control
 
             if (_elapsed > _lifeTime)
             {
-                CombatDesigner.FireReport(isHit: false);
                 _ownerTime = null;
                 gameObject.SetActive(false);
             }
@@ -56,7 +55,6 @@ namespace Enemy.Control
             if (!collider.TryGetComponent(out IDamageable damageable)) return;
 
             damageable.Damage(_damage);
-            CombatDesigner.FireReport(isHit: true);
             gameObject.SetActive(false);
         }
 

@@ -8,9 +8,10 @@ namespace Enemy.Control
     /// </summary>
     public class BlackBoard : IReadonlyBlackBoard, IOwnerTime
     {
-        public BlackBoard()
+        public BlackBoard(string name = "")
         {
-            PlayerInput = new Queue<PlayerInputMessage>();
+            ID = System.Guid.NewGuid();
+            Name = name;
             ActionOptions = new Queue<ActionPlan>();
             WarpOptions = new Queue<WarpPlan>();
             MovementOptions = new Queue<MovementPlan>();
@@ -20,10 +21,15 @@ namespace Enemy.Control
             FovExit = new HashSet<Collider>();
         }
 
+        // 外部から個体毎の判定が出来る。
+        // コンストラクタで生成。
+        public System.Guid ID { get; private set; }
+        public string Name { get; private set; }
+
         // 外部からポーズの処理を呼ぶと反映される。
         // プレイヤー側でQTEの制御を行う際にタイムスケールが変更される。
         public float PausableDeltaTime => Time.deltaTime * PausableTimeScale;
-        public float PausableTimeScale => ProvidePlayerInformation.TimeScale * (IsExternalPause ? 0 : 1);
+        public float PausableTimeScale => ProvidePlayerInformation.TimeScale * (IsOrderedPause ? 0 : 1);
 
         // ビヘイビアツリーの各ノードがキューイングする。
         // Updateで書きこまれ、LateUpdateで消える。
@@ -31,14 +37,6 @@ namespace Enemy.Control
         public Queue<WarpPlan> WarpOptions { get; private set; }
         public Queue<MovementPlan> MovementOptions { get; private set; }
         public Queue<ForwardPlan> ForwardOptions { get; private set; }
-
-        // レベルの調整メッセージをセンサーで受信した場合は更新される。
-        // Updateで書き込まれる。
-        public LevelAdjustMessage LevelAdjust { get; set; }
-
-        // そのフレームでプレイヤーが入力したキーのメッセージをセンサーがキューイングしていく。
-        // Updateで書き込まれ、LateUpdateで消える。
-        public Queue<PlayerInputMessage> PlayerInput { get; private set; }
 
         // 視界センサーが書き込む。
         // Updateで書きこまれ、LateUpdateで消える。
@@ -71,19 +69,16 @@ namespace Enemy.Control
         // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
         public float LastAttackTime { get; set; }
 
-        // 自身の状態をチェックするセンサーが書き込む。
-        // Startの1回のみ。
-        public string Name { get; set; }
         // Updateで値が更新される。
         public int Hp { get; set; }
         public int CurrentFrameDamage { get; set; }
         public bool IsDying { get; set; }
         public float LifeTime { get; set; }
-        
+
         // 外部からの処理の呼び出しで操作をする場合に使うフラグ。
-        // センサー側がUpdateで値を更新する。
-        public bool ExternalAttackTrigger { get; set; }
-        public bool IsExternalPause { get; set; }
+        // センサー側がUpdateで値を更新し、トリガーはLateUpdateでfalseに戻る。
+        public bool OrderedAttackTrigger { get; set; }
+        public bool IsOrderedPause { get; set; }
 
         public bool IsAlive
         {

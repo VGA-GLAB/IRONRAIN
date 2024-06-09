@@ -71,7 +71,7 @@ namespace Enemy.Control.FSM
         /// <summary>
         /// ゲーム終了時にステートを破棄するタイミングで呼ぶ処理。
         /// </summary>
-        public virtual void Destroy() { }
+        public virtual void Dispose() { }
 
         /// <summary>
         /// Enter()が呼ばれてかつ、ステートの遷移処理を呼んでいない場合のみ遷移可能。

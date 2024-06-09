@@ -18,25 +18,25 @@ namespace Enemy.Control
         private Sequence _damaged;
         private BlackBoard _blackBoard;
 
-        public BehaviorTree(Transform transform, Transform rotate, EnemyParams enemyParams, BlackBoard blackBoard)
+        public BehaviorTree(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _approach = new Sequence(
                 "ApproachSequence",
-                new MoveToPlayer(Choice.Approach, transform, rotate, blackBoard, enemyParams),
+                new MoveToPlayer(Choice.Approach, transform, enemyParams, blackBoard),
                 new LookAtPlayer(Choice.Approach, blackBoard),
                 new WriteActionPlan(Choice.Approach, blackBoard)
                 );
 
             _chase = new Sequence(
                 "ChaseSequence", 
-                new MoveToPlayer(Choice.Chase, transform, rotate, blackBoard, enemyParams),
+                new MoveToPlayer(Choice.Chase, transform, enemyParams, blackBoard),
                 new LookAtPlayer(Choice.Chase, blackBoard),
                 new WriteActionPlan(Choice.Chase, blackBoard)
                 );
 
             _attack = new Sequence(
                 "AttackSequence",
-                new CheckAttackConditions(transform, rotate, blackBoard, enemyParams),
+                new CheckAttackConditions(transform, enemyParams, blackBoard),
                 new WriteActionPlan(Choice.Attack, blackBoard)
                 );
 
@@ -75,14 +75,14 @@ namespace Enemy.Control
             else if (choice == Choice.Hide) _hide.Update();
             else if (choice == Choice.Damaged) _damaged.Update();
 
-            // NOTE:ツリーを実行しても必ず行動として選択されるとは限らないのでノードの実行のたびに値を変化させるとバグる。
-            //      Updateで更新しているのなら、LateUpdateで諸々を消す？
+            // ツリーを実行しても必ず行動として選択されるとは限らないので、
+            // ノードの実行のたびに値を変化させるとバグる。
         }
 
         /// <summary>
-        /// 各ノードで書きこんだ内容を消す。
+        /// フレームを跨ぐ前に各ノードで書きこんだ内容を消す。
         /// </summary>
-        public void Clear()
+        public void ClearBlackBoardWritedValues()
         {
             _blackBoard.ActionOptions.Clear();
             _blackBoard.WarpOptions.Clear();

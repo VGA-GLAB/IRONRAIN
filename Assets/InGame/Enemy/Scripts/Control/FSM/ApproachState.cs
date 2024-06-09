@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Enemy.Control.FSM
 {
     /// <summary>
-    /// スロット位置まで接近するステート
+    /// 画面に表示され、スロット位置まで接近するステート。
     /// </summary>
     public class ApproachState : State
     {
@@ -24,41 +24,28 @@ namespace Enemy.Control.FSM
 
         protected override void Enter()
         {
-            _animation.Play(Const.AnimationName.ApproachEnter);
+            // 接近アニメーション開始がAnimatorのEntryなので何も再生しない。
         }
 
         protected override void Exit()
         {
-            _animation.Play(Const.AnimationName.Idle);
+            // 接近アニメーション終了をトリガー。
+            _animation.SetTrigger(BodyAnimation.ParamName.ApproachEndTrigger);
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            if (IsDead())
-            {
-                TryChangeState(stateTable[StateKey.Idle]);
-            }
-            else
-            {
-                Approach(stateTable);
-            }  
-        }
-
-        // 死んだかチェック
-        private bool IsDead()
-        {
+            // 死んだかチェック。
+            bool isDead = false;
             foreach (ActionPlan plan in _blackBoard.ActionOptions)
             {
-                if (plan.Choice == Choice.Broken) return true;
+                if (plan.Choice == Choice.Broken) isDead = true;
             }
 
-            return false;
-        }
+            // 死亡した場合はアイドル状態を経由して死亡ステートに遷移する。
+            if (isDead) { TryChangeState(stateTable[StateKey.Idle]); return; }
 
-        // 移動させ、移動完了した場合は遷移
-        private void Approach(IReadOnlyDictionary<StateKey, State> stateTable)
-        {
-            // スロット位置への接近中かの判定がこのステートの終了条件。
+            // スロット位置へ接近中かがこのステートの終了条件。
             // 接近するための移動や回転を行わないフレームがあれば条件を満たして遷移。
             bool isApproaching = false;
 
@@ -90,6 +77,7 @@ namespace Enemy.Control.FSM
                 isApproaching = true;
             }
 
+            // 接近アニメーション終了は次フレームでExitが呼ばれたタイミング。
             if (!isApproaching) TryChangeState(stateTable[StateKey.Idle]);
         }
     }

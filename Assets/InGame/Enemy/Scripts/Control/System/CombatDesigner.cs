@@ -2,12 +2,11 @@
 using System.Threading;
 using UniRx;
 using UnityEngine;
-using Enemy.Control.GPT;
+using Enemy.Unused.GPT;
 using System;
 using System.Buffers;
-using Enemy.DebugUse;
 
-namespace Enemy.Control
+namespace Enemy.Unused
 {
     /// <summary>
     /// 敵のレベルを調整するパラメータを送信するメッセージの構造体

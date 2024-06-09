@@ -83,10 +83,14 @@ namespace Enemy.Control
         [System.Serializable]
         public class OtherSettings
         {
+            // チュートリアル用の敵として設定するためにはこのチェックを入れるだけで良い。
             [Header("チュートリアルの敵として扱う")]
             [SerializeField] private bool _isTutorial;
+            [Header("シーケンス設定")]
+            [SerializeField] private EnemyManager.Sequence _sequence;
 
             public bool IsTutorial => _isTutorial;
+            public EnemyManager.Sequence Sequence => _sequence;
         }
 
         // デバッグ用
@@ -120,5 +124,6 @@ namespace Enemy.Control
 
         // インターフェースで外部から参照する。
         public EnemyType Type => _common != null ? _common.Type : EnemyType.Dummy;
+        public EnemyManager.Sequence Sequence => _other.Sequence;
     }
 }

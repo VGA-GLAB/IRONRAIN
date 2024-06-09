@@ -8,7 +8,6 @@ namespace Enemy.Control
     /// </summary>
     public class FireRate
     {
-        private EnemyParams _params;
         private BlackBoard _blackBoard;
         private IReadOnlyList<float> _timing;
 
@@ -17,7 +16,6 @@ namespace Enemy.Control
 
         public FireRate(EnemyParams enemyParams, BlackBoard blackBoard)
         {
-            _params = enemyParams;
             _blackBoard = blackBoard;
             _timing = InitTiming(enemyParams);
         }
@@ -53,9 +51,9 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// 攻撃タイミングを更新
+        /// 攻撃を行った場合は攻撃タイミングを更新する。
         /// </summary>
-        public void NextTiming()
+        public void UpdateIfAttacked()
         {
             // 最後に攻撃したタイミングが次の攻撃タイミングより前の場合はそのまま
             if (_blackBoard.LastAttackTime <= _blackBoard.NextAttackTime) return;
@@ -68,11 +66,6 @@ namespace Enemy.Control
             if (_index > 0) t -= _timing[_index - 1];
 
             _blackBoard.NextAttackTime = Time.time + t;
-
-            // レベルの調整
-            // 攻撃速度を上げるには次の攻撃タイミングまでの時間を減らす必要があるので符号を反転する。
-            float order = -_blackBoard.LevelAdjust.FireRate * t;
-            _blackBoard.NextAttackTime += order;
         }
     }
 }

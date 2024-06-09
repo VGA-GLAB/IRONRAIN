@@ -3,76 +3,28 @@ using UnityEngine.Events;
 
 namespace Enemy.Control
 {
-    // アニメーションの終了と同じフレームでイベントを呼び出してトリガーをセットすると、そのトリガーをスルーしてしまう。
-    // これは、トリガーでのチェック後にイベントの呼び出しが行われているっぽいのが原因かと。
-    // 対策として1フレーム手前でイベントを呼んでやる。
-
     /// <summary>
+    /// アニメーションイベントにフックする用のコールバックをまとめてある。
     /// このスクリプトはAnimatorと同じオブジェクトにアタッチすること。
     /// </summary>
+    [RequireComponent(typeof(Animator))]
     public class AnimationEvent : MonoBehaviour
     {
-        public enum Key { Fire, FireAnimationEnd, DamageAnimationEnd }
-
-        // 攻撃アニメーション中、弾や判定を出すタイミングで呼ばれる。
-        UnityAction OnFire;
-        // 攻撃アニメーションが終了したタイミングで呼ばれる。
-        UnityAction OnFireAnimationEnd;
-        // ダメージアニメーションが終了したタイミングで呼ばれる。
-        UnityAction OnDamageAnimationEnd;
-
-        private void OnDestroy()
-        {
-            // 登録されているコールバックを全て解除
-            OnFire = null;
-            OnFireAnimationEnd = null;
-        }
-
         /// <summary>
-        /// コールバックを登録
+        /// 近接攻撃の判定を出すタイミング。
+        /// 遠距離攻撃の場合はこのタイミングで弾を発射する。
         /// </summary>
-        public void Register(Key key, UnityAction action)
-        {
-            if (key == Key.Fire) OnFire += action;
-            if (key == Key.FireAnimationEnd) OnFireAnimationEnd += action;
-            if (key == Key.DamageAnimationEnd) OnDamageAnimationEnd += action;
-        }
-
+        public event UnityAction OnFireStart;
         /// <summary>
-        /// コールバックを解除
+        /// 近接攻撃の判定を消すタイミング。
         /// </summary>
-        public void Release(Key key, UnityAction action)
-        {
-            if (key == Key.Fire) OnFire -= action;
-            if (key == Key.FireAnimationEnd) OnFireAnimationEnd -= action;
-            if (key == Key.DamageAnimationEnd) OnDamageAnimationEnd -= action;
-        }
+        public event UnityAction OnFireEnd;
 
-        /// <summary>
-        /// 攻撃アニメーション中の弾や判定を出すタイミング。
-        /// アニメーションイベントとして割り当てる。
-        /// </summary>
-        public void Fire()
-        {
-            OnFire?.Invoke();
-        }
-
-        /// <summary>
-        /// 攻撃アニメーションの再生終了タイミング。
-        /// アニメーションイベントとして割り当てる。
-        /// </summary>
-        public void FireAnimationEnd()
-        {
-            OnFireAnimationEnd?.Invoke();
-        }
-
-        /// <summary>
-        /// ダメージアニメーションの再生終了タイミング。
-        /// アニメーションイベントとして割り当てる。
-        /// </summary>
-        public void DamageAnimationEnd()
-        {
-            OnDamageAnimationEnd?.Invoke();
-        }
+        // アニメーションイベントに登録するメソッド群。
+        // アニメーションの終了と同じフレームに登録すると意図した挙動にならない可能性がある。
+        // Unityのイベント関数の順番の問題？
+        // 対策として終了1フレーム手前でイベントを呼ぶなど工夫が必要。
+        public void FireStart() => OnFireStart?.Invoke();
+        public void FireEnd() => OnFireEnd?.Invoke();
     }
 }

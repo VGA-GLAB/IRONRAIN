@@ -7,6 +7,34 @@ namespace Enemy.Control
 {
     public class EnemyManager : MonoBehaviour
     {
+        // シーケンスの判定に使用。
+        public enum Sequence
+        {
+            None,           
+            Tutorial,       // チュートリアル
+            MultiBattle,    // 追跡:乱戦中に味方機が登場
+        }
+
+        // 登録された敵への命令。
+        public class Order
+        {
+            public enum Type 
+            {
+                None,
+                PlayerDetect, // プレイヤーを発見状態にさせる。
+                Pause,        // ポーズ。
+                Resume,       // ポーズ解除。
+                Attack,       // 攻撃させる。
+            };
+
+            public Type OrderType;
+
+            public void Clear()
+            {
+                OrderType = Type.None;
+            }
+        }
+
         // シーン上の敵を登録する用のメッセージ。
         private struct Message
         {
@@ -17,11 +45,45 @@ namespace Enemy.Control
             public ControlMode Mode;
         }
 
+        // 登録された敵。
         private HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
+        // 登録された敵に対して命令。
+        // 命令の処理を呼び出す度に書き換えて使いまわす。
+        private Order _order = new Order();
 
         private void Awake()
         {
             MessageBroker.Default.Receive<Message>().Subscribe(OnMessageReceived).AddTo(this);
+        }
+
+        private void Update()
+        {
+#if false
+            // 命令テスト
+            foreach (EnemyController c in _enemies)
+            {
+                if (c.Params.Sequence == Sequence.MultiBattle)
+                {
+                    if (Input.GetKeyDown(KeyCode.Z))
+                    {
+                        _order.OrderType = Order.Type.PlayerDetect;
+                        c.Order(_order);
+                    }
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        c.Attack();
+                    }
+                    if (Input.GetKeyDown(KeyCode.C))
+                    {
+                        c.Pause();
+                    }
+                    if (Input.GetKeyDown(KeyCode.V))
+                    {
+                        c.Resume();
+                    }
+                }
+            }
+#endif
         }
 
         // 自身へのメッセージを受信し、登録もしくは解除。

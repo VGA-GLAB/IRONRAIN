@@ -1,138 +1,125 @@
-﻿using UnityEngine;
+﻿using Enemy.DebugUse;
+using Enemy.Extensions;
+using UnityEngine;
 
 namespace Enemy.Control
 {
     /// <summary>
-    /// 自身の状態や周囲を認識して黒板に書き込む。
+    /// 必要な情報を黒板に書き込む。
     /// </summary>
-    public class Perception : LifeCycle
+    public class Perception
     {
-        private LevelAdjust _levelAdjust;
-        private PlayerInput _playerInput;
-        private FireRate _fireRate;
-        private PositionRelationship _position;
-        private FovSensor _fovSensor;
-        private ApproachSensor _approachSensor;
-        private ConditionCheck _conditionCheck;
-        private ExternalTiming _externalTiming;
+        private Transform _transform;
+        private EnemyParams _params;
         private BlackBoard _blackBoard;
+        private Transform _player;
+        private SlotPool _pool;
 
-        public Perception(Transform transform, Transform rotate, Transform player, EnemyParams enemyParams, 
-            BlackBoard blackBoard, SlotPool pool)
+        // エリアとスロットの計算は、プレイヤーがY軸以外で回転すると破綻する可能性がある。
+        private CircleArea _area;
+        private CircleArea _playerArea;
+        private Slot _slot;
+
+        public Perception(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
+            Transform player, SlotPool pool)
         {
-            _levelAdjust = new LevelAdjust(transform, blackBoard);
-            _playerInput = new PlayerInput(transform, blackBoard);
-            _fireRate = new FireRate(enemyParams, blackBoard);
-            _position = new PositionRelationship(transform, rotate, player, pool, enemyParams);
-            _fovSensor = new FovSensor(transform, rotate, enemyParams);
-            _approachSensor = new ApproachSensor(transform, enemyParams);
-            _conditionCheck = new ConditionCheck(transform, enemyParams, blackBoard);
-            _externalTiming = new ExternalTiming(blackBoard);
+            _transform = transform;
+            _params = enemyParams;
             _blackBoard = blackBoard;
+            _player = player;
+            _pool = pool;
         }
 
-        public override void OnStartEvent()
+        /// <summary>
+        /// 初期化。
+        /// スロットを借りて、他必要な値を黒板に書き込む。
+        /// </summary>
+        public void Init()
         {
-            _position.Setup(_blackBoard);
-            _conditionCheck.Setup();
+            // それぞれのエリアを作成
+            _area = new CircleArea(_transform.position, _params.Common.Area.Radius);
+            _playerArea = new CircleArea(_player.position, _params.Common.Area.PlayerRadius);
+            // スロット確保
+            _pool.TryRent(_transform.position, out _slot);
+
+            // エリアとスロットを黒板に書き込む。
+            _blackBoard.Area = _area;
+            _blackBoard.PlayerArea = _playerArea;
+            _blackBoard.Slot = _slot;
+
+            // 生存時間の初期値を黒板に書き込む。
+            _blackBoard.LifeTime = _params.Battle.LifeTime;
         }
 
-        public override void OnEnableEvent()
+        /// <summary>
+        /// 各値を更新
+        /// </summary>
+        public void Update()
         {
-            _fovSensor.OnCaptureEnter += FovCaptureEnter;
-            _fovSensor.OnCaptureStay += FovCaptureStay;
-            _fovSensor.OnCaptureExit += FovCaptureExit;
+            // エリアの位置をそれぞれの対象の位置に更新。
+            _playerArea.Point = _player.position;
+            _area.Point = _transform.position;
+
+            // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
+            if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
+
+            // プレイヤーの位置を黒板に書き込む。
+            _blackBoard.PlayerPosition = _player.position;
+
+            // 自身からプレイヤーへのベクトルを黒板に書き込む。
+            _blackBoard.TransformToPlayerDirection = (_player.position - _transform.position).normalized;
+            _blackBoard.TransformToPlayerDistance = (_player.position - _transform.position).magnitude;
+
+            // 自身とプレイヤーの距離が検知可能範囲内の場合は、プレイヤーを検知したフラグを立てる。
+            if (_blackBoard.TransformToPlayerDistance < _params.Advance.Distance)
+            {
+                _blackBoard.IsPlayerDetected = true;
+            }
+
+            // プレイヤーを検知した状態ならば生存時間を減らす。
+            if (_blackBoard.IsPlayerDetected) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
+
+            // 自身のエリアからスロットへのベクトルを黒板に書き込む。
+            _blackBoard.AreaToSlotDirection = (_slot.Point - _area.Point).normalized;
+            _blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
+
+            // スロットに到着した場合は、接近完了フラグを立てる。
+            if (_blackBoard.AreaToSlotSqrDistance < EnemyParams.Debug.ApproachCompleteThreshold)
+            {
+                _blackBoard.IsApproachCompleted = true;
+            }
         }
 
-        public override void OnDisableEvent()
+        /// <summary>
+        /// 後始末。
+        /// スロットを返却し、このクラスが黒板に書き込んだ参照をnullにする。
+        /// </summary>
+        public void Dispose()
         {
-            _fovSensor.OnCaptureEnter -= FovCaptureEnter;
-            _fovSensor.OnCaptureStay -= FovCaptureStay;
-            _fovSensor.OnCaptureExit -= FovCaptureExit;
+            if (_pool != null) _pool.Return(_slot);
 
-            // 撃破演出後に無効化して画面から消す想定。
-            _position.Erase(_blackBoard);
+            _blackBoard.Area = null;
+            _blackBoard.PlayerArea = null;
+            _blackBoard.Slot = null;
         }
 
-        public override Result UpdateEvent()
+        /// <summary>
+        /// 描画。
+        /// </summary>
+        public void Draw()
         {
-            // 黒板への読み書きに使う様々なパラメータを増減させる可能性があるので
-            // メッセージの受信は一番最初に実行しておく。
-            _levelAdjust.Write();
-            _playerInput.Write();
+            // 自身とプレイヤーのエリア
+            _playerArea?.DrawOnGizmos();
+            _area?.DrawOnGizmos();
 
-            _fovSensor.CheckFOV();
-            _approachSensor.Update(_blackBoard);
-            _position.Update(_blackBoard);
-            _fireRate.NextTiming();
-            _conditionCheck.Check();
+            // エリアからスロットに向けた矢印
+            if (_slot != null)
+            {
+                GizmosUtils.Line(_area.Point, _slot.Point, ColorExtensions.ThinWhite);
+            }
 
-            // 外部からの操作によってポーズするフラグも黒板に反映している。
-            _externalTiming.Update();
-
-            return Result.Running;
-        }
-
-        public override Result LateUpdateEvent()
-        {
-            _playerInput.Clear();
-
-            // Updateで登録したコールバックが呼ばれる事が前提条件。
-            // 黒板に書き込んだ内容をフレームを跨ぐ前に全て消す。
-            _blackBoard.FovEnter.Clear();
-            _blackBoard.FovStay.Clear();
-            _blackBoard.FovExit.Clear();
-
-            return Result.Running;
-        }
-
-        public override void OnDrawGizmosEvent()
-        {
-            _fovSensor.DrawViewRange();
-            _approachSensor.DrawRange();
-            _position.DrawArea();
-
-            // LateUpdateで書き込んだ内容を消しているので、黒板の情報は正常に描画されない。
-        }
-
-        public override void OnDamaged(int value, string weapon)
-        {
-            _conditionCheck.Damage(value, weapon);
-        }
-
-        public override void OnPreCleanup()
-        {
-            _levelAdjust.Dispose();
-        }
-
-        public override void OnAttackEvent()
-        {
-            _externalTiming.AttackTrigger();
-        }
-
-        public override void OnPauseEvent()
-        {
-            _externalTiming.Pause();
-        }
-
-        public override void OnResumeEvent()
-        {
-            _externalTiming.Resume();
-        }
-
-        private void FovCaptureEnter(Collider collider)
-        {
-            _blackBoard.FovEnter.Add(collider);
-        }
-
-        private void FovCaptureStay(Collider collider)
-        {
-            _blackBoard.FovStay.Add(collider);
-        }
-
-        private void FovCaptureExit(Collider collider)
-        {
-            _blackBoard.FovExit.Add(collider);
+            // プレイヤーを検知する範囲
+            GizmosUtils.WireCircle(_transform.position, _params.Advance.Distance, ColorExtensions.ThinGreen);
         }
     }
 }

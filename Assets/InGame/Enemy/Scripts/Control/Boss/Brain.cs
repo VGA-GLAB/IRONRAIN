@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enemy.Control.Boss
 {
-    public class Brain : LifeCycle
+    public class Brain
     {
         private BlackBoard _blackBoard;
 
@@ -13,21 +13,17 @@ namespace Enemy.Control.Boss
             _blackBoard = blackBoard;
         }
 
-        public override Result UpdateEvent()
+        public void UpdateEvent()
         {
             // 移動のみテスト。本来はビヘイビアツリー？
             Vector3 dir = _blackBoard.PointP - _blackBoard.Area.Point;
             Vector3 warp = _blackBoard.Area.Point + dir * Time.deltaTime * 5;
             _blackBoard.AddWarpOption(Choice.Idle, warp);
-
-            return Result.Running;
         }
 
-        public override Result LateUpdateEvent()
+        public void LateUpdateEvent()
         {
             _blackBoard.WarpOptions.Clear();
-
-            return Result.Running;
         }
     }
 }

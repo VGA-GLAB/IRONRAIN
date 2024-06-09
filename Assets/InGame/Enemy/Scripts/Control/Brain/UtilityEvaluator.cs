@@ -24,17 +24,15 @@ namespace Enemy.Control
     /// </summary>
     public class UtilityEvaluator
     {
+        private EnemyParams _params;
         private BlackBoard _blackBoard;
-        private EnemyParams _enemyParams;
-        private IApproach _approach;
 
         private List<Choice> _order;
 
-        public UtilityEvaluator(BlackBoard blackBoard, EnemyParams enemyParams, IApproach approach)
+        public UtilityEvaluator(EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _blackBoard = blackBoard;
-            _enemyParams = enemyParams;
-            _approach = approach;
+            _params = enemyParams;
             _order = new List<Choice>(EnumExtensions.Length<Choice>());
         }
         
@@ -49,18 +47,11 @@ namespace Enemy.Control
             if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
 
             // 接近検知範囲外の場合は画面から隠す
-            if (!_blackBoard.IsPlayerDetected) 
-            {
-                _order.Add(Choice.Hide); 
-                return _order; 
-            }
-
-            // 接近中の場合はインターフェースを実装したクラス側で制御するので何もしない。
-            if (_approach != null && !_approach.IsCompleted()) { /*実装まだ*/ }
+            if (!_blackBoard.IsPlayerDetected) { _order.Add(Choice.Hide); return _order; }
 
             // 接近が完了したフラグで判定。
             // 攻撃中にプレイヤーを追跡していると、離れることで接近の条件を満たすのを防ぐ。
-            if (_approach == null && !_blackBoard.IsApproachCompleted)
+            if (!_blackBoard.IsApproachCompleted)
             {
                 _order.Add(Choice.Approach);
             }
@@ -76,12 +67,12 @@ namespace Enemy.Control
                     // ダメージを受けた場合は怯む
                     _order.Add(Choice.Damaged);
                 }
-                else if (_enemyParams.Other.IsTutorial)
+                else if (_params.Other.IsTutorial)
                 {
                     _order.Add(Choice.Chase);
 
                     // チュートリアル用の敵の場合は、外部から攻撃処理を呼び出すことで攻撃する。                    
-                    if (_blackBoard.ExternalAttackTrigger) _order.Add(Choice.Attack);
+                    if (_blackBoard.OrderedAttackTrigger) _order.Add(Choice.Attack);
                 }
                 else
                 {

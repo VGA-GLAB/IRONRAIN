@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enemy.Control.Boss
 {
-    public class Action : LifeCycle
+    public class Action
     {
         private BlackBoard _blackBoard;
         private Transform _transform;
@@ -17,7 +17,7 @@ namespace Enemy.Control.Boss
             _funnels = funnels;
         }
 
-        public override void OnStartEvent()
+        public void OnStartEvent()
         {
             foreach (FunnelController f in _funnels)
             {
@@ -25,7 +25,7 @@ namespace Enemy.Control.Boss
             }
         }
 
-        public override Result UpdateEvent()
+        public void UpdateEvent()
         {
             // 座標を直接書き換える。
             // deltaTimeぶんの移動を上書きする恐れがあるので移動より先。
@@ -35,8 +35,6 @@ namespace Enemy.Control.Boss
 
                 _transform.position = plan.Position;
             }
-
-            return Result.Running;
         }
     }
 }

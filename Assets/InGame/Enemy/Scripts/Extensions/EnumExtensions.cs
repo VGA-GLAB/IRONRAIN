@@ -1,11 +1,11 @@
-using System;
+ï»¿using System;
 
 namespace Enemy.Extensions
 {
     public static class EnumExtensions
     {
         /// <summary>
-        /// —ñ‹“Œ^‚Ì—v‘f”‚ğ•Ô‚·B
+        /// åˆ—æŒ™å‹ã®è¦ç´ æ•°ã‚’è¿”ã™ã€‚
         /// </summary>
         public static int Length<T>() where T : Enum
         {

@@ -5,10 +5,13 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 盾持ちの敵の装備
+    /// 盾持ち敵の装備。
+    /// 攻撃タイミングはアニメーションイベント任せ。
     /// </summary>
     public class ShieldEquipment : MonoBehaviour, IEquipment
     {
+        [Header("アニメーションイベントに処理をフック")]
+        [SerializeField] private AnimationEvent _animationEvent;
         [Header("向きの基準")]
         [SerializeField] private Transform _rotate;
         [Header("範囲の設定")]
@@ -16,10 +19,24 @@ namespace Enemy.Control
         [SerializeField] private float _heightOffset;
         [SerializeField] private float _radius = 3.0f;
 
-        // 毎フレーム攻撃のアニメーションをトリガーしないようにフラグで管理
-        private bool _isAttackAnimationPlaying;
+        private void OnEnable()
+        {
+            _animationEvent.OnFireStart += Collision;
+        }
 
-        void IEquipment.Attack(IOwnerTime ownerTime)
+        private void OnDisable()
+        {
+            _animationEvent.OnFireStart -= Collision;
+        }
+
+        // 発射する前に装備者への参照が必要。
+        void IEquipment.RegisterOwner(IOwnerTime _)
+        {
+            // 1フレームだけ判定するので現状必要なし。
+        }
+
+        // 当たり判定を出してダメージを与える。
+        private void Collision()
         {
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
             RaycastExtensions.OverlapSphere(Origin(), _radius, col =>
@@ -28,20 +45,6 @@ namespace Enemy.Control
 
                 damageable.Damage(1); // ダメージ量は適当
             });
-        }
-
-        void IEquipment.PlayAttackAnimation(BodyAnimation animation)
-        {
-            if (_isAttackAnimationPlaying) return;
-
-            _isAttackAnimationPlaying = true;
-            animation.SetTrigger(Const.AnimationParam.AttackTrigger);
-        }
-
-        void IEquipment.PlayAttackEndAnimation(BodyAnimation animation)
-        {
-            animation.SetTrigger(Const.AnimationParam.AttackEndTrigger);
-            _isAttackAnimationPlaying = false;
         }
 
         // 攻撃の基準となる座標を返す
@@ -58,6 +61,7 @@ namespace Enemy.Control
 
         private void OnDrawGizmos()
         {
+            // 攻撃範囲。
             GizmosUtils.WireSphere(Origin(), _radius, ColorExtensions.ThinRed);
         }
     }

@@ -9,16 +9,14 @@ namespace Enemy.Control
     public class CheckAttackConditions : Node
     {
         private Transform _transform;
-        private Transform _rotate;
-        private BlackBoard _blackBoard;
         private EnemyParams _params;
+        private BlackBoard _blackBoard;
 
-        public CheckAttackConditions(Transform transform, Transform rotate, BlackBoard blackBoard, EnemyParams enemyParams)
+        public CheckAttackConditions(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _transform = transform;
-            _rotate = rotate;
-            _blackBoard = blackBoard;
             _params = enemyParams;
+            _blackBoard = blackBoard;
         }
 
         protected override void Enter()

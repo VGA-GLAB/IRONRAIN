@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Enemy.Control.FSM
 {
     /// <summary>
-    /// 生成後、画面に映っていない状態のステート
+    /// 生成後、画面に表示されていない状態のステート。
     /// </summary>
     public class HideState : State
     {
@@ -32,21 +32,15 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            if(IsExit()) TryChangeState(stateTable[StateKey.Idle]);
-        }
-
-        // 隠れる行動が選ばれていなければ遷移する。
-        private bool IsExit()
-        {
+            // 隠れる行動が選ばれているかチェック。
+            bool isExit = true;
             foreach (ActionPlan plan in _blackBoard.ActionOptions)
             {
-                if (plan.Choice == Choice.Hide)
-                {
-                    return false;
-                }
+                if (plan.Choice == Choice.Hide) isExit = false;
             }
 
-            return true;
+            // 選ばれていない場合はアイドルに遷移。
+            if(isExit) TryChangeState(stateTable[StateKey.Idle]);
         }
     }
 }

@@ -5,47 +5,58 @@ using UnityEngine;
 namespace Enemy.Control.FSM
 {
     /// <summary>
-    /// 撃破されたステート
+    /// 撃破されたステート。
     /// </summary>
     public class BrokenState : State
     {
-        private BodyAnimation _bodyAnimation;
-        private Effector _effector;
+        private EnemyParams _params;
         private BlackBoard _blackBoard;
+        private BodyAnimation _animation;
+        private Effector _effector;
 
-        // 一度だけアニメーションを再生するためのフラグ
-        private bool _isAnimationPlaying;
+        // 一度だけアニメーションやエフェクトを再生するためのフラグ
+        private bool _isPlaying;
 
-        public BrokenState(BodyAnimation bodyAnimation, Effector effector, BlackBoard blackBoard)
+        public BrokenState(EnemyParams enemyParams, BlackBoard blackBoard, BodyAnimation bodyAnimation, 
+            Effector effector)
         {
-            _bodyAnimation = bodyAnimation;
-            _effector = effector;
+            _params = enemyParams;
             _blackBoard = blackBoard;
+            _animation = bodyAnimation;
+            _effector = effector;
         }
 
         public override StateKey Key => StateKey.Broken;
 
         protected override void Enter()
         {
-            _isAnimationPlaying = false;
+            _isPlaying = false;
         }
 
         protected override void Exit()
         {
-            _isAnimationPlaying = false;
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            if (!_isAnimationPlaying)
-            {
-                _isAnimationPlaying = true;
-                _bodyAnimation.Play(Const.AnimationName.Broken);
+            // 一度だけ再生すれば良い。
+            if (_isPlaying) return;
+            _isPlaying = true;
 
-                _effector.Play(EffectKey.Destroyed, _blackBoard);
+            // 再生するアニメーション名が敵の種類によって違う。
+            string stateName = "";
+            if (_params.Type == EnemyType.MachineGun) stateName = BodyAnimation.StateName.MachineGun.Damage;
+            else if (_params.Type == EnemyType.Launcher) stateName = BodyAnimation.StateName.Launcher.Damage;
+            else if (_params.Type == EnemyType.Shield) stateName = BodyAnimation.StateName.Shield.Damage;
 
-                // 現状、アバターマスクが機能していないので、BaseLayerのアニメーションが再生されない。
-            }
+            // 設定ミスなどで対応しているアニメーションが無い場合。
+            if (stateName == "") return;
+
+            // 死亡アニメーションとエフェクトを再生。
+            _animation.Play(stateName);
+            _effector.Play(EffectKey.Destroyed, _blackBoard);
+
+            /* 必要に応じて再生後にアイドル状態に戻るような処理を入れても可。 */
         }
     }
 }

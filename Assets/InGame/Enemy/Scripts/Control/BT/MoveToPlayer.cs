@@ -10,24 +10,21 @@ namespace Enemy.Control.BT
     {
         private Choice _choice;
         private Transform _transform;
-        private Transform _rotate;
-        private BlackBoard _blackBoard;
         private EnemyParams _params;
+        private BlackBoard _blackBoard;
 
-        private float _speed;
+        private float _moveSpeed;
 
-        public MoveToPlayer(Choice choice, Transform transform, Transform rotate, BlackBoard blackBoard, 
-            EnemyParams enemyParams)
+        public MoveToPlayer(Choice choice, Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _choice = choice;
             _transform = transform;
-            _rotate = rotate;
-            _blackBoard = blackBoard;
             _params = enemyParams;
+            _blackBoard = blackBoard;
 
             // 接近か否かで速さが変わる。
             // 現状、接近か戦闘しかないのでこれで十分。
-            _speed = choice == Choice.Approach ? enemyParams.Advance.MoveSpeed : enemyParams.Battle.ChaseSpeed;
+            _moveSpeed = choice == Choice.Approach ? enemyParams.Advance.MoveSpeed : enemyParams.Battle.ChaseSpeed;
         }
 
         protected override void OnBreak()
@@ -60,12 +57,9 @@ namespace Enemy.Control.BT
                 EnemyParams.Debug.HomingPower
                 );
 
-            // レベルの調整した速さ
-            // -1から1の値を速さに乗算し、この値を速さに足すことで、0から基準値の2倍の範囲で加速減速を表現する。
-            float orderedSpeed = _speed + _speed * _blackBoard.LevelAdjust.MoveSpeed;
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
-            Vector3 delta = toSlot * orderedSpeed * _blackBoard.PausableDeltaTime;
+            Vector3 delta = toSlot * _moveSpeed * _blackBoard.PausableDeltaTime;
 
             Vector3 warp;
             if (delta.sqrMagnitude >= _blackBoard.AreaToSlotSqrDistance)

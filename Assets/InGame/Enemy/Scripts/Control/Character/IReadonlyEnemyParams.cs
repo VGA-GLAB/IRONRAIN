@@ -13,5 +13,9 @@ namespace Enemy.Control
         /// 敵の種類を判定する。
         /// </summary>
         public EnemyType Type { get; }
+        /// <summary>
+        /// 登場するシーケンスを判定する。
+        /// </summary>
+        public EnemyManager.Sequence Sequence { get; }
     }
 }
