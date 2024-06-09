@@ -39,6 +39,5 @@ public class AgentScript : MonoBehaviour
     public void EnemyDestory()
     {
         RaderMap.DestroyEnemy(this.gameObject);
-        Destroy(this.gameObject);
     }
 }
