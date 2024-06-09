@@ -93,6 +93,70 @@ public class PlayerQTEModel : IPlayerStateModel
     }
 
     /// <summary>
+    /// つばぜり合い
+    /// </summary>
+    /// <param name="endCts"></param>
+    /// <param name="startToken"></param>
+    /// <returns></returns>
+    public async UniTask BossQTE1(CancellationTokenSource endCts, CancellationToken startToken)
+    {
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        {
+            _playerEnvroment.AddState(PlayerStateType.QTE);
+
+            ProvidePlayerInformation.TimeScale = 0.2f;
+            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
+            _qteType.Value = QTEState.QTE1;
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を奥に押した状態にする", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を思いっきり手前に引く", 0.5f, startToken);
+            _qteType.Value = QTEState.QTE2;
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            ProvidePlayerInformation.TimeScale = 1f;
+            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            Debug.Log("QTEキャンセル");
+            endCts.Cancel();
+        }
+    }
+
+    public async UniTask BossQTE2(CancellationTokenSource endCts, CancellationToken startToken)
+    {
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        {
+            _playerEnvroment.AddState(PlayerStateType.QTE);
+
+            ProvidePlayerInformation.TimeScale = 0.2f;
+            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
+            _qteType.Value = QTEState.QTE1;
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を奥に押した状態にする", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("ボタン③を押したままレバー②を思いっきり手前に引く", 0.5f, startToken);
+            _qteType.Value = QTEState.QTE2;
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            ProvidePlayerInformation.TimeScale = 1f;
+            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            Debug.Log("QTEキャンセル");
+            endCts.Cancel();
+        }
+    }
+
+    /// <summary>
     /// QTEの失敗判定
     /// </summary>
     /// <returns></returns>
