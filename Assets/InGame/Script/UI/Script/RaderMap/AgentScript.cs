@@ -26,11 +26,16 @@ public class AgentScript : MonoBehaviour
         RaderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
     }
 
-    private void Start()
+    /// <summary>
+    /// エネミーが生成された時に呼ばれる処理
+    /// </summary>
+    public void EnemyGenerate()
     {
         RaderMap.GenerateEnemy(this.gameObject);
     }
-
+    /// <summary>
+    /// エネミーが破棄された時に呼ばれる
+    /// </summary>
     public void EnemyDestory()
     {
         RaderMap.DestroyEnemy(this.gameObject);
