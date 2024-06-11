@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Enemy.Control.Boss;
+using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
@@ -30,6 +31,20 @@ namespace Enemy.Control
             public EnemyController Enemy;
         }
 
+        // シーン上のボスを登録する用のメッセージ。
+        private struct BossRegisterMessage
+        {
+            public BossController Boss;
+        }
+
+        // シーン上のボスを登録解除する用のメッセージ。
+        private struct BossReleaseMessage
+        {
+            public BossController Boss;
+        }
+
+        // 登録されたボス。
+        private BossController _boss;
         // 登録された敵。
         private HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
         // 登録された敵に対して命令。
@@ -38,20 +53,15 @@ namespace Enemy.Control
 
         private void Awake()
         {
+            // メッセージングで敵とボスを登録/登録解除する。
             MessageBroker.Default.Receive<RegisterMessage>()
                 .Subscribe(msg => _enemies.Add(msg.Enemy)).AddTo(this);
             MessageBroker.Default.Receive<ReleaseMessage>()
                 .Subscribe(msg => _enemies.Remove(msg.Enemy)).AddTo(this);
-        }
-
-        private void Update()
-        {
-#if false
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                DetectPlayer(Sequence.MultiBattle);
-            }
-#endif
+            MessageBroker.Default.Receive<BossRegisterMessage>()
+                .Subscribe(msg => _boss = msg.Boss).AddTo(this);
+            MessageBroker.Default.Receive<BossReleaseMessage>()
+                .Subscribe(msg => _boss = null).AddTo(this);
         }
 
         /// <summary>
@@ -99,6 +109,14 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// ボス戦を開始する。
+        /// </summary>
+        public void BossStart()
+        {
+            // 
+        }
+
+        /// <summary>
         /// 敵を登録する。
         /// </summary>
         public static void Register(EnemyController enemy)
@@ -107,11 +125,27 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// ボスを登録する。
+        /// </summary>
+        public static void Register(BossController boss)
+        {
+            MessageBroker.Default.Publish(new BossRegisterMessage { Boss = boss });
+        }
+
+        /// <summary>
         /// 敵の登録を解除する。
         /// </summary>
         public static void Release(EnemyController enemy)
         {
             MessageBroker.Default.Publish(new ReleaseMessage { Enemy = enemy });
+        }
+
+        /// <summary>
+        /// ボスの登録を解除する。
+        /// </summary>
+        public static void Release(BossController boss)
+        {
+            MessageBroker.Default.Publish(new BossReleaseMessage { Boss = boss });
         }
     }
 }
