@@ -1,11 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEditor.Recorder.Input;
 using UnityEngine;
-
-#if UNITY_EDITOR
-using UnityEditor.Recorder;
-#endif
 
 public sealed class PrepareStartController : MonoBehaviour
 {
