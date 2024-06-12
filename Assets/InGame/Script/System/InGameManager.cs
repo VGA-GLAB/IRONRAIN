@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,7 +11,10 @@ public sealed class InGameManager : MonoBehaviour
     [SerializeField] private ChaseSequenceController _chaseSequenceController = default;
     [SerializeField] private FirstAnnounceSeqController _firstAnnounceSeqController = default;
     [SerializeField] private AvoidanceSeqController _avoidanceSeqController = default;
+    [SerializeField] private BossStartSeqController _bossStartSeqController = default;
+    [SerializeField] private PlayerController _playerController = default;
     [SerializeField] private GameObject _attackSeqEnemy = default;
+    [SerializeField] private DebugScript _debugScript;
     [SerializeField, Tooltip("IProvidePlayerInformationInjectableを実装したComponentをアタッチしてください")]
     private Component[] _providePlayerInjectableComponents = default;
 
@@ -44,11 +47,17 @@ public sealed class InGameManager : MonoBehaviour
             var temp = n as IProvidePlayerInformationInjectable;
             temp?.InjectProProvidePlayerInformation(PlayerInformation);
         }
+        _debugScript.SetUp(_chaseSequenceController);
     }
 
     private async void Start()
     {
         await ChaseManageAsync(this.GetCancellationTokenOnDestroy());
+    }
+
+    private void Update()
+    {
+        //Debug.Log(_chaseSequenceController.GetCurrentSequence());
     }
 
     private async UniTask ChaseManageAsync(CancellationToken cancellationToken)
@@ -112,9 +121,9 @@ public sealed class InGameManager : MonoBehaviour
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.AttackSequence>();
 
         // 現在チュートリアルの敵が死んだら終了するようにしてある。
-        Debug.Log("攻撃のチュートリアル中");
+        //Debug.Log("攻撃のチュートリアル中");
         await UniTask.WaitUntil(() => !_attackSeqEnemy, cancellationToken: cancellationToken);
-        Debug.Log("攻撃のチュートリアル終了");
+        //Debug.Log("攻撃のチュートリアル終了");
     }
 
     private async UniTask TouchPanelSequence(CancellationToken cancellationToken)
@@ -122,9 +131,9 @@ public sealed class InGameManager : MonoBehaviour
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.TouchPanelSequence>();
 
         // Todo:タッチパネルのチュートリアルの終了を待つ処理に差し替える
-        Debug.Log("タッチパネルのチュートリアル中");
-        await UniTask.WaitForSeconds(5F, cancellationToken: cancellationToken);
-        Debug.Log("タッチパネルのチュートリアル終了");
+        //Debug.Log("タッチパネルのチュートリアル中");
+        await UniTask.WaitForSeconds(1F, cancellationToken: cancellationToken);
+        //Debug.Log("タッチパネルのチュートリアル終了");
     }
 
     private async UniTask LeverSequence(CancellationToken cancellationToken)
@@ -132,9 +141,9 @@ public sealed class InGameManager : MonoBehaviour
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.LeverSequence>();
 
         // Todo:レバーのチュートリアルを待つ処理に書き直す
-        Debug.Log("Leverのチュートリアル中");
-        await UniTask.WaitForSeconds(5F, cancellationToken: cancellationToken);
-        Debug.Log("Leverのチュートリアル終了");
+        //Debug.Log("Leverのチュートリアル中");
+        await UniTask.WaitForSeconds(1F, cancellationToken: cancellationToken);
+        //Debug.Log("Leverのチュートリアル終了");
     }
 
     private async UniTask QTETutorialSequence(CancellationToken cancellationToken)
@@ -142,40 +151,40 @@ public sealed class InGameManager : MonoBehaviour
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.QTETutorialSequence>();
 
         // Todo:QTEのチュートリアルの終了を待つ処理に書き換える
-        Debug.Log("QTEのチュートリアル中");
-        await UniTask.WaitForSeconds(5F, cancellationToken: cancellationToken);
-        Debug.Log("QTEのチュートリアル終了");
+        //Debug.Log("QTEのチュートリアル中");
+        await UniTask.WaitForSeconds(1F, cancellationToken: cancellationToken);
+        //Debug.Log("QTEのチュートリアル終了");
     }
 
     private async UniTask MultiBattleSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.MultiBattleSequence>();
 
-        Debug.Log("道中戦の途中");
-        await UniTask.WaitForSeconds(10F, cancellationToken: cancellationToken);
-        Debug.Log("道中戦終了");
+        var storyEvent = _playerController.SeachState<PlayerStoryEvent>();
+        //Debug.Log("道中戦の途中");
+        await UniTask.WaitUntil(storyEvent.GoalCenterPoint, cancellationToken: cancellationToken);
+        //Debug.Log("道中戦終了");
     }
 
     private async UniTask PurgeSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.PurgeSequence>();
-        
-        Debug.Log("Purge中");
-        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
-        Debug.Log("Purge終了");
+        //Debug.Log("Purge中");
+        await _playerController.SeachState<PlayerStoryEvent>().StartJetPackPurge();
+       // Debug.Log("Purge終了");
     }
 
     private async UniTask FallSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.FallSequence>();
-
-        await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
+        await _playerController.SeachState<PlayerStoryEvent>().StartFall();
     }
     
     private async UniTask BossStartSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.BossStartSequence>();
-        
+        _bossStartSeqController.SetUp(_playerController);
+        await _bossStartSeqController.BossStart();
         Debug.Log("Purge中");
         await UniTask.WaitForSeconds(5f, cancellationToken: cancellationToken);
         Debug.Log("Purge終了");

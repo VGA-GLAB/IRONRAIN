@@ -53,6 +53,7 @@ public class InputProvider
     {
     }
 
+    #region 初期化処理
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -61,58 +62,58 @@ public class InputProvider
         _inputMap = new XRIDefaultInputActions();
         _inputMap.Enable();
         InirializeInput();
-        _inputMap.Lever.Arrow.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
-        _inputMap.Lever.Arrow.canceled += context => RightLeverInputDir = Vector2.zero;
-        _inputMap.Lever.WASD.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
-        _inputMap.Lever.WASD.canceled += context => LeftLeverInputDir = Vector2.zero;
-        _inputMap.XRIRightHand.FryStick.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
-        _inputMap.XRIRightHand.FryStick.canceled += context => RightLeverInputDir = Vector2.zero;
-        _inputMap.XRILeftHand.Throttle.performed += context => 
-        {
-            _throttle = context.ReadValue<float>();
-            LeftLeverInputDir = new Vector2(0,_throttle * -1);
-        };
-        _inputMap.XRILeftHand.Throttle.canceled += context => RightLeverInputDir = Vector2.zero;
 
-        _inputMap.Lever.RightButton.performed += context =>
-        {
-            var dir = context.ReadValue<Vector2>();
-            if (dir.x == 1)
-            {
-                Debug.Log("Right2");
-                ExecuteInput(InputType.RightButton2, InputMode.Enter);
-            }
-            else if(dir.x == -1)
-            {
-                Debug.Log("Right1");
-                ExecuteInput(InputType.RightButton1, InputMode.Enter);
-            }
-        };
-        _inputMap.Lever.RightButton.canceled += context =>
-        {
-            var dir = context.ReadValue<Vector2>();
-            if (dir.x == 1)
-            {
-                ExecuteInput(InputType.RightButton2, InputMode.Exit);
-            }
-            else if (dir.x == -1)
-            {
-                ExecuteInput(InputType.RightButton1, InputMode.Exit);
-            }
-        };
+        FryStickInputInit();
+        KeyBordInit();
+        VRInputInit();
 
-        _inputMap.XRIRightHandInteraction.Select.performed += context => IsRightLeverMove = true; 
+        _inputMap.XRIRightHandInteraction.Select.performed += context => IsRightLeverMove = true;
         _inputMap.XRIRightHandInteraction.Select.canceled += context => IsRightLeverMove = false;
         _inputMap.XRILeftHandInteraction.Select.performed += context => IsLeftLeverMove = true;
         _inputMap.XRILeftHandInteraction.Select.canceled += context => IsLeftLeverMove = false;
-        _inputMap.XRIRightHandInteraction.OneButton.performed += context => ExecuteInput(InputType.RightButton1, InputMode.Enter);
-        _inputMap.XRIRightHandInteraction.OneButton.canceled += context => ExecuteInput(InputType.RightButton1, InputMode.Exit);
-        _inputMap.XRIRightHandInteraction.TwoButton.performed += context => ExecuteInput(InputType.RightButton2, InputMode.Enter);
-        _inputMap.XRIRightHandInteraction.TwoButton.canceled += context => ExecuteInput(InputType.RightButton2, InputMode.Exit);
-        _inputMap.XRIRightHandInteraction.Activate.performed += context => ExecuteInput(InputType.RightButton1, InputMode.Enter);
-        _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.RightButton1, InputMode.Exit);
-        _inputMap.XRIRightHandInteraction.ActivateValue.performed += context => ExecuteInput(InputType.WeaponChenge, InputMode.Enter);
-        _inputMap.XRIRightHandInteraction.ActivateValue.canceled += context => ExecuteInput(InputType.WeaponChenge, InputMode.Exit);
+        _inputMap.Lever.OneButton.performed += context => ExecuteInput(InputType.OneButton, InputMode.Enter);
+        _inputMap.Lever.OneButton.canceled += context => ExecuteInput(InputType.OneButton, InputMode.Exit);
+        _inputMap.Lever.TwoButton.performed += context => ExecuteInput(InputType.TwoButton, InputMode.Enter);
+        _inputMap.Lever.TwoButton.canceled += context => ExecuteInput(InputType.TwoButton, InputMode.Exit);
+        _inputMap.Lever.ThirdButton.performed += context => ExecuteInput(InputType.ThreeButton, InputMode.Enter);
+        _inputMap.Lever.ThirdButton.canceled += context => ExecuteInput(InputType.ThreeButton, InputMode.Exit);
+        _inputMap.Lever.ForceButton.performed += context => ExecuteInput(InputType.FourButton, InputMode.Enter);
+        _inputMap.Lever.ForceButton.canceled += context => ExecuteInput(InputType.FourButton, InputMode.Exit);
+        _inputMap.Toggle.Toggle1.performed += context => ExecuteInput(InputType.Toggle1, InputMode.Enter);
+        _inputMap.Toggle.Toggle1.canceled += context => ExecuteInput(InputType.Toggle1, InputMode.Exit);
+        _inputMap.Toggle.Toggle2.performed += context => ExecuteInput(InputType.Toggle2, InputMode.Enter);
+        _inputMap.Toggle.Toggle2.canceled += context => ExecuteInput(InputType.Toggle2, InputMode.Exit);
+        _inputMap.Toggle.Toggle3.performed += context => ExecuteInput(InputType.Toggle3, InputMode.Enter);
+        _inputMap.Toggle.Toggle3.canceled += context => ExecuteInput(InputType.Toggle3, InputMode.Exit);
+        _inputMap.Toggle.Toggle4.performed += context => ExecuteInput(InputType.Toggle4, InputMode.Enter);
+        _inputMap.Toggle.Toggle4.canceled += context => ExecuteInput(InputType.Toggle4, InputMode.Exit);
+        _inputMap.Toggle.Toggle5.performed += context => ExecuteInput(InputType.Toggle5, InputMode.Enter);
+        _inputMap.Toggle.Toggle5.canceled += context => ExecuteInput(InputType.Toggle5, InputMode.Exit);
+        _inputMap.Toggle.Toggle6.performed += context => ExecuteInput(InputType.Toggle6, InputMode.Enter);
+        _inputMap.Toggle.Toggle6.canceled += context => ExecuteInput(InputType.Toggle6, InputMode.Exit);
+
+        _isInstanced = true;
+    }
+
+    private void FryStickInputInit()
+    {
+        _inputMap.XRIRightHand.FryStick.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.XRIRightHand.FryStick.canceled += context => RightLeverInputDir = Vector2.zero;
+        _inputMap.XRILeftHand.Throttle.performed += context =>
+        {
+            _throttle = context.ReadValue<float>();
+            LeftLeverInputDir = new Vector2(0, _throttle * -1);
+        };
+
+        _inputMap.XRILeftHand.Throttle.canceled += context => RightLeverInputDir = Vector2.zero;
+    }
+
+    private void VRInputInit()
+    {
+        _inputMap.XRIRightHandInteraction.Activate.performed += context => ExecuteInput(InputType.OneButton, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.Activate.canceled += context => ExecuteInput(InputType.OneButton, InputMode.Exit);
+        _inputMap.XRIRightHandInteraction.ActivateValue.performed += context => ExecuteInput(InputType.TwoButton, InputMode.Enter);
+        _inputMap.XRIRightHandInteraction.ActivateValue.canceled += context => ExecuteInput(InputType.TwoButton, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightTrigger, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.Select.canceled += context => ExecuteInput(InputType.RightTrigger, InputMode.Exit);
         _inputMap.XRILeftHandInteraction.Select.performed += context => ExecuteInput(InputType.LeftTrigger, InputMode.Enter);
@@ -121,20 +122,18 @@ public class InputProvider
         _inputMap.XRILeftHandInteraction.Select.canceled += context => ExecuteInput(InputType.LeftLeverMove, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightLeverMove, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.Select.canceled += context => ExecuteInput(InputType.RightLeverMove, InputMode.Exit);
-        _inputMap.Toggle.Toggle1.performed += context => ExecuteInput(InputType.Toggle1, InputMode.Enter);
-        _inputMap.Toggle.Toggle1.canceled += context => ExecuteInput(InputType.Toggle1, InputMode.Exit);        
-        _inputMap.Toggle.Toggle2.performed += context => ExecuteInput(InputType.Toggle2, InputMode.Enter);
-        _inputMap.Toggle.Toggle2.canceled += context => ExecuteInput(InputType.Toggle2, InputMode.Exit);        
-        _inputMap.Toggle.Toggle3.performed += context => ExecuteInput(InputType.Toggle3, InputMode.Enter);
-        _inputMap.Toggle.Toggle3.canceled += context => ExecuteInput(InputType.Toggle3, InputMode.Exit);        
-        _inputMap.Toggle.Toggle4.performed += context => ExecuteInput(InputType.Toggle4, InputMode.Enter);
-        _inputMap.Toggle.Toggle4.canceled += context => ExecuteInput(InputType.Toggle4, InputMode.Exit);        
-        _inputMap.Toggle.Toggle5.performed += context => ExecuteInput(InputType.Toggle5, InputMode.Enter);
-        _inputMap.Toggle.Toggle5.canceled += context => ExecuteInput(InputType.Toggle5, InputMode.Exit);        
-        _inputMap.Toggle.Toggle6.performed += context => ExecuteInput(InputType.Toggle6, InputMode.Enter);
-        _inputMap.Toggle.Toggle6.canceled += context => ExecuteInput(InputType.Toggle6, InputMode.Exit);
+    }
 
-        _isInstanced = true;
+    private void KeyBordInit() 
+    {
+        _inputMap.Lever.WASD.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.Lever.WASD.canceled += context => RightLeverInputDir = Vector2.zero;     
+        _inputMap.Lever.LeftLever.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.Lever.LeftLever.canceled += context => LeftLeverInputDir = Vector2.zero;  
+        _inputMap.Lever.LeverThree.performed += context => ExecuteInput(InputType.ThreeLever, InputMode.Enter);
+        _inputMap.Lever.LeverThree.canceled += context => ExecuteInput(InputType.ThreeLever, InputMode.Exit);
+        _inputMap.Lever.LeverFour.performed += context => ExecuteInput(InputType.FourLever, InputMode.Enter);
+        _inputMap.Lever.LeverFour.canceled += context => ExecuteInput(InputType.FourLever, InputMode.Exit);
     }
 
     /// <summary>
@@ -163,6 +162,7 @@ public class InputProvider
             _isStayInputDic.Add((InputType)i, false);
         }
     }
+    #endregion
 
     /// <summary>
     /// 入力開始入力解除したときに呼ばれる関数
@@ -298,10 +298,18 @@ public class InputProvider
         RightLeverMove,     
         /// <summary>左レバーが動いているか</summary>
         LeftLeverMove,
-        /// <summary>右ボタンその1</summary>
-        RightButton1,
-        /// <summary>右ボタンその2</summary>
-        RightButton2,
+        /// <summary>ボタンその1</summary>
+        OneButton,
+        /// <summary>ボタンその2</summary>
+        TwoButton,
+        /// <summary>ボタンその3</summary>
+        ThreeButton,
+        /// <summary>ボタンその4</summary>
+        FourButton,
+        /// <summary>レバーその3</summary>
+        ThreeLever,
+        /// <summary>レバーその4</summary>
+        FourLever,
         /// <summary>右手のトリガー</summary>
         RightTrigger,
         /// <summary>左手のトリガー</summary>

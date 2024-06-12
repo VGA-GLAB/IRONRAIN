@@ -61,26 +61,6 @@ namespace Enemy.DebugUse
             if (Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
         }
 
-        private void LateUpdate()
-        {
-            ControlCamera();
-        }
-
-        private void OnValidate()
-        {
-            ControlCamera();
-        }
-
-        // カメラをプレイヤーの正面を捉えるように制御する
-        private void ControlCamera()
-        {
-            if (_camera != null)
-            {
-                _camera.position = transform.position;
-                _camera.forward = transform.forward;
-            }
-        }
-
         // レイキャストで攻撃
         private void Attack(string weapon)
         {
@@ -108,9 +88,23 @@ namespace Enemy.DebugUse
             return (p, q);
         }
 
+        // カメラをプレイヤーの正面を捉えるように制御する
+        private void LateUpdate()
+        {
+            if (_camera == null) return;
+            
+            _camera.position = _transform.position;
+            _camera.forward = _transform.forward;
+        }
+
         private void OnDrawGizmos()
         {
-            // 攻撃範囲
+            DrawAttackRange();
+        }
+
+        // 攻撃範囲
+        private void DrawAttackRange()
+        {
             (Vector3, Vector3) p = AttackRange();
             GizmosUtils.Line(p.Item1, p.Item2, ColorExtensions.ThinRed);
         }

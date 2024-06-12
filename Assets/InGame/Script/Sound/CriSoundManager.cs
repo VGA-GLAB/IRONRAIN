@@ -9,7 +9,7 @@ using Cysharp.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-/// <summary>ѓTѓEѓ“ѓh‚рЉЗ—ќ‚·‚йѓNѓ‰ѓX</summary>
+/// <summary>г‚µг‚¦гѓігѓ‰г‚’з®Ўзђ†гЃ™г‚‹г‚Їгѓ©г‚№</summary>
 public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 {
     private void Start()
@@ -19,62 +19,62 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
         _se = new CriMultiChannel(_masterVolume);
     }
 
-    /// <summary>ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+    /// <summary>гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ </summary>
     private Volume _masterVolume = default;
 
-    /// <summary>BGM‚р—¬‚·ѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>BGMг‚’жµЃгЃ™гѓЃгѓЈгѓігѓЌгѓ«</summary>
     private CriSingleChannel _bgm = default;
 
-    /// <summary>SE‚р—¬‚·ѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>SEг‚’жµЃгЃ™гѓЃгѓЈгѓігѓЌгѓ«</summary>
     private CriMultiChannel _se = default;
 
-    /// <summary>ѓ}ѓXѓ^Ѓ[‚Мѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+    /// <summary>гѓћг‚№г‚їгѓјгЃ®гѓњгѓЄгѓҐгѓјгѓ </summary>
     public IVolume MasterVolume => _masterVolume;
 
-    /// <summary>BGM‚Мѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>BGMгЃ®гѓЃгѓЈгѓігѓЌгѓ«</summary>
     public ICustomChannel BGM => _bgm;
 
-    /// <summary>SE‚Мѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>SEгЃ®гѓЃгѓЈгѓігѓЌгѓ«</summary>
     public ICustomChannel SE => _se;
 
-    /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ‚МѓCѓ“ѓ^Ѓ[ѓtѓFЃ[ѓX</summary>
+    /// <summary>гѓњгѓЄгѓҐгѓјгѓ гЃ®г‚¤гѓіг‚їгѓјгѓ•г‚§гѓјг‚№</summary>
     public interface IVolume
     {
-        /// <summary>‰№—К‚МѓvѓЌѓpѓeѓB</summary>
+        /// <summary>йџій‡ЏгЃ®гѓ—гѓ­гѓ‘гѓ†г‚Ј</summary>
         public float Value { get; set; }
 
-        /// <summary>‰№—К‚Є•ПЌX‚і‚к‚ЅЌЫ‚МѓCѓxѓ“ѓg</summary>
+        /// <summary>йџій‡ЏгЃЊе¤‰ж›ґгЃ•г‚ЊгЃџйљ›гЃ®г‚¤гѓ™гѓігѓ€</summary>
         public event Action<float> OnVolumeChanged;
     }
 
-    /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ‚МѓNѓ‰ѓX</summary>
+    /// <summary>гѓњгѓЄгѓҐгѓјгѓ гЃ®г‚Їгѓ©г‚№</summary>
     private class Volume : IVolume
     {
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ </summary>
         private float _value = 1.0f;
 
-        /// <summary>ѓCѓxѓ“ѓg‚ЄЊД‚О‚к‚йЌЫ‚Ми‡’l</summary>
+        /// <summary>г‚¤гѓ™гѓігѓ€гЃЊе‘јгЃ°г‚Њг‚‹йљ›гЃ®й–ѕеЂ¤</summary>
         private const float DIFF = 0.01f;
 
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ‚МѓvѓЌѓpѓeѓB</summary>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ гЃ®гѓ—гѓ­гѓ‘гѓ†г‚Ј</summary>
         public float Value
         {
             get => _value;
             set
             {
-                // 0‚©‚з1‚МЉФ‚Йђ§ЊА‚·‚й
+                // 0гЃ‹г‚‰1гЃ®й–“гЃ«е€¶й™ђгЃ™г‚‹
                 value = Mathf.Clamp01(value);
-                // ѓ{ѓЉѓ…Ѓ[ѓЂ‚М•П‰»—К‚Єи‡’l‚р’ґ‚¦‚Д‚ў‚ЅЏкЌ‡
+                // гѓњгѓЄгѓҐгѓјгѓ гЃ®е¤‰еЊ–й‡ЏгЃЊй–ѕеЂ¤г‚’и¶…гЃ€гЃ¦гЃ„гЃџе ґеђ€
                 if (_value + DIFF < value || _value - DIFF > value)
                 {
-                    // ѓCѓxѓ“ѓg‚МЊД‚СЏo‚µ
+                    // г‚¤гѓ™гѓігѓ€гЃ®е‘јгЃіе‡єгЃ—
                     _onVolumeChanged?.Invoke(value);
                     _value = value;
                 }
             }
         }
 
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ‚Є•ПЌX‚і‚к‚ЅЌЫ‚МѓCѓxѓ“ѓg</summary>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ гЃЊе¤‰ж›ґгЃ•г‚ЊгЃџйљ›гЃ®г‚¤гѓ™гѓігѓ€</summary>
         private event Action<float> _onVolumeChanged = default;
 
         public event Action<float> OnVolumeChanged
@@ -83,119 +83,119 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             remove => _onVolumeChanged -= value;
         }
 
-        /// <summary>€Г–Щ“I‚И‰‰ЋZЋq</summary>
+        /// <summary>жљ—й»™зљ„гЃЄжј”з®—е­ђ</summary>
         public static implicit operator float(Volume volume) => volume.Value;
     }
 
-    /// <summary>Player‚МѓfЃ[ѓ^‚р‚Ь‚Ж‚Я‚ЅЌ\‘ў‘М</summary>
+    /// <summary>PlayerгЃ®гѓ‡гѓјг‚їг‚’гЃѕгЃЁг‚ЃгЃџж§‹йЂ дЅ“</summary>
     private struct CriPlayerData
     {
-        /// <summary>ЌДђ¶‚і‚к‚Ѕ‰№ђє‚рђ§Њд‚·‚й‚Ѕ‚Я‚МѓIѓuѓWѓFѓNѓg</summary>
+        /// <summary>е†Ќз”џгЃ•г‚ЊгЃџйџіеЈ°г‚’е€¶еѕЎгЃ™г‚‹гЃџг‚ЃгЃ®г‚Єгѓ–г‚ёг‚§г‚Їгѓ€</summary>
         public CriAtomExPlayback Playback { get; set; }
 
-        /// <summary>ЌДђ¶‚і‚к‚Ѕ‰№ђє‚рђ§Њд‚·‚й‚Ѕ‚Я‚МѓIѓuѓWѓFѓNѓg</summary>
+        /// <summary>е†Ќз”џгЃ•г‚ЊгЃџйџіеЈ°г‚’е€¶еѕЎгЃ™г‚‹гЃџг‚ЃгЃ®г‚Єгѓ–г‚ёг‚§г‚Їгѓ€</summary>
         public CriAtomCustomStruct CustomStruct { get; set; }
 
-        /// <summary>ѓLѓ…Ѓ[Џо•с</summary>
+        /// <summary>г‚­гѓҐгѓјжѓ…е ±</summary>
         public CriAtomEx.CueInfo CueInfo { get; set; }
 
-        /// <summary>3D‰№Њ№‚р€µ‚¤‚Ѕ‚Я‚МѓIѓuѓWѓFѓNѓg</summary>
+        /// <summary>3Dйџіжєђг‚’ж‰±гЃ†гЃџг‚ЃгЃ®г‚Єгѓ–г‚ёг‚§г‚Їгѓ€</summary>
         public CriAtomEx3dSource Source { get; set; }
 
-        /// <summary>ЌЕЊг‚ЙѓAѓbѓvѓfЃ[ѓg‚ЄЌs‚н‚к‚ЅЋћЉФ</summary>
+        /// <summary>жњЂеѕЊгЃ«г‚ўгѓѓгѓ—гѓ‡гѓјгѓ€гЃЊиЎЊг‚Џг‚ЊгЃџж™‚й–“</summary>
         public float LastUpdateTime { get; set; }
 
-        /// <summary>ѓLѓ…Ѓ[‚Єѓ‹Ѓ[ѓv‚µ‚Д‚ў‚й‚©</summary>
+        /// <summary>г‚­гѓҐгѓјгЃЊгѓ«гѓјгѓ—гЃ—гЃ¦гЃ„г‚‹гЃ‹</summary>
         public bool IsLoop => CueInfo.length < 0;
 
-        /// <summary>ѓLѓѓѓ“ѓZѓ‹Џ€—ќ</summary>
+        /// <summary>г‚­гѓЈгѓіг‚»гѓ«е‡¦зђ†</summary>
         public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        /// <summary>ђiЌs•ыЊь‚МѓxѓNѓgѓ‹‚рЊvЋZЃEђЭ’и‚·‚й</summary>
-        /// <param name="nextPos">Ћџ‚Мѓ|ѓWѓVѓ‡ѓ“</param>
+        /// <summary>йЂІиЎЊж–№еђ‘гЃ®гѓ™г‚Їгѓ€гѓ«г‚’иЁ€з®—гѓ»иЁ­е®љгЃ™г‚‹</summary>
+        /// <param name="nextPos">ж¬ЎгЃ®гѓќг‚ёг‚·гѓ§гѓі</param>
         public void UpdateCurrentVector(Vector3 nextPos)
         {
-            // ‘O‰с‚МѓAѓbѓvѓfЃ[ѓg‚©‚з‚МЊo‰ЯЋћЉФ
+            // е‰Ќе›ћгЃ®г‚ўгѓѓгѓ—гѓ‡гѓјгѓ€гЃ‹г‚‰гЃ®зµЊйЃЋж™‚й–“
 
             var delta = Playback.GetTime() - LastUpdateTime;
 
-            // Њ»ЌЭ‚Мѓ|ѓWѓVѓ‡ѓ“‚рЋж“ѕ‚·‚й
+            // зЏѕењЁгЃ®гѓќг‚ёг‚·гѓ§гѓіг‚’еЏ–еѕ—гЃ™г‚‹
             CriAtomEx.NativeVector nativePos = Source.GetPosition();
 
-            // NativeVector‚рVector3‚Й•ПЉ·‚·‚й
+            // NativeVectorг‚’Vector3гЃ«е¤‰жЏ›гЃ™г‚‹
             Vector3 currentPos = new Vector3(nativePos.x, nativePos.y, nativePos.z);
 
-            // ђiЌs•ыЊь‚МѓxѓNѓgѓ‹‚рЊvЋZ‚·‚й
+            // йЂІиЎЊж–№еђ‘гЃ®гѓ™г‚Їгѓ€гѓ«г‚’иЁ€з®—гЃ™г‚‹
             Vector3 moveVec = nextPos - currentPos;
 
-            // 1•b‚ ‚Ѕ‚иЃiCriAtomEx3dSource.SetVelocity‚М€шђ”Ѓj‚М€Ъ“®—К
+            // 1з§’гЃ‚гЃџг‚Љпј€CriAtomEx3dSource.SetVelocityгЃ®еј•ж•°пј‰гЃ®з§»е‹•й‡Џ
             moveVec /= delta;
 
-            // ѓAѓbѓvѓfЃ[ѓgЋћЉФ‚рЌXђV
+            // г‚ўгѓѓгѓ—гѓ‡гѓјгѓ€ж™‚й–“г‚’ж›ґж–°
             LastUpdateTime = Playback.GetTime();
 
-            // ѓ|ѓWѓVѓ‡ѓ“ЃEѓxѓNѓgѓ‹‚рђЭ’и‚·‚й
+            // гѓќг‚ёг‚·гѓ§гѓігѓ»гѓ™г‚Їгѓ€гѓ«г‚’иЁ­е®љгЃ™г‚‹
             Source.SetPosition(nextPos.x, nextPos.y, nextPos.z);
             Source.SetVelocity(moveVec.x, moveVec.y, moveVec.z);
 
-            // ѓ|ѓWѓVѓ‡ѓ“ЃEѓxѓNѓgѓ‹‚рЌXђV‚·‚й
+            // гѓќг‚ёг‚·гѓ§гѓігѓ»гѓ™г‚Їгѓ€гѓ«г‚’ж›ґж–°гЃ™г‚‹
             Source.Update();
         }
     }
 
-    /// <summary>ѓ`ѓѓѓ“ѓlѓ‹‚рЌмђ¬‚·‚й‚Ѕ‚Я‚Й•K—v‚ИЏо•с‚р‚Ь‚Ж‚Я‚ЅѓNѓ‰ѓX</summary>
+    /// <summary>гѓЃгѓЈгѓігѓЌгѓ«г‚’дЅњж€ђгЃ™г‚‹гЃџг‚ЃгЃ«еї…и¦ЃгЃЄжѓ…е ±г‚’гЃѕгЃЁг‚ЃгЃџг‚Їгѓ©г‚№</summary>
     private abstract class AbstractCriChannel
     {
-        /// <summary>‰№ђє‚рЌДђ¶‚·‚й‚Ѕ‚Я‚МѓvѓЊѓCѓ„Ѓ[</summary>
+        /// <summary>йџіеЈ°г‚’е†Ќз”џгЃ™г‚‹гЃџг‚ЃгЃ®гѓ—гѓ¬г‚¤гѓ¤гѓј</summary>
         protected CriAtomExPlayer _player = new CriAtomExPlayer();
 
-        /// <summary>ѓvѓЊѓCѓ„Ѓ[Џо•с‚МѓXѓЊѓbѓhѓZЃ[ѓt‚ИѓRѓЊѓNѓVѓ‡ѓ“</summary>
+        /// <summary>гѓ—гѓ¬г‚¤гѓ¤гѓјжѓ…е ±гЃ®г‚№гѓ¬гѓѓгѓ‰г‚»гѓјгѓ•гЃЄг‚ігѓ¬г‚Їг‚·гѓ§гѓі</summary>
         protected ConcurrentDictionary<int, CriPlayerData> _cueData = new ConcurrentDictionary<int, CriPlayerData>();
 
-        /// <summary>ѓLѓ…Ѓ[ѓfЃ[ѓ^‚МѓJѓEѓ“ѓg‚МЌЕ‘еђ”</summary>
+        /// <summary>г‚­гѓҐгѓјгѓ‡гѓјг‚їгЃ®г‚«г‚¦гѓігѓ€гЃ®жњЂе¤§ж•°</summary>
         protected int _maxCueCount = 0;
 
-        /// <summary>ЌнЏњ‚і‚к‚ЅѓvѓЊѓCѓ„Ѓ[ѓfЃ[ѓ^‚МѓCѓ“ѓfѓbѓNѓX‚рЉi”[‚·‚йѓRѓЊѓNѓVѓ‡ѓ“</summary>
+        /// <summary>е‰Љй™¤гЃ•г‚ЊгЃџгѓ—гѓ¬г‚¤гѓ¤гѓјгѓ‡гѓјг‚їгЃ®г‚¤гѓігѓ‡гѓѓг‚Їг‚№г‚’ж јзґЌгЃ™г‚‹г‚ігѓ¬г‚Їг‚·гѓ§гѓі</summary>
         protected ConcurrentBag<int> _removedCueDataIndex = new ConcurrentBag<int>();
 
-        /// <summary>3DѓЉѓXѓiЃ[‚р€µ‚¤‚Ѕ‚Я‚МѓIѓuѓWѓFѓNѓg</summary>
+        /// <summary>3DгѓЄг‚№гѓЉгѓјг‚’ж‰±гЃ†гЃџг‚ЃгЃ®г‚Єгѓ–г‚ёг‚§г‚Їгѓ€</summary>
         protected CriAtomEx3dListener _listener = default;
 
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ </summary>
         protected Volume _volume = new Volume();
 
-        /// <summary>ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+        /// <summary>гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ </summary>
         protected Volume _masterVolume = null;
 
-        /// <summary>ѓLѓѓѓ“ѓZѓ‹Џ€—ќ</summary>
+        /// <summary>г‚­гѓЈгѓіг‚»гѓ«е‡¦зђ†</summary>
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
-        /// <summary>ѓRѓ“ѓXѓgѓ‰ѓNѓ^</summary>
-        /// <param name="masterVolume">ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂЃi“ь—Нђк—pЃj</param>
+        /// <summary>г‚ігѓіг‚№гѓ€гѓ©г‚Їг‚ї</summary>
+        /// <param name="masterVolume">гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ пј€е…ҐеЉ›е°‚з”Ёпј‰</param>
         protected AbstractCriChannel(in Volume masterVolume)
         {
-            // ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂ‚рђЭ’и
+            // гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ г‚’иЁ­е®љ
             _masterVolume = masterVolume;
 
-            // ѓ{ѓЉѓ…Ѓ[ѓЂ‚Є•ПЌX‚і‚к‚ЅЌЫ‚МѓCѓxѓ“ѓg‚р“o^
+            // гѓњгѓЄгѓҐгѓјгѓ гЃЊе¤‰ж›ґгЃ•г‚ЊгЃџйљ›гЃ®г‚¤гѓ™гѓігѓ€г‚’з™»йЊІ
             _volume.OnVolumeChanged += UpdateVolume;
             _masterVolume.OnVolumeChanged += UpdateMasterVolume;
         }
 
-        /// <summary>ѓfѓXѓgѓ‰ѓNѓ^</summary>
+        /// <summary>гѓ‡г‚№гѓ€гѓ©г‚Їг‚ї</summary>
         ~AbstractCriChannel()
         {
-            // ѓLѓѓѓ“ѓZѓ‹Џ€—ќ‚рЋАЌs
+            // г‚­гѓЈгѓіг‚»гѓ«е‡¦зђ†г‚’е®џиЎЊ
             _tokenSource.Cancel();
 
-            // ѓ{ѓЉѓ…Ѓ[ѓЂ‚Є•ПЌX‚і‚к‚ЅЌЫ‚МѓCѓxѓ“ѓg‚рЌнЏњ
+            // гѓњгѓЄгѓҐгѓјгѓ гЃЊе¤‰ж›ґгЃ•г‚ЊгЃџйљ›гЃ®г‚¤гѓ™гѓігѓ€г‚’е‰Љй™¤
             _volume.OnVolumeChanged -= UpdateVolume;
             _masterVolume.OnVolumeChanged -= UpdateMasterVolume;
 
-            // ѓvѓЊѓCѓ„Ѓ[‚р”jЉь
+            // гѓ—гѓ¬г‚¤гѓ¤гѓјг‚’з ґжЈ„
             _player.Dispose();
 
-            // ѓvѓЊѓCѓ„Ѓ[‚МѓfЃ[ѓ^‚р”jЉь
+            // гѓ—гѓ¬г‚¤гѓ¤гѓјгЃ®гѓ‡гѓјг‚їг‚’з ґжЈ„
             foreach (var data in _cueData)
             {
                 data.Value.CancellationTokenSource.Cancel();
@@ -203,129 +203,129 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             }
         }
 
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ‚рЌXђV‚·‚й</summary>
-        /// <param name="volume">ѓ{ѓЉѓ…Ѓ[ѓЂ‚МѓvѓЌѓpѓeѓB‚ЙѓZѓbѓg‚µ‚Ѕ’l</param>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ г‚’ж›ґж–°гЃ™г‚‹</summary>
+        /// <param name="volume">гѓњгѓЄгѓҐгѓјгѓ гЃ®гѓ—гѓ­гѓ‘гѓ†г‚ЈгЃ«г‚»гѓѓгѓ€гЃ—гЃџеЂ¤</param>
         private void UpdateVolume(float volume)
         {
-            // ѓvѓЊѓCѓ„Ѓ[‚Мѓ{ѓЉѓ…Ѓ[ѓЂ‚рђЭ’и
+            // гѓ—гѓ¬г‚¤гѓ¤гѓјгЃ®гѓњгѓЄгѓҐгѓјгѓ г‚’иЁ­е®љ
             _player.SetVolume(volume * _masterVolume);
 
-            // ђЭ’и‚µ‚Ѕѓ{ѓЉѓ…Ѓ[ѓЂ‚рЌДђ¶’†‚М‰№ђє‚Й‚а”Ѕ‰f
+            // иЁ­е®љгЃ—гЃџгѓњгѓЄгѓҐгѓјгѓ г‚’е†Ќз”џдё­гЃ®йџіеЈ°гЃ«г‚‚еЏЌж 
             foreach (var data in _cueData)
             {
                 _player.Update(data.Value.Playback);
             }
         }
 
-        /// <summary>ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂ‚рЌXђV‚·‚й</summary>
-        /// <param name="masterVolume">ѓ{ѓЉѓ…Ѓ[ѓЂ‚МѓvѓЌѓpѓeѓB‚ЙѓZѓbѓg‚µ‚Ѕ’l</param>
+        /// <summary>гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ г‚’ж›ґж–°гЃ™г‚‹</summary>
+        /// <param name="masterVolume">гѓњгѓЄгѓҐгѓјгѓ гЃ®гѓ—гѓ­гѓ‘гѓ†г‚ЈгЃ«г‚»гѓѓгѓ€гЃ—гЃџеЂ¤</param>
         private void UpdateMasterVolume(float masterVolume)
         {
-            // ѓvѓЊѓCѓ„Ѓ[‚Мѓ{ѓЉѓ…Ѓ[ѓЂ‚рђЭ’и
+            // гѓ—гѓ¬г‚¤гѓ¤гѓјгЃ®гѓњгѓЄгѓҐгѓјгѓ г‚’иЁ­е®љ
             _player.SetVolume(_volume * masterVolume);
 
-            // ђЭ’и‚µ‚Ѕѓ{ѓЉѓ…Ѓ[ѓЂ‚рЌДђ¶’†‚М‰№ђє‚Й‚а”Ѕ‰f
+            // иЁ­е®љгЃ—гЃџгѓњгѓЄгѓҐгѓјгѓ г‚’е†Ќз”џдё­гЃ®йџіеЈ°гЃ«г‚‚еЏЌж 
             foreach (var data in _cueData)
             {
                 _player.Update(data.Value.Playback);
             }
         }
 
-        /// <summary>ЌДђ¶‚ЄЏI—№‚·‚й‚М‚р‘Т‚Б‚Д‚©‚зPlayback‚рЌнЏњ‚·‚й</summary>
-        /// <param name="index">ѓLѓ…Ѓ[ѓfЃ[ѓ^‚МѓCѓ“ѓfѓbѓNѓX</param>
+        /// <summary>е†Ќз”џгЃЊзµ‚дє†гЃ™г‚‹гЃ®г‚’еѕ…гЃЈгЃ¦гЃ‹г‚‰Playbackг‚’е‰Љй™¤гЃ™г‚‹</summary>
+        /// <param name="index">г‚­гѓҐгѓјгѓ‡гѓјг‚їгЃ®г‚¤гѓігѓ‡гѓѓг‚Їг‚№</param>
         protected async void DestroyPlaybackAfterPlayEnd(int index)
         {
-            // ѓLѓ…Ѓ[‚Єѓ‹Ѓ[ѓv‚µ‚Д‚ў‚Ѕ‚з”І‚Ї‚й
+            // г‚­гѓҐгѓјгЃЊгѓ«гѓјгѓ—гЃ—гЃ¦гЃ„гЃџг‚‰жЉњгЃ‘г‚‹
             if (_cueData[index].IsLoop)
             {
                 return;
             }
 
-            // Ћw’и‚µ‚Ѕѓ~ѓЉ•bЃiѓLѓ…Ѓ[‚М’·‚іЃjЊг‚ЙЉ®—№‚·‚йѓLѓѓѓ“ѓZѓ‹‰В”\‚Иѓ^ѓXѓN‚рЌмђ¬
+            // жЊ‡е®љгЃ—гЃџгѓџгѓЄз§’пј€г‚­гѓҐгѓјгЃ®й•·гЃ•пј‰еѕЊгЃ«е®Њдє†гЃ™г‚‹г‚­гѓЈгѓіг‚»гѓ«еЏЇиѓЅгЃЄг‚їг‚№г‚Їг‚’дЅњж€ђ
             await Task.Delay((int)_cueData[index].CueInfo.length, _cueData[index].CancellationTokenSource.Token);
 
             while (true)
             {
-                // ЌДђ¶‚ЄЉ®—№‚µ‚ЅЏкЌ‡ && Ћw’и‚µ‚ЅѓLЃ[‚рЋќ‚В’l‚ЄђіЏн‚ЙЌнЏњ‚і‚к‚ЅЏкЌ‡
+                // е†Ќз”џгЃЊе®Њдє†гЃ—гЃџе ґеђ€ && жЊ‡е®љгЃ—гЃџг‚­гѓјг‚’жЊЃгЃ¤еЂ¤гЃЊж­ЈеёёгЃ«е‰Љй™¤гЃ•г‚ЊгЃџе ґеђ€
                 if (_cueData[index].Playback.GetStatus() == CriAtomExPlayback.Status.Removed && _cueData.TryRemove(index, out CriPlayerData deletedData))
                 {
-                    // ѓCѓ“ѓfѓbѓNѓX‚рѓRѓЊѓNѓVѓ‡ѓ“‚Й’З‰Б
+                    // г‚¤гѓігѓ‡гѓѓг‚Їг‚№г‚’г‚ігѓ¬г‚Їг‚·гѓ§гѓігЃ«иїЅеЉ 
                     _removedCueDataIndex.Add(index);
 
-                    // ЌнЏњ‚і‚к‚ЅѓvѓЊѓCѓ„Ѓ[‚МѓfЃ[ѓ^‚р”jЉь
+                    // е‰Љй™¤гЃ•г‚ЊгЃџгѓ—гѓ¬г‚¤гѓ¤гѓјгЃ®гѓ‡гѓјг‚їг‚’з ґжЈ„
                     deletedData.Source?.Dispose();
 
                     return;
                 }
 
-                // ЌДђ¶’†‚МЏкЌ‡
+                // е†Ќз”џдё­гЃ®е ґеђ€
                 else
                 {
-                    // Ћw’и‚µ‚ЅЉъЉФ‚МЊг‚ЙЉ®—№‚·‚йѓLѓѓѓ“ѓZѓ‹‰В”\‚Иѓ^ѓXѓN‚рЌмђ¬
+                    // жЊ‡е®љгЃ—гЃџжњџй–“гЃ®еѕЊгЃ«е®Њдє†гЃ™г‚‹г‚­гѓЈгѓіг‚»гѓ«еЏЇиѓЅгЃЄг‚їг‚№г‚Їг‚’дЅњж€ђ
                     await Task.Delay(TimeSpan.FromSeconds(0.05D), _cueData[index].CancellationTokenSource.Token);
                 }
             }
         }
 
         /// <summary></summary>
-        /// <param name="playerData">Player‚МѓfЃ[ѓ^</param>
+        /// <param name="playerData">PlayerгЃ®гѓ‡гѓјг‚ї</param>
         protected int AddCueData(CriPlayerData playerData)
         {
-            // ѓLѓ…Ѓ[‚Єѓ‹Ѓ[ѓv‚µ‚Д‚ў‚йЏкЌ‡
+            // г‚­гѓҐгѓјгЃЊгѓ«гѓјгѓ—гЃ—гЃ¦гЃ„г‚‹е ґеђ€
             if (playerData.IsLoop)
             {
-                // ЌнЏњ‚і‚к‚ЅѓLѓ…Ѓ[ѓfЃ[ѓ^‚Є1‚В€ИЏг‚ ‚йЏкЌ‡
+                // е‰Љй™¤гЃ•г‚ЊгЃџг‚­гѓҐгѓјгѓ‡гѓјг‚їгЃЊ1гЃ¤д»ҐдёЉгЃ‚г‚‹е ґеђ€
                 if (_removedCueDataIndex.Count > 0)
                 {
-                    // •Пђ”‚рЏ‰Љъ‰»
+                    // е¤‰ж•°г‚’е€ќжњџеЊ–
                     int tempIndex;
 
-                    //  ѓRѓЊѓNѓVѓ‡ѓ“‚©‚зѓIѓuѓWѓFѓNѓg‚рЌнЏњ‚Е‚«‚йЏкЌ‡
+                    //  г‚ігѓ¬г‚Їг‚·гѓ§гѓігЃ‹г‚‰г‚Єгѓ–г‚ёг‚§г‚Їгѓ€г‚’е‰Љй™¤гЃ§гЃЌг‚‹е ґеђ€
                     if (_removedCueDataIndex.TryTake(out tempIndex))
                     {
-                        // ѓLЃ[‚ЖPlayerѓfЃ[ѓ^‚МѓyѓA‚р’З‰Б
+                        // г‚­гѓјгЃЁPlayerгѓ‡гѓјг‚їгЃ®гѓљг‚ўг‚’иїЅеЉ 
                         _cueData.TryAdd(tempIndex, playerData);
                     }
 
                     return tempIndex;
                 }
 
-                // ЌнЏњ‚і‚к‚ЅѓLѓ…Ѓ[ѓfЃ[ѓ^‚Є‘¶ЌЭ‚µ‚И‚ўЏкЌ‡
+                // е‰Љй™¤гЃ•г‚ЊгЃџг‚­гѓҐгѓјгѓ‡гѓјг‚їгЃЊе­ењЁгЃ—гЃЄгЃ„е ґеђ€
                 else
                 {
-                    // ѓLѓ…Ѓ[ѓfЃ[ѓ^‚МѓJѓEѓ“ѓg‚р‘ќ‰Б
+                    // г‚­гѓҐгѓјгѓ‡гѓјг‚їгЃ®г‚«г‚¦гѓігѓ€г‚’еў—еЉ 
                     _maxCueCount++;
 
-                    // ѓLЃ[‚ЖPlayerѓfЃ[ѓ^‚МѓyѓA‚р’З‰Б
+                    // г‚­гѓјгЃЁPlayerгѓ‡гѓјг‚їгЃ®гѓљг‚ўг‚’иїЅеЉ 
                     _cueData.TryAdd(_maxCueCount, playerData);
 
                     return _maxCueCount;
                 }
             }
 
-            // ѓLѓ…Ѓ[‚Єѓ‹Ѓ[ѓv‚µ‚Д‚ў‚И‚ўЏкЌ‡ && ЌнЏњ‚і‚к‚ЅѓLѓ…Ѓ[ѓfЃ[ѓ^‚Є1‚В€ИЏг‚ ‚йЏкЌ‡
+            // г‚­гѓҐгѓјгЃЊгѓ«гѓјгѓ—гЃ—гЃ¦гЃ„гЃЄгЃ„е ґеђ€ && е‰Љй™¤гЃ•г‚ЊгЃџг‚­гѓҐгѓјгѓ‡гѓјг‚їгЃЊ1гЃ¤д»ҐдёЉгЃ‚г‚‹е ґеђ€
             if (_removedCueDataIndex.Count > 0)
             {
-                // •Пђ”‚рЏ‰Љъ‰»
+                // е¤‰ж•°г‚’е€ќжњџеЊ–
                 int tempIndex;
 
-                // ѓRѓЊѓNѓVѓ‡ѓ“‚©‚зѓIѓuѓWѓFѓNѓg‚рЌнЏњ‚Е‚«‚йЏкЌ‡
+                // г‚ігѓ¬г‚Їг‚·гѓ§гѓігЃ‹г‚‰г‚Єгѓ–г‚ёг‚§г‚Їгѓ€г‚’е‰Љй™¤гЃ§гЃЌг‚‹е ґеђ€
                 if (_removedCueDataIndex.TryTake(out tempIndex))
                 {
-                    // ѓLЃ[‚ЖPlayerѓfЃ[ѓ^‚МѓyѓA‚р’З‰Б
+                    // г‚­гѓјгЃЁPlayerгѓ‡гѓјг‚їгЃ®гѓљг‚ўг‚’иїЅеЉ 
                     _cueData.TryAdd(tempIndex, playerData);
                 }
 
                 DestroyPlaybackAfterPlayEnd(tempIndex);
                 return tempIndex;
             }
-            // ѓLѓ…Ѓ[‚Єѓ‹Ѓ[ѓv‚µ‚Д‚ў‚И‚ўЏкЌ‡ && ЌнЏњ‚і‚к‚ЅѓLѓ…Ѓ[ѓfЃ[ѓ^‚Є‘¶ЌЭ‚µ‚И‚ўЏкЌ‡
+            // г‚­гѓҐгѓјгЃЊгѓ«гѓјгѓ—гЃ—гЃ¦гЃ„гЃЄгЃ„е ґеђ€ && е‰Љй™¤гЃ•г‚ЊгЃџг‚­гѓҐгѓјгѓ‡гѓјг‚їгЃЊе­ењЁгЃ—гЃЄгЃ„е ґеђ€
             else
             {
-                // ѓLѓ…Ѓ[ѓfЃ[ѓ^‚МѓJѓEѓ“ѓg‚р‘ќ‰Б
+                // г‚­гѓҐгѓјгѓ‡гѓјг‚їгЃ®г‚«г‚¦гѓігѓ€г‚’еў—еЉ 
                 _maxCueCount++;
 
-                // ѓLЃ[‚ЖPlayerѓfЃ[ѓ^‚МѓyѓA‚р’З‰Б
+                // г‚­гѓјгЃЁPlayerгѓ‡гѓјг‚їгЃ®гѓљг‚ўг‚’иїЅеЉ 
                 _cueData.TryAdd(_maxCueCount, playerData);
 
                 DestroyPlaybackAfterPlayEnd(_maxCueCount);
@@ -334,75 +334,75 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
         }
     }
 
-    /// <summary>‰№Љy‚рЉЗ—ќ‚·‚й‚Ѕ‚Я‚М‹@”\‚рЋќ‚Б‚ЅѓCѓ“ѓ^Ѓ[ѓtѓFЃ[ѓX</summary>
+    /// <summary>йџіжҐЅг‚’з®Ўзђ†гЃ™г‚‹гЃџг‚ЃгЃ®ж©џиѓЅг‚’жЊЃгЃЈгЃџг‚¤гѓіг‚їгѓјгѓ•г‚§гѓјг‚№</summary>
     public interface ICustomChannel
     {
-        /// <summary>ѓ{ѓЉѓ…Ѓ[ѓЂ</summary>
+        /// <summary>гѓњгѓЄгѓҐгѓјгѓ </summary>
         public IVolume Volume { get; }
 
-        /// <summary>‰№Љy‚р—¬‚·ЉЦђ”</summary>
-        /// <param name="cueSheetName">—¬‚µ‚Ѕ‚ўѓLѓ…Ѓ[ѓVЃ[ѓg‚М–ј‘O</param>
-        /// <param name="cueName">—¬‚µ‚Ѕ‚ўѓLѓ…Ѓ[‚М–ј‘O</param>
-        /// <param name="volume">ѓ{ѓЉѓ…Ѓ[ѓЂ</param>
-        /// <returns>‘ЂЌм‚·‚йЌЫ‚Й•K—v‚ИIndex</returns>
+        /// <summary>йџіжҐЅг‚’жµЃгЃ™й–ўж•°</summary>
+        /// <param name="cueSheetName">жµЃгЃ—гЃџгЃ„г‚­гѓҐгѓјг‚·гѓјгѓ€гЃ®еђЌе‰Ќ</param>
+        /// <param name="cueName">жµЃгЃ—гЃџгЃ„г‚­гѓҐгѓјгЃ®еђЌе‰Ќ</param>
+        /// <param name="volume">гѓњгѓЄгѓҐгѓјгѓ </param>
+        /// <returns>ж“ЌдЅњгЃ™г‚‹йљ›гЃ«еї…и¦ЃгЃЄIndex</returns>
         public int Play(string cueSheetName, string cueName, float volume = 1.0F);
 
-        /// <summary>‰№Љy‚р—¬‚·ЉЦђ”(3D)</summary>
-        /// <param name="playSoundWorldPos">—¬‚·Position‚МWorldSpace</param>
-        /// <param name="cueSheetName">—¬‚µ‚Ѕ‚ўѓLѓ…Ѓ[ѓVЃ[ѓg‚М–ј‘O</param>
-        /// <param name="cueName">—¬‚µ‚Ѕ‚ўѓLѓ…Ѓ[‚М–ј‘O</param>
-        /// <param name="volume">ѓ{ѓЉѓ…Ѓ[ѓЂ</param>
-        /// <returns>‘ЂЌм‚·‚йЌЫ‚Й•K—v‚ИIndex</returns>
+        /// <summary>йџіжҐЅг‚’жµЃгЃ™й–ўж•°(3D)</summary>
+        /// <param name="playSoundWorldPos">жµЃгЃ™PositionгЃ®WorldSpace</param>
+        /// <param name="cueSheetName">жµЃгЃ—гЃџгЃ„г‚­гѓҐгѓјг‚·гѓјгѓ€гЃ®еђЌе‰Ќ</param>
+        /// <param name="cueName">жµЃгЃ—гЃџгЃ„г‚­гѓҐгѓјгЃ®еђЌе‰Ќ</param>
+        /// <param name="volume">гѓњгѓЄгѓҐгѓјгѓ </param>
+        /// <returns>ж“ЌдЅњгЃ™г‚‹йљ›гЃ«еї…и¦ЃгЃЄIndex</returns>
         public int Play3D(Vector3 playSoundWorldPos, string cueSheetName, string cueName, float volume = 1.0F);
 
-        /// <summary>3D‚М—¬‚·Position‚рЌXђV‚·‚й</summary>
-        /// <param name="playSoundWorldPos">ЌXђV‚·‚йPosition</param>
-        /// <param name="index">•ПЌX‚·‚й‰№ђє‚МPlayЋћ‚М–Я‚и’l(Index)</param>
+        /// <summary>3DгЃ®жµЃгЃ™Positionг‚’ж›ґж–°гЃ™г‚‹</summary>
+        /// <param name="playSoundWorldPos">ж›ґж–°гЃ™г‚‹Position</param>
+        /// <param name="index">е¤‰ж›ґгЃ™г‚‹йџіеЈ°гЃ®Playж™‚гЃ®ж€»г‚ЉеЂ¤(Index)</param>
         public void Update3DPos(Vector3 playSoundWorldPos, int index);
 
-        /// <summary>‰№ђє‚рPause‚і‚№‚й</summary>
-        /// <param name="index">Pause‚і‚№‚Ѕ‚ў‰№ђє‚МPlayЋћ‚М–Я‚и’l(Index)</param>
+        /// <summary>йџіеЈ°г‚’PauseгЃ•гЃ›г‚‹</summary>
+        /// <param name="index">PauseгЃ•гЃ›гЃџгЃ„йџіеЈ°гЃ®Playж™‚гЃ®ж€»г‚ЉеЂ¤(Index)</param>
         public void Pause(int index);
 
-        /// <summary>Pause‚і‚№‚Ѕ‰№ђє‚рResume‚і‚№‚й</summary>
-        /// <param name="index">Resume‚і‚№‚Ѕ‚ў‰№ђє‚МPlayЋћ‚М–Я‚и’l(Index)</param>
+        /// <summary>PauseгЃ•гЃ›гЃџйџіеЈ°г‚’ResumeгЃ•гЃ›г‚‹</summary>
+        /// <param name="index">ResumeгЃ•гЃ›гЃџгЃ„йџіеЈ°гЃ®Playж™‚гЃ®ж€»г‚ЉеЂ¤(Index)</param>
         public void Resume(int index);
 
-        /// <summary>‰№ђє‚рStop‚і‚№‚й</summary>
-        /// <param name="index">Stop‚і‚№‚Ѕ‚ў‰№ђє‚МPlayЋћ‚М–Я‚и’l(Index)</param>
+        /// <summary>йџіеЈ°г‚’StopгЃ•гЃ›г‚‹</summary>
+        /// <param name="index">StopгЃ•гЃ›гЃџгЃ„йџіеЈ°гЃ®Playж™‚гЃ®ж€»г‚ЉеЂ¤(Index)</param>
         public void Stop(int index);
 
-        /// <summary>‚·‚Ч‚Д‚М‰№ђє‚рStop‚і‚№‚й</summary>
+        /// <summary>гЃ™гЃ№гЃ¦гЃ®йџіеЈ°г‚’StopгЃ•гЃ›г‚‹</summary>
         public void StopAll();
 
-        /// <summary>ѓ‹Ѓ[ѓv‚µ‚Д‚ў‚й‰№ђє‚·‚Ч‚Д‚рStop‚і‚№‚й</summary>
+        /// <summary>гѓ«гѓјгѓ—гЃ—гЃ¦гЃ„г‚‹йџіеЈ°гЃ™гЃ№гЃ¦г‚’StopгЃ•гЃ›г‚‹</summary>
         public void StopLoopCue();
 
-        /// <summary>‚·‚Ч‚Д‚МѓЉѓXѓiЃ[‚рђЭ’и‚·‚й</summary>
-        /// <param name="listener">ѓЉѓXѓiЃ[</param>
+        /// <summary>гЃ™гЃ№гЃ¦гЃ®гѓЄг‚№гѓЉгѓјг‚’иЁ­е®љгЃ™г‚‹</summary>
+        /// <param name="listener">гѓЄг‚№гѓЉгѓј</param>
         public void SetListenerAll(CriAtomListener listener);
 
-        /// <summary>ѓЉѓXѓiЃ[‚рђЭ’и‚·‚й</summary>
-        /// <param name="listener">ѓЉѓXѓiЃ[</param>
-        /// <param name="index">ѓЉѓXѓiЃ[‚р•ПЌX‚µ‚Ѕ‚ў‰№ђє‚МPlayЋћ‚М–Я‚и’l</param>
+        /// <summary>гѓЄг‚№гѓЉгѓјг‚’иЁ­е®љгЃ™г‚‹</summary>
+        /// <param name="listener">гѓЄг‚№гѓЉгѓј</param>
+        /// <param name="index">гѓЄг‚№гѓЉгѓјг‚’е¤‰ж›ґгЃ—гЃџгЃ„йџіеЈ°гЃ®Playж™‚гЃ®ж€»г‚ЉеЂ¤</param>
         public void SetListener(CriAtomListener listener, int index);
     }
 
-    /// <summary>BGM‚И‚З‚ЙЋg—p‚·‚йЃA€к‚В‚М‰№‚М‚Э‚рЏo—Н‚·‚йѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>BGMгЃЄгЃ©гЃ«дЅїз”ЁгЃ™г‚‹гЂЃдёЂгЃ¤гЃ®йџігЃ®гЃїг‚’е‡єеЉ›гЃ™г‚‹гѓЃгѓЈгѓігѓЌгѓ«</summary>
     private class CriSingleChannel : AbstractCriChannel, ICustomChannel
     {
         public CriAtomExPlayer _test = new CriAtomExPlayer();
-        /// <summary>Њ»ЌЭЌДђ¶’†‚МAcb</summary>
+        /// <summary>зЏѕењЁе†Ќз”џдё­гЃ®Acb</summary>
         private CriAtomExAcb _currentAcb = null;
 
-        /// <summary>Њ»ЌЭЌДђ¶’†‚МCueName</summary>
+        /// <summary>зЏѕењЁе†Ќз”џдё­гЃ®CueName</summary>
         private string _currentCueName = "";
 
-        /// <summary>ѓRѓ“ѓXѓgѓ‰ѓNѓ^Ѓ|</summary>
-        /// <param name="masterVolume">ѓ}ѓXѓ^Ѓ[ѓ{ѓЉѓ…Ѓ[ѓЂ</param>
+        /// <summary>г‚ігѓіг‚№гѓ€гѓ©г‚Їг‚їпјЌ</summary>
+        /// <param name="masterVolume">гѓћг‚№г‚їгѓјгѓњгѓЄгѓҐгѓјгѓ </param>
         public CriSingleChannel(Volume masterVolume) : base(masterVolume)
         {
-            // TODO - Add‚ЙЋё”s‚µ‚Ѕ‚ўЌЫ‚МЏ€—ќ‚р’З‰Б‚·‚й
+            // TODO - AddгЃ«е¤±ж•—гЃ—гЃџгЃ„йљ›гЃ®е‡¦зђ†г‚’иїЅеЉ гЃ™г‚‹
             _cueData.TryAdd(0, new CriPlayerData());
         }
 
@@ -410,7 +410,7 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 
         public int Play(string cueSheetName, string cueName, float volume = 1.0F)
         {
-            // CueSheet‚©‚зЏо•с‚рЋж“ѕ
+            // CueSheetгЃ‹г‚‰жѓ…е ±г‚’еЏ–еѕ—
             var tempAcb = CriAtom.GetAcb(cueSheetName);
             var tempPlayerData = new CriPlayerData();
             tempAcb.GetCueInfo(cueName, out CriAtomEx.CueInfo tempInfo);
@@ -419,13 +419,13 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             if (_currentAcb == tempAcb && _currentCueName == cueName
                                        && _player.GetStatus() == CriAtomExPlayer.Status.Playing)
             {
-                // ѓCѓ“ѓfѓbѓNѓX‚р•Ф‚·
+                // г‚¤гѓігѓ‡гѓѓг‚Їг‚№г‚’иї”гЃ™
                 return _cueData.Count - 1;
             }
 
             Stop(_cueData.Count - 1);
 
-            // Џо•с‚рѓZѓbѓg‚µ‚ДЌДђ¶
+            // жѓ…е ±г‚’г‚»гѓѓгѓ€гЃ—гЃ¦е†Ќз”џ
             _player.SetCue(tempAcb, cueName);
             _player.SetVolume(_volume * _masterVolume * volume);
             _player.Set3dSource(null);
@@ -439,7 +439,7 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 
         public int Play3D(Vector3 playSoundWorldPos, string cueSheetName, string cueName, float volume = 1.0F)
         {
-            // CueSheet‚©‚зЏо•с‚рЋж“ѕ
+            // CueSheetгЃ‹г‚‰жѓ…е ±г‚’еЏ–еѕ—
             var tempAcb = CriAtom.GetAcb(cueSheetName);
             var tempPlayerData = new CriPlayerData();
             tempAcb.GetCueInfo(cueName, out CriAtomEx.CueInfo tempInfo);
@@ -453,11 +453,11 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 
             Stop(_cueData.Count - 1);
 
-            // ЌА•WЏо•с‚рѓZѓbѓg‚µ‚ДЌДђ¶
+            // еє§жЁ™жѓ…е ±г‚’г‚»гѓѓгѓ€гЃ—гЃ¦е†Ќз”џ
             var temp3dData = new CriAtomEx3dSource();
 
             temp3dData.SetPosition(playSoundWorldPos.x, playSoundWorldPos.y, playSoundWorldPos.z);
-            // ѓЉѓXѓiЃ[‚Жѓ\Ѓ[ѓX‚рђЭ’и
+            // гѓЄг‚№гѓЉгѓјгЃЁг‚Ѕгѓјг‚№г‚’иЁ­е®љ
             _player.Set3dListener(_listener);
             _player.Set3dSource(temp3dData);
             tempPlayerData.Source = temp3dData;
@@ -523,26 +523,26 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             _player.Update(_cueData[index].Playback);
         }
 
-        /// <summary>ѓJѓXѓ^ѓЂЌ\‘ў‘М‚р•Ф‚·ѓЃѓ\ѓbѓh</summary>
-        /// <param name="playerData">ѓJѓXѓ^ѓЂЌ\‘ў‘М‚р•ЫЋќ‚µ‚Д‚ў‚йѓvѓЊѓCѓ„Ѓ[Џо•с</param>
+        /// <summary>г‚«г‚№г‚їгѓ ж§‹йЂ дЅ“г‚’иї”гЃ™гѓЎг‚Ѕгѓѓгѓ‰</summary>
+        /// <param name="playerData">г‚«г‚№г‚їгѓ ж§‹йЂ дЅ“г‚’дїќжЊЃгЃ—гЃ¦гЃ„г‚‹гѓ—гѓ¬г‚¤гѓ¤гѓјжѓ…е ±</param>
         public CriAtomCustomStruct GetCustomStruct(CriPlayerData playerData) => playerData.CustomStruct;
 
-        /// <summary>ЌДђ¶ЏI—№‚р‘Т‚ВЃiUnitaskЃj</summary>
+        /// <summary>е†Ќз”џзµ‚дє†г‚’еѕ…гЃ¤пј€Unitaskпј‰</summary>
         public async UniTask WaitPlayingEnd(CancellationToken token, CriAtomCustomStruct customStruct)
         {
-            // True‚р•Ф‚·‚Ь‚Е‘Т‚В
+            // Trueг‚’иї”гЃ™гЃѕгЃ§еѕ…гЃ¤
             await UniTask.WaitUntil(customStruct.CheckPlayingEnd, default, token, false);
         }
 
-        /// <summary>ЌДђ¶ЏI—№‚р‘Т‚ВЃiCoroutineЃj</summary>
+        /// <summary>е†Ќз”џзµ‚дє†г‚’еѕ…гЃ¤пј€Coroutineпј‰</summary>
         public System.Collections.IEnumerator WaitPlayingEndCor(CriAtomCustomStruct customStruct)
         {
-            // True‚р•Ф‚·‚Ь‚Е‘Т‚В
+            // Trueг‚’иї”гЃ™гЃѕгЃ§еѕ…гЃ¤
             yield return new WaitUntil(customStruct.CheckPlayingEnd);
         }
     }
 
-    /// <summary>SE‚И‚З‚ЙЋg—p‚·‚йЃA•Ўђ”‚М‰№‚рЏo—Н‚·‚йѓ`ѓѓѓ“ѓlѓ‹</summary>
+    /// <summary>SEгЃЄгЃ©гЃ«дЅїз”ЁгЃ™г‚‹гЂЃи¤‡ж•°гЃ®йџіг‚’е‡єеЉ›гЃ™г‚‹гѓЃгѓЈгѓігѓЌгѓ«</summary>
     private class CriMultiChannel : AbstractCriChannel, ICustomChannel
     {
         public CriMultiChannel(in Volume masterVolume) : base(in masterVolume)
@@ -575,17 +575,17 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 
         public int Play3D(Vector3 playSoundWorldPos, string cueSheetName, string cueName, float volume)
         {
-            // CueSheet‚©‚зЏо•с‚рЋж“ѕ
+            // CueSheetгЃ‹г‚‰жѓ…е ±г‚’еЏ–еѕ—
             var tempAcb = CriAtom.GetAcb(cueSheetName);
             var tempPlayerData = new CriPlayerData();
             tempAcb.GetCueInfo(cueName, out CriAtomEx.CueInfo tempInfo);
             tempPlayerData.CueInfo = tempInfo;
 
-            // ЌА•WЏо•с‚рѓZѓbѓg‚µ‚ДЌДђ¶
+            // еє§жЁ™жѓ…е ±г‚’г‚»гѓѓгѓ€гЃ—гЃ¦е†Ќз”џ
             var temp3dData = new CriAtomEx3dSource();
 
             temp3dData.SetPosition(playSoundWorldPos.x, playSoundWorldPos.y, playSoundWorldPos.z);
-            // ѓЉѓXѓiЃ[‚Жѓ\Ѓ[ѓX‚рђЭ’и
+            // гѓЄг‚№гѓЉгѓјгЃЁг‚Ѕгѓјг‚№г‚’иЁ­е®љ
             _player.Set3dListener(_listener);
             _player.Set3dSource(temp3dData);
             tempPlayerData.Source = temp3dData;
@@ -687,40 +687,40 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             _player.Update(_cueData[index].Playback);
         }
 
-        /// <summary>ѓJѓXѓ^ѓЂЌ\‘ў‘М‚р•Ф‚·ѓЃѓ\ѓbѓh</summary>
-        /// <param name="playerData">ѓJѓXѓ^ѓЂЌ\‘ў‘М‚р•ЫЋќ‚µ‚Д‚ў‚йѓvѓЊѓCѓ„Ѓ[Џо•с</param>
+        /// <summary>г‚«г‚№г‚їгѓ ж§‹йЂ дЅ“г‚’иї”гЃ™гѓЎг‚Ѕгѓѓгѓ‰</summary>
+        /// <param name="playerData">г‚«г‚№г‚їгѓ ж§‹йЂ дЅ“г‚’дїќжЊЃгЃ—гЃ¦гЃ„г‚‹гѓ—гѓ¬г‚¤гѓ¤гѓјжѓ…е ±</param>
         public CriAtomCustomStruct GetCustomStruct(CriPlayerData playerData) => playerData.CustomStruct;
 
-        /// <summary>ЌДђ¶ЏI—№‚р‘Т‚ВЃiUnitaskЃj</summary>
+        /// <summary>е†Ќз”џзµ‚дє†г‚’еѕ…гЃ¤пј€Unitaskпј‰</summary>
         public async UniTask WaitPlayingEnd(CancellationToken token, CriAtomCustomStruct customStruct)
         {
-            // True‚р•Ф‚·‚Ь‚Е‘Т‚В
+            // Trueг‚’иї”гЃ™гЃѕгЃ§еѕ…гЃ¤
             await UniTask.WaitUntil(customStruct.CheckPlayingEnd, default, token, false);
         }
 
-        /// <summary>ЌДђ¶ЏI—№‚р‘Т‚ВЃiCoroutineЃj</summary>
+        /// <summary>е†Ќз”џзµ‚дє†г‚’еѕ…гЃ¤пј€Coroutineпј‰</summary>
         public System.Collections.IEnumerator WaitPlayingEndCor(CriAtomCustomStruct customStruct)
         {
-            // True‚р•Ф‚·‚Ь‚Е‘Т‚В
+            // Trueг‚’иї”гЃ™гЃѕгЃ§еѕ…гЃ¤
             yield return new WaitUntil(customStruct.CheckPlayingEnd);
         }
     }
 
-    /// <summary>CriAtomExPlayback‚рѓ‰ѓbѓv‚µ‚ЅѓIѓЉѓWѓiѓ‹Ќ\‘ў‘М</summary>
+    /// <summary>CriAtomExPlaybackг‚’гѓ©гѓѓгѓ—гЃ—гЃџг‚ЄгѓЄг‚ёгѓЉгѓ«ж§‹йЂ дЅ“</summary>
     public struct CriAtomCustomStruct
     {
-        /// <summary>CriAtomExPlaybackЌ\‘ў‘М</summary>
+        /// <summary>CriAtomExPlaybackж§‹йЂ дЅ“</summary>
         public CriAtomExPlayback Playback { get; set; }
 
-        /// <summary>ЌДђ¶ѓgѓ‰ѓbѓNЏо•с</summary>
+        /// <summary>е†Ќз”џгѓ€гѓ©гѓѓг‚Їжѓ…е ±</summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct TrackInfo
         {
-            public uint id;                         /**< ЌДђ¶ID **/
-            public CriAtomEx.CueType sequenceType;  /**< ђeѓVЃ[ѓPѓ“ѓXѓ^ѓCѓv **/
-            public IntPtr playerHn;                 /**< ѓvѓЊЃ[ѓ„ѓnѓ“ѓhѓ‹ **/
-            public ushort trackNo;                  /**< ѓgѓ‰ѓbѓN”ФЌ† **/
-            public ushort reserved;                 /**< —\–с—М€ж **/
+            public uint id;                         /**< е†Ќз”џID **/
+            public CriAtomEx.CueType sequenceType;  /**< и¦Єг‚·гѓјг‚±гѓіг‚№г‚їг‚¤гѓ— **/
+            public IntPtr playerHn;                 /**< гѓ—гѓ¬гѓјгѓ¤гѓЏгѓігѓ‰гѓ« **/
+            public ushort trackNo;                  /**< гѓ€гѓ©гѓѓг‚Їз•ЄеЏ· **/
+            public ushort reserved;                 /**< дє€зґ„й еџџ **/
         }
 
         public CriAtomCustomStruct(uint id) : this()
@@ -731,8 +731,8 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 #endif
         }
 
-        /// <summary>ЌДђ¶ѓXѓeЃ[ѓ^ѓX‚МЋж“ѕ</summary>
-        /// <returns>ЌДђ¶’†‚©‚З‚¤‚©Ѓifalse = ЌДђ¶’†ЃAtrue = ЌДђ¶ЏI—№Ѓj</returns>
+        /// <summary>е†Ќз”џг‚№гѓ†гѓјг‚їг‚№гЃ®еЏ–еѕ—</summary>
+        /// <returns>е†Ќз”џдё­гЃ‹гЃ©гЃ†гЃ‹пј€false = е†Ќз”џдё­гЂЃtrue = е†Ќз”џзµ‚дє†пј‰</returns>
         public bool CheckPlayingEnd()
         {
             if (GetStatus() == CriAtomExPlayback.Status.Removed)
@@ -745,8 +745,8 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             }
         }
 
-        /// <summary>ЌДђ¶‰№‚М’вЋ~</summary>
-        /// <param name = 'ignoresReleaseTime' > ѓЉѓЉЃ[ѓXЋћЉФ‚р–іЋ‹‚·‚й‚©‚З‚¤‚©
+        /// <summary>е†Ќз”џйџігЃ®еЃњж­ў</summary>
+        /// <param name = 'ignoresReleaseTime' > гѓЄгѓЄгѓјг‚№ж™‚й–“г‚’з„Ўи¦–гЃ™г‚‹гЃ‹гЃ©гЃ†гЃ‹
         public void Stop(bool ignoresReleaseTime)
         {
             if (CriAtomPlugin.IsLibraryInitialized() == false) { return; }
@@ -761,65 +761,65 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
             }
         }
 
-        /// <summary>ЌДђ¶‰№‚Мѓ|Ѓ[ѓY</summary>
+        /// <summary>е†Ќз”џйџігЃ®гѓќгѓјг‚є</summary>
         public void Pause() => Playback.Pause(true);
 
-        /// <summary>ЌДђ¶‰№‚Мѓ|Ѓ[ѓY‰рЏњ</summary>
-        /// <param name="mode">ѓ|Ѓ[ѓY‰рЏњ‘ОЏЫ</param>
+        /// <summary>е†Ќз”џйџігЃ®гѓќгѓјг‚єи§Јй™¤</summary>
+        /// <param name="mode">гѓќгѓјг‚єи§Јй™¤еЇѕи±Ў</param>
         public void Resume(CriAtomEx.ResumeMode mode) => Playback.Resume(mode);
 
-        /// <summary>ЌДђ¶‰№‚Мѓ|Ѓ[ѓYЏу‘Ф‚МЋж“ѕ</summary>
-        /// <returns>ѓ|Ѓ[ѓY’†‚©‚З‚¤‚©Ѓifalse = ѓ|Ѓ[ѓY‚і‚к‚Д‚ў‚И‚ўЃAtrue = ѓ|Ѓ[ѓY’†Ѓj</returns>
+        /// <summary>е†Ќз”џйџігЃ®гѓќгѓјг‚єзЉ¶ж…‹гЃ®еЏ–еѕ—</summary>
+        /// <returns>гѓќгѓјг‚єдё­гЃ‹гЃ©гЃ†гЃ‹пј€false = гѓќгѓјг‚єгЃ•г‚ЊгЃ¦гЃ„гЃЄгЃ„гЂЃtrue = гѓќгѓјг‚єдё­пј‰</returns>
         public bool IsPaused() => Playback.IsPaused();
 
-        /// <summary>ЌДђ¶‰№‚МѓtѓHЃ[ѓ}ѓbѓgЏо•с‚МЋж“ѕ</summary>
-        /// <param name='info'>ѓtѓHЃ[ѓ}ѓbѓgЏо•с</param>
-        /// <returns>Џо•с‚ЄЋж“ѕ‚Е‚«‚Ѕ‚©‚З‚¤‚©Ѓi true = Ћж“ѕ‚Е‚«‚ЅЃA false = Ћж“ѕ‚Е‚«‚И‚©‚Б‚ЅЃj</returns>
+        /// <summary>е†Ќз”џйџігЃ®гѓ•г‚©гѓјгѓћгѓѓгѓ€жѓ…е ±гЃ®еЏ–еѕ—</summary>
+        /// <param name='info'>гѓ•г‚©гѓјгѓћгѓѓгѓ€жѓ…е ±</param>
+        /// <returns>жѓ…е ±гЃЊеЏ–еѕ—гЃ§гЃЌгЃџгЃ‹гЃ©гЃ†гЃ‹пј€ true = еЏ–еѕ—гЃ§гЃЌгЃџгЂЃ false = еЏ–еѕ—гЃ§гЃЌгЃЄгЃ‹гЃЈгЃџпј‰</returns>
         public bool GetFormatInfo(out CriAtomEx.FormatInfo info) => Playback.GetFormatInfo(out info);
 
-        /// <summary>ЌДђ¶ѓXѓeЃ[ѓ^ѓX‚МЋж“ѕ</summary>
-        /// <returns>ЌДђ¶ѓXѓeЃ[ѓ^ѓX</returns>
+        /// <summary>е†Ќз”џг‚№гѓ†гѓјг‚їг‚№гЃ®еЏ–еѕ—</summary>
+        /// <returns>е†Ќз”џг‚№гѓ†гѓјг‚їг‚№</returns>
         public CriAtomExPlayback.Status GetStatus() => Playback.GetStatus();
 
-        /// <summary>ЌДђ¶ЋћЌЏ‚МЋж“ѕ</summary>
-        /// <returns>ЌДђ¶ЋћЌЏЃiѓ~ѓЉ•b’P€КЃj</returns>
+        /// <summary>е†Ќз”џж™‚е€»гЃ®еЏ–еѕ—</summary>
+        /// <returns>е†Ќз”џж™‚е€»пј€гѓџгѓЄз§’еЌдЅЌпј‰</returns>
         public long GetTime() => Playback.GetTime();
 
-        /// <summary>‰№ђє‚Й“ЇЉъ‚µ‚ЅЌДђ¶ЋћЌЏ‚МЋж“ѕ</summary>
-        /// <returns>ЌДђ¶ЋћЌЏЃiѓ~ѓЉ•b’P€КЃj</returns>
+        /// <summary>йџіеЈ°гЃ«еђЊжњџгЃ—гЃџе†Ќз”џж™‚е€»гЃ®еЏ–еѕ—</summary>
+        /// <returns>е†Ќз”џж™‚е€»пј€гѓџгѓЄз§’еЌдЅЌпј‰</returns>
         public long GetTimeSyncedWithAudio() => Playback.GetTimeSyncedWithAudio();
 
-        /// <summary>ЌДђ¶ѓTѓ“ѓvѓ‹ђ”‚МЋж“ѕ</summary>
-        /// <param name='numSamples'>ЌДђ¶ЌП‚ЭѓTѓ“ѓvѓ‹ђ”</param>
-        /// <param name='samplingRate'>ѓTѓ“ѓvѓЉѓ“ѓOѓЊЃ[ѓg</param>
-        /// <returns>ѓTѓ“ѓvѓ‹ђ”‚ЄЋж“ѕ‚Е‚«‚Ѕ‚©‚З‚¤‚©Ѓi true = Ћж“ѕ‚Е‚«‚ЅЃA false = Ћж“ѕ‚Е‚«‚И‚©‚Б‚ЅЃj</returns>
+        /// <summary>е†Ќз”џг‚µгѓігѓ—гѓ«ж•°гЃ®еЏ–еѕ—</summary>
+        /// <param name='numSamples'>е†Ќз”џжё€гЃїг‚µгѓігѓ—гѓ«ж•°</param>
+        /// <param name='samplingRate'>г‚µгѓігѓ—гѓЄгѓіг‚°гѓ¬гѓјгѓ€</param>
+        /// <returns>г‚µгѓігѓ—гѓ«ж•°гЃЊеЏ–еѕ—гЃ§гЃЌгЃџгЃ‹гЃ©гЃ†гЃ‹пј€ true = еЏ–еѕ—гЃ§гЃЌгЃџгЂЃ false = еЏ–еѕ—гЃ§гЃЌгЃЄгЃ‹гЃЈгЃџпј‰</returns>
         public bool GetNumPlayedSamples(out long numSamples, out int samplingRate) => Playback.GetNumPlayedSamples(out numSamples, out samplingRate);
 
-        /// <summary>ѓVЃ[ѓPѓ“ѓXЌДђ¶€К’u‚МЋж“ѕ</summary>
-        /// <returns>ѓVЃ[ѓPѓ“ѓXЌДђ¶€К’uЃiѓ~ѓЉ•b’P€КЃj</returns>
+        /// <summary>г‚·гѓјг‚±гѓіг‚№е†Ќз”џдЅЌзЅ®гЃ®еЏ–еѕ—</summary>
+        /// <returns>г‚·гѓјг‚±гѓіг‚№е†Ќз”џдЅЌзЅ®пј€гѓџгѓЄз§’еЌдЅЌпј‰</returns>
         public long GetSequencePosition() => Playback.GetSequencePosition();
 
-        /// <summary>ЌДђ¶‰№‚МѓJѓЊѓ“ѓgѓuѓЌѓbѓNѓCѓ“ѓfѓbѓNѓX‚МЋж“ѕ</summary>
-        /// <returns>ѓJѓЊѓ“ѓgѓuѓЌѓbѓNѓCѓ“ѓfѓbѓNѓX</returns>
+        /// <summary>е†Ќз”џйџігЃ®г‚«гѓ¬гѓігѓ€гѓ–гѓ­гѓѓг‚Їг‚¤гѓігѓ‡гѓѓг‚Їг‚№гЃ®еЏ–еѕ—</summary>
+        /// <returns>г‚«гѓ¬гѓігѓ€гѓ–гѓ­гѓѓг‚Їг‚¤гѓігѓ‡гѓѓг‚Їг‚№</returns>
         public int GetCurrentBlockIndex() => Playback.GetCurrentBlockIndex();
 
-        /// <summary>ЌДђ¶ѓgѓ‰ѓbѓNЏо•с‚МЋж“ѕ</summary>
-        /// <param name='info'>ЌДђ¶ѓgѓ‰ѓbѓNЏо•с</param>
-        /// <returns>Ћж“ѕ‚Йђ¬Њч‚µ‚Ѕ‚©</returns>
+        /// <summary>е†Ќз”џгѓ€гѓ©гѓѓг‚Їжѓ…е ±гЃ®еЏ–еѕ—</summary>
+        /// <param name='info'>е†Ќз”џгѓ€гѓ©гѓѓг‚Їжѓ…е ±</param>
+        /// <returns>еЏ–еѕ—гЃ«ж€ђеЉџгЃ—гЃџгЃ‹</returns>
         public bool GetTrackInfo(out CriAtomExPlayback.TrackInfo info) => Playback.GetTrackInfo(out info);
 
-        /// <summary>ѓrЃ[ѓg“ЇЉъЏо•с‚МЋж“ѕ</summary>
-        /// <param name='info'>ѓrЃ[ѓg“ЇЉъЏо•с</param>
-        /// <returns>Ћж“ѕ‚Йђ¬Њч‚µ‚Ѕ‚©</returns>
+        /// <summary>гѓ“гѓјгѓ€еђЊжњџжѓ…е ±гЃ®еЏ–еѕ—</summary>
+        /// <param name='info'>гѓ“гѓјгѓ€еђЊжњџжѓ…е ±</param>
+        /// <returns>еЏ–еѕ—гЃ«ж€ђеЉџгЃ—гЃџгЃ‹</returns>
         public bool GetBeatSyncInfo(out CriAtomExBeatSync.Info info) => Playback.GetBeatSyncInfo(out info);
 
-        /// <summary>ЌДђ¶‰№‚МѓuѓЌѓbѓN‘J€Ъ</summary>
-        /// <param name='index'>ѓuѓЌѓbѓNѓCѓ“ѓfѓbѓNѓX</param>
+        /// <summary>е†Ќз”џйџігЃ®гѓ–гѓ­гѓѓг‚ЇйЃ·з§»</summary>
+        /// <param name='index'>гѓ–гѓ­гѓѓг‚Їг‚¤гѓігѓ‡гѓѓг‚Їг‚№</param>
         public void SetNextBlockIndex(int index) => Playback.SetNextBlockIndex(index);
 
-        /// <summary>ѓrЃ[ѓg“ЇЉъѓIѓtѓZѓbѓg‚МђЭ’и</summary>
-        /// <param name='timeMs'>ѓIѓtѓZѓbѓgЋћЉФЃiѓ~ѓЉ•bЃj</param>
-        /// <returns>ѓIѓtѓZѓbѓg‚МђЭ’и‚Йђ¬Њч‚µ‚Ѕ‚©</returns>
+        /// <summary>гѓ“гѓјгѓ€еђЊжњџг‚Єгѓ•г‚»гѓѓгѓ€гЃ®иЁ­е®љ</summary>
+        /// <param name='timeMs'>г‚Єгѓ•г‚»гѓѓгѓ€ж™‚й–“пј€гѓџгѓЄз§’пј‰</param>
+        /// <returns>г‚Єгѓ•г‚»гѓѓгѓ€гЃ®иЁ­е®љгЃ«ж€ђеЉџгЃ—гЃџгЃ‹</returns>
 
         public bool SetBeatSyncOffset(short timeMs) => Playback.SetBeatSyncOffset(timeMs);
 

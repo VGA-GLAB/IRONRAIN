@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -25,7 +25,7 @@ public sealed class FirstAnnounceSeqController : MonoBehaviour
         // 最初に何秒か待つ
         await UniTask.WaitForSeconds(_firstAwaitTimeSec, cancellationToken: cancellationToken);
         
-        await Announce(cancellationToken);
+        //await Announce(cancellationToken);
     }
 
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
