@@ -99,7 +99,7 @@ namespace Enemy.Control
             EnemyManager.Register(this);
 
             // レーダーに表示する。
-            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+            //if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
 
             // Perception
             _perception.Init();
@@ -153,7 +153,7 @@ namespace Enemy.Control
         private IEnumerator CleanupAsync()
         {
             // レーダーから消す。
-            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+            if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
 
             // Perception
             _perception.Dispose();
