@@ -26,7 +26,6 @@ public class PlayerController : MonoBehaviour
             _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());
         }
     }
-
     private void OnDestroy()
     {
         for (int i = 0; i < _playerStateList.Count; i++)
