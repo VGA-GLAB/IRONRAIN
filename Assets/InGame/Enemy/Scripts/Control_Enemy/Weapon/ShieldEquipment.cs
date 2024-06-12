@@ -41,7 +41,7 @@ namespace Enemy.Control
             });
         }
 
-        // 攻撃の基準となる座標を返す
+        // 攻撃の基準となる座標を返す。
         private Vector3 Origin()
         {
             if (_rotate == null) return transform.position;

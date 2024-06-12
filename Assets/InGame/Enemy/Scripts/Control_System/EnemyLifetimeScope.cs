@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Enemy.Control
 {
+    // 
     public class EnemyLifetimeScope : LifetimeScope
     {
         [SerializeField] private Transform _player;
