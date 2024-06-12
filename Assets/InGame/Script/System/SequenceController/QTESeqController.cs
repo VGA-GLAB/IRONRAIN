@@ -35,10 +35,24 @@ public class QTESeqController : MonoBehaviour
         // 最初の待ち時間
         await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: cancellationToken);
 
-        // QTEを開始させる
-        _playerQTEModel.StartQTE();
+        // QTEを開始させて成功を待つ
+        await RepeatQTE();
+    }
 
-        // QTEの終了（成功）を待つ
+    /// <summary>QTEが成功するまで繰り返す</summary>
+    public async UniTask RepeatQTE()
+    {
+        // 比較用
+        var result = QTEResultType.Failure;
+
+        // QTEが成功するまで繰り返す
+        while (result != QTEResultType.Success)
+        {
+            result = await _playerQTEModel.StartQTE();
+        }
+
+        // QTEが成功した後の処理を記述する
+        Debug.Log("QTE Successed.");
     }
 
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
