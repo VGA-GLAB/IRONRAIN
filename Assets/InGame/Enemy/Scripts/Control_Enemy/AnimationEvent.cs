@@ -12,7 +12,7 @@ namespace Enemy.Control
     {
         /// <summary>
         /// 近接攻撃の判定を出すタイミング。
-        /// 遠距離攻撃の場合はこのタイミングで弾を発射する。
+        /// 遠距離攻撃の場合はこのタイミングで弾を発射する
         /// </summary>
         public event UnityAction OnFireStart;
         /// <summary>

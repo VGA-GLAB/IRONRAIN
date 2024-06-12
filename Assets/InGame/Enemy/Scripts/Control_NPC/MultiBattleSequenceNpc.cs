@@ -21,8 +21,23 @@ namespace Enemy.Control
         [Min(1)]
         [SerializeField] private float _defeatDistance = 5;
 
-        private void Start()
+        void Start()
         {
+            // 画面から非表示になるが、外部から安全に呼び出せるようにスケールを0にしておく。
+            transform.localScale = Vector3.zero;
+
+            // 自信を登録
+            NpcManager.Register(this);
+        }
+
+        /// <summary>
+        /// 外部から呼び出してイベント再生
+        /// </summary>
+        public void Play()
+        {
+            // 画面に表示
+            transform.localScale = Vector3.one;
+
             if (_target != null)
             {
                 DefeatTargetAsync(this.GetCancellationTokenOnDestroy()).Forget();
