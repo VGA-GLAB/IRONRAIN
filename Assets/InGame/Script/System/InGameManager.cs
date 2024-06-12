@@ -11,6 +11,7 @@ public sealed class InGameManager : MonoBehaviour
     [SerializeField] private ChaseSequenceController _chaseSequenceController = default;
     [SerializeField] private FirstAnnounceSeqController _firstAnnounceSeqController = default;
     [SerializeField] private AttackSeqController _attackSeqController = default;
+    [SerializeField] private QTESeqController _QTESeqController = default;
     [SerializeField] private AvoidanceSeqController _avoidanceSeqController = default;
     [SerializeField] private BossStartSeqController _bossStartSeqController = default;
     [SerializeField] private PlayerController _playerController = default;
@@ -147,11 +148,7 @@ public sealed class InGameManager : MonoBehaviour
     private async UniTask QTETutorialSequence(CancellationToken cancellationToken)
     {
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.QTETutorialSequence>();
-
-        // Todo:QTEのチュートリアルの終了を待つ処理に書き換える
-        //Debug.Log("QTEのチュートリアル中");
-        await UniTask.WaitForSeconds(1F, cancellationToken: cancellationToken);
-        //Debug.Log("QTEのチュートリアル終了");
+        await _QTESeqController.QTESeqAsync(cancellationToken);
     }
 
     private async UniTask MultiBattleSequence(CancellationToken cancellationToken)

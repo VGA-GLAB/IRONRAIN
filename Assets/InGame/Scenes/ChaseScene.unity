@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12866, g: 0.14591241, b: 0.17724228, a: 1}
+  m_IndirectSpecularColor: {r: 0.15490156, g: 0.17128283, b: 0.20743889, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5360,6 +5360,8 @@ GameObject:
   - component: {fileID: 94510887}
   - component: {fileID: 94510886}
   - component: {fileID: 94510888}
+  - component: {fileID: 94510890}
+  - component: {fileID: 94510889}
   m_Layer: 0
   m_Name: TutorialController
   m_TagString: Untagged
@@ -5441,6 +5443,41 @@ MonoBehaviour:
   _chaseStage: {fileID: 1145448185}
   _bossStage: {fileID: 1145448185}
   _enemyManager: {fileID: 0}
+--- !u!114 &94510889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94510884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ff290eb522c3141956c7861a155f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyManager: {fileID: 213009448}
+  _playerQTE: {fileID: 2667218937599446709}
+  _qteAwaitTimeSec: 5
+--- !u!114 &94510890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94510884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ee587598ceb5341a2412afec82fbd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textBox: {fileID: 1255844601}
+  _enemyManager: {fileID: 213009448}
+  _textBoxOpenAndCloseSec: 0.5
+  _tutorialText: "\u653B\u6483\u306E\u4ED5\u65B9\u3092\u8868\u793A"
+  _textDuration: 3
+  _announceCueSheetName: SE
+  _announceCueName: SE_Kill
+  _waitAfterAnnounceSec: 1
 --- !u!1 &95719676
 GameObject:
   m_ObjectHideFlags: 0
@@ -11600,6 +11637,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+--- !u!114 &213009448 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7980481993630760504, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+  m_PrefabInstance: {fileID: 213009447}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d336bebf9b881419dbac0707a57d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &216341618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8259524632637961923, guid: 27024f5809f4a4347b9cd7f26a1bdf93, type: 3}
@@ -60012,7 +60060,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chaseSequenceController: {fileID: 1814249522}
   _firstAnnounceSeqController: {fileID: 94510887}
-  _attackSeqController: {fileID: 0}
+  _attackSeqController: {fileID: 94510890}
+  _QTESeqController: {fileID: 94510889}
   _avoidanceSeqController: {fileID: 94510886}
   _bossStartSeqController: {fileID: 94510888}
   _playerController: {fileID: 2667218937599446716}
@@ -65650,7 +65699,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 179162216354139438, guid: 9d4f209f39bb8704d8037c902f0e1fd6, type: 3}
   m_PrefabInstance: {fileID: 1329786559}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914984296}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8c64c125d33c714697c38ed8bccb297, type: 3}
@@ -73254,6 +73303,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4099084847248940424, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
   m_PrefabInstance: {fileID: 2667218937599446707}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2667218937599446709 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7821395390396876064, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
+  m_PrefabInstance: {fileID: 2667218937599446707}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f1642546e2c0b64288c2f77a50298cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2667218937599446716 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1454600687060090342, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
