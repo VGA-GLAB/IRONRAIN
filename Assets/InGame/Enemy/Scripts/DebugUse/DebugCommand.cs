@@ -1,7 +1,6 @@
 ﻿using Enemy.Control;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -9,8 +8,9 @@ namespace Enemy.DebugUse
 {
     public class DebugCommand : MonoBehaviour
     {
-        [Header("コマンドで敵に命令する")]
+        [Header("コマンドで敵やNPCに命令する")]
         [SerializeField] private EnemyManager _enemyManager;
+        [SerializeField] private NpcManager _npcManager;
 
         private GUIStyle _style = new GUIStyle();
         private GUIStyleState _state = new GUIStyleState();
@@ -145,6 +145,19 @@ namespace Enemy.DebugUse
             {
                 _enemyManager.BossStart();
                 Debug.Log($"ボス戦開始");
+                return true;
+            }
+
+            // NPCのシーケンスイベント
+            if (cmd[0] == "NPC" && cmd[1] == "PLAYEVENT" && cmd.Length == 3)
+            {
+                NpcManager.Sequence seq;
+                if (cmd[2] == "NONE") seq = NpcManager.Sequence.None;
+                else if (cmd[2] == "MULTIBATTLE") seq = NpcManager.Sequence.MultiBattle;
+                else return false;
+
+                _npcManager.PlayEvent(seq);
+                Debug.Log($"{seq}シーケンスのNPCイベントを実行");
                 return true;
             }
 

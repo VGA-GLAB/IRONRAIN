@@ -76,7 +76,7 @@ namespace Enemy.Control.Boss
             FunnelController.RegisterOwner(this, _funnels);
 
             // レーダーに表示する。
-            //if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
 
             // Perception
             _perception.Init();

@@ -14,6 +14,7 @@
             Attack,       // 攻撃させる。
             QteTrigger,   // QTE開始(盾持ちの敵が自身に命令)。
             BossStart,    // ボス戦開始。
+            FunnelExpand, // ファンネル展開。
         };
 
         public Type OrderType;

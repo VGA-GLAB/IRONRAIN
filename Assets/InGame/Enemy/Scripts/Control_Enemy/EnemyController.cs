@@ -99,7 +99,7 @@ namespace Enemy.Control
             EnemyManager.Register(this);
 
             // レーダーに表示する。
-            //if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
 
             // Perception
             _perception.Init();
