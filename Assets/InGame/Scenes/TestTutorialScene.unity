@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12857139, g: 0.1459519, b: 0.1771957, a: 1}
+  m_IndirectSpecularColor: {r: 0.15490156, g: 0.17128283, b: 0.20743889, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3854,6 +3854,7 @@ GameObject:
   - component: {fileID: 950379096}
   - component: {fileID: 950379097}
   - component: {fileID: 950379098}
+  - component: {fileID: 950379099}
   m_Layer: 0
   m_Name: TutorialController
   m_TagString: Untagged
@@ -3913,6 +3914,26 @@ MonoBehaviour:
   _shootWaitSec: 1
   _textBoxOpenAndCloseSec: 0.5
   _tutorialText: "\u304A\u4E0A\u624B\u3067\u3059\uFF01"
+  _textDuration: 3
+  _announceCueSheetName: SE
+  _announceCueName: SE_Kill
+  _waitAfterAnnounceSec: 1
+--- !u!114 &950379099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950379095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ee587598ceb5341a2412afec82fbd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textBox: {fileID: 1534161680}
+  _enemyManager: {fileID: 1356474653}
+  _textBoxOpenAndCloseSec: 0.5
+  _tutorialText: "\u73FE\u5728\u3001\u30C6\u30B9\u30C8\u30C6\u30AD\u30B9\u30C8\u304C\u8868\u793A\u3055\u308C\u3066\u3044\u307E\u3059"
   _textDuration: 3
   _announceCueSheetName: SE
   _announceCueName: SE_Kill
@@ -5377,6 +5398,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6246fccd2e3ad5842a2a81e81f061489, type: 3}
+--- !u!114 &1356474653 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7980481993630760504, guid: 8cedb8b313fbc6e4da0c5c3f4dd3e941, type: 3}
+  m_PrefabInstance: {fileID: 213009447}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d336bebf9b881419dbac0707a57d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1437766487
 GameObject:
   m_ObjectHideFlags: 0
@@ -5563,6 +5595,7 @@ MonoBehaviour:
   _chaseSequenceController: {fileID: 1437766489}
   _firstAnnounceSeqController: {fileID: 950379097}
   _avoidanceSeqController: {fileID: 950379098}
+  _attackSeqController: {fileID: 950379099}
   _attackSeqEnemy: {fileID: 0}
   _providePlayerInjectableComponents: []
 --- !u!1 &1450551573 stripped
@@ -6885,7 +6918,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 978102174, guid: 098f9a93ef8574f44b6dcf9d34a23f5f, type: 3}
   m_PrefabInstance: {fileID: 1713015170}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309676703}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8c64c125d33c714697c38ed8bccb297, type: 3}

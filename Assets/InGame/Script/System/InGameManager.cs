@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,6 +11,7 @@ public sealed class InGameManager : MonoBehaviour
     [SerializeField] private ChaseSequenceController _chaseSequenceController = default;
     [SerializeField] private FirstAnnounceSeqController _firstAnnounceSeqController = default;
     [SerializeField] private AvoidanceSeqController _avoidanceSeqController = default;
+    [SerializeField] private AttackSeqController _attackSeqController = default;
     [SerializeField] private GameObject _attackSeqEnemy = default;
     [SerializeField, Tooltip("IProvidePlayerInformationInjectableを実装したComponentをアタッチしてください")]
     private Component[] _providePlayerInjectableComponents = default;
@@ -111,10 +112,7 @@ public sealed class InGameManager : MonoBehaviour
         // AttackSequence
         _chaseSequenceController.ChangeSequence<ChaseSequenceController.AttackSequence>();
 
-        // 現在チュートリアルの敵が死んだら終了するようにしてある。
-        Debug.Log("攻撃のチュートリアル中");
-        await UniTask.WaitUntil(() => !_attackSeqEnemy, cancellationToken: cancellationToken);
-        Debug.Log("攻撃のチュートリアル終了");
+        await _attackSeqController.AttackSeqAsync(cancellationToken);
     }
 
     private async UniTask TouchPanelSequence(CancellationToken cancellationToken)
