@@ -7,6 +7,7 @@ public class PlayerStoryEvent : PlayerComponentBase
 {
     [SerializeField] private Transform _bossBattleStartPos;
     [SerializeField] private Transform _centerPoint;
+    [SerializeField] private List<LeverController> _leverCon;
 
     /// <summary>
     /// ジェットパックをパージ
@@ -39,6 +40,20 @@ public class PlayerStoryEvent : PlayerComponentBase
     {
         _playerEnvroment.AddState(PlayerStateType.Inoperable);
         await _playerEnvroment.PlayerAnimation.FallAnim();
+    }
+
+    /// <summary>
+    /// チェイスシーン始める
+    /// </summary>
+    public void StartChaseScene()
+    {
+        _playerEnvroment.SeachState<PlayerTrackingPhaseMove>().enabled = true;
+        _playerEnvroment.SeachState<PlayerQTE>().enabled = true;
+        _playerEnvroment.SeachState<PlayerWeaponController>().enabled = true;
+        for (int i = 0; i < _leverCon.Count; i++)  
+        {
+            _leverCon[i].enabled = true;
+        }
     }
 
     /// <summary>

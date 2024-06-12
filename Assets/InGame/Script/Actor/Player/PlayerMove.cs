@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -10,5 +10,10 @@ public class PlayerMove : PlayerComponentBase
     private void Awake()
     {
         MoveModel = _playerStateModel as PlayerMoveModel;
+    }
+
+    private void OnEnable()
+    {
+        MoveModel.ResetPos();
     }
 }

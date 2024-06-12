@@ -11,7 +11,7 @@ public class PlayerMoveModel : IPlayerStateModel
     [SerializeField] LeverController _leftController;
     [SerializeField] LeverController _rightController;
     [SerializeField] Rigidbody _rb;
-    [SerializeField] private BossStage _bossStage;
+    [SerializeField] private Transform _pointP;
 
     private float _totalThrusterMove;
     private PlayerEnvroment _playerEnvroment;
@@ -27,9 +27,9 @@ public class PlayerMoveModel : IPlayerStateModel
         _leftController.SetUp(env.PlayerSetting);
         _rightController.SetUp(env.PlayerSetting);  
         _transform = _playerEnvroment.PlayerTransform;
-        _centerPoint = _bossStage.PointP;
-        env.PlayerTransform.SetParent(_centerPoint);
-        _playerEnvroment.PlayerTransform.position = new Vector3(0, 0, 20);
+        _centerPoint = _pointP;
+        env.PlayerTransform.SetParent(_pointP);
+        _playerEnvroment.PlayerTransform.localPosition = new Vector3(0, 0, 20);
     }
 
     public void Start()
@@ -55,6 +55,11 @@ public class PlayerMoveModel : IPlayerStateModel
     }
 
     public void Dispose()
+    {
+       
+    }
+
+    public void ResetPos() 
     {
        
     }
@@ -101,7 +106,6 @@ public class PlayerMoveModel : IPlayerStateModel
         //２ギア
         else
         {
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
         }
     }
 

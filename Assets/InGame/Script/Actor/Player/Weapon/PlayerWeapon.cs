@@ -35,6 +35,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
 
     private void Update()
     {
+        if (_playerEnvroment == null) return;
         _playerEnvroment.RaderMap.NearEnemyLockon();
         //次の発射までの計算
         _currentTime += Time.deltaTime;

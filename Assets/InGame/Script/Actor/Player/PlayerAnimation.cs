@@ -26,8 +26,10 @@ public class PlayerAnimation : MonoBehaviour
 
     public async UniTask FallAnim() 
     {
-        Animator anim = Instantiate(_fallObj, _fallInsPos).GetComponent<Animator>();
+        var obj = Instantiate(_fallObj, _fallInsPos);
+        Animator anim = obj.GetComponent<Animator>();
         await UniTask.WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
         PlayerLoopTiming.Update, _token);
+        obj.SetActive(false);
     }
 }
