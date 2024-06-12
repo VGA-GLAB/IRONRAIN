@@ -14,6 +14,7 @@ public class LineRendererDraw : MonoBehaviour
     /// <summary>ボタンを押しているかのフラグ </summary>
     private bool IsInput = false;
 
+
     private void Start()
     {
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.LeftTrigger, LineStart);
@@ -87,4 +88,5 @@ public class LineRendererDraw : MonoBehaviour
         IsInput = false;
         Debug.Log("線を消す");
     }
+
 }
