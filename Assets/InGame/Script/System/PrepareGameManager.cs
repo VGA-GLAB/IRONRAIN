@@ -9,10 +9,7 @@ public sealed class PrepareGameManager : MonoBehaviour
 {
     [SerializeField] private PrepareSequenceController _prepareSequenceController = default;
     [SerializeField] private PrepareStartController _prepareStartController = default;
-    [SerializeField] private StartUpSeqController _startUpSeqController = default;
-    [SerializeField] private PrepareSortieSeqController _prepareSortieSeqController = default;
-    [SerializeField] private SortieController _sortieController = default;
-    
+
     private async void Start()
     {
         await ManagePrepareAsync(this.GetCancellationTokenOnDestroy());
@@ -20,8 +17,9 @@ public sealed class PrepareGameManager : MonoBehaviour
 
     private async UniTask ManagePrepareAsync(CancellationToken cancellationToken)
     {
-        await PrepareStartSeqAsync(cancellationToken);
-        
+        await _prepareStartController.PrepareStartAsync(cancellationToken);
+        _prepareSequenceController.ChangeSequence<PrepareSequenceController.StartUpSequence>();
+
         await StartUpSeqAsync(cancellationToken);
 
         await PrepareSortieSeqAsync(cancellationToken);
@@ -29,27 +27,18 @@ public sealed class PrepareGameManager : MonoBehaviour
         await SortieSeqAsync(cancellationToken);
     }
 
-    private async UniTask PrepareStartSeqAsync(CancellationToken cancellationToken)
-    {
-        _prepareSequenceController.ChangeSequence<PrepareSequenceController.StartUpSequence>();
-        await _prepareStartController.PrepareStartAsync(cancellationToken);
-    }
-
     private async UniTask StartUpSeqAsync(CancellationToken cancellationToken)
     {
-        _prepareSequenceController.ChangeSequence<PrepareSequenceController.StartUpSequence>();
-        await _startUpSeqController.StartUpSeqAsync(cancellationToken);
+
     }
 
     private async UniTask PrepareSortieSeqAsync(CancellationToken cancellationToken)
     {
-        _prepareSequenceController.ChangeSequence<PrepareSequenceController.PrepareSortieSequence>();
-        await _prepareSortieSeqController.PrepareSortieSeqAsync(cancellationToken);
+
     }
 
     private async UniTask SortieSeqAsync(CancellationToken cancellationToken)
     {
-        _prepareSequenceController.ChangeSequence<PrepareSequenceController.SortieSequence>();
-        await _sortieController.SortieSeqAsync(cancellationToken);
+
     }
 }

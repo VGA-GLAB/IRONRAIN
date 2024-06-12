@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 public class LineRendererDraw : MonoBehaviour
 {
@@ -13,6 +18,7 @@ public class LineRendererDraw : MonoBehaviour
     private float _interval = 0.1f;
     /// <summary>ボタンを押しているかのフラグ </summary>
     private bool IsInput = false;
+
 
     private void Start()
     {
@@ -87,4 +93,5 @@ public class LineRendererDraw : MonoBehaviour
         IsInput = false;
         Debug.Log("線を消す");
     }
+
 }

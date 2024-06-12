@@ -1,4 +1,4 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,17 +7,17 @@ public class PlayerSetting : ScriptableObject
 {
     public PlayerParams PlayerParamsData => _playerParams;
 
-    [Header("ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®å…¥åŠ›ã‚’è¨±å¯ã™ã‚‹ã‹ã©ã†ã‹")]
+    [Header("ƒL[ƒ{[ƒh‚Ì“ü—Í‚ğ‹–‰Â‚·‚é‚©‚Ç‚¤‚©")]
     public bool IsKeyBoard;
-    public bool IsVRInput;
-    public bool IsFryCon;
-    [Header("Playerã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼è¨­å®š")]
+    [Header("Player‚Ìƒpƒ‰ƒ[ƒ^[İ’è")]
     [SerializeField] private PlayerParams _playerParams;
 
     [System.Serializable]
     public class PlayerParams 
     {
-        public float Speed => _speed;
+        public float OneGearSpeed => _oneGearSpeed;
+        public float TwoGearSpeed => _twoGearSpeed;
+        public float ThreeGearSpeed => _threeGearSpeed;
         public float ThrusterMoveNum => _thrusterMoveNum;
         public int ThrusterMoveTime => _thrusterMoveTime;
         public int RestrictionLane => _restrictionLane;
@@ -27,26 +27,30 @@ public class PlayerSetting : ScriptableObject
         public float QteTimeLimit => _qteTimeLimit;
         public int Hp => _hp;
 
-        [Header("Playerã®Hp")]
+        [Header("Player‚ÌHp")]
         [SerializeField] private int _hp;
-        [Header("===Playerã®ç§»å‹•è¨­å®š===")]
-        [Header("ã‚¹ãƒ”ãƒ¼ãƒ‰")]
-        [SerializeField] private int _speed;
-        [Header("ï¼‘å›ã®ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ã®ç§»å‹•é‡")]
+        [Header("===Player‚ÌˆÚ“®İ’è===")]
+        [Header("1‘¬")]
+        [SerializeField] private float _oneGearSpeed;
+        [Header("2‘¬")]
+        [SerializeField] private float _twoGearSpeed;
+        [Header("3‘¬")]
+        [SerializeField] private float _threeGearSpeed;
+        [Header("‚P‰ñ‚ÌƒXƒ‰ƒXƒ^[‚ÌˆÚ“®—Ê")]
         [SerializeField] private float _thrusterMoveNum;
-        [Header("ä½•ç§’é–“ã§ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ã§ç§»å‹•ã™ã‚‹ã‹")]
+        [Header("‰½•bŠÔ‚ÅƒXƒ‰ƒXƒ^[‚ÅˆÚ“®‚·‚é‚©")]
         [SerializeField] private int _thrusterMoveTime;
-        [Header("ã©ã®ãƒ¬ãƒ¼ãƒ³ã‹ã‚‰åˆ¶é™ã‚’ã‹ã‘ã‚‹ã‹")]
+        [Header("‚Ç‚ÌƒŒ[ƒ“‚©‚ç§ŒÀ‚ğ‚©‚¯‚é‚©")]
         [SerializeField] private int _restrictionLane;
-        //[Header("ãƒ¬ãƒ¼ãƒ³ã«æˆ»ãã†ã¨ã™ã‚‹åŠ›ã®å€ç‡")]
+        //[Header("ƒŒ[ƒ“‚É–ß‚»‚¤‚Æ‚·‚é—Í‚Ì”{—¦")]
         //[SerializeField] private float _returnLaneStrengthMagnification;
-        [Header("ãƒ¬ãƒ¼ãƒ³ã«æˆ»ãã†ã¨ã™ã‚‹åŠ›ã®å¼·ã•")]
+        [Header("ƒŒ[ƒ“‚É–ß‚»‚¤‚Æ‚·‚é—Í‚Ì‹­‚³")]
         [SerializeField] private float _returnLaneStrength;
-        [Header("ãƒ¬ãƒ¼ãƒ³ã«æˆ»ãã†ã¨ã™ã‚‹åŠ›ã®å¼·ã•ã®æœ€å¤§å€¤")]
+        [Header("ƒŒ[ƒ“‚É–ß‚»‚¤‚Æ‚·‚é—Í‚Ì‹­‚³‚ÌÅ‘å’l")]
         [SerializeField] private float _maxReturnLaneStrength;
 
-        [Header("===QTEã®è¨­å®š===")]
-        [Header("QTEã®æ™‚é–“åˆ¶é™")]
+        [Header("===QTE‚Ìİ’è===")]
+        [Header("QTE‚ÌŠÔ§ŒÀ")]
         [SerializeField] float _qteTimeLimit;
     }
 

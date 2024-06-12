@@ -29,11 +29,9 @@ public class PlayerQTE : PlayerComponentBase
         if(QTEModel == null) return;
         var enemyTypeReader = other.GetComponentsInParent<IReadonlyEnemyParams>();
         if (enemyTypeReader.Length == 0) return;
-        Debug.Log(other);
         //盾持ちの敵が入ってきたら
         if (enemyTypeReader[0].Type == EnemyType.Shield)
         {
-            Debug.Log("wea");
             QTEModel.StartQTE();
         }
     }

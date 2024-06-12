@@ -1022,30 +1022,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
-                    ""id"": ""97641562-e490-4821-969a-e4338f7ab1be"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThirdButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""067b2204-22bf-4f2e-ba04-184bd3710615"",
                     ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button9"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Force Button"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0fb2caf4-8f11-48d0-b034-ed9637afa91d"",
-                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1922,17 +1900,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
-                    ""id"": ""91c7947f-13a3-4c4c-baf2-ab0c748d1f77"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OneButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""2c734370-e3be-40b6-8fae-12125a8d73b8"",
                     ""path"": ""<XRController>{RightHand}/{SecondaryButton}"",
                     ""interactions"": """",
@@ -1946,17 +1913,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": """",
                     ""id"": ""6f43b0b7-d7a7-4797-ae7a-9aff4bd222ce"",
                     ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TwoButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f6df3ecd-3cbe-49c8-aff5-abe54b101a2e"",
-                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2834,40 +2790,13 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""OneButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""53b945f2-44a7-4417-a80b-20e2efd65a6e"",
-                    ""expectedControlType"": ""Button"",
+                    ""name"": ""Arrow"",
+                    ""type"": ""Value"",
+                    ""id"": ""14f54a9e-6fad-4cd4-bef7-71eb69bbacd1"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""TwoButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""ca00d8c6-bf9b-46bb-9696-6d6cd8330a17"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ThirdButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""c4850abd-8970-4361-8cca-1ac30c69a917"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Force Button"",
-                    ""type"": ""Button"",
-                    ""id"": ""a30767d0-26f7-44ce-b6e1-b8115af29827"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""RightButton"",
@@ -2877,33 +2806,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""LeftLever"",
-                    ""type"": ""Value"",
-                    ""id"": ""2edae5c6-2564-48cb-9483-ddaee84304b7"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""LeverThree"",
-                    ""type"": ""Button"",
-                    ""id"": ""f62c08f0-d649-4021-82d2-5b428f3ee02f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LeverFour"",
-                    ""type"": ""Button"",
-                    ""id"": ""85dfb3e1-1dbe-4265-bf91-d3e8bdb41eff"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2959,6 +2861,61 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrow"",
+                    ""id"": ""3c2937b3-6240-488a-a0ee-8c4de0b790d6"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""467a90ef-fef6-40a5-ac4f-15dc024121ab"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""653d013a-ca83-4396-8531-b340ae1dc400"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5a280325-5194-4bc7-8c56-27855468c4b9"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7bc025c1-9b11-4e03-a7fe-10aff0dcb963"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -3027,149 +2984,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""RightButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5c387748-41f2-45aa-b257-3931d65ff5c6"",
-                    ""path"": ""<Mouse>/scroll"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeftLever"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d3c9a75b-c4d4-4843-ace7-7f8e0d365963"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeverThree"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a2e82fcc-1ad5-4cf1-af8c-a4c439906304"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeverFour"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""29fca6cd-416c-47ae-9c33-5049b6cb5cf2"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button9"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Force Button"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f1463da0-b5a8-499e-9d93-394512c11af8"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Force Button"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""83058b69-eb06-4d03-a25f-f9625ad3e0cc"",
-                    ""path"": ""<XRController>{RightHand}/{PrimaryButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OneButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""972c4bd4-ca97-4627-9126-48163eccfcf0"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OneButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""102097ef-0751-4929-8ec0-3c795e7e1b9a"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OneButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fb19e331-69a6-4c87-8847-e6ab6b4f91d0"",
-                    ""path"": ""<XRController>{RightHand}/{SecondaryButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TwoButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3d8654fd-1640-49ef-b9cd-3b39e30f2387"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TwoButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""13959f65-193e-4322-a30f-14e7f1e7a4dd"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TwoButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dd790203-ae9c-4cb5-8e64-b2d37ce7567b"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThirdButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""48324d73-33cf-4166-bd9a-32abaf7ea7f1"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThirdButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3479,14 +3293,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         // Lever
         m_Lever = asset.FindActionMap("Lever", throwIfNotFound: true);
         m_Lever_WASD = m_Lever.FindAction("WASD", throwIfNotFound: true);
-        m_Lever_OneButton = m_Lever.FindAction("OneButton", throwIfNotFound: true);
-        m_Lever_TwoButton = m_Lever.FindAction("TwoButton", throwIfNotFound: true);
-        m_Lever_ThirdButton = m_Lever.FindAction("ThirdButton", throwIfNotFound: true);
-        m_Lever_ForceButton = m_Lever.FindAction("Force Button", throwIfNotFound: true);
+        m_Lever_Arrow = m_Lever.FindAction("Arrow", throwIfNotFound: true);
         m_Lever_RightButton = m_Lever.FindAction("RightButton", throwIfNotFound: true);
-        m_Lever_LeftLever = m_Lever.FindAction("LeftLever", throwIfNotFound: true);
-        m_Lever_LeverThree = m_Lever.FindAction("LeverThree", throwIfNotFound: true);
-        m_Lever_LeverFour = m_Lever.FindAction("LeverFour", throwIfNotFound: true);
         // Toggle
         m_Toggle = asset.FindActionMap("Toggle", throwIfNotFound: true);
         m_Toggle_Toggle1 = m_Toggle.FindAction("Toggle1", throwIfNotFound: true);
@@ -4659,27 +4467,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputActionMap m_Lever;
     private List<ILeverActions> m_LeverActionsCallbackInterfaces = new List<ILeverActions>();
     private readonly InputAction m_Lever_WASD;
-    private readonly InputAction m_Lever_OneButton;
-    private readonly InputAction m_Lever_TwoButton;
-    private readonly InputAction m_Lever_ThirdButton;
-    private readonly InputAction m_Lever_ForceButton;
+    private readonly InputAction m_Lever_Arrow;
     private readonly InputAction m_Lever_RightButton;
-    private readonly InputAction m_Lever_LeftLever;
-    private readonly InputAction m_Lever_LeverThree;
-    private readonly InputAction m_Lever_LeverFour;
     public struct LeverActions
     {
         private @XRIDefaultInputActions m_Wrapper;
         public LeverActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @WASD => m_Wrapper.m_Lever_WASD;
-        public InputAction @OneButton => m_Wrapper.m_Lever_OneButton;
-        public InputAction @TwoButton => m_Wrapper.m_Lever_TwoButton;
-        public InputAction @ThirdButton => m_Wrapper.m_Lever_ThirdButton;
-        public InputAction @ForceButton => m_Wrapper.m_Lever_ForceButton;
+        public InputAction @Arrow => m_Wrapper.m_Lever_Arrow;
         public InputAction @RightButton => m_Wrapper.m_Lever_RightButton;
-        public InputAction @LeftLever => m_Wrapper.m_Lever_LeftLever;
-        public InputAction @LeverThree => m_Wrapper.m_Lever_LeverThree;
-        public InputAction @LeverFour => m_Wrapper.m_Lever_LeverFour;
         public InputActionMap Get() { return m_Wrapper.m_Lever; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4692,30 +4488,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @WASD.started += instance.OnWASD;
             @WASD.performed += instance.OnWASD;
             @WASD.canceled += instance.OnWASD;
-            @OneButton.started += instance.OnOneButton;
-            @OneButton.performed += instance.OnOneButton;
-            @OneButton.canceled += instance.OnOneButton;
-            @TwoButton.started += instance.OnTwoButton;
-            @TwoButton.performed += instance.OnTwoButton;
-            @TwoButton.canceled += instance.OnTwoButton;
-            @ThirdButton.started += instance.OnThirdButton;
-            @ThirdButton.performed += instance.OnThirdButton;
-            @ThirdButton.canceled += instance.OnThirdButton;
-            @ForceButton.started += instance.OnForceButton;
-            @ForceButton.performed += instance.OnForceButton;
-            @ForceButton.canceled += instance.OnForceButton;
+            @Arrow.started += instance.OnArrow;
+            @Arrow.performed += instance.OnArrow;
+            @Arrow.canceled += instance.OnArrow;
             @RightButton.started += instance.OnRightButton;
             @RightButton.performed += instance.OnRightButton;
             @RightButton.canceled += instance.OnRightButton;
-            @LeftLever.started += instance.OnLeftLever;
-            @LeftLever.performed += instance.OnLeftLever;
-            @LeftLever.canceled += instance.OnLeftLever;
-            @LeverThree.started += instance.OnLeverThree;
-            @LeverThree.performed += instance.OnLeverThree;
-            @LeverThree.canceled += instance.OnLeverThree;
-            @LeverFour.started += instance.OnLeverFour;
-            @LeverFour.performed += instance.OnLeverFour;
-            @LeverFour.canceled += instance.OnLeverFour;
         }
 
         private void UnregisterCallbacks(ILeverActions instance)
@@ -4723,30 +4501,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @WASD.started -= instance.OnWASD;
             @WASD.performed -= instance.OnWASD;
             @WASD.canceled -= instance.OnWASD;
-            @OneButton.started -= instance.OnOneButton;
-            @OneButton.performed -= instance.OnOneButton;
-            @OneButton.canceled -= instance.OnOneButton;
-            @TwoButton.started -= instance.OnTwoButton;
-            @TwoButton.performed -= instance.OnTwoButton;
-            @TwoButton.canceled -= instance.OnTwoButton;
-            @ThirdButton.started -= instance.OnThirdButton;
-            @ThirdButton.performed -= instance.OnThirdButton;
-            @ThirdButton.canceled -= instance.OnThirdButton;
-            @ForceButton.started -= instance.OnForceButton;
-            @ForceButton.performed -= instance.OnForceButton;
-            @ForceButton.canceled -= instance.OnForceButton;
+            @Arrow.started -= instance.OnArrow;
+            @Arrow.performed -= instance.OnArrow;
+            @Arrow.canceled -= instance.OnArrow;
             @RightButton.started -= instance.OnRightButton;
             @RightButton.performed -= instance.OnRightButton;
             @RightButton.canceled -= instance.OnRightButton;
-            @LeftLever.started -= instance.OnLeftLever;
-            @LeftLever.performed -= instance.OnLeftLever;
-            @LeftLever.canceled -= instance.OnLeftLever;
-            @LeverThree.started -= instance.OnLeverThree;
-            @LeverThree.performed -= instance.OnLeverThree;
-            @LeverThree.canceled -= instance.OnLeverThree;
-            @LeverFour.started -= instance.OnLeverFour;
-            @LeverFour.performed -= instance.OnLeverFour;
-            @LeverFour.canceled -= instance.OnLeverFour;
         }
 
         public void RemoveCallbacks(ILeverActions instance)
@@ -5002,14 +4762,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     public interface ILeverActions
     {
         void OnWASD(InputAction.CallbackContext context);
-        void OnOneButton(InputAction.CallbackContext context);
-        void OnTwoButton(InputAction.CallbackContext context);
-        void OnThirdButton(InputAction.CallbackContext context);
-        void OnForceButton(InputAction.CallbackContext context);
+        void OnArrow(InputAction.CallbackContext context);
         void OnRightButton(InputAction.CallbackContext context);
-        void OnLeftLever(InputAction.CallbackContext context);
-        void OnLeverThree(InputAction.CallbackContext context);
-        void OnLeverFour(InputAction.CallbackContext context);
     }
     public interface IToggleActions
     {

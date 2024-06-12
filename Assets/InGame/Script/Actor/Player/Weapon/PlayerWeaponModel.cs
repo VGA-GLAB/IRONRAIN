@@ -60,7 +60,7 @@ public class PlayerWeaponModel : IPlayerStateModel
 
     private void Shot()
     {
-        _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton);
+        _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton1);
         if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
             || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
             || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
