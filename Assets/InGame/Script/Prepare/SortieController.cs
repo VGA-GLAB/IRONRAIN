@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 public sealed class SortieController : MonoBehaviour
 {
+    [SerializeField] private Transform _player;
     [SerializeField] private float _firstWaitSec = 5F;
     [SerializeField] private HatchController _secondHatch = default;
     [SerializeField] private HatchController.OpenDoorData _secondHatchData = default;
     [SerializeField] private TutorialTextBoxController _tutorialTextBoxController = default;
     [SerializeField] private string _text = "F3とF4を入力してください";
+    [SerializeField] private Transform _hangerOutside = default;
     
     public async UniTask SortieSeqAsync(CancellationToken cancellationToken)
     {
@@ -29,6 +32,10 @@ public sealed class SortieController : MonoBehaviour
 
         await _tutorialTextBoxController.DoCloseTextBoxAsync(1F, cancellationToken);
         
+        _tutorialTextBoxController.ClearText();
+        
         await _secondHatch.OpenDoorAsync(_secondHatchData, cancellationToken);
+
+        await _player.DOMove(_hangerOutside.position, 2F).ToUniTask(cancellationToken: cancellationToken);
     }
 }

@@ -51,7 +51,7 @@ public sealed class InGameManager : MonoBehaviour
         _debugScript.SetUp(_chaseSequenceController);
     }
 
-    private async void Start()
+    public async void InGameStart()
     {
         await ChaseManageAsync(this.GetCancellationTokenOnDestroy());
     }

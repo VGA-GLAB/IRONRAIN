@@ -23,7 +23,6 @@ public sealed class FirstAnnounceSeqController : MonoBehaviour
     /// <param name="cancellationToken"></param>
     public async UniTask FirstAnnounceTaskSeqAsync(CancellationToken cancellationToken)
     {
-        _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         // 最初に何秒か待つ
         await UniTask.WaitForSeconds(_firstAwaitTimeSec, cancellationToken: cancellationToken);
         

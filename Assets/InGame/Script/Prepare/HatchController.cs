@@ -17,13 +17,13 @@ public sealed class HatchController : MonoBehaviour
         _smoke.Play();
         
         await UniTask.WhenAll(
-            _overDoor.DOMoveY(data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken),
-            _underDoor.DOMoveY(-data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken)
+            _overDoor.DOLocalMoveY(data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken),
+            _underDoor.DOLocalMoveY(-data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken)
         );
         
         await UniTask.WhenAll(
-            _overDoor.DOMoveY(data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken),
-            _underDoor.DOMoveY(-data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken)
+            _overDoor.DOLocalMoveY(data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken),
+            _underDoor.DOLocalMoveY(-data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken)
         );
     }
 

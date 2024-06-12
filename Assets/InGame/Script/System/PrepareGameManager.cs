@@ -51,5 +51,6 @@ public sealed class PrepareGameManager : MonoBehaviour
     {
         _prepareSequenceController.ChangeSequence<PrepareSequenceController.SortieSequence>();
         await _sortieController.SortieSeqAsync(cancellationToken);
+        _prepareSequenceController.EndSequence();
     }
 }

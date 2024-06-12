@@ -5,6 +5,8 @@ using UnityEngine;
 
 public sealed class AvoidanceSeqController : MonoBehaviour
 {
+    [SerializeField] private PlayerStoryEvent _playerStoryEvent = default;
+    [SerializeField] private PlayerController _playerController;
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private EnemyController _tutorialEnemy = default;
     [SerializeField] private float _shootWaitSec = 2F;
@@ -32,6 +34,8 @@ public sealed class AvoidanceSeqController : MonoBehaviour
         
         await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
 
+        _playerStoryEvent.StartChaseScene();
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         _tutorialEnemy.Pause();
 
         Debug.Log("レバーかスペースキーを押してください");
@@ -40,7 +44,8 @@ public sealed class AvoidanceSeqController : MonoBehaviour
             InputProvider.Instance.LeftLeverDir != Vector3.zero ||
             InputProvider.Instance.RightLeverDir != Vector3.zero ||
             UnityEngine.InputSystem.Keyboard.current.spaceKey.isPressed, cancellationToken: cancellationToken);
-
+        
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
         _tutorialEnemy.Resume();
 
         await Announce(cancellationToken);
@@ -53,7 +58,7 @@ public sealed class AvoidanceSeqController : MonoBehaviour
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
         await UniTask.WhenAll(
-            CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
+            //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText()
         );
         
