@@ -7,6 +7,7 @@ using TMPro;
 public class QTESeqController : MonoBehaviour
 {
     [SerializeField] private EnemyManager _enemyManager = default;
+    [SerializeField] private PlayerQTEModel _playerQTEModel = default;
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [Header("QTEを開始するまでの待ち時間")]
     [SerializeField] private float _qteAwaitTimeSec = 5F;
@@ -35,7 +36,7 @@ public class QTESeqController : MonoBehaviour
         await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: cancellationToken);
 
         // QTEを開始させる
-
+        _playerQTEModel.StartQTE();
 
         // QTEの終了（成功）を待つ
     }
