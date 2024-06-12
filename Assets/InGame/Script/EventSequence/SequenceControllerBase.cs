@@ -86,4 +86,9 @@ public class SequenceControllerBase : MonoBehaviour
         _currentSequence = GetSequenceBase<T>();
         _currentSequence.OnSequenceStartEvent?.Invoke();
     }
+
+    public void EndSequence()
+    {
+        _currentSequence.OnSequenceEndEvent?.Invoke();
+    }
 }
