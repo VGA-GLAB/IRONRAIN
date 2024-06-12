@@ -38,18 +38,20 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            StartQTE();
+            StartQTE().Forget();
         }
     }
 
-    public void StartQTE()
+    public async UniTask<QTEResultType> StartQTE()
     {
+        QTEResultType qteResult = QTEResultType.Failure;
         var startCts = new CancellationTokenSource();
         var startToken = startCts.Token;
         var endCts = new CancellationTokenSource();
         var endToken = endCts.Token;
-        QTE(endCts, startToken).Forget();
-        QTEFailureJudgment(startCts, endToken).Forget();
+        qteResult = await QTE(endCts, startToken);
+        qteResult = await QTEFailureJudgment(startCts, endToken);
+        return qteResult;
     }
 
     /// <summary>
@@ -58,7 +60,7 @@ public class PlayerQTEModel : IPlayerStateModel
     /// <param name="endCts"></param>
     /// <param name="startToken"></param>
     /// <returns></returns>
-    public async UniTask QTE(CancellationTokenSource endCts, CancellationToken startToken)
+    public async UniTask<QTEResultType> QTE(CancellationTokenSource endCts, CancellationToken startToken)
     {
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
@@ -89,7 +91,9 @@ public class PlayerQTEModel : IPlayerStateModel
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
             Debug.Log("QTEキャンセル");
             endCts.Cancel();
+            return QTEResultType.Success;
         }
+        return QTEResultType.Failure;
     }
 
     /// <summary>
@@ -160,7 +164,7 @@ public class PlayerQTEModel : IPlayerStateModel
     /// QTEの失敗判定
     /// </summary>
     /// <returns></returns>
-    private async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
+    private async UniTask<QTEResultType> QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
     {
         //失敗までの時間を計測
         await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
@@ -170,5 +174,6 @@ public class PlayerQTEModel : IPlayerStateModel
         _qteType.Value = QTEState.QTENone;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
         startCts.Cancel();
+        return QTEResultType.Failure;
     }
 }

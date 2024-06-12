@@ -34,7 +34,7 @@ public class PlayerQTE : PlayerComponentBase
         if (enemyTypeReader[0].Type == EnemyType.Shield)
         {
             Debug.Log("wea");
-            QTEModel.StartQTE();
+            QTEModel.StartQTE().Forget();
         }
     }
 }
