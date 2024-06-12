@@ -1,4 +1,4 @@
-ï»¿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     private PlayerSetting.PlayerParams _params;
     private Transform _transform;
 
-    [Tooltip("ç¾åœ¨ã®ãƒ¬ãƒ¼ãƒ³")]
+    [Tooltip("Œ»İ‚ÌƒŒ[ƒ“")]
     private int _currentLane;
     private Vector3 _savePos;
     private bool _isRetunRale;
@@ -30,11 +30,9 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
 
         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
     }
-    protected override void FixedUpdate()
-    {        
-        base.FixedUpdate();
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) 
-            && !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
+    public void FixedUpdate()
+    {
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             Move();
         }
@@ -44,22 +42,27 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
         }
     }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-    public override void Dispose()
+    public void Dispose()
     {
 
     }
 
     private void Move()
     {
-        //å·¦ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼
-        if (_rightController.ControllerDir.x == -1)
+        //‚RƒMƒA
+        if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z == 1)
         {
-            //ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ä¸­ã§ã¯ãªã‹ã£ãŸå ´åˆ
+            _rb.velocity = _transform.forward * _params.ThreeGearSpeed * ProvidePlayerInformation.TimeScale;
+        }
+        //‚PƒMƒA
+        else if (_leftController.ControllerDir.z == -1 && _rightController.ControllerDir.z == -1)
+        {
+            _rb.velocity = _transform.forward * _params.OneGearSpeed * ProvidePlayerInformation.TimeScale;
+        }
+        //¶ƒXƒ‰ƒXƒ^[
+        else if (_leftController.ControllerDir.z == 1 && _rightController.ControllerDir.z != 1)
+        {
+            //ƒXƒ‰ƒXƒ^[’†‚Å‚Í‚È‚©‚Á‚½ê‡
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
@@ -68,12 +71,12 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
                 _currentLane--;
                 if (_currentLane == _params.RestrictionLane * -1) _savePos = transform.localPosition;
             }
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+            _rb.velocity = _transform.forward * _params.TwoGearSpeed * ProvidePlayerInformation.TimeScale;
         }
-        //å³ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼
-        else if (_rightController.ControllerDir.x == 1)
+        //‰EƒXƒ‰ƒXƒ^[
+        else if (_leftController.ControllerDir.z != 1 && _rightController.ControllerDir.z == 1)
         {
-            //ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ä¸­ã§ã¯ãªã‹ã£ãŸå ´åˆ
+            //ƒXƒ‰ƒXƒ^[’†‚Å‚Í‚È‚©‚Á‚½ê‡
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
             {
                 _playerEnvroment.AddState(PlayerStateType.Thruster);
@@ -82,19 +85,19 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
                 _currentLane++;
                 if (_currentLane == _params.RestrictionLane) _savePos = transform.localPosition;
             }
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+            _rb.velocity = _transform.forward * _params.TwoGearSpeed * ProvidePlayerInformation.TimeScale;
         }
-        //ï¼’ã‚®ã‚¢
-        else
+        //‚QƒMƒA
+        else if (_leftController.ControllerDir.z == 0 && _rightController.ControllerDir.z == 0)
         {
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+            _rb.velocity = _transform.forward * _params.TwoGearSpeed * ProvidePlayerInformation.TimeScale;
         }
 
         _rb.velocity += transform.right * ReturnLaneStrength();
     }
 
     /// <summary>
-    /// ã©ã®ãã‚‰ã„ã®é€Ÿã•ã§ä¸€ç•ªç«¯ã®ãƒ¬ãƒ¼ãƒ³ã«æˆ»ã™ã‹ã©ã†ã‹
+    /// ‚Ç‚Ì‚­‚ç‚¢‚Ì‘¬‚³‚Åˆê”Ô’[‚ÌƒŒ[ƒ“‚É–ß‚·‚©‚Ç‚¤‚©
     /// </summary>
     public float ReturnLaneStrength()
     {
@@ -110,21 +113,21 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             isRight = -1;
         }
 
-        //ã©ã®ç¨‹åº¦ãƒ¬ãƒ¼ãƒ³ã‹ã‚‰é›¢ã‚ŒãŸã‹
+        //‚Ç‚Ì’ö“xƒŒ[ƒ“‚©‚ç—£‚ê‚½‚©
         var distanceLane = _currentLane - _params.RestrictionLane * isRight;
         ret = distanceLane * _params.ReturnLaneStrength;
 
-        //æœ€å¤§å€¤ä»¥ä¸Šã«ãªã£ã¦ã„ãªã„ã‹
+        //Å‘å’lˆÈã‚É‚È‚Á‚Ä‚¢‚È‚¢‚©
         if (ret < _params.MaxReturnLaneStrength * isRight)
         {
             ret = _params.MaxReturnLaneStrength * isRight;
         }
 
         var dis = _transform.localPosition.x - _savePos.x;
-        //Debug.Log($"è·é›¢{dis}");
+        //Debug.Log($"‹——£{dis}");
         if (Mathf.Abs(dis) < 2 && _isRetunRale)
         {
-            //Debug.Log("ä»˜ã„ãŸ");
+            //Debug.Log("•t‚¢‚½");
             _isRetunRale = false;
             _currentLane = _params.RestrictionLane * isRight;
         }

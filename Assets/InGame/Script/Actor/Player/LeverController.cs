@@ -41,10 +41,10 @@ public class LeverController : MonoBehaviour
     {
         if (_leverType == LeverType.Right)
         {
-            _rightButton1?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.OneButton));
-            _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.OneButton));
-            _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.TwoButton));
-            _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.TwoButton));
+            _rightButton1?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.RightButton1));
+            _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton1));
+            _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.RightButton2));
+            _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.RightButton2));
             _isLeverMove = InputProvider.Instance.GetStayInput(InputProvider.InputType.RightTrigger);
         }
         else
@@ -56,7 +56,7 @@ public class LeverController : MonoBehaviour
     void Update()
     {
       
-        if (!_playerSetting.IsVRInput && _leverDir != Vector2.zero) 
+        if (_playerSetting.IsKeyBoard && _leverDir != Vector2.zero) 
         {
             _isLeverMove = true;
         }
@@ -104,7 +104,8 @@ public class LeverController : MonoBehaviour
                     .SetLink(this.gameObject);
             }
 
-            _controllerDir = Vector3.zero;
+            _controllerDir.z = 0;
+
         }
 
         _playerHandSavePos = _playerHandTransfrom.transform.localPosition;
@@ -133,8 +134,8 @@ public class LeverController : MonoBehaviour
     /// </summary>
     private void SetControllerDir() 
     {
-        //VRコントローラの場合
-        if (_playerSetting.IsVRInput)
+
+        if (!_playerSetting.IsKeyBoard)
         {
             if (transform.localPosition.z > _neutralPos.localPosition.z + _neutralRange)
             {
@@ -151,7 +152,6 @@ public class LeverController : MonoBehaviour
         }
         else
         {
-            //それ以外
             if (0.95f <= _leverDir.y)
             {
                 _controllerDir.z = 1;
@@ -163,19 +163,6 @@ public class LeverController : MonoBehaviour
             else 
             {
                 _controllerDir.z = 0;
-            }
-
-            if (0.95f <= _leverDir.x)
-            {
-                _controllerDir.x = 1;
-            }
-            else if (_leverDir.x < -0.95f)
-            {
-                _controllerDir.x = -1;
-            }
-            else
-            {
-                _controllerDir.x = 0;
             }
         }
     }

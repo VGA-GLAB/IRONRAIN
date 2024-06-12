@@ -19,10 +19,8 @@ public sealed class PrepareStartController : MonoBehaviour
     
     public async UniTask PrepareStartAsync(CancellationToken cancellationToken)
     {
-        Debug.Log("Test");
-        
         await UniTask.WaitForSeconds(_firstDelayTime, cancellationToken: cancellationToken);
-        
+
         await Announce(cancellationToken);
     }
     

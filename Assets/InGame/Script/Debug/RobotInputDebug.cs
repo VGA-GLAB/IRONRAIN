@@ -13,18 +13,11 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _currentWeapon;
     [SerializeField] private Text _currentBullet;
     [SerializeField] private Text _maxBullet;
-    [SerializeField] private Text _currentSeq;
 
-    private ChaseSequenceController _chaseSequenceController;
     private PlayerMove _playerMove;
     private PlayerWeaponController _weaponCon;
     private PlayerQTE _playerQTE;
     private bool _active = false;
-
-    public void SetUp(ChaseSequenceController chaseSequenceController) 
-    {
-        _chaseSequenceController = chaseSequenceController;
-    }
 
     private void Start()
     {
@@ -48,12 +41,11 @@ public class RobotInputDebug : MonoBehaviour
     {
         if (!_active) return;
 
-        _leftInput.text = $"X:{InputProvider.Instance.LeftLeverDir.x}Z:{InputProvider.Instance.LeftLeverDir.z}";
-        _rightInput.text = $"X:{InputProvider.Instance.RightLeverDir.x}Z:{InputProvider.Instance.RightLeverDir.z}";
+        _leftInput.text = InputProvider.Instance.LeftLeverDir.z.ToString();
+        _rightInput.text = InputProvider.Instance.RightLeverDir.z.ToString();
         _maxBullet.text = _weaponCon.WeaponModel.CurrentWeapon.WeaponParam.MagazineSize.ToString();
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
-        _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
+        _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString();
         _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
-        _currentSeq.text = _chaseSequenceController.GetCurrentSequence().ToString().Replace("ChaseSequenceController+", "");
     }
 }
