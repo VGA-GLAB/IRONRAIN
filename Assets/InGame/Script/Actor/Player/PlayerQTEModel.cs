@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+Ôªøusing Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -38,68 +38,142 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            StartQTE();
+            StartQTE().Forget();
         }
     }
 
-    public void StartQTE()
+    public async UniTask<QTEResultType> StartQTE()
     {
+        QTEResultType qteResult = QTEResultType.Failure;
         var startCts = new CancellationTokenSource();
         var startToken = startCts.Token;
         var endCts = new CancellationTokenSource();
         var endToken = endCts.Token;
-        QTE(endCts, startToken).Forget();
-        QTEFailureJudgment(startCts, endToken).Forget();
+        qteResult = await QTE(endCts, startToken);
+        qteResult = await QTEFailureJudgment(startCts, endToken);
+        return qteResult;
     }
 
     /// <summary>
-    /// QTEÇÃó¨ÇÍ
+    /// QTE„ÅÆÊµÅ„Çå
     /// </summary>
     /// <param name="endCts"></param>
     /// <param name="startToken"></param>
     /// <returns></returns>
-    public async UniTask QTE(CancellationTokenSource endCts, CancellationToken startToken)
+    public async UniTask<QTEResultType> QTE(CancellationTokenSource endCts, CancellationToken startToken)
     {
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
-            Debug.Log("QTEÉÇÅ[Éh");
+
             ProvidePlayerInformation.TimeScale = 0.2f;
             ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
             _qteType.Value = QTEState.QTE1;
-            //âEÉåÉoÅ[É{É^Éì1ÇâüÇµÇΩÇ‹Ç‹âEÉåÉoÅ[Çà¯Ç≠
-            await UniTask.WaitUntil(() => InputProvider.Instance.RightLeverDir.z == -1
-            && InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton1), PlayerLoopTiming.Update, startToken);
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÊâãÂâç„Å´Âºï„ÅÑ„ÅüÁä∂ÊÖã„Å´„Åó„Çç", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÂ••„Å´Êäº„ÅóÂá∫„Åô„Çà„ÅÜ„Å´ÂÇæ„Åë„Çç", 0.5f, startToken);
             _qteType.Value = QTEState.QTE2;
-            //âEÉåÉoÅ[É{É^Éì1ÇâüÇµÇΩÇ‹Ç‹âEÉåÉoÅ[ÇâüÇ∑
-            await UniTask.WaitUntil(() => InputProvider.Instance.RightLeverDir.z == 1
-            && InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton1), PlayerLoopTiming.Update, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë£„ÇíÊäº„Åõ", 0.5f, startToken); 
             _qteType.Value = QTEState.QTE3;
-            //âEÉåÉoÅ[É{É^Éì2ÇâüÇ∑
-            await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.RightButton2), PlayerLoopTiming.Update, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
             _qteType.Value = QTEState.QTENone;
 
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
-            Debug.Log("QTEÉLÉÉÉìÉZÉã");
+            Debug.Log("QTE„Ç≠„É£„É≥„Çª„É´");
+            endCts.Cancel();
+            return QTEResultType.Success;
+        }
+        return QTEResultType.Failure;
+    }
+
+    /// <summary>
+    /// „Å§„Å∞„Åú„ÇäÂêà„ÅÑ
+    /// </summary>
+    /// <param name="endCts"></param>
+    /// <param name="startToken"></param>
+    /// <returns></returns>
+    public async UniTask BossQTE1(CancellationTokenSource endCts, CancellationToken startToken)
+    {
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        {
+            _playerEnvroment.AddState(PlayerStateType.QTE);
+
+            ProvidePlayerInformation.TimeScale = 0.2f;
+            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
+            _qteType.Value = QTEState.QTE1;
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÂ••„Å´Êäº„Åó„ÅüÁä∂ÊÖã„Å´„Åô„Çã", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÊÄù„ÅÑ„Å£„Åç„ÇäÊâãÂâç„Å´Âºï„Åè", 0.5f, startToken);
+            _qteType.Value = QTEState.QTE2;
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            ProvidePlayerInformation.TimeScale = 1f;
+            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            Debug.Log("QTE„Ç≠„É£„É≥„Çª„É´");
+            endCts.Cancel();
+        }
+    }
+
+    public async UniTask BossQTE2(CancellationTokenSource endCts, CancellationToken startToken)
+    {
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
+        {
+            _playerEnvroment.AddState(PlayerStateType.QTE);
+
+            ProvidePlayerInformation.TimeScale = 0.2f;
+            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
+
+            _qteType.Value = QTEState.QTE1;
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÂ••„Å´Êäº„Åó„ÅüÁä∂ÊÖã„Å´„Åô„Çã", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("„Éú„Çø„É≥‚ë¢„ÇíÊäº„Åó„Åü„Åæ„Åæ„É¨„Éê„Éº‚ë°„ÇíÊÄù„ÅÑ„Å£„Åç„ÇäÊâãÂâç„Å´Âºï„Åè", 0.5f, startToken);
+            _qteType.Value = QTEState.QTE2;
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            ProvidePlayerInformation.TimeScale = 1f;
+            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            Debug.Log("QTE„Ç≠„É£„É≥„Çª„É´");
             endCts.Cancel();
         }
     }
 
     /// <summary>
-    /// QTEÇÃé∏îsîªíË
+    /// QTE„ÅÆÂ§±ÊïóÂà§ÂÆö
     /// </summary>
     /// <returns></returns>
-    private async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
+    private async UniTask<QTEResultType> QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
     {
-        //é∏îsÇ‹Ç≈ÇÃéûä‘Çåvë™
+        //Â§±Êïó„Åæ„Åß„ÅÆÊôÇÈñì„ÇíË®àÊ∏¨
         await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
-        Debug.Log("QTEèIóπ");
+        Debug.Log("QTEÁµÇ‰∫Ü");
         ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Failure);
         ProvidePlayerInformation.TimeScale = 1f;
         _qteType.Value = QTEState.QTENone;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
         startCts.Cancel();
+        return QTEResultType.Failure;
     }
 }

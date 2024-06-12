@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,15 +8,22 @@ public class DebugScript : MonoBehaviour
     [SerializeField] RobotInputDebug _robotInputDebug;
     [SerializeField] MyButton _button;
     [SerializeField] private bool _robotInput;
+    private ChaseSequenceController _chaseSequenceController;
+
+    public void SetUp(ChaseSequenceController chaseSequenceController) 
+    {
+        _chaseSequenceController = chaseSequenceController;
+    }
 
     private void Start()
     {
         if (_robotInput) 
         {
+            _robotInputDebug.SetUp(_chaseSequenceController);
             _robotInputDebug.Active();
         }
 
-        //_button.OnClickUp.Subscribe(_ => Debug.Log("ƒ{ƒ^ƒ“‚ª—£‚³‚ê‚Ü‚µ‚½"));
-        //_button.OnClickDown.Subscribe(_ => Debug.Log("ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ü‚µ‚½"));
+        //_button.OnClickUp.Subscribe(_ => Debug.Log("ãƒœã‚¿ãƒ³ãŒé›¢ã•ã‚Œã¾ã—ãŸ"));
+        //_button.OnClickDown.Subscribe(_ => Debug.Log("ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¾ã—ãŸ"));
     }
 }
