@@ -6,6 +6,7 @@ using UnityEngine;
 public sealed class FirstAnnounceSeqController : MonoBehaviour
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
+    [SerializeField] private PlayerController _playerController = null;
     [Header("最初の待ち時間")]
     [SerializeField] private float _firstAwaitTimeSec = 10F;
     [Header("テキストボックスに関する値")]
@@ -22,10 +23,11 @@ public sealed class FirstAnnounceSeqController : MonoBehaviour
     /// <param name="cancellationToken"></param>
     public async UniTask FirstAnnounceTaskSeqAsync(CancellationToken cancellationToken)
     {
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         // 最初に何秒か待つ
         await UniTask.WaitForSeconds(_firstAwaitTimeSec, cancellationToken: cancellationToken);
         
-        //await Announce(cancellationToken);
+        await Announce(cancellationToken);
     }
 
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
@@ -35,7 +37,7 @@ public sealed class FirstAnnounceSeqController : MonoBehaviour
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
         await UniTask.WhenAll(
-            CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
+            //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText()
         );
         
