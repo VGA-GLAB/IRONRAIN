@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Control
+namespace Enemy.Control.Boss
 {
     /// <summary>
     /// 外部から敵をコントロールするために、Perception層での黒板への書き込みを上書きする。
@@ -19,7 +19,7 @@ namespace Enemy.Control
         // コピーされたインスタンスをプールからキューに移して処理、その後またプールに戻す。
         // 命令は参照型なので、キューイングした後に同フレーム内で命令が書き換わってしまうのを防ぐ。
         private Stack<EnemyOrder> _pool;
-        private Queue<EnemyOrder > _buffer;
+        private Queue<EnemyOrder> _buffer;
 
         public OverrideOrder(BlackBoard blackBoard)
         {
@@ -43,30 +43,9 @@ namespace Enemy.Control
             {
                 EnemyOrder order = _buffer.Dequeue();
                 // プレイヤーを発見させる。
-                if (order.OrderType == EnemyOrder.Type.PlayerDetect)
+                if (order.OrderType == EnemyOrder.Type.BossStart)
                 {
-                    _blackBoard.IsPlayerDetected = true;
-                }
-                // 攻撃させる。
-                else if (order.OrderType == EnemyOrder.Type.Attack)
-                {
-                    _blackBoard.OrderedAttackTrigger = true;
-                }
-                // ポーズ
-                else if (order.OrderType == EnemyOrder.Type.Pause)
-                {
-                    _blackBoard.IsOrderedPause = true;
-                }
-                // ポーズ解除
-                else if (order.OrderType == EnemyOrder.Type.Resume)
-                {
-                    _blackBoard.IsOrderedPause = false;
-                }
-                // ボス戦開始
-                else if (order.OrderType == EnemyOrder.Type.BossStart)
-                {
-                    _blackBoard.Hp = 0;
-                    _blackBoard.IsDying = true;
+                    _blackBoard.IsBossStarted = true;
                 }
 
                 // 命令をクリアしてプールに戻す。
@@ -80,7 +59,7 @@ namespace Enemy.Control
         /// </summary>
         public void ClearOrderedTrigger()
         {
-            _blackBoard.OrderedAttackTrigger = false;
+            //
         }
 
         /// <summary>

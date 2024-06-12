@@ -1,4 +1,5 @@
 ﻿using Enemy.Control.Boss;
+using Enemy.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
@@ -113,7 +114,14 @@ namespace Enemy.Control
         /// </summary>
         public void BossStart()
         {
-            // 
+            // 命令をボス戦開始に書き換え。
+            _order.OrderType = EnemyOrder.Type.BossStart;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
+
+            // 全シーケンスの敵に対して命令
+            foreach (EnemyController e in _enemies) e.Order(_order);
         }
 
         /// <summary>

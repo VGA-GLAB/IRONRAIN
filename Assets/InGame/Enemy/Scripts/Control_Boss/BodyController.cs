@@ -18,17 +18,20 @@ namespace Enemy.Control.Boss
         private State _currentState;
 
         // 既に後始末処理を実行済みかを判定するフラグ。
-        bool _isCleanup;
+        private bool _isCleanup;
 
-        public BodyController(Transform transform, BlackBoard blackBoard, IReadOnlyCollection<FunnelController> funnels)
+        public BodyController(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, 
+            Renderer[] renderers, IReadOnlyCollection<FunnelController> funnels)
         {
             _blackBoard = blackBoard;
 
+            // ボスのオブジェクトの構成が雑魚敵と同じ想定、Bodyクラスを流用する。
+            Body body = new Body(transform, offset, rotate, renderers);
             _stateTable = new Dictionary<StateKey, State>
             {
                 { StateKey.Idle, new IdleState(blackBoard) },
                 { StateKey.Appear, new AppearState(blackBoard) },
-                { StateKey.Battle, new BattleState(blackBoard) },
+                { StateKey.Battle, new BattleState(blackBoard, body) },
             };
 
             // 初期状態では画面に表示されている。

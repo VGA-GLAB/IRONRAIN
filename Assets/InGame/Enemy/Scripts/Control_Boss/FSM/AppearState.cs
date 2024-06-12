@@ -29,6 +29,9 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
+            /* 登場演出ｺｺ */
+
+            TryChangeState(stateTable[StateKey.Idle]);
         }
 
         public override void Dispose()

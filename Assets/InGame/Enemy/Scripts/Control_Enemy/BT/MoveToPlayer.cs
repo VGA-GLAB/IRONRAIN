@@ -44,7 +44,7 @@ namespace Enemy.Control.BT
                 _blackBoard.Area.Point, 
                 _blackBoard.Slot.Point, 
                 _blackBoard.AreaToSlotDirection,
-                EnemyParams.Debug.HomingPower
+                EnemyParams.Const.HomingPower
                 );
 
             // 接近か否かで速さが変わる。
@@ -67,7 +67,7 @@ namespace Enemy.Control.BT
             warp.y = Mathf.Lerp(
                 _transform.position.y, 
                 _blackBoard.PlayerPosition.y, 
-                EnemyParams.Debug.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
+                EnemyParams.Const.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
             );
 
             _plan.Position = warp;

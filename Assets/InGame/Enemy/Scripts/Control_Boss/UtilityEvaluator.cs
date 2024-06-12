@@ -41,7 +41,15 @@ namespace Enemy.Control.Boss
         {
             _order.Clear();
 
-            //
+            // ボス戦開始した状態
+            if (_blackBoard.IsBossStarted)
+            {
+                // まずは登場する。
+                if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
+
+                // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
+                _order.Add(Choice.Chase);
+            }
 
             return _order;
         }

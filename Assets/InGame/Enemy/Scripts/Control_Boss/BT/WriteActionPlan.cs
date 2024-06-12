@@ -1,6 +1,6 @@
-﻿namespace Enemy.Control.BT
+﻿namespace Enemy.Control.Boss.BT
 {
-    public class WriteActionPlan : Node
+    public class WriteActionPlan : Enemy.Control.BT.Node
     {
         private ActionPlan _plan;
         private BlackBoard _blackBoard;

@@ -22,7 +22,7 @@ namespace Enemy.Control
         private State _currentState;
 
         // 既に後始末処理を実行済みかを判定するフラグ。
-        bool _isCleanup;
+        private bool _isCleanup;
 
         public BodyController(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
             Transform offset, Transform rotate, Renderer[] renderers, Animator animator, Effect[] effects)
@@ -31,13 +31,13 @@ namespace Enemy.Control
             _animator = animator;
 
             // 各ステートにTransformやアニメーション、演出を操作するクラスを渡す。
-            Body body = new Body(transform, blackBoard, offset, rotate, renderers);
+            Body body = new Body(transform, offset, rotate, renderers);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
             Effector effector = new Effector(effects);
             _stateTable = new Dictionary<StateKey, State>
             {
                 { StateKey.Approach, new ApproachState(blackBoard, body, bodyAnimation) },
-                { StateKey.Broken, new BrokenState(enemyParams, blackBoard, bodyAnimation, effector) },
+                { StateKey.Broken, new BrokenState(enemyParams, blackBoard, body, bodyAnimation, effector) },
                 { StateKey.Escape, new EscapeState(blackBoard, body, bodyAnimation) },
                 { StateKey.Idle, new IdleState(blackBoard) },
                 { StateKey.Hide, new HideState(blackBoard, body) },

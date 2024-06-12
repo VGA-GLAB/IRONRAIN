@@ -11,17 +11,19 @@ namespace Enemy.Control.FSM
     {
         private EnemyParams _params;
         private BlackBoard _blackBoard;
+        private Body _body;
         private BodyAnimation _animation;
         private Effector _effector;
 
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;
 
-        public BrokenState(EnemyParams enemyParams, BlackBoard blackBoard, BodyAnimation bodyAnimation, 
+        public BrokenState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, BodyAnimation bodyAnimation, 
             Effector effector)
         {
             _params = enemyParams;
             _blackBoard = blackBoard;
+            _body = body;
             _animation = bodyAnimation;
             _effector = effector;
         }
@@ -39,6 +41,9 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
+            // 画面に表示されていない状態で死亡した場合、死亡演出を再生しない。
+            if (!_body.IsRendererEnabled()) return;
+
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;
             _isPlaying = true;

@@ -84,7 +84,7 @@ namespace Enemy.Control
             _blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
 
             // スロットに到着した場合は、接近完了フラグを立てる。
-            if (_blackBoard.AreaToSlotSqrDistance < EnemyParams.Debug.ApproachCompleteThreshold)
+            if (_blackBoard.AreaToSlotSqrDistance < EnemyParams.Const.ApproachCompleteThreshold)
             {
                 _blackBoard.IsApproachCompleted = true;
             }

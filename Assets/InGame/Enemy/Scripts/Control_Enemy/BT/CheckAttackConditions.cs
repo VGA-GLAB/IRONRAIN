@@ -1,7 +1,6 @@
-﻿using Enemy.Control.BT;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Enemy.Control
+namespace Enemy.Control.BT
 {
     /// <summary>
     /// 視界内にプレイヤーがおり、攻撃タイミングかどうかをチェック。

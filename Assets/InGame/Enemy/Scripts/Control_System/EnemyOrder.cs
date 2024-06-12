@@ -13,6 +13,7 @@
             Resume,       // ポーズ解除。
             Attack,       // 攻撃させる。
             QteTrigger,   // QTE開始(盾持ちの敵が自身に命令)。
+            BossStart,    // ボス戦開始。
         };
 
         public Type OrderType;

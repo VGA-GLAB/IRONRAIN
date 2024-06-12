@@ -79,7 +79,10 @@ namespace Enemy.Control.FSM
             // 移動
             while (_blackBoard.MovePlans.TryDequeue(out ActionPlan.Move plan))
             {
-                if (plan.Choice == Choice.Chase) _body.Move(plan.Direction * plan.Speed);
+                if (plan.Choice == Choice.Chase)
+                {
+                    _body.Move(plan.Direction * plan.Speed * _blackBoard.PausableDeltaTime);
+                }
             }
             // 回転
             while (_blackBoard.LookPlans.TryDequeue(out ActionPlan.Look plan))

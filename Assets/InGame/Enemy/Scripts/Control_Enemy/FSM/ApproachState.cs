@@ -64,7 +64,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice != Choice.Approach) continue;
 
-                _body.Move(plan.Direction * plan.Speed);
+                _body.Move(plan.Direction * plan.Speed * _blackBoard.PausableDeltaTime);
                 isApproaching = true;
             }
 

@@ -11,5 +11,13 @@ namespace Enemy.Extensions
         {
             return Enum.GetValues(typeof(T)).Length;
         }
+
+        /// <summary>
+        /// 列挙型の要素を全て返す。
+        /// </summary>
+        public static Array GetAll<T>() where T : Enum
+        {
+            return Enum.GetValues(typeof(T));
+        }
     }
 }

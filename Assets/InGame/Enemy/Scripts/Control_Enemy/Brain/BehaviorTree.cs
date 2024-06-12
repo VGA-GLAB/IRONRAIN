@@ -11,52 +11,55 @@ namespace Enemy.Control
         private Sequence _approach;
         private Sequence _chase;
         private Sequence _attack;
-        private Sequence _idle;
         private Sequence _escape;
         private Sequence _broken;
         private Sequence _hide;
         private Sequence _damaged;
+
         private BlackBoard _blackBoard;
 
         public BehaviorTree(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _approach = new Sequence(
-                "ApproachSequence",
+                "ApproachSeq",
                 new MoveToPlayer(Choice.Approach, transform, enemyParams, blackBoard),
                 new LookAtPlayer(Choice.Approach, blackBoard),
                 new WriteActionPlan(Choice.Approach, blackBoard)
                 );
 
             _chase = new Sequence(
-                "ChaseSequence", 
+                "ChaseSeq", 
                 new MoveToPlayer(Choice.Chase, transform, enemyParams, blackBoard),
                 new LookAtPlayer(Choice.Chase, blackBoard),
                 new WriteActionPlan(Choice.Chase, blackBoard)
                 );
 
             _attack = new Sequence(
-                "AttackSequence",
+                "AttackSeq",
                 new CheckAttackConditions(transform, enemyParams, blackBoard),
                 new WriteActionPlan(Choice.Attack, blackBoard)
                 );
 
             _escape = new Sequence(
-                "EscapeSequence",
+                "EscapeSeq",
                 new MoveVertical(enemyParams, blackBoard),
                 new WriteActionPlan(Choice.Escape, blackBoard)
                 );
 
             _broken = new Sequence(
-                "BrokenSequence",
-                new WriteActionPlan(Choice.Broken, blackBoard));
+                "BrokenSeq",
+                new WriteActionPlan(Choice.Broken, blackBoard)
+                );
 
             _hide = new Sequence(
-                "HideSequence",
-                new WriteActionPlan(Choice.Hide, blackBoard));
+                "HideSeq",
+                new WriteActionPlan(Choice.Hide, blackBoard)
+                );
 
             _damaged = new Sequence(
-                "DamagedSequence",
-                new WriteActionPlan(Choice.Damaged, blackBoard));
+                "DamagedSeq",
+                new WriteActionPlan(Choice.Damaged, blackBoard)
+                );
 
             _blackBoard = blackBoard;
         }

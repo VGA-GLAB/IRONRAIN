@@ -27,7 +27,9 @@ namespace Enemy.Control.FSM
 
         protected override void Exit()
         {
-            _body.RendererEnable(true);
+            // 生存中ならば画面に表示。
+            // 隠れている状態のまま命令によって死亡した場合、1フレームだけ画面に表示されてしまうことを防ぐ。
+            if (_blackBoard.IsAlive) _body.RendererEnable(true);
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)

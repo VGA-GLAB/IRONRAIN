@@ -93,18 +93,17 @@ namespace Enemy.Control
             public EnemyManager.Sequence Sequence => _sequence;
         }
 
-        // デバッグ用
         // 必要に応じてプランナー用に外出しする。
-        public static class Debug
+        public static class Const
         {
             // プレイヤーに接近する際のホーミング力
-            public static float HomingPower = 0.5f;
+            public const float HomingPower = 0.5f;
             // 前後左右に移動するアニメーションのブレンドする強さ
-            public static float BlendTreeParameterMag = 100.0f;
+            public const float BlendTreeParameterMag = 100.0f;
             // 接近完了とみなす距離の閾値
-            public static float ApproachCompleteThreshold = 0.1f;
+            public const float ApproachCompleteThreshold = 0.1f;
             // 戦闘時に上下移動する際の速さ
-            public static float VerticalMoveSpeed = 1.5f;
+            public const float VerticalMoveSpeed = 1.5f;
         }
 
         [Header("生成~直進状態の設定")]

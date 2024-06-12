@@ -22,7 +22,7 @@ namespace Enemy.Control.Boss
             _blackBoard = blackBoard;
             _player = player;
             _pointP = pointP;
-            _area = new CircleArea(transform.position, BossParams.Debug.AreaRadius);
+            _area = new CircleArea(transform.position, BossParams.Const.AreaRadius);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Enemy.Control.Boss
         public void Init()
         {
             // プレイヤーのエリアを作成する。
-            _playerArea = new CircleArea(_player.position, BossParams.Debug.PlayerAreaRadius);
+            _playerArea = new CircleArea(_player.position, BossParams.Const.PlayerAreaRadius);
             
             // 黒板に書き込む。
             _blackBoard.Area = _area;
@@ -54,8 +54,11 @@ namespace Enemy.Control.Boss
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
             if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
 
+            // 自身から点Pへの向きを黒板に書き込む。
+            _blackBoard.TransformToPointPDirection = (_blackBoard.PointP - _transform.position).normalized;
+
             // ボス戦開始からの経過時間を更新
-            _blackBoard.ElapsedTime += Time.deltaTime;
+            if (_blackBoard.IsBossStarted) _blackBoard.ElapsedTime += Time.deltaTime;
         }
 
         /// <summary>

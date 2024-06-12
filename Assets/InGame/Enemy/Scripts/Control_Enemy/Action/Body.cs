@@ -10,15 +10,13 @@ namespace Enemy.Control
     public class Body
     {
         private Transform _transform;
-        private BlackBoard _blackBoard;
         private Transform _offset;
         private Transform _rotate;
         private Renderer[] _renderers;
 
-        public Body(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, Renderer[] renderers)
+        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers)
         {
             _transform = transform;
-            _blackBoard = blackBoard;
             _offset = offset;
             _rotate = rotate;
             _renderers = renderers;
@@ -51,6 +49,21 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// Rendererが表示/非表示の状態を返す。
+        /// </summary>
+        public bool IsRendererEnabled()
+        {
+            // RendererEnableメソッドで全てのRendererに対して一括で表示/非表示の処理をしているが
+            // 一応全てのRendererが表示されているか判定する。
+            foreach (Renderer r in _renderers)
+            {
+                if (!r.enabled) return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// オブジェクトの座標を変更する。
         /// </summary>
         public void Warp(in Vector3 position)
@@ -63,7 +76,7 @@ namespace Enemy.Control
         /// </summary>
         public void Move(in Vector3 velocity)
         {
-            _transform.position += velocity * _blackBoard.PausableDeltaTime;
+            _transform.position += velocity;
         }
 
         /// <summary>
@@ -71,7 +84,7 @@ namespace Enemy.Control
         /// </summary>
         public void OffsetMove(in Vector3 velocity)
         {
-            _offset.position += velocity * _blackBoard.PausableDeltaTime;
+            _offset.position += velocity;
         }
 
         /// <summary>

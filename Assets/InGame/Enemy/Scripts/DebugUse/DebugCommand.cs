@@ -24,7 +24,7 @@ namespace Enemy.DebugUse
         private void Awake()
         {
             _style.fontSize = 30;
-            _state.textColor = Color.white;
+            _state.textColor = Color.green;
             _style.normal = _state;
         }
 
@@ -137,6 +137,14 @@ namespace Enemy.DebugUse
 
                 _enemyManager.DefeatThemAll(seq);
                 Debug.Log($"{seq}シーケンスの敵を全滅");
+                return true;
+            }
+
+            // ボス戦開始
+            if (cmd[0] == "BOSSSTART" && cmd.Length == 1)
+            {
+                _enemyManager.BossStart();
+                Debug.Log($"ボス戦開始");
                 return true;
             }
 
