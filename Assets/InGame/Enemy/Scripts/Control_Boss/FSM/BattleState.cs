@@ -16,14 +16,16 @@ namespace Enemy.Control.Boss.FSM
 
         private BlackBoard _blackBoard;
         private Body _body;
+        private IReadOnlyCollection<FunnelController> _funnels;
 
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleState(BlackBoard blackBoard, Body body)
+        public BattleState(BlackBoard blackBoard, Body body, IReadOnlyCollection<FunnelController> funnels)
         {
             _blackBoard = blackBoard;
             _body = body;
+            _funnels = funnels;
         }
 
         public override StateKey Key => StateKey.Battle;
@@ -38,6 +40,16 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
+            // 行動を調べる。
+            while (_blackBoard.ActionPlans.TryDequeue(out ActionPlan plan))
+            {
+                // ファンネル展開
+                if (plan.Choice == Choice.FunnelExpand && _funnels != null)
+                {
+                    foreach (FunnelController f in _funnels) f.OpenAnimation();
+                }
+            }
+
             // 移動を上書きする恐れがあるので、先に座標を直接書き換える。
             while (_blackBoard.WarpPlans.TryDequeue(out ActionPlan.Warp plan))
             {
