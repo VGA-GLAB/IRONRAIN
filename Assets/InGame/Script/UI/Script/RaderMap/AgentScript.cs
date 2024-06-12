@@ -31,10 +31,11 @@ public class AgentScript : MonoBehaviour
     /// </summary>
     public void EnemyGenerate()
     {
+        //エネミーを生成する
         RaderMap.GenerateEnemy(this.gameObject);
     }
     /// <summary>
-    /// エネミーが破棄された時に呼ばれる
+    /// エネミーが破棄された時
     /// </summary>
     public void EnemyDestory()
     {
