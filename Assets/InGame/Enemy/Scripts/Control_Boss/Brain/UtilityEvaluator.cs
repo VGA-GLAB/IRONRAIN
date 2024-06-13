@@ -15,6 +15,9 @@ namespace Enemy.Control.Boss
         BladeAttack,  // 刀で攻撃
         RifleFire,    // ライフルで攻撃
         FunnelExpand, // ファンネルを展開
+        BreakLeftArm, // プレイヤーの左手破壊
+        FirstQte,     // ボス1回目のQTE
+        SecondQte,    // ボス2回目のQTE
     }
 
     /// <summary>
@@ -47,10 +50,25 @@ namespace Enemy.Control.Boss
                 // まずは登場する。
                 if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
 
+                // 終盤のQTEイベント中
+                if (_blackBoard.IsQteEventStarted)
+                {
+                    // 命令によって分岐
+                    switch (_blackBoard.OrderdQteEventStep)
+                    {
+                        // プレイヤーの左手破壊
+                        case FSM.QteEventState.Step.BreakLeftArm: _order.Add(Choice.BreakLeftArm); break;
+                        // QTE1回目
+                        case FSM.QteEventState.Step.FirstQte: _order.Add(Choice.FirstQte); break;
+                        // QTE2回目
+                        case FSM.QteEventState.Step.SecondQte: _order.Add(Choice.SecondQte); break;
+                    }
+
+                    return _order;
+                }
+
                 // ファンネル展開。
                 if (_blackBoard.FunnelExpandTrigger) _order.Add(Choice.FunnelExpand);
-
-                // 次ここにFirstQTEとSecondQTEの処理
 
                 // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
                 _order.Add(Choice.Chase);

@@ -35,40 +35,16 @@ namespace Enemy.Control
             BossEnd,       // ボス:ボス戦終了演出。
         }
 
-        // シーン上の敵を登録する用のメッセージ。
-        private struct RegisterMessage
+        // 登録する用のメッセージ。
+        private struct RegisterMessage<T>
         {
-            public EnemyController Enemy;
+            public T Character;
         }
 
-        // シーン上の敵を登録解除する用のメッセージ。
-        private struct ReleaseMessage
+        // 登録解除する用のメッセージ。
+        private struct ReleaseMessage<T>
         {
-            public EnemyController Enemy;
-        }
-
-        // シーン上のボスを登録する用のメッセージ。
-        private struct BossRegisterMessage
-        {
-            public BossController Boss;
-        }
-
-        // シーン上のボスを登録解除する用のメッセージ。
-        private struct BossReleaseMessage
-        {
-            public BossController Boss;
-        }
-
-        // シーン上のNPCを登録する用のメッセージ。
-        private struct NpcRegisterMessage
-        {
-            public INpc NPC;
-        }
-
-        // シーン上のNPCを登録解除する用のメッセージ。
-        private struct NpcReleaseMessage
-        {
-            public INpc NPC;
+            public T Character;
         }
 
         // 登録されたボス。
@@ -83,13 +59,23 @@ namespace Enemy.Control
 
         private void Awake()
         {
-            // メッセージングで登録/登録解除する。
-            MessageBroker.Default.Receive<RegisterMessage>().Subscribe(msg => _enemies.Add(msg.Enemy)).AddTo(this);
-            MessageBroker.Default.Receive<ReleaseMessage>().Subscribe(msg => _enemies.Remove(msg.Enemy)).AddTo(this);
-            MessageBroker.Default.Receive<BossRegisterMessage>().Subscribe(msg => _boss = msg.Boss).AddTo(this);
-            MessageBroker.Default.Receive<BossReleaseMessage>().Subscribe(msg => _boss = null).AddTo(this);
-            MessageBroker.Default.Receive<NpcRegisterMessage>().Subscribe(msg => _npcs.Add(msg.NPC)).AddTo(this);
-            MessageBroker.Default.Receive<NpcReleaseMessage>().Subscribe(msg => _npcs.Remove(msg.NPC)).AddTo(this);
+            // メッセージングで敵を登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<EnemyController>>()
+                .Subscribe(msg => _enemies.Add(msg.Character)).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<EnemyController>>()
+                .Subscribe(msg => _enemies.Remove(msg.Character)).AddTo(this);
+
+            // メッセージングでボスを登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<BossController>>()
+                .Subscribe(msg => _boss = msg.Character).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<BossController>>()
+                .Subscribe(_ => _boss = null).AddTo(this);
+
+            // メッセージングでNPCを登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<INpc>>()
+                .Subscribe(msg => _npcs.Add(msg.Character)).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<INpc>>()
+                .Subscribe(msg => _npcs.Remove(msg.Character)).AddTo(this);
         }
 
         /// <summary>
@@ -199,51 +185,32 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// 敵を登録する。
+        /// 登録する。
         /// </summary>
-        public static void Register(EnemyController enemy)
+        public static void Register<T>(T character)
         {
-            MessageBroker.Default.Publish(new RegisterMessage { Enemy = enemy });
+            if (!IsRegistrable<T>()) return;
+
+            MessageBroker.Default.Publish(new RegisterMessage<T> { Character = character });
         }
 
         /// <summary>
-        /// ボスを登録する。
+        /// 登録を解除する。
         /// </summary>
-        public static void Register(BossController boss)
+        public static void Release<T>(T character)
         {
-            MessageBroker.Default.Publish(new BossRegisterMessage { Boss = boss });
+            if (!IsRegistrable<T>()) return;
+
+            MessageBroker.Default.Publish(new ReleaseMessage<T> { Character = character });
         }
 
-        /// <summary>
-        /// NPCを登録する。
-        /// </summary>
-        public static void Register(INpc npc)
+        // 登録可能な型かチェック
+        private static bool IsRegistrable<T>()
         {
-            MessageBroker.Default.Publish(new NpcRegisterMessage { NPC = npc });
-        }
-
-        /// <summary>
-        /// 敵の登録を解除する。
-        /// </summary>
-        public static void Release(EnemyController enemy)
-        {
-            MessageBroker.Default.Publish(new ReleaseMessage { Enemy = enemy });
-        }
-
-        /// <summary>
-        /// ボスの登録を解除する。
-        /// </summary>
-        public static void Release(BossController boss)
-        {
-            MessageBroker.Default.Publish(new BossReleaseMessage { Boss = boss });
-        }
-
-        /// <summary>
-        /// NPCの登録を解除する。
-        /// </summary>
-        public static void Release(INpc npc)
-        {
-            MessageBroker.Default.Publish(new NpcReleaseMessage { NPC = npc });
+            if (typeof(T) == typeof(EnemyController)) return true;
+            else if (typeof(T) == typeof(BossController)) return true;
+            else if (typeof(T) == typeof(INpc)) return true;
+            else return false;
         }
     }
 }
