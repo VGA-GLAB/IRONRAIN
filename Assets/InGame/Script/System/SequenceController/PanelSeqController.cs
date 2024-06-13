@@ -21,6 +21,8 @@ public class PanelSeqController : AbstractSequenceBase
     [SerializeField] private string _announceCueSheetName = "SE";
     [SerializeField] private string _announceCueName = "SE_Kill";
     [SerializeField] private float _waitAfterAnnounceSec = 1F;
+
+    [Header("パネルチュートリアルを待つ時間")] private float _waitTime = 5f;
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
     {
         // 最初の待ち時間
@@ -31,7 +33,12 @@ public class PanelSeqController : AbstractSequenceBase
         //タッチパネルの操作をオペレーターがしゃべる
         await Announce(ct);
         
-        //一定時間後に終了
+        //一定時間待つ
+        await UniTask.WaitForSeconds(_waitTime, cancellationToken: ct);
+        
+        //敵を消して終了
+        //await UniTask.WaitUntil(() => )
+        
     }
     
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
@@ -43,7 +50,7 @@ public class PanelSeqController : AbstractSequenceBase
         _textBox.ClearText();
 
         await UniTask.WhenAll(
-            //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
+            CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText()
         );
 
