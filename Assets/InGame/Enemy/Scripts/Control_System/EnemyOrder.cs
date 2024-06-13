@@ -8,13 +8,16 @@
         public enum Type
         {
             None,
-            PlayerDetect, // プレイヤーを発見状態にさせる。
-            Pause,        // ポーズ。
-            Resume,       // ポーズ解除。
-            Attack,       // 攻撃させる。
-            QteTrigger,   // QTE開始(盾持ちの敵が自身に命令)。
-            BossStart,    // ボス戦開始。
-            FunnelExpand, // ファンネル展開。
+            PlayerDetect,  // プレイヤーを発見状態にさせる。
+            Pause,         // ポーズ。
+            Resume,        // ポーズ解除。
+            Attack,        // 攻撃させる。
+            QteTrigger,    // QTE開始(盾持ちの敵が自身に命令)。
+            BossStart,     // ボス戦開始。
+            FunnelExpand,  // ファンネル展開。
+            BreakLeftArm,  // プレイヤーの左腕破壊~。
+            BossFirstQTE,  // ボス戦QTE1回目。
+            BossSecondQTE, // ボス戦QTE2回目。
         };
 
         public Type OrderType;

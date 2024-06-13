@@ -31,7 +31,7 @@ namespace Enemy.Control.Boss
             {
                 { StateKey.Idle, new IdleState(blackBoard) },
                 { StateKey.Appear, new AppearState(blackBoard) },
-                { StateKey.Battle, new BattleState(blackBoard, body) },
+                { StateKey.Battle, new BattleState(blackBoard, body, funnels) },
             };
 
             // 初期状態では画面に表示されている。

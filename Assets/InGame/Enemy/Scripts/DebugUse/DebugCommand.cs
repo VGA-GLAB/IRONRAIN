@@ -10,7 +10,6 @@ namespace Enemy.DebugUse
     {
         [Header("コマンドで敵やNPCに命令する")]
         [SerializeField] private EnemyManager _enemyManager;
-        [SerializeField] private NpcManager _npcManager;
 
         private GUIStyle _style = new GUIStyle();
         private GUIStyleState _state = new GUIStyleState();
@@ -104,7 +103,7 @@ namespace Enemy.DebugUse
             {
                 EnemyManager.Sequence seq;
                 if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
+                else if (cmd[1] == "FIRSTANAUNNCE") seq = EnemyManager.Sequence.FirstAnaunnce;
                 else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
                 else return false;
 
@@ -117,7 +116,7 @@ namespace Enemy.DebugUse
             {
                 EnemyManager.Sequence seq;
                 if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
+                else if (cmd[1] == "FIRSTANAUNNCE") seq = EnemyManager.Sequence.FirstAnaunnce;
                 else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
                 else return false;
 
@@ -131,7 +130,7 @@ namespace Enemy.DebugUse
             {
                 EnemyManager.Sequence seq;
                 if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
+                else if (cmd[1] == "FIRSTANAUNNCE") seq = EnemyManager.Sequence.FirstAnaunnce;
                 else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
                 else return false;
 
@@ -149,14 +148,14 @@ namespace Enemy.DebugUse
             }
 
             // NPCのシーケンスイベント
-            if (cmd[0] == "NPC" && cmd[1] == "PLAYEVENT" && cmd.Length == 3)
+            if (cmd[0] == "PLAYNPCEVENT" && cmd.Length == 2)
             {
-                NpcManager.Sequence seq;
-                if (cmd[2] == "NONE") seq = NpcManager.Sequence.None;
-                else if (cmd[2] == "MULTIBATTLE") seq = NpcManager.Sequence.MultiBattle;
+                EnemyManager.Sequence seq;
+                if (cmd[2] == "NONE") seq = EnemyManager.Sequence.None;
+                else if (cmd[2] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
                 else return false;
 
-                _npcManager.PlayEvent(seq);
+                _enemyManager.PlayNpcEvent(seq);
                 Debug.Log($"{seq}シーケンスのNPCイベントを実行");
                 return true;
             }

@@ -47,6 +47,11 @@ namespace Enemy.Control.Boss
                 // まずは登場する。
                 if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
 
+                // ファンネル展開。
+                if (_blackBoard.FunnelExpandTrigger) _order.Add(Choice.FunnelExpand);
+
+                // 次ここにFirstQTEとSecondQTEの処理
+
                 // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
                 _order.Add(Choice.Chase);
             }

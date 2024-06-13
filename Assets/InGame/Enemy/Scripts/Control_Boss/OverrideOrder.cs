@@ -47,6 +47,20 @@ namespace Enemy.Control.Boss
                 {
                     _blackBoard.IsBossStarted = true;
                 }
+                // ファンネル展開
+                if (order.OrderType == EnemyOrder.Type.FunnelExpand)
+                {
+                    _blackBoard.FunnelExpandTrigger = true;
+                }
+                // QTE1回目
+                if (order.OrderType == EnemyOrder.Type.BossFirstQTE)
+                {
+                    _blackBoard.FirstQteTrigger = true;
+                }
+                if (order.OrderType == EnemyOrder.Type.BossSecondQTE)
+                {
+                    _blackBoard.SecondQteTrigger = true;
+                }
 
                 // 命令をクリアしてプールに戻す。
                 order.Clear();
@@ -59,7 +73,9 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void ClearOrderedTrigger()
         {
-            //
+            _blackBoard.FunnelExpandTrigger = false;
+            _blackBoard.FirstQteTrigger = false;
+            _blackBoard.SecondQteTrigger = false;
         }
 
         /// <summary>
