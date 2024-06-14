@@ -138,6 +138,18 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// ボス戦でファンネル展開。
+        /// </summary>
+        public void FunnelExpand()
+        {
+            // 命令をファンネル展開に切り替え。
+            _order.OrderType = EnemyOrder.Type.FunnelExpand;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
+        }
+
+        /// <summary>
         /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
         /// </summary>
         public void BreakLeftArm()

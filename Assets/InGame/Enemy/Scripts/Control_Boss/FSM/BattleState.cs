@@ -71,6 +71,17 @@ namespace Enemy.Control.Boss.FSM
             {
                 if (plan.Choice == Choice.Chase) _body.Forward(plan.Forward);
             }
+
+            // 攻撃
+            foreach (ActionPlan plan in _blackBoard.ActionPlans)
+            {
+                if (plan.Choice == Choice.BladeAttack)
+                {
+                }
+                else if (plan.Choice == Choice.RifleFire)
+                {
+                }
+            }
         }
 
         public override void Dispose()
@@ -78,6 +89,3 @@ namespace Enemy.Control.Boss.FSM
         }
     }
 }
-
-// 次:敵が刀とアサルトライフルで攻撃してくる処理を書く。
-// その次:ファンネルが死ぬようにする。
