@@ -54,6 +54,8 @@ public class RobotInputDebug : MonoBehaviour
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
         _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
-        _currentSeq.text = _inGameManager.CurrentSequence.ToString().Replace("ChaseSequenceController+", "");
+        _currentSeq.text = _inGameManager.CurrentSequence == null 
+            ? "<null>" 
+            : _inGameManager.CurrentSequence.ToString().Replace("ChaseSequenceController+", "");
     }
 }
