@@ -24,7 +24,7 @@ public sealed class InGameManager : MonoBehaviour
         public float TimeScale { get; set; }
     }
 
-    public async void InGameStartUnityEventReceive() => await InGameStartAsync(this.GetCancellationTokenOnDestroy());
+    public void InGameStartUnityEventReceive() => InGameStartAsync(this.GetCancellationTokenOnDestroy()).Forget();
 
     private async UniTask InGameStartAsync(CancellationToken ct)
     {
