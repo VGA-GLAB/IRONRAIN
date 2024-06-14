@@ -15,53 +15,67 @@ namespace Enemy.Control
         public enum Sequence
         {
             None,           
-            Tutorial,    // 追跡:最初に敵が1体だけ出てくる。
-            MultiBattle, // 追跡:乱戦中に味方機が登場。
+            FirstAnaunnce, // 追跡:最初に敵が1体だけ出てくる。
+            Avoidance,     // 追跡:敵が先に攻撃してくる。
+            Attack,        // 追跡:プレイヤーが1機倒す。
+            TouchPanel,    // 追跡:敵を複数対出す。
+            Lever,         // 追跡:レバー操作。(敵は関係なし？)
+            QTETutorial,   // 追跡:盾持ちが出現、QTEする。
+            MultiBattle,   // 追跡:乱戦中に味方機が登場。
+            Purge,         // 追跡:装備パージ。(敵は関係なし？)
+            Fall,          // ボス:時期が落下。
+            BossStart,     // ボス:ボス戦開始。
+            FirstFunnel,   // ボス:ファンネル展開
+            ToggleButton,  // ボス:多重ロックオン(敵は関係なし？)
+            SecondFunnel,  // ボス:ファンネル復活
+            BossAgain,     // ボス:通常戦闘
+            BreakLeftArm,  // ボス:プレイヤー左腕破壊。
+            FirstBossQTE,  // ボス:QTE1回目
+            SecondQTE,     // ボス:QTE2回目
+            BossEnd,       // ボス:ボス戦終了演出。
         }
 
-        // シーン上の敵を登録する用のメッセージ。
-        private struct RegisterMessage
+        // 登録する用のメッセージ。
+        private struct RegisterMessage<T>
         {
-            public EnemyController Enemy;
+            public T Character;
         }
 
-        // シーン上の敵を登録解除する用のメッセージ。
-        private struct ReleaseMessage
+        // 登録解除する用のメッセージ。
+        private struct ReleaseMessage<T>
         {
-            public EnemyController Enemy;
-        }
-
-        // シーン上のボスを登録する用のメッセージ。
-        private struct BossRegisterMessage
-        {
-            public BossController Boss;
-        }
-
-        // シーン上のボスを登録解除する用のメッセージ。
-        private struct BossReleaseMessage
-        {
-            public BossController Boss;
+            public T Character;
         }
 
         // 登録されたボス。
         private BossController _boss;
         // 登録された敵。
         private HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
+        // 登録されたNPC。
+        private HashSet<INpc> _npcs = new HashSet<INpc>();
         // 登録された敵に対して命令。
         // 命令の処理を呼び出す度に書き換えて使いまわす。
         private EnemyOrder _order = new EnemyOrder();
 
         private void Awake()
         {
-            // メッセージングで敵とボスを登録/登録解除する。
-            MessageBroker.Default.Receive<RegisterMessage>()
-                .Subscribe(msg => _enemies.Add(msg.Enemy)).AddTo(this);
-            MessageBroker.Default.Receive<ReleaseMessage>()
-                .Subscribe(msg => _enemies.Remove(msg.Enemy)).AddTo(this);
-            MessageBroker.Default.Receive<BossRegisterMessage>()
-                .Subscribe(msg => _boss = msg.Boss).AddTo(this);
-            MessageBroker.Default.Receive<BossReleaseMessage>()
-                .Subscribe(msg => _boss = null).AddTo(this);
+            // メッセージングで敵を登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<EnemyController>>()
+                .Subscribe(msg => _enemies.Add(msg.Character)).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<EnemyController>>()
+                .Subscribe(msg => _enemies.Remove(msg.Character)).AddTo(this);
+
+            // メッセージングでボスを登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<BossController>>()
+                .Subscribe(msg => _boss = msg.Character).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<BossController>>()
+                .Subscribe(_ => _boss = null).AddTo(this);
+
+            // メッセージングでNPCを登録/登録解除する。
+            MessageBroker.Default.Receive<RegisterMessage<INpc>>()
+                .Subscribe(msg => _npcs.Add(msg.Character)).AddTo(this);
+            MessageBroker.Default.Receive<ReleaseMessage<INpc>>()
+                .Subscribe(msg => _npcs.Remove(msg.Character)).AddTo(this);
         }
 
         /// <summary>
@@ -124,35 +138,79 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// 敵を登録する。
+        /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
         /// </summary>
-        public static void Register(EnemyController enemy)
+        public void BreakLeftArm()
         {
-            MessageBroker.Default.Publish(new RegisterMessage { Enemy = enemy });
+            // 命令をプレイヤーの左腕を破壊するに切り替え。
+            _order.OrderType = EnemyOrder.Type.BreakLeftArm;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
         }
 
         /// <summary>
-        /// ボスを登録する。
+        /// BreakLeftArmメソッド呼び出し後、1回目のQTEを行う。
         /// </summary>
-        public static void Register(BossController boss)
+        public void BossFirstQte()
         {
-            MessageBroker.Default.Publish(new BossRegisterMessage { Boss = boss });
+            // 命令をQTEの1回目に切り替え。
+            _order.OrderType = EnemyOrder.Type.BossFirstQTE;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
         }
 
         /// <summary>
-        /// 敵の登録を解除する。
+        /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
         /// </summary>
-        public static void Release(EnemyController enemy)
+        public void BossSecondQte()
         {
-            MessageBroker.Default.Publish(new ReleaseMessage { Enemy = enemy });
+            // 命令を2回目のQTEに切り替え。
+            _order.OrderType = EnemyOrder.Type.BossSecondQTE;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
         }
 
         /// <summary>
-        /// ボスの登録を解除する。
+        /// シーケンスを指定してNPCのイベントを実行。
         /// </summary>
-        public static void Release(BossController boss)
+        public void PlayNpcEvent(Sequence sequence)
         {
-            MessageBroker.Default.Publish(new BossReleaseMessage { Boss = boss });
+            foreach (INpc npc in _npcs)
+            {
+                if (npc.Sequence == sequence) npc.Play();
+            }
+        }
+
+        /// <summary>
+        /// 登録する。
+        /// </summary>
+        public static void Register<T>(T character)
+        {
+            if (!IsRegistrable<T>()) return;
+
+            MessageBroker.Default.Publish(new RegisterMessage<T> { Character = character });
+        }
+
+        /// <summary>
+        /// 登録を解除する。
+        /// </summary>
+        public static void Release<T>(T character)
+        {
+            if (!IsRegistrable<T>()) return;
+
+            MessageBroker.Default.Publish(new ReleaseMessage<T> { Character = character });
+        }
+
+        // 登録可能な型かチェック
+        private static bool IsRegistrable<T>()
+        {
+            if (typeof(T) == typeof(EnemyController)) return true;
+            else if (typeof(T) == typeof(BossController)) return true;
+            else if (typeof(T) == typeof(INpc)) return true;
+            else return false;
         }
     }
 }

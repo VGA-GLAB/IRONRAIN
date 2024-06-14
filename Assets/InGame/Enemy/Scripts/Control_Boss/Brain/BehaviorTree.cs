@@ -17,6 +17,9 @@ namespace Enemy.Control.Boss
         private EnemyBT.Sequence _bladeAttack;
         private EnemyBT.Sequence _rifleFire;
         private EnemyBT.Sequence _funnelExpand;
+        private EnemyBT.Sequence _breakLeftArm;
+        private EnemyBT.Sequence _firstQte;
+        private EnemyBT.Sequence _secondQte;
 
         private BlackBoard _blackBoard;
 
@@ -48,6 +51,21 @@ namespace Enemy.Control.Boss
                 new BossBT.WriteActionPlan(Choice.FunnelExpand, blackBoard)
                 );
 
+            _breakLeftArm = new EnemyBT.Sequence(
+                "BreakLeftArmSeq",
+                new BossBT.WriteActionPlan(Choice.BreakLeftArm, blackBoard)
+                );
+
+            _firstQte = new EnemyBT.Sequence(
+                "FirstQteSeq",
+                new BossBT.WriteActionPlan(Choice.FirstQte, blackBoard)
+                );
+
+            _secondQte = new EnemyBT.Sequence(
+                "SecondQteSeq",
+                new BossBT.WriteActionPlan(Choice.SecondQte, blackBoard)
+                );
+
             _blackBoard = blackBoard;
         }
 
@@ -62,6 +80,9 @@ namespace Enemy.Control.Boss
             else if (choice == Choice.BladeAttack) _bladeAttack.Update();
             else if (choice == Choice.RifleFire) _rifleFire.Update();
             else if (choice == Choice.FunnelExpand) _funnelExpand.Update();
+            else if (choice == Choice.BreakLeftArm) _breakLeftArm.Update();
+            else if (choice == Choice.FirstQte) _firstQte.Update();
+            else if (choice == Choice.SecondQte) _secondQte.Update();
         }
 
         /// <summary>

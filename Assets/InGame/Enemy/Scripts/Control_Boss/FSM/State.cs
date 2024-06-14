@@ -10,9 +10,11 @@ namespace Enemy.Control.Boss.FSM
     public enum StateKey
     {
         Base,
-        Idle,
-        Appear,
-        Battle,
+        Idle,     // 初期状態
+        Appear,   // 登場演出
+        Battle,   // 戦闘
+        QteEvent, // プレイヤーの左腕破壊~QTE2回目
+        Broken,   // 戦闘終了
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Enemy.Control
+﻿namespace Enemy
 {
     /// <summary>
     /// 複数のクラスから参照される値を定数化しまとめておく

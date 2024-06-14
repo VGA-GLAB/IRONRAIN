@@ -47,6 +47,29 @@ namespace Enemy.Control.Boss
                 {
                     _blackBoard.IsBossStarted = true;
                 }
+                // ファンネル展開
+                if (order.OrderType == EnemyOrder.Type.FunnelExpand)
+                {
+                    _blackBoard.FunnelExpandTrigger = true;
+                }
+                // プレイヤーの左手破壊
+                if (order.OrderType == EnemyOrder.Type.BreakLeftArm)
+                {
+                    _blackBoard.IsQteEventStarted = true;
+                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.BreakLeftArm;
+                }
+                // QTE1回目
+                if (order.OrderType == EnemyOrder.Type.BossFirstQTE)
+                {
+                    _blackBoard.IsQteEventStarted = true;
+                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.FirstQte;
+                }
+                // QTE2回目
+                if (order.OrderType == EnemyOrder.Type.BossSecondQTE)
+                {
+                    _blackBoard.IsQteEventStarted = true;
+                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.SecondQte;
+                }
 
                 // 命令をクリアしてプールに戻す。
                 order.Clear();
@@ -59,7 +82,7 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void ClearOrderedTrigger()
         {
-            //
+            _blackBoard.FunnelExpandTrigger = false;
         }
 
         /// <summary>
