@@ -15,15 +15,15 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _maxBullet;
     [SerializeField] private Text _currentSeq;
 
-    private ChaseSequenceController _chaseSequenceController;
+    private InGameManager _inGameManager;
     private PlayerMove _playerMove;
     private PlayerWeaponController _weaponCon;
     private PlayerQTE _playerQTE;
     private bool _active = false;
 
-    public void SetUp(ChaseSequenceController chaseSequenceController) 
+    public void SetUp(InGameManager inGameManager) 
     {
-        _chaseSequenceController = chaseSequenceController;
+        _inGameManager = inGameManager;
     }
 
     private void Start()
@@ -54,6 +54,6 @@ public class RobotInputDebug : MonoBehaviour
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
         _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
-        _currentSeq.text = _chaseSequenceController.GetCurrentSequence().ToString().Replace("ChaseSequenceController+", "");
+        _currentSeq.text = _inGameManager.CurrentSequence.ToString().Replace("ChaseSequenceController+", "");
     }
 }

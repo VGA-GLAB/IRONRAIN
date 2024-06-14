@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
         {
             _playerStateList[i].SetUp(_playerEnvroment, this.GetCancellationTokenOnDestroy());
         }
+
+        if (_playerSetting.IsStartChaseScene) 
+        {
+            SeachState<PlayerStoryEvent>().StartChaseScene();
+        }
     }
     private void OnDestroy()
     {
