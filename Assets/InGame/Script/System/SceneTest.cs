@@ -8,6 +8,5 @@ public class SceneTest : MonoBehaviour
     private void Start()
     {
        SceneTests = FindObjectsByType<SceneTest>(FindObjectsSortMode.InstanceID);
-        Debug.Log(SceneTests.Length);
     }
 }

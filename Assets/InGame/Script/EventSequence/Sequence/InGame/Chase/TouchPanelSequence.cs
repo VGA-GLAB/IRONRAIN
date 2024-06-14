@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
 using UnityEngine;
@@ -8,7 +8,7 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
     [SerializeField] private PlayerStoryEvent _playerStoryEvent = default;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private TutorialTextBoxController _textBox = default;
-    [SerializeField] private EnemyController _tutorialEnemy = default;
+    [SerializeField] private EnemyManager _enemyManager = default;
     [SerializeField] private float _shootWaitSec = 2F;
     
     [Header("テキストボックスに関する値")]
@@ -26,18 +26,19 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
     {
         // 最初の待ち時間
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
-        
+
         //敵を複数体出現させる
-        
+        _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
+        _enemyManager.Pause(EnemyManager.Sequence.TouchPanel);
         
         //タッチパネルの操作をオペレーターがしゃべる
         await Announce(ct);
         
         //一定時間待つ
         await UniTask.WaitForSeconds(_waitTime, cancellationToken: ct);
-        
+
         //敵を消して終了
-        //await UniTask.WaitUntil(() => )
+        _enemyManager.DefeatThemAll(EnemyManager.Sequence.TouchPanel);
     }
     
     private async UniTask Announce(CancellationToken cancellationToken)
