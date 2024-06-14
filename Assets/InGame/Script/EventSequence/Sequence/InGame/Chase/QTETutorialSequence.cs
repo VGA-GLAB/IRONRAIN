@@ -22,7 +22,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
 
         // 盾持ちを出現させる
-        _enemyManager.DetectPlayer(EnemyManager.Sequence.Tutorial);
+        _enemyManager.DetectPlayer(EnemyManager.Sequence.QTETutorial);
 
         // 最初の待ち時間
         await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: ct);
