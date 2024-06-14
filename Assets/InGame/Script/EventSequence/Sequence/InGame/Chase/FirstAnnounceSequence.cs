@@ -36,6 +36,11 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
             ChangeText()
         );
         
+        await UniTask.WhenAll(
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle1)),
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle2))
+        );
+        
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
         _textBox.ClearText();
         
