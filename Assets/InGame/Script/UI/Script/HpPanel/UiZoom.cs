@@ -13,7 +13,7 @@ public class UiZoom : MonoBehaviour
     /// <summary>パネルが現在ズーム状態かの判定 </summary>
     private bool _isZoom = false;
 
-    public void OnButtom(int num)
+    public void OnButtomZoom(int num)
     {
         //ズーム状態かにより、条件分岐
         //ズーム状態ならもとに戻し、それ以外ならズームする
