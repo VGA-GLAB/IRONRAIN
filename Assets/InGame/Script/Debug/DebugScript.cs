@@ -8,18 +8,13 @@ public class DebugScript : MonoBehaviour
     [SerializeField] RobotInputDebug _robotInputDebug;
     [SerializeField] MyButton _button;
     [SerializeField] private bool _robotInput;
-    private ChaseSequenceController _chaseSequenceController;
-
-    public void SetUp(ChaseSequenceController chaseSequenceController) 
-    {
-        _chaseSequenceController = chaseSequenceController;
-    }
+    [SerializeField] private InGameManager _gameManager;
 
     private void Start()
     {
         if (_robotInput) 
         {
-            _robotInputDebug.SetUp(_chaseSequenceController);
+            _robotInputDebug.SetUp(_gameManager);
             _robotInputDebug.Active();
         }
 
