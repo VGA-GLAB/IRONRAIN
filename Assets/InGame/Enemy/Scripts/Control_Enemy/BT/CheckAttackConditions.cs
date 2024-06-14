@@ -29,7 +29,7 @@ namespace Enemy.Control.BT
         protected override State Stay()
         {
             // 視界は自身を中心とした球形なので、横や後ろにいる場合も攻撃してしまう。
-            if (CheckFOV() && _blackBoard.NextAttackTime < Time.time)
+            if (CheckFOV())
             {
                 return State.Success;
             }

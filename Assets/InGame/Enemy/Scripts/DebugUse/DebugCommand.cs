@@ -1,6 +1,6 @@
 ﻿using Enemy.Control;
+using Enemy.Extensions;
 using System;
-using System.Collections;
 using System.Text;
 using UnityEngine;
 
@@ -10,7 +10,6 @@ namespace Enemy.DebugUse
     {
         [Header("コマンドで敵やNPCに命令する")]
         [SerializeField] private EnemyManager _enemyManager;
-        [SerializeField] private NpcManager _npcManager;
 
         private GUIStyle _style = new GUIStyle();
         private GUIStyleState _state = new GUIStyleState();
@@ -18,8 +17,6 @@ namespace Enemy.DebugUse
         
         // コマンド入力可能状態
         private bool _isEnable;
-        // コマンド実行時の演出を表示
-        private bool _isEnterEffect;
 
         private void Awake()
         {
@@ -65,25 +62,18 @@ namespace Enemy.DebugUse
                 }
             }
 
+            // 1文字消す。
+            if (Input.GetKeyDown(KeyCode.Backspace) && _command.Length > 0)
+            {
+                _command.Remove(_command.Length - 1, 1);
+            }
+
             // コマンドを実行
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                // コマンドを実行して成功した場合は演出
-                if (RunCommand()) StartCoroutine(EnterEffectAsync());
-
+                RunCommand();
                 _command.Clear();
 
-            }
-        }
-
-        // コマンド実行の演出。
-        // フラグをオンオフ繰り返して演出する。
-        private IEnumerator EnterEffectAsync()
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                _isEnterEffect = !_isEnterEffect;
-                yield return new WaitForSeconds(0.15f);
             }
         }
 
@@ -93,75 +83,118 @@ namespace Enemy.DebugUse
             string[] cmd = _command.ToString().Split();
 
             // 生存中の敵の数を数える。
-            if (cmd[0] == "ENEMYCOUNT")
+            if (cmd[0] == "ENEMYCOUNT" && cmd.Length == 1)
             {
-                Debug.Log($"生存中の敵の数{_enemyManager.EnemyCount()}");
+                Log($"生存中の敵の数 {_enemyManager.EnemyCount()}");
                 return true;
             }
 
             // シーケンスの敵が全滅しているかチェック
             if (cmd[0] == "ISALLDEFEATED" && cmd.Length == 2)
             {
-                EnemyManager.Sequence seq;
-                if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
-                else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
-                else return false;
+                if (TryToSequence(cmd[1], out EnemyManager.Sequence seq))
+                {
+                    Log($"{seq}シーケンスの敵が全滅 {_enemyManager.IsAllDefeated(seq)}");
+                    return true;
+                }
 
-                Debug.Log($"{seq}シーケンスの敵が全滅している: {_enemyManager.IsAllDefeated(seq)}");
-                return true;
+                return false;
             }
 
             // プレイヤーを検出
             if (cmd[0] == "DETECTPLAYER" && cmd.Length == 2)
             {
-                EnemyManager.Sequence seq;
-                if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
-                else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
-                else return false;
+                if (TryToSequence(cmd[1], out EnemyManager.Sequence seq))
+                {
+                    _enemyManager.DetectPlayer(seq);
+                    Log($"{seq}シーケンスの敵がプレイヤーを検出");
+                    return true;
+                }
 
-                _enemyManager.DetectPlayer(seq);
-                Debug.Log($"{seq}シーケンスの敵がプレイヤーを検出");
-                return true;
+                return false;
             }
 
             // シーケンスの敵を全滅させる
             if (cmd[0] == "DEFEATTHEMALL" && cmd.Length == 2)
             {
-                EnemyManager.Sequence seq;
-                if (cmd[1] == "NONE") seq = EnemyManager.Sequence.None;
-                else if (cmd[1] == "TUTORIAL") seq = EnemyManager.Sequence.Tutorial;
-                else if (cmd[1] == "MULTIBATTLE") seq = EnemyManager.Sequence.MultiBattle;
-                else return false;
+                if (TryToSequence(cmd[1], out EnemyManager.Sequence seq))
+                {
+                    _enemyManager.DefeatThemAll(seq);
+                    Log($"{seq}シーケンスの敵を全滅");
+                    return true;
+                }
 
-                _enemyManager.DefeatThemAll(seq);
-                Debug.Log($"{seq}シーケンスの敵を全滅");
-                return true;
+                return false;
             }
 
             // ボス戦開始
             if (cmd[0] == "BOSSSTART" && cmd.Length == 1)
             {
                 _enemyManager.BossStart();
-                Debug.Log($"ボス戦開始");
+                Log($"ボス戦開始");
+                return true;
+            }
+
+            // プレイヤーの左腕破壊
+            if (cmd[0] == "BREAKLEFTARM" && cmd.Length == 1)
+            {
+                _enemyManager.BreakLeftArm();
+                Log($"プレイヤーの左腕破壊イベント開始");
+                return true;
+            }
+
+            // ボス戦1回目のQTE
+            if (cmd[0] == "BOSSFIRSTQTE" && cmd.Length == 1)
+            {
+                _enemyManager.BossFirstQte();
+                Log($"ボス戦1回目のQTE開始");
+                return true;
+            }
+
+            // ボス戦2回目のQTE
+            if (cmd[0] == "BOSSSECONDQTE" && cmd.Length == 1)
+            {
+                _enemyManager.BossSecondQte();
+                Log($"ボス戦2回目のQTE開始");
                 return true;
             }
 
             // NPCのシーケンスイベント
-            if (cmd[0] == "NPC" && cmd[1] == "PLAYEVENT" && cmd.Length == 3)
+            if (cmd[0] == "PLAYNPCEVENT" && cmd.Length == 2)
             {
-                NpcManager.Sequence seq;
-                if (cmd[2] == "NONE") seq = NpcManager.Sequence.None;
-                else if (cmd[2] == "MULTIBATTLE") seq = NpcManager.Sequence.MultiBattle;
-                else return false;
+                if (TryToSequence(cmd[1], out EnemyManager.Sequence seq))
+                {
+                    _enemyManager.PlayNpcEvent(seq);
+                    Log($"{seq}シーケンスのNPCイベントを実行");
+                    return true;
+                }
 
-                _npcManager.PlayEvent(seq);
-                Debug.Log($"{seq}シーケンスのNPCイベントを実行");
-                return true;
+                return false;
             }
 
             return false;
+        }
+
+        // 列挙型に変換
+        private bool TryToSequence(string s, out EnemyManager.Sequence value)
+        {
+            foreach (EnemyManager.Sequence seq in EnumExtensions.GetAll<EnemyManager.Sequence>())
+            {
+                if (seq.ToString().ToUpper() == s)
+                {
+                    value = seq;
+                    return true;
+                }
+            }
+
+            value = EnemyManager.Sequence.None;
+            return false;
+        }
+
+        // ログの表示
+        private void Log(string s)
+        {
+            Debug.Log($"<color=#00ff00>敵デバッグコマンド実行: {s}</color>");
         }
 
         private void OnGUI()
@@ -169,11 +202,6 @@ namespace Enemy.DebugUse
             if (_isEnable)
             {
                 GUILayout.Label($"ｺﾏﾝﾄﾞ: {_command}<", _style);
-            }
-
-            if (_isEnterEffect)
-            {
-                GUILayout.Label($"ｺﾏﾝﾄﾞｼﾞｯｺｳ", _style);
             }
         }
     }

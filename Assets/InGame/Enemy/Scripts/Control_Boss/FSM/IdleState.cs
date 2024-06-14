@@ -37,6 +37,9 @@ namespace Enemy.Control.Boss.FSM
                 else if (plan.Choice == Choice.BladeAttack) TryChangeState(stateTable[StateKey.Battle]);
                 else if (plan.Choice == Choice.RifleFire) TryChangeState(stateTable[StateKey.Battle]);
                 else if (plan.Choice == Choice.FunnelExpand) TryChangeState(stateTable[StateKey.Battle]);
+                else if (plan.Choice == Choice.BreakLeftArm) TryChangeState(stateTable[StateKey.QteEvent]);
+                else if (plan.Choice == Choice.FirstQte) TryChangeState(stateTable[StateKey.QteEvent]);
+                else if (plan.Choice == Choice.SecondQte) TryChangeState(stateTable[StateKey.QteEvent]);
             }
         }
     }

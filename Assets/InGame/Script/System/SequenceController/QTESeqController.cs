@@ -30,7 +30,7 @@ public class QTESeqController : MonoBehaviour
         await UniTask.WaitForSeconds(2F, cancellationToken: cancellationToken);
 
         // 盾持ちを出現させる
-        _enemyManager.DetectPlayer(EnemyManager.Sequence.Tutorial);
+        _enemyManager.DetectPlayer(EnemyManager.Sequence.FirstAnaunnce);
 
         // 最初の待ち時間
         await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: cancellationToken);

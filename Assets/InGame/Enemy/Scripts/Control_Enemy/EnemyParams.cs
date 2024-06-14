@@ -83,8 +83,8 @@ namespace Enemy.Control
         [System.Serializable]
         public class OtherSettings
         {
-            // チュートリアル用の敵として設定するためにはこのチェックを入れるだけで良い。
             [Header("チュートリアルの敵として扱う")]
+            [Tooltip("外部から攻撃命令をされた場合のみ攻撃する。")]
             [SerializeField] private bool _isTutorial;
             [Header("シーケンス設定")]
             [SerializeField] private EnemyManager.Sequence _sequence;

@@ -40,10 +40,13 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            // 行動を調べる。
-            while (_blackBoard.ActionPlans.TryDequeue(out ActionPlan plan))
+            // イベントのトリガーになるような行動を調べる。
+            foreach(ActionPlan plan in _blackBoard.ActionPlans)
             {
-                // ファンネル展開
+                // プレイヤーの左腕破壊をトリガーに、QTEイベントのステートへ遷移。
+                if (plan.Choice == Choice.BreakLeftArm) { TryChangeState(stateTable[StateKey.Idle]); return; }
+
+                // 攻撃中だろうが移動中だろうがファンネル展開を実行。
                 if (plan.Choice == Choice.FunnelExpand && _funnels != null)
                 {
                     foreach (FunnelController f in _funnels) f.OpenAnimation();
@@ -67,6 +70,17 @@ namespace Enemy.Control.Boss.FSM
             while (_blackBoard.LookPlans.TryDequeue(out ActionPlan.Look plan))
             {
                 if (plan.Choice == Choice.Chase) _body.Forward(plan.Forward);
+            }
+
+            // 攻撃
+            foreach (ActionPlan plan in _blackBoard.ActionPlans)
+            {
+                if (plan.Choice == Choice.BladeAttack)
+                {
+                }
+                else if (plan.Choice == Choice.RifleFire)
+                {
+                }
             }
         }
 

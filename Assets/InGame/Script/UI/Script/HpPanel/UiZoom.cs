@@ -33,7 +33,7 @@ public class UiZoom : MonoBehaviour
         //Sequenceの生成
         var sequence = DOTween.Sequence().SetLink(_zoomPanel.gameObject);
         //RectTransformでパネルを移動させる
-        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(_rectTransforms[num].anchoredPosition.x, _rectTransforms[num].anchoredPosition.y), _zoomTime));
+        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(-_rectTransforms[num].anchoredPosition.x, -_rectTransforms[num].anchoredPosition.y), _zoomTime));
         //ズームさせる
         sequence.Join(_zoomPanel.DOScale(_scale, _scale));
         sequence.Play();

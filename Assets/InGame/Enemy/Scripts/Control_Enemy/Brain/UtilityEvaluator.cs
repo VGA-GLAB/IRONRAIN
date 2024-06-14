@@ -44,43 +44,35 @@ namespace Enemy.Control
             _order.Clear();
 
             // 死亡している場合は死亡が最優先
-            if (_blackBoard.Hp <= 0) _order.Add(Choice.Broken);
+            if (_blackBoard.Hp <= 0) { _order.Add(Choice.Broken); return _order; }
 
             // 接近検知範囲外の場合は画面から隠す
             if (!_blackBoard.IsPlayerDetected) { _order.Add(Choice.Hide); return _order; }
 
             // 接近が完了したフラグで判定。
             // 攻撃中にプレイヤーを追跡していると、離れることで接近の条件を満たすのを防ぐ。
-            if (!_blackBoard.IsApproachCompleted)
+            if (!_blackBoard.IsApproachCompleted) { _order.Add(Choice.Approach); return _order; }
+
+            // 時間が0以下の場合は撤退
+            if (_blackBoard.LifeTime <= 0) { _order.Add(Choice.Escape); return _order; }
+
+            // ダメージを受けた場合は怯む
+            if (_blackBoard.CurrentFrameDamage > 0) { _order.Add(Choice.Damaged); return _order; }
+
+            // チュートリアル用の敵の場合
+            if (_params.Other.IsTutorial)
             {
-                _order.Add(Choice.Approach);
+                // 外部から攻撃処理を呼び出すことで攻撃する。
+                if (_blackBoard.OrderedAttackTrigger) _order.Add(Choice.Attack);
             }
             else
             {
-                if (_blackBoard.LifeTime <= 0)
-                {
-                    // 時間が0以下の場合は撤退
-                    _order.Add(Choice.Escape);
-                }
-                else if (_blackBoard.CurrentFrameDamage > 0)
-                {
-                    // ダメージを受けた場合は怯む
-                    _order.Add(Choice.Damaged);
-                }
-                else if (_params.Other.IsTutorial)
-                {
-                    _order.Add(Choice.Chase);
-
-                    // チュートリアル用の敵の場合は、外部から攻撃処理を呼び出すことで攻撃する。                    
-                    if (_blackBoard.OrderedAttackTrigger) _order.Add(Choice.Attack);
-                }
-                else
-                {
-                    // それ以外は移動しつつ攻撃
-                    _order.Add(Choice.Chase);
-                    _order.Add(Choice.Attack);
-                }
+                // 攻撃タイミングが来ていた場合は攻撃する。
+                if (_blackBoard.NextAttackTime < Time.time) _order.Add(Choice.Attack);
             }
+
+            // プレイヤーを追跡
+            _order.Add(Choice.Chase);
 
             return _order;
         }

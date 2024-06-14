@@ -11,7 +11,7 @@ namespace Enemy.Control
     /// 目標に向かって移動し、一定距離まで近づいたら撃破、そのまま直進して退場する。
     /// SetActiveの切り替えで有効無効を切り替える。
     /// </summary>
-    public class MultiBattleSequenceNpc : MonoBehaviour
+    public class MultiBattleSequenceNpc : MonoBehaviour , INpc
     {
         [Header("撃破目標")]
         [SerializeField] private EnemyController _target;
@@ -21,19 +21,24 @@ namespace Enemy.Control
         [Min(1)]
         [SerializeField] private float _defeatDistance = 5;
 
-        void Start()
+        EnemyManager.Sequence INpc.Sequence => EnemyManager.Sequence.MultiBattle;
+
+        private void Start()
         {
             // 画面から非表示になるが、外部から安全に呼び出せるようにスケールを0にしておく。
             transform.localScale = Vector3.zero;
 
             // 自信を登録
-            NpcManager.Register(this);
+            EnemyManager.Register(this);
         }
 
-        /// <summary>
-        /// 外部から呼び出してイベント再生
-        /// </summary>
-        public void Play()
+        private void OnDestroy()
+        {
+            // 自身の登録を解除
+            EnemyManager.Release(this);
+        }
+
+        void INpc.Play()
         {
             // 画面に表示
             transform.localScale = Vector3.one;
