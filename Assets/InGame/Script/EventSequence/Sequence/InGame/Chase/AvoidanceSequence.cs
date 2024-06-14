@@ -62,6 +62,11 @@ public sealed class AvoidanceSequence : AbstractSequenceBase
             ChangeText()
         );
         
+        await UniTask.WhenAll(
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle1)),
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle2))
+        );
+        
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
         
         async UniTask ChangeText()
