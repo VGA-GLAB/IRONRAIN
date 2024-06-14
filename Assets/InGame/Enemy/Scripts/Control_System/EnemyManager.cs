@@ -123,6 +123,36 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// シーケンスを指定してポーズ
+        /// </summary>
+        public void Pause(Sequence sequence)
+        {
+            // 命令をポーズに書き換え。
+            _order.OrderType = EnemyOrder.Type.Pause;
+
+            // シーケンスを指定して命令。
+            foreach (EnemyController e in _enemies)
+            {
+                if (e.Params.Sequence == sequence) e.Order(_order);
+            }
+        }
+
+        /// <summary>
+        /// シーケンスを指定してポーズ解除
+        /// </summary>
+        public void Resume(Sequence sequence)
+        {
+            // 命令をポーズ解除に書き換え。
+            _order.OrderType = EnemyOrder.Type.Resume;
+
+            // シーケンスを指定して命令。
+            foreach (EnemyController e in _enemies)
+            {
+                if (e.Params.Sequence == sequence) e.Order(_order);
+            }
+        }
+
+        /// <summary>
         /// ボス戦を開始する。
         /// </summary>
         public void BossStart()
