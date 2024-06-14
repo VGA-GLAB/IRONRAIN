@@ -13,9 +13,9 @@ public sealed class PrepareGameManager : MonoBehaviour
     [SerializeField] private PrepareSortieSeqController _prepareSortieSeqController = default;
     [SerializeField] private SortieController _sortieController = default;
     
-    private async void Start()
+    private void Start()
     {
-        await ManagePrepareAsync(this.GetCancellationTokenOnDestroy());
+        ManagePrepareAsync(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
     private async UniTask ManagePrepareAsync(CancellationToken cancellationToken)
