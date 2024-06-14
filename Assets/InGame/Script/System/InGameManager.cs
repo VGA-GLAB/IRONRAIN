@@ -8,6 +8,7 @@ using UnityEngine;
 
 public sealed class InGameManager : MonoBehaviour
 {
+    
     public AbstractSequenceBase CurrentSequence => _currentSequence;
 
     [SerializeField] private AbstractSequenceBase[] _sequences = default;
@@ -23,11 +24,13 @@ public sealed class InGameManager : MonoBehaviour
         public float TimeScale { get; set; }
     }
 
-    public async void InGameStart()
+    public async void InGameStartUnityEventReceive() => await InGameStartAsync(this.GetCancellationTokenOnDestroy());
+
+    private async UniTask InGameStartAsync(CancellationToken ct)
     {
         foreach (var seq in _sequences)
         {
-            await seq.PlaySequenceAsync(this.GetCancellationTokenOnDestroy());
+            await seq.PlaySequenceAsync(ct);
             _currentSequence = seq;
         }
     }
