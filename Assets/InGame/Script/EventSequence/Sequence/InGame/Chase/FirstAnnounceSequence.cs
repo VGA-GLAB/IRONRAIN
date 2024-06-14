@@ -1,11 +1,14 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Enemy.Control;
 using UnityEngine;
 
 public sealed class FirstAnnounceSequence : AbstractSequenceBase
 {
+    [SerializeField] private PlayerStoryEvent _playerStoryEvent = default;
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private PlayerController _playerController = null;
+    [SerializeField] private EnemyController _tutorialEnemy = default;
     [Header("最初の待ち時間")]
     [SerializeField] private float _firstAwaitTimeSec = 10F;
     [Header("テキストボックスに関する値")]
@@ -17,10 +20,14 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     [SerializeField] private string _announceCueSheetName = "SE";
     [SerializeField] private string _announceCueName = "SE_Kill";
     [SerializeField] private float _waitAfterAnnounceSec = 1F;
+    [Header("弾を打つまでの待ち時間")]
+    [SerializeField] private float _shootWaitSec = 2F;
     
     public override async UniTask PlaySequenceAsync(CancellationToken ct)
     {// 最初に何秒か待つ
         await UniTask.WaitForSeconds(_firstAwaitTimeSec, cancellationToken: ct);
+        
+        await UniTask.WaitForSeconds(2F, cancellationToken: ct);
         
         await Announce(ct);
     }
@@ -29,6 +36,11 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     /// <param name="cancellationToken"></param>
     private async UniTask Announce(CancellationToken cancellationToken)
     {
+        await UniTask.WaitUntil(() => _tutorialEnemy.BlackBoard.IsApproachCompleted, cancellationToken: cancellationToken);
+        
+        _playerStoryEvent.StartChaseScene();
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
+        
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
         await UniTask.WhenAll(
@@ -36,10 +48,26 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
             ChangeText()
         );
         
-        await UniTask.WhenAll(
-            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle1)),
-            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle2))
-        );
+        Debug.Log("Shooooooooot!");
+        _tutorialEnemy.Attack();
+        
+        await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
+
+        _tutorialEnemy.Pause();
+
+        Debug.Log("レバーかスペースキーを押してください");
+        // 特定の入力を受けたらPauseを回避する
+        await UniTask.WaitUntil(() =>
+            InputProvider.Instance.LeftLeverDir != Vector3.zero ||
+            InputProvider.Instance.RightLeverDir != Vector3.zero ||
+            UnityEngine.InputSystem.Keyboard.current.spaceKey.isPressed, cancellationToken: cancellationToken);
+        
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
+        _tutorialEnemy.Resume();
+
+        await UniTask.Yield(cancellationToken: cancellationToken);
+        
+        //_playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
         _textBox.ClearText();

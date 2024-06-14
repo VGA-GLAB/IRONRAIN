@@ -30,9 +30,11 @@ public sealed class PrepareStartController : MonoBehaviour
     {
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
-        await UniTask.WhenAll(
+        await  UniTask.WhenAll(
             //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
-            ChangeText()
+            ChangeText(),
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle1), cancellationToken: cancellationToken),
+            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle2), cancellationToken: cancellationToken)
         );
         
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
