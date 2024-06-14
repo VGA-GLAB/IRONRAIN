@@ -30,9 +30,12 @@ namespace Enemy.Control
             [Header("移動速度")]
             [Min(1.0f)]
             [SerializeField] private float _moveSpeed = 12.0f;
+            [Header("スロット番号")]
+            [SerializeField] private SlotPool.Place _slotPlace;
 
             public float Distance => _distance;
             public float MoveSpeed => _moveSpeed;
+            public SlotPool.Place SlotPlace => _slotPlace;
         }
 
         // 戦闘
