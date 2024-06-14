@@ -29,7 +29,7 @@ public class AttackSeqController : MonoBehaviour
         await Announce(cancellationToken);
 
         // 実際に1機倒す
-        await UniTask.WaitUntil(() => _enemyManager.IsAllDefeated(EnemyManager.Sequence.Tutorial));
+        await UniTask.WaitUntil(() => _enemyManager.IsAllDefeated(EnemyManager.Sequence.FirstAnaunnce));
 }
 
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
