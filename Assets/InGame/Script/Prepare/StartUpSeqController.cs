@@ -24,11 +24,6 @@ public sealed class StartUpSeqController : MonoBehaviour
 
     public async UniTask StartUpSeqAsync(CancellationToken cancellationToken)
     {
-        await UniTask.WhenAll(
-            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle1)),
-            UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle2))
-        );
-
         await MonitorOpenAsync(cancellationToken);
     }
 
