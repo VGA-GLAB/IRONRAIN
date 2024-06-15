@@ -25,7 +25,7 @@ namespace Enemy.Control
         public class AdvanceSettings
         {
             [Header("検知距離")]
-            [Min(1.0f)]
+            [Min(0)]
             [SerializeField] private float _distance = 33.0f;
             [Header("移動速度")]
             [Min(1.0f)]

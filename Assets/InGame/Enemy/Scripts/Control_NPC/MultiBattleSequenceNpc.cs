@@ -29,20 +29,20 @@ namespace Enemy.Control
             transform.localScale = Vector3.zero;
 
             // 自信を登録
-            EnemyManager.Register(this);
+            EnemyManager.Register<INpc>(this);
         }
 
         private void OnDestroy()
         {
             // 自身の登録を解除
-            EnemyManager.Release(this);
+            EnemyManager.Release<INpc>(this);
         }
 
         void INpc.Play()
         {
             // 画面に表示
             transform.localScale = Vector3.one;
-
+            
             if (_target != null)
             {
                 DefeatTargetAsync(this.GetCancellationTokenOnDestroy()).Forget();
