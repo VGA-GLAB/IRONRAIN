@@ -28,7 +28,7 @@ namespace Enemy.DebugUse
         private void Update()
         {
             // 有効/無効を切り替え
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyCode.Slash))
             {
                 _command.Clear();
                 _isEnable = !_isEnable;
