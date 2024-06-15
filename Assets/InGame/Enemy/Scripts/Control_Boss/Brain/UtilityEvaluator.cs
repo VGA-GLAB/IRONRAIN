@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Enemy.Extensions;
+using UnityEngine;
 
 namespace Enemy.Control.Boss
 {
@@ -69,6 +70,12 @@ namespace Enemy.Control.Boss
 
                 // ファンネル展開。
                 if (_blackBoard.FunnelExpandTrigger) _order.Add(Choice.FunnelExpand);
+
+                // 近接攻撃タイミングが来ていた場合は攻撃する。
+                if (_blackBoard.NextMeleeAttackTime < Time.time) _order.Add(Choice.BladeAttack);
+
+                // 遠距離攻撃タイミングが来ていた場合は攻撃する。
+                if (_blackBoard.NextRangeAttackTime < Time.time) _order.Add(Choice.RifleFire);
 
                 // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
                 _order.Add(Choice.Chase);

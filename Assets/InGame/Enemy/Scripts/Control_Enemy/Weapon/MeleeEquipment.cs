@@ -5,10 +5,10 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 盾持ち敵の装備。
+    /// 近接攻撃の装備。
     /// 攻撃タイミングはアニメーションイベント任せ。
     /// </summary>
-    public class ShieldEquipment : MonoBehaviour
+    public class MeleeEquipment : MonoBehaviour
     {
         [Header("アニメーションイベントに処理をフック")]
         [SerializeField] private AnimationEvent _animationEvent;

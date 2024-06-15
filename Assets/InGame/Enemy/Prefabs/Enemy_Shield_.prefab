@@ -117,6 +117,7 @@ MonoBehaviour:
     _advance:
       _distance: 33
       _moveSpeed: 12
+      _slotPlace: 0
     _battle:
       _maxHp: 10
       _dying: 0.2
@@ -140,6 +141,7 @@ MonoBehaviour:
   _effects:
   - {fileID: 6507933991480767477}
   - {fileID: 5329035056386970053}
+  _damageHitBox: {fileID: 3589729310548736452}
 --- !u!114 &9062715359764695379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +591,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e90563625144c1941b096316ef406917, type: 3}
+--- !u!65 &3589729310548736452 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
+  m_PrefabInstance: {fileID: 4840901825075989794}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4528175664367590642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9077314326590853584, guid: e90563625144c1941b096316ef406917, type: 3}

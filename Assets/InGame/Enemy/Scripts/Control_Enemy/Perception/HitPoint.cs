@@ -45,10 +45,14 @@ namespace Enemy.Control
         /// </summary>
         public void Update()
         {
-            _blackBoard.Hp -= _damageBuffer;
-            _blackBoard.Hp = Mathf.Max(0, _blackBoard.Hp);
-            _blackBoard.CurrentFrameDamage = _damageBuffer;
-            _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
+            // プレイヤーを検知していない状態だとダメージが入らない。
+            if (_blackBoard.IsPlayerDetected)
+            {
+                _blackBoard.Hp -= _damageBuffer;
+                _blackBoard.Hp = Mathf.Max(0, _blackBoard.Hp);
+                _blackBoard.CurrentFrameDamage = _damageBuffer;
+                _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
+            }
 
             // フレーム毎のダメージなので反映後は0に戻す。
             _damageBuffer = 0;

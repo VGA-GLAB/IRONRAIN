@@ -20,6 +20,7 @@ namespace Enemy.Control
         [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Animator _animator;
         [SerializeField] private Effect[] _effects;
+        [SerializeField] private Collider _damageHitBox;
 
         // 注入する依存関係。
         private Transform _player;
@@ -81,7 +82,7 @@ namespace Enemy.Control
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
             _bodyController = new BodyController(transform, _params, _blackBoard, _offset, _rotate, _renderers, 
-                _animator, _effects);
+                _animator, _effects, _damageHitBox);
 
 #if UNITY_EDITOR
             _debugStatusUI = new DebugStatusUI(transform, _params, _blackBoard);

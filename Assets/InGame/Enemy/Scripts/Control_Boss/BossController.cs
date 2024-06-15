@@ -18,12 +18,14 @@ namespace Enemy.Control.Boss
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
         [SerializeField] private Renderer[] _renderers;
+        [SerializeField] private Collider _damageHitBox;
 
         // 注入する依存関係
         private Transform _pointP;
         private Transform _player;
         // 自身の状態や周囲を認識して黒板に書き込むPerception層。
         private Perception _perception;
+        private FireRate _fireRate;
         private OverrideOrder _overrideOrder;
         // 黒板に書き込まれた内容から次にとるべき行動を決定するBrain層。
         private UtilityEvaluator _utilityEvaluator;
@@ -60,12 +62,14 @@ namespace Enemy.Control.Boss
 
             // Perception
             _perception = new Perception(transform, _blackBoard, _player, _pointP);
+            _fireRate = new FireRate(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
-            _bodyController = new BodyController(transform, _blackBoard, _offset, _rotate, _renderers, _funnels);
+            _bodyController = new BodyController(transform, _blackBoard, _offset, _rotate, _renderers,
+                _damageHitBox, _funnels);
         }
 
         private void Start()
@@ -86,6 +90,7 @@ namespace Enemy.Control.Boss
         {
             // Perception
             _perception.Update();
+            _fireRate.UpdateIfAttacked();
             _overrideOrder.Update();
             
             // Brain

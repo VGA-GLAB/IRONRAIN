@@ -77,9 +77,13 @@ namespace Enemy.Control.Boss.FSM
             {
                 if (plan.Choice == Choice.BladeAttack)
                 {
+                    //
+                    _blackBoard.LastMeleeAttackTime = Time.time;
                 }
                 else if (plan.Choice == Choice.RifleFire)
                 {
+                    //
+                    _blackBoard.LastRangeAttackTime = Time.time;
                 }
             }
         }

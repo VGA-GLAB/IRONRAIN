@@ -25,13 +25,14 @@ namespace Enemy.Control
         private bool _isCleanup;
 
         public BodyController(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
-            Transform offset, Transform rotate, Renderer[] renderers, Animator animator, Effect[] effects)
+            Transform offset, Transform rotate, Renderer[] renderers, Animator animator, Effect[] effects,
+            Collider damageHitBox)
         {
             _blackBoard = blackBoard;
             _animator = animator;
 
             // 各ステートにTransformやアニメーション、演出を操作するクラスを渡す。
-            Body body = new Body(transform, offset, rotate, renderers);
+            Body body = new Body(transform, offset, rotate, renderers, damageHitBox);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
             Effector effector = new Effector(effects);
             _stateTable = new Dictionary<StateKey, State>

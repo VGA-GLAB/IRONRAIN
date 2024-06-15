@@ -65,6 +65,8 @@ namespace Enemy.Control
                 // ボス戦開始
                 else if (order.OrderType == EnemyOrder.Type.BossStart)
                 {
+                    // HitPointクラスで、プレイヤーを検知していない状態の場合はダメージが入らないようにしている。
+                    // 状態にかかわらず死亡させたいので、HPを直接書きかえる。
                     _blackBoard.Hp = 0;
                     _blackBoard.IsDying = true;
                 }
