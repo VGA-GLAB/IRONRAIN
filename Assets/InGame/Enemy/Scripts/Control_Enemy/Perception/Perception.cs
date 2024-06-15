@@ -40,7 +40,7 @@ namespace Enemy.Control
             _area = new CircleArea(_transform.position, _params.Common.Area.Radius);
             _playerArea = new CircleArea(_player.position, _params.Common.Area.PlayerRadius);
             // スロット確保
-            _pool.TryRent(_transform.position, out _slot);
+            _pool.TryRent(_params.Advance.SlotPlace, out _slot);
 
             // エリアとスロットを黒板に書き込む。
             _blackBoard.Area = _area;

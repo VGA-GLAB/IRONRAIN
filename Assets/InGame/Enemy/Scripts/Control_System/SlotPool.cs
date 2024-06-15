@@ -5,20 +5,6 @@ using UnityEngine;
 
 namespace Enemy.Control
 {
-    #region 円周上に配置するために未使用
-    /// <summary>
-    /// スロットの位置を指定する用の列挙型
-    /// </summary>
-    //public enum SlotPlace
-    //{
-    //    Left,
-    //    MiddleLeft,
-    //    Middle,
-    //    MiddleRight,
-    //    Right,
-    //}
-    #endregion
-
     /// <summary>
     /// 敵を配置する箇所。
     /// </summary>
@@ -52,10 +38,24 @@ namespace Enemy.Control
     [DefaultExecutionOrder(-1)]
     public class SlotPool : MonoBehaviour
     {
+        /// <summary>
+        /// スロットの位置を指定する用の列挙型
+        /// </summary>
+        public enum Place
+        {
+            Left,
+            MiddleLeft,
+            Middle,
+            MiddleRight,
+            Right,
+        }
+
+        // 列挙型の長さと同じ数だけスロットを生成
+        private static int Quantity = EnumExtensions.Length<Place>();
+
         [Header("プレイヤーの前方向を基準にする")]
         [SerializeField] private Transform _player;
         [Header("生成の設定")]
-        [SerializeField] private int _quantity = 5;
         [SerializeField] private float _forwardOffset = 6.0f;
         [SerializeField] private float _space = 3.0f;
         [Header("スロットの設定")]
@@ -95,7 +95,7 @@ namespace Enemy.Control
         {
             if (_player == null) return;
 
-            _pool = new Slot[_quantity];
+            _pool = new Slot[Quantity];
 
             // 中心点からプレイヤーの距離を半径とする円
             foreach ((Vector3 point, int index) s in SlotPoint())
@@ -103,7 +103,7 @@ namespace Enemy.Control
                 _pool[s.index] = new Slot(s.point, _radius);
             }
 
-            EmptyCount = _quantity;
+            EmptyCount = Quantity;
         }
 
         private void UpdateSlot()
@@ -118,13 +118,13 @@ namespace Enemy.Control
 
         private IEnumerable<(Vector3, int)> SlotPoint()
         {
-            for (int i = 0; i < _quantity; i++)
+            for (int i = 0; i < Quantity; i++)
             {
                 // プレイヤーを基準に左右均等に配置する。
                 Vector3 p = _player.position + _player.forward * _forwardOffset;
                 Vector3 left = -_player.right * _space * i;
-                left += _player.right * (_quantity / 2) * _space;
-                if (_quantity % 2 == 0) left += -_player.right * _space / 2;
+                left += _player.right * (Quantity / 2) * _space;
+                if (Quantity % 2 == 0) left += -_player.right * _space / 2;
 
                 yield return (p + left, i);
             }
@@ -137,7 +137,7 @@ namespace Enemy.Control
         {
             slot = null;
 
-            if (_pool == null) { return false; }
+            if (_pool == null) return false;
 
             float min = float.MaxValue;
             foreach (Slot s in _pool)
@@ -151,6 +151,23 @@ namespace Enemy.Control
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 指定したスロットを借りる。
+        /// </summary>
+        public bool TryRent(Place place, out Slot slot)
+        {
+            if (_pool == null)
+            {
+                slot = null;
+                return false;
+            }
+            else
+            {
+                slot = _pool[(int)place];
+                return true;
+            }
         }
 
         /// <summary>
