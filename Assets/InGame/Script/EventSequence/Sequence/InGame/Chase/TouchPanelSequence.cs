@@ -5,8 +5,6 @@ using UnityEngine;
 
 public sealed class TouchPanelSequence : AbstractSequenceBase
 {
-    [SerializeField] private PlayerStoryEvent _playerStoryEvent = default;
-    [SerializeField] private PlayerController _playerController;
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private EnemyManager _enemyManager = default;
     [SerializeField] private float _shootWaitSec = 2F;
@@ -21,7 +19,8 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
     [SerializeField] private string _announceCueName = "SE_Kill";
     [SerializeField] private float _waitAfterAnnounceSec = 1F;
     
-    [Header("パネルチュートリアルを待つ時間")] private float _waitTime = 5f;
+    [Header("パネルチュートリアルを待つ時間")]
+    [SerializeField] private float _waitTime = 5f;
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
     {
         // 最初の待ち時間
