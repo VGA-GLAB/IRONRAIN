@@ -663,12 +663,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135567621}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 852.28, y: 84.96, z: -60}
-  m_LocalScale: {x: 40.38, y: 40.38, z: 40.38}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1759155139}
-  m_RootOrder: -2
+  m_Father: {fileID: 1217858610}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &153388778
 GameObject:
@@ -35223,7 +35223,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1759155139}
+  - {fileID: 1217858610}
   - {fileID: 1823932884}
   - {fileID: 1127170006}
   - {fileID: 1935615645}
@@ -41629,12 +41629,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1217858609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 820, y: 80, z: -190.4}
+  m_LocalPosition: {x: 396, y: 80, z: -18.399994}
   m_LocalScale: {x: 40.38, y: 40.38, z: 40.38}
   m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1759155139}
-  m_RootOrder: -2
+  m_Children:
+  - {fileID: 1759155139}
+  - {fileID: 135567622}
+  m_Father: {fileID: 959200905}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1217858611
 BoxCollider:
@@ -43701,11 +43703,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d207e7b414903488ad29743b6fe5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isSkip: 1
   _prepareSequenceController: {fileID: 1260057701}
   _prepareStartController: {fileID: 377073429}
   _startUpSeqController: {fileID: 377073428}
   _prepareSortieSeqController: {fileID: 377073427}
   _sortieController: {fileID: 377073426}
+  _playerTransform: {fileID: 4633842901574863}
+  _skipPos: {fileID: 1929721380}
+  _onSkipEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1814249523}
+        m_TargetAssemblyTypeName: InGameManager, Assembly-CSharp
+        m_MethodName: InGameStartUnityEventReceive
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1551956727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54722,14 +54742,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759155138}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -424, y: 0, z: 172}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.024764735, y: 0.024764735, z: 0.024764735}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 135567622}
-  - {fileID: 1217858610}
-  m_Father: {fileID: 959200905}
-  m_RootOrder: -2
+  m_Children: []
+  m_Father: {fileID: 1217858610}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1761478971
 GameObject:
