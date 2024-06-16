@@ -58,8 +58,15 @@ namespace Enemy.Control.FSM
             if (stateName == "") return;
 
             // 死亡アニメーションとエフェクトを再生。
+#if false
             _animation.Play(stateName);
+#elif true
+            _body.RendererEnable(false);
+#endif
             _effector.Play(EffectKey.Destroyed, _blackBoard);
+
+            // ダメージの当たり判定を消す。
+            _body.DamageHitBoxEnable(false);
 
             /* 必要に応じて再生後にアイドル状態に戻るような処理を入れても可。 */
         }

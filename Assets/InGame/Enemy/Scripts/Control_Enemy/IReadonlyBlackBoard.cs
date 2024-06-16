@@ -6,6 +6,11 @@
     public interface IReadonlyBlackBoard : IOwnerTime
     {
         /// <summary>
+        /// 敵を識別するためのID。
+        /// </summary>
+        public System.Guid ID { get; }
+
+        /// <summary>
         /// 敵が生存しているかを判定。
         /// </summary>
         public bool IsAlive { get; }
