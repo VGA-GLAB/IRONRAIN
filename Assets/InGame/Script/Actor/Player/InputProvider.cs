@@ -173,7 +173,6 @@ public class InputProvider
         switch (type)
         {
             case InputMode.Enter:
-                Debug.Log($"{input}が押されました");
                 //入力開始処理を実行する
                 SetStayInput(input, true);
                 _onEnterInputDic[input]?.Invoke();

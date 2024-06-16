@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ public class BulletCon : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private Rigidbody _rb;
-    [Tooltip("ƒƒbƒNƒIƒ“‚µ‚Ä‚¢‚é“G")]
+    [Tooltip("ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã—ã¦ã„ã‚‹æ•µ")]
     private GameObject _lockOnEnemy;
 
     private int _damege;
@@ -20,7 +20,7 @@ public class BulletCon : MonoBehaviour
 
     private void Update()
     {
-        ///ˆê’UŠ®‘S’Ç]‚É
+        ///ä¸€æ—¦å®Œå…¨è¿½å¾“ã«
         if (_lockOnEnemy)
         {
             transform.LookAt(_lockOnEnemy.transform);
@@ -36,7 +36,6 @@ public class BulletCon : MonoBehaviour
         if (!playerCon && damageble != null) 
         {                                                                                                                                                                                                   
             damageble.Damage(_damege);
-            Debug.Log($"{other.name}‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚½");
             Destroy(this.gameObject);
         }
     }

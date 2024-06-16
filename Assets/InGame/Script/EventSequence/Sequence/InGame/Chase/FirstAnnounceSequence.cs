@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
 using UnityEngine;
@@ -37,7 +37,6 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     private async UniTask Announce(CancellationToken cancellationToken)
     {
         await UniTask.WaitUntil(() => _tutorialEnemy.BlackBoard.IsApproachCompleted, cancellationToken: cancellationToken);
-        
         _playerStoryEvent.StartChaseScene();
         _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         
