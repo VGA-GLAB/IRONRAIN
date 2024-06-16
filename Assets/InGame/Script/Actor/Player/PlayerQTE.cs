@@ -13,6 +13,8 @@ public class PlayerQTE : PlayerComponentBase
 
     [SerializeField] private PlayerQTEView _qteView;
 
+    private System.Guid _guid;
+
     private void Awake()
     {
         QTEModel = _playerStateModel as PlayerQTEModel;
@@ -33,8 +35,9 @@ public class PlayerQTE : PlayerComponentBase
         //盾持ちの敵が入ってきたら
         if (enemyTypeReader[0].Params.Type == EnemyType.Shield)
         {
+            _guid = enemyTypeReader[0].BlackBoard.ID;
             Debug.Log("wea");
-            QTEModel.StartQTE().Forget();
+            QTEModel.StartQTE(_guid).Forget();
         }
     }
 }
