@@ -69,6 +69,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2074662523174345178}
   - component: {fileID: 8043517583957521617}
+  - component: {fileID: 6928186978489002271}
   m_Layer: 0
   m_Name: Debug
   m_TagString: Untagged
@@ -104,6 +105,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyManager: {fileID: 7980481993630760504}
+--- !u!114 &6928186978489002271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074662523174345179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53948cbd0cf2fb499576c93a1b8c12c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2074662523816519476
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +149,7 @@ Transform:
   - {fileID: 2074662522697631685}
   - {fileID: 2074662523174345178}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2074662524510200475
 GameObject:
@@ -197,7 +210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  _quantity: 5
   _forwardOffset: 6
   _space: 3
   _radius: 1

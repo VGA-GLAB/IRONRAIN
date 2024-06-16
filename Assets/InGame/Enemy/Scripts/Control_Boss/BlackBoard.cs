@@ -44,6 +44,14 @@ namespace Enemy.Control.Boss
         public Vector3 TransformToPointPDirection { get; set; }
         public float ElapsedTime { get; set; }
 
+        // FireRateクラスが書き込む。
+        // Updateで値が更新される。
+        public float NextRangeAttackTime { get; set; }
+        public float NextMeleeAttackTime { get; set; }
+        // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
+        public float LastRangeAttackTime { get; set; }
+        public float LastMeleeAttackTime { get; set; }
+
         // OverrideOrderクラスが書き込む。
         // Updateで値が更新される。
         public bool IsBossStarted { get; set; }

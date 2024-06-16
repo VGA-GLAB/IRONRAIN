@@ -26,11 +26,46 @@ namespace Enemy.Control.Boss
         [System.Serializable]
         public class BattleSettings
         {
+            // 近距離攻撃
+            [System.Serializable]
+            public class MeleeAttack
+            {
+                [Header("攻撃間隔")]
+                [Min(0.01f)]
+                [SerializeField] private float _attackRate = 0.01f;
+
+                public float AttackRate => _attackRate;
+            }
+
+            // 遠距離攻撃
+            [System.Serializable]
+            public class RangeAttack
+            {
+                [Header("遠距離攻撃タイミングを記述したファイル")]
+                [Tooltip("記述されたタイミングをループする。")]
+                [SerializeField] private TextAsset _inputBufferAsset;
+                [Header("ファイルを使用する")]
+                [SerializeField] private bool _useInputBuffer;
+                [Header("ファイルを使用しない場合の攻撃間隔")]
+                [Min(0.01f)]
+                [SerializeField] private float _attackRate = 0.01f;
+
+                public TextAsset InputBufferAsset => _inputBufferAsset;
+                public bool UseInputBuffer => _useInputBuffer;
+                public float AttackRate => _attackRate;
+            }
+
             [Header("移動速度")]
             [Min(1.0f)]
             [SerializeField] private float _moveSpeed = 12.0f;
+            [Header("近距離攻撃")]
+            [SerializeField] private MeleeAttack _meleeAttack;
+            [Header("遠距離攻撃")]
+            [SerializeField] private RangeAttack _rangeAttack;
 
             public float MoveSpeed => _moveSpeed;
+            public MeleeAttack MeleeAttackConfig => _meleeAttack;
+            public RangeAttack RangeAttackConfig => _rangeAttack;
         }
 
         // 必要に応じてプランナー用に外出しする。

@@ -21,12 +21,12 @@ namespace Enemy.Control.Boss
         private bool _isCleanup;
 
         public BodyController(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, 
-            Renderer[] renderers, IReadOnlyCollection<FunnelController> funnels)
+            Renderer[] renderers, Collider damageHitBox, IReadOnlyCollection<FunnelController> funnels)
         {
             _blackBoard = blackBoard;
 
             // ボスのオブジェクトの構成が雑魚敵と同じ想定、Bodyクラスを流用する。
-            Body body = new Body(transform, offset, rotate, renderers);
+            Body body = new Body(transform, offset, rotate, renderers, damageHitBox);
             _stateTable = new Dictionary<StateKey, State>
             {
                 { StateKey.Idle, new IdleState(blackBoard) },

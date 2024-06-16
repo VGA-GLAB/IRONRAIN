@@ -110,7 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5448234366258911459}
   - component: {fileID: 978102174}
-  - component: {fileID: 74849210414920447}
+  - component: {fileID: 1958082171914697921}
   m_Layer: 0
   m_Name: Enemy_MachineGun_
   m_TagString: Untagged
@@ -150,6 +150,7 @@ MonoBehaviour:
     _advance:
       _distance: 33
       _moveSpeed: 12
+      _slotPlace: 0
     _battle:
       _maxHp: 10
       _dying: 0.2
@@ -171,11 +172,11 @@ MonoBehaviour:
   - {fileID: 5448234365278661825}
   - {fileID: 5448234365976160108}
   _animator: {fileID: 6414272571457249341}
-  _animationEvent: {fileID: 8357249222482679970}
   _effects:
   - {fileID: 2814327668011818326}
   - {fileID: 2740373235964737581}
---- !u!114 &74849210414920447
+  _damageHitBox: {fileID: 5667956713918100482}
+--- !u!114 &1958082171914697921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,11 +185,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5448234366258911458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ef6e6fd573f27a418ee1ba9f0587acf, type: 3}
+  m_Script: {fileID: 11500000, guid: eea3abeb821860e449e18793af365c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animationEvent: {fileID: 8357249222482679970}
-  _aimMode: 0
+  _aimMode: 1
   _muzzle: {fileID: 503237666098712288}
   _key: 1
   _target: {fileID: 0}
@@ -568,6 +569,11 @@ PrefabInstance:
 --- !u!4 &4732905623015035188 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9077314326590853584, guid: e90563625144c1941b096316ef406917, type: 3}
+  m_PrefabInstance: {fileID: 4348139539810844900}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5667956713918100482 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
   m_PrefabInstance: {fileID: 4348139539810844900}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5448234365696066974
