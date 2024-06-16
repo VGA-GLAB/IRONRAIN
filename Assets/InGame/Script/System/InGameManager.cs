@@ -39,8 +39,8 @@ public sealed class InGameManager : MonoBehaviour
             }
             else
             {
-                await _sequences[i].PlaySequenceAsync(ct);
                 _currentSequence = _sequences[i];   
+                await _sequences[i].PlaySequenceAsync(ct);
             }
         }
     }

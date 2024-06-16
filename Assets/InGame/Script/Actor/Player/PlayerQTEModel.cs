@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Threading;
 using UnityEngine;
 using UniRx;
@@ -12,6 +11,8 @@ public class PlayerQTEModel : IPlayerStateModel
     private PlayerEnvroment _playerEnvroment;
     private PlayerSetting.PlayerParams _playerParams;
     private ReactiveProperty<QTEState> _qteType = new();
+    private QTEResultType _qteResultType;
+    private Guid _enemyId;
 
     public void Dispose()
     {
@@ -38,19 +39,28 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            StartQTE().Forget();
+            //StartQTE().Forget();
         }
     }
 
-    public async UniTask<QTEResultType> StartQTE()
+    public async UniTask<QTEResultType> StartQTE(System.Guid enemyId)
     {
+        _enemyId = enemyId;
         QTEResultType qteResult = QTEResultType.Failure;
         var startCts = new CancellationTokenSource();
         var startToken = startCts.Token;
         var endCts = new CancellationTokenSource();
         var endToken = endCts.Token;
-        qteResult = await QTE(endCts, startToken);
-        qteResult = await QTEFailureJudgment(startCts, endToken);
+
+        try
+        {
+            qteResult = await QTE(endCts, startToken);
+            qteResult = await QTEFailureJudgment(startCts, endToken);
+        }
+        catch 
+        {
+            return qteResult;
+        }
         return qteResult;
     }
 
@@ -62,12 +72,14 @@ public class PlayerQTEModel : IPlayerStateModel
     /// <returns></returns>
     public async UniTask<QTEResultType> QTE(CancellationTokenSource endCts, CancellationToken startToken)
     {
+        _qteResultType = QTEResultType.Failure;
+
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
 
             ProvidePlayerInformation.TimeScale = 0.2f;
-            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            ProvidePlayerInformation.StartQte.OnNext(_enemyId);
             var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
 
             _qteType.Value = QTEState.QTE1;
@@ -87,14 +99,16 @@ public class PlayerQTEModel : IPlayerStateModel
             _qteType.Value = QTEState.QTENone;
 
             ProvidePlayerInformation.TimeScale = 1f;
-            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
-            endCts.Cancel();
             await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.5f, startToken);
             tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, startToken).Forget();
-            return QTEResultType.Success;
+
+            _qteResultType = QTEResultType.Success;
+            endCts.Cancel();
+            return _qteResultType;
         }
-        return QTEResultType.Failure;
+        return _qteResultType;
     }
 
     /// <summary>
@@ -110,7 +124,7 @@ public class PlayerQTEModel : IPlayerStateModel
             _playerEnvroment.AddState(PlayerStateType.QTE);
 
             ProvidePlayerInformation.TimeScale = 0.2f;
-            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            ProvidePlayerInformation.StartQte.OnNext(_enemyId);
             var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
 
             _qteType.Value = QTEState.QTE1;
@@ -125,7 +139,7 @@ public class PlayerQTEModel : IPlayerStateModel
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
 
             ProvidePlayerInformation.TimeScale = 1f;
-            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
             Debug.Log("QTEキャンセル");
             endCts.Cancel();
@@ -139,7 +153,7 @@ public class PlayerQTEModel : IPlayerStateModel
             _playerEnvroment.AddState(PlayerStateType.QTE);
 
             ProvidePlayerInformation.TimeScale = 0.2f;
-            ProvidePlayerInformation.StartQte.OnNext(UniRx.Unit.Default);
+            ProvidePlayerInformation.StartQte.OnNext(_enemyId);
             var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
 
             _qteType.Value = QTEState.QTE1;
@@ -159,7 +173,7 @@ public class PlayerQTEModel : IPlayerStateModel
             _qteType.Value = QTEState.QTENone;
 
             ProvidePlayerInformation.TimeScale = 1f;
-            ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
+            ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
             Debug.Log("QTEキャンセル");
             endCts.Cancel();
@@ -175,11 +189,12 @@ public class PlayerQTEModel : IPlayerStateModel
         //失敗までの時間を計測
         await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
         Debug.Log("QTE終了");
-        ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Failure);
+        ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Failure, _enemyId));
         ProvidePlayerInformation.TimeScale = 1f;
         _qteType.Value = QTEState.QTENone;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
+        _qteResultType = QTEResultType.Failure;
         startCts.Cancel();
-        return QTEResultType.Failure;
+        return _qteResultType;
     }
 }
