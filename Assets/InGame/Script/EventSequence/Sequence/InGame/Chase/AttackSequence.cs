@@ -10,7 +10,7 @@ public sealed class AttackSequence : AbstractSequenceBase
 
     [Header("テキストボックスに関する値")]
     [SerializeField] private float _textBoxOpenAndCloseSec = 0.5F;
-    [SerializeField, TextArea] private string _tutorialText = "現在、テストテキストが表示されています";
+    [SerializeField, TextArea] private string _tutorialText = "左クリックで攻撃";
     [SerializeField] private float _textDuration = 3F;
 
     [Header("アナウンス音声に関する値")]
@@ -39,7 +39,7 @@ public sealed class AttackSequence : AbstractSequenceBase
         _textBox.ClearText();
 
         await UniTask.WhenAll(
-            CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
+            //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText()
         );
 
