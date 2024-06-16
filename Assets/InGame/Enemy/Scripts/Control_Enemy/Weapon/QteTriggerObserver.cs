@@ -38,6 +38,16 @@ namespace Enemy.Control
                 .Where(col => col.CompareTag(Const.PlayerTag))
                 .Subscribe(col => _owner.Order(_order))
                 .AddTo(this);
+
+            ProvidePlayerInformation.StartQte.Subscribe(_ => 
+            {
+                // Debug.Log("QTEはじめ")
+            }).AddTo(this);
+            ProvidePlayerInformation.EndQte.Subscribe(result => 
+            {
+                // Debug.Log(
+            }).AddTo(this);
+            
         }
     }
 }
