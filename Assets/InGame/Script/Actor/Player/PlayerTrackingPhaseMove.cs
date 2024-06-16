@@ -66,7 +66,7 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
                 var nextPoint = transform.position + transform.right * -1 * _params.ThrusterMoveNum;
                 ThrusterMove(nextPoint);
                 _currentLane--;
-                if (_currentLane == _params.RestrictionLane * -1) _savePos = transform.localPosition;
+                if (_currentLane == _params.RestrictionLane * -1) _savePos = transform.position;
             }
             _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
         }
@@ -80,7 +80,7 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
                 var nextPoint = transform.position + transform.right * _params.ThrusterMoveNum;
                 ThrusterMove(nextPoint);
                 _currentLane++;
-                if (_currentLane == _params.RestrictionLane) _savePos = transform.localPosition;
+                if (_currentLane == _params.RestrictionLane) _savePos = transform.position;
             }
             _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
         }
