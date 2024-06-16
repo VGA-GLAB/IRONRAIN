@@ -27,11 +27,11 @@ public class PlayerQTE : PlayerComponentBase
     private void OnTriggerEnter(Collider other)
     {
         if(QTEModel == null) return;
-        var enemyTypeReader = other.GetComponentsInParent<IReadonlyEnemyParams>();
+        var enemyTypeReader = other.GetComponentsInParent<EnemyController>();
         if (enemyTypeReader.Length == 0) return;
         Debug.Log(other);
         //盾持ちの敵が入ってきたら
-        if (enemyTypeReader[0].Type == EnemyType.Shield)
+        if (enemyTypeReader[0].Params.Type == EnemyType.Shield)
         {
             Debug.Log("wea");
             QTEModel.StartQTE().Forget();

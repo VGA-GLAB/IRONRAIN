@@ -55,7 +55,6 @@ public abstract class PlayerWeaponBase : MonoBehaviour
             _isFire = false;
             _currentTime = 0;
             _currentBullets--;
-            Debug.Log("弾を打った");
         }
 
         if (_currentBullets == 0)

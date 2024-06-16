@@ -64,7 +64,6 @@ public class PlayerStoryEvent : PlayerComponentBase
         _playerEnvroment.SeachState<PlayerTrackingPhaseMove>().enabled = false;
         _playerEnvroment.SeachState<PlayerMove>().enabled = true;
         _playerEnvroment.ClearState();
-        _playerEnvroment.PlayerTransform.position = _bossBattleStartPos.position;
     }
 
     /// <summary>
@@ -73,8 +72,9 @@ public class PlayerStoryEvent : PlayerComponentBase
     public bool GoalCenterPoint()
     {
         if (_playerEnvroment.PlayerTransform.position.z - 40 < _centerPoint.position.z
-            && _playerEnvroment.PlayerTransform.position.z + 20 > _centerPoint.position.z)
+            && _playerEnvroment.PlayerTransform.position.z + 5 > _centerPoint.position.z)
         {
+            Debug.Log("ついた");
             return true;
         }
         return false;

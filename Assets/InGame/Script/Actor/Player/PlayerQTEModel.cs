@@ -89,8 +89,9 @@ public class PlayerQTEModel : IPlayerStateModel
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(QTEResultType.Success);
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
-            Debug.Log("QTEキャンセル");
             endCts.Cancel();
+            await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.5f, startToken);
+            tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, startToken).Forget();
             return QTEResultType.Success;
         }
         return QTEResultType.Failure;
