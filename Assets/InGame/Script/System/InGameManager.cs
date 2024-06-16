@@ -8,6 +8,9 @@ using UnityEngine;
 
 public sealed class InGameManager : MonoBehaviour
 {
+    [SerializeField] private bool _isSkip = false;
+    [Header("そのインデックスのシーケンスまでスキップします")]
+    [SerializeField] private int _skipIndex = 0;
     
     public AbstractSequenceBase CurrentSequence => _currentSequence;
 
@@ -28,10 +31,17 @@ public sealed class InGameManager : MonoBehaviour
 
     private async UniTask InGameStartAsync(CancellationToken ct)
     {
-        foreach (var seq in _sequences)
+        for (int i = 0; i < _sequences.Length; i++)
         {
-            await seq.PlaySequenceAsync(ct);
-            _currentSequence = seq;
+            if (_isSkip && i <= _skipIndex)
+            {
+                _sequences[i].OnSkip();
+            }
+            else
+            {
+                await _sequences[i].PlaySequenceAsync(ct);
+                _currentSequence = _sequences[i];   
+            }
         }
     }
 }

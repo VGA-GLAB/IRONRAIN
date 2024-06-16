@@ -22,7 +22,12 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     [SerializeField] private float _waitAfterAnnounceSec = 1F;
     [Header("弾を打つまでの待ち時間")]
     [SerializeField] private float _shootWaitSec = 2F;
-    
+
+    public override void OnSkip()
+    {
+        _playerStoryEvent.StartChaseScene();
+    }
+
     public override async UniTask PlaySequenceAsync(CancellationToken ct)
     {// 最初に何秒か待つ
         await UniTask.WaitForSeconds(_firstAwaitTimeSec, cancellationToken: ct);
