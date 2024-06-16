@@ -4,18 +4,36 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public sealed class PrepareGameManager : MonoBehaviour
 {
+    [SerializeField] private bool _isSkip = false;
     [SerializeField] private PrepareSequenceController _prepareSequenceController = default;
     [SerializeField] private PrepareStartController _prepareStartController = default;
     [SerializeField] private StartUpSeqController _startUpSeqController = default;
     [SerializeField] private PrepareSortieSeqController _prepareSortieSeqController = default;
     [SerializeField] private SortieController _sortieController = default;
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Transform _skipPos;
+    [SerializeField] private UnityEvent _onSkipEvent;
     
     private void Start()
     {
-        ManagePrepareAsync(this.GetCancellationTokenOnDestroy()).Forget();
+        if (!_isSkip)
+        {
+            ManagePrepareAsync(this.GetCancellationTokenOnDestroy()).Forget();   
+        }
+        else
+        {
+            _playerTransform.position = _skipPos.position;
+            _onSkipEvent.Invoke();
+        }
+    }
+
+    private void Skip()
+    {
+        
     }
 
     private async UniTask ManagePrepareAsync(CancellationToken cancellationToken)
