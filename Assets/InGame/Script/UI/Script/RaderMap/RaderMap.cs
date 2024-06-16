@@ -169,6 +169,7 @@ public class RaderMap : MonoBehaviour
         if(nearEnemy.obj is null)
         {
             _enemyDistance = float.MaxValue;
+            _nowRockEnemy = null;
             return;
         }
 
