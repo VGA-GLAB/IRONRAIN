@@ -36,7 +36,7 @@ public class QTESeqController : MonoBehaviour
         await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: cancellationToken);
 
         // QTEを開始させる
-        _playerQTEModel.StartQTE();
+        //_playerQTEModel.StartQTE();
 
         // QTEの終了（成功）を待つ
     }

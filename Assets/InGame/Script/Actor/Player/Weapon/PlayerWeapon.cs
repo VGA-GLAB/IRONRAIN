@@ -51,7 +51,11 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         {
             //後でオブジェクトプールに
             var obj = Instantiate(_bulletPrefab, _bulletInsPos.position, Quaternion.identity);
-            obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.GetRockEnemy, _params.ShotDamage);
+            obj.GetComponent<BulletCon>().SetUp(
+                _playerEnvroment.RaderMap.GetRockEnemy, 
+                _params.ShotDamage,
+                _playerEnvroment.PlayerTransform.forward);
+
             _isFire = false;
             _currentTime = 0;
             _currentBullets--;
