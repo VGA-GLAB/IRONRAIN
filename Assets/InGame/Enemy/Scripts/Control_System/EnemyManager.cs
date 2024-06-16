@@ -76,6 +76,18 @@ namespace Enemy.Control
                 .Subscribe(msg => _npcs.Add(msg.Character)).AddTo(this);
             MessageBroker.Default.Receive<ReleaseMessage<INpc>>()
                 .Subscribe(msg => _npcs.Remove(msg.Character)).AddTo(this);
+
+            // QTE開始を各キャラクターに伝える。
+            ProvidePlayerInformation.StartQte.Subscribe(_ => 
+            {
+                //
+            }).AddTo(this);
+
+            // QTE終了を各キャラクターに伝える。
+            ProvidePlayerInformation.EndQte.Subscribe(_ =>
+            {
+                //
+            }).AddTo(this);
         }
 
         /// <summary>
@@ -150,6 +162,14 @@ namespace Enemy.Control
             {
                 if (e.Params.Sequence == sequence) e.Order(_order);
             }
+        }
+
+        /// <summary>
+        /// QTEのチュートリアルを開始する。
+        /// </summary>
+        public void QteTutorial()
+        {
+            //
         }
 
         /// <summary>
