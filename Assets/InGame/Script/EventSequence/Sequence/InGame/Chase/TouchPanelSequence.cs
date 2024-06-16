@@ -47,7 +47,7 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
         _textBox.ClearText();
 
         await UniTask.WhenAll(
-            CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
+            //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText()
         );
 
