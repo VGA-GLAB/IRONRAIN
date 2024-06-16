@@ -22,7 +22,7 @@ namespace Enemy.Control
 
             // QTE判定にプレイヤーが接触した命令
             _order = new EnemyOrder();
-            _order.OrderType = EnemyOrder.Type.QteTrigger;
+            _order.OrderType = EnemyOrder.Type.QteTriggerEnter;
         }
 
         private void Start()
@@ -38,16 +38,6 @@ namespace Enemy.Control
                 .Where(col => col.CompareTag(Const.PlayerTag))
                 .Subscribe(col => _owner.Order(_order))
                 .AddTo(this);
-
-            ProvidePlayerInformation.StartQte.Subscribe(_ => 
-            {
-                // Debug.Log("QTEはじめ")
-            }).AddTo(this);
-            ProvidePlayerInformation.EndQte.Subscribe(result => 
-            {
-                // Debug.Log(
-            }).AddTo(this);
-            
         }
     }
 }
