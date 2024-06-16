@@ -50,7 +50,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         if (_isFire && 0 < _currentBullets && !_isReload)
         {
             //後でオブジェクトプールに
-            var obj = Instantiate(_bulletPrefab, _bulletInsPos);
+            var obj = Instantiate(_bulletPrefab, _bulletInsPos.position, Quaternion.identity);
             obj.GetComponent<BulletCon>().SetUp(_playerEnvroment.RaderMap.GetRockEnemy, _params.ShotDamage);
             _isFire = false;
             _currentTime = 0;
