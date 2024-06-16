@@ -169,7 +169,14 @@ namespace Enemy.Control
         /// </summary>
         public void QteTutorial()
         {
-            //
+            // 命令を自身を対象としてQTE開始に書き換え。
+            _order.OrderType = EnemyOrder.Type.QteStartTargeted;
+
+            // QTEのチュートリアルシーケンスに登場する敵に対して命令。
+            foreach (EnemyController e in _enemies)
+            {
+                if (e.Params.Sequence == Sequence.QTETutorial) e.Order(_order);
+            }
         }
 
         /// <summary>
