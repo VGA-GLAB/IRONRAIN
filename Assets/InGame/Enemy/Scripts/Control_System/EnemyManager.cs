@@ -77,17 +77,71 @@ namespace Enemy.Control
             MessageBroker.Default.Receive<ReleaseMessage<INpc>>()
                 .Subscribe(msg => _npcs.Remove(msg.Character)).AddTo(this);
 
-            // QTE開始を各キャラクターに伝える。
-            ProvidePlayerInformation.StartQte.Subscribe(_ => 
-            {
-                //
-            }).AddTo(this);
+#if false
+            // QTE開始/終了を各キャラクターに伝える。
+            ProvidePlayerInformation.StartQte.Subscribe(OnQteStart).AddTo(this);
+            ProvidePlayerInformation.EndQte.Subscribe(OnQteEnd).AddTo(this);
 
-            // QTE終了を各キャラクターに伝える。
-            ProvidePlayerInformation.EndQte.Subscribe(_ =>
+            void OnQteStart(xxx arg)
             {
-                //
-            }).AddTo(this);
+                foreach (EnemyController e in _enemies)
+                {
+                    if (arg.ID == e.BlackBoard.ID)
+                    {
+                        // QTEのチュートリアルシーケンスに登場する敵に対して、自身を対象としてQTE開始を命令。
+                        _order.OrderType = EnemyOrder.Type.QteStartTargeted;
+                    }
+                    else
+                    {
+                        // それ以外のシーケンスの敵に対しては、自身以外を対象としてQTE開始を命令。
+                        _order.OrderType = EnemyOrder.Type.QteStartUntargeted;
+                    }
+
+                    e.Order(_order);
+                }
+            }
+
+            void OnQteEnd(xxx result)
+            {
+                foreach (EnemyController e in _enemies)
+                {
+                    if (result.ID == e.BlackBoard.ID)
+                    {
+                        // QTEのチュートリアルシーケンスに登場する敵に対して、自身を対象としてQTE開始を命令。
+                        _order.OrderType = EnemyOrder.Type.QteEndTargeted;
+                    }
+                    else
+                    {
+                        // それ以外のシーケンスの敵に対しては、自身以外を対象としてQTE開始を命令。
+                        _order.OrderType = EnemyOrder.Type.QteEndUntargeted;
+                    }
+
+                    e.Order(_order);
+                }
+            }
+#endif
+        }
+
+        /// <summary>
+        /// シーケンスを指定して敵を取得。
+        /// </summary>
+        /// <param name="enemies">この引数に敵への参照を入れて返す。</param>
+        /// <returns>敵を1体以上取得:true 取得できる敵がいない:false</returns>
+        public bool TryGetEnemies(Sequence sequence, List<EnemyController> enemies)
+        {
+            if (enemies == null) return false;
+            
+            // 呼ばれる度に入れ物は空にする。
+            enemies.Clear();
+
+            if (_enemies == null) return false;
+
+            foreach (EnemyController e in _enemies)
+            {
+                if (e.Params.Sequence == sequence) enemies.Add(e);
+            }
+
+            return enemies.Count > 0;
         }
 
         /// <summary>
@@ -162,14 +216,6 @@ namespace Enemy.Control
             {
                 if (e.Params.Sequence == sequence) e.Order(_order);
             }
-        }
-
-        /// <summary>
-        /// QTEのチュートリアルを開始する。
-        /// </summary>
-        public void QteTutorial()
-        {
-            //
         }
 
         /// <summary>
