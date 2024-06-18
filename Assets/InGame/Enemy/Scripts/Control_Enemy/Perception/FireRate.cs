@@ -9,14 +9,16 @@ namespace Enemy.Control
     public class FireRate
     {
         private BlackBoard _blackBoard;
-        private IReadOnlyList<float> _timing;
+        private Equipment _equip;
 
+        private IReadOnlyList<float> _timing;
         // 攻撃する度にこの値を更新し、次の攻撃タイミングを計算する。
         private int _index;
 
-        public FireRate(EnemyParams enemyParams, BlackBoard blackBoard)
+        public FireRate(EnemyParams enemyParams, BlackBoard blackBoard, Equipment equip)
         {
             _blackBoard = blackBoard;
+            _equip = equip;
             _timing = InitTiming(enemyParams);
         }
 
@@ -56,7 +58,7 @@ namespace Enemy.Control
         public void UpdateIfAttacked()
         {
             // 最後に攻撃したタイミングが次の攻撃タイミングより前の場合はそのまま
-            if (_blackBoard.LastAttackTime <= _blackBoard.NextAttackTime) return;
+            if (_equip.LastAttackTiming <= _blackBoard.NextAttackTime) return;
 
             _index++;
             _index %= _timing.Count;

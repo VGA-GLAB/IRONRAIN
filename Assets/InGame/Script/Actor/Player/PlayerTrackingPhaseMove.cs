@@ -18,7 +18,10 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     [Tooltip("現在のレーン")]
     private int _currentLane;
     private Vector3 _savePos;
+    [Tooltip("レーンに戻され始めているかどうか")]
     private bool _isRetunRale;
+    [Tooltip("レーンに強制移動を始めるかどうか")]
+    private bool _isForcingMove;
 
     protected override void Start()
     {
@@ -31,9 +34,9 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
     }
     protected override void FixedUpdate()
-    {        
+    {
         base.FixedUpdate();
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) 
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
             && !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
         {
             Move();
@@ -56,41 +59,45 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
 
     private void Move()
     {
+        ThrusterMove();
+
+        _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+        _rb.velocity += transform.right * ReturnLaneStrength();
+    }
+
+    /// <summary>
+    /// スラスターの移動処理
+    /// </summary>
+    private void ThrusterMove()
+    {
+        if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster)
+            || _isForcingMove) 
+            return;
+
         //左スラスター
         if (_rightController.ControllerDir.x == -1)
         {
-            //スラスター中ではなかった場合
-            if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
+            _playerEnvroment.AddState(PlayerStateType.Thruster);
+            var nextPoint = transform.position + transform.right * -1 * _params.ThrusterMoveNum;
+            ThrusterNextPointMove(nextPoint);
+            _currentLane--;
+            if (_currentLane == _params.RestrictionLane * -1) 
             {
-                _playerEnvroment.AddState(PlayerStateType.Thruster);
-                var nextPoint = transform.position + transform.right * -1 * _params.ThrusterMoveNum;
-                ThrusterMove(nextPoint);
-                _currentLane--;
-                if (_currentLane == _params.RestrictionLane * -1) _savePos = transform.position;
-            }
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+                Debug.Log("Save");
+                _savePos = _transform.position;
+            } 
+
         }
         //右スラスター
         else if (_rightController.ControllerDir.x == 1)
         {
-            //スラスター中ではなかった場合
-            if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
-            {
-                _playerEnvroment.AddState(PlayerStateType.Thruster);
-                var nextPoint = transform.position + transform.right * _params.ThrusterMoveNum;
-                ThrusterMove(nextPoint);
-                _currentLane++;
-                if (_currentLane == _params.RestrictionLane) _savePos = transform.position;
-            }
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+            _playerEnvroment.AddState(PlayerStateType.Thruster);
+            var nextPoint = transform.position + transform.right * _params.ThrusterMoveNum;
+            ThrusterNextPointMove(nextPoint);
+            _currentLane++;
+            if (_currentLane == _params.RestrictionLane) _savePos = _transform.position;
         }
-        //２ギア
-        else
-        {
-            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
-        }
-
-        _rb.velocity += transform.right * ReturnLaneStrength();
+        Debug.Log(_currentLane);
     }
 
     /// <summary>
@@ -102,7 +109,6 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
         var isRight = 1;
         if (_currentLane <= _params.RestrictionLane && _currentLane >= _params.RestrictionLane * -1)
         {
-            //Debug.Log("0");
             return 0;
         }
         if (_currentLane < _params.RestrictionLane * -1)
@@ -120,19 +126,27 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             ret = _params.MaxReturnLaneStrength * isRight;
         }
 
-        var dis = _transform.localPosition.x - _savePos.x;
-        //Debug.Log($"距離{dis}");
-        if (Mathf.Abs(dis) < 2 && _isRetunRale)
+        var dis = _transform.position.z - _savePos.z;
+        var endDis = 2;
+        Debug.Log($"距離{dis}");
+
+        //ある程度近づいたら強制移動をやめる
+        if (Mathf.Abs(dis) < endDis && _isRetunRale)
         {
             //Debug.Log("付いた");
             _isRetunRale = false;
+            _isForcingMove = false;
             _currentLane = _params.RestrictionLane * isRight;
         }
 
         return ret * -1;
     }
 
-    private void ThrusterMove(Vector3 nextPoint)
+    /// <summary>
+    /// スラスターで指定されたポイントに移動する際の処理
+    /// </summary>
+    /// <param name="nextPoint"></param>
+    private void ThrusterNextPointMove(Vector3 nextPoint)
     {
         UniTask.Create(async () =>
         {
@@ -140,9 +154,17 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             .DOMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale);
             _playerEnvroment.RemoveState(PlayerStateType.Thruster);
 
+            //Playerを指定のレーンに戻しを始めるかどうか
             if (_currentLane > _params.RestrictionLane || _currentLane < _params.RestrictionLane * -1 && !_isRetunRale)
             {
                 _isRetunRale = true;
+            }
+
+            //Playerを指定のレーンまで強制移動するかどうか
+            if (_currentLane > _params.ForcingMoveLane || _currentLane < _params.ForcingMoveLane * -1 && !_isForcingMove) 
+            {
+                Debug.Log("強制移動");
+                _isForcingMove = true;
             }
         });
     }

@@ -36,7 +36,6 @@ public class PlayerQTE : PlayerComponentBase
         if (enemyTypeReader[0].Params.Type == EnemyType.Shield)
         {
             _guid = enemyTypeReader[0].BlackBoard.ID;
-            Debug.Log("wea");
             QTEModel.StartQTE(_guid).Forget();
         }
     }

@@ -8,7 +8,7 @@ namespace Enemy.Control.Boss
     /// <summary>
     /// キャラクターの情報を各層で共有する。
     /// </summary>
-    public class BlackBoard
+    public class BlackBoard : IReadonlyBlackBoard
     {
         public BlackBoard(string name = "")
         {
@@ -40,17 +40,19 @@ namespace Enemy.Control.Boss
         // Startでインスタンスが確保、Updateで値が更新され、Disableでnull。
         public CircleArea Area { get; set; }
         public CircleArea PlayerArea { get; set; }
+        public Vector3 Forward { get; set; }
         public Vector3 PointP { get; set; }
         public Vector3 TransformToPointPDirection { get; set; }
+        public float TransformToPointPDistance { get; set; }
+        public Vector3 TransformToPlayerDirection { get; set; }
+        public float TransformToPlayerSqrDistance { get; set; }
+        public bool IsWithinMeleeRange { get; set; }
         public float ElapsedTime { get; set; }
 
         // FireRateクラスが書き込む。
         // Updateで値が更新される。
         public float NextRangeAttackTime { get; set; }
         public float NextMeleeAttackTime { get; set; }
-        // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
-        public float LastRangeAttackTime { get; set; }
-        public float LastMeleeAttackTime { get; set; }
 
         // OverrideOrderクラスが書き込む。
         // Updateで値が更新される。

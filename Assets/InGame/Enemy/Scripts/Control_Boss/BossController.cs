@@ -18,7 +18,10 @@ namespace Enemy.Control.Boss
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
         [SerializeField] private Renderer[] _renderers;
+        [SerializeField] private Animator _animator;
         [SerializeField] private Collider _damageHitBox;
+        [SerializeField] private MeleeEquipment _meleeEquipment;
+        [SerializeField] private RangeEquipment _rangeEquipment;
 
         // 注入する依存関係
         private Transform _pointP;
@@ -41,6 +44,11 @@ namespace Enemy.Control.Boss
         // 二重に処理を呼ばないために必要。
         private bool _isCleanupRunning;
 
+        /// <summary>
+        /// 敵の状態を参照する。実行中に変化する値はこっち。
+        /// </summary>
+        public IReadonlyBlackBoard BlackBoard => _blackBoard;
+
         // Transform2つだとVContainerでエラーが出るので、デバッグ用のクラスで注入している。
         [Inject]
         private void Construct(DebugPointP pointP, Transform player)
@@ -61,15 +69,15 @@ namespace Enemy.Control.Boss
             _blackBoard = new BlackBoard();
 
             // Perception
-            _perception = new Perception(transform, _blackBoard, _player, _pointP);
-            _fireRate = new FireRate(_params, _blackBoard);
+            _perception = new Perception(transform, _params, _blackBoard, _rotate, _player, _pointP, _meleeEquipment);
+            _fireRate = new FireRate(_params, _blackBoard, _meleeEquipment, _rangeEquipment);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
             _bodyController = new BodyController(transform, _blackBoard, _offset, _rotate, _renderers,
-                _damageHitBox, _funnels);
+                _animator, _damageHitBox, _funnels);
         }
 
         private void Start()

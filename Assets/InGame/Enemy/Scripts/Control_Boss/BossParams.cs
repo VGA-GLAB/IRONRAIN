@@ -32,9 +32,9 @@ namespace Enemy.Control.Boss
             {
                 [Header("攻撃間隔")]
                 [Min(0.01f)]
-                [SerializeField] private float _attackRate = 0.01f;
+                [SerializeField] private float _rate = 0.01f;
 
-                public float AttackRate => _attackRate;
+                public float Rate => _rate;
             }
 
             // 遠距離攻撃
@@ -48,11 +48,11 @@ namespace Enemy.Control.Boss
                 [SerializeField] private bool _useInputBuffer;
                 [Header("ファイルを使用しない場合の攻撃間隔")]
                 [Min(0.01f)]
-                [SerializeField] private float _attackRate = 0.01f;
+                [SerializeField] private float _rate = 0.01f;
 
                 public TextAsset InputBufferAsset => _inputBufferAsset;
                 public bool UseInputBuffer => _useInputBuffer;
-                public float AttackRate => _attackRate;
+                public float Rate => _rate;
             }
 
             [Header("移動速度")]

@@ -70,6 +70,29 @@ namespace Enemy.Control
                     _blackBoard.Hp = 0;
                     _blackBoard.IsDying = true;
                 }
+                // 自身を対象としてQTE開始
+                else if (order.OrderType == EnemyOrder.Type.QteStartTargeted)
+                {
+                    //
+                }
+                // 自身以外を対象としてQTE開始
+                else if (order.OrderType == EnemyOrder.Type.QteStartUntargeted)
+                {
+                    //
+                }
+                // 自身を対象としてQTE終了
+                else if (order.OrderType == EnemyOrder.Type.QteEndTargeted)
+                {
+                    // HitPointクラスで、プレイヤーを検知していない状態の場合はダメージが入らないようにしている。
+                    // 状態にかかわらず死亡させたいので、HPを直接書きかえる。
+                    _blackBoard.Hp = 0;
+                    _blackBoard.IsDying = true;
+                }
+                // 自身以外を対象としてQTE終了
+                else if (order.OrderType == EnemyOrder.Type.QteEndUntargeted)
+                {
+                    //
+                }
 
                 // 命令をクリアしてプールに戻す。
                 order.Clear();

@@ -7,6 +7,13 @@ using UnityEngine.Events;
 
 namespace Enemy.Control
 {
+    #region 注意書き
+    // ObservableStateMachineTriggerのコールバックは遷移元Exit→遷移先Enterの順番で呼ばれない。
+    // 遷移先Enterの数フレーム後に遷移元Exitが呼ばれる。滑らかなアニメーションの遷移をするため？
+    // Layer名からclip名を取得して再生中か調べる方法は、clip名をステート名と揃えるか、
+    // clip名の定数のクラスを作る必要があり、これ以上複雑化して管理できなくなりそうなので断念。
+    #endregion
+
     /// <summary>
     /// アニメーションさせる。
     /// ObservableStateMachineTriggerコンポーネントがAnimatorにアタッチされている必要がある。
@@ -65,13 +72,33 @@ namespace Enemy.Control
                 public const string MoveRightLoop = "all_move_right_lp";
                 public const string MoveRightEnd = "all_move_right_ed";
                 public const string ShieldStart = "enemy_shield_st";  // 盾構え
-                public const string ShieldLoop = "enemy_shield_st";   // 盾構え
+                public const string ShieldLoop = "enemy_shield_lp";   // 盾構え
                 public const string Attack = "enemy_shield_attack00"; // 攻撃？
                 public const string Damage = "enemy_break01";
             }
+
+            public static class Boss
+            {
+                public const string Idle = "Idle";
+                public const string MoveFrontLoop = "all_move_front_lp";
+                public const string MoveFrontEnd = "all_move_front_ed";
+                public const string MoveLeftStart = "all_move_left_st";
+                public const string MoveLeftLoop = "all_move_left_lp";
+                public const string MoveLeftEnd = "all_move_left_ed";
+                public const string MoveRightStart = "all_move_right_st";
+                public const string MoveRightLoop = "all_move_right_lp";
+                public const string MoveRightEnd = "all_move_right_ed";
+                public const string HoldStart = "enemy_assault_hold_st";   // 銃構え
+                public const string HoldLoop = "enemy_assault_hold_lp";    // 銃構え
+                public const string FireLoop = "enemy_assault_fire_lp";    // 銃攻撃
+                public const string BladeStart = "enemy_shield_st";        // 刀構え
+                public const string BladeLoop = "enemy_shield_lp";         // 刀構え
+                public const string BladeAttack = "enemy_shield_attack00"; // 刀攻撃
+                public const string Damage = "enemy_break00";
+            }
         }
 
-        // ボスを除く3種類の雑魚敵のパラメータ名の定数。
+        // ボスを含む敵のパラメータ名の定数。
         public static class ParamName
         {
             // この値をAnimatorのステートのSpeedに乗算した値が最終的なアニメーション再生速度。
@@ -113,6 +140,14 @@ namespace Enemy.Control
             // プレイヤーがQTE成功。
             // 盾持ちはGetDamageTriggerではなくこちらを使う。
             public const string BreakTrigger = "BreakTrigger";
+
+            // ボスの登場が完了し、戦闘状態で使用。
+            // ボスが刀を構える。
+            public const string TempBladeAttackSetTrigger = "TempBladeAttackSetTrigger";
+
+            // TempBladeAttackSetTriggerで刀を構えた状態が前提。
+            // ボスが刀で攻撃する。
+            public const string TempBladeAttackTrigger = "TempBladeAttackTrigger";
         }
 
         // Animatorの各ステート
@@ -277,6 +312,14 @@ namespace Enemy.Control
         public void SetTrigger(string name)
         {
             _animator.SetTrigger(name);
+        }
+
+        /// <summary>
+        /// アニメーションのトリガーをリセットする。
+        /// </summary>
+        public void ResetTrigger(string name)
+        {
+            _animator.ResetTrigger(name);
         }
     }
 }

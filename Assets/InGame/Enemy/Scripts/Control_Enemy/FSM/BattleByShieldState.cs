@@ -122,13 +122,9 @@ namespace Enemy.Control.FSM
             while (_blackBoard.ActionPlans.TryDequeue(out ActionPlan plan))
             {
                 // 攻撃のアニメーション再生をトリガー。
-                // ステートに遷移してきたEnterのタイミングで、武器を構えるアニメーション再生がトリガーされている。
                 if (plan.Choice == Choice.Attack)
                 {
                     _animation.SetTrigger(BodyAnimation.ParamName.AttackSetTrigger);
-                    // 最後に攻撃した時間を更新しているが、本当にここで大丈夫か要チェック。
-                    // トリガーから実際に再生されるまでのラグ(HasExitTime設定など)があるかもしれない？
-                    _blackBoard.LastAttackTime = Time.time;
                 }
             }
         }
@@ -136,19 +132,20 @@ namespace Enemy.Control.FSM
         // アニメーションが盾構え状態
         private void StayShield()
         {
-            // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
+            // 現状、特にプランナーから指示が無いので構え->攻撃を瞬時に行う。
             _animation.SetTrigger(BodyAnimation.ParamName.AttackTrigger);
         }
 
         // アニメーションが攻撃状態
         private void StayAttack()
         {
-            // AnimationがMissingになっており、アニメーションイベントに登録できないのでまだ。
+            //
         }
 
         // アニメーションがそれ以外状態
         private void StayOther()
         {
+            //
         }
     }
 }

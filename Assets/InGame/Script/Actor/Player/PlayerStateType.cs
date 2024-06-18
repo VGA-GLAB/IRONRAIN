@@ -1,16 +1,18 @@
-using System;
+ï»¿using System;
 
 [Flags]
 public enum PlayerStateType
 {
-    /// <summary>ƒXƒ‰ƒXƒ^[ˆÚ“®’†</summary>
+    /// <summary>ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ç§»å‹•ä¸­</summary>
     Thruster = 1,
-    /// <summary>QTEƒ‚[ƒVƒ‡ƒ“’†</summary>
+    /// <summary>QTEãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­</summary>
     QTE = 2,
-    /// <summary>C•œƒ‚[ƒh</summary>
+    /// <summary>ä¿®å¾©ãƒ¢ãƒ¼ãƒ‰</summary>
     RepairMode = 4,
-    /// <summary>‘€ì•s”\</summary>
+    /// <summary>æ“ä½œä¸èƒ½</summary>
     Inoperable = 8,
-    /// <summary>•ŠíØ‚è‘Ö‚¦</summary>
+    /// <summary>æ­¦å™¨åˆ‡ã‚Šæ›¿ãˆ</summary>
     SwitchingArms = 16,
+    /// <summary>æ”»æ’ƒä¸å¯èƒ½</summary>
+    NonAttack = 32,
 }

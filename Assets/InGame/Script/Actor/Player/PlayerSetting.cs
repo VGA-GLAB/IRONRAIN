@@ -23,6 +23,7 @@ public class PlayerSetting : ScriptableObject
         public float ThrusterMoveNum => _thrusterMoveNum;
         public int ThrusterMoveTime => _thrusterMoveTime;
         public int RestrictionLane => _restrictionLane;
+        public int ForcingMoveLane => _forcingMoveLane;
         //public float ReturnLaneStrengthMagnification => _returnLaneStrengthMagnification;
         public float ReturnLaneStrength => _returnLaneStrength;
         public float MaxReturnLaneStrength => _maxReturnLaneStrength;
@@ -40,6 +41,8 @@ public class PlayerSetting : ScriptableObject
         [SerializeField] private int _thrusterMoveTime;
         [Header("どのレーンから制限をかけるか")]
         [SerializeField] private int _restrictionLane;
+        [Header("どのレーンから強制移動を始めるか")]
+        [SerializeField] private int _forcingMoveLane;
         //[Header("レーンに戻そうとする力の倍率")]
         //[SerializeField] private float _returnLaneStrengthMagnification;
         [Header("レーンに戻そうとする力の強さ")]
