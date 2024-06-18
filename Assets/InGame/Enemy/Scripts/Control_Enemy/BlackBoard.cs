@@ -68,8 +68,6 @@ namespace Enemy.Control
         // FireRateクラスが書き込む。
         // Updateで値が更新される。
         public float NextAttackTime { get; set; }
-        // Action側で攻撃処理を呼んだ際に、この値をTimeに書き換えることで、次の攻撃タイミングが更新される。
-        public float LastAttackTime { get; set; }
 
         // HitPointクラスが書き込む。
         // Updateで値が更新される。

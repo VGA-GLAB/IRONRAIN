@@ -21,6 +21,7 @@ namespace Enemy.Control
         [SerializeField] private Animator _animator;
         [SerializeField] private Effect[] _effects;
         [SerializeField] private Collider _damageHitBox;
+        [SerializeField] private Equipment _equipment;
 
         // 注入する依存関係。
         private Transform _player;
@@ -73,7 +74,7 @@ namespace Enemy.Control
 
             // Perception
             _perception = new Perception(transform, _params, _blackBoard, _player, _surroundingPool);
-            _fireRate = new FireRate(_params, _blackBoard);
+            _fireRate = new FireRate(_params, _blackBoard, _equipment);
             _eyeSensor = new EyeSensor(transform, _params, _blackBoard, _rotate);
             _hitPoint = new HitPoint(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);

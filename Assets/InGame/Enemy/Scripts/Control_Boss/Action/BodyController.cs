@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Control.FSM;
 using Enemy.Control.Boss.FSM;
 
 namespace Enemy.Control.Boss
@@ -21,17 +22,18 @@ namespace Enemy.Control.Boss
         private bool _isCleanup;
 
         public BodyController(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, 
-            Renderer[] renderers, Collider damageHitBox, IReadOnlyCollection<FunnelController> funnels)
+            Renderer[] renderers, Animator animator, Collider damageHitBox, IReadOnlyCollection<FunnelController> funnels)
         {
             _blackBoard = blackBoard;
 
-            // ボスのオブジェクトの構成が雑魚敵と同じ想定、Bodyクラスを流用する。
+            // ボスのオブジェクトの構成が雑魚敵と同じ想定なので流用する。
             Body body = new Body(transform, offset, rotate, renderers, damageHitBox);
+            BodyAnimation bodyAnimation = new BodyAnimation(animator);
             _stateTable = new Dictionary<StateKey, State>
             {
-                { StateKey.Idle, new IdleState(blackBoard) },
+                { StateKey.Idle, new Boss.FSM.IdleState(blackBoard) },
                 { StateKey.Appear, new AppearState(blackBoard) },
-                { StateKey.Battle, new BattleState(blackBoard, body, funnels) },
+                { StateKey.Battle, new BattleState(blackBoard, body, bodyAnimation, funnels) },
                 { StateKey.QteEvent, new QteEventState(blackBoard) },
             };
 

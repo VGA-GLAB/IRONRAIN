@@ -12,6 +12,7 @@ namespace Enemy.Control
         Dying,
         Fire,
         Destroyed,
+        BladeAttack,
     }
 
     /// <summary>

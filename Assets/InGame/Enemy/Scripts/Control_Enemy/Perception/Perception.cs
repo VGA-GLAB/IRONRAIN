@@ -108,14 +108,20 @@ namespace Enemy.Control
         /// </summary>
         public void Draw()
         {
-            // 自身とプレイヤーのエリア
-            _playerArea?.DrawOnGizmos();
-            _area?.DrawOnGizmos();
+            // 自身とプレイヤーのエリアを、それぞれの高さに合わせて描画。
+            _playerArea?.DrawOnGizmos(_player);
+            _area?.DrawOnGizmos(_transform);
 
             // エリアからスロットに向けた矢印
             if (_slot != null)
             {
-                GizmosUtils.Line(_area.Point, _slot.Point, ColorExtensions.ThinWhite);
+                // それぞれの高さに合わせて描画。
+                Vector3 sp = _slot.Point;
+                Vector3 ap = _area.Point;
+                if (_player != null) sp.y = _player.position.y;
+                if (_transform != null) ap.y = _transform.position.y;
+
+                GizmosUtils.Line(sp, ap, ColorExtensions.ThinWhite);
             }
 
             // プレイヤーを検知する範囲

@@ -75,5 +75,22 @@ namespace Enemy.Control
         {
             GizmosUtils.WireCircle(Point, Radius, Color.white);
         }
+
+        /// <summary>
+        /// ギズモに描画
+        /// 任意のオブジェクトに高さを合わせる。
+        /// </summary>
+        public virtual void DrawOnGizmos(Transform owner)
+        {
+            if (owner == null)
+            {
+                DrawOnGizmos();
+            }
+            else
+            {
+                Vector3 p = new Vector3(Point.x, owner.position.y, Point.z);
+                GizmosUtils.WireCircle(p, Radius, Color.white);
+            }
+        }
     }
 }

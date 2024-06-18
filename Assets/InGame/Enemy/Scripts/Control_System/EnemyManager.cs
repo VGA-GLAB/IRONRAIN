@@ -1,4 +1,5 @@
 ﻿using Enemy.Control.Boss;
+using Meta.Voice;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
