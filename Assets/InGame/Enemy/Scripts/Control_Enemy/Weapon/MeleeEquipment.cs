@@ -1,4 +1,5 @@
-﻿using Enemy.DebugUse;
+﻿using Enemy.Control.Boss;
+using Enemy.DebugUse;
 using Enemy.Extensions;
 using UnityEngine;
 
@@ -8,25 +9,37 @@ namespace Enemy.Control
     /// 近接攻撃の装備。
     /// 攻撃タイミングはアニメーションイベント任せ。
     /// </summary>
-    public class MeleeEquipment : MonoBehaviour
+    public class MeleeEquipment : Equipment
     {
         [Header("アニメーションイベントに処理をフック")]
         [SerializeField] private AnimationEvent _animationEvent;
+        [Header("攻撃エフェクト(任意)")]
+        [SerializeField] private Effect _attackEffect;
         [Header("向きの基準")]
         [SerializeField] private Transform _rotate;
         [Header("範囲の設定")]
         [SerializeField] private float _forwardOffset;
         [SerializeField] private float _heightOffset;
+        [Min(1.0f)]
         [SerializeField] private float _radius = 3.0f;
+
+        private IOwnerTime _owner;
+
+        private void Start()
+        {
+            // 雑魚敵とボスの両用。
+            if (TryGetComponent(out EnemyController e)) _owner = e.BlackBoard;
+            else if (TryGetComponent(out BossController b)) _owner = b.BlackBoard;
+        }
 
         private void OnEnable()
         {
-            _animationEvent.OnFireStart += Collision;
+            _animationEvent.OnMeleeAttackStart += Collision;
         }
 
         private void OnDisable()
         {
-            _animationEvent.OnFireStart -= Collision;
+            _animationEvent.OnMeleeAttackStart -= Collision;
         }
 
         // 当たり判定を出してダメージを与える。
@@ -36,9 +49,16 @@ namespace Enemy.Control
             RaycastExtensions.OverlapSphere(Origin(), _radius, col =>
             {
                 if (col == null) return;
+                
                 // コライダーと同じオブジェクトにコンポーネントが付いている前提。
                 if (col.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
+
+                // 判定の瞬間の演出
+                if (_attackEffect != null) _attackEffect.Play(_owner);
             });
+
+            // タイミングを更新。
+            LastAttackTiming = Time.time;
         }
 
         // 攻撃の基準となる座標を返す。
@@ -51,6 +71,14 @@ namespace Enemy.Control
             Vector3 h = _rotate.up * _heightOffset;
 
             return transform.position + f + h;
+        }
+
+        /// <summary>
+        /// 座標が攻撃範囲内かを返す。
+        /// </summary>
+        public bool IsWithinRange(in Vector3 point)
+        {
+            return (Origin() - point).sqrMagnitude <= _radius * _radius;
         }
 
         private void OnDrawGizmos()

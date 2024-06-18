@@ -76,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3771377507711898164}
   - component: {fileID: 1707658032}
-  - component: {fileID: 9062715359764695379}
+  - component: {fileID: 3429574497764547139}
   - component: {fileID: 1349603992259834385}
   m_Layer: 0
   m_Name: Enemy_Shield_
@@ -142,7 +142,8 @@ MonoBehaviour:
   - {fileID: 6507933991480767477}
   - {fileID: 5329035056386970053}
   _damageHitBox: {fileID: 3589729310548736452}
---- !u!114 &9062715359764695379
+  _equipment: {fileID: 3429574497764547139}
+--- !u!114 &3429574497764547139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,12 +152,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3771377507711898171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64de58b96d9b5c640b05a1d8541c810b, type: 3}
+  m_Script: {fileID: 11500000, guid: f0c297667e2789f46a5e4b1493beb2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animationEvent: {fileID: 8846152727131948784}
+  _attackEffect: {fileID: 0}
   _rotate: {fileID: 3771377508665326701}
-  _forwardOffset: 4
+  _forwardOffset: 0
   _heightOffset: 0
   _radius: 3
 --- !u!114 &1349603992259834385

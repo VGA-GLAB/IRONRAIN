@@ -9,12 +9,14 @@ namespace Enemy.Control.FSM
     public enum StateKey
     {
         Base,
-        Approach,
-        Battle,
-        Broken,
-        Escape,
-        Idle,
-        Hide,
+        Approach, // 追跡:接近
+        Battle,   // 共用:戦闘
+        Broken,   // 追跡:死亡、ボス:戦闘終了
+        Escape,   // 追跡:撤退
+        Idle,     // 共用:初期状態
+        Hide,     // 追跡:画面非表示
+        Appear,   // ボス:登場演出
+        QteEvent, // ボス:プレイヤーの左腕破壊~QTE2回目
     }
 
     /// <summary>

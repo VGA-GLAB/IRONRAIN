@@ -10,16 +10,21 @@ namespace Enemy.Control.Boss
     public class FireRate
     {
         private BlackBoard _blackBoard;
+        private Equipment _meleeEquip;
+        private RangeEquipment _rangeEquip;
+
         private IReadOnlyList<float> _rangeTiming;
         private IReadOnlyList<float> _meleeTiming;
-
         // 攻撃する度にこの値を更新し、次の攻撃タイミングを計算する。
         private int _rangeIndex;
         private int _meleeIndex;
 
-        public FireRate(BossParams bossParams, BlackBoard blackBoard)
+        public FireRate(BossParams bossParams, BlackBoard blackBoard, Equipment meleeEquip, 
+            RangeEquipment rangeEquip)
         {
             _blackBoard = blackBoard;
+            _meleeEquip = meleeEquip;
+            _rangeEquip = rangeEquip;
             _rangeTiming = InitRangeTiming(bossParams);
             _meleeTiming = InitMeleeTiming(bossParams);
         }
@@ -45,7 +50,7 @@ namespace Enemy.Control.Boss
             else
             {
                 // 一定間隔で攻撃
-                timing.Add(bossParams.Battle.RangeAttackConfig.AttackRate);
+                timing.Add(bossParams.Battle.RangeAttackConfig.Rate);
             }
 
             // 最初の攻撃タイミングを設定
@@ -60,7 +65,7 @@ namespace Enemy.Control.Boss
             // 一定間隔で攻撃
             List<float> timing = new List<float>
             {
-                bossParams.Battle.MeleeAttackConfig.AttackRate
+                bossParams.Battle.MeleeAttackConfig.Rate
             };
 
             // 最初の攻撃タイミングを設定
@@ -75,7 +80,7 @@ namespace Enemy.Control.Boss
         public void UpdateIfAttacked()
         {
             // 最後に遠距離攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_blackBoard.NextRangeAttackTime < _blackBoard.LastRangeAttackTime)
+            if (_blackBoard.NextRangeAttackTime < _rangeEquip.LastAttackTiming)
             {
                 _rangeIndex++;
                 _rangeIndex %= _rangeTiming.Count;
@@ -88,7 +93,7 @@ namespace Enemy.Control.Boss
             }
 
             // 最後に近接攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_blackBoard.NextMeleeAttackTime < _blackBoard.LastMeleeAttackTime)
+            if (_blackBoard.NextMeleeAttackTime < _meleeEquip.LastAttackTiming)
             {
                 _meleeIndex++;
                 _meleeIndex %= _meleeTiming.Count;

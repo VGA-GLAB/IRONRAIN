@@ -33,6 +33,7 @@ namespace Enemy.Control.Boss
             _chase = new EnemyBT.Sequence(
                 "ChaseSeq",
                 new BossBT.MoveToPointP(transform, bossParams, blackBoard),
+                new BossBT.LookAtPlayer(blackBoard),
                 new BossBT.WriteActionPlan(Choice.Chase, blackBoard)
                 );
 

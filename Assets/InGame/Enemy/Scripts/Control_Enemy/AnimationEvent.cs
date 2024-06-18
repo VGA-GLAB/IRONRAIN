@@ -20,17 +20,26 @@ namespace Enemy.Control
     public class AnimationEvent : MonoBehaviour
     {
         /// <summary>
-        /// 近接攻撃の判定を出すタイミング。
-        /// 遠距離攻撃の場合はこのタイミングで弾を発射する
+        /// 遠距離攻撃は、このタイミングで弾を発射する。
         /// </summary>
-        public event UnityAction OnFireStart;
+        public event UnityAction OnRangeFireStart;
+        /// <summary>
+        /// 遠距離攻撃かつ持続的に判定が出るもの用(まだない)。
+        /// </summary>
+        public event UnityAction OnRangeFireEnd;
+        /// <summary>
+        /// 近接攻撃の判定を出すタイミング。
+        /// </summary>
+        public event UnityAction OnMeleeAttackStart;
         /// <summary>
         /// 近接攻撃の判定を消すタイミング。
         /// </summary>
-        public event UnityAction OnFireEnd;
+        public event UnityAction OnMeleeAttackEnd;
 
         // アニメーションイベントに登録するメソッド群。
-        public void FireStart() => OnFireStart?.Invoke();
-        public void FireEnd() => OnFireEnd?.Invoke();
+        public void RangeFireStart() => OnRangeFireStart?.Invoke();
+        public void RangeFireEnd() => OnRangeFireEnd?.Invoke();
+        public void MeleeAttackStart() => OnMeleeAttackStart?.Invoke();
+        public void MeleeAttackEnd() => OnMeleeAttackEnd?.Invoke();
     }
 }

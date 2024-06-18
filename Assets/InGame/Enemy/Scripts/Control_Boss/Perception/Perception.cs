@@ -10,18 +10,23 @@ namespace Enemy.Control.Boss
     public class Perception
     {
         private Transform _transform;
+        private BossParams _params;
         private BlackBoard _blackBoard;
         private Transform _player;
         private Transform _pointP;
+        private MeleeEquipment _meleeEquip;
         private CircleArea _area;
         private CircleArea _playerArea;
 
-        public Perception(Transform transform, BlackBoard blackBoard, Transform player, Transform pointP)
+        public Perception(Transform transform, BossParams bossParams, BlackBoard blackBoard, Transform player, 
+            Transform pointP, MeleeEquipment meleeEquip)
         {
             _transform = transform;
+            _params = bossParams;
             _blackBoard = blackBoard;
             _player = player;
             _pointP = pointP;
+            _meleeEquip = meleeEquip;
             _area = new CircleArea(transform.position, BossParams.Const.AreaRadius);
         }
 
@@ -54,10 +59,18 @@ namespace Enemy.Control.Boss
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
             if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
 
-            // 自身から点Pへの向きを黒板に書き込む。
+            // 自身から点Pへのベクトルを黒板に書き込む。
             _blackBoard.TransformToPointPDirection = (_blackBoard.PointP - _transform.position).normalized;
+            _blackBoard.TransformToPointPDistance = (_blackBoard.PointP - _transform.position).magnitude;
 
-            // ボス戦開始からの経過時間を更新
+            // 自身からプレイヤーへのベクトルを黒板に書き込む。
+            _blackBoard.TransformToPlayerDirection = (_player.position - _transform.position).normalized;
+            _blackBoard.TransformToPlayerSqrDistance = (_player.position - _transform.position).sqrMagnitude;
+
+            // プレイヤーが近接攻撃が届く範囲にいるか。
+            _blackBoard.IsWithinMeleeRange = _meleeEquip.IsWithinRange(_player.position);
+            
+            // ボス戦開始からの経過時間を更新。
             if (_blackBoard.IsBossStarted) _blackBoard.ElapsedTime += Time.deltaTime;
         }
 

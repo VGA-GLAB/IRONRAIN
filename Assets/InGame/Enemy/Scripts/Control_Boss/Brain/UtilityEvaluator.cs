@@ -45,41 +45,45 @@ namespace Enemy.Control.Boss
         {
             _order.Clear();
 
-            // ボス戦開始した状態
-            if (_blackBoard.IsBossStarted)
+            // ボス戦開始した状態は何もしない。
+            if (!_blackBoard.IsBossStarted) return _order;
+
+            // まずは登場する。
+            if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
+
+            // 終盤のQTEイベント中
+            if (_blackBoard.IsQteEventStarted)
             {
-                // まずは登場する。
-                if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
-
-                // 終盤のQTEイベント中
-                if (_blackBoard.IsQteEventStarted)
+                // 命令によって分岐
+                switch (_blackBoard.OrderdQteEventStep)
                 {
-                    // 命令によって分岐
-                    switch (_blackBoard.OrderdQteEventStep)
-                    {
-                        // プレイヤーの左手破壊
-                        case FSM.QteEventState.Step.BreakLeftArm: _order.Add(Choice.BreakLeftArm); break;
-                        // QTE1回目
-                        case FSM.QteEventState.Step.FirstQte: _order.Add(Choice.FirstQte); break;
-                        // QTE2回目
-                        case FSM.QteEventState.Step.SecondQte: _order.Add(Choice.SecondQte); break;
-                    }
-
-                    return _order;
+                    // プレイヤーの左手破壊
+                    case FSM.QteEventState.Step.BreakLeftArm: _order.Add(Choice.BreakLeftArm); break;
+                    // QTE1回目
+                    case FSM.QteEventState.Step.FirstQte: _order.Add(Choice.FirstQte); break;
+                    // QTE2回目
+                    case FSM.QteEventState.Step.SecondQte: _order.Add(Choice.SecondQte); break;
                 }
 
-                // ファンネル展開。
-                if (_blackBoard.FunnelExpandTrigger) _order.Add(Choice.FunnelExpand);
-
-                // 近接攻撃タイミングが来ていた場合は攻撃する。
-                if (_blackBoard.NextMeleeAttackTime < Time.time) _order.Add(Choice.BladeAttack);
-
-                // 遠距離攻撃タイミングが来ていた場合は攻撃する。
-                if (_blackBoard.NextRangeAttackTime < Time.time) _order.Add(Choice.RifleFire);
-
-                // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
-                _order.Add(Choice.Chase);
+                return _order;
             }
+
+            // ファンネル展開。
+            if (_blackBoard.FunnelExpandTrigger) _order.Add(Choice.FunnelExpand);
+
+            // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃する。
+            if (_blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time)
+            {
+                _order.Add(Choice.BladeAttack);
+            }
+            // または、遠距離攻撃タイミングが来ていた場合は攻撃する。
+            else if (_blackBoard.NextRangeAttackTime < Time.time)
+            {
+                _order.Add(Choice.RifleFire);
+            }
+
+            // ボス戦開始後、登場が完了した場合は、プレイヤーを追いかける。
+            _order.Add(Choice.Chase);
 
             return _order;
         }

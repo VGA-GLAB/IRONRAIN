@@ -1,4 +1,5 @@
-﻿using Enemy.DebugUse;
+﻿using Enemy.Control.Boss;
+using Enemy.DebugUse;
 using Enemy.Extensions;
 using UnityEngine;
 using VContainer;
@@ -9,7 +10,7 @@ namespace Enemy.Control
     /// 遠距離攻撃の装備。
     /// 装備者への参照を渡してもらい、発射自体はアニメーションイベントにフック。
     /// </summary>
-    public class RangeEquipment : MonoBehaviour
+    public class RangeEquipment : Equipment
     {
         enum AimMode
         {
@@ -30,7 +31,7 @@ namespace Enemy.Control
 
         private Transform _player;
 
-        private EnemyController _owner;
+        private IOwnerTime _owner;
 
         [Inject]
         private void Construct(Transform player)
@@ -38,19 +39,21 @@ namespace Enemy.Control
             _player = player;
         }
 
-        private void Awake()
+        private void Start()
         {
-            _owner = GetComponent<EnemyController>();
+            // 雑魚敵とボスの両用。
+            if (TryGetComponent(out EnemyController e)) _owner = e.BlackBoard;
+            else if (TryGetComponent(out BossController b)) _owner = b.BlackBoard;
         }
 
         private void OnEnable()
         {
-            _animationEvent.OnFireStart += Shoot;
+            _animationEvent.OnRangeFireStart += Shoot;
         }
 
         private void OnDisable()
         {
-            _animationEvent.OnFireStart -= Shoot;
+            _animationEvent.OnRangeFireStart -= Shoot;
         }
 
         // 弾を発射する。
@@ -74,17 +77,20 @@ namespace Enemy.Control
                     break;
             }
 
+            // タイミングを更新。
+            LastAttackTiming = Time.time;
+
             // 前方に撃つ
             void FireToForward()
             {
-                BulletPool.Fire(_owner.BlackBoard, _key, _muzzle.position, _muzzle.forward);
+                BulletPool.Fire(_owner, _key, _muzzle.position, _muzzle.forward);
             }
 
             // 目標に向けて撃つ
             void FireToTarget(Transform target)
             {
                 Vector3 f = (target.position - _muzzle.position).normalized;
-                BulletPool.Fire(_owner.BlackBoard, _key, _muzzle.position, f);
+                BulletPool.Fire(_owner, _key, _muzzle.position, f);
             }
         }
 
