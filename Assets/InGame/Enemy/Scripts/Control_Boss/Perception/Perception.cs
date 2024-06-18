@@ -12,18 +12,20 @@ namespace Enemy.Control.Boss
         private Transform _transform;
         private BossParams _params;
         private BlackBoard _blackBoard;
+        private Transform _rotate;
         private Transform _player;
         private Transform _pointP;
         private MeleeEquipment _meleeEquip;
         private CircleArea _area;
         private CircleArea _playerArea;
 
-        public Perception(Transform transform, BossParams bossParams, BlackBoard blackBoard, Transform player, 
-            Transform pointP, MeleeEquipment meleeEquip)
+        public Perception(Transform transform, BossParams bossParams, BlackBoard blackBoard, Transform rotate, 
+            Transform player, Transform pointP, MeleeEquipment meleeEquip)
         {
             _transform = transform;
             _params = bossParams;
             _blackBoard = blackBoard;
+            _rotate = rotate;
             _player = player;
             _pointP = pointP;
             _meleeEquip = meleeEquip;
@@ -49,6 +51,9 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Update()
         {
+            // 前方向
+            _blackBoard.Forward = _rotate.forward;
+
             // 点Pの位置
             _blackBoard.PointP = _pointP.position;
 

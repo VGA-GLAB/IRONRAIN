@@ -52,10 +52,10 @@ namespace Enemy.Control
                 
                 // コライダーと同じオブジェクトにコンポーネントが付いている前提。
                 if (col.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
-
-                // 判定の瞬間の演出
-                if (_attackEffect != null) _attackEffect.Play(_owner);
             });
+            
+            // 判定の瞬間の演出
+            if (_attackEffect != null) _attackEffect.Play(_owner);
 
             // タイミングを更新。
             LastAttackTiming = Time.time;

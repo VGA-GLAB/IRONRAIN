@@ -40,6 +40,7 @@ namespace Enemy.Control.Boss
         // Startでインスタンスが確保、Updateで値が更新され、Disableでnull。
         public CircleArea Area { get; set; }
         public CircleArea PlayerArea { get; set; }
+        public Vector3 Forward { get; set; }
         public Vector3 PointP { get; set; }
         public Vector3 TransformToPointPDirection { get; set; }
         public float TransformToPointPDistance { get; set; }

@@ -9,6 +9,10 @@ namespace Enemy.Control.Boss
     /// </summary>
     public interface IReadonlyBlackBoard : IOwnerTime
     {
-
+        /// <summary>
+        /// 前方向。
+        /// Transform型のforwardプロパティで取得できる値と等しい。
+        /// </summary>
+        public Vector3 Forward { get; }
     }
 }

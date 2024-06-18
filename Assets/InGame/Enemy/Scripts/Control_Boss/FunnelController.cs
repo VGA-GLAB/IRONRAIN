@@ -1,8 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading;
 using UniRx;
 using UnityEngine;
+using VContainer;
 
 namespace Enemy.Control.Boss
 {
@@ -25,14 +25,24 @@ namespace Enemy.Control.Boss
         [Header("撃破された際の演出(任意)")]
         [SerializeField] private Effect _defeatedEffect;
 
-        private Transform _transform;
+        private Transform _player;
         private BossController _boss;
+
+        private Transform _transform;
         // ボス本体を基準として展開するので、この値にボス本体の位置を足す。
         private Vector3 _expandOffset;
         // 速度
         private Vector3 _velocity;
         // 現在の状態
         private State _state = State.Unexpanded;
+        // 攻撃までの時間
+        private float _elapsed;
+
+        [Inject]
+        private void Construct(Transform player)
+        {
+            _player = player;
+        }
 
         private void Awake()
         {
@@ -45,6 +55,9 @@ namespace Enemy.Control.Boss
                 _boss = msg.Boss;
                 msg.Funnels.Add(this);
             }).AddTo(this);
+
+            // ファンネル毎に射撃タイミングをずらすために経過時間の初期値を変える。
+            _elapsed = Random.value;
         }
 
         private void Start()
@@ -70,6 +83,21 @@ namespace Enemy.Control.Boss
 
                 // 速度で移動。
                 _transform.position += _velocity * _boss.BlackBoard.PausableDeltaTime;
+
+                // 一定時間毎に攻撃する。攻撃間隔は適当。
+                _elapsed += _boss.BlackBoard.PausableDeltaTime;
+                if (_elapsed > 1)
+                {
+                    _elapsed = 0;
+
+                    // ボスの前向きと同じ方向に飛ばす。
+                    BulletPool.Fire(
+                        _boss.BlackBoard, 
+                        BulletKey.MachineGun, 
+                        _transform.position, 
+                        _boss.BlackBoard.Forward
+                        );
+                }
             }
         }
 

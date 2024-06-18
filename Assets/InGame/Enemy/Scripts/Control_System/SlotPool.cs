@@ -21,13 +21,25 @@ namespace Enemy.Control
         public bool IsUsing { get; set; }
 
         /// <summary>
-        /// ギズモに描画
+        /// ギズモに描画。
         /// </summary>
         public override void DrawOnGizmos()
         {
             Color c = IsUsing ? Color.white : ColorExtensions.ThinWhite;
             GizmosUtils.WireSphere(Point, 0.2f, c); // 大きさは適当
             GizmosUtils.WireCircle(Point, Radius, c);
+        }
+
+        /// <summary>
+        /// ギズモに描画。
+        /// 描画する高さを引数で指定できる。
+        /// </summary>
+        public void DrawOnGizmos(Transform owner)
+        {
+            Vector3 p = new Vector3(Point.x, owner.position.y, Point.z);
+            Color c = IsUsing ? Color.white : ColorExtensions.ThinWhite;
+            GizmosUtils.WireSphere(p, 0.2f, c); // 大きさは適当
+            GizmosUtils.WireCircle(p, Radius, c);
         }
     }
 
@@ -85,9 +97,9 @@ namespace Enemy.Control
 
         private void OnDrawGizmos()
         {
-            if (_pool != null)
+            if (_pool != null && _player != null)
             {
-                foreach (Slot s in _pool) s.DrawOnGizmos();
+                foreach (Slot s in _pool) s.DrawOnGizmos(_player);
             }
         }
 

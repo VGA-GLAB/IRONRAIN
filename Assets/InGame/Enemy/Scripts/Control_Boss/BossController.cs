@@ -69,7 +69,7 @@ namespace Enemy.Control.Boss
             _blackBoard = new BlackBoard();
 
             // Perception
-            _perception = new Perception(transform, _params, _blackBoard, _player, _pointP, _meleeEquipment);
+            _perception = new Perception(transform, _params, _blackBoard, _rotate, _player, _pointP, _meleeEquipment);
             _fireRate = new FireRate(_params, _blackBoard, _meleeEquipment, _rangeEquipment);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
