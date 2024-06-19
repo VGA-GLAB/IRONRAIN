@@ -83,7 +83,6 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             _currentLane--;
             if (_currentLane == _params.RestrictionLane * -1) 
             {
-                Debug.Log("Save");
                 _savePos = _transform.position;
             } 
 
@@ -128,7 +127,7 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
 
         var dis = _transform.position.z - _savePos.z;
         var endDis = 2;
-        Debug.Log($"距離{dis}");
+        //Debug.Log($"距離{dis}");
 
         //ある程度近づいたら強制移動をやめる
         if (Mathf.Abs(dis) < endDis && _isRetunRale)
