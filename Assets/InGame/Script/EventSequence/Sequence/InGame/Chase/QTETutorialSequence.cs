@@ -8,6 +8,8 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
 {
     [SerializeField] private EnemyManager _enemyManager = default;
     [SerializeField] private PlayerQTE _playerQTE = default;
+    //[Header("どの程度の距離でQteをスタートさせるか")]
+    //[SerializeField] private int _qteStartDis;
     private PlayerQTEModel _playerQTEModel = default;
     [Header("QTEを開始するまでの待ち時間")]
     [SerializeField] private float _qteAwaitTimeSec = 5F;
@@ -38,10 +40,12 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
 
             // QTEチュートリアルの敵のID、これを_playerQTEModel.StartQTEメソッドの引数にしてやれば大丈夫。
             System.Guid id = _enemies[0].BlackBoard.ID;
-
+            Debug.Log("待機開始");
             /* 出現した敵が良い感じの位置に来るまでawait */
+            await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: ct);
 
             /* QTE開始、成功をawait */
+            await RepeatQTE();
         }
     }
 

@@ -2904,6 +2904,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WeaponChenge"",
+                    ""type"": ""Button"",
+                    ""id"": ""583724d8-5c2b-4265-bcde-8432aeac7396"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -3168,6 +3177,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ThirdButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c54dd2e-c7e3-44b2-a6ba-79f7dc94a4d6"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponChenge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3487,6 +3507,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_Lever_LeftLever = m_Lever.FindAction("LeftLever", throwIfNotFound: true);
         m_Lever_LeverThree = m_Lever.FindAction("LeverThree", throwIfNotFound: true);
         m_Lever_LeverFour = m_Lever.FindAction("LeverFour", throwIfNotFound: true);
+        m_Lever_WeaponChenge = m_Lever.FindAction("WeaponChenge", throwIfNotFound: true);
         // Toggle
         m_Toggle = asset.FindActionMap("Toggle", throwIfNotFound: true);
         m_Toggle_Toggle1 = m_Toggle.FindAction("Toggle1", throwIfNotFound: true);
@@ -4667,6 +4688,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_Lever_LeftLever;
     private readonly InputAction m_Lever_LeverThree;
     private readonly InputAction m_Lever_LeverFour;
+    private readonly InputAction m_Lever_WeaponChenge;
     public struct LeverActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -4680,6 +4702,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @LeftLever => m_Wrapper.m_Lever_LeftLever;
         public InputAction @LeverThree => m_Wrapper.m_Lever_LeverThree;
         public InputAction @LeverFour => m_Wrapper.m_Lever_LeverFour;
+        public InputAction @WeaponChenge => m_Wrapper.m_Lever_WeaponChenge;
         public InputActionMap Get() { return m_Wrapper.m_Lever; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4716,6 +4739,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @LeverFour.started += instance.OnLeverFour;
             @LeverFour.performed += instance.OnLeverFour;
             @LeverFour.canceled += instance.OnLeverFour;
+            @WeaponChenge.started += instance.OnWeaponChenge;
+            @WeaponChenge.performed += instance.OnWeaponChenge;
+            @WeaponChenge.canceled += instance.OnWeaponChenge;
         }
 
         private void UnregisterCallbacks(ILeverActions instance)
@@ -4747,6 +4773,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @LeverFour.started -= instance.OnLeverFour;
             @LeverFour.performed -= instance.OnLeverFour;
             @LeverFour.canceled -= instance.OnLeverFour;
+            @WeaponChenge.started -= instance.OnWeaponChenge;
+            @WeaponChenge.performed -= instance.OnWeaponChenge;
+            @WeaponChenge.canceled -= instance.OnWeaponChenge;
         }
 
         public void RemoveCallbacks(ILeverActions instance)
@@ -5010,6 +5039,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnLeftLever(InputAction.CallbackContext context);
         void OnLeverThree(InputAction.CallbackContext context);
         void OnLeverFour(InputAction.CallbackContext context);
+        void OnWeaponChenge(InputAction.CallbackContext context);
     }
     public interface IToggleActions
     {

@@ -79,6 +79,8 @@ public class InputProvider
         _inputMap.Lever.ThirdButton.canceled += context => ExecuteInput(InputType.ThreeButton, InputMode.Exit);
         _inputMap.Lever.ForceButton.performed += context => ExecuteInput(InputType.FourButton, InputMode.Enter);
         _inputMap.Lever.ForceButton.canceled += context => ExecuteInput(InputType.FourButton, InputMode.Exit);
+        _inputMap.Lever.WeaponChenge.performed += context => ExecuteInput(InputType.WeaponChenge, InputMode.Enter);
+        _inputMap.Lever.WeaponChenge.canceled += context => ExecuteInput(InputType.WeaponChenge, InputMode.Exit);
         _inputMap.Toggle.Toggle1.performed += context => ExecuteInput(InputType.Toggle1, InputMode.Enter);
         _inputMap.Toggle.Toggle1.canceled += context => ExecuteInput(InputType.Toggle1, InputMode.Exit);
         _inputMap.Toggle.Toggle2.performed += context => ExecuteInput(InputType.Toggle2, InputMode.Enter);
