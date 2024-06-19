@@ -89,6 +89,7 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
+        Destroy(EnemyMaps[enemy].gameObject);
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
         NearEnemyLockon(); 
