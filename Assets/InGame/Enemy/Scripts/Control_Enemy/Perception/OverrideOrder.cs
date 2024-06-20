@@ -80,16 +80,26 @@ namespace Enemy.Control
                 {
                     //
                 }
-                // 自身を対象としてQTE終了
-                else if (order.OrderType == EnemyOrder.Type.QteEndTargeted)
+                // 自身を対象としてQTE成功
+                else if (order.OrderType == EnemyOrder.Type.QteSuccessTargeted)
                 {
                     // HitPointクラスで、プレイヤーを検知していない状態の場合はダメージが入らないようにしている。
                     // 状態にかかわらず死亡させたいので、HPを直接書きかえる。
                     _blackBoard.Hp = 0;
                     _blackBoard.IsDying = true;
                 }
-                // 自身以外を対象としてQTE終了
-                else if (order.OrderType == EnemyOrder.Type.QteEndUntargeted)
+                // 自身以外を対象としてQTE成功
+                else if (order.OrderType == EnemyOrder.Type.QteSuccessUntargeted)
+                {
+                    //
+                }
+                // 自身を対象としてQTE失敗
+                else if (order.OrderType == EnemyOrder.Type.QteFailureTargeted)
+                {
+                    //
+                }
+                // 自身以外を対象としてQTE失敗
+                else if (order.OrderType == EnemyOrder.Type.QteFailureUntargeted)
                 {
                     //
                 }

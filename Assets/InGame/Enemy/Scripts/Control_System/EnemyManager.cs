@@ -78,49 +78,55 @@ namespace Enemy.Control
             MessageBroker.Default.Receive<ReleaseMessage<INpc>>()
                 .Subscribe(msg => _npcs.Remove(msg.Character)).AddTo(this);
 
-#if false
-            // QTE開始/終了を各キャラクターに伝える。
-            ProvidePlayerInformation.StartQte.Subscribe(OnQteStart).AddTo(this);
-            ProvidePlayerInformation.EndQte.Subscribe(OnQteEnd).AddTo(this);
-
-            void OnQteStart(xxx arg)
+            // QTE開始を各キャラクターに伝える。
+            ProvidePlayerInformation.StartQte.Subscribe(id => 
             {
                 foreach (EnemyController e in _enemies)
                 {
-                    if (arg.ID == e.BlackBoard.ID)
+                    if (id == e.BlackBoard.ID)
                     {
-                        // QTEのチュートリアルシーケンスに登場する敵に対して、自身を対象としてQTE開始を命令。
                         _order.OrderType = EnemyOrder.Type.QteStartTargeted;
                     }
                     else
                     {
-                        // それ以外のシーケンスの敵に対しては、自身以外を対象としてQTE開始を命令。
                         _order.OrderType = EnemyOrder.Type.QteStartUntargeted;
                     }
 
                     e.Order(_order);
                 }
-            }
+            }).AddTo(this);
 
-            void OnQteEnd(xxx result)
+            // QTEの成功/失敗を各キャラクターに伝える。
+            ProvidePlayerInformation.EndQte.Subscribe(result => 
             {
                 foreach (EnemyController e in _enemies)
                 {
-                    if (result.ID == e.BlackBoard.ID)
+                    if (result.EnemyId == e.BlackBoard.ID)
                     {
-                        // QTEのチュートリアルシーケンスに登場する敵に対して、自身を対象としてQTE開始を命令。
-                        _order.OrderType = EnemyOrder.Type.QteEndTargeted;
+                        if (result.ResultType == QTEResultType.Success)
+                        {
+                            _order.OrderType = EnemyOrder.Type.QteSuccessTargeted;
+                        }
+                        else
+                        {
+                            _order.OrderType = EnemyOrder.Type.QteFailureTargeted;
+                        }
                     }
                     else
                     {
-                        // それ以外のシーケンスの敵に対しては、自身以外を対象としてQTE開始を命令。
-                        _order.OrderType = EnemyOrder.Type.QteEndUntargeted;
+                        if (result.ResultType == QTEResultType.Success)
+                        {
+                            _order.OrderType = EnemyOrder.Type.QteSuccessUntargeted;
+                        }
+                        else
+                        {
+                            _order.OrderType = EnemyOrder.Type.QteFailureUntargeted;
+                        }
                     }
 
                     e.Order(_order);
                 }
-            }
-#endif
+            }).AddTo(this);
         }
 
         /// <summary>
