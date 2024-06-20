@@ -20,8 +20,10 @@
             BossSecondQTE,   // ボス戦QTE2回目。
             QteStartTargeted,   // 自身を対象としてQTE開始。
             QteStartUntargeted, // 自身以外を対象としてQTE開始。
-            QteEndTargeted,     // 自身を対象としてQTE終了。
-            QteEndUntargeted,   // 自身以外を対象としてQTE終了。
+            QteSuccessTargeted,   // 自身を対象としてQTE成功。
+            QteSuccessUntargeted, // 自身以外を対象としてQTE成功。
+            QteFailureTargeted,   // 自身を対象としてQTE失敗。
+            QteFailureUntargeted, // 自身以外を対象としてQTE失敗。
         };
 
         public Type OrderType;
