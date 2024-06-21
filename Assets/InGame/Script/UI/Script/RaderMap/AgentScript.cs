@@ -1,5 +1,6 @@
 ﻿using System;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,8 +23,10 @@ public class AgentScript : MonoBehaviour
 
     private void Awake()
     {
+        var raderMap = GameObject.FindObjectOfType(typeof(RaderMap)).GetComponent<RaderMap>();
         //レーダーテストを検索する
-        RaderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
+        if (raderMap != null)
+            RaderMap = raderMap;
     }
 
     /// <summary>
