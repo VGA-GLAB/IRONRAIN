@@ -43,6 +43,7 @@ namespace Enemy.Control
             _escape = new Sequence(
                 "EscapeSeq",
                 new MoveVertical(enemyParams, blackBoard),
+                new HideIfOffScreen(blackBoard),
                 new WriteActionPlan(Choice.Escape, blackBoard)
                 );
 

@@ -1,0 +1,42 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Enemy.Control.BT
+{
+    /// <summary>
+    /// 画面外に出た場合は隠れる。
+    /// </summary>
+    public class HideIfOffScreen : Node
+    {
+        private ActionPlan _plan;
+        private BlackBoard _blackBoard;
+
+        public HideIfOffScreen(BlackBoard blackBoard)
+        {
+            _plan = new ActionPlan(Choice.Hide);
+            _blackBoard = blackBoard;
+        }
+
+        protected override void Enter()
+        {
+           
+        }
+
+        protected override void Exit()
+        {
+            
+        }
+
+        protected override State Stay()
+        {
+            // とりあえずプレイヤーとの距離で判定。
+            if (_blackBoard.TransformToPlayerDistance > 20.0f)
+            {
+                _blackBoard.ActionPlans.Enqueue(_plan);
+            }
+
+            return State.Running;
+        }
+    }
+}

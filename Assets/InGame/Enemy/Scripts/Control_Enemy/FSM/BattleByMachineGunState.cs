@@ -17,6 +17,7 @@ namespace Enemy.Control.FSM
             Fire,  // FireLoop
         }
 
+        private EnemyParams _params;
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
@@ -24,8 +25,9 @@ namespace Enemy.Control.FSM
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleByMachineGunState(BlackBoard blackBoard, Body body, BodyAnimation animation)
+        public BattleByMachineGunState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, BodyAnimation animation)
         {
+            _params = enemyParams;
             _blackBoard = blackBoard;
             _body = body;
             _animation = animation;
@@ -139,7 +141,13 @@ namespace Enemy.Control.FSM
         // アニメーションが攻撃状態
         private void StayFire()
         {
-            //
+            // チュートリアル用の敵の場合、攻撃状態になった瞬間に攻撃終了のフラグを立てる。
+            // Animatorのenemy_assult_fire_lpステートを繰り返す遷移にHasExitTimeのチェックが入っている前提。
+            if (_params.Other.IsTutorial)
+            {
+                // この場合、1回攻撃のアニメーションが再生された後、アイドル状態に戻るはず。
+                _animation.SetTrigger(BodyAnimation.ParamName.AttackEndTrigger);
+            }
         }
 
         // アニメーションがそれ以外状態

@@ -54,10 +54,9 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
         
         Debug.Log("Shooooooooot!");
         _tutorialEnemy.Attack();
-        
-        await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
-
         _tutorialEnemy.Pause();
+
+        await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
 
         Debug.Log("レバーかスペースキーを押してください");
         // 特定の入力を受けたらPauseを回避する
