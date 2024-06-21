@@ -39,7 +39,8 @@ public class PlayerMoveModel : IPlayerStateModel
     }
     public void FixedUpdate()
     {
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) || !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) 
+            || !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
         {
             Move();
         }
