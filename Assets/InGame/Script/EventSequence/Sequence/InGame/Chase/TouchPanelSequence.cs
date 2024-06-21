@@ -8,7 +8,8 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private EnemyManager _enemyManager = default;
     [SerializeField] private float _shootWaitSec = 2F;
-    
+    [SerializeField] private PlayerController _playerController = null;
+
     [Header("テキストボックスに関する値")]
     [SerializeField] private float _textBoxOpenAndCloseSec = 0.5F;
     [SerializeField, TextArea] private string _tutorialText = "現在、テストテキストが表示されています";
@@ -26,6 +27,9 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
         // 最初の待ち時間
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
 
+        //プレイヤーの攻撃、移動不可にする
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
         //敵を複数体出現させる
         _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
         _enemyManager.Pause(EnemyManager.Sequence.TouchPanel);
@@ -36,6 +40,9 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
         //一定時間待つ
         await UniTask.WaitForSeconds(_waitTime, cancellationToken: ct);
 
+        //プレイヤーを動けるようにする
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
         //敵を消して終了
         _enemyManager.DefeatThemAll(EnemyManager.Sequence.TouchPanel);
     }

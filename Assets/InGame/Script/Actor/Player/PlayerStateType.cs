@@ -15,4 +15,6 @@ public enum PlayerStateType
     SwitchingArms = 16,
     /// <summary>攻撃不可能</summary>
     NonAttack = 32,
+    /// <summary>Qte不可</summary>
+    NonQte = 64,
 }
