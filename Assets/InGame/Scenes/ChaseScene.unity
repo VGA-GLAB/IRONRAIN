@@ -7518,17 +7518,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
   m_PrefabInstance: {fileID: 309274961}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &312861166 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7821395390396876064, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
-  m_PrefabInstance: {fileID: 2667218937599446707}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f1642546e2c0b64288c2f77a50298cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &320644753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60319,8 +60308,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyManager: {fileID: 395139130}
-  _playerQTE: {fileID: 312861166}
-  _qteAwaitTimeSec: 5
+  _playerCon: {fileID: 2667218937599446716}
+  _qteStartDis: 40
 --- !u!114 &1877061346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60358,6 +60347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textBox: {fileID: 1255844601}
   _enemyManager: {fileID: 395139130}
+  _playerController: {fileID: 2667218937599446716}
   _textBoxOpenAndCloseSec: 0.5
   _tutorialText: "\u5DE6\u30AF\u30EA\u30C3\u30AF\u3067\u653B\u6483"
   _textDuration: 3
