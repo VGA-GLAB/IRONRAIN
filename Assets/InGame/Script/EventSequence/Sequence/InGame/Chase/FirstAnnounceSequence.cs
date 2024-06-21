@@ -26,6 +26,7 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     public override void OnSkip()
     {
         _playerStoryEvent.StartChaseScene();
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
     }
 
     public override async UniTask PlaySequenceAsync(CancellationToken ct)
@@ -44,6 +45,7 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
         await UniTask.WaitUntil(() => _tutorialEnemy.BlackBoard.IsApproachCompleted, cancellationToken: cancellationToken);
         _playerStoryEvent.StartChaseScene();
         _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
         
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
