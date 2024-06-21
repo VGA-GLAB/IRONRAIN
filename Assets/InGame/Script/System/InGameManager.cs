@@ -5,17 +5,22 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public sealed class InGameManager : MonoBehaviour
 {
+    [Header("スキップ機能の有効化")]
     [SerializeField] private bool _isSkip = false;
     [Header("そのインデックスのシーケンスまでスキップします")]
     [SerializeField] private int _skipIndex = 0;
-    
-    public AbstractSequenceBase CurrentSequence => _currentSequence;
 
+    [Space, Header("シーケンスがすべて終了した際に呼び出すシーン名")]
+    [SerializeField] private string _loadSceneName;
+    [Space]
     [SerializeField] private AbstractSequenceBase[] _sequences = default;
     private AbstractSequenceBase _currentSequence;
+    public AbstractSequenceBase CurrentSequence => _currentSequence;
+
 
 
     public interface IProvidePlayerInformation
@@ -43,5 +48,12 @@ public sealed class InGameManager : MonoBehaviour
                 await _sequences[i].PlaySequenceAsync(ct);
             }
         }
+        
+        InGameEnd();
+    }
+
+    private void InGameEnd()
+    {
+        SceneManager.LoadScene(_loadSceneName);
     }
 }
