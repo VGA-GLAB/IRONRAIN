@@ -34,13 +34,15 @@ public class AgentScript : MonoBehaviour
     /// </summary>
     public void EnemyGenerate()
     {
-        RaderMap.GenerateEnemy(this.gameObject);
+        if(RaderMap != null)
+            RaderMap.GenerateEnemy(this.gameObject);
     }
     /// <summary>
     /// エネミーが破棄された時に呼ばれる
     /// </summary>
     public void EnemyDestory()
     {
-        RaderMap.DestroyEnemy(this.gameObject);
+        if (RaderMap != null)
+            RaderMap.DestroyEnemy(this.gameObject);
     }
 }
