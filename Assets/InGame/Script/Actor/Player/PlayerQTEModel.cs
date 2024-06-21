@@ -74,8 +74,7 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         _qteResultType = QTEResultType.Failure;
 
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
-            || !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonQte))
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
 

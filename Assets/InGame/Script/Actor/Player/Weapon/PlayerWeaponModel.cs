@@ -65,7 +65,6 @@ public class PlayerWeaponModel : IPlayerStateModel
             || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
             || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
             || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonAttack)
-            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
             || !_isShot) return;
         
         _playerWeaponList[_currentWeaponIndex].Shot();

@@ -15,6 +15,7 @@ public class BulletCon : MonoBehaviour
     public void SetUp(GameObject enemy, int damege, Vector3 shotDir)
     {
         _lockOnEnemy = enemy;
+        //Debug.Log(_lockOnEnemy.name);
         _damege = damege;
         _shotDir = shotDir;
     }
@@ -31,7 +32,8 @@ public class BulletCon : MonoBehaviour
         {
             transform.LookAt(_lockOnEnemy.transform);
         }
-        _rb.velocity = transform.forward * _speed * ProvidePlayerInformation.TimeScale;
+        _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
+
     }
 
     private void OnTriggerEnter(Collider other)

@@ -7,10 +7,12 @@ using UnityEngine;
 public sealed class QTETutorialSequence : AbstractSequenceBase
 {
     [SerializeField] private EnemyManager _enemyManager = default;
-    [SerializeField] private PlayerController _playerCon = default;
-    [Header("どの程度の距離でQteをスタートさせるか")]
-    [SerializeField] private float _qteStartDis;
+    [SerializeField] private PlayerQTE _playerQTE = default;
+    //[Header("どの程度の距離でQteをスタートさせるか")]
+    //[SerializeField] private int _qteStartDis;
     private PlayerQTEModel _playerQTEModel = default;
+    [Header("QTEを開始するまでの待ち時間")]
+    [SerializeField] private float _qteAwaitTimeSec = 5F;
 
     // 敵を一覧で返す度にアロケーションを発生させないために、敵一覧を格納するためのリスト。
     // もし1度のアロケーション程度、気にならないのならば内部でリスト作って返すように作る
@@ -19,12 +21,11 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
 
     private void Start()
     {
-        _playerQTEModel = _playerCon.SeachState<PlayerQTE>().QTEModel;
+        _playerQTEModel = _playerQTE.QTEModel;
     }
 
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
     {
-        _playerCon.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         // 最初の待ち時間
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
 
@@ -39,21 +40,17 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
 
             // QTEチュートリアルの敵のID、これを_playerQTEModel.StartQTEメソッドの引数にしてやれば大丈夫。
             System.Guid id = _enemies[0].BlackBoard.ID;
+            Debug.Log("待機開始");
             /* 出現した敵が良い感じの位置に来るまでawait */
-            await UniTask.WaitUntil
-                (() =>(_playerCon.transform.position - _enemies[0].transform.position).sqrMagnitude < _qteStartDis,
-                PlayerLoopTiming.Update,
-                ct);
-            Debug.Log("近づいた");
+            await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: ct);
+
             /* QTE開始、成功をawait */
-            await RepeatQTE();
+            await RepeatQTE(id);
         }
-        Debug.Log("終わった");
-        _playerCon.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
     }
 
     /// <summary>QTEイベントの成功を待つ</summary>
-    public async UniTask RepeatQTE()
+    public async UniTask RepeatQTE(System.Guid id)
     {
         // 比較用
         QTEResultType result = QTEResultType.Failure;
@@ -61,7 +58,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
         // 成功するまでQTEを繰り返す
         while (result != QTEResultType.Success)
         {
-            result = await _playerQTEModel.StartQTE(new System.Guid());
+            result = await _playerQTEModel.StartQTE(id);
         }
     }
 }

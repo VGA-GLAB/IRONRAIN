@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15490156, g: 0.17128283, b: 0.20743889, a: 1}
+  m_IndirectSpecularColor: {r: 0.15082759, g: 0.1668396, b: 0.20346883, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -27488,7 +27488,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh66782
+  m_Name: pb_Mesh41306
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -28214,7 +28214,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh67356
+  m_Name: pb_Mesh41868
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -35006,7 +35006,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh67276
+  m_Name: pb_Mesh41790
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -42682,7 +42682,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh67238
+  m_Name: pb_Mesh41752
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -43623,7 +43623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d207e7b414903488ad29743b6fe5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isSkip: 1
+  _isSkip: 0
   _prepareSequenceController: {fileID: 1260057701}
   _prepareStartController: {fileID: 377073429}
   _startUpSeqController: {fileID: 377073428}
@@ -54936,8 +54936,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4761ffc0ffba6404f9603ef99fec8f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isSkip: 1
+  _isSkip: 0
   _skipIndex: 4
+  _loadSceneName: StartScene
   _sequences:
   - {fileID: 1877061349}
   - {fileID: 1877061348}
@@ -60336,7 +60337,6 @@ MonoBehaviour:
   _textBox: {fileID: 1255844601}
   _enemyManager: {fileID: 395139130}
   _shootWaitSec: 2
-  _playerController: {fileID: 2667218937599446716}
   _textBoxOpenAndCloseSec: 0.5
   _tutorialText: "\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u5909\u3048\u305F\u3044\u6642\u306F\u3001\u30ED\u30C3\u30AF\u30AA\u30F3\u30D1\u30CD\u30EB\u3092\u64CD\u4F5C\u3059\u308C\u3070\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u5909\u3048\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n\u72D9\u3044\u305F\u3044\u6575\u306E\u30A2\u30A4\u30B3\u30F3\u3092\u30BF\u30C3\u30C1\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
   _textDuration: 3
@@ -66334,9 +66334,15 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1404925706}
   - {fileID: 309274962}
   - {fileID: 690880611}
+  - {fileID: 1470891571}
+  - {fileID: 2041564007}
   - {fileID: 1624051071}
+  - {fileID: 1317394707}
+  - {fileID: 121233482}
+  - {fileID: 1881535789}
   - {fileID: 1263861600}
   - {fileID: 1133434824}
   - {fileID: 2098154441}
@@ -66345,12 +66351,6 @@ Transform:
   - {fileID: 851966109}
   - {fileID: 1824153335}
   - {fileID: 649123081}
-  - {fileID: 121233482}
-  - {fileID: 2041564007}
-  - {fileID: 1317394707}
-  - {fileID: 1881535789}
-  - {fileID: 1404925706}
-  - {fileID: 1470891571}
   - {fileID: 625561312}
   - {fileID: 327885908}
   - {fileID: 1402827275}

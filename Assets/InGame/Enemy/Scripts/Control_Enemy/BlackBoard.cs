@@ -82,5 +82,9 @@ namespace Enemy.Control
 
         // 読み取り専用黒板で使う。
         public bool IsAlive => Hp > 0;
+
+        // BrokenStateクラスもしくはEscapeStateクラスが書き込む。
+        // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。
+        public bool IsExitCompleted { get; set; }
     }
 }
