@@ -26,7 +26,6 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     public override void OnSkip()
     {
         _playerStoryEvent.StartChaseScene();
-        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
     }
 
     public override async UniTask PlaySequenceAsync(CancellationToken ct)
@@ -45,7 +44,6 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
         await UniTask.WaitUntil(() => _tutorialEnemy.BlackBoard.IsApproachCompleted, cancellationToken: cancellationToken);
         _playerStoryEvent.StartChaseScene();
         _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
-        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
         
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
@@ -56,9 +54,10 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
         
         Debug.Log("Shooooooooot!");
         _tutorialEnemy.Attack();
-        _tutorialEnemy.Pause();
-
+        
         await UniTask.WaitForSeconds(_shootWaitSec, cancellationToken: cancellationToken);
+
+        _tutorialEnemy.Pause();
 
         Debug.Log("レバーかスペースキーを押してください");
         // 特定の入力を受けたらPauseを回避する

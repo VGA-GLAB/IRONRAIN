@@ -45,12 +45,12 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
             await UniTask.WaitForSeconds(_qteAwaitTimeSec, cancellationToken: ct);
 
             /* QTE開始、成功をawait */
-            await RepeatQTE(id);
+            await RepeatQTE();
         }
     }
 
     /// <summary>QTEイベントの成功を待つ</summary>
-    public async UniTask RepeatQTE(System.Guid id)
+    public async UniTask RepeatQTE()
     {
         // 比較用
         QTEResultType result = QTEResultType.Failure;
@@ -58,7 +58,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
         // 成功するまでQTEを繰り返す
         while (result != QTEResultType.Success)
         {
-            result = await _playerQTEModel.StartQTE(id);
+            result = await _playerQTEModel.StartQTE(new System.Guid());
         }
     }
 }
