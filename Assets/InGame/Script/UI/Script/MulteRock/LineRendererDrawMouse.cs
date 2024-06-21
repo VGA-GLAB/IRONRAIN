@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace mouse
 {
-    public class LineRendererDraw : MonoBehaviour, IDragHandler, IPointerUpHandler
+    public class LineRendererDraw : MonoBehaviour, IPointerDownHandler,IDragHandler, IPointerUpHandler
     {
         [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
         [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
@@ -17,18 +17,15 @@ namespace mouse
         /// <summary>ボタンを押しているかのフラグ </summary>
         private bool IsInput = false;
 
-
-        private void Start()
-        {
-            InputProvider.Instance.SetEnterInput(InputProvider.InputType.LeftTrigger, LineStart);
-            InputProvider.Instance.SetExitInput(InputProvider.InputType.LeftTrigger, LineEnd);
-        }
-
         public void OnDrag(PointerEventData eventData)
         {
             var rayStartPosition = _origin.transform.position;
+            var mousePos = Input.mousePosition;
+            mousePos.z = 1f;
             //マウスでRayを飛ばす方向を決める
-            var direction = _origin.transform.forward;
+            var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            var direction = (worldMousePos - rayStartPosition).normalized;
+            Debug.Log(direction);
             //Hitしたオブジェクト格納用
             RaycastHit hit;
             if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
@@ -39,6 +36,7 @@ namespace mouse
                 SetPosition(pos);
                 Debug.Log("線を書く");
             }
+            
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -94,7 +92,10 @@ namespace mouse
             Debug.Log("線を消す");
         }
 
-        
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            
+        }
     }
 }
 

@@ -96,7 +96,6 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             _currentLane++;
             if (_currentLane == _params.RestrictionLane) _savePos = _transform.position;
         }
-        Debug.Log(_currentLane);
     }
 
     /// <summary>
