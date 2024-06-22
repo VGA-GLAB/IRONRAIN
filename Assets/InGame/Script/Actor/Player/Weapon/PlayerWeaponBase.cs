@@ -44,7 +44,6 @@ public abstract class PlayerWeaponBase : MonoBehaviour
             _isFire = true;
         }
     }
-
     public virtual void Shot()
     {
         if (_isFire && 0 < _currentBullets && !_isReload)
@@ -64,6 +63,24 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         if (_currentBullets == 0)
         {
             Reload();
+        }
+    }
+
+
+    /// <summary>
+    /// マルチショット
+    /// </summary>
+    public void MulchShot()
+    {
+        var lockOnEnemys = _playerEnvroment.RaderMap.MultiLockEnemys;
+
+        for (int i = 0; i < lockOnEnemys.Count; i++)
+        {
+            var obj = Object.Instantiate(_bulletPrefab, _bulletInsPos.position, Quaternion.identity);
+            obj.GetComponent<BulletCon>().SetUp(
+                _playerEnvroment.RaderMap.MultiLockEnemys[i],
+                _params.ShotDamage,
+                _playerEnvroment.PlayerTransform.forward);
         }
     }
 
