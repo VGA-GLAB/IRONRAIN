@@ -71,6 +71,12 @@ public class PlayerWeaponModel : IPlayerStateModel
         _playerWeaponList[_currentWeaponIndex].Shot();
     }
 
+    public void MulchShot() 
+    {
+        _playerWeaponList[_currentWeaponIndex].MulchShot();
+    }
+
+
     public void Dispose()
     {
 
