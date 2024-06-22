@@ -61,7 +61,10 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
     {
         ThrusterMove();
 
-        _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonMoveForward)) 
+        {
+            _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
+        }
         _rb.velocity += transform.right * ReturnLaneStrength();
     }
 
