@@ -76,8 +76,8 @@ namespace Enemy.Control
             // ステートマシンを更新。
             _currentState = _currentState.Update(_stateTable);
 
-            // ステート内で退場完了フラグが黒板に書き込まれた場合は、これ以上更新しなくて良い。
-            if (_blackBoard.IsExitCompleted) return Result.Complete;
+            // ステート内で後始末の準備完了フラグが立った場合は、これ以上更新しなくて良い。
+            if (_blackBoard.IsCleanupReady) return Result.Complete;
             else return Result.Running;
         }
 

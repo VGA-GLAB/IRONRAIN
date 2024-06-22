@@ -123,6 +123,9 @@ namespace Enemy.Control.Boss
 
             // 展開中に状態を変更
             _state = State.Expanded;
+
+            // レーダーに表示する。
+            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
         }
 
         /// <summary>
@@ -146,6 +149,9 @@ namespace Enemy.Control.Boss
 
             // 撃破された際の演出
             if (_defeatedEffect != null) _defeatedEffect.Play(_boss.BlackBoard);
+
+            // レーダーから消す。
+            if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
         }
     }
 }

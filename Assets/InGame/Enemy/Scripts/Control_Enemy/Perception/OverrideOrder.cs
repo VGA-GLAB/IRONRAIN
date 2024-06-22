@@ -11,7 +11,7 @@ namespace Enemy.Control
     public class OverrideOrder
     {
         // 同フレーム内で処理できる命令の最大数。
-        const int OrderCapacity = 3;
+        const int OrderCapacity = 6;
 
         private BlackBoard _blackBoard;
 
