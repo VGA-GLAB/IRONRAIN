@@ -5,6 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public sealed class InGameManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public sealed class InGameManager : MonoBehaviour
 
     [SerializeField] private AbstractSequenceBase[] _sequences = default;
     private AbstractSequenceBase _currentSequence;
+
+    [SerializeField] private string _startSceneName = "StartScene";
 
 
     public interface IProvidePlayerInformation
@@ -43,5 +46,7 @@ public sealed class InGameManager : MonoBehaviour
                 await _sequences[i].PlaySequenceAsync(ct);
             }
         }
+
+        SceneManager.LoadScene(_startSceneName);
     }
 }
