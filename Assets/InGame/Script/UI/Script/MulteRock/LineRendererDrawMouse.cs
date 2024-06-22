@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace mouse
@@ -9,6 +10,7 @@ namespace mouse
         [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
         [SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
         [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
+        private MouseMultilockSystem _mouseMultilockSystem;
 
         /// <summary>頂点の数 </summary>
         private int _posCount = 0;
@@ -17,6 +19,10 @@ namespace mouse
         /// <summary>ボタンを押しているかのフラグ </summary>
         private bool IsInput = false;
 
+        private void Start()
+        {
+            _mouseMultilockSystem = FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
+        }
         public void OnDrag(PointerEventData eventData)
         {
             var rayStartPosition = _origin.transform.position;
@@ -25,7 +31,6 @@ namespace mouse
             //マウスでRayを飛ばす方向を決める
             var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
             var direction = (worldMousePos - rayStartPosition).normalized;
-            //Debug.Log(direction);
             //Hitしたオブジェクト格納用
             RaycastHit hit;
             if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
