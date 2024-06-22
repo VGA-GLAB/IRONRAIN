@@ -27,6 +27,7 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
     {
         _playerStoryEvent.StartChaseScene();
         _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonMoveForward);
     }
 
     public override async UniTask PlaySequenceAsync(CancellationToken ct)
@@ -46,6 +47,7 @@ public sealed class FirstAnnounceSequence : AbstractSequenceBase
         _playerStoryEvent.StartChaseScene();
         _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
         _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonMoveForward);
         
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
 
