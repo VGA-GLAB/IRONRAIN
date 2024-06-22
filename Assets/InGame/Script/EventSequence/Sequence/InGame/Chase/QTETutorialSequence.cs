@@ -20,6 +20,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
     private void Start()
     {
         _playerQTEModel = _playerCon.SeachState<PlayerQTE>().QTEModel;
+        _playerCon.PlayerEnvroment.RemoveState(PlayerStateType.NonMoveForward);
     }
 
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
@@ -48,6 +49,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
             await RepeatQTE(id);
         }
         _playerCon.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
+        _playerCon.PlayerEnvroment.RemoveState(PlayerStateType.NonMoveForward);
     }
 
     /// <summary>QTEイベントの成功を待つ</summary>
