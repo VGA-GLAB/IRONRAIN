@@ -63,6 +63,8 @@ public sealed class TutorialTextBoxController : MonoBehaviour
                 _textBox.enabled = false;
             })
             .ToUniTask(cancellationToken: cancellationToken);
+        
+        ClearText();
     }
 
     public void ClearText() => _textUI.text = "";
