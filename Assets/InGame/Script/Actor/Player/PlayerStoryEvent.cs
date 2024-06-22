@@ -72,7 +72,7 @@ public class PlayerStoryEvent : PlayerComponentBase
     public bool GoalCenterPoint()
     {
         if (_playerEnvroment.PlayerTransform.position.x - 20 < _centerPoint.position.x
-            && _playerEnvroment.PlayerTransform.position.x + 5 > _centerPoint.position.x)
+            && _playerEnvroment.PlayerTransform.position.x + 30 > _centerPoint.position.x)
         {
             Debug.Log("ついた");
             return true;
