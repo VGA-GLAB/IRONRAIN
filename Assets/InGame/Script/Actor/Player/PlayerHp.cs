@@ -8,8 +8,9 @@ public class PlayerHp : MonoBehaviour, IDamageable
 {
     public event Action OnDownEvent;
     [SerializeField] Camera _mainCamera;
-    [SerializeField] float _time;
-    [SerializeField] float _strength;  
+    [SerializeField] private float _time;
+    [SerializeField] private float _strength;
+    [SerializeField] private HpManager _hpManager;
 
     private int _hp;
     private PlayerEnvroment _playerEnvroment;
@@ -25,6 +26,7 @@ public class PlayerHp : MonoBehaviour, IDamageable
         _hp = Mathf.Max(_hp - value, 0);
         Debug.Log("ダメージを受けた");
         _mainCamera.DOShakePosition(_time, _strength);
+        _hpManager.BodyDamage(value);
         if (_hp == 0) 
         {
             OnDownEvent?.Invoke();
