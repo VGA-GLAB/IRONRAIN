@@ -44,16 +44,14 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
                 (() =>(_playerCon.transform.position - _enemies[0].transform.position).sqrMagnitude < _qteStartDis,
                 PlayerLoopTiming.Update,
                 ct);
-            Debug.Log("近づいた");
             /* QTE開始、成功をawait */
-            await RepeatQTE();
+            await RepeatQTE(id);
         }
-        Debug.Log("終わった");
         _playerCon.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
     }
 
     /// <summary>QTEイベントの成功を待つ</summary>
-    public async UniTask RepeatQTE()
+    public async UniTask RepeatQTE(System.Guid id)
     {
         // 比較用
         QTEResultType result = QTEResultType.Failure;
@@ -61,7 +59,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
         // 成功するまでQTEを繰り返す
         while (result != QTEResultType.Success)
         {
-            result = await _playerQTEModel.StartQTE(new System.Guid());
+            result = await _playerQTEModel.StartQTE(id);
         }
     }
 }
