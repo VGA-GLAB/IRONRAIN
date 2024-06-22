@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,10 +41,12 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
+    private MouseMultilockSystem _mouseMultilockSystem;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
+        _mouseMultilockSystem = GameObject.FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
     }
 
     void Update()
@@ -77,9 +80,12 @@ public class RaderMap : MonoBehaviour
         var enemyUi = Instantiate(agent.Image, _center.transform.parent);
         var uiObj = enemyUi.gameObject.GetComponent<EnemyUi>();
         uiObj.Enemy = enemy;
-        EnemyMaps.Add(enemy, enemyUi);
-        agent.RectTransform = enemyUi.GetComponent<RectTransform>();
-        _enemys.Add(enemy);
+        if (!EnemyMaps.ContainsKey(enemy))
+        {
+            EnemyMaps.Add(enemy, enemyUi);
+            agent.RectTransform = enemyUi.GetComponent<RectTransform>();
+            _enemys.Add(enemy);
+        }
     }
 
     /// <summary>
@@ -88,10 +94,17 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        Destroy(EnemyMaps[enemy].gameObject);
+        if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
+        {
+            _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+        }
+
+        if (EnemyMaps.ContainsKey(enemy))
+        {
+            Destroy(EnemyMaps[enemy].gameObject);
+        }
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
-        NearEnemyLockon(); 
     }
 
     /// <summary>
@@ -199,6 +212,8 @@ public class RaderMap : MonoBehaviour
             //全てのエネミーのロックオンを外す
             ResetUi();
             //パネルタッチでのロックオン状態にする
+            if (!EnemyMaps.ContainsKey(enemyAgent.gameObject))
+                return;
             enemyAgent.IsDefault = false;
             enemyAgent.IsRockon = true;
             EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
@@ -239,7 +254,7 @@ public class RaderMap : MonoBehaviour
     // <summary>
     // マルチロックオン処理
     // </summary>
-    public void MultiLockon(List<GameObject> enemys)
+    public void MultiLockon(HashSet<GameObject> enemys)
     {
         //全てのエネミーのロックオンを外す
         ResetUi();
@@ -248,6 +263,8 @@ public class RaderMap : MonoBehaviour
 
         foreach (var enemy in enemys)
         {
+            if (!EnemyMaps.ContainsKey(enemy))
+                continue;
             var agentScript = enemy.GetComponent<AgentScript>();
             _multiLockEnemys.Add(enemy);
             agentScript.IsRockon = true;
