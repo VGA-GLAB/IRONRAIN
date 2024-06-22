@@ -43,7 +43,7 @@ public class PlayerQTEModel : IPlayerStateModel
         }
     }
 
-    public async UniTask<QTEResultType> StartQTE(System.Guid enemyId)
+    public async UniTask<QTEResultType> StartQTE(System.Guid enemyId, QteType qteType)
     {
         _enemyId = enemyId;
         QTEResultType qteResult = QTEResultType.Failure;
@@ -54,7 +54,19 @@ public class PlayerQTEModel : IPlayerStateModel
 
         try
         {
-            qteResult = await QTE(endCts, startToken);
+            if (qteType == QteType.NormalQte)
+            {
+                qteResult = await QTE(endCts, startToken);
+            }
+            else if (qteType == QteType.BossQte1)
+            {
+                qteResult = await BossQTE1(endCts, startToken);
+            }
+            else if (qteType == QteType.BossQte2) 
+            {
+                qteResult = await BossQTE2(endCts, startToken);
+            }
+            
             qteResult = await QTEFailureJudgment(startCts, endToken);
         }
         catch 
@@ -118,8 +130,9 @@ public class PlayerQTEModel : IPlayerStateModel
     /// <param name="endCts"></param>
     /// <param name="startToken"></param>
     /// <returns></returns>
-    public async UniTask BossQTE1(CancellationTokenSource endCts, CancellationToken startToken)
+    public async UniTask<QTEResultType> BossQTE1(CancellationTokenSource endCts, CancellationToken startToken)
     {
+        _qteResultType = QTEResultType.Failure;
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
@@ -142,12 +155,15 @@ public class PlayerQTEModel : IPlayerStateModel
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
-            Debug.Log("QTEキャンセル");
+
+            _qteResultType = QTEResultType.Success;
             endCts.Cancel();
+            return _qteResultType;
         }
+        return _qteResultType;
     }
 
-    public async UniTask BossQTE2(CancellationTokenSource endCts, CancellationToken startToken)
+    public async UniTask<QTEResultType> BossQTE2(CancellationTokenSource endCts, CancellationToken startToken)
     {
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
@@ -176,9 +192,12 @@ public class PlayerQTEModel : IPlayerStateModel
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
-            Debug.Log("QTEキャンセル");
+
+            _qteResultType = QTEResultType.Success;
             endCts.Cancel();
+            return _qteResultType;
         }
+        return _qteResultType;
     }
 
     /// <summary>

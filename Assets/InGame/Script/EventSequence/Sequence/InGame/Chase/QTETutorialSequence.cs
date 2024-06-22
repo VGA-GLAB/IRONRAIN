@@ -59,7 +59,7 @@ public sealed class QTETutorialSequence : AbstractSequenceBase
         // 成功するまでQTEを繰り返す
         while (result != QTEResultType.Success)
         {
-            result = await _playerQTEModel.StartQTE(id);
+            result = await _playerQTEModel.StartQTE(id, QteType.NormalQte);
         }
     }
 }
