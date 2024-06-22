@@ -17,4 +17,6 @@ public enum PlayerStateType
     NonAttack = 32,
     /// <summary>Qte不可</summary>
     NonQte = 64,
+    /// <summary>前進不可</summary>
+    NonMoveForward = 128,
 }
