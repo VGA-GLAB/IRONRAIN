@@ -10,7 +10,7 @@ namespace Enemy.Control.Boss
     /// 一時的に画面から消して動作を止めたい場合: xxx
     /// これ以上動かさず、削除する場合: xxx
     /// </summary>
-    public class BossController : MonoBehaviour
+    public class BossController : MonoBehaviour, IDamageable
     {
         [Header("プランナーが弄る値")]
         [SerializeField] private BossParams _params;
@@ -169,6 +169,14 @@ namespace Enemy.Control.Boss
         public void Order(EnemyOrder order)
         {
             _overrideOrder.Buffer(order);
+        }
+
+        /// <summary>
+        /// ダメージ処理。
+        /// </summary>
+        public void Damage(int value, string weapon = "")
+        {
+            // 時間でシーケンスが進行するため何もしない。
         }
     }
 }
