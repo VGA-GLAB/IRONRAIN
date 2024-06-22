@@ -26,13 +26,13 @@ namespace Enemy.Control
 
         public BodyController(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
             Transform offset, Transform rotate, Renderer[] renderers, Animator animator, Effect[] effects,
-            Collider damageHitBox)
+            Collider[] hitBoxes)
         {
             _blackBoard = blackBoard;
             _animator = animator;
 
             // 各ステートにTransformやアニメーション、演出を操作するクラスを渡す。
-            Body body = new Body(transform, offset, rotate, renderers, damageHitBox);
+            Body body = new Body(transform, offset, rotate, renderers, hitBoxes);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
             Effector effector = new Effector(effects);
             _stateTable = new Dictionary<StateKey, State>
