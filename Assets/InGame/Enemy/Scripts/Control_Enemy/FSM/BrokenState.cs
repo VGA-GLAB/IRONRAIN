@@ -15,6 +15,8 @@ namespace Enemy.Control.FSM
         private BodyAnimation _animation;
         private Effector _effector;
 
+        // 画面に表示された状態で死亡したかどうかで演出を再生するかどうかを決める。
+        private bool _isRendererEnabledOnEnter;
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;
 
@@ -36,6 +38,9 @@ namespace Enemy.Control.FSM
 
         protected override void Enter()
         {
+            // 画面に表示されていない状態で死亡したかチェック
+            _isRendererEnabledOnEnter = _body.IsRendererEnabled();
+
             _isPlaying = false;
             _exitElapsed = 0;
         }
@@ -46,9 +51,21 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            // 画面に表示されていない状態で死亡した場合、死亡演出を再生しない。
-            if (!_body.IsRendererEnabled()) return;
+            // ステートの開始から少し経ったら後始末の準備完了フラグを立てる。
+            _exitElapsed += _blackBoard.PausableDeltaTime;
+            if (_exitElapsed > 1.5f) // 値は適当。
+            {
+                _blackBoard.IsCleanupReady = true;
+            }
 
+            // Enterのタイミングで画面に表示されていたかで処理を分ける。
+            if (_isRendererEnabledOnEnter) StayRendererEnabledOnEnter();
+            else StayRendererDisabledOnEnter();
+        }
+
+        // Enterのタイミングで画面に表示されていた場合。
+        private void StayRendererEnabledOnEnter()
+        {
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;
             _isPlaying = true;
@@ -70,17 +87,15 @@ namespace Enemy.Control.FSM
             _effector.Play(EffectKey.Destroyed, _blackBoard);
 #endif
 
-            // ダメージの当たり判定を消す。
+            // 当たり判定を消す。
             _body.HitBoxEnable(false);
+        }
 
-            // 死亡演出が終わるまで待つ。
-            _exitElapsed += _blackBoard.PausableDeltaTime;
-            if (_exitElapsed > 2.0f) // 値は適当。
-            {
-                _blackBoard.IsExitCompleted = true;
-            }
-
-            /* 必要に応じて再生後にアイドル状態に戻るような処理を入れても可。 */
+        // Enterのタイミングで画面に表示されていなかった場合。
+        private void StayRendererDisabledOnEnter()
+        {
+            // 即座に後始末の準備完了フラグを立てる。
+            _blackBoard.IsCleanupReady = true;
         }
     }
 }

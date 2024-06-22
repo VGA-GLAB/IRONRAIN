@@ -156,7 +156,7 @@ namespace Enemy.Control
         {
             // レーダーから消す。
             if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
-
+            
             // Perception
             _perception.Dispose();
 
@@ -231,7 +231,7 @@ namespace Enemy.Control
         /// </summary>
         public void Damage(int value, string weapon)
         {
-            _hitPoint?.Damage(value, weapon);
+            _hitPoint.Damage(value, weapon);
         }
     }
 }

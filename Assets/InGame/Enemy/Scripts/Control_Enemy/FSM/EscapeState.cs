@@ -53,10 +53,10 @@ namespace Enemy.Control.FSM
                 if (plan.Choice == Choice.Escape) _body.Forward(plan.Forward);
             }
 
-            // 画面から消えた場合は後処理を呼んでも問題ない。
+            // 画面から消えた場合は後始末の処理を呼んでも問題ない。
             while (_blackBoard.ActionPlans.TryDequeue(out ActionPlan plan))
             {
-                if (plan.Choice == Choice.Hide) _blackBoard.IsExitCompleted = true;
+                if (plan.Choice == Choice.Hide) _blackBoard.IsCleanupReady = true;
             }
         }
     }

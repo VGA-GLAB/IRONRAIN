@@ -1,6 +1,4 @@
 ﻿using Enemy.Control.Boss;
-using Meta.Voice;
-using SerializableCallback;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
@@ -180,7 +178,8 @@ namespace Enemy.Control
         {
             foreach (EnemyController e in _enemies)
             {
-                if (e.Params.Sequence == sequence) e.Damage(int.MaxValue, "");
+                // 極大ダメージを与えて体力を0にする。
+                if (e.Params.Sequence == sequence) e.Damage(int.MaxValue / 2, "");
             }
         }
 

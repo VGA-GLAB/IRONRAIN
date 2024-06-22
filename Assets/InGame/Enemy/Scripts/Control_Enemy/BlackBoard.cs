@@ -82,7 +82,7 @@ namespace Enemy.Control
 
         // BrokenStateクラスもしくはEscapeStateクラスが書き込む。
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。
-        public bool IsExitCompleted { get; set; }
+        public bool IsCleanupReady { get; set; }
 
         // 読み取り専用黒板で使う。
         public bool IsAlive => Hp > 0;
