@@ -44,6 +44,7 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
         _playerController.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
         _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
         //敵を消して終了
+        _enemyManager.Resume(EnemyManager.Sequence.TouchPanel);
         _enemyManager.DefeatThemAll(EnemyManager.Sequence.TouchPanel);
     }
     
