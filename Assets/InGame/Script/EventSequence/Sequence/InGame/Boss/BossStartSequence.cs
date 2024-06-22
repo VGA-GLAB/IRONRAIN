@@ -8,6 +8,12 @@ public sealed class BassStartSequence : AbstractSequenceBase
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private EnemyManager _enemyManager;
 
+    public override void OnSkip()
+    {
+        _playerController.SeachState<PlayerStoryEvent>().BossStart();
+        _enemyManager.BossStart();
+    }
+
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
     {
         //Bossの起動処理
