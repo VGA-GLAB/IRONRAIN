@@ -20,7 +20,7 @@ namespace Enemy.Control
         [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Animator _animator;
         [SerializeField] private Effect[] _effects;
-        [SerializeField] private Collider _damageHitBox;
+        [SerializeField] private Collider[] _hitBoxes;
         [SerializeField] private Equipment _equipment;
 
         // 注入する依存関係。
@@ -83,7 +83,7 @@ namespace Enemy.Control
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
             _bodyController = new BodyController(transform, _params, _blackBoard, _offset, _rotate, _renderers, 
-                _animator, _effects, _damageHitBox);
+                _animator, _effects, _hitBoxes);
 
 #if UNITY_EDITOR
             _debugStatusUI = new DebugStatusUI(transform, _params, _blackBoard);
@@ -196,7 +196,7 @@ namespace Enemy.Control
 
         /// <summary>
         /// 外部から敵の行動を制御する。
-        /// /// </summary>
+        /// </summary>
         public void Order(EnemyOrder order)
         {
             _overrideOrder.Buffer(order);

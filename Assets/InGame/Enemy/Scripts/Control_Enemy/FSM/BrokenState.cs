@@ -71,7 +71,7 @@ namespace Enemy.Control.FSM
 #endif
 
             // ダメージの当たり判定を消す。
-            _body.DamageHitBoxEnable(false);
+            _body.HitBoxEnable(false);
 
             // 死亡演出が終わるまで待つ。
             _exitElapsed += _blackBoard.PausableDeltaTime;

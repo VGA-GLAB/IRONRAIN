@@ -13,16 +13,16 @@ namespace Enemy.Control
         private Transform _offset;
         private Transform _rotate;
         private Renderer[] _renderers;
-        private Collider _damageHitBox;
+        private Collider[] _hitBoxes;
 
-        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers, 
-            Collider damageHitBox)
+        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers,
+            params Collider[] hitBoxes)
         {
             _transform = transform;
             _offset = offset;
             _rotate = rotate;
             _renderers = renderers;
-            _damageHitBox = damageHitBox;
+            _hitBoxes = hitBoxes;
         }
 
         /// <summary>
@@ -67,12 +67,15 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// ダメージの当たり判定のみを有効/無効化する。
-        /// 撃破された後、ダメージの判定を残さないために有効。
+        /// 各種当たり判定のみを有効/無効化する。
+        /// 撃破された後、当たり判定を残さないために有効。
         /// </summary>
-        public void DamageHitBoxEnable(bool value)
+        public void HitBoxEnable(bool value)
         {
-            _damageHitBox.enabled = value;
+            foreach (Collider c in _hitBoxes)
+            {
+                c.enabled = value;
+            }
         }
 
 
