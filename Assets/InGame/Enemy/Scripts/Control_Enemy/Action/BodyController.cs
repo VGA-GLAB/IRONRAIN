@@ -48,7 +48,7 @@ namespace Enemy.Control
             State battleState = null;
             if (enemyParams.Type == EnemyType.MachineGun)
             {
-                battleState = new BattleByMachineGunState(blackBoard, body, bodyAnimation);
+                battleState = new BattleByMachineGunState(enemyParams, blackBoard, body, bodyAnimation);
             }
             else if (enemyParams.Type == EnemyType.Launcher)
             {
@@ -76,7 +76,9 @@ namespace Enemy.Control
             // ステートマシンを更新。
             _currentState = _currentState.Update(_stateTable);
 
-            return Result.Running; // <- 必要に応じて修正する。
+            // ステート内で退場完了フラグが黒板に書き込まれた場合は、これ以上更新しなくて良い。
+            if (_blackBoard.IsExitCompleted) return Result.Complete;
+            else return Result.Running;
         }
 
         /// <summary>
