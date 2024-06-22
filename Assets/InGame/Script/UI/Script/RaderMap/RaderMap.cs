@@ -18,7 +18,6 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
-    [SerializeField, Tooltip("マルチロック距離")] private float _multilockDis = 10f;
     /// <summary>Centerからのオフセット</summary>
     private Vector3 _offset;
     /// <summary>現在ロックされているエネミー</summary>
@@ -159,7 +158,7 @@ public class RaderMap : MonoBehaviour
         if(_nowRockEnemy != null)
         {
             var agent = _nowRockEnemy.GetComponent<AgentScript>();
-            if (!agent.IsDefault)
+            if (!agent.IsDefault && IsVisible(agent.gameObject))
                 return;
         }
 
