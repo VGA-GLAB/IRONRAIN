@@ -80,9 +80,12 @@ public class RaderMap : MonoBehaviour
         var enemyUi = Instantiate(agent.Image, _center.transform.parent);
         var uiObj = enemyUi.gameObject.GetComponent<EnemyUi>();
         uiObj.Enemy = enemy;
-        EnemyMaps.Add(enemy, enemyUi);
-        agent.RectTransform = enemyUi.GetComponent<RectTransform>();
-        _enemys.Add(enemy);
+        if (!EnemyMaps.ContainsKey(enemy))
+        {
+            EnemyMaps.Add(enemy, enemyUi);
+            agent.RectTransform = enemyUi.GetComponent<RectTransform>();
+            _enemys.Add(enemy);
+        }
     }
 
     /// <summary>
@@ -91,11 +94,17 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
-        Destroy(EnemyMaps[enemy].gameObject);
+        if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
+        {
+            _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+        }
+
+        if (EnemyMaps.ContainsKey(enemy))
+        {
+            Destroy(EnemyMaps[enemy].gameObject);
+        }
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
-        NearEnemyLockon(); 
     }
 
     /// <summary>
@@ -203,6 +212,8 @@ public class RaderMap : MonoBehaviour
             //全てのエネミーのロックオンを外す
             ResetUi();
             //パネルタッチでのロックオン状態にする
+            if (!EnemyMaps.ContainsKey(enemyAgent.gameObject))
+                return;
             enemyAgent.IsDefault = false;
             enemyAgent.IsRockon = true;
             EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;

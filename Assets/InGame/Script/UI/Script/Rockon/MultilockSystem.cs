@@ -78,7 +78,7 @@ public class MultilockSystem : MonoBehaviour
     private void MultilockAction()
     {
         //格納したエネミーで同じものを削除する
-        //_lockOnEnemy = _lockOnEnemy.Distinct().ToList();
+        //LockOnEnemy = LockOnEnemy.Distinct().ToList();
         if (LockOnEnemy.Count > 0)
         {
             _raderMap.MultiLockon(LockOnEnemy);

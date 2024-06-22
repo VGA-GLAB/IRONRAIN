@@ -6,7 +6,8 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private float _firstDelayTime = 1F;
-    
+    [SerializeField] private PlayerController _playerController;
+    private PlayerWeaponController _playerWeaponController;
     [Header("テキストボックスに関する値")]
     [SerializeField] private float _textBoxOpenAndCloseSec = 0.5F;
     [SerializeField, TextArea] private string _tutorialText = "現在、テストテキストが表示されています";
@@ -18,7 +19,11 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
     [SerializeField] private float _waitAfterAnnounceSec = 1F;
 
     [Header("マルチロックオン")] [SerializeField] private MouseMultilockSystem _mouseMultilockSystem;
-    
+
+    private void Start()
+    {
+        _playerWeaponController = _playerController.SeachState<PlayerWeaponController>();
+    }
     public async override UniTask PlaySequenceAsync(CancellationToken ct)
     {
         await UniTask.WaitForSeconds(_firstDelayTime, cancellationToken: ct);
@@ -43,9 +48,10 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
         _mouseMultilockSystem.MultilockOnStart();
         await ChangeText("敵UIをなぞってマルチロックオンをしてください");//テキストを変える
         await UniTask.WaitUntil(() => !_mouseMultilockSystem.IsMultilock, cancellationToken: cancellationToken);
+        _playerWeaponController.WeaponModel.MulchShot();
         await ChangeText("OK");//テキストを変える
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
-        
+        await UniTask.WaitForSeconds(3, cancellationToken: cancellationToken);
         async UniTask ChangeText(string changeText)
         {
             _textBox.ClearText();

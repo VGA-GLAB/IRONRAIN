@@ -15,7 +15,7 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
     public bool IsMultilock;
 
     /// <summary>敵のUIリスト </summary>
-    private HashSet<GameObject> _lockOnEnemy = new HashSet<GameObject>();
+    public HashSet<GameObject> LockOnEnemy = new HashSet<GameObject>();
 
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
@@ -69,7 +69,7 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
             if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
             {
                 //Debug.Log("uiに当たった");
-                _lockOnEnemy.Add(enemyUi.Enemy);
+                LockOnEnemy.Add(enemyUi.Enemy);
                 _lockUi.Add(enemyUi.gameObject);
             }
         }
@@ -92,13 +92,13 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
         if (IsMultilock)
         {
             //格納したエネミーで同じものを削除する
-            if (_lockOnEnemy.Count > 0)
+            if (LockOnEnemy.Count > 0)
             {
-                //_lockOnEnemy = _lockOnEnemy.Distinct().ToList();
-                _raderMap.MultiLockon(_lockOnEnemy);
+                //LockOnEnemy = LockOnEnemy.Distinct().ToList();
+                _raderMap.MultiLockon(LockOnEnemy);
             }
             IsMultilock = false;
-            _lockOnEnemy.Clear();
+            LockOnEnemy.Clear();
         }
     }
 
@@ -117,17 +117,17 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(_lockOnEnemy.Count > 1)
+        if(LockOnEnemy.Count > 1)
             EndMultilockAction();
         else
-            _lockOnEnemy.Clear();
+            LockOnEnemy.Clear();
 
         _lockUi.Clear();
     }
 
     public void EnemyDestory(GameObject enemy)
     {
-        _lockOnEnemy.Remove(enemy);
+        LockOnEnemy.Remove(enemy);
         _lockUi.Remove(enemy);
     }
 }
