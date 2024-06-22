@@ -25,7 +25,7 @@ namespace mouse
             //マウスでRayを飛ばす方向を決める
             var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
             var direction = (worldMousePos - rayStartPosition).normalized;
-            Debug.Log(direction);
+            //Debug.Log(direction);
             //Hitしたオブジェクト格納用
             RaycastHit hit;
             if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
@@ -34,7 +34,7 @@ namespace mouse
                 //pos.z = _panel.transform.position.z;
                 //SetPosition(Camera.main.ScreenToWorldPoint(pos));
                 SetPosition(pos);
-                Debug.Log("線を書く");
+                //Debug.Log("線を書く");
             }
             
         }
@@ -52,7 +52,7 @@ namespace mouse
         {
             if (!PosCheck(pos))
             {
-                Debug.Log("だめ");
+                //Debug.Log("だめ");
                 return;
             }
             _posCount++;
@@ -89,7 +89,7 @@ namespace mouse
             _lineRenderer.positionCount = 0;
             _posCount = 0;
             IsInput = false;
-            Debug.Log("線を消す");
+           // Debug.Log("線を消す");
         }
 
         public void OnPointerDown(PointerEventData eventData)
