@@ -7,6 +7,7 @@ public sealed class AttackSequence : AbstractSequenceBase
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private EnemyManager _enemyManager = default;
+    [SerializeField] private PlayerController _playerController = default;
 
     [Header("テキストボックスに関する値")]
     [SerializeField] private float _textBoxOpenAndCloseSec = 0.5F;
@@ -26,8 +27,15 @@ public sealed class AttackSequence : AbstractSequenceBase
         // 攻撃の仕方をオペレーターが喋る
         await Announce(ct);
 
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
+
         // 実際に1機倒す
         await UniTask.WaitUntil(() => _enemyManager.IsAllDefeated(EnemyManager.Sequence.Attack));
+    }
+
+    public override void OnSkip()
+    {
+        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
     }
 
     /// <summary>アナウンスとTextBoxの更新を同時に行う関数</summary>
