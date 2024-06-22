@@ -29,7 +29,6 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
 
         //プレイヤーの攻撃、移動不可にする
         _playerController.PlayerEnvroment.AddState(PlayerStateType.Inoperable);
-        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
         //敵を複数体出現させる
         _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
         _enemyManager.Pause(EnemyManager.Sequence.TouchPanel);
@@ -42,7 +41,6 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
 
         //プレイヤーを動けるようにする
         _playerController.PlayerEnvroment.RemoveState(PlayerStateType.Inoperable);
-        _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
         //敵を消して終了
         _enemyManager.Resume(EnemyManager.Sequence.TouchPanel);
         _enemyManager.DefeatThemAll(EnemyManager.Sequence.TouchPanel);

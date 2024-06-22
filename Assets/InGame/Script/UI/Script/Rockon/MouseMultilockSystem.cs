@@ -26,15 +26,6 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
         _raderMap = GameObject.FindObjectOfType(typeof(RaderMap)).GetComponent<RaderMap>();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (IsMultilock)
-        {
-            SerchEnemy();
-        }
-    }
-
 
     /// <summary>
     /// エネミーを探す処理
@@ -103,6 +94,9 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        EndMultilockAction();
+        if(LockOnEnemy.Count > 1)
+            EndMultilockAction();
+        else
+            LockOnEnemy.Clear();  
     }
 }
