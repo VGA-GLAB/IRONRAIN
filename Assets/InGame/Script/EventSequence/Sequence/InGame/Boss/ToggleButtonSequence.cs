@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -41,13 +41,9 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
         );
         //マルチロックフラグがオンになる
         _mouseMultilockSystem.MultilockOnStart();
-        
-        
-        await UniTask.WhenAll(
-            //マルチロック処理
-            UniTask.WaitUntil(() => _mouseMultilockSystem.IsMultilock == false, cancellationToken: cancellationToken),
-            ChangeText("OK") //テキストを変える
-        );
+        await ChangeText("敵UIをなぞってマルチロックオンをしてください");//テキストを変える
+        await UniTask.WaitUntil(() => !_mouseMultilockSystem.IsMultilock, cancellationToken: cancellationToken);
+        await ChangeText("OK");//テキストを変える
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
         
         async UniTask ChangeText(string changeText)

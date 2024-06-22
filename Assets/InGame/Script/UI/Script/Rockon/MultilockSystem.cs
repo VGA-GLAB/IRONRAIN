@@ -10,7 +10,7 @@ public class MultilockSystem : MonoBehaviour
     public bool IsMultilock;
 
     /// <summary>敵のUIリスト </summary>
-    private List<GameObject> LockOnEnemy;
+    private HashSet<GameObject> LockOnEnemy;
 
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
@@ -78,7 +78,7 @@ public class MultilockSystem : MonoBehaviour
     private void MultilockAction()
     {
         //格納したエネミーで同じものを削除する
-        LockOnEnemy = LockOnEnemy.Distinct().ToList();
+        //_lockOnEnemy = _lockOnEnemy.Distinct().ToList();
         if (LockOnEnemy.Count > 0)
         {
             _raderMap.MultiLockon(LockOnEnemy);

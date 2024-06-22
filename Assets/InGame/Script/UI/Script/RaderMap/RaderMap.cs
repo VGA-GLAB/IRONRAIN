@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,10 +41,12 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
+    private MouseMultilockSystem _mouseMultilockSystem;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
+        _mouseMultilockSystem = GameObject.FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
     }
 
     void Update()
@@ -88,6 +91,7 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
+        _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
         Destroy(EnemyMaps[enemy].gameObject);
         EnemyMaps.Remove(enemy);
         _enemys.Remove(enemy);
@@ -239,7 +243,7 @@ public class RaderMap : MonoBehaviour
     // <summary>
     // マルチロックオン処理
     // </summary>
-    public void MultiLockon(List<GameObject> enemys)
+    public void MultiLockon(HashSet<GameObject> enemys)
     {
         //全てのエネミーのロックオンを外す
         ResetUi();
@@ -248,6 +252,8 @@ public class RaderMap : MonoBehaviour
 
         foreach (var enemy in enemys)
         {
+            if (!EnemyMaps.ContainsKey(enemy))
+                continue;
             var agentScript = enemy.GetComponent<AgentScript>();
             _multiLockEnemys.Add(enemy);
             agentScript.IsRockon = true;
