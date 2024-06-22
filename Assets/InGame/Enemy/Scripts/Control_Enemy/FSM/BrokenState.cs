@@ -18,6 +18,10 @@ namespace Enemy.Control.FSM
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;
 
+        // 死亡演出が終わるまで待つためのタイマー。
+        // 後々はアニメーションの終了にフックするので必要なくなる。
+        private float _exitElapsed;
+
         public BrokenState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, BodyAnimation bodyAnimation, 
             Effector effector)
         {
@@ -33,6 +37,7 @@ namespace Enemy.Control.FSM
         protected override void Enter()
         {
             _isPlaying = false;
+            _exitElapsed = 0;
         }
 
         protected override void Exit()
@@ -62,11 +67,18 @@ namespace Enemy.Control.FSM
             _animation.Play(stateName);
 #elif true
             _body.RendererEnable(false);
-#endif
             _effector.Play(EffectKey.Destroyed, _blackBoard);
+#endif
 
             // ダメージの当たり判定を消す。
             _body.DamageHitBoxEnable(false);
+
+            // 死亡演出が終わるまで待つ。
+            _exitElapsed += _blackBoard.PausableDeltaTime;
+            if (_exitElapsed > 2.0f) // 値は適当。
+            {
+                _blackBoard.IsExitCompleted = true;
+            }
 
             /* 必要に応じて再生後にアイドル状態に戻るような処理を入れても可。 */
         }
