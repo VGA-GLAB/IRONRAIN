@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Enemy.Control;
 
-public sealed class BassStartSequence : AbstractSequenceBase
+public sealed class BossStartSequence : AbstractSequenceBase
 {
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private EnemyManager _enemyManager;
