@@ -87,8 +87,8 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             if (_currentLane == _params.RestrictionLane * -1) 
             {
                 _savePos = _transform.position;
-            } 
-
+            }
+            CriAudioManager.Instance.SE.Play("SE", "SE_Evasion");
         }
         //右スラスター
         else if (_rightController.ControllerDir.x == 1)
@@ -98,6 +98,7 @@ public class PlayerTrackingPhaseMove : PlayerComponentBase
             ThrusterNextPointMove(nextPoint);
             _currentLane++;
             if (_currentLane == _params.RestrictionLane) _savePos = _transform.position;
+            CriAudioManager.Instance.SE.Play("SE", "SE_Evasion");
         }
     }
 
