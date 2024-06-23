@@ -117,11 +117,7 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(LockOnEnemy.Count > 1)
-            EndMultilockAction();
-        else
-            LockOnEnemy.Clear();
-
+        EndMultilockAction();
         _lockUi.Clear();
     }
 
