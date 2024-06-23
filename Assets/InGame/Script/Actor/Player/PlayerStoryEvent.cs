@@ -22,12 +22,15 @@ public class PlayerStoryEvent : PlayerComponentBase
         await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, token);
         await tutorialTextBoxController.DoTextChangeAsync("F3を押せ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle3), PlayerLoopTiming.Update, token);
+        CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
         await tutorialTextBoxController.DoTextChangeAsync("F4を押せ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), PlayerLoopTiming.Update, token);
+        CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
         //右レバーボタン1を押したまま右レバーを押す
         await tutorialTextBoxController.DoTextChangeAsync("WボタンとShiftボタンを押せ", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeLever), PlayerLoopTiming.Update, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
+        CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
         await tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, token);
         Debug.Log("パージ成功");
         //await _playerAnimation.JetpackPurgeAnim();
