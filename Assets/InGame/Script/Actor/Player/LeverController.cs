@@ -36,6 +36,7 @@ public class LeverController : MonoBehaviour
     private Vector3 _controllerMoveDir = new();
     private PlayerSetting _playerSetting;
     private Tween _tween;
+    private bool _isSetUp;
 
     private void Start()
     {
@@ -55,7 +56,8 @@ public class LeverController : MonoBehaviour
 
     void Update()
     {
-      
+        if (!_isSetUp) return;
+
         if (!_playerSetting.IsVRInput && _leverDir != Vector2.zero) 
         {
             _isLeverMove = true;
@@ -79,6 +81,7 @@ public class LeverController : MonoBehaviour
     public void SetUp(PlayerSetting playerSetting) 
     {
         _playerSetting = playerSetting;
+        _isSetUp = true;
     }
 
     /// <summary>
