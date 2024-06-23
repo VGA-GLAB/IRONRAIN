@@ -152,11 +152,11 @@ public class LeverController : MonoBehaviour
         else
         {
             //それ以外
-            if (0.95f <= _leverDir.y)
+            if (0.9f <= _leverDir.y)
             {
                 _controllerDir.z = 1;
             }
-            else if (_leverDir.y < -0.95f)
+            else if (_leverDir.y < -0.90f)
             {
                 _controllerDir.z = -1;
             }
@@ -165,11 +165,11 @@ public class LeverController : MonoBehaviour
                 _controllerDir.z = 0;
             }
 
-            if (0.95f <= _leverDir.x)
+            if (0.9f <= _leverDir.x)
             {
                 _controllerDir.x = 1;
             }
-            else if (_leverDir.x < -0.95f)
+            else if (_leverDir.x < -0.9f)
             {
                 _controllerDir.x = -1;
             }

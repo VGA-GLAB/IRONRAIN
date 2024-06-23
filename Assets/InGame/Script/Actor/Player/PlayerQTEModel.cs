@@ -97,16 +97,16 @@ public class PlayerQTEModel : IPlayerStateModel
 
             _qteType.Value = QTEState.QTE1;
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンを押したまま右レバーまたはマウスホイールを手前に引いた状態にしろ", 0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは右レバーの前ボタンを押したまま右レバーまたはマウスホイールを手前に引いた状態にしろ", 0.5f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
 
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンを押したまま右レバーまたはマウスホイールを奥に押し出すように傾けろ", 0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは右レバーの前ボタンを押したまま右レバーまたはマウスホイールを奥に押し出すように傾けろ", 0.5f, startToken);
             _qteType.Value = QTEState.QTE2;
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
 
-            await tutorialTextBoxController.DoTextChangeAsync("左レバーの後ろのボタンか右クリックを押せ", 0.5f, startToken); 
+            await tutorialTextBoxController.DoTextChangeAsync("右レバーの後ろのボタンか右クリックを押せ", 0.5f, startToken); 
             _qteType.Value = QTEState.QTE3;
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
             _qteType.Value = QTEState.QTENone;
@@ -143,13 +143,13 @@ public class PlayerQTEModel : IPlayerStateModel
 
             _qteType.Value = QTEState.QTE1;
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンを押したまま右レバーまたはマウスホイールを奥に押した状態にする", 0.5f, startToken);
-            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは右レバーの前ボタンを押したまま右レバーまたはマウスホイールを奥に押した状態にする", 0.5f, startToken);
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
 
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンを押したまま右レバーまたはマウスホイールを思いっきり手前に引く", 0.5f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは右レバーの前ボタンを押したまま右レバーまたはマウスホイールを思いっきり手前に引く", 0.5f, startToken);
             _qteType.Value = QTEState.QTE2;
-            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
 
             ProvidePlayerInformation.TimeScale = 1f;
@@ -175,14 +175,14 @@ public class PlayerQTEModel : IPlayerStateModel
 
             _qteType.Value = QTEState.QTE1;
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンを押したまま右レバーまたはマウスホイールを奥に押した状態にする", 0.5f, startToken);
-            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
-            && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
-
-            await tutorialTextBoxController.DoTextChangeAsync("左クリックを押したまま右レバーまたはマウスホイールを思いっきり手前に引く", 0.5f, startToken);
-            _qteType.Value = QTEState.QTE2;
+            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは右レバーの前ボタンを押したまま右レバーまたはマウスホイールを奥に押した状態にする", 0.5f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+
+            await tutorialTextBoxController.DoTextChangeAsync("左クリックまたは左レバーの後ろボタンを押したまま右レバーまたはマウスホイールを思いっきり手前に引く", 0.5f, startToken);
+            _qteType.Value = QTEState.QTE2;
+            await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
+            && InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton), PlayerLoopTiming.Update, startToken);
 
             await tutorialTextBoxController.DoTextChangeAsync("左レバーの後ろのボタンか右クリックを押せ", 0.5f, startToken);
             _qteType.Value = QTEState.QTE3;
