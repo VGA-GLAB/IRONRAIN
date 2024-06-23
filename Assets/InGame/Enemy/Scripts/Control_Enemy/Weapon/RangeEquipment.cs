@@ -80,6 +80,9 @@ namespace Enemy.Control
             // タイミングを更新。
             LastAttackTiming = Time.time;
 
+            // 発射音
+            CriAudioManager.Instance.SE.Play("", "SE_AssaultRifle");
+
             // 前方に撃つ
             void FireToForward()
             {

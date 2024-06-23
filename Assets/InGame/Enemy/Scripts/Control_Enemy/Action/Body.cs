@@ -12,16 +12,16 @@ namespace Enemy.Control
         private Transform _transform;
         private Transform _offset;
         private Transform _rotate;
-        private Renderer[] _renderers;
+        private Transform[] _models;
         private Collider[] _hitBoxes;
 
-        public Body(Transform transform, Transform offset, Transform rotate, Renderer[] renderers,
+        public Body(Transform transform, Transform offset, Transform rotate, Transform[] models,
             params Collider[] hitBoxes)
         {
             _transform = transform;
             _offset = offset;
             _rotate = rotate;
-            _renderers = renderers;
+            _models = models;
             _hitBoxes = hitBoxes;
         }
 
@@ -40,27 +40,27 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// Rendererのみを表示/非表示にする。
+        /// 3Dモデルのみを表示/非表示にする。
         /// 生成後、撃破されていないが画面から消したい場合に有効。
         /// </summary>
-        public void RendererEnable(bool value)
+        public void ModelEnable(bool value)
         {
-            foreach (Renderer r in _renderers)
+            foreach (Transform t in _models)
             {
-                r.enabled = value;
+                t.localScale = value ? Vector3.one : Vector3.zero;
             }
         }
 
         /// <summary>
-        /// Rendererが表示/非表示の状態を返す。
+        /// 3Dモデルが表示/非表示の状態を返す。
         /// </summary>
-        public bool IsRendererEnabled()
+        public bool IsModelEnabled()
         {
-            // RendererEnableメソッドで全てのRendererに対して一括で表示/非表示の処理をしているが
-            // 一応全てのRendererが表示されているか判定する。
-            foreach (Renderer r in _renderers)
+            // ModelEnableメソッドで全ての3Dモデルに対して一括で表示/非表示の処理をしているが
+            // 一応全てが表示されているか判定する。
+            foreach (Transform t in _models)
             {
-                if (!r.enabled) return false;
+                if (t.localScale != Vector3.zero) return false;
             }
 
             return true;

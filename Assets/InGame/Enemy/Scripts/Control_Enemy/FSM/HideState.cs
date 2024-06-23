@@ -22,14 +22,14 @@ namespace Enemy.Control.FSM
 
         protected override void Enter()
         {
-            _body.RendererEnable(false);
+            _body.ModelEnable(false);
         }
 
         protected override void Exit()
         {
             // 生存中ならば画面に表示。
             // 隠れている状態のまま命令によって死亡した場合、1フレームだけ画面に表示されてしまうことを防ぐ。
-            if (_blackBoard.IsAlive) _body.RendererEnable(true);
+            if (_blackBoard.IsAlive) _body.ModelEnable(true);
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)

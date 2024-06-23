@@ -39,7 +39,7 @@ namespace Enemy.Control.FSM
         protected override void Enter()
         {
             // 画面に表示されていない状態で死亡したかチェック
-            _isRendererEnabledOnEnter = _body.IsRendererEnabled();
+            _isRendererEnabledOnEnter = _body.IsModelEnabled();
 
             _isPlaying = false;
             _exitElapsed = 0;
@@ -83,7 +83,7 @@ namespace Enemy.Control.FSM
 #if false
             _animation.Play(stateName);
 #elif true
-            _body.RendererEnable(false);
+            _body.ModelEnable(false);
             _effector.Play(EffectKey.Destroyed, _blackBoard);
 #endif
 

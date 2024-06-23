@@ -17,7 +17,7 @@ namespace Enemy.Control.Boss
         [Header("自身やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
-        [SerializeField] private Renderer[] _renderers;
+        [SerializeField] private Transform[] _models;
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _damageHitBox;
         [SerializeField] private MeleeEquipment _meleeEquipment;
@@ -76,7 +76,7 @@ namespace Enemy.Control.Boss
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
-            _bodyController = new BodyController(transform, _blackBoard, _offset, _rotate, _renderers,
+            _bodyController = new BodyController(transform, _blackBoard, _offset, _rotate, _models,
                 _animator, _damageHitBox, _funnels);
         }
 
