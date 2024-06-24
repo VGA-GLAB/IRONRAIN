@@ -69,6 +69,11 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
             if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
             {
                 //Debug.Log("uiに当たった");
+                if (!LockOnEnemy.Contains(enemyUi.Enemy))
+                {
+                    //ターゲットをロックしたときに出す音
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
+                }
                 LockOnEnemy.Add(enemyUi.Enemy);
                 _lockUi.Add(enemyUi.gameObject);
             }
@@ -104,13 +109,16 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        
+        //パネルに触れた時の音
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (IsMultilock)
         {
+            //多重ロックオン発動時に流れる音
+            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
             SerchEnemy();
         }
     }
