@@ -65,7 +65,7 @@ public class PlayerStoryEvent : PlayerComponentBase
     public void BossStart() 
     {
         _playerEnvroment.SeachState<PlayerTrackingPhaseMove>().enabled = false;
-        _playerEnvroment.SeachState<PlayerMove>().enabled = true;
+        _playerEnvroment.SeachState<PlayerBossMove>().enabled = true;
         _playerEnvroment.ClearState();
     }
 

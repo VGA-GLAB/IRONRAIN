@@ -1,8 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveView : MonoBehaviour
+public class PlayerBossMoveView : MonoBehaviour
 {
     void Start()
     {
