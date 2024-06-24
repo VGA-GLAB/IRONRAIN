@@ -23,10 +23,8 @@ public class AgentScript : MonoBehaviour
 
     private void Awake()
     {
-        var raderMap = GameObject.FindObjectOfType(typeof(RaderMap)).GetComponent<RaderMap>();
         //レーダーテストを検索する
-        if (raderMap != null)
-            RaderMap = raderMap;
+        RaderMap = FindObjectOfType<RaderMap>();
     }
 
     /// <summary>
