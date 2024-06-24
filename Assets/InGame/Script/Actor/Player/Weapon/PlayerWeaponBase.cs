@@ -12,6 +12,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     [SerializeField] protected GameObject _bulletPrefab;
     [SerializeField] protected Transform _bulletInsPos;
     [SerializeField] protected PlayerWeaponParams _params;
+    [SerializeField] protected string _shotSeCueName;
 
     protected bool _isShotInput;
     [Tooltip("現在の弾数")]
@@ -54,6 +55,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
                 _playerEnvroment.RaderMap.GetRockEnemy, 
                 _params.ShotDamage,
                 _playerEnvroment.PlayerTransform.forward);
+
+            CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
 
             _isFire = false;
             _currentTime = 0;
