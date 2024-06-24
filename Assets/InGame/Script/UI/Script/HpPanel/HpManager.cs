@@ -72,6 +72,8 @@ public class HpManager : MonoBehaviour
     /// </summary>
     void PanelFlash()
     {
+        //アラートを鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Alert");
         Image panel = _panelObj.GetComponent<Image>();
         panel.DOFade(_panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
         //DOTween.ToAlpha(() => panel.color, color => panel.color = color, _panelA, _flashInterval).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);

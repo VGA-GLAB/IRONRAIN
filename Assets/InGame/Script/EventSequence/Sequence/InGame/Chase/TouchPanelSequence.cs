@@ -33,6 +33,8 @@ public sealed class TouchPanelSequence : AbstractSequenceBase
         _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
         _enemyManager.Pause(EnemyManager.Sequence.TouchPanel);
         
+        //パネルに指示がでる前兆音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
         //タッチパネルの操作をオペレーターがしゃべる
         await Announce(ct);
         
