@@ -43,6 +43,9 @@ namespace Enemy.Control.FSM
 
             _isPlaying = false;
             _exitElapsed = 0;
+
+            // 撃破されたときの音
+            AudioWrapper.PlaySE("SE_Kill");
         }
 
         protected override void Exit()

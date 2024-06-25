@@ -56,8 +56,8 @@ namespace Enemy.Control
             // 時間が0以下の場合は撤退
             if (_blackBoard.LifeTime <= 0) { _order.Add(Choice.Escape); return _order; }
 
-            // ダメージを受けた場合は怯む
-            if (_blackBoard.CurrentFrameDamage > 0) { _order.Add(Choice.Damaged); return _order; }
+            // ダメージを受けた場合(耐性などで無効化された場合は除く)
+            if (_blackBoard.Damage > 0) { _order.Add(Choice.Damaged); return _order; }
 
             // チュートリアル用の敵の場合
             if (_params.Other.IsTutorial)

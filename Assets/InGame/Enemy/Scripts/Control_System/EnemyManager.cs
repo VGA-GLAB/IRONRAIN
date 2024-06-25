@@ -293,6 +293,18 @@ namespace Enemy.Control
         }
 
         /// <summary>
+        /// ボス戦終了。
+        /// </summary>
+        public void BossEnd()
+        {
+            // 命令をボス戦終了に切り替え。
+            _order.OrderType = EnemyOrder.Type.BossEnd;
+
+            // ボスに命令
+            if (_boss != null) _boss.Order(_order);
+        }
+
+        /// <summary>
         /// シーケンスを指定してNPCのイベントを実行。
         /// </summary>
         public void PlayNpcEvent(Sequence sequence)

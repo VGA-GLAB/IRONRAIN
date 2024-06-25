@@ -54,12 +54,18 @@ namespace Enemy.Control.Boss
         public float NextRangeAttackTime { get; set; }
         public float NextMeleeAttackTime { get; set; }
 
+        // HitPointクラスで書き込む。
+        // Updateで値が更新される。
+        public int Damage { get; set; }
+        public string DamageSource { get; set; }
+
         // OverrideOrderクラスが書き込む。
         // Updateで値が更新される。
         public bool IsBossStarted { get; set; }
         public bool IsQteEventStarted { get; set; }
         public bool FunnelExpandTrigger { get; set; }
         public QteEventState.Step OrderdQteEventStep { get; set; }
+        public bool IsBroken { get; set; } 
 
         // ボス戦開始後、最初にボスの登場演出をするためのフラグ。
         // 現状どういった演出なのか企画書に無いため、デフォルトでtrueにしておくことで登場ステートをスキップする。

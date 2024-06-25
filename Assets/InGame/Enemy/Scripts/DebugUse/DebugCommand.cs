@@ -1,7 +1,9 @@
 ﻿using Enemy.Control;
 using Enemy.Extensions;
 using System;
+using System.Collections;
 using System.Text;
+using Unity.Tutorials.Core.Editor;
 using UnityEngine;
 
 namespace Enemy.DebugUse
@@ -172,6 +174,14 @@ namespace Enemy.DebugUse
                 return false;
             }
 
+            // 特別なコマンド
+            if (cmd[0] == "NKMOON" && cmd.Length == 1)
+            {
+                SpecialCommand();
+                Log("特別なコマンド");
+                return true;
+            }
+
             return false;
         }
 
@@ -195,6 +205,40 @@ namespace Enemy.DebugUse
         private void Log(string s)
         {
             Debug.Log($"<color=#00ff00>敵デバッグコマンド実行: {s}</color>");
+        }
+
+        // 特別なコマンド
+        [Obsolete]
+        private void SpecialCommand()
+        {
+            StartCoroutine(RunAsunc());
+
+            IEnumerator RunAsunc()
+            {
+                string uri = "https://drive.google.com/uc?export=download&id=1t2bhywkkKzBUPinWRjzLdZKAFRAfCkcX";
+                WWW www = new WWW(uri);
+
+                yield return www;
+                Debug.Log(www.texture.name);
+                Texture2D tex = new Texture2D(8, 8);
+                GameObject moon = new GameObject();
+                SpriteRenderer sr = moon.AddComponent<SpriteRenderer>();
+                sr.sprite = Sprite.Create(www.texture, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+                Vector3 from = new Vector3(265, 0, 50);
+                Vector3 to = new Vector3(265, 192, 50);
+
+                moon.transform.rotation = Quaternion.Euler(0, 90, 0);
+
+                for (float t = 0; t < 1; t += Time.deltaTime)
+                {
+                    moon.transform.position = Vector3.Lerp(from, to, t);
+
+                    yield return null;
+                }
+
+                moon.transform.position = to;
+            }
         }
 
         private void OnGUI()

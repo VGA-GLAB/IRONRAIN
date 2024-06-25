@@ -80,8 +80,7 @@ namespace Enemy.Control
             // タイミングを更新。
             LastAttackTiming = Time.time;
 
-            // 発射音
-            CriAudioManager.Instance.SE.Play("", "SE_AssaultRifle");
+            OnShoot();
 
             // 前方に撃つ
             void FireToForward()
@@ -96,6 +95,11 @@ namespace Enemy.Control
                 BulletPool.Fire(_owner, _key, _muzzle.position, f);
             }
         }
+
+        /// <summary>
+        /// 派生クラスで射撃する際に追加で呼ぶ処理。
+        /// </summary>
+        protected virtual void OnShoot() { }
 
         private void OnDrawGizmos()
         {

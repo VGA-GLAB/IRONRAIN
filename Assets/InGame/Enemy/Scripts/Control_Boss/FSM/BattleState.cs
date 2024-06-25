@@ -64,8 +64,14 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
+            // ダメージを受けた場合に音を再生。
+            if (_blackBoard.DamageSource != "")
+            {
+                AudioWrapper.PlaySE("SE_Missile_Hit");
+            }
+
             // イベントのトリガーになるような行動を調べる。
-            foreach(ActionPlan plan in _blackBoard.ActionPlans)
+            foreach (ActionPlan plan in _blackBoard.ActionPlans)
             {
                 // プレイヤーの左腕破壊をトリガーに、QTEイベントのステートへ遷移。
                 if (plan.Choice == Choice.BreakLeftArm) { TryChangeState(stateTable[StateKey.Idle]); return; }
@@ -74,6 +80,9 @@ namespace Enemy.Control.Boss.FSM
                 if (plan.Choice == Choice.FunnelExpand && _funnels != null)
                 {
                     foreach (FunnelController f in _funnels) f.Expand();
+
+                    // ファンネル展開音
+                    AudioWrapper.PlaySE("SE_Funnel");
                 }
             }
 

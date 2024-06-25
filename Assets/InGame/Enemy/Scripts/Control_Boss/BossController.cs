@@ -29,6 +29,7 @@ namespace Enemy.Control.Boss
         // 自身の状態や周囲を認識して黒板に書き込むPerception層。
         private Perception _perception;
         private FireRate _fireRate;
+        private HitPoint _hitPoint;
         private OverrideOrder _overrideOrder;
         // 黒板に書き込まれた内容から次にとるべき行動を決定するBrain層。
         private UtilityEvaluator _utilityEvaluator;
@@ -71,6 +72,7 @@ namespace Enemy.Control.Boss
             // Perception
             _perception = new Perception(transform, _params, _blackBoard, _rotate, _player, _pointP, _meleeEquipment);
             _fireRate = new FireRate(_params, _blackBoard, _meleeEquipment, _rangeEquipment);
+            _hitPoint = new HitPoint(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
@@ -99,6 +101,7 @@ namespace Enemy.Control.Boss
             // Perception
             _perception.Update();
             _fireRate.UpdateIfAttacked();
+            _hitPoint.Update();
             _overrideOrder.Update();
             
             // Brain
@@ -176,7 +179,7 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Damage(int value, string weapon = "")
         {
-            // 時間でシーケンスが進行するため何もしない。
+            _hitPoint.Damage(value, weapon);
         }
     }
 }

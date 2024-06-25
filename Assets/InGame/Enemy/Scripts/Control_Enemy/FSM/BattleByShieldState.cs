@@ -59,6 +59,12 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
+            // ダメージを受けた場合に音を再生。
+            if (_blackBoard.DamageSource != "")
+            {
+                AudioWrapper.PlaySE("SE_Missile_Hit");
+            }
+
             // 死亡もしくは撤退をチェック。
             bool isExit = false;
             foreach (ActionPlan plan in _blackBoard.ActionPlans)

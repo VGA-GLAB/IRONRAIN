@@ -20,6 +20,7 @@ namespace Enemy.Control.Boss
         private EnemyBT.Sequence _breakLeftArm;
         private EnemyBT.Sequence _firstQte;
         private EnemyBT.Sequence _secondQte;
+        private EnemyBT.Sequence _broken;
 
         private BlackBoard _blackBoard;
 
@@ -67,6 +68,11 @@ namespace Enemy.Control.Boss
                 new BossBT.WriteActionPlan(Choice.SecondQte, blackBoard)
                 );
 
+            _broken = new EnemyBT.Sequence(
+                "Broken",
+                new BossBT.WriteActionPlan(Choice.Broken, blackBoard)
+                );
+
             _blackBoard = blackBoard;
         }
 
@@ -84,6 +90,7 @@ namespace Enemy.Control.Boss
             else if (choice == Choice.BreakLeftArm) _breakLeftArm.Update();
             else if (choice == Choice.FirstQte) _firstQte.Update();
             else if (choice == Choice.SecondQte) _secondQte.Update();
+            else if (choice == Choice.Broken) _broken.Update();
         }
 
         /// <summary>

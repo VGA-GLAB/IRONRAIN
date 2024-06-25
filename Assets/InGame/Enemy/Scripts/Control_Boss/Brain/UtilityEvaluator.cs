@@ -19,6 +19,7 @@ namespace Enemy.Control.Boss
         BreakLeftArm, // プレイヤーの左手破壊
         FirstQte,     // ボス1回目のQTE
         SecondQte,    // ボス2回目のQTE
+        Broken,       // 撃破
     }
 
     /// <summary>
@@ -45,11 +46,14 @@ namespace Enemy.Control.Boss
         {
             _order.Clear();
 
-            // ボス戦開始した状態は何もしない。
+            // ボス戦が始まっていない状態は何もしない。
             if (!_blackBoard.IsBossStarted) return _order;
 
             // まずは登場する。
             if (!_blackBoard.IsAppearCompleted) { _order.Add(Choice.Appear); return _order; }
+
+            // QTEが終了して撃破される。
+            if (_blackBoard.IsBroken) { _order.Add(Choice.Broken); return _order; }
 
             // 終盤のQTEイベント中
             if (_blackBoard.IsQteEventStarted)

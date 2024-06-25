@@ -51,6 +51,11 @@ namespace Enemy.Control.Boss.FSM
                 {
                     Debug.Log("敵側で2回目のQTEの処理が呼ばれている状態");
                 }
+                else if (plan.Choice == Choice.Broken)
+                {
+                    TryChangeState(stateTable[StateKey.Idle]);
+                    return;
+                }
             }
         }
     }
