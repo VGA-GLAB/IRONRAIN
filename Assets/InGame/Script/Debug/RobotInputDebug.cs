@@ -16,7 +16,7 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _currentSeq;
 
     private InGameManager _inGameManager;
-    private PlayerMove _playerMove;
+    private PlayerBossMove _playerMove;
     private PlayerWeaponController _weaponCon;
     private PlayerQTE _playerQTE;
     private bool _active = false;
