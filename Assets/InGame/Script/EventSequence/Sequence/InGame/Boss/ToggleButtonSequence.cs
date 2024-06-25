@@ -36,7 +36,10 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
     private async UniTask Announce(CancellationToken cancellationToken)
     {
         await _textBox.DoOpenTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
-
+        
+        //パネルに指示がでる前兆音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
+        
         await  UniTask.WhenAll(
             //CriAudioManager.Instance.SE.PlayAsync(_announceCueSheetName, _announceCueName, cancellationToken),
             ChangeText(_tutorialText),
@@ -44,11 +47,21 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), cancellationToken: cancellationToken),
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle5), cancellationToken: cancellationToken)
         );
+        
+        //トグルの音を出す
+        CriAudioManager.Instance.SE.Play("SE", "SE_Toggle");
         //マルチロックフラグがオンになる
         _mouseMultilockSystem.MultilockOnStart();
+        
+        //パネルに指示がでる前兆音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
+        
         await ChangeText("敵UIをなぞってマルチロックオンをしてください");//テキストを変える
         await UniTask.WaitUntil(() => !_mouseMultilockSystem.IsMultilock, cancellationToken: cancellationToken);
         _playerWeaponController.WeaponModel.MulchShot();
+        //パネルに指示がでる前兆音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
+        
         await ChangeText("OK");//テキストを変える
         await _textBox.DoCloseTextBoxAsync(_textBoxOpenAndCloseSec, cancellationToken);
         await UniTask.WaitForSeconds(3, cancellationToken: cancellationToken);

@@ -189,7 +189,14 @@ public class RaderMap : MonoBehaviour
         float nearEnemyDis = nearEnemy.Item2;
         agentScript.IsRockon = true;
         EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
-        _nowRockEnemy = nearEnemy.obj;
+        
+        //前のターゲットと違うかを判定
+        if (nearEnemy.obj != _nowRockEnemy)
+        {
+            _nowRockEnemy = nearEnemy.obj;
+            //ターゲットが切り替わる音を出す
+            CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
+        }
         _enemyDistance = nearEnemyDis;
     }
 
@@ -219,6 +226,9 @@ public class RaderMap : MonoBehaviour
             EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
             _nowRockEnemy = enemyAgent.gameObject;
             _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
+            
+            //ターゲットが切り替わる音を出す
+            CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
         }  
     }
 
