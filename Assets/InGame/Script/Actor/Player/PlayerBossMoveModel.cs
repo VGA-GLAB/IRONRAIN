@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Enemy.Control.Boss;
 
-public class PlayerMoveModel : IPlayerStateModel
+public class PlayerBossMoveModel : IPlayerStateModel
 {
     [SerializeField] LeverController _leftController;
     [SerializeField] LeverController _rightController;
