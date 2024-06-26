@@ -57,6 +57,8 @@ namespace Enemy.Control
             // 判定の瞬間の演出
             if (_attackEffect != null) _attackEffect.Play(_owner);
 
+            OnCollision();
+
             // タイミングを更新。
             LastAttackTiming = Time.time;
         }
@@ -80,6 +82,11 @@ namespace Enemy.Control
         {
             return (Origin() - point).sqrMagnitude <= _radius * _radius;
         }
+
+        /// <summary>
+        /// 派生クラスで射撃する際に追加で呼ぶ処理。
+        /// </summary>
+        protected virtual void OnCollision() { }
 
         private void OnDrawGizmos()
         {

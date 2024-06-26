@@ -72,7 +72,8 @@ namespace Enemy.Control
         // HitPointクラスが書き込む。
         // Updateで値が更新される。
         public int Hp { get; set; }
-        public int CurrentFrameDamage { get; set; }
+        public int Damage { get; set; }
+        public string DamageSource { get; set; }
         public bool IsDying { get; set; }
 
         // OverrideOrderクラスが書き込む。

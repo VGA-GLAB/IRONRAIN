@@ -17,6 +17,8 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Enter()
         {
+            // 撃破されたときの音
+            AudioWrapper.PlaySE("SE_Kill");
         }
 
         protected override void Exit()
