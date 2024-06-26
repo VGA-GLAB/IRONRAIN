@@ -5,7 +5,6 @@ using Enemy.Control;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEditor.PlayerSettings;
 
 public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -21,12 +20,13 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
     LayerMask _layerMask;
     [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
     [SerializeField, Tooltip("Rayの距離")] private float _rayDis = 100f;
+    [SerializeField] private PlayerController _playerController;
     /// <summary>レーダーマップ </summary>
     private RaderMap _raderMap;
     /// <summary>ロックオンしたUi </summary>
     private HashSet<GameObject> _lockUi = new HashSet<GameObject>();
     private int _posCount;
-
+    
     private void Awake()
     {
         //レーダーテストを検索する
@@ -96,7 +96,9 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
     {
         if (IsMultilock)
         {
-            //格納したエネミーで同じものを削除する
+            //プレイヤーを攻撃可能にする
+            _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
+            
             if (LockOnEnemy.Count > 0)
             {
                 //LockOnEnemy = LockOnEnemy.Distinct().ToList();
