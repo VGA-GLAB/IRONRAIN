@@ -9,7 +9,7 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// 敵のリスト
     /// </summary>
-    private List<GameObject> _enemys = new List<GameObject>();
+    private List<GameObject> _enemies = new List<GameObject>();
     /// <summary>
     /// 敵UIのリスト
     /// </summary>
@@ -51,14 +51,14 @@ public class RaderMap : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < _enemys.Count; i++)
+        for (int i = 0; i < _enemies.Count; i++)
         {
-            AgentScript _agent = _enemys[i].GetComponent<AgentScript>();
+            AgentScript _agent = _enemies[i].GetComponent<AgentScript>();
 
-            Vector3 enemyDir = _enemys[i].transform.position;
+            Vector3 enemyDir = _enemies[i].transform.position;
             //敵の高さとプレイヤーの高さを合わせる
             enemyDir.y = _player.position.y;
-            enemyDir = _enemys[i].transform.position - _player.position;
+            enemyDir = _enemies[i].transform.position - _player.position;
 
             enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
             enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
@@ -84,7 +84,7 @@ public class RaderMap : MonoBehaviour
         {
             EnemyMaps.Add(enemy, enemyUi);
             agent.RectTransform = enemyUi.GetComponent<RectTransform>();
-            _enemys.Add(enemy);
+            _enemies.Add(enemy);
         }
     }
 
@@ -102,9 +102,9 @@ public class RaderMap : MonoBehaviour
         if (EnemyMaps.ContainsKey(enemy))
         {
             Destroy(EnemyMaps[enemy].gameObject);
+            EnemyMaps.Remove(enemy);
+            _enemies.Remove(enemy);
         }
-        EnemyMaps.Remove(enemy);
-        _enemys.Remove(enemy);
     }
 
     /// <summary>
@@ -122,17 +122,17 @@ public class RaderMap : MonoBehaviour
         float nearDistance = float.MaxValue;
 
         //エネミーとの距離を判定する
-        for (int i = 0; i < _enemys.Count; i++)
+        for (int i = 0; i < _enemies.Count; i++)
         {
             //視野角内にいるのかを判定する
-            if (!IsVisible(_enemys[i].gameObject))
+            if (!IsVisible(_enemies[i].gameObject))
                 continue;
 
-            float distance = Vector3.Distance(_enemys[i].transform.position, _player.transform.position);
+            float distance = Vector3.Distance(_enemies[i].transform.position, _player.transform.position);
             if (distance < nearDistance)
             {
                 nearDistance = distance;
-                _nearEnemy = _enemys[i].gameObject;
+                _nearEnemy = _enemies[i].gameObject;
             }
         }
         return (_nearEnemy, nearDistance);
@@ -238,7 +238,7 @@ public class RaderMap : MonoBehaviour
     private void ResetUi()
     {
         //全てのエネミーのロックオンを外す
-        foreach (var enemy in _enemys)
+        foreach (var enemy in _enemies)
         {
             var agent = enemy.GetComponent<AgentScript>();
             agent.IsRockon = false;

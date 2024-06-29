@@ -47,7 +47,8 @@ public sealed class ToggleButtonSequence : AbstractSequenceBase
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), cancellationToken: cancellationToken),
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle5), cancellationToken: cancellationToken)
         );
-        
+        //プレイヤーを攻撃不可にする
+        _playerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
         //トグルの音を出す
         CriAudioManager.Instance.SE.Play("SE", "SE_Toggle");
         //マルチロックフラグがオンになる
