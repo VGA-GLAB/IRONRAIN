@@ -3,7 +3,6 @@ using Enemy.Extensions;
 using System;
 using System.Collections;
 using System.Text;
-using Unity.Tutorials.Core.Editor;
 using UnityEngine;
 
 namespace Enemy.DebugUse
