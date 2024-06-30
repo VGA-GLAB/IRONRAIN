@@ -155,12 +155,20 @@ public class LeverController : MonoBehaviour
         else
         {
             //それ以外
-            if (0.9f <= _leverDir.y)
+            if (0.9f <= _leverDir.y && _controllerDir.z != 1)
             {
+                if (_controllerDir.z != 1)
+                {
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                }
                 _controllerDir.z = 1;
             }
-            else if (_leverDir.y < -0.90f)
+            else if (_leverDir.y < -0.90f && _controllerDir.z != -1)
             {
+                if (_controllerDir.z != -1)
+                {
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                }
                 _controllerDir.z = -1;
             }
             else 
@@ -170,10 +178,18 @@ public class LeverController : MonoBehaviour
 
             if (0.9f <= _leverDir.x)
             {
+                if (_controllerDir.x != 1)
+                {
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                }
                 _controllerDir.x = 1;
             }
             else if (_leverDir.x < -0.9f)
             {
+                if (_controllerDir.x != -1)
+                {
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                }
                 _controllerDir.x = -1;
             }
             else
