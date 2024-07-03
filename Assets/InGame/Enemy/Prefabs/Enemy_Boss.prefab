@@ -112,6 +112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 210203917328404538}
+  - component: {fileID: 5731813322607179553}
   - component: {fileID: 5808456780048057001}
   - component: {fileID: 5983340524661467776}
   - component: {fileID: 3844559127346597492}
@@ -137,8 +138,30 @@ Transform:
   m_Children:
   - {fileID: 3564728836760371592}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5731813322607179553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322955871657262202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98291b76a2995614980eba86545c6976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _appear:
+    _moveSpeed: 12
+  _battle:
+    _moveSpeed: 12
+    _meleeAttack:
+      _rate: 0.01
+    _rangeAttack:
+      _inputBufferAsset: {fileID: 0}
+      _useInputBuffer: 0
+      _rate: 0.01
 --- !u!114 &5808456780048057001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,17 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e81818495cc3d644bdffbe155a50ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _params:
-    _appear:
-      _moveSpeed: 12
-    _battle:
-      _moveSpeed: 12
-      _meleeAttack:
-        _rate: 0.01
-      _rangeAttack:
-        _inputBufferAsset: {fileID: 0}
-        _useInputBuffer: 0
-        _rate: 1
   _offset: {fileID: 3564728836760371592}
   _rotate: {fileID: 3935250599935373704}
   _models:
@@ -309,7 +321,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894853937762592059}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: a6260d56934136d4fa847a2cbe1114be, type: 3}
   m_Controller: {fileID: 9100000, guid: 1d556ec324a31e64e8c1c9079c70a654, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0

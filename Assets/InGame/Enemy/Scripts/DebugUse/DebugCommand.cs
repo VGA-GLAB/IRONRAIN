@@ -1,7 +1,6 @@
 ﻿using Enemy.Control;
 using Enemy.Extensions;
 using System;
-using System.Collections;
 using System.Text;
 using UnityEngine;
 
@@ -11,6 +10,13 @@ namespace Enemy.DebugUse
     {
         [Header("コマンドで敵やNPCに命令する")]
         [SerializeField] private EnemyManager _enemyManager;
+        [Header("コマンドラインの設定")]
+        [SerializeField] private int _commandFontSize = 30;
+        [Header("ボタンの設定")]
+        [SerializeField] private float _buttonX = 0;
+        [SerializeField] private float _buttonY = 33;
+        [SerializeField] private float _buttonWidth = 300;
+        [SerializeField] private float _buttonHeight = 70;
 
         private GUIStyle _style = new GUIStyle();
         private GUIStyleState _state = new GUIStyleState();
@@ -21,7 +27,7 @@ namespace Enemy.DebugUse
 
         private void Awake()
         {
-            _style.fontSize = 30;
+            _style.fontSize = _commandFontSize;
             _state.textColor = Color.green;
             _style.normal = _state;
         }
@@ -37,9 +43,17 @@ namespace Enemy.DebugUse
 
             if (!_isEnable) return;
 
+            // コマンドラインの設定を反映。
+            _style.fontSize = _commandFontSize;
+
             // 何らかのキーが入力されている場合はコマンドに追加
             if (Input.anyKeyDown)
             {
+                // マウスクリックを弾く。
+                if (Input.GetMouseButtonDown(0) ||
+                    Input.GetMouseButtonDown(1) ||
+                    Input.GetMouseButtonDown(2)) return;
+
                 foreach (KeyCode c in Enum.GetValues(typeof(KeyCode)))
                 {
                     if (Input.GetKeyDown(c))
@@ -75,6 +89,15 @@ namespace Enemy.DebugUse
                 RunCommand();
                 _command.Clear();
 
+            }
+        }
+
+        private void OnGUI()
+        {
+            if (_isEnable)
+            {
+                GUILayout.Label($"ｺﾏﾝﾄﾞ: {_command}<", _style);
+                SequenceEventButton(_buttonX, _buttonY, _buttonWidth, _buttonHeight);
             }
         }
 
@@ -174,7 +197,7 @@ namespace Enemy.DebugUse
             }
 
             // 特別なコマンド
-            if (cmd[0] == "NKMOON" && cmd.Length == 1)
+            if (cmd[0] == "UUDDLRLRBA" && cmd.Length == 1)
             {
                 SpecialCommand();
                 Log("特別なコマンド");
@@ -206,46 +229,57 @@ namespace Enemy.DebugUse
             Debug.Log($"<color=#00ff00>敵デバッグコマンド実行: {s}</color>");
         }
 
-        // 特別なコマンド
-        [Obsolete]
-        private void SpecialCommand()
+        // シーケンス再生のボタン
+        private void SequenceEventButton(float x, float y, float w, float h)
         {
-            StartCoroutine(RunAsunc());
-
-            IEnumerator RunAsunc()
+            if (GUI.Button(new Rect(x, y, w, h), "AttackSeq"))
             {
-                string uri = "https://drive.google.com/uc?export=download&id=1t2bhywkkKzBUPinWRjzLdZKAFRAfCkcX";
-                WWW www = new WWW(uri);
-
-                yield return www;
-                Debug.Log(www.texture.name);
-                Texture2D tex = new Texture2D(8, 8);
-                GameObject moon = new GameObject();
-                SpriteRenderer sr = moon.AddComponent<SpriteRenderer>();
-                sr.sprite = Sprite.Create(www.texture, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-
-                Vector3 from = new Vector3(265, 0, 50);
-                Vector3 to = new Vector3(265, 192, 50);
-
-                moon.transform.rotation = Quaternion.Euler(0, 90, 0);
-
-                for (float t = 0; t < 1; t += Time.deltaTime)
-                {
-                    moon.transform.position = Vector3.Lerp(from, to, t);
-
-                    yield return null;
-                }
-
-                moon.transform.position = to;
+                // 現状、唯一の視界で検知するタイプなので特になし。
+            }
+            else if (GUI.Button(new Rect(x, y + h, w, h), "TouchPanelSeq"))
+            {
+                _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
+            }
+            else if (GUI.Button(new Rect(x, y + 2 * h, w, h), "QTETutorialSeq"))
+            {
+                _enemyManager.DetectPlayer(EnemyManager.Sequence.QTETutorial);
+                _enemyManager.Pause(EnemyManager.Sequence.TouchPanel);
+            }
+            else if (GUI.Button(new Rect(x, y + 3 * h, w, h), "MultiBattleSeq"))
+            {
+                _enemyManager.DetectPlayer(EnemyManager.Sequence.MultiBattle);
+                _enemyManager.PlayNpcEvent(EnemyManager.Sequence.MultiBattle);
+            }
+            else if (GUI.Button(new Rect(x, y + 4 * h, w, h), "BossStartSeq"))
+            {
+                _enemyManager.BossStart();
+            }
+            else if (GUI.Button(new Rect(x, y + 5 * h, w, h), "FirstFunnel"))
+            {
+                _enemyManager.FunnelExpand();
+            }
+            else if (GUI.Button(new Rect(x, y + 6 * h, w, h), "SecondFunnel"))
+            {
+                _enemyManager.FunnelExpand();
+            }
+            else if (GUI.Button(new Rect(x, y + 7 * h, w, h), "BreakLeftArm"))
+            {
+                _enemyManager.BreakLeftArm();
+            }
+            else if (GUI.Button(new Rect(x, y + 8 * h, w, h), "FirstBossQTE"))
+            {
+                _enemyManager.BossFirstQte();
+            }
+            else if (GUI.Button(new Rect(x, y + 9 * h, w, h), "SecondQTE"))
+            {
+                _enemyManager.BossSecondQte();
             }
         }
 
-        private void OnGUI()
+        // 特別なコマンド
+        private void SpecialCommand()
         {
-            if (_isEnable)
-            {
-                GUILayout.Label($"ｺﾏﾝﾄﾞ: {_command}<", _style);
-            }
+            //
         }
     }
 }
