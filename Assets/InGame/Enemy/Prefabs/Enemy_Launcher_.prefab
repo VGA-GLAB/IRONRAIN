@@ -43,6 +43,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5998904032055883278}
+  - component: {fileID: 4367666349068593964}
   - component: {fileID: 574555572}
   - component: {fileID: 4528664346901782079}
   - component: {fileID: -3786682619925584479}
@@ -69,6 +70,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4367666349068593964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5998904032055883265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0f0717277915d43b32a56b4a5c7c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _advance:
+    _distance: 33
+    _moveSpeed: 12
+    _slotPlace: 0
+  _battle:
+    _maxHp: 10
+    _dying: 0.2
+    _lifeTime: 60
+    _inputBufferAsset: {fileID: 0}
+    _useInputBuffer: 0
+    _attackRate: 0.01
+    _chaseSpeed: 6
+    _escapeSpeed: 6
+    _fovRadius: 8
+  _other:
+    _isTutorial: 0
+    _sequence: 0
+    _common: {fileID: 11400000, guid: d7b1915fc8482f641b62d9faea0a0286, type: 2}
 --- !u!114 &574555572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,25 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c64c125d33c714697c38ed8bccb297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _params:
-    _advance:
-      _distance: 33
-      _moveSpeed: 12
-      _slotPlace: 0
-    _battle:
-      _maxHp: 10
-      _dying: 0.2
-      _lifeTime: 60
-      _inputBufferAsset: {fileID: 0}
-      _useInputBuffer: 0
-      _attackRate: 0.01
-      _chaseSpeed: 6
-      _escapeSpeed: 6
-      _fovRadius: 8
-    _other:
-      _isTutorial: 0
-      _sequence: 0
-    _common: {fileID: 11400000, guid: d7b1915fc8482f641b62d9faea0a0286, type: 2}
   _offset: {fileID: 5998904034082580316}
   _rotate: {fileID: 5998904032262117972}
   _models:
@@ -533,11 +545,11 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704080476470270064}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: dd0dee84912a7af46bde443457b7f2a3, type: 3}
+  m_Avatar: {fileID: 9000000, guid: a6260d56934136d4fa847a2cbe1114be, type: 3}
   m_Controller: {fileID: 9100000, guid: 342e646278fa21f4bbbe6f49050bc764, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

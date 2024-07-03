@@ -10,10 +10,9 @@ namespace Enemy.Control.Boss
     /// 一時的に画面から消して動作を止めたい場合: xxx
     /// これ以上動かさず、削除する場合: xxx
     /// </summary>
+    [RequireComponent(typeof(BossParams))]
     public class BossController : MonoBehaviour, IDamageable
     {
-        [Header("プランナーが弄る値")]
-        [SerializeField] private BossParams _params;
         [Header("自身やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
@@ -22,6 +21,8 @@ namespace Enemy.Control.Boss
         [SerializeField] private Collider _damageHitBox;
         [SerializeField] private MeleeEquipment _meleeEquipment;
         [SerializeField] private RangeEquipment _rangeEquipment;
+
+        private BossParams _params;
 
         // 注入する依存関係
         private Transform _pointP;
@@ -66,8 +67,9 @@ namespace Enemy.Control.Boss
                 Debug.LogWarning($"依存関係の構築に失敗: PointP:{_pointP}, Player:{_player}");
             }
 
-            _funnels = new List<FunnelController>();
+            _params = GetComponent<BossParams>();
             _blackBoard = new BlackBoard();
+            _funnels = new List<FunnelController>();
 
             // Perception
             _perception = new Perception(transform, _params, _blackBoard, _rotate, _player, _pointP, _meleeEquipment);

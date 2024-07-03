@@ -9,7 +9,7 @@ namespace Enemy.Control.Boss
     /// プランナーが弄る。
     /// </summary>
     [System.Serializable]
-    public class BossParams
+    public class BossParams : MonoBehaviour
     {
         // 登場
         [System.Serializable]

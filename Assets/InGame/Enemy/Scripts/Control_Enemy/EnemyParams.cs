@@ -17,8 +17,7 @@ namespace Enemy.Control
     /// 敵キャラクター個体毎のパラメータ。
     /// プランナーが弄る。
     /// </summary>
-    [System.Serializable]
-    public class EnemyParams : IReadonlyEnemyParams
+    public class EnemyParams : MonoBehaviour, IReadonlyEnemyParams
     {
         // 接近
         [System.Serializable]
@@ -91,9 +90,12 @@ namespace Enemy.Control
             [SerializeField] private bool _isTutorial;
             [Header("シーケンス設定")]
             [SerializeField] private EnemyManager.Sequence _sequence;
+            [Header("種類ごとに共通したパラメータ")]
+            [SerializeField] private CommonParams _common;
 
             public bool IsTutorial => _isTutorial;
             public EnemyManager.Sequence Sequence => _sequence;
+            public CommonParams Common => _common;
         }
 
         // 必要に応じてプランナー用に外出しする。
@@ -109,23 +111,20 @@ namespace Enemy.Control
             public const float VerticalMoveSpeed = 1.5f;
         }
 
-        [Header("生成~直進状態の設定")]
+        [Header("登場演出中の設定")]
         [SerializeField] private AdvanceSettings _advance;
         [Header("戦闘状態の設定")]
         [SerializeField] private BattleSettings _battle;
-        [Header("その他の設定")]
+        [Header("基本的にそのままで良い設定")]
         [SerializeField] private OtherSettings _other;
-        [Header("種類ごとに共通したパラメータ")]
-        [Tooltip("例外的なキャラクターがいない場合はこの項目は弄らなくて良い。")]
-        [SerializeField] private CommonParams _common;
 
         public AdvanceSettings Advance => _advance;
         public BattleSettings Battle => _battle;
         public OtherSettings Other => _other;
-        public CommonParams Common => _common;
+        public CommonParams Common => _other.Common;
 
         // インターフェースで外部から参照する。
-        public EnemyType Type => _common != null ? _common.Type : EnemyType.Dummy;
+        public EnemyType Type => _other.Common != null ? _other.Common.Type : EnemyType.Dummy;
         public EnemyManager.Sequence Sequence => _other.Sequence;
     }
 }

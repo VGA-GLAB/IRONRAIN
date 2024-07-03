@@ -34,7 +34,7 @@ namespace Enemy.Control
         /// ギズモに描画。
         /// 描画する高さを引数で指定できる。
         /// </summary>
-        public void DrawOnGizmos(Transform owner)
+        public override void DrawOnGizmos(Transform owner)
         {
             Vector3 p = new Vector3(Point.x, owner.position.y, Point.z);
             Color c = IsUsing ? Color.white : ColorExtensions.ThinWhite;

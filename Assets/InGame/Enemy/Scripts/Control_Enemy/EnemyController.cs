@@ -10,10 +10,9 @@ namespace Enemy.Control
     /// 一時的に画面から消して動作を止めたい場合: xxx
     /// これ以上動かさず、削除する場合: xxx
     /// </summary>
+    [RequireComponent(typeof(EnemyParams))]
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [Header("プランナーが弄る値")]
-        [SerializeField] private EnemyParams _params;
         [Header("自身やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
@@ -22,6 +21,8 @@ namespace Enemy.Control
         [SerializeField] private Effect[] _effects;
         [SerializeField] private Collider[] _hitBoxes;
         [SerializeField] private Equipment _equipment;
+
+        private EnemyParams _params;
 
         // 注入する依存関係。
         private Transform _player;
@@ -70,6 +71,7 @@ namespace Enemy.Control
                 Debug.LogWarning($"依存関係の構築に失敗: Player:{_player}, SurroundingPool:{_surroundingPool}");
             }
 
+            _params = GetComponent<EnemyParams>();
             _blackBoard = new BlackBoard(gameObject.name);
 
             // Perception
