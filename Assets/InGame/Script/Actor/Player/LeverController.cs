@@ -42,10 +42,10 @@ public class LeverController : MonoBehaviour
     {
         if (_leverType == LeverType.Right)
         {
-            _rightButton1?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.OneButton));
-            _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.OneButton));
-            _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.TwoButton));
-            _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.TwoButton));
+            _rightButton1?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.OneButton)).AddTo(this);
+            _rightButton1?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.OneButton)).AddTo(this);
+            _rightButton2?.OnClickDown.Subscribe(_ => InputProvider.Instance.CallEnterInput(InputProvider.InputType.TwoButton)).AddTo(this);
+            _rightButton2?.OnClickUp.Subscribe(_ => InputProvider.Instance.CallExitInput(InputProvider.InputType.TwoButton)).AddTo(this);
             _isLeverMove = InputProvider.Instance.GetStayInput(InputProvider.InputType.RightTrigger);
         }
         else
