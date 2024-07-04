@@ -18,7 +18,7 @@ public class DebugScript : MonoBehaviour
             _robotInputDebug.Active();
         }
 
-        //_button.OnClickUp.Subscribe(_ => Debug.Log("ボタンが離されました"));
-        //_button.OnClickDown.Subscribe(_ => Debug.Log("ボタンが押されました"));
+        //_button.OnClickUp.Subscribe(_ => Debug.Log("ボタンが離されました")).AddTo(this);
+        //_button.OnClickDown.Subscribe(_ => Debug.Log("ボタンが押されました")).AddTo(this);
     }
 }
