@@ -102,14 +102,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7094892581923860863, guid: 8a0f6151e213616498a2cc66017dbd13, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5959143522218690000}
+      addedObject: {fileID: -995807019727151779}
   m_SourcePrefab: {fileID: 100100000, guid: 8a0f6151e213616498a2cc66017dbd13, type: 3}
 --- !u!1 &387986139517124827 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7094892581923860863, guid: 8a0f6151e213616498a2cc66017dbd13, type: 3}
   m_PrefabInstance: {fileID: 7427694039531631012}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5959143522218690000
+--- !u!114 &-995807019727151779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,11 +118,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 387986139517124827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: facde0069c61fef4593c60df8425e3c5, type: 3}
+  m_Script: {fileID: 11500000, guid: b14bfd18f098cf440b2e715734787792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Image: {fileID: 6315224949624085020, guid: cf8f6f961afce5c4da26ba75c415c8ec, type: 3}
-  IsRockon: 0
-  _defultColor: {r: 1, g: 0, b: 0, a: 0}
-  _rockonColor: {r: 0, g: 0.102157354, b: 1, a: 0}
-  IsDefault: 1
+  _player: {fileID: 0}
+  _center: {fileID: 0}
+  _raderLength: 30
+  _radius: 6
+  _rockonDis: 100
+  _origin: {fileID: 0}
+  _sightAngle: 0
