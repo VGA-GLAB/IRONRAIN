@@ -22,6 +22,7 @@ namespace Enemy.Control
         {
             _approach = new Sequence(
                 "ApproachSeq",
+                new OrderedSpawn(Choice.Approach, blackBoard),
                 new MoveToPlayer(Choice.Approach, transform, enemyParams, blackBoard),
                 new LookAtPlayer(Choice.Approach, blackBoard),
                 new WriteActionPlan(Choice.Approach, blackBoard)
