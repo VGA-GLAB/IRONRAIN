@@ -15,11 +15,16 @@ public class EnemyUi : MonoBehaviour, IPointerDownHandler
     private void Awake()
     {
         //レーダーテストを検索する
-        RaderMap = GameObject.Find("RaderTest").GetComponent<RaderMap>();
+        RaderMap = GameObject.FindObjectOfType<RaderMap>().GetComponent<RaderMap>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         RaderMap.PanelRock(Enemy);
+    }
+
+    public void Test()
+    {
+        Debug.Log("テスト");
     }
 }

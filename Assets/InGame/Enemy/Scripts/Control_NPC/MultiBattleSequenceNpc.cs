@@ -21,6 +21,7 @@ namespace Enemy.Control
         [Min(1)]
         [SerializeField] private float _defeatDistance = 5;
 
+        GameObject INpc.GameObject => gameObject;
         EnemyManager.Sequence INpc.Sequence => EnemyManager.Sequence.MultiBattle;
 
         private void Start()
