@@ -1,4 +1,6 @@
-﻿namespace Enemy.Control
+﻿using UnityEngine;
+
+namespace Enemy.Control
 {
     /// <summary>
     /// 敵に命令するときにEnemyController側に渡す内容。
@@ -27,11 +29,19 @@
             QteFailureUntargeted, // 自身以外を対象としてQTE失敗。
         };
 
+        /// <summary>
+        /// 命令内容
+        /// </summary>
         public Type OrderType;
+        /// <summary>
+        /// 位置の指定
+        /// </summary>        
+        public Vector3? Point;
 
         public void Clear()
         {
             OrderType = Type.None;
+            Point = default;
         }
     }
 }

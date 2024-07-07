@@ -80,6 +80,7 @@ namespace Enemy.Control
         // Updateで値が更新される。
         public bool OrderedAttackTrigger { get; set; }
         public bool IsOrderedPause { get; set; }
+        public Vector3? OrderedSpawnPoint { get; set; }
 
         // BrokenStateクラスもしくはEscapeStateクラスが書き込む。
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。
