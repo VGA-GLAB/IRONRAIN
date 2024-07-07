@@ -30,7 +30,21 @@ public class PlayerController : MonoBehaviour
         {
             SeachState<PlayerStoryEvent>().StartChaseScene();
         }
+
+        if (_playerSetting.IsToggleTest) 
+        {
+            InputProvider.Instance.SetEnterInput(InputProvider.InputType.OneButton, () =>
+            {
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle1);
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle2);
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle3);
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle4);
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle5);
+                InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle6);
+            });
+        }
     }
+
     private void OnDestroy()
     {
         for (int i = 0; i < _playerStateList.Count; i++)
