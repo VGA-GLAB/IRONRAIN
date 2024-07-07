@@ -183,7 +183,6 @@ namespace Enemy.Control
             }
         }
 
-        // あとで消す。
         /// <summary>
         /// 引数で指定したシーケンスに登場する敵全員に対して
         /// 画面上に出現、プレイヤーに接近するように命令する。
@@ -197,42 +196,6 @@ namespace Enemy.Control
             foreach (EnemyController e in _enemies)
             {
                 if (e.Params.Sequence == sequence) e.Order(_order);
-            }
-        }
-
-        /// <summary>
-        /// 引数で指定したシーケンスに登場する敵全員に対して
-        /// 画面上に出現、プレイヤーに接近するように命令する。
-        /// </summary>
-        /// <param name="point">出現位置</param>
-        public void Spawn(Vector3 point, Sequence sequence)
-        {
-            // 命令をプレイヤー検出に書き換え。
-            _order.OrderType = EnemyOrder.Type.PlayerDetect;
-
-            // シーケンスの敵全体の中心を求める。
-            Vector3 center = Vector3.zero;
-            int length = 0;
-            foreach (EnemyController e in _enemies)
-            {
-                if (e.Params.Sequence == sequence)
-                {
-                    center += e.transform.position;
-                    length++;
-                }
-            }
-            center /= length;
-
-            // 中心点を引数の位置としてそこからのベクトルを足す。
-            foreach (EnemyController e in _enemies)
-            {
-                if (e.Params.Sequence == sequence)
-                {
-                    Vector3 dist = center - e.transform.position;
-                    _order.Point = point + dist;
-                    
-                    e.Order(_order);
-                }
             }
         }
 

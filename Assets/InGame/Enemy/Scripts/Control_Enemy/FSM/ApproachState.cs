@@ -24,14 +24,7 @@ namespace Enemy.Control.FSM
 
         protected override void Enter()
         {
-            // 生成位置へワープする命令
-            foreach (ActionPlan.Warp plan in _blackBoard.WarpPlans)
-            {
-                if (plan.Priority == Priority.Critical)
-                {
-                    _body.Warp(plan.Position);
-                }
-            }
+            // 接近アニメーション開始がAnimatorのEntryなので何も再生しない。
         }
 
         protected override void Exit()

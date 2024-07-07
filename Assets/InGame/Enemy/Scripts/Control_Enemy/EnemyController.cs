@@ -50,14 +50,7 @@ namespace Enemy.Control
         /// <summary>
         /// 敵の各種パラメータを参照する。実行中に変化しない値はこっち。
         /// </summary>
-        public IReadonlyEnemyParams Params
-        {
-            get
-            {
-                if (_params == null) _params = GetComponent<EnemyParams>();
-                return _params;
-            }
-        }
+        public IReadonlyEnemyParams Params => _params;
         /// <summary>
         /// 敵の状態を参照する。実行中に変化する値はこっち。
         /// </summary>

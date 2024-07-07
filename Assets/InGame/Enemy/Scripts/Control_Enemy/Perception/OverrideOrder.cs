@@ -46,7 +46,6 @@ namespace Enemy.Control
                 if (order.OrderType == EnemyOrder.Type.PlayerDetect)
                 {
                     _blackBoard.IsPlayerDetected = true;
-                    _blackBoard.OrderedSpawnPoint = order.Point;
                 }
                 // 攻撃させる。
                 else if (order.OrderType == EnemyOrder.Type.Attack)
@@ -128,7 +127,6 @@ namespace Enemy.Control
             if (_pool.TryPop(out EnemyOrder o))
             {
                 o.OrderType = order.OrderType;
-                o.Point = order.Point;
                 _buffer.Enqueue(o);
             }
             else Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
