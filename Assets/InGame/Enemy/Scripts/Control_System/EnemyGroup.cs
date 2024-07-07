@@ -99,7 +99,7 @@ namespace Enemy.Control
 
             foreach (List<EnemyController> enemies in _enemies.Values)
             {
-                if (enemies == null) continue;
+                if (enemies == null || enemies.Count == 0) continue;
 
                 for (int i = 0; i < enemies.Count - 1; i++)
                 {
