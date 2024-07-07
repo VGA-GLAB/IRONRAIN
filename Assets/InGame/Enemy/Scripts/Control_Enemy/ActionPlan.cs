@@ -3,6 +3,17 @@
 namespace Enemy.Control
 {
     /// <summary>
+    /// どの行動を優先するかを判定するための列挙型
+    /// </summary>
+    public enum Priority
+    {
+        Critical, // ゲームの進行に関わるようなもの。
+        High,     
+        Medium,   // 基本値  
+        Low,
+    }
+
+    /// <summary>
     /// BrainからActionへ行動ごとの情報を渡す。
     /// </summary>
     public class ActionPlan
@@ -13,6 +24,10 @@ namespace Enemy.Control
         /// どの行動を選択したかは共通で必要。
         /// </summary>
         public Choice Choice { get; private set; }
+        /// <summary>
+        /// 必要に応じて優先度を設定する。
+        /// </summary>
+        public Priority Priority { get; set; } = Priority.Medium;
 
         /// <summary>
         /// Positionの書き換えで移動する。
