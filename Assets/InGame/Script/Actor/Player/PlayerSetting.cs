@@ -11,6 +11,7 @@ public class PlayerSetting : ScriptableObject
     public bool IsKeyBoard;
     public bool IsVRInput;
     public bool IsFryCon;
+    public bool IsToggleTest;
     [Header("チェイスシーンをすぐ始めるか")]
     public bool IsStartChaseScene;
     [Header("Playerのパラメーター設定")]
