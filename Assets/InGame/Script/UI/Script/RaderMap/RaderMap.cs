@@ -46,7 +46,7 @@ public class RaderMap : MonoBehaviour
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
-        _mouseMultilockSystem = GameObject.FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
+        _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
     }
 
     void Update()
