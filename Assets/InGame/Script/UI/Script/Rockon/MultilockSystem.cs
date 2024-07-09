@@ -23,6 +23,7 @@ public class MultilockSystem : MonoBehaviour
     /// <summary>ロックオンしたUi </summary>
     private HashSet<GameObject> _lockUi;
     private int _posCount;
+    private bool _isFirstTouch = true;
     
     private void Awake()
     {
@@ -41,11 +42,28 @@ public class MultilockSystem : MonoBehaviour
     {
         if (IsMultilock)
         {
+            //多重ロックオン発動時に流れる音
             CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
             SerchEnemy();
         }
     }
 
+    private void LateUpdate()
+    {
+        _posCount = 0;
+        _lineRenderer.positionCount = _posCount;
+        //ラインレンダラーの更新
+        if (_lockUi.Count < 1)
+            return;
+        _lineRenderer.positionCount = _lockUi.Count;
+
+        foreach (GameObject obj in _lockUi)
+        {
+            _posCount++;
+            _lineRenderer.positionCount = _posCount;
+            _lineRenderer.SetPosition(_posCount - 1, obj.transform.position);
+        }
+    }
 
     /// <summary>
     /// エネミーを探す処理
@@ -60,6 +78,13 @@ public class MultilockSystem : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(rayStartPosition, direction, out hit, _rayDis, _layerMask))
         {
+            if (_isFirstTouch)
+            {
+                _isFirstTouch = false;
+                //パネルに触れた時の音
+                CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+            }
+            
             if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
             {
                 //Debug.Log("当たった");
@@ -106,6 +131,13 @@ public class MultilockSystem : MonoBehaviour
             IsMultilock = false;
             LockOnEnemy.Clear();
         }
+        _lockUi.Clear();
+        _isFirstTouch = true;
     }
 
+    public void EnemyDestory(GameObject enemy)
+    {
+        LockOnEnemy.Remove(enemy);
+        _lockUi.Remove(enemy);
+    }
 }
