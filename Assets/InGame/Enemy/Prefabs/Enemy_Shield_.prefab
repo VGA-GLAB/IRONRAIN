@@ -94,8 +94,8 @@ MonoBehaviour:
     _useInputBuffer: 0
     _attackRate: 0.01
     _chaseSpeed: 6
-    _escapeSpeed: 6
-    _fovRadius: 8
+    _escapeSpeed: 36
+    _fovRadius: 24
   _other:
     _isTutorial: 0
     _sequence: 0
@@ -240,7 +240,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2368887930220020192, guid: 85ca670ff990bad4a9f21d2fce5ad966, type: 3}
       propertyPath: m_Radius
-      value: 0.75
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368887930220020192, guid: 85ca670ff990bad4a9f21d2fce5ad966, type: 3}
+      propertyPath: m_Center.z
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6759474290077807104, guid: 85ca670ff990bad4a9f21d2fce5ad966, type: 3}
       propertyPath: m_RootOrder
@@ -618,7 +622,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496040928326146700}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: a6260d56934136d4fa847a2cbe1114be, type: 3}
   m_Controller: {fileID: 9100000, guid: a00958ff8d346584ba247a0618cd1e5c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
