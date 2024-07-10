@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using Oculus.Interaction.Throw;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MultilockSystem : MonoBehaviour
 {
@@ -11,17 +14,21 @@ public class MultilockSystem : MonoBehaviour
     public bool IsMultilock;
 
     /// <summary>敵のUIリスト </summary>
-    private HashSet<GameObject> LockOnEnemy = new HashSet<GameObject>();
+    public HashSet<GameObject> LockOnEnemy = new HashSet<GameObject>();
     [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
-    [SerializeField, Tooltip("Rayの距離")] private float _rayDis = 10f;
+    [FormerlySerializedAs("_rayDis")] [SerializeField, Tooltip("Rayの距離")] private float _rayDistance = 10f;
     [SerializeField] private PlayerController _playerController;
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
 
+    [SerializeField, Tooltip("ドラッグした時に音がなる距離")]
+    private float _dragDistance = 0.1f;
+    /// <summary>前回のdrag位置 </summary>
+    private float _preDragPos;
     /// <summary>レーダーマップ </summary>
     private RaderMap _raderMap;
     /// <summary>ロックオンしたUi </summary>
-    private HashSet<GameObject> _lockUi;
+    private HashSet<GameObject> _lockUi = new HashSet<GameObject>();
     private int _posCount;
     private bool _isFirstTouch = true;
     
@@ -29,12 +36,6 @@ public class MultilockSystem : MonoBehaviour
     {
         //レーダーテストを検索する
         _raderMap = FindObjectOfType<RaderMap>();
-    }
-
-    private void Start()
-    {
-        // InputProvider.Instance.SetEnterInput(InputProvider.InputType.LeftTrigger, MultilockOnStart);
-        // InputProvider.Instance.SetExitInput(InputProvider.InputType.LeftTrigger, MultilockAction);
     }
 
     // Update is called once per frame
@@ -76,7 +77,7 @@ public class MultilockSystem : MonoBehaviour
         var direction = _rayOrigin.transform.forward;
         //Hitしたオブジェクト格納用
         RaycastHit hit;
-        if (Physics.Raycast(rayStartPosition, direction, out hit, _rayDis, _layerMask))
+        if (Physics.Raycast(rayStartPosition, direction, out hit, _rayDistance, _layerMask))
         {
             if (_isFirstTouch)
             {
