@@ -48,12 +48,12 @@ namespace Enemy.Control
 
         private void OnEnable()
         {
-            _animationEvent.OnRangeFireStart += Shoot;
+            //_animationEvent.OnRangeFireStart += Shoot;
         }
 
         private void OnDisable()
         {
-            _animationEvent.OnRangeFireStart -= Shoot;
+            //_animationEvent.OnRangeFireStart -= Shoot;
         }
 
         // 弾を発射する。
