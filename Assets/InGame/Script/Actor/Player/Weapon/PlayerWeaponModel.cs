@@ -55,8 +55,7 @@ public class PlayerWeaponModel : IPlayerStateModel
         {
             _currentWeaponIndex = 0;
         }
-        CriAudioManager.Instance.SE.Play("SE", "SE_Change");
-        Debug.Log($"現在の武器は{_playerWeaponList[_currentWeaponIndex]}");
+        CriAudioManager.Instance.SE.Play("SE", "Change");
     }
 
     private void Shot()
