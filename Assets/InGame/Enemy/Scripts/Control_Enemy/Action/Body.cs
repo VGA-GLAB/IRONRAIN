@@ -60,10 +60,10 @@ namespace Enemy.Control
             // 一応全てが表示されているか判定する。
             foreach (Transform t in _models)
             {
-                if (t.localScale != Vector3.zero) return false;
+                if (t.localScale != Vector3.zero) return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>

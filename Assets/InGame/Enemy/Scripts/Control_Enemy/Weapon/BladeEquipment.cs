@@ -9,7 +9,6 @@ namespace Enemy.Control
         protected override void OnCollision()
         {
             AudioWrapper.PlaySE("SE_Sword");
-            Debug.Log("おとなる");
         }
     }
 }
