@@ -28,6 +28,6 @@ public class EnemyUi : MonoBehaviour
 
     public void Test()
     {
-        Debug.Log("テスト");
+        //Debug.Log("テスト");
     }
 }

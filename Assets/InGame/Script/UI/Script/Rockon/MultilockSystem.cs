@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
-using Oculus.Interaction.Throw;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class MultilockSystem : MonoBehaviour
 {
@@ -24,7 +21,7 @@ public class MultilockSystem : MonoBehaviour
     [SerializeField, Tooltip("ドラッグした時に音がなる距離")]
     private float _dragDistance = 0.1f;
     /// <summary>前回のdrag位置 </summary>
-    private float _preDragPos;
+    private Vector3 _preDragPos;
     /// <summary>レーダーマップ </summary>
     private RaderMap _raderMap;
     /// <summary>ロックオンしたUi </summary>
@@ -43,8 +40,6 @@ public class MultilockSystem : MonoBehaviour
     {
         if (IsMultilock)
         {
-            //多重ロックオン発動時に流れる音
-            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
             SerchEnemy();
         }
     }
@@ -86,6 +81,15 @@ public class MultilockSystem : MonoBehaviour
                 CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
             }
             
+            // マルチロックで移動距離に応じて音を鳴らす
+            Vector3 currentDragPosition = hit.transform.position;
+            if ((currentDragPosition - _preDragPos).sqrMagnitude > _dragDistance * _dragDistance)
+            {
+                //多重ロックオン発動時に流れる音
+                CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                _preDragPos = currentDragPosition;
+            }
+            
             if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
             {
                 //Debug.Log("当たった");
@@ -102,8 +106,7 @@ public class MultilockSystem : MonoBehaviour
         {
             EndMultilockAction();
         }
-
-        Debug.DrawRay(rayStartPosition, direction, Color.blue);
+        //Debug.DrawRay(rayStartPosition, direction, Color.blue);
     }
 
     /// <summary>

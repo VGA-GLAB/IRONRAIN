@@ -17,8 +17,8 @@ public class LineRendererDraw : MonoBehaviour
 
     private void Start()
     {
-        InputProvider.Instance.SetEnterInput(InputProvider.InputType.LeftTrigger, LineStart);
-        InputProvider.Instance.SetExitInput(InputProvider.InputType.LeftTrigger, LineEnd);
+        // InputProvider.Instance.SetEnterInput(InputProvider.InputType.LeftTrigger, LineStart);
+        // InputProvider.Instance.SetExitInput(InputProvider.InputType.LeftTrigger, LineEnd);
     }
 
     private void Update()
