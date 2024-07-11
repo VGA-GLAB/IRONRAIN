@@ -72,7 +72,7 @@ namespace Enemy.Control.FSM
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;
             _isPlaying = true;
-
+            
             // 再生するアニメーション名が敵の種類によって違う。
             string stateName = "";
             if (_params.Type == EnemyType.MachineGun) stateName = BodyAnimation.StateName.MachineGun.Damage;
