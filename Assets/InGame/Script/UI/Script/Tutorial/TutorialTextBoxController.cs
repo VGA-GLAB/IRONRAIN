@@ -18,11 +18,23 @@ public sealed class TutorialTextBoxController : MonoBehaviour
         _textBox.enabled = false;
     }
 
-    public async UniTask DoTextChangeAsync(string text, float duration, CancellationToken cancellationToken, 
+    public void ChangeText(string text)
+    {
+        _textUI.text = text;
+    }
+
+    public async UniTask DoTextChangeAsync(string text, float oneCharDuration, CancellationToken cancellationToken, 
         ScrambleMode scrambleMode = ScrambleMode.None)
     {
-        await _textUI.DOText(text, duration, scrambleMode: scrambleMode)
+        await _textUI.DOText(text, oneCharDuration * text.Length, scrambleMode: scrambleMode)
             .ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    public void Open()
+    {
+        _textUI.enabled = true;
+        _textBox.enabled = true;
+        transform.localScale = Vector3.one;
     }
 
     public async UniTask DoOpenTextBoxAsync(float duration, CancellationToken cancellationToken)
@@ -41,6 +53,14 @@ public sealed class TutorialTextBoxController : MonoBehaviour
                 }
             })
             .ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    public void Close()
+    {
+        _textUI.enabled = false;
+        _textBox.enabled = false;
+        transform.localScale = Vector3.one;
+        ClearText();
     }
 
     public async UniTask DoCloseTextBoxAsync(float duration, CancellationToken cancellationToken)
