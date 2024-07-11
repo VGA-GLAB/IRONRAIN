@@ -14,4 +14,9 @@ public class PlayerSound : MonoBehaviour
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle5, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle6, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
     }
+
+    private void Update()
+    {
+        
+    }
 }
