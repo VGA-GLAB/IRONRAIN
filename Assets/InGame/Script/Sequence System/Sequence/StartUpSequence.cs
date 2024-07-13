@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace IronRain.SequenceSystem
 {
@@ -21,7 +22,16 @@ namespace IronRain.SequenceSystem
         [SerializeField] private OpenMonitorSequence _monitorSequence;
 
         [Header("Event Number 3")]
-        [SerializeField] private OpenHangerDoorSequence _openHanger;
+        [SerializeField] private OpenHangerDoorSequence _openFirstDoor;
+
+        [Header("Event Num 4")]
+        [SerializeField] private MoveTargetSequence _moveSecondDoorTarget;
+
+        [Header("Event Num 5")]
+        [SerializeField] private WaitToggleSequence _secondDoorToggle;
+        [SerializeField] private OpenHangerDoorSequence _openSecondDoor;
+        [SerializeField] private MoveTargetSequence _moveOutside;
+        
         
         private SequenceData _data;
         
@@ -34,6 +44,13 @@ namespace IronRain.SequenceSystem
         public void SetData(SequenceData data)
         {
             _data = data;
+            
+            _waitToggleSequence.SetData(data);
+            _monitorSequence.SetData(data);
+            _openFirstDoor.SetData(data);
+            _moveSecondDoorTarget.SetData(data);
+            _openSecondDoor.SetData(data);
+            _moveOutside.SetData(data);
         }
         
         public async UniTask PlayAsync(CancellationToken ct)
@@ -41,19 +58,30 @@ namespace IronRain.SequenceSystem
             switch (_eventNum)
             {
                 case 1:
-                    _waitToggleSequence.PlayAsync(ct).Forget();
+                    await _waitToggleSequence.PlayAsync(ct);
                     break;
                 case 2:
                     _monitorSequence.PlayAsync(ct).Forget();
                     break;
                 case 3:
-                    _openHanger.PlayAsync(ct).Forget();
+                    _openFirstDoor.PlayAsync(ct).Forget();
                     break;
                 case 4:
-                    
+                    _moveSecondDoorTarget.PlayAsync(ct).Forget();
+                    break;
+                case 5:
+                    await _secondDoorToggle.PlayAsync(ct);
+                    Event5Async(ct).Forget();
+                    break;
             }
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
+        }
+
+        private async UniTask Event5Async(CancellationToken ct)
+        {
+            await _openSecondDoor.PlayAsync(ct);
+            await _moveOutside.PlayAsync(ct);
         }
 
         public void Skip()
