@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -26,10 +27,16 @@ public class StartSceneController : MonoBehaviour
 
     [SerializeField] private string _loadSceneName = "ChaseScene";
 
+    private InputAction _pressAnyKeyAction =
+        new InputAction(type: InputActionType.PassThrough, binding: "*/<Button>", interactions: "Press");
+
     private async void Start()
     {
         await StartSceneAsync(this.GetCancellationTokenOnDestroy());
     }
+
+    private void OnEnable() => _pressAnyKeyAction.Enable();
+    private void OnDisable() => _pressAnyKeyAction.Disable();
 
     private async UniTask StartSceneAsync(CancellationToken ct)
     {
@@ -37,7 +44,7 @@ public class StartSceneController : MonoBehaviour
 
         await _textBox.DoTextChangeAsync(_firstText, _oneCharDuration, ct);
 
-        await UniTask.WaitUntil(() => UnityEngine.InputSystem.Keyboard.current.anyKey.isPressed, cancellationToken: ct);
+        await UniTask.WaitUntil(() => _pressAnyKeyAction.triggered, cancellationToken: ct);
 
         await _textBox.DoCloseTextBoxAsync(1F, ct);
         _textBox.ClearText();
