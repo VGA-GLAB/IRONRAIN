@@ -109,9 +109,6 @@ namespace Enemy.Control
         {
             EnemyManager.Register(this);
 
-            // レーダーに表示する。
-            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
-
             // Perception
             _perception.Init();
             _hitPoint.Init();          
@@ -125,7 +122,7 @@ namespace Enemy.Control
             _fireRate.UpdateIfAttacked();
             _hitPoint.Update();
             // 命令で上書きするのでPerception層の一番最後。
-            _overrideOrder.Update();     
+            _overrideOrder.Update();
 
             // Brain
             // 優先度順で全ての行動に対する制御を決める。
@@ -163,9 +160,6 @@ namespace Enemy.Control
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
-            // レーダーから消す。
-            if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
-            
             // Perception
             _perception.Dispose();
 
