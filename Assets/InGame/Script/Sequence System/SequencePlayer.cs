@@ -1,21 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
     public class SequencePlayer : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private SequenceManager _manager;
+        [SerializeField] private bool _playOnAwake = true;
+
+        private ISequence[] _sequences;
+
+        private void Awake()
         {
-        
+            _sequences = _manager.GetSequences();
+
+            if (_playOnAwake)
+            {
+                Play();
+            }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        public void Play() => PlayAsync(this.GetCancellationTokenOnDestroy()).Forget();
         
+        public async UniTask PlayAsync(CancellationToken ct)
+        {
+            foreach (var seq in _manager.GetSequences())
+            {
+                await seq.PlayAsync(ct);
+            }
         }
     }
 }

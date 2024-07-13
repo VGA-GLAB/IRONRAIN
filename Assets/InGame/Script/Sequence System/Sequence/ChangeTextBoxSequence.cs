@@ -10,8 +10,8 @@ namespace IronRain.SequenceSystem
         private TutorialTextBoxController _textBox;
         
         [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private string _text = "";
-        [SerializeField] private float _oneCharDuration = 0F;
+        [SerializeField,TextArea] private string _text = "";
+        [SerializeField] private float _oneCharDuration = 0.05F;
         [SerializeField] private float _delaySec = 0F;
         
         public void SetData(SequenceData data)
