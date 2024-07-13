@@ -12,7 +12,10 @@ public class StartSceneController : MonoBehaviour
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private Light[] _lights = default;
-    [FormerlySerializedAs("_text")] [SerializeField, TextArea] private string _firstText = "Press Any Button";
+
+    [FormerlySerializedAs("_text")] [SerializeField]
+    private float _oneCharDuration = 0.05F;
+    [SerializeField, TextArea] private string _firstText = "Press Any Button";
     [Header("サイレン")]
     [SerializeField] private float _loopSec = 1.5F;
 
@@ -32,7 +35,7 @@ public class StartSceneController : MonoBehaviour
     {
         await _textBox.DoOpenTextBoxAsync(1F, ct);
 
-        await _textBox.DoTextChangeAsync(_firstText, 1F, ct);
+        await _textBox.DoTextChangeAsync(_firstText, _oneCharDuration, ct);
 
         await UniTask.WaitUntil(() => UnityEngine.InputSystem.Keyboard.current.anyKey.isPressed, cancellationToken: ct);
 
@@ -42,11 +45,13 @@ public class StartSceneController : MonoBehaviour
         using var sirenCTS = new CancellationTokenSource();
         Siren(sirenCTS.Token);
 
+        CriAudioManager.Instance.SE.Play("SE", "SE_Alert");
+
         await UniTask.WaitForSeconds(_waitSec, cancellationToken: ct);
 
         await _textBox.DoOpenTextBoxAsync(1F, ct);
 
-        await _textBox.DoTextChangeAsync(_secondText, 1F, ct);
+        await _textBox.DoTextChangeAsync(_secondText, _oneCharDuration, ct);
 
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
 
