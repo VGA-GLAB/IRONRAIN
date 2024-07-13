@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7270267471246126463
 MonoBehaviour:
@@ -49,33 +49,150 @@ MonoBehaviour:
   _isDebug: 0
   _debugSequenceList:
   - rid: 1578471246827094016
-  - rid: 1578471199245860866
-  - rid: 1578471199245860867
-  - rid: -2
+  - rid: 1578471262862442496
+  - rid: 1578471262862442499
+  - rid: 1578471262862442500
+  - rid: 1578471262862442497
+  - rid: 1578471262862442501
+  - rid: 1578471262862442498
+  - rid: 1578471262862442503
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 1578471199245860866
-      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _openSec: 0
-        _delaySec: 0
-    - rid: 1578471199245860867
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
     - rid: 1578471246827094016
       type: {class: StartUpSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 0
+        _totalSec: 2
         _eventNum: 0
         _waitToggleSequence:
           _toggleButton1: 12
           _toggleButton2: 13
-        _monitorOpenSec: 1
+        _monitorSequence:
+          _totalSec: 0
+          _monitorOpenSec: 1
+        _openFirstDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveSecondDoorTarget:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+        _secondDoorToggle:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _openSecondDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveOutside:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+    - rid: 1578471262862442496
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+    - rid: 1578471262862442497
+      type: {class: StartUpSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _eventNum: 1
+        _waitToggleSequence:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _monitorSequence:
+          _totalSec: 0
+          _monitorOpenSec: 1
+        _openFirstDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveSecondDoorTarget:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+        _secondDoorToggle:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _openSecondDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveOutside:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+    - rid: 1578471262862442498
+      type: {class: StartUpSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _eventNum: 2
+        _waitToggleSequence:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _monitorSequence:
+          _totalSec: 0
+          _monitorOpenSec: 1
+        _openFirstDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveSecondDoorTarget:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+        _secondDoorToggle:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _openSecondDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveOutside:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+    - rid: 1578471262862442499
+      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _openSec: 1
+        _delaySec: 0
+    - rid: 1578471262862442500
+      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _text: "F1\u3068F2\u3092\u62BC\u3059\u3068\u6249\u304C\u958B\u304D\u307E\u3059\u3002"
+        _oneCharDuration: 0.05
+        _delaySec: 0
+    - rid: 1578471262862442501
+      type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _closeDuration: 1
+    - rid: 1578471262862442503
+      type: {class: StartUpSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _eventNum: 3
+        _waitToggleSequence:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _monitorSequence:
+          _totalSec: 0
+          _monitorOpenSec: 1
+        _openFirstDoor:
+          _totalSec: 1
+          _targetDoor: 0
+        _moveSecondDoorTarget:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
+        _secondDoorToggle:
+          _toggleButton1: 12
+          _toggleButton2: 13
+        _openSecondDoor:
+          _totalSec: 0
+          _targetDoor: 0
+        _moveOutside:
+          _totalSec: 0
+          _moveSec: 0
+          _target: 0
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
