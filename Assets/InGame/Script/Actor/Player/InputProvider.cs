@@ -124,6 +124,8 @@ public class InputProvider
         _inputMap.XRILeftHandInteraction.Select.canceled += context => ExecuteInput(InputType.LeftLeverMove, InputMode.Exit);
         _inputMap.XRIRightHandInteraction.Select.performed += context => ExecuteInput(InputType.RightLeverMove, InputMode.Enter);
         _inputMap.XRIRightHandInteraction.Select.canceled += context => ExecuteInput(InputType.RightLeverMove, InputMode.Exit);
+        _inputMap.XRILeftHandLocomotion.Move.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.XRILeftHandLocomotion.Move.canceled += context => RightLeverInputDir = Vector2.zero;
     }
 
     private void KeyBordInit() 
