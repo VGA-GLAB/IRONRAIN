@@ -470,7 +470,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Throttle"",
                     ""type"": ""Value"",
                     ""id"": ""52b68949-7351-42b8-9bca-a71d3dbe5453"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -711,7 +711,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""6e9f4cb0-c2b1-45d2-a96d-b24c898edab6"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/z"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3073,7 +3073,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""29fca6cd-416c-47ae-9c33-5049b6cb5cf2"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button9"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3161,7 +3161,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""dd790203-ae9c-4cb5-8e64-b2d37ce7567b"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button5"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/button2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
