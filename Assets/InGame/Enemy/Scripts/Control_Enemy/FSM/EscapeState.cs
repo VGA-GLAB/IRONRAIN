@@ -12,19 +12,22 @@ namespace Enemy.Control.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private AgentScript _agentScript;
 
-        public EscapeState(BlackBoard blackBoard, Body body, BodyAnimation animation)
+        public EscapeState(BlackBoard blackBoard, Body body, BodyAnimation animation, AgentScript agentScript)
         {
             _blackBoard = blackBoard;
             _body = body;
             _animation = animation;
+            _agentScript = agentScript;
         }
 
         public override StateKey Key => StateKey.Escape;
 
         protected override void Enter()
         {
-
+            // レーダーマップから消す。
+            if (_agentScript != null) _agentScript.EnemyDestory();
         }
 
         protected override void Exit()

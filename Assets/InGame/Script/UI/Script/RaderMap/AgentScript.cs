@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Interfaces;
+using System;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class AgentScript : MonoBehaviour
     [SerializeField] public Color _rockonColor;
     /// <summary>マップに表示するイメージのロックオン時の色 </summary>
     public bool IsDefault = true;
+    [SerializeField, Tooltip("テスト用")] private bool _isTest = false;
 
     private void Awake()
     {
@@ -27,6 +29,13 @@ public class AgentScript : MonoBehaviour
         RaderMap = FindObjectOfType<RaderMap>();
     }
 
+    private void Start()
+    {
+        if(_isTest)
+        {
+            EnemyGenerate();
+        }  
+    }
     /// <summary>
     /// エネミーが生成された時に呼ばれる処理
     /// </summary>

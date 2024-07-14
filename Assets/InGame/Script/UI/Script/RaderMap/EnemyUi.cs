@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EnemyUi : MonoBehaviour, IPointerDownHandler
+public class EnemyUi : MonoBehaviour
 {
     public GameObject Enemy;
     /// <summary>表示するレーダーマップ </summary>
@@ -18,13 +18,16 @@ public class EnemyUi : MonoBehaviour, IPointerDownHandler
         RaderMap = GameObject.FindObjectOfType<RaderMap>().GetComponent<RaderMap>();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    /// <summary>
+    /// 触れたときに呼ばれる処理
+    /// </summary>
+    public void OnButton()
     {
         RaderMap.PanelRock(Enemy);
     }
 
     public void Test()
     {
-        Debug.Log("テスト");
+        //Debug.Log("テスト");
     }
 }

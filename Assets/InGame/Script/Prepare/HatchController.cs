@@ -8,23 +8,22 @@ using UnityEngine;
 
 public sealed class HatchController : MonoBehaviour
 {
-    [SerializeField] private Transform _overDoor = default;
-    [SerializeField] private Transform _underDoor = default;
+    [SerializeField] private Animation _overDoor = default;
+    [SerializeField] private Animation _underDoor = default;
     [SerializeField] private ParticleSystem _smoke = default;
 
     public async UniTask OpenDoorAsync(OpenDoorData data, CancellationToken cancellationToken)
     {
         _smoke.Play();
-        
-        await UniTask.WhenAll(
-            _overDoor.DOLocalMoveY(data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken),
-            _underDoor.DOLocalMoveY(-data.FirstMoveValue, data.FirstDuration).ToUniTask(cancellationToken: cancellationToken)
-        );
-        
-        await UniTask.WhenAll(
-            _overDoor.DOLocalMoveY(data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken),
-            _underDoor.DOLocalMoveY(-data.SecondMoveValue, data.SecondDuration).ToUniTask(cancellationToken: cancellationToken)
-        );
+
+        _underDoor.Play();
+        _overDoor.Play();
+    }
+
+    public void Open()
+    {
+        _underDoor.Play();
+        _overDoor.Play();
     }
 
     [Serializable]

@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -12,7 +13,10 @@ public class StartSceneController : MonoBehaviour
 {
     [SerializeField] private TutorialTextBoxController _textBox = default;
     [SerializeField] private Light[] _lights = default;
-    [FormerlySerializedAs("_text")] [SerializeField, TextArea] private string _firstText = "Press Any Button";
+
+    [FormerlySerializedAs("_text")] [SerializeField]
+    private float _oneCharDuration = 0.05F;
+    [SerializeField, TextArea] private string _firstText = "Press Any Button";
     [Header("サイレン")]
     [SerializeField] private float _loopSec = 1.5F;
 
@@ -23,18 +27,24 @@ public class StartSceneController : MonoBehaviour
 
     [SerializeField] private string _loadSceneName = "ChaseScene";
 
+    private InputAction _pressAnyKeyAction =
+        new InputAction(type: InputActionType.PassThrough, binding: "*/<Button>", interactions: "Press");
+
     private async void Start()
     {
         await StartSceneAsync(this.GetCancellationTokenOnDestroy());
     }
 
+    private void OnEnable() => _pressAnyKeyAction.Enable();
+    private void OnDisable() => _pressAnyKeyAction.Disable();
+
     private async UniTask StartSceneAsync(CancellationToken ct)
     {
         await _textBox.DoOpenTextBoxAsync(1F, ct);
 
-        await _textBox.DoTextChangeAsync(_firstText, 1F, ct);
+        await _textBox.DoTextChangeAsync(_firstText, _oneCharDuration, ct);
 
-        await UniTask.WaitUntil(() => UnityEngine.InputSystem.Keyboard.current.anyKey.isPressed, cancellationToken: ct);
+        await UniTask.WaitUntil(() => _pressAnyKeyAction.triggered, cancellationToken: ct);
 
         await _textBox.DoCloseTextBoxAsync(1F, ct);
         _textBox.ClearText();
@@ -42,11 +52,13 @@ public class StartSceneController : MonoBehaviour
         using var sirenCTS = new CancellationTokenSource();
         Siren(sirenCTS.Token);
 
+        CriAudioManager.Instance.SE.Play("SE", "SE_Alert");
+
         await UniTask.WaitForSeconds(_waitSec, cancellationToken: ct);
 
         await _textBox.DoOpenTextBoxAsync(1F, ct);
 
-        await _textBox.DoTextChangeAsync(_secondText, 1F, ct);
+        await _textBox.DoTextChangeAsync(_secondText, _oneCharDuration, ct);
 
         await UniTask.WaitForSeconds(2F, cancellationToken: ct);
 

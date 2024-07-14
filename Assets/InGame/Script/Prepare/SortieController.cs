@@ -24,7 +24,7 @@ public sealed class SortieController : MonoBehaviour
         await _tutorialTextBoxController.DoOpenTextBoxAsync(1F, cancellationToken);
         
         await UniTask.WhenAll(
-            _tutorialTextBoxController.DoTextChangeAsync(_text, 2F, cancellationToken),
+            _tutorialTextBoxController.DoTextChangeAsync(_text, 0.05F, cancellationToken),
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle3), cancellationToken: cancellationToken),
             UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), cancellationToken: cancellationToken)
         );

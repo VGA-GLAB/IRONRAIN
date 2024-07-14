@@ -1,5 +1,4 @@
 ﻿using Enemy.Control.FSM;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,15 +30,22 @@ namespace Enemy.Control
             _blackBoard = blackBoard;
             _animator = animator;
 
+            // 登場時にレーダーマップに表示、退場時にレーダーマップから消す。
+            // それぞれ対応するステートに渡して処理を呼んでもらう。
+            if (!transform.TryGetComponent(out AgentScript agentScript))
+            {
+                Debug.LogWarning($"{nameof(AgentScript)}がアタッチされていないため、レーダーマップに写らない");
+            }
+
             // 各ステートにTransformやアニメーション、演出を操作するクラスを渡す。
             Body body = new Body(transform, offset, rotate, models, hitBoxes);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
             Effector effector = new Effector(effects);
             _stateTable = new Dictionary<StateKey, State>
             {
-                { StateKey.Approach, new ApproachState(blackBoard, body, bodyAnimation) },
-                { StateKey.Broken, new BrokenState(enemyParams, blackBoard, body, bodyAnimation, effector) },
-                { StateKey.Escape, new EscapeState(blackBoard, body, bodyAnimation) },
+                { StateKey.Approach, new ApproachState(blackBoard, body, bodyAnimation, agentScript) },
+                { StateKey.Broken, new BrokenState(enemyParams, blackBoard, body, bodyAnimation, effector, agentScript) },
+                { StateKey.Escape, new EscapeState(blackBoard, body, bodyAnimation, agentScript) },
                 { StateKey.Idle, new IdleState(blackBoard) },
                 { StateKey.Hide, new HideState(blackBoard, body) },
             };

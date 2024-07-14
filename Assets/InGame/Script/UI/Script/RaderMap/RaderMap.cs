@@ -42,11 +42,15 @@ public class RaderMap : MonoBehaviour
     }
 
     private MouseMultilockSystem _mouseMultilockSystem;
+
+    private MultilockSystem _multilockSystem;
+
+    [SerializeField] private bool _isMouse = true;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
-        _mouseMultilockSystem = GameObject.FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
+        _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
     }
 
     void Update()
@@ -94,9 +98,19 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
+        if (_isMouse)
         {
-            _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+            if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
+            {
+                _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+            }
+        }
+        else
+        {
+            if(_multilockSystem.LockOnEnemy.Contains(enemy))
+            {
+                _multilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+            }
         }
 
         if (EnemyMaps.ContainsKey(enemy))

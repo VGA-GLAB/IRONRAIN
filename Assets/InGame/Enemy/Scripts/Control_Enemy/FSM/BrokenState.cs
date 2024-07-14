@@ -14,6 +14,7 @@ namespace Enemy.Control.FSM
         private Body _body;
         private BodyAnimation _animation;
         private Effector _effector;
+        private AgentScript _agentScript;
 
         // 画面に表示された状態で死亡したかどうかで演出を再生するかどうかを決める。
         private bool _isRendererEnabledOnEnter;
@@ -25,13 +26,14 @@ namespace Enemy.Control.FSM
         private float _exitElapsed;
 
         public BrokenState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, BodyAnimation bodyAnimation, 
-            Effector effector)
+            Effector effector, AgentScript agentScript)
         {
             _params = enemyParams;
             _blackBoard = blackBoard;
             _body = body;
             _animation = bodyAnimation;
             _effector = effector;
+            _agentScript = agentScript;
         }
 
         public override StateKey Key => StateKey.Broken;
@@ -46,6 +48,9 @@ namespace Enemy.Control.FSM
 
             // 撃破されたときの音
             AudioWrapper.PlaySE("SE_Kill");
+
+            // レーダーマップから消す。
+            if (_agentScript != null) _agentScript.EnemyDestory();
         }
 
         protected override void Exit()
@@ -72,7 +77,7 @@ namespace Enemy.Control.FSM
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;
             _isPlaying = true;
-
+            
             // 再生するアニメーション名が敵の種類によって違う。
             string stateName = "";
             if (_params.Type == EnemyType.MachineGun) stateName = BodyAnimation.StateName.MachineGun.Damage;
