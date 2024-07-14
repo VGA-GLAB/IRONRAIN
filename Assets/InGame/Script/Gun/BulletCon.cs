@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BulletCon : MonoBehaviour
 {
+    public event Action<BulletCon> OnRelease;
+
     [SerializeField] private float _speed;
     [SerializeField] private Rigidbody _rb;
     [Tooltip("ロックオンしている敵")]
@@ -18,24 +21,32 @@ public class BulletCon : MonoBehaviour
         _damege = damege;
         _shotDir = shotDir;
     }
-
-    private void Start()
-    {
-        Destroy(this.gameObject, 5f);
-    }
-
     private void Update()
     {
         ///一旦完全追従に
-        if (_lockOnEnemy)
+        if (_lockOnEnemy && _lockOnEnemy.activeSelf)
         {
             transform.LookAt(_lockOnEnemy.transform);
             _rb.velocity = transform.forward * _speed * ProvidePlayerInformation.TimeScale;
         }
-        else 
+        else if (_lockOnEnemy && !_lockOnEnemy.activeSelf) 
         {
             _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
         }
+        else
+        {
+            _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
+        }
+    }
+
+    private void OnEnable()
+    {
+          StartCoroutine(BulletRelese());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,7 +56,14 @@ public class BulletCon : MonoBehaviour
         if (!playerCon && damageble != null) 
         {                                                                                                                                                                                                   
             damageble.Damage(_damege);
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
+            OnRelease?.Invoke(this);
         }
+    }
+
+    private IEnumerator BulletRelese() 
+    {
+        yield return new WaitForSeconds(2);
+        OnRelease?.Invoke(this);
     }
 }

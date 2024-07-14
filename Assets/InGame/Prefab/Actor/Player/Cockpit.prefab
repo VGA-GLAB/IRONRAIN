@@ -1515,6 +1515,7 @@ GameObject:
   - component: {fileID: 2268677340034192887}
   - component: {fileID: 6649512386314107267}
   - component: {fileID: 5756206767237145972}
+  - component: {fileID: 1570113717442997424}
   m_Layer: 6
   m_Name: PlayerWeapon
   m_TagString: Untagged
@@ -1549,10 +1550,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91b58fcd25735504293362de77d7163e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 6348920230107005041, guid: a89eacfe10619224ea97875b0f2927dc, type: 3}
-  _bulletInsPos: {fileID: 5917866099676332348}
   _params: {fileID: 11400000, guid: b09662769c904b74a903f4536da3a0bf, type: 2}
   _shotSeCueName: SE_RocketLauncher
+  _bulletPool: {fileID: 1570113717442997424}
 --- !u!114 &6649512386314107267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1588,10 +1588,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8dbf4e3e1590d4eb2db574cf4c2a77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 6348920230107005041, guid: a89eacfe10619224ea97875b0f2927dc, type: 3}
-  _bulletInsPos: {fileID: 5917866099676332348}
   _params: {fileID: 11400000, guid: 853fc6ba52535bb4fbfe1e5efe17b719, type: 2}
   _shotSeCueName: SE_AssaultRifle
+  _bulletPool: {fileID: 1570113717442997424}
+--- !u!114 &1570113717442997424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495222728609010321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 480e500f69199e54194483e6a7118be0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 6348920230107005041, guid: a89eacfe10619224ea97875b0f2927dc, type: 3}
+  _shotPos: {fileID: 5917866099676332348}
 --- !u!1 &1634312577402327956
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(BulletPool))]
 public abstract class PlayerWeaponBase : MonoBehaviour
 {
     public PlayerWeaponParams WeaponParam => _params;
     public int CurrentBullets => _currentBullets;
 
-    [Header("弾のPrefab")]
-    [SerializeField] protected GameObject _bulletPrefab;
-    [SerializeField] protected Transform _bulletInsPos;
     [SerializeField] protected PlayerWeaponParams _params;
     [SerializeField] protected string _shotSeCueName;
+    [SerializeField] protected BulletPool _bulletPool;
 
     protected bool _isShotInput;
     [Tooltip("現在の弾数")]
@@ -50,8 +49,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         if (_isFire && 0 < _currentBullets && !_isReload)
         {
             //後でオブジェクトプールに
-            var obj = Instantiate(_bulletPrefab, _bulletInsPos.position, Quaternion.identity);
-            obj.GetComponent<BulletCon>().SetUp(
+            var bulletCon = _bulletPool.GetBullet();
+            bulletCon.SetUp(
                 _playerEnvroment.RaderMap.GetRockEnemy, 
                 _params.ShotDamage,
                 _playerEnvroment.PlayerTransform.forward);
@@ -79,8 +78,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
 
         for (int i = 0; i < lockOnEnemys.Count; i++)
         {
-            var obj = Object.Instantiate(_bulletPrefab, _bulletInsPos.position, Quaternion.identity);
-            obj.GetComponent<BulletCon>().SetUp(
+            var bulletCon = _bulletPool.GetBullet();
+            bulletCon.SetUp(
                 _playerEnvroment.RaderMap.MultiLockEnemys[i],
                 _params.ShotDamage,
                 _playerEnvroment.PlayerTransform.forward);
