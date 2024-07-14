@@ -1,4 +1,4 @@
-#if CRI_SOUND_MANAGER
+﻿#if CRI_SOUND_MANAGER
 using UnityEngine;
 using System;
 using CriWare;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 /// <summary>サウンドを管理するクラス</summary>
 public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
 {
-    private void Start()
+    private void Awake()
     {
         _masterVolume = new Volume();
         _bgm = new CriSingleChannel(_masterVolume);

@@ -9,5 +9,10 @@ namespace IronRain.SequenceSystem
         [Header("Debug機能")]
         [SerializeField] private bool _isDebug;
         [SerializeReference, SubclassSelector] private ISequence[] _debugSequenceList;
+
+        public ISequence[] GetSequences()
+        {
+            return _debugSequenceList;
+        }
     }
 }

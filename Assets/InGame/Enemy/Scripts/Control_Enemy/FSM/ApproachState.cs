@@ -12,12 +12,14 @@ namespace Enemy.Control.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private AgentScript _agentScript;
 
-        public ApproachState(BlackBoard blackBoard, Body body, BodyAnimation animation)
+        public ApproachState(BlackBoard blackBoard, Body body, BodyAnimation animation, AgentScript agentScript)
         {
             _blackBoard = blackBoard;
             _body = body;
             _animation = animation;
+            _agentScript = agentScript;
         }
 
         public override StateKey Key => StateKey.Approach;
@@ -32,6 +34,9 @@ namespace Enemy.Control.FSM
                     _body.Warp(plan.Position);
                 }
             }
+
+            // レーダーマップに表示させる。
+            if (_agentScript != null) _agentScript.EnemyGenerate();
         }
 
         protected override void Exit()
