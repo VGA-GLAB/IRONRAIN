@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7270267471246126463
 MonoBehaviour:
@@ -117,7 +117,9 @@ MonoBehaviour:
   - rid: 1578471290832158796
   - rid: 1578471290832158804
   - rid: 1578471290832158797
-  - rid: 1578471290832158800
+  - rid: 1578471333925748736
+  - rid: 1578471333925748737
+  - rid: 1578471333925748738
   - rid: 1578471290832158805
   - rid: 1578471290832158806
   - rid: 1578471290832158807
@@ -525,8 +527,6 @@ MonoBehaviour:
         _text: "\u6575UI\u3092\u306A\u305E\u3063\u3066\u30DE\u30EB\u30C1\u30ED\u30C3\u30AF\u30AA\u30F3\u3057\u3066\u304F\u3060\u3055\u3044"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471290832158800
-      type: {class: WaitMultiLockSequenceAndFireSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 1578471290832158801
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -623,6 +623,15 @@ MonoBehaviour:
       type: {class: LoadSceneSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _loadScenenName: StartScene
+    - rid: 1578471333925748736
+      type: {class: WaitMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 1578471333925748737
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 32
+    - rid: 1578471333925748738
+      type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
