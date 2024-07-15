@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using IronRain.SequenceSystem;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,8 +15,8 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private Text _currentBullet;
     [SerializeField] private Text _maxBullet;
     [SerializeField] private Text _currentSeq;
+    [SerializeField] private SequencePlayer _sequencePlayer;
 
-    private InGameManager _inGameManager;
     private PlayerBossMove _playerMove;
     private PlayerWeaponController _weaponCon;
     private PlayerQTE _playerQTE;
@@ -23,7 +24,7 @@ public class RobotInputDebug : MonoBehaviour
 
     public void SetUp(InGameManager inGameManager) 
     {
-        _inGameManager = inGameManager;
+
     }
 
     private void Start()
@@ -54,8 +55,8 @@ public class RobotInputDebug : MonoBehaviour
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
         _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
-        //_currentSeq.text = _inGameManager.CurrentSequence == null 
-        //    ? "<null>" 
-        //    : _inGameManager.CurrentSequence.ToString().Replace("ChaseSequenceController+", "");
+        _currentSeq.text = _sequencePlayer.CurrentSequence == null 
+            ? "<null>" 
+            : _sequencePlayer.CurrentSequence.ToString().Replace("IronRain.SequenceSystem", "");
     }
 }
