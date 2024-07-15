@@ -53,7 +53,7 @@ public class RaderMap : MonoBehaviour
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
         _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
-        _pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
+        //_pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
     }
 
     void Update()
@@ -92,7 +92,7 @@ public class RaderMap : MonoBehaviour
             EnemyMaps.Add(enemy, enemyUi);
             agent.RectTransform = enemyUi.GetComponent<RectTransform>();
             _enemies.Add(enemy);
-            _pokeInteractionBase.AddIcon(enemyUi.gameObject);
+            //_pokeInteractionBase.AddIcon(enemyUi.gameObject);
         }
     }
 
@@ -119,7 +119,7 @@ public class RaderMap : MonoBehaviour
 
         if (EnemyMaps.ContainsKey(enemy))
         {
-            _pokeInteractionBase.RemoveIcon(EnemyMaps[enemy].gameObject);
+            //_pokeInteractionBase.RemoveIcon(EnemyMaps[enemy].gameObject);
             Destroy(EnemyMaps[enemy].gameObject);
             EnemyMaps.Remove(enemy);
             _enemies.Remove(enemy);

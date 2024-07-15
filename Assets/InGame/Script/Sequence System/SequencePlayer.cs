@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,10 +9,13 @@ namespace IronRain.SequenceSystem
 {
     public class SequencePlayer : MonoBehaviour
     {
+        public ISequence CurrentSequence => _currentSequence;
+
         [SerializeField] private SequenceManager _manager;
         [SerializeField] private bool _playOnAwake = true;
 
         private ISequence[] _sequences;
+        private ISequence _currentSequence;
 
         private void Awake()
         {
@@ -30,7 +33,8 @@ namespace IronRain.SequenceSystem
         {
             foreach (var seq in _manager.GetSequences())
             {
-                await seq.PlayAsync(ct);
+                _currentSequence = seq;
+                await _currentSequence.PlayAsync(ct);
             }
         }
     }
