@@ -11,7 +11,7 @@ public class RaderMap : MonoBehaviour
     /// </summary>
     private List<GameObject> _enemies = new List<GameObject>();
     /// <summary>
-    /// 敵UIのリスト
+    /// 敵UIのリスト(GameObject:実際の敵、Image:Ui)
     /// </summary>
     public Dictionary<GameObject, Image> EnemyMaps = new Dictionary<GameObject, Image>();
     [SerializeField, Tooltip("プレイヤーの位置")] private Transform _player;
@@ -47,13 +47,13 @@ public class RaderMap : MonoBehaviour
 
     [SerializeField] private bool _isMouse = true;
 
-    private PokeInteractionBase _pokeInteractionBase;
+    private UiPokeInteraction _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
         _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
-        _pokeInteractionBase = FindObjectOfType<PokeInteractionBase>();
+        _pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
     }
 
     void Update()
