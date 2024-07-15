@@ -1,4 +1,5 @@
 using System;
+using Enemy.Control;
 using UnityEngine;
 
 namespace IronRain.SequenceSystem
@@ -6,6 +7,7 @@ namespace IronRain.SequenceSystem
     [Serializable]
     public struct SequenceData
     {
+        [Header("Prepare")]
         [SerializeField] private Transform _player;
         public Transform PlayerTransform => _player;
         [SerializeField] private Transform _secondHatchTarget;
@@ -20,5 +22,16 @@ namespace IronRain.SequenceSystem
         public HatchController FirstHatch => _firstHatch;
         [SerializeField] private HatchController _secondHatch;
         public HatchController SecondHatch => _secondHatch;
+        [Header("Chase")]
+        [SerializeField] private PlayerStoryEvent _playerStoryEvent;
+        public PlayerStoryEvent PlayerStoryEvent => _playerStoryEvent;
+        [SerializeField] private PlayerController _playerController;
+        public PlayerController PlayerController => _playerController;
+        [SerializeField] private EnemyController _tutorialEnemy;
+        public EnemyController TutorialEnemy => _tutorialEnemy;
+        [SerializeField] private EnemyManager _enemyManager;
+        public EnemyManager EnemyManager => _enemyManager;
+        [SerializeField] private MouseMultilockSystem _multiLockSystem;
+        public MouseMultilockSystem MouseMultiLockSystem => _multiLockSystem;
     }
 }

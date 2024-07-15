@@ -106,7 +106,6 @@ public class InputProvider
             _throttle = context.ReadValue<float>();
             LeftLeverInputDir = new Vector2(0, _throttle * -1);
         };
-
         _inputMap.XRILeftHand.Throttle.canceled += context => LeftLeverInputDir = Vector2.zero;
     }
 
