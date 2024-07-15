@@ -101,7 +101,11 @@ public class InputProvider
     {
         _inputMap.XRIRightHand.FryStick.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
         _inputMap.XRIRightHand.FryStick.canceled += context => RightLeverInputDir = Vector2.zero;
-        _inputMap.XRILeftHand.Throttle.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
+        _inputMap.XRILeftHand.Throttle.performed += context =>
+        {
+            _throttle = context.ReadValue<float>();
+            LeftLeverInputDir = new Vector2(0, _throttle * -1);
+        };
         _inputMap.XRILeftHand.Throttle.canceled += context => LeftLeverInputDir = Vector2.zero;
     }
 
