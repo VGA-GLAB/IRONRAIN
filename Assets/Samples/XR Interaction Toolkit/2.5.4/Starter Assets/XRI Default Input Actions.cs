@@ -470,7 +470,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Throttle"",
                     ""type"": ""Value"",
                     ""id"": ""52b68949-7351-42b8-9bca-a71d3dbe5453"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -711,7 +711,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""6e9f4cb0-c2b1-45d2-a96d-b24c898edab6"",
-                    ""path"": ""<HID::Thrustmaster T.16000M>/stick"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1589,7 +1589,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""9ec4003c-f752-4a84-b3d7-fca0369fa199"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/stick"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3061,6 +3061,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
+                    ""id"": ""7caa2d9a-a3e6-4e3b-8f71-4c8ebe47bff3"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/stick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverThree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a2e82fcc-1ad5-4cf1-af8c-a4c439906304"",
                     ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
@@ -3072,8 +3083,19 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8cc80736-4a36-4170-b512-e0dce18a1fd4"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/stick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""29fca6cd-416c-47ae-9c33-5049b6cb5cf2"",
-                    ""path"": ""<HID::Thrustmaster T.16000M>/trigger"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button9"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3106,7 +3128,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""972c4bd4-ca97-4627-9126-48163eccfcf0"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/trigger"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3139,7 +3161,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""3d8654fd-1640-49ef-b9cd-3b39e30f2387"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button2"",
+                    ""path"": ""<HID::Thrustmaster T.16000M>/button2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3161,7 +3183,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""dd790203-ae9c-4cb5-8e64-b2d37ce7567b"",
-                    ""path"": ""<HID::Thrustmaster T.16000M>/button2"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button8"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
