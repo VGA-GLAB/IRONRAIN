@@ -46,11 +46,14 @@ public class RaderMap : MonoBehaviour
     private MultilockSystem _multilockSystem;
 
     [SerializeField] private bool _isMouse = true;
+
+    private PokeInteractionBase _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
         _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
+        _pokeInteractionBase = FindObjectOfType<PokeInteractionBase>();
     }
 
     void Update()
@@ -89,6 +92,7 @@ public class RaderMap : MonoBehaviour
             EnemyMaps.Add(enemy, enemyUi);
             agent.RectTransform = enemyUi.GetComponent<RectTransform>();
             _enemies.Add(enemy);
+            _pokeInteractionBase.AddIcon(enemyUi.gameObject);
         }
     }
 
@@ -115,6 +119,7 @@ public class RaderMap : MonoBehaviour
 
         if (EnemyMaps.ContainsKey(enemy))
         {
+            _pokeInteractionBase.RemoveIcon(EnemyMaps[enemy].gameObject);
             Destroy(EnemyMaps[enemy].gameObject);
             EnemyMaps.Remove(enemy);
             _enemies.Remove(enemy);
