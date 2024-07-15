@@ -24,11 +24,22 @@ public class UiPokeInteraction : MonoBehaviour
     private bool _isSelect;
     private bool _isInteractorView;
     private bool _isSelectingInteractorView;
+
+    /// <summary>
+    /// カーソルのRectTransform
+    /// </summary>
+    private RectTransform _cursorRectTransform;
+
+    [SerializeField, Tooltip("Canvas")] private Canvas _canvas;
     /// <summary>
     /// 前のフレームでSelect判定されているか
     /// </summary>
     private bool _wasSelect = false;
-    
+
+    void Awake()
+    {
+        _cursorRectTransform = _cursor.GetComponent<RectTransform>();
+    }
     void Start()
     {
         // 状態のフラグ操作をコールバックに登録。
@@ -45,7 +56,7 @@ public class UiPokeInteraction : MonoBehaviour
     void Update()
     {
         // 指先がUIに触れていた場合かつ前のフレームで選択状態で無い場合に反映。
-        if (_isSelect　&& !_wasSelect)
+        if (true)
         {
             FingertipCursor(_fingertip, _cursor);
             CheckIcons(_cursor);
@@ -61,8 +72,14 @@ public class UiPokeInteraction : MonoBehaviour
         Vector3 p = cursor.transform.position;
         p.x = fingertip.transform.position.x;
         p.y = fingertip.transform.position.y;
-
+        
         cursor.transform.position = p;
+        
+        // Vector3 p = cursor.transform.localPosition;
+        // p.x = fingertip.transform.localPosition.x;
+        // p.y = fingertip.transform.localPosition.y;
+        //
+        // cursor.transform.localPosition = p;
     }
 
     // 指先のカーソルと同じ位置のアイコンを大きめに描画。
