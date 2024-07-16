@@ -15,7 +15,7 @@ public class EnemyUi : MonoBehaviour
     private void Awake()
     {
         //レーダーテストを検索する
-        RaderMap = GameObject.FindObjectOfType<RaderMap>().GetComponent<RaderMap>();
+        RaderMap = GameObject.FindObjectOfType<RaderMap>();
     }
 
     /// <summary>
