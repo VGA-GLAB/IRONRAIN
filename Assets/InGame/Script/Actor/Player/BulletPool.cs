@@ -29,7 +29,7 @@ public class BulletPool: MonoBehaviour
 
     public void ReleaseBullet(BulletCon bulletCon) 
     {
-        bulletCon.gameObject.SetActive(false);
+        bulletCon.SetVisible(false);
         _bulletPool.Release(bulletCon);
     }
 
@@ -43,7 +43,7 @@ public class BulletPool: MonoBehaviour
     private void OnGetObj(BulletCon bulletCon) 
     {
         bulletCon.transform.position = _shotPos.position;
-        bulletCon.gameObject.SetActive(true);
+        bulletCon.SetVisible(true);
     }
 
     private void DestroyPoolBullet(BulletCon bulletCon) 
