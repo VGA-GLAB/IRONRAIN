@@ -4,7 +4,7 @@ public class LineRendererDraw : MonoBehaviour
 {
     [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
     [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
-    [SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
+    //[SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
     [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
 
     /// <summary>頂点の数 </summary>
