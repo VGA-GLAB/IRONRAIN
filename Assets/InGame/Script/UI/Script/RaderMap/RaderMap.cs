@@ -207,8 +207,11 @@ public class RaderMap : MonoBehaviour
         AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
         float nearEnemyDis = nearEnemy.Item2;
         agentScript.IsRockon = true;
-        EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
-        
+        //EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+        //ロックオンUiを表示する
+        var rockonUi = EnemyMaps[agentScript.gameObject].gameObject.GetComponent<EnemyUi>();
+        rockonUi._rockonUi.SetActive(true);
+
         //前のターゲットと違うかを判定
         if (nearEnemy.obj != _nowRockEnemy)
         {
@@ -242,7 +245,11 @@ public class RaderMap : MonoBehaviour
                 return;
             enemyAgent.IsDefault = false;
             enemyAgent.IsRockon = true;
-            EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
+            //EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
+            //ロックオンUiを表示する
+            var rockonUi = EnemyMaps[enemyAgent.gameObject].gameObject.GetComponent<EnemyUi>();
+            rockonUi._rockonUi.SetActive(true);
+
             _nowRockEnemy = enemyAgent.gameObject;
             _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
             
@@ -262,7 +269,10 @@ public class RaderMap : MonoBehaviour
             var agent = enemy.GetComponent<AgentScript>();
             agent.IsRockon = false;
             agent.IsDefault = true;
-            EnemyMaps[enemy].color = agent._defultColor;
+            //EnemyMaps[enemy].color = agent._defultColor;
+            //エネミーのロックオンUiをすべて非表示にする
+            var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
+            enemyUi._rockonUi.SetActive(false);
         }
     }
     //視野角をギズモ化
@@ -297,7 +307,10 @@ public class RaderMap : MonoBehaviour
             var agentScript = enemy.GetComponent<AgentScript>();
             _multiLockEnemys.Add(enemy);
             agentScript.IsRockon = true;
-            EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+            //EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
+            //ロックオンされている敵のロックオンUiをすべて表示にする
+            var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
+            enemyUi._rockonUi.SetActive(true);
         }
     }
 }
