@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
@@ -15,9 +12,11 @@ namespace IronRain.SequenceSystem
             _mouseMultiLockSystem = data.MouseMultiLockSystem;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct)
         {
             _mouseMultiLockSystem.MultilockOnStart();
+
+            return UniTask.CompletedTask;
         }
 
         public void Skip()

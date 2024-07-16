@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
-using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
@@ -16,9 +13,11 @@ namespace IronRain.SequenceSystem
             _enemyManager = data.EnemyManager;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct)
         {
             _enemyManager.BreakLeftArm();
+
+            return UniTask.CompletedTask;
         }
 
         public void Skip()
