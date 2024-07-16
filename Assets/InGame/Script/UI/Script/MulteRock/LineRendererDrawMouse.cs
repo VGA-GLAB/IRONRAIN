@@ -8,7 +8,7 @@ namespace mouse
     {
         [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
         [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
-        [SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
+        //[SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
         [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
         private MouseMultilockSystem _mouseMultilockSystem;
 
@@ -17,7 +17,7 @@ namespace mouse
         /// <summary>頂点を生成する最低間隔 </summary>
         private float _interval = 0.1f;
         /// <summary>ボタンを押しているかのフラグ </summary>
-        private bool IsInput = false;
+        //private bool IsInput = false;
 
         private void Start()
         {
@@ -85,7 +85,7 @@ namespace mouse
 
         private void LineStart()
         {
-            IsInput = true;
+            //IsInput = true;
         }
 
         private void LineEnd()
@@ -93,7 +93,7 @@ namespace mouse
             //ラインレンダラーを初期化
             _lineRenderer.positionCount = 0;
             _posCount = 0;
-            IsInput = false;
+            //IsInput = false;
            // Debug.Log("線を消す");
         }
 
