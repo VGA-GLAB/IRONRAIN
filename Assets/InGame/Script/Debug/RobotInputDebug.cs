@@ -22,7 +22,7 @@ public class RobotInputDebug : MonoBehaviour
     private PlayerQTE _playerQTE;
     private bool _active = false;
 
-    public void SetUp(InGameManager inGameManager) 
+    public void SetUp() 
     {
 
     }
