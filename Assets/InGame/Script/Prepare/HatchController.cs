@@ -12,12 +12,14 @@ public sealed class HatchController : MonoBehaviour
     [SerializeField] private Animation _underDoor = default;
     [SerializeField] private ParticleSystem _smoke = default;
 
-    public async UniTask OpenDoorAsync(OpenDoorData data, CancellationToken cancellationToken)
+    public UniTask OpenDoorAsync(OpenDoorData data, CancellationToken cancellationToken)
     {
         _smoke.Play();
 
         _underDoor.Play();
         _overDoor.Play();
+        
+        return UniTask.CompletedTask;
     }
 
     public void Open()

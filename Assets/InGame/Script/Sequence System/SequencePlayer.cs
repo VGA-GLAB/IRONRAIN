@@ -9,7 +9,7 @@ namespace IronRain.SequenceSystem
         public ISequence CurrentSequence => _currentSequence;
 
         [SerializeField] private SequenceManager _manager;
-        [SerializeField] private bool _playOnAwake = true;
+        [SerializeField] private bool _playOnStart = true;
         [Header("スキップ機能")]
         [SerializeField] private bool _isSkip = false;
         [SerializeField] private int _startIndex;
@@ -17,11 +17,11 @@ namespace IronRain.SequenceSystem
         private ISequence[] _sequences;
         private ISequence _currentSequence;
 
-        private void Awake()
+        private void Start()
         {
             _sequences = _manager.GetSequences();
 
-            if (_playOnAwake)
+            if (_playOnStart)
             {
                 Play();
             }
