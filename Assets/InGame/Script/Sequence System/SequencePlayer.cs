@@ -10,6 +10,9 @@ namespace IronRain.SequenceSystem
 
         [SerializeField] private SequenceManager _manager;
         [SerializeField] private bool _playOnAwake = true;
+        [Header("スキップ機能")]
+        [SerializeField] private bool _isSkip = false;
+        [SerializeField] private int _startIndex;
 
         private ISequence[] _sequences;
         private ISequence _currentSequence;
@@ -28,10 +31,29 @@ namespace IronRain.SequenceSystem
         
         public async UniTask PlayAsync(CancellationToken ct)
         {
-            foreach (var seq in _manager.GetSequences())
+            var sequences = _manager.GetSequences();
+
+            if (_isSkip)
             {
-                _currentSequence = seq;
-                await _currentSequence.PlayAsync(ct);
+                for (int i = 0; i < sequences.Length; i++)
+                {
+                    if (i < _startIndex)
+                    {
+                        sequences[i].Skip();
+                    }
+                    else
+                    {
+                        await sequences[i].PlayAsync(ct);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var seq in sequences)
+                {
+                    _currentSequence = seq;
+                    await _currentSequence.PlayAsync(ct);
+                }   
             }
         }
     }
