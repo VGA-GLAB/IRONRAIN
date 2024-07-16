@@ -6,7 +6,6 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(MultilockSystemExample))]
 public class MultilockSystemDebugger : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _button;
@@ -16,13 +15,10 @@ public class MultilockSystemDebugger : MonoBehaviour
 
     private bool _isButtonPushed;
 
-    private void Awake()
-    {
-        _multilock = GetComponent<MultilockSystemExample>();
-    }
-
     private void Start()
     {
+        _multilock = FindAnyObjectByType<MultilockSystemExample>();
+
         // 状態のフラグ操作をコールバックに登録。
         _button.WhenSelect.AddListener(OnButtonPushed);
         _button.WhenUnselect.AddListener(OnButtonReleased);
@@ -33,6 +29,8 @@ public class MultilockSystemDebugger : MonoBehaviour
         if (!_isButtonPushed)
         {
             _isButtonPushed = true;
+
+            _text.text = "Running...";
 
             MultilockAsync(this.GetCancellationTokenOnDestroy()).Forget();
         }

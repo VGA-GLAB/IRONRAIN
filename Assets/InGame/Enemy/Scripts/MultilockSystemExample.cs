@@ -8,6 +8,7 @@ using UnityEngine;
 public class MultilockSystemExample : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
+    [SerializeField] private LineRenderer _lineRenderer;
     [Header("右手の人差し指")]
     [SerializeField] private Transform _fingertip;
     [Header("指先の位置を示すパネル上のカーソル")]
@@ -26,11 +27,15 @@ public class MultilockSystemExample : MonoBehaviour
 
     private void Start()
     {
+        // 線を非表示にする。
+        _lineRenderer.positionCount = 0;
+
         // 状態のフラグ操作をコールバックに登録。
         _event.WhenSelect.AddListener(() => _isSelect = true);
         _event.WhenUnselect.AddListener(() => _isSelect = false);
     }
 
+    // なぞった結果、n体以上lock-onできなかった場合はやり直しの処理が無い。
     public async UniTask<List<GameObject>> LockOnAsync(CancellationToken token)
     {
         // パネルを指で突くまで待つ。
@@ -41,6 +46,9 @@ public class MultilockSystemExample : MonoBehaviour
 
         // パネルをなぞっている間に接触したTargetを一時的に保持しておくコレクション。
         _temp.Clear();
+
+        // 線をリセット。
+        _lineRenderer.positionCount = 0;
 
         // パネルをなぞっている状態。
         while (_isSelect)
@@ -53,7 +61,12 @@ public class MultilockSystemExample : MonoBehaviour
             {
                 if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                 {
-                    _temp.Add(t);
+                    if (_temp.Add(t))
+                    {
+                        // 新しく追加した場合は、Target同士を結ぶ線を引く。
+                        _lineRenderer.positionCount++;
+                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                    }
                 }
             }
 
