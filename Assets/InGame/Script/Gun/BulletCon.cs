@@ -9,6 +9,8 @@ public class BulletCon : MonoBehaviour
 
     [SerializeField] private float _speed;
     [SerializeField] private Rigidbody _rb;
+    [SerializeField] private ParticleSystem[] _particleArray;
+    [SerializeField] private SphereCollider _sphereCollider;
     [Tooltip("ロックオンしている敵")]
     private GameObject _lockOnEnemy;
 
@@ -39,16 +41,6 @@ public class BulletCon : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-          StartCoroutine(BulletRelese());
-    }
-
-    private void OnDisable()
-    {
-        StopAllCoroutines();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         var damageble = other.GetComponentInParent<IDamageable>();  
@@ -56,9 +48,30 @@ public class BulletCon : MonoBehaviour
         if (!playerCon && damageble != null) 
         {                                                                                                                                                                                                   
             damageble.Damage(_damege);
-            gameObject.SetActive(false);
             OnRelease?.Invoke(this);
         }
+    }
+
+    public void SetVisible(bool isVisible)
+    {
+        if (isVisible)
+        {
+            for (int i = 0; i < _particleArray.Length; i++) 
+            {
+                _particleArray[i].Play();
+            }
+            StartCoroutine(BulletRelese());
+        }
+        else 
+        {
+            for (int i = 0; i < _particleArray.Length; i++)
+            {
+                _particleArray[i].Stop();
+            }
+            StopAllCoroutines();
+        }
+
+        _sphereCollider.enabled = isVisible;
     }
 
     private IEnumerator BulletRelese() 
