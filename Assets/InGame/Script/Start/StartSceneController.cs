@@ -90,7 +90,7 @@ public class StartSceneController : MonoBehaviour
         {
             t.color = Color.red;
             DOTween.To(() => t.intensity, x => t.intensity = x, 0F, 1F)
-                .ToUniTask(cancellationToken: ct);
+                .ToUniTask(cancellationToken: ct).Forget();
         }
         
         await DOTween.To(() => RenderSettings.ambientIntensity, x => RenderSettings.ambientIntensity = x, 0F, 1F)

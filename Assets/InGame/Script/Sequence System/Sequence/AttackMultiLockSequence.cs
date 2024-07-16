@@ -12,9 +12,11 @@ namespace IronRain.SequenceSystem
             _playerController = data.PlayerController;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct)
         {
             _playerController.SeachState<PlayerWeaponController>().WeaponModel.MulchShot();
+            
+            return UniTask.CompletedTask;
         }
 
         public void Skip()

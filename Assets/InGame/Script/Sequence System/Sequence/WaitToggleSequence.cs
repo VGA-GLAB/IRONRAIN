@@ -30,7 +30,6 @@ namespace IronRain.SequenceSystem
 
         public void Skip()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
