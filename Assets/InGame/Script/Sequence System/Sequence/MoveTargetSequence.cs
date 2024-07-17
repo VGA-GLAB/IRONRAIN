@@ -32,9 +32,9 @@ namespace IronRain.SequenceSystem
             _data = data;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            Move(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+            Move(ct).Forget(exceptionHandler);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }

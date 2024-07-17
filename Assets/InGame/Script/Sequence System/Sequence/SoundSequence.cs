@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -25,9 +26,9 @@ namespace IronRain.SequenceSystem
 
         public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            PlaySoundAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+            PlaySoundAsync(ct).Forget(exceptionHandler);
             
             // 全体時間待って抜ける
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
@@ -44,7 +45,7 @@ namespace IronRain.SequenceSystem
             }
             else
             {
-                CriAudioManager.Instance.SE.Play(_cueName, _cueName);
+                CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
             }
         }
 

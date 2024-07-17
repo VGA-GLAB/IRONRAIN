@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace IronRain.SequenceSystem
             _playerController = data.PlayerController;
         }
 
-        public UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _playerController.SeachState<PlayerWeaponController>().WeaponModel.MulchShot();
             

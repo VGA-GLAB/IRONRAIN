@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -16,10 +17,10 @@ namespace IronRain.SequenceSystem
             _data = data;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _data.TextBox.DoCloseTextBoxAsync(_closeDuration, ct)
-                .Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                .Forget(exceptionHandler);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }

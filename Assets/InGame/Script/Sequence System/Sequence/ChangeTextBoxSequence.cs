@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -26,10 +27,10 @@ namespace IronRain.SequenceSystem
             _delaySec = delaySec;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _textBox.DoTextChangeAsync(_text, _oneCharDuration, ct)
-                .Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                .Forget(exceptionHandler);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace IronRain.SequenceSystem
             _playerController = data.PlayerController;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _playerController.PlayerEnvroment.RemoveState(_removeState);
 

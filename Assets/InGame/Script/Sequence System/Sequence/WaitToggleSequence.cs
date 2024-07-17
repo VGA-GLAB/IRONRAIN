@@ -19,7 +19,7 @@ namespace IronRain.SequenceSystem
         
         public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             // 二つの入力を待つ
             await UniTask.WhenAll(
