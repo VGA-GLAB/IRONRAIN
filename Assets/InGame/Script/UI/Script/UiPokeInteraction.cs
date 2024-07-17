@@ -20,10 +20,10 @@ public class UiPokeInteraction : MonoBehaviour
     [Header("指先で触れるUI上のアイコン")]
     [SerializeField] private List<GameObject> _icons = new List<GameObject>();
 
-    private bool _isHover;
+    //private bool _isHover;
     private bool _isSelect;
-    private bool _isInteractorView;
-    private bool _isSelectingInteractorView;
+    //private bool _isInteractorView;
+    //private bool _isSelectingInteractorView;
 
     /// <summary>
     /// カーソルのRectTransform
@@ -43,14 +43,14 @@ public class UiPokeInteraction : MonoBehaviour
     void Start()
     {
         // 状態のフラグ操作をコールバックに登録。
-        _event.WhenHover.AddListener(() => _isHover = true);
-        _event.WhenUnhover.AddListener(() => _isHover = false);
+        //_event.WhenHover.AddListener(() => _isHover = true);
+        //_event.WhenUnhover.AddListener(() => _isHover = false);
         _event.WhenSelect.AddListener(() => _isSelect = true);
         _event.WhenUnselect.AddListener(() => _isSelect = false);
-        _event.WhenInteractorViewAdded.AddListener(() => _isInteractorView = true);
-        _event.WhenInteractorViewRemoved.AddListener(() => _isInteractorView = false);
-        _event.WhenSelectingInteractorViewAdded.AddListener(() => _isSelectingInteractorView = true);
-        _event.WhenSelectingInteractorViewRemoved.AddListener(() => _isSelectingInteractorView = false);
+        //_event.WhenInteractorViewAdded.AddListener(() => _isInteractorView = true);
+        //_event.WhenInteractorViewRemoved.AddListener(() => _isInteractorView = false);
+        //_event.WhenSelectingInteractorViewAdded.AddListener(() => _isSelectingInteractorView = true);
+        //_event.WhenSelectingInteractorViewRemoved.AddListener(() => _isSelectingInteractorView = false);
     }
 
     void Update()
