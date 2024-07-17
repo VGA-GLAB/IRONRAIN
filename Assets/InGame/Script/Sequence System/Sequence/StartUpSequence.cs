@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -49,25 +50,25 @@ namespace IronRain.SequenceSystem
             _moveOutside.SetData(data);
         }
         
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             switch (_eventNum)
             {
                 case 1:
-                    await _waitToggleSequence.PlayAsync(ct);
+                    await _waitToggleSequence.PlayAsync(ct, exceptionHandler);
                     break;
                 case 2:
-                    _monitorSequence.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                    _monitorSequence.PlayAsync(ct, exceptionHandler).Forget(exceptionHandler);
                     break;
                 case 3:
-                    _openFirstDoor.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                    _openFirstDoor.PlayAsync(ct, exceptionHandler).Forget(exceptionHandler);
                     break;
                 case 4:
-                    _moveSecondDoorTarget.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                    _moveSecondDoorTarget.PlayAsync(ct, exceptionHandler).Forget(exceptionHandler);
                     break;
                 case 5:
-                    await _secondDoorToggle.PlayAsync(ct);
-                    Event5Async(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
+                    await _secondDoorToggle.PlayAsync(ct, exceptionHandler);
+                    Event5Async(ct).Forget(exceptionHandler);
                     break;
             }
 

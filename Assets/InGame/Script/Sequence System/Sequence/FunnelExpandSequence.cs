@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
@@ -13,7 +14,7 @@ namespace IronRain.SequenceSystem
             _enemyManager = data.EnemyManager;
         }
 
-        public UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _enemyManager.FunnelExpand();
 

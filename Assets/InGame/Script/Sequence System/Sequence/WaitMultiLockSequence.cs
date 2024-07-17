@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -5,16 +6,19 @@ namespace IronRain.SequenceSystem
 {
     public class WaitMultiLockSequence : ISequence
     {
-        private MouseMultilockSystem _mouseMultiLockSystem;
+        private MultilockSystemExample _multiLockSystem;
+        private RaderMap _raderMap;
         
         public void SetData(SequenceData data)
         {
-            _mouseMultiLockSystem = data.MouseMultiLockSystem;
+            _multiLockSystem = data.MultiLockSystem;
+            _raderMap = data.RaderMap;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            await UniTask.WaitUntil(() => !_mouseMultiLockSystem.IsMultilock, cancellationToken: ct);
+            var enemy = await _multiLockSystem.LockOnAsync(ct);
+            _raderMap.MultiLockon(enemy);
         }
 
         public void Skip() { }

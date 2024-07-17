@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace IronRain.SequenceSystem
     {
         public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             await UniTask.WaitUntil(() =>
                 InputProvider.Instance.LeftLeverDir != Vector3.zero ||
