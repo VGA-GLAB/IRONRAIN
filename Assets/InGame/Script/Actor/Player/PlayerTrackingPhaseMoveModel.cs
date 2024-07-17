@@ -72,6 +72,10 @@ public class PlayerTrackingPhaseMoveModel : IPlayerStateModel
         {
             _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
         }
+        else 
+        {
+            _rb.velocity = Vector3.zero;
+        }
         _rb.velocity += _transform.right * ReturnLaneStrength();
     }
 
@@ -91,7 +95,7 @@ public class PlayerTrackingPhaseMoveModel : IPlayerStateModel
             var nextPoint = _transform.position + _transform.right * -1 * _params.ThrusterMoveNum;
             ThrusterNextPointMove(nextPoint).Forget();
             _currentLane--;
-            if (_currentLane == _params.RestrictionLane * -1)
+            if (_currentLane + 1 == _params.RestrictionLane * -1)
             {
                 _savePos = _transform.position;
             }
@@ -104,7 +108,7 @@ public class PlayerTrackingPhaseMoveModel : IPlayerStateModel
             var nextPoint = _transform.position + _transform.right * _params.ThrusterMoveNum;
             ThrusterNextPointMove(nextPoint).Forget();
             _currentLane++;
-            if (_currentLane == _params.RestrictionLane) _savePos = _transform.position;
+            if (_currentLane - 1 == _params.RestrictionLane) _savePos = _transform.position;
             CriAudioManager.Instance.SE.Play("SE", "SE_Evasion");
         }
     }
@@ -135,7 +139,7 @@ public class PlayerTrackingPhaseMoveModel : IPlayerStateModel
             ret = _params.MaxReturnLaneStrength * isRight;
         }
 
-        var dis = _transform.position.z - _savePos.z;
+        var dis = _transform.position.x - _savePos.x;
         var endDis = 2;
         //Debug.Log($"距離{dis}");
 
