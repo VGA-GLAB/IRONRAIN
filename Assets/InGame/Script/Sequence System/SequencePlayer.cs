@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace IronRain.SequenceSystem
@@ -18,7 +17,6 @@ namespace IronRain.SequenceSystem
 
         private ISequence[] _sequences;
         private ISequence _currentSequence;
-        private static int _index;
 
         private void Start()
         {
@@ -36,31 +34,31 @@ namespace IronRain.SequenceSystem
         {
             var sequences = _manager.GetSequences();
 
-            for (_index = 0; _index < sequences.Length; _index++)
+            for (int i = 0; i < sequences.Length; i++)
             {
-                _currentSequence = sequences[_index];
+                _currentSequence = sequences[i];
                 
                 try
                 {
-                    if (_isSkip && _startIndex < _index)
+                    if (_isSkip && _startIndex < i)
                     {
                         _currentSequence.Skip();
                     }
                     else
                     {
-                        await _currentSequence.PlayAsync(ct);
+                        await _currentSequence.PlayAsync(ct, x =>ExceptionReceiver(x, i));
                     }
                 }
                 catch (Exception e)
                 {
-                    SequencePlayerExceptionReceiver(e);
+                    ExceptionReceiver(e, i);
                 }
             }
         }
 
-        public static void SequencePlayerExceptionReceiver(Exception e)
+        private void ExceptionReceiver(Exception e, int index)
         {
-            Debug.LogError($"Sequence Element{_index}でエラー");
+            Debug.LogError($"Sequence Element{index}でエラー");
             throw e;
         }
     }

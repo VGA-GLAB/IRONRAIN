@@ -31,7 +31,9 @@ namespace IronRain.SequenceSystem
         public EnemyController TutorialEnemy => _tutorialEnemy;
         [SerializeField] private EnemyManager _enemyManager;
         public EnemyManager EnemyManager => _enemyManager;
-        [SerializeField] private MouseMultilockSystem _multiLockSystem;
-        public MouseMultilockSystem MouseMultiLockSystem => _multiLockSystem;
+        [SerializeField] private MultilockSystemExample _multiLockSystem;
+        public MultilockSystemExample MultiLockSystem => _multiLockSystem;
+        [SerializeField] private RaderMap _raderMapMap;
+        public RaderMap RaderMap => _raderMapMap;
     }
 }

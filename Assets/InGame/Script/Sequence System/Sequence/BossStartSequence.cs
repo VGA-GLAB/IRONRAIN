@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace IronRain.SequenceSystem
             _data = data;
         }
 
-        public UniTask PlayAsync(CancellationToken ct)
+        public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _data.PlayerController.SeachState<PlayerStoryEvent>().BossStart();
             _data.EnemyManager.BossStart();

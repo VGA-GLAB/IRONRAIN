@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
@@ -20,7 +21,7 @@ namespace IronRain.SequenceSystem
             _tutorialEnemy = data.TutorialEnemy;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _tutorialEnemy.Attack();
 

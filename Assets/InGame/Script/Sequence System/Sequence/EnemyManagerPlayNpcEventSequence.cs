@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy.Control;
@@ -23,7 +24,7 @@ namespace IronRain.SequenceSystem
             _enemyManager = data.EnemyManager;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct)
+        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _enemyManager.PlayNpcEvent(_targetSeq);
 
