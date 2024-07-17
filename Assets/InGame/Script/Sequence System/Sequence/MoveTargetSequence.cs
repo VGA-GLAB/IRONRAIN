@@ -34,7 +34,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct)
         {
-            Move(ct).Forget();
+            Move(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }

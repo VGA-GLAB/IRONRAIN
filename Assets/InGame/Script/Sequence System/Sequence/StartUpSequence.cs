@@ -57,17 +57,17 @@ namespace IronRain.SequenceSystem
                     await _waitToggleSequence.PlayAsync(ct);
                     break;
                 case 2:
-                    _monitorSequence.PlayAsync(ct).Forget();
+                    _monitorSequence.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
                     break;
                 case 3:
-                    _openFirstDoor.PlayAsync(ct).Forget();
+                    _openFirstDoor.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
                     break;
                 case 4:
-                    _moveSecondDoorTarget.PlayAsync(ct).Forget();
+                    _moveSecondDoorTarget.PlayAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
                     break;
                 case 5:
                     await _secondDoorToggle.PlayAsync(ct);
-                    Event5Async(ct).Forget();
+                    Event5Async(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
                     break;
             }
 

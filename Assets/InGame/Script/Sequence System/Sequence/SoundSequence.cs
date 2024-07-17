@@ -27,7 +27,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct)
         {
-            PlaySoundAsync(ct).Forget();
+            PlaySoundAsync(ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
             
             // 全体時間待って抜ける
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
