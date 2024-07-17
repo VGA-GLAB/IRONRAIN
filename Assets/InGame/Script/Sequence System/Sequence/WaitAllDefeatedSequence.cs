@@ -24,7 +24,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            await UniTask.WaitUntil(() => _enemyManager.IsAllDefeated(EnemyManager.Sequence.Attack),
+            await UniTask.WaitUntil(() => _enemyManager.IsAllDefeated(_targetSeq),
                 cancellationToken: ct);
         }
 
