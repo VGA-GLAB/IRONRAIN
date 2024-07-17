@@ -42,18 +42,18 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
-    private MouseMultilockSystem _mouseMultilockSystem;
+    //private MouseMultilockSystem _mouseMultilockSystem;
 
-    private MultilockSystem _multilockSystem;
+    //private MultilockSystem _multilockSystem;
 
-    [SerializeField] private bool _isMouse = true;
+    //[SerializeField] private bool _isMouse = true;
 
     private UiPokeInteraction _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
-        _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
+        //_mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
         //_pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
     }
 
