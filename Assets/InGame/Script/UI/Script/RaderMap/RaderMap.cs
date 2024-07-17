@@ -36,6 +36,7 @@ public class RaderMap : MonoBehaviour
 
     /// <summary>マルチロック時のエネミー </summary>
     private List<GameObject> _multiLockEnemys = new List<GameObject>();
+
     public List<GameObject> MultiLockEnemys
     {
         get { return _multiLockEnemys; }
@@ -293,7 +294,7 @@ public class RaderMap : MonoBehaviour
     // <summary>
     // マルチロックオン処理
     // </summary>
-    public void MultiLockon(HashSet<GameObject> enemys)
+    public void MultiLockon(List<GameObject> enemys)
     {
         //全てのエネミーのロックオンを外す
         ResetUi();

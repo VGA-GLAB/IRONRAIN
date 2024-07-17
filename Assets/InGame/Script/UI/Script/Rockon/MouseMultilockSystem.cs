@@ -102,7 +102,7 @@ public class MouseMultilockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
             if (LockOnEnemy.Count > 0)
             {
                 //LockOnEnemy = LockOnEnemy.Distinct().ToList();
-                _raderMap.MultiLockon(LockOnEnemy);
+               // _raderMap.MultiLockon(LockOnEnemy);
             }
             IsMultilock = false;
             LockOnEnemy.Clear();
