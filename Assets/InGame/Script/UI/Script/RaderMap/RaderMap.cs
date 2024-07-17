@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,13 +44,14 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
+    private bool _isTouch = false;
     //private MouseMultilockSystem _mouseMultilockSystem;
 
     //private MultilockSystem _multilockSystem;
 
     //[SerializeField] private bool _isMouse = true;
 
-    private UiPokeInteraction _pokeInteractionBase;
+    //private UiPokeInteraction _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
@@ -256,7 +259,9 @@ public class RaderMap : MonoBehaviour
             
             //ターゲットが切り替わる音を出す
             CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
-        }  
+        }
+
+        _isTouch = true;
     }
 
     /// <summary>
@@ -316,5 +321,11 @@ public class RaderMap : MonoBehaviour
             var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
             enemyUi._rockonUi.SetActive(true);
         }
+    }
+
+    public async UniTask WaitTouchPanelAsync(CancellationToken ct)
+    {
+        _isTouch = false;
+        await UniTask.WaitUntil(() => _isTouch, cancellationToken: ct);
     }
 }
