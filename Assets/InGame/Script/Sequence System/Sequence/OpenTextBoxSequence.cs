@@ -26,7 +26,7 @@ namespace IronRain.SequenceSystem
         
         public async UniTask PlayAsync(CancellationToken ct)
         {
-            _tutorialText.DoOpenTextBoxAsync(_openSec, ct).Forget();
+            _tutorialText.DoOpenTextBoxAsync(_openSec, ct).Forget(SequencePlayer.SequencePlayerExceptionReceiver);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }

@@ -28,7 +28,8 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct)
         {
-            _textBox.DoTextChangeAsync(_text, _oneCharDuration, ct).Forget();
+            _textBox.DoTextChangeAsync(_text, _oneCharDuration, ct)
+                .Forget(SequencePlayer.SequencePlayerExceptionReceiver);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }
