@@ -42,18 +42,18 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
-    private MouseMultilockSystem _mouseMultilockSystem;
+    //private MouseMultilockSystem _mouseMultilockSystem;
 
-    private MultilockSystem _multilockSystem;
+    //private MultilockSystem _multilockSystem;
 
-    [SerializeField] private bool _isMouse = true;
+    //[SerializeField] private bool _isMouse = true;
 
     private UiPokeInteraction _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
-        _mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
+        //_mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
         //_pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
     }
 
@@ -280,14 +280,17 @@ public class RaderMap : MonoBehaviour
     private void OnDrawGizmos()
     {
         // 視界の範囲（正面及び左右の端）をギズモとして描く
-        Vector3 selfDir = _origin.forward;
-        Vector3 rightBorder = Quaternion.Euler(0, _sightAngle / 2, 0) * selfDir; //右端
-        Vector3 leftBorder = Quaternion.Euler(0, -1 * _sightAngle / 2, 0) * selfDir; //左端
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(_origin.transform.position, selfDir * _rockonDis);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(_origin.transform.position, rightBorder * _rockonDis);
-        Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
+        if(_origin != null)
+        {
+            Vector3 selfDir = _origin.forward;
+            Vector3 rightBorder = Quaternion.Euler(0, _sightAngle / 2, 0) * selfDir; //右端
+            Vector3 leftBorder = Quaternion.Euler(0, -1 * _sightAngle / 2, 0) * selfDir; //左端
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(_origin.transform.position, selfDir * _rockonDis);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(_origin.transform.position, rightBorder * _rockonDis);
+            Gizmos.DrawRay(_origin.transform.position, leftBorder * _rockonDis);
+        } 
     }
 
 
