@@ -10,12 +10,14 @@ public class EnemyUi : MonoBehaviour
     public GameObject Enemy;
     /// <summary>表示するレーダーマップ </summary>
     [NonSerialized] public RaderMap RaderMap;
-    private Image _image;
+    public GameObject _rockonUi;
 
     private void Awake()
     {
         //レーダーテストを検索する
         RaderMap = GameObject.FindObjectOfType<RaderMap>();
+        //ロックオンUiを非表示にする
+        _rockonUi.SetActive(false);
     }
 
     /// <summary>
