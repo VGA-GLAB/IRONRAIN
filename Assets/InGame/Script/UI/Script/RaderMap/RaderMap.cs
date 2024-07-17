@@ -103,20 +103,20 @@ public class RaderMap : MonoBehaviour
     /// <param name="enemy"></param>
     public void DestroyEnemy(GameObject enemy)
     {
-        if (_isMouse)
-        {
-            if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
-            {
-                _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
-            }
-        }
-        else
-        {
-            if(_multilockSystem.LockOnEnemy.Contains(enemy))
-            {
-                _multilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
-            }
-        }
+        //if (_isMouse)
+        //{
+        //    if(_mouseMultilockSystem.LockOnEnemy.Contains(enemy))
+        //    {
+        //        _mouseMultilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+        //    }
+        //}
+        //else
+        //{
+        //    if(_multilockSystem.LockOnEnemy.Contains(enemy))
+        //    {
+        //        _multilockSystem.EnemyDestory(EnemyMaps[enemy].gameObject);
+        //    }
+        //}
 
         if (EnemyMaps.ContainsKey(enemy))
         {
