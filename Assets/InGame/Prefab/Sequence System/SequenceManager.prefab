@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7270267471246126463
 MonoBehaviour:
@@ -338,11 +338,11 @@ MonoBehaviour:
         - rid: 1578471385183027266
         - rid: 1578471385183027267
         - rid: 1578471385183027268
+        - rid: 1578471388244082688
         - rid: 1578471385183027269
-        - rid: 1578471385183027270
         - rid: 1578471385183027271
-        - rid: 1578471385183027272
-        - rid: 1578471385183027273
+        - rid: 1578471388244082690
+        - rid: 1578471388244082691
     - rid: 1578471385183027262
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -351,7 +351,7 @@ MonoBehaviour:
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _addState: 8
+        _addState: 40
     - rid: 1578471385183027264
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -387,25 +387,11 @@ MonoBehaviour:
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471385183027270
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
     - rid: 1578471385183027271
       type: {class: EnemyManagerResumeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 4
-    - rid: 1578471385183027272
-      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 4
-    - rid: 1578471385183027273
-      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-        _addState: 8
     - rid: 1578471385183027274
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -427,7 +413,7 @@ MonoBehaviour:
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _removeState: 136
+        _removeState: 168
     - rid: 1578471385183027278
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -687,6 +673,17 @@ MonoBehaviour:
       type: {class: LoadSceneSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _loadScenenName: StartScene
+    - rid: 1578471388244082688
+      type: {class: WaitPanelTouchSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 1578471388244082690
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 40
+    - rid: 1578471388244082691
+      type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _targetSeq: 4
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,5 +725,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
-  _isSkip: 1
+  _isSkip: 0
   _startIndex: 56
