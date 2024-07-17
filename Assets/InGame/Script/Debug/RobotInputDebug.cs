@@ -55,8 +55,14 @@ public class RobotInputDebug : MonoBehaviour
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
         _moveState.text = _playerQTE.QTEModel.QTEType.Value.ToString();
-        _currentSeq.text = _sequencePlayer.CurrentSequence == null 
-            ? "<null>" 
-            : _sequencePlayer.CurrentSequence.ToString().Replace("IronRain.SequenceSystem", "");
+
+        if (_sequencePlayer.CurrentSequence is SequenceGroup temp)
+        {
+            _currentSeq.text = temp.GroupName;
+        }
+        else
+        {
+            _currentSeq.text = "<null>";
+        }
     }
 }
