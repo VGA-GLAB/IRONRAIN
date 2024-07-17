@@ -10,6 +10,7 @@ namespace IronRain.SequenceSystem
     public sealed class SequenceGroup : ISequence
     {
         [SerializeField] private string _groupName;
+        public string GroupName => _groupName;
         [SerializeReference, SubclassSelector] private ISequence[] _sequences;
 
         
