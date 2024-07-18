@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -26,6 +26,8 @@ namespace IronRain.SequenceSystem
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             var enemies = new List<EnemyController>();
+            _data.PlayerController.PlayerEnvroment.AddState(PlayerStateType.NonTriggerQte);
+            _data.PlayerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
 
             if (_data.EnemyManager.TryGetEnemies(EnemyManager.Sequence.QTETutorial, enemies))
             {
@@ -38,7 +40,11 @@ namespace IronRain.SequenceSystem
                     ct);
 
                 await WaitQTEAsync(id);
+                Debug.Log("終わり");
             }
+
+            _data.PlayerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
+            _data.PlayerController.PlayerEnvroment.RemoveState(PlayerStateType.NonTriggerQte);
         }
         
         private async UniTask WaitQTEAsync(System.Guid id)

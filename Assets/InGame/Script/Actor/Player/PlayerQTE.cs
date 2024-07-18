@@ -28,7 +28,8 @@ public class PlayerQTE : PlayerComponentBase
 
     private void OnTriggerEnter(Collider other)
     {
-        if(QTEModel == null || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)) return;
+        if(QTEModel == null || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
+            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonTriggerQte)) return;
         var enemyTypeReader = other.GetComponentsInParent<EnemyController>();
         if (enemyTypeReader.Length == 0) return;
         Debug.Log(other);
