@@ -229,12 +229,12 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// Panelを押したときのロックオン処理
     /// </summary>
-    /// <param name="enemyUi"></param>
-    public void PanelRock(GameObject enemyUi)
+    /// <param name="enemyObject"></param>
+    public void PanelRock(GameObject enemyObject)
     {
         //var ui = enemyUi.GetComponent<EnemyUi>();
-        var enemyObj = enemyUi.gameObject;
-        var enemyAgent = enemyObj.GetComponent<AgentScript>();
+        //var enemyObj = enemyObject.gameObject;
+        var enemyAgent = enemyObject.GetComponent<AgentScript>();
         if(!enemyAgent.IsDefault)
         {
             //全てのエネミーのロックオンを外す
