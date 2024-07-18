@@ -26,6 +26,13 @@ namespace Enemy.Control.Boss
         {
             _blackBoard = blackBoard;
 
+            // ボス戦開始時にレーダーマップに表示、QTEイベントの最後(死亡演出？)にレーダーマップから消す。
+            // それぞれ対応するステートに渡して処理を呼んでもらう。
+            if (!transform.TryGetComponent(out AgentScript agentScript))
+            {
+                Debug.LogWarning($"{nameof(AgentScript)}がアタッチされていないため、レーダーマップに写らない");
+            }
+
             // ボスのオブジェクトの構成が雑魚敵と同じ想定なので流用する。
             Body body = new Body(transform, offset, rotate, models, damageHitBox);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
@@ -33,8 +40,8 @@ namespace Enemy.Control.Boss
             {
                 { StateKey.Idle, new Boss.FSM.IdleState(blackBoard) },
                 { StateKey.Appear, new AppearState(blackBoard) },
-                { StateKey.Battle, new BattleState(blackBoard, body, bodyAnimation, funnels) },
-                { StateKey.QteEvent, new QteEventState(blackBoard) },
+                { StateKey.Battle, new BattleState(blackBoard, body, bodyAnimation, funnels, agentScript) },
+                { StateKey.QteEvent, new QteEventState(blackBoard, agentScript) },
             };
 
             // 初期状態では画面に表示されている。
