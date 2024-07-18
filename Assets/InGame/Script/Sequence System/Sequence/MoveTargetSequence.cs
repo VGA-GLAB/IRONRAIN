@@ -61,7 +61,7 @@ namespace IronRain.SequenceSystem
             }
             else
             {
-                _data.PlayerTransform.position = _data.SecondHatchTarget.position;
+                _data.PlayerTransform.position = _data.HangerOutsideTarget.position;
             }
         }
     }
