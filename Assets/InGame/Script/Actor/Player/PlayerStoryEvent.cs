@@ -20,14 +20,14 @@ public class PlayerStoryEvent : PlayerComponentBase
         _playerEnvroment.ClearState();
         _playerEnvroment.AddState(PlayerStateType.Inoperable);
         await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, token);
-        await tutorialTextBoxController.DoTextChangeAsync("F3を押せ", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("[F3]を押してください。", 0.05f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle3), PlayerLoopTiming.Update, token);
         CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
-        await tutorialTextBoxController.DoTextChangeAsync("F4を押せ", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("[F4]を押してください。", 0.05f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), PlayerLoopTiming.Update, token);
         CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
         //右レバーボタン1を押したまま右レバーを押す
-        await tutorialTextBoxController.DoTextChangeAsync("WボタンとShiftボタンを押せ", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("[Shift]と[w]を同時に押してください！", 0.5f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeLever), PlayerLoopTiming.Update, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
         CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
