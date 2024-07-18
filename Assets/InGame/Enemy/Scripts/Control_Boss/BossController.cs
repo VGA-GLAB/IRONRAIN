@@ -91,8 +91,10 @@ namespace Enemy.Control.Boss
             // ファンネルと相互に参照させる。
             FunnelController.RegisterOwner(this, _funnels);
 
+            // ステート側に移したが、一応コメントアウトで残しておく。
+            // 7/21の会が終わったら消す。
             // レーダーに表示する。
-            if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+            //if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
 
             // Perception
             _perception.Init();
@@ -136,8 +138,10 @@ namespace Enemy.Control.Boss
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
+            // ステート側に移したが、一応コメントアウトで残しておく。
+            // 7/21の会が終わったら消す。
             // レーダーから消す。
-            if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
+            //if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
 
             // Perception
             _perception.Dispose();

@@ -24,17 +24,19 @@ namespace Enemy.Control.Boss.FSM
         private Body _body;
         private BodyAnimation _animation;
         private IReadOnlyCollection<FunnelController> _funnels;
+        private AgentScript _agentScript;
 
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
         public BattleState(BlackBoard blackBoard, Body body, BodyAnimation bodyAnimation, 
-            IReadOnlyCollection<FunnelController> funnels)
+            IReadOnlyCollection<FunnelController> funnels, AgentScript agentScript)
         {
             _blackBoard = blackBoard;
             _body = body;
             _animation = bodyAnimation;
             _funnels = funnels;
+            _agentScript = agentScript;
 
             // アニメーションのステートの遷移をトリガーする。
             Register(BodyAnimation.StateName.Boss.Idle, AnimationGroup.Idle);
@@ -56,6 +58,7 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Enter()
         {
+            if (_agentScript != null) _agentScript.EnemyGenerate();
         }
 
         protected override void Exit()
