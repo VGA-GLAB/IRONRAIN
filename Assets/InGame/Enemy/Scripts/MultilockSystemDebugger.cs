@@ -11,13 +11,13 @@ public class MultilockSystemDebugger : MonoBehaviour
     [SerializeField] private InteractableUnityEventWrapper _button;
     [SerializeField] private Text _text;
 
-    private MultilockSystemExample _multilock;
+    private LockOnSystem _multilock;
 
     private bool _isButtonPushed;
 
     private void Start()
     {
-        _multilock = FindAnyObjectByType<MultilockSystemExample>();
+        _multilock = FindAnyObjectByType<LockOnSystem>();
 
         // 状態のフラグ操作をコールバックに登録。
         _button.WhenSelect.AddListener(OnButtonPushed);
@@ -43,7 +43,7 @@ public class MultilockSystemDebugger : MonoBehaviour
 
     private async UniTaskVoid MultilockAsync(CancellationToken token)
     {
-        List<GameObject> result = await _multilock.LockOnAsync(token);
+        List<GameObject> result = await _multilock.MultiLockOnAsync(token);
 
         if (result == null)
         {
