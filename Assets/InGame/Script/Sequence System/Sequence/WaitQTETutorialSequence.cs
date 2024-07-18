@@ -40,7 +40,6 @@ namespace IronRain.SequenceSystem
                     ct);
 
                 await WaitQTEAsync(id);
-                Debug.Log("終わり");
             }
 
             _data.PlayerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);

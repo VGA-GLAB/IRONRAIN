@@ -24,7 +24,6 @@ public class PlayerHp : MonoBehaviour, IDamageable
     public void Damage(int value, string weapon = "")
     {
         _hp = Mathf.Max(_hp - value, 0);
-        Debug.Log("ダメージを受けた");
         _mainCamera.DOShakePosition(_time, _strength);
         _hpManager.BodyDamage(value);
         if (_hp == 0) 

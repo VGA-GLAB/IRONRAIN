@@ -210,7 +210,6 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         //失敗までの時間を計測
         await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
-        Debug.Log("QTE終了");
         ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Failure, _enemyId));
         ProvidePlayerInformation.TimeScale = 1f;
         _qteType.Value = QTEState.QTENone;
