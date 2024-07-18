@@ -26,6 +26,7 @@ Shader "Custom/2DMonitor"
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
@@ -33,6 +34,8 @@ Shader "Custom/2DMonitor"
                 float2 uv : TEXCOORD0;
                 float4 positionCS : SV_POSITION;
                 half fogFactor : TEXCOORD1;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+                UNITY_VERTEX_OUTPUT_STEREO
             };
 
             TEXTURE2D(_MainTex);
@@ -50,6 +53,11 @@ Shader "Custom/2DMonitor"
             Varyings vert (Attributes v)
             {
                 Varyings o;
+
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                
                 o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.fogFactor = ComputeFogFactor(o.positionCS.z);
@@ -58,6 +66,9 @@ Shader "Custom/2DMonitor"
 
             half4 frag (Varyings i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+                
                 // sample the texture
                 half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.uv);
 
