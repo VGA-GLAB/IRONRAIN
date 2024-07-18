@@ -3,9 +3,10 @@ using Oculus.Interaction;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 // 右手の人差し指でパネルを突く前提。
-public class MultilockSystemExample : MonoBehaviour
+public class LockOnSystem : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
@@ -33,10 +34,56 @@ public class MultilockSystemExample : MonoBehaviour
         // 状態のフラグ操作をコールバックに登録。
         _event.WhenSelect.AddListener(() => _isSelect = true);
         _event.WhenUnselect.AddListener(() => _isSelect = false);
+
+        // タッチパネルに触れて対象をロックオン。
+        _event.WhenSelect.AddListener(Touch);
+    }
+
+    private async UniTaskVoid M()
+    {
+        Debug.Log("マルチロックオン開始");
+        var r = await MultiLockOnAsync(this.GetCancellationTokenOnDestroy());
+        foreach (var v in r)
+        {
+            Debug.Log(v.name + "をマルチロックオンした");
+        }
+    }
+
+    // Targetに触れた場合は、それをロックオンする。
+    // この処理はマルチロック中も呼び出されているので注意。
+    private void Touch()
+    {
+        FingertipCursor(_fingertip, _cursor);
+        
+        // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
+        AllTargets(_targets, _parent);
+
+        foreach (Transform t in _targets)
+        {
+            if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
+        }
+
+        foreach (Transform t in _targets)
+        {
+            // Targetに触れているかチェック
+            if (!IsCollision(_cursor, t, _cursorRadius, _targetRadius)) continue;
+            // 一応Targetのコンポーネントが付いているかチェック
+            if (!t.TryGetComponent(out EnemyUi ui)) continue;
+            
+            // ターゲット更新
+            ui.OnButton();
+            Debug.Log(ui.Enemy.name + "をロックオン");
+            break;
+        }
     }
 
     // なぞった結果、n体以上lock-onできなかった場合はやり直しの処理が無い。
-    public async UniTask<List<GameObject>> LockOnAsync(CancellationToken token)
+    /// <summary>
+    /// マルチロックが終わるまで待つ。
+    /// タッチパネルを指でなぞり、触れたUIに対応する敵をロックオンする。
+    /// </summary>
+    /// <returns>ロックオンした敵のオブジェクト一覧</returns>
+    public async UniTask<List<GameObject>> MultiLockOnAsync(CancellationToken token)
     {
         // パネルを指で突くまで待つ。
         await UniTask.WaitUntil(() => _isSelect, cancellationToken: token);
@@ -97,11 +144,12 @@ public class MultilockSystemExample : MonoBehaviour
     // パネル上のカーソルのxy座標を指先に合わせる。
     private void FingertipCursor(Transform fingertip, Transform cursor)
     {
-        Vector3 p = cursor.position;
-        p.x = fingertip.position.x;
-        p.y = fingertip.position.y;
+        //Vector3 p = cursor.position;
+        //p.x = fingertip.position.x;
+        //p.y = fingertip.position.y;
 
-        cursor.position = p;
+        //cursor.position = p;
+        cursor.position = fingertip.position;
     }
 
     // カーソルとTargetがパネル上で接触しているかを判定。

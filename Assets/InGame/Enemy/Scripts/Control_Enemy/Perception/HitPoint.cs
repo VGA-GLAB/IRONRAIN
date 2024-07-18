@@ -90,7 +90,7 @@ namespace Enemy.Control
         {
             // 無敵
             if (_params.Common.Tactical.Armor == Armor.Invincible) return true;
-
+            
             // 近接攻撃無効化
             if (_params.Common.Tactical.Armor == Armor.Melee &&
                 weaponName == Const.PlayerMeleeWeaponName) return true;
