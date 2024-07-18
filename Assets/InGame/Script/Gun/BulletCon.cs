@@ -16,8 +16,9 @@ public class BulletCon : MonoBehaviour
 
     private Vector3 _shotDir;
     private int _damege;
+    private string weaponName;
 
-    public void SetUp(GameObject enemy, int damege, Vector3 shotDir)
+    public void SetUp(GameObject enemy, int damege, Vector3 shotDir, string weaponName)
     {
         _lockOnEnemy = enemy;
         _damege = damege;
@@ -47,7 +48,7 @@ public class BulletCon : MonoBehaviour
         var playerCon = other.GetComponentInParent<PlayerController>();
         if (!playerCon && damageble != null) 
         {                                                                                                                                                                                                   
-            damageble.Damage(_damege);
+            damageble.Damage(_damege, weaponName);
             OnRelease?.Invoke(this);
         }
     }

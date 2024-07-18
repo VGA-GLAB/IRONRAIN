@@ -53,7 +53,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
             bulletCon.SetUp(
                 _playerEnvroment.RaderMap.GetRockEnemy, 
                 _params.ShotDamage,
-                _playerEnvroment.PlayerTransform.forward);
+                _playerEnvroment.PlayerTransform.forward,
+                _params.WeaponName);
 
             CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
 
@@ -82,7 +83,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
             bulletCon.SetUp(
                 _playerEnvroment.RaderMap.MultiLockEnemys[i],
                 _params.ShotDamage,
-                _playerEnvroment.PlayerTransform.forward);
+                _playerEnvroment.PlayerTransform.forward,
+                _params.WeaponName);
         }
     }
 
