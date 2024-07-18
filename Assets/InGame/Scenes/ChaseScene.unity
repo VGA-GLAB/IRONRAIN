@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.015911594, g: 0.020126771, b: 0.02895359, a: 1}
+  m_IndirectSpecularColor: {r: 0.015986765, g: 0.019945912, b: 0.028999092, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -16921,7 +16921,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d641a50c4fe4ee3489a64cf52b76ae79, type: 2}
+  - {fileID: 2100000, guid: 978bbcf5050244f1b95128c04103f628, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27595,6 +27595,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2667218937599446712}
     m_Modifications:
+    - target: {fileID: 657110455392590795, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115404298022273734, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2277125167260543875, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -27639,14 +27647,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2318541096211957964, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _size.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318541096211957964, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318541096211957964, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _size.z
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318541096211957964, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _position.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
       propertyPath: _fingertip
       value: 
       objectReference: {fileID: 1157957508}
     - target: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _cursorRadius
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
       propertyPath: _lineRenderer
       value: 
       objectReference: {fileID: 1157957509}
+    - target: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+      propertyPath: _targetRadius
+      value: 0.005
+      objectReference: {fileID: 0}
     - target: {fileID: 6782548348282618678, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
       propertyPath: _origin
       value: 
@@ -27659,8 +27691,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PanelUi
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4621638196702234233, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -27670,17 +27701,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2277125167260543875, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
   m_PrefabInstance: {fileID: 466548940}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &466548942 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
-  m_PrefabInstance: {fileID: 466548940}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61169263f79529840b799bf331273b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &466548943 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6782548348282618678, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
@@ -49259,6 +49279,10 @@ PrefabInstance:
       propertyPath: _isSkip
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 52876117135305751, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _startIndex
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3503134301487715534, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: m_Name
       value: SequenceManager
@@ -49338,7 +49362,7 @@ PrefabInstance:
     - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _sequenceData._multiLockSystem
       value: 
-      objectReference: {fileID: 466548942}
+      objectReference: {fileID: 1789447702}
     - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _sequenceData._playerController
       value: 
@@ -49438,7 +49462,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d641a50c4fe4ee3489a64cf52b76ae79, type: 2}
+  - {fileID: 2100000, guid: 978bbcf5050244f1b95128c04103f628, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -55579,6 +55603,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ActionAssets:
   - {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+--- !u!114 &1789447702 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3164624181934871924, guid: 852a21cf26fc3944b9dd19ae497765eb, type: 3}
+  m_PrefabInstance: {fileID: 466548940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61169263f79529840b799bf331273b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1792901938
 GameObject:
   m_ObjectHideFlags: 0
@@ -67681,7 +67716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2613147941094809975, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2638478628322450825, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
       propertyPath: _playerController
