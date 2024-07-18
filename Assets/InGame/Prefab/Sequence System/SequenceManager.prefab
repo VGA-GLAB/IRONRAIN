@@ -48,644 +48,649 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDebug: 1
   _debugSequenceList:
-  - rid: 1578471388244082693
-  - rid: 1578471388244082694
-  - rid: 1578471388244082696
-  - rid: 1578471388244082702
-  - rid: 1578471388244082705
-  - rid: 1578471388244082712
-  - rid: 1578471388244082717
-  - rid: 1578471388244082730
-  - rid: 1578471388244082737
-  - rid: 1578471388244082750
-  - rid: 1578471388244082754
-  - rid: 1578471388244082758
-  - rid: 1578471388244082760
-  - rid: 1578471388244082762
-  - rid: 1578471388244082765
-  - rid: 1578471388244082768
-  - rid: 1578471388244082783
-  - rid: 1578471388244082786
-  - rid: 1578471388244082788
-  - rid: 1578471388244082790
-  - rid: 1578471388244082795
-  - rid: 1578471388244082800
+  - rid: 1578471403179212800
+  - rid: 1578471403179212802
+  - rid: 1578471403179212808
+  - rid: 1578471403179212811
+  - rid: 1578471403179212818
+  - rid: 1578471403179212823
+  - rid: 1578471403179212836
+  - rid: 1578471403179212843
+  - rid: 1578471403179212856
+  - rid: 1578471403179212860
+  - rid: 1578471403179212864
+  - rid: 1578471403179212866
+  - rid: 1578471403179212868
+  - rid: 1578471403179212871
+  - rid: 1578471403179212874
+  - rid: 1578471403179212889
+  - rid: 1578471403179212892
+  - rid: 1578471403179212894
+  - rid: 1578471403179212896
+  - rid: 1578471403179212901
+  - rid: 1578471403179212906
   references:
     version: 2
     RefIds:
-    - rid: 1578471388244082693
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-    - rid: 1578471388244082694
+    - rid: 1578471403179212800
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: PrepareStartSequence
         _sequences:
-        - rid: 1578471388244082695
-    - rid: 1578471388244082695
+        - rid: 1578471403179212801
+    - rid: 1578471403179212801
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-    - rid: 1578471388244082696
+    - rid: 1578471403179212802
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: StartUpSequence
         _sequences:
-        - rid: 1578471388244082697
-        - rid: 1578471388244082698
-        - rid: 1578471388244082699
-        - rid: 1578471388244082700
-        - rid: 1578471388244082701
-    - rid: 1578471388244082697
+        - rid: 1578471403179212803
+        - rid: 1578471403179212804
+        - rid: 1578471403179212805
+        - rid: 1578471403179212806
+        - rid: 1578471403179212807
+    - rid: 1578471403179212803
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082698
+    - rid: 1578471403179212804
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-        _text: "F1\u3068F2\u3092\u62BC\u3059\u3068\u6249\u304C\u958B\u304D\u307E\u3059\u3002"
+        _clearText: 1
+        _text: "[F1]\u3068[F2]\u3092\u62BC\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082699
+    - rid: 1578471403179212805
       type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _toggleButton1: 12
         _toggleButton2: 13
-    - rid: 1578471388244082700
+    - rid: 1578471403179212806
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082701
+    - rid: 1578471403179212807
       type: {class: OpenMonitorSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _monitorOpenSec: 1
-    - rid: 1578471388244082702
+    - rid: 1578471403179212808
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: PrepareSortieSequence
         _sequences:
-        - rid: 1578471388244082703
-        - rid: 1578471388244082704
-    - rid: 1578471388244082703
+        - rid: 1578471403179212809
+        - rid: 1578471403179212810
+    - rid: 1578471403179212809
       type: {class: OpenHangerDoorSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _targetDoor: 0
-    - rid: 1578471388244082704
+    - rid: 1578471403179212810
       type: {class: MoveTargetSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 10
         _moveSec: 10
         _target: 0
-    - rid: 1578471388244082705
+    - rid: 1578471403179212811
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: SortieSequence
         _sequences:
-        - rid: 1578471388244082706
-        - rid: 1578471388244082707
-        - rid: 1578471388244082708
-        - rid: 1578471388244082709
-        - rid: 1578471388244082710
-        - rid: 1578471388244082711
-    - rid: 1578471388244082706
+        - rid: 1578471403179212812
+        - rid: 1578471403179212813
+        - rid: 1578471403179212814
+        - rid: 1578471403179212815
+        - rid: 1578471403179212816
+        - rid: 1578471403179212817
+    - rid: 1578471403179212812
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082707
+    - rid: 1578471403179212813
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-        _text: "F3\u3068F4\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"
+        _clearText: 1
+        _text: "[F3]\u3068[F4]\u3092\u62BC\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082708
+    - rid: 1578471403179212814
       type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _toggleButton1: 14
         _toggleButton2: 15
-    - rid: 1578471388244082709
+    - rid: 1578471403179212815
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082710
+    - rid: 1578471403179212816
       type: {class: OpenHangerDoorSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _targetDoor: 1
-    - rid: 1578471388244082711
+    - rid: 1578471403179212817
       type: {class: MoveTargetSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _moveSec: 1
         _target: 1
-    - rid: 1578471388244082712
+    - rid: 1578471403179212818
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: FirstAnnounceSequence
         _sequences:
-        - rid: 1578471388244082713
-        - rid: 1578471388244082714
-        - rid: 1578471388244082715
-        - rid: 1578471388244082716
-    - rid: 1578471388244082713
+        - rid: 1578471403179212819
+        - rid: 1578471403179212820
+        - rid: 1578471403179212821
+        - rid: 1578471403179212822
+    - rid: 1578471403179212819
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-    - rid: 1578471388244082714
+    - rid: 1578471403179212820
       type: {class: WaitTutorialEnemyApproachSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082715
+    - rid: 1578471403179212821
       type: {class: StartChaseSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-    - rid: 1578471388244082716
+    - rid: 1578471403179212822
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _addState: 168
-    - rid: 1578471388244082717
+    - rid: 1578471403179212823
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: AvoidSequence
         _sequences:
-        - rid: 1578471388244082718
-        - rid: 1578471388244082719
-        - rid: 1578471388244082720
-        - rid: 1578471388244082721
-        - rid: 1578471388244082722
-        - rid: 1578471388244082723
-        - rid: 1578471388244082724
-        - rid: 1578471388244082725
-        - rid: 1578471388244082726
-        - rid: 1578471388244082727
-        - rid: 1578471388244082728
-        - rid: 1578471388244082729
-    - rid: 1578471388244082718
+        - rid: 1578471403179212824
+        - rid: 1578471403179212825
+        - rid: 1578471403179212826
+        - rid: 1578471403179212827
+        - rid: 1578471403179212828
+        - rid: 1578471403179212829
+        - rid: 1578471403179212830
+        - rid: 1578471403179212831
+        - rid: 1578471403179212832
+        - rid: 1578471403179212833
+        - rid: 1578471403179212834
+        - rid: 1578471403179212835
+    - rid: 1578471403179212824
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082719
+    - rid: 1578471403179212825
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-        _text: "\u6575\u304C\u7403\u3092\u6253\u3063\u3066\u304D\u307E\u3059\u907F\u3051\u3066\u304F\u3060\u3055\u3044
-          \u30EC\u30D0\u30FC\u3067\u79FB\u52D5\u307E\u305F\u306FSpace\u30AD\u30FC\u3092\u62BC\u3057\u3066\u304F\u3060\u3055\u3044"
+        _clearText: 1
+        _text: "\u53F3\u30EC\u30D0\u30FC\u3092\u5DE6\u53F3\u306B\u52D5\u304B\u3057\u3066\r\n\u6575\u306E\u5F3E\u3092\u907F\u3051\u3066\u304F\u3060\u3055\u3044\uFF01"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082720
+    - rid: 1578471403179212826
       type: {class: TutorialEnemyAttackSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-    - rid: 1578471388244082721
+    - rid: 1578471403179212827
       type: {class: TutorialEnemyPauseSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-    - rid: 1578471388244082722
+    - rid: 1578471403179212828
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-    - rid: 1578471388244082723
+    - rid: 1578471403179212829
       type: {class: WaitLeverInputSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082724
+    - rid: 1578471403179212830
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 8
-    - rid: 1578471388244082725
+    - rid: 1578471403179212831
       type: {class: TutorialEnemyResumeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-    - rid: 1578471388244082726
+    - rid: 1578471403179212832
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082727
+    - rid: 1578471403179212833
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082728
+    - rid: 1578471403179212834
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-        _text: "\u304A\u898B\u4E8B\u3067\u3059"
+        _clearText: 1
+        _text: "\u304A\u898B\u4E8B\u3067\u3059\uFF01"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082729
+    - rid: 1578471403179212835
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082730
+    - rid: 1578471403179212836
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: AttackSequence
         _sequences:
-        - rid: 1578471388244082731
-        - rid: 1578471388244082732
-        - rid: 1578471388244082733
-        - rid: 1578471388244082734
-        - rid: 1578471388244082735
-        - rid: 1578471388244082736
-    - rid: 1578471388244082731
+        - rid: 1578471403179212837
+        - rid: 1578471403179212838
+        - rid: 1578471403179212839
+        - rid: 1578471403179212840
+        - rid: 1578471403179212841
+        - rid: 1578471403179212842
+    - rid: 1578471403179212837
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-    - rid: 1578471388244082732
+    - rid: 1578471403179212838
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 32
-    - rid: 1578471388244082733
+    - rid: 1578471403179212839
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082734
+    - rid: 1578471403179212840
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-        _text: "\u5DE6\u30AF\u30EA\u30C3\u30AF\u3067\u653B\u6483"
+        _clearText: 1
+        _text: "\u53F3\u30EC\u30D0\u30FC\u306E\u30C8\u30EA\u30AC\u30FC\u3067\u5C04\u6483\u3067\u304D\u307E\u3059\u3002"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082735
+    - rid: 1578471403179212841
       type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _targetSeq: 3
-    - rid: 1578471388244082736
+    - rid: 1578471403179212842
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082737
+    - rid: 1578471403179212843
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: TouchPanelSequence
         _sequences:
-        - rid: 1578471388244082738
-        - rid: 1578471388244082739
-        - rid: 1578471388244082740
-        - rid: 1578471388244082741
-        - rid: 1578471388244082742
-        - rid: 1578471388244082743
-        - rid: 1578471388244082744
-        - rid: 1578471388244082745
-        - rid: 1578471388244082746
-        - rid: 1578471388244082747
-        - rid: 1578471388244082748
-        - rid: 1578471388244082749
-    - rid: 1578471388244082738
+        - rid: 1578471403179212844
+        - rid: 1578471403179212845
+        - rid: 1578471403179212846
+        - rid: 1578471403179212847
+        - rid: 1578471403179212848
+        - rid: 1578471403179212849
+        - rid: 1578471403179212850
+        - rid: 1578471403179212851
+        - rid: 1578471403179212852
+        - rid: 1578471403179212853
+        - rid: 1578471403179212854
+        - rid: 1578471403179212855
+    - rid: 1578471403179212844
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-    - rid: 1578471388244082739
+    - rid: 1578471403179212845
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _addState: 40
-    - rid: 1578471388244082740
+    - rid: 1578471403179212846
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 4
-    - rid: 1578471388244082741
+    - rid: 1578471403179212847
       type: {class: EnemyManagerPauseSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 4
-    - rid: 1578471388244082742
+    - rid: 1578471403179212848
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _cueSheetName: SE
         _cueName: SE_Panel
         _delaySec: 0
-    - rid: 1578471388244082743
+    - rid: 1578471403179212849
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082744
+    - rid: 1578471403179212850
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 4
-        _text: "\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u5909\u3048\u305F\u3044\u6642\u306F\u3001\u30ED\u30C3\u30AF\u30AA\u30F3\u30D1\u30CD\u30EB\u3092\u64CD\u4F5C\u3059\u308C\u3070\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u5909\u3048\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n\u72D9\u3044\u305F\u3044\u6575\u306E\u30A2\u30A4\u30B3\u30F3\u3092\u30BF\u30C3\u30C1\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+        _clearText: 1
+        _text: "\u30DE\u30C3\u30D7\u4E0A\u306E\u6575\u3092\u30BF\u30C3\u30C1\u3059\u308B\u3053\u3068\u3067\r\n\u30BF\u30FC\u30B2\u30C3\u30C8\u3092\u5909\u66F4\u3067\u304D\u307E\u3059\u3002"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082745
+    - rid: 1578471403179212851
       type: {class: WaitPanelTouchSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082746
+    - rid: 1578471403179212852
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082747
+    - rid: 1578471403179212853
       type: {class: EnemyManagerResumeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0.1
         _targetSeq: 4
-    - rid: 1578471388244082748
+    - rid: 1578471403179212854
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 40
-    - rid: 1578471388244082749
+    - rid: 1578471403179212855
       type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _targetSeq: 4
-    - rid: 1578471388244082750
+    - rid: 1578471403179212856
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: QTETutorialSequence
         _sequences:
-        - rid: 1578471388244082751
-        - rid: 1578471388244082752
-        - rid: 1578471388244082753
-    - rid: 1578471388244082751
+        - rid: 1578471403179212857
+        - rid: 1578471403179212858
+        - rid: 1578471403179212859
+    - rid: 1578471403179212857
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 6
-    - rid: 1578471388244082752
+    - rid: 1578471403179212858
       type: {class: WaitQTETutorialSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _qteStartDis: 400
-    - rid: 1578471388244082753
+    - rid: 1578471403179212859
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 168
-    - rid: 1578471388244082754
+    - rid: 1578471403179212860
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: MultiBattleSequence
         _sequences:
-        - rid: 1578471388244082755
-        - rid: 1578471388244082756
-        - rid: 1578471388244082757
-    - rid: 1578471388244082755
+        - rid: 1578471403179212861
+        - rid: 1578471403179212862
+        - rid: 1578471403179212863
+    - rid: 1578471403179212861
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 7
-    - rid: 1578471388244082756
+    - rid: 1578471403179212862
       type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _targetSeq: 7
-    - rid: 1578471388244082757
+    - rid: 1578471403179212863
       type: {class: WaitGoalPointSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082758
+    - rid: 1578471403179212864
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: PurgeSequence
         _sequences:
-        - rid: 1578471388244082759
-    - rid: 1578471388244082759
+        - rid: 1578471403179212865
+    - rid: 1578471403179212865
       type: {class: WaitPurgeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082760
+    - rid: 1578471403179212866
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: FallSequence
         _sequences:
-        - rid: 1578471388244082761
-    - rid: 1578471388244082761
+        - rid: 1578471403179212867
+    - rid: 1578471403179212867
       type: {class: WaitStartFallSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082762
+    - rid: 1578471403179212868
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: BossStartSequence
         _sequences:
-        - rid: 1578471388244082763
-        - rid: 1578471388244082764
-    - rid: 1578471388244082763
+        - rid: 1578471403179212869
+        - rid: 1578471403179212870
+    - rid: 1578471403179212869
       type: {class: BossStartSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082764
+    - rid: 1578471403179212870
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 40
-    - rid: 1578471388244082765
+    - rid: 1578471403179212871
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: FirstFunnelSequence
         _sequences:
-        - rid: 1578471388244082766
-        - rid: 1578471388244082767
-    - rid: 1578471388244082766
+        - rid: 1578471403179212872
+        - rid: 1578471403179212873
+    - rid: 1578471403179212872
       type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082767
+    - rid: 1578471403179212873
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-    - rid: 1578471388244082768
+    - rid: 1578471403179212874
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: ToggleButtonSequence
         _sequences:
-        - rid: 1578471388244082769
-        - rid: 1578471388244082770
-        - rid: 1578471388244082771
-        - rid: 1578471388244082772
-        - rid: 1578471388244082773
-        - rid: 1578471388244082774
-        - rid: 1578471388244082775
-        - rid: 1578471388244082776
-        - rid: 1578471388244082777
-        - rid: 1578471388244082778
-        - rid: 1578471388244082779
-        - rid: 1578471388244082780
-        - rid: 1578471388244082781
-        - rid: 1578471388244082782
-    - rid: 1578471388244082769
+        - rid: 1578471403179212875
+        - rid: 1578471403179212876
+        - rid: 1578471403179212877
+        - rid: 1578471403179212878
+        - rid: 1578471403179212879
+        - rid: 1578471403179212880
+        - rid: 1578471403179212881
+        - rid: 1578471403179212882
+        - rid: 1578471403179212883
+        - rid: 1578471403179212884
+        - rid: 1578471403179212885
+        - rid: 1578471403179212886
+        - rid: 1578471403179212887
+        - rid: 1578471403179212888
+    - rid: 1578471403179212875
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082770
+    - rid: 1578471403179212876
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _cueSheetName: SE
         _cueName: SE_Panel
         _delaySec: 0
-    - rid: 1578471388244082771
+    - rid: 1578471403179212877
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-        _text: "F4\u3068F5\u3092\u62BC\u3057\u3066\u30DE\u30EB\u30C1\u30ED\u30C3\u30AF\u3092\u3057\u3066\u304F\u3060\u3055\u3044"
+        _clearText: 1
+        _text: "\u591A\u91CD\u30ED\u30C3\u30AF\u30AA\u30F3\u306E\u6E96\u5099\u3092\u3057\u307E\u3059\u3002\r\n[F4]\u3068[F5]\u3092\u62BC\u3057\u3066\u304F\u3060\u3055\u3044\uFF01"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082772
+    - rid: 1578471403179212878
       type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _toggleButton1: 15
         _toggleButton2: 16
-    - rid: 1578471388244082773
+    - rid: 1578471403179212879
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _addState: 32
-    - rid: 1578471388244082774
+    - rid: 1578471403179212880
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _cueSheetName: SE
         _cueName: SE_Toggle
         _delaySec: 0
-    - rid: 1578471388244082775
+    - rid: 1578471403179212881
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _cueSheetName: SE
         _cueName: SE_Panel
         _delaySec: 0
-    - rid: 1578471388244082776
+    - rid: 1578471403179212882
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1.5
-        _text: "\u6575UI\u3092\u306A\u305E\u3063\u3066\u30DE\u30EB\u30C1\u30ED\u30C3\u30AF\u30AA\u30F3\u3057\u3066\u304F\u3060\u3055\u3044"
+        _clearText: 1
+        _text: "\u30DE\u30C3\u30D7\u4E0A\u306E\u6575\u3092\u306A\u305E\u3063\u3066\r\n\u3059\u3079\u3066\u30ED\u30C3\u30AF\u30AA\u30F3\u3057\u3066\u304F\u3060\u3055\u3044\uFF01"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082777
+    - rid: 1578471403179212883
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _cueSheetName: SE
         _cueName: SE_Panel
         _delaySec: 0
-    - rid: 1578471388244082778
+    - rid: 1578471403179212884
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 32
-    - rid: 1578471388244082779
+    - rid: 1578471403179212885
       type: {class: WaitMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082780
+    - rid: 1578471403179212886
       type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082781
+    - rid: 1578471403179212887
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
-        _text: OK!
+        _clearText: 1
+        _text: "\u304A\u898B\u4E8B\u3067\u3059\uFF01"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082782
+    - rid: 1578471403179212888
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082783
+    - rid: 1578471403179212889
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: SecondFunnelSequence
         _sequences:
-        - rid: 1578471388244082784
-        - rid: 1578471388244082785
-    - rid: 1578471388244082784
+        - rid: 1578471403179212890
+        - rid: 1578471403179212891
+    - rid: 1578471403179212890
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 3
-    - rid: 1578471388244082785
+    - rid: 1578471403179212891
       type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082786
+    - rid: 1578471403179212892
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: BossAgainSequence
         _sequences:
-        - rid: 1578471388244082787
-    - rid: 1578471388244082787
+        - rid: 1578471403179212893
+    - rid: 1578471403179212893
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 20
-    - rid: 1578471388244082788
+    - rid: 1578471403179212894
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: BreakLeftArmSequence
         _sequences:
-        - rid: 1578471388244082789
-    - rid: 1578471388244082789
+        - rid: 1578471403179212895
+    - rid: 1578471403179212895
       type: {class: BreakLeftArmSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082790
+    - rid: 1578471403179212896
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: FirstBossQTESequence
         _sequences:
-        - rid: 1578471388244082791
-        - rid: 1578471388244082792
-        - rid: 1578471388244082793
-        - rid: 1578471388244082794
-    - rid: 1578471388244082791
+        - rid: 1578471403179212897
+        - rid: 1578471403179212898
+        - rid: 1578471403179212899
+        - rid: 1578471403179212900
+    - rid: 1578471403179212897
       type: {class: BossFirstQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082792
+    - rid: 1578471403179212898
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082793
+    - rid: 1578471403179212899
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
+        _clearText: 1
         _text: "QTE\u7D42\u4E86"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082794
+    - rid: 1578471403179212900
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082795
+    - rid: 1578471403179212901
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: SecondQTESequence
         _sequences:
-        - rid: 1578471388244082796
-        - rid: 1578471388244082797
-        - rid: 1578471388244082798
-        - rid: 1578471388244082799
-    - rid: 1578471388244082796
+        - rid: 1578471403179212902
+        - rid: 1578471403179212903
+        - rid: 1578471403179212904
+        - rid: 1578471403179212905
+    - rid: 1578471403179212902
       type: {class: BossSecondQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471388244082797
+    - rid: 1578471403179212903
       type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _openSec: 1
         _delaySec: 0
-    - rid: 1578471388244082798
+    - rid: 1578471403179212904
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1.5
+        _clearText: 1
         _text: "QTE2\u7D42\u4E86"
         _oneCharDuration: 0.05
         _delaySec: 0
-    - rid: 1578471388244082799
+    - rid: 1578471403179212905
       type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 1578471388244082800
+    - rid: 1578471403179212906
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: BossEndSequence
         _sequences:
-        - rid: 1578471388244082801
-    - rid: 1578471388244082801
+        - rid: 1578471403179212907
+    - rid: 1578471403179212907
       type: {class: LoadSceneSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _loadScenenName: StartScene
@@ -714,7 +719,7 @@ MonoBehaviour:
     _playerController: {fileID: 0}
     _tutorialEnemy: {fileID: 0}
     _enemyManager: {fileID: 0}
-    _multiLockSystem: {fileID: 0}
+    _lockSystem: {fileID: 0}
     _raderMapMap: {fileID: 0}
 --- !u!114 &52876117135305751
 MonoBehaviour:
