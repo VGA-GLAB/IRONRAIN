@@ -6,18 +6,18 @@ namespace IronRain.SequenceSystem
 {
     public class WaitMultiLockSequence : ISequence
     {
-        private MultilockSystemExample _multiLockSystem;
+        private LockOnSystem _lockSystem;
         private RaderMap _raderMap;
         
         public void SetData(SequenceData data)
         {
-            _multiLockSystem = data.MultiLockSystem;
+            _lockSystem = data.LockSystem;
             _raderMap = data.RaderMap;
         }
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            var enemy = await _multiLockSystem.LockOnAsync(ct);
+            var enemy = await _lockSystem.MultiLockOnAsync(ct);
             _raderMap.MultiLockon(enemy);
         }
 

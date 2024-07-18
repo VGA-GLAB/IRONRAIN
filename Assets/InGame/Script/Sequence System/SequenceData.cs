@@ -1,6 +1,7 @@
 using System;
 using Enemy.Control;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace IronRain.SequenceSystem
 {
@@ -31,8 +32,8 @@ namespace IronRain.SequenceSystem
         public EnemyController TutorialEnemy => _tutorialEnemy;
         [SerializeField] private EnemyManager _enemyManager;
         public EnemyManager EnemyManager => _enemyManager;
-        [SerializeField] private MultilockSystemExample _multiLockSystem;
-        public MultilockSystemExample MultiLockSystem => _multiLockSystem;
+        [SerializeField] private LockOnSystem _lockSystem;
+        public LockOnSystem LockSystem => _lockSystem;
         [SerializeField] private RaderMap _raderMapMap;
         public RaderMap RaderMap => _raderMapMap;
     }

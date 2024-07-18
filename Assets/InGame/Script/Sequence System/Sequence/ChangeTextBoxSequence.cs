@@ -10,6 +10,7 @@ namespace IronRain.SequenceSystem
         private TutorialTextBoxController _textBox;
         
         [SerializeField] private float _totalSec = 0F;
+        [SerializeField] private bool _clearText = true;
         [SerializeField,TextArea] private string _text = "";
         [SerializeField] private float _oneCharDuration = 0.05F;
         [SerializeField] private float _delaySec = 0F;
@@ -29,6 +30,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            if (_clearText) _textBox.ClearText();
             _textBox.DoTextChangeAsync(_text, _oneCharDuration, ct)
                 .Forget(exceptionHandler);
 
