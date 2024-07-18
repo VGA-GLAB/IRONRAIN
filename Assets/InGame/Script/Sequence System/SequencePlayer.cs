@@ -40,7 +40,7 @@ namespace IronRain.SequenceSystem
                 
                 try
                 {
-                    if (_isSkip && _startIndex < i)
+                    if (_isSkip && i < _startIndex)
                     {
                         _currentSequence.Skip();
                     }
