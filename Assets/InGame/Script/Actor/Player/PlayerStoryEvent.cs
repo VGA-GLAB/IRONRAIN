@@ -27,7 +27,7 @@ public class PlayerStoryEvent : PlayerComponentBase
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), PlayerLoopTiming.Update, token);
         CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
         //右レバーボタン1を押したまま右レバーを押す
-        await tutorialTextBoxController.DoTextChangeAsync("[Shift]と[w]を同時に押してください！", 0.5f, token);
+        await tutorialTextBoxController.DoTextChangeAsync("[Shift]と[w]を同時に押してください！", 0.05f, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeLever), PlayerLoopTiming.Update, token);
         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
         CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
