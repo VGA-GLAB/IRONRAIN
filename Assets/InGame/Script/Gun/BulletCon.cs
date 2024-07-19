@@ -49,7 +49,7 @@ public class BulletCon : MonoBehaviour
         var playerCon = other.GetComponentInParent<PlayerController>();
         if (!playerCon && damageble != null) 
         {                                                                                                                                                                                                   
-            damageble.Damage(_damege, weaponName);
+            damageble.Damage(_damege, _weaponName);
             OnRelease?.Invoke(this);
         }
     }
