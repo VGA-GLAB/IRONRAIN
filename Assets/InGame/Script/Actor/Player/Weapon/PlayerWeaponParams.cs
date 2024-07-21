@@ -1,20 +1,23 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponData", menuName = "PlayerData/CreatePlayerWeaponParam")]
 public class PlayerWeaponParams : ScriptableObject
 {
+    public string WeaponName => _weaponName;
     public float ShotRate => _shotRate;
     public int MagazineSize => _magazineSize;
     public int ShotDamage => _shotDamege;
 
-    [Header("===•Ší‚ÌŠî–{İ’è===")]
-    [Header("˜AË‘¬“x")]
+    [Header("===æ­¦å™¨ã®åŸºæœ¬è¨­å®š===")]
+    [Header("æ­¦å™¨ã®åå‰")]
+    [SerializeField] protected string _weaponName;
+    [Header("é€£å°„é€Ÿåº¦")]
     [SerializeField] protected float _shotRate;
-    [Header("ƒ}ƒKƒWƒ“‚ÌƒTƒCƒY")]
+    [Header("ãƒã‚¬ã‚¸ãƒ³ã®ã‚µã‚¤ã‚º")]
     [SerializeField] protected int _magazineSize;
-    [Header("—^‚¦‚éƒ_ƒ[ƒW—Ê")]
+    [Header("ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸é‡")]
     [SerializeField] protected int _shotDamege;
 }
 
