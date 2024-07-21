@@ -3183,7 +3183,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""dd790203-ae9c-4cb5-8e64-b2d37ce7567b"",
-                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button8"",
+                    ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/button5"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
