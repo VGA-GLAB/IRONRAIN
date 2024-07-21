@@ -56,7 +56,7 @@ namespace Enemy.DebugUse
             _transform.Rotate(new Vector3(0, deltaRot, 0));
 
             // 遠距離攻撃
-            if (Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerRangeWeaponName);
+            if (Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerAssaultRifleWeaponName);
             // 近接攻撃
             if (Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
         }

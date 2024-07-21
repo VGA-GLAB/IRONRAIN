@@ -97,7 +97,7 @@ namespace Enemy.Control
 
             // 遠距離攻撃無効化
             if (_params.Common.Tactical.Armor == Armor.Range &&
-                weaponName == Const.PlayerRangeWeaponName) return true;
+                weaponName == Const.PlayerAssaultRifleWeaponName) return true;
 
             return false;
         }
@@ -110,6 +110,7 @@ namespace Enemy.Control
         {
             // 武器が空文字だった場合
             if (weapon == "") weapon = "Unknown";
+            Debug.Log(weapon);
 
             _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
         }
