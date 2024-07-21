@@ -187,7 +187,7 @@ public class PlayerQTEModel : IPlayerStateModel
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
             tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("右レバーのトリガーを押してください。", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("右レバーのトリガーを押しながら\n左レバーを手前に引いてください。", 0.05f, startToken);
             _qteType.Value = QTEState.QTE2;
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton), PlayerLoopTiming.Update, startToken);
