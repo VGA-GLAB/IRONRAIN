@@ -106,6 +106,9 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Expand()
         {
+            // ドローンを倒しきらずに2回目の展開をした場合。
+            if (_state == State.Expanded) return;
+
             // 画面に表示。
             _transform.localScale = Vector3.one;
 
@@ -136,7 +139,6 @@ namespace Enemy.Control.Boss
         {
             MessageBroker.Default.Publish(new Message { Boss = boss, Funnels = funnels });
         }
-
 
         /// <summary>
         /// 攻撃を受けた。

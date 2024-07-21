@@ -19,10 +19,12 @@ namespace Enemy.Control.Boss.FSM
         }
 
         private BlackBoard _blackBoard;
+        private AgentScript _agentScript;
 
-        public QteEventState(BlackBoard blackBoard)
+        public QteEventState(BlackBoard blackBoard, AgentScript agentScript)
         {
             _blackBoard = blackBoard;
+            _agentScript = agentScript;
         }
 
         public override StateKey Key => StateKey.QteEvent;
@@ -33,6 +35,7 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Exit()
         {
+            if (_agentScript != null) _agentScript.EnemyDestory();
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)

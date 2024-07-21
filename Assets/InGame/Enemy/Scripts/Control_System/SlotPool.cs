@@ -183,7 +183,7 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// スロットを返却する
+        /// スロットを返却する。
         /// </summary>
         public void Return(Slot slot)
         {

@@ -52,6 +52,8 @@ public class PlayerQTEModel : IPlayerStateModel
         var endCts = new CancellationTokenSource();
         var endToken = endCts.Token;
 
+        QTEFailureJudgment(startCts, endToken).Forget();
+
         try
         {
             if (qteType == QteType.NormalQte)
@@ -67,12 +69,13 @@ public class PlayerQTEModel : IPlayerStateModel
                 qteResult = await BossQTE2(endCts, startToken);
             }
             
-            qteResult = await QTEFailureJudgment(startCts, endToken);
         }
         catch 
         {
             return qteResult;
         }
+
+        endCts.Cancel();
         return qteResult;
     }
 
@@ -86,8 +89,7 @@ public class PlayerQTEModel : IPlayerStateModel
     {
         _qteResultType = QTEResultType.Failure;
 
-        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
-            || !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonQte))
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
         {
             _playerEnvroment.AddState(PlayerStateType.QTE);
 
@@ -95,20 +97,21 @@ public class PlayerQTEModel : IPlayerStateModel
             ProvidePlayerInformation.StartQte.OnNext(_enemyId);
             var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
 
-            _qteType.Value = QTEState.QTE1;
-            await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは左レバーの前ボタンを押したまま左レバーまたはマウスホイールを手前に引いた状態にしろ", 0.05f, startToken);
+            _qteType.Value = QTEState.QTE1; 
+            Debug.Log("QTE1");
+            await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[□]を押したまま\n左レバーを引いてください。", 0.05f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
             tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは左レバーの前ボタンを押したまま左レバーまたはマウスホイールを奥に押し出すように傾けろ", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[□]を押したまま\n左レバーを前に押し出してください。", 0.05f, startToken);
             _qteType.Value = QTEState.QTE2;
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
             tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("左レバーの後ろのボタンか右クリックを押せ", 0.05f, startToken); 
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[R2]を押してください。", 0.05f, startToken); 
             _qteType.Value = QTEState.QTE3;
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
             _qteType.Value = QTEState.QTENone;
@@ -118,10 +121,9 @@ public class PlayerQTEModel : IPlayerStateModel
             ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
             await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.05f, startToken);
-            tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, startToken).Forget();
+            tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
 
             _qteResultType = QTEResultType.Success;
-            endCts.Cancel();
             return _qteResultType;
         }
         return _qteResultType;
@@ -146,21 +148,23 @@ public class PlayerQTEModel : IPlayerStateModel
 
             _qteType.Value = QTEState.QTE1;
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは左レバーの前ボタンを押したまま左レバーまたはマウスホイールを奥に押した状態にする", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[□]を押したまま\n左レバーを前に押し出してください。", 0.05f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+            tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは左レバーの前ボタンを押したまま左レバーまたはマウスホイールを思いっきり手前に引く", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[□]を押したまま\n左レバーを引いてください。", 0.05f, startToken);
             _qteType.Value = QTEState.QTE2;
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+            tutorialTextBoxController.ClearText();
 
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
 
             _qteResultType = QTEResultType.Success;
-            endCts.Cancel();
             return _qteResultType;
         }
         return _qteResultType;
@@ -178,26 +182,29 @@ public class PlayerQTEModel : IPlayerStateModel
 
             _qteType.Value = QTEState.QTE1;
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-            await tutorialTextBoxController.DoTextChangeAsync("Qボタンまたは左レバーの前ボタンを押したまま左レバーまたはマウスホイールを奥に押した状態にする", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[□]を押したまま\n左レバーを奥に押し出してください。", 0.05f, startToken);
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.ThreeButton), PlayerLoopTiming.Update, startToken);
+            tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("左クリックまたは左レバーの後ろボタンを押したまま左レバーまたはマウスホイールを思いっきり手前に引く", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("右レバーのトリガーを押しながら\n左レバーを手前に引いてください。", 0.05f, startToken);
             _qteType.Value = QTEState.QTE2;
             await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1
             && InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton), PlayerLoopTiming.Update, startToken);
+            tutorialTextBoxController.ClearText();
 
-            await tutorialTextBoxController.DoTextChangeAsync("左レバーの後ろのボタンか右クリックを押せ", 0.05f, startToken);
+            await tutorialTextBoxController.DoTextChangeAsync("左レバーの[R2]を押してください。", 0.05f, startToken);
             _qteType.Value = QTEState.QTE3;
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
             _qteType.Value = QTEState.QTENone;
+            tutorialTextBoxController.ClearText();
 
             ProvidePlayerInformation.TimeScale = 1f;
             ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
             _playerEnvroment.RemoveState(PlayerStateType.QTE);
+            tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
 
             _qteResultType = QTEResultType.Success;
-            endCts.Cancel();
             return _qteResultType;
         }
         return _qteResultType;
@@ -207,17 +214,15 @@ public class PlayerQTEModel : IPlayerStateModel
     /// QTEの失敗判定
     /// </summary>
     /// <returns></returns>
-    private async UniTask<QTEResultType> QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
+    private async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
     {
         //失敗までの時間を計測
         await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
-        Debug.Log("QTE終了");
         ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Failure, _enemyId));
         ProvidePlayerInformation.TimeScale = 1f;
         _qteType.Value = QTEState.QTENone;
         _playerEnvroment.RemoveState(PlayerStateType.QTE);
         _qteResultType = QTEResultType.Failure;
         startCts.Cancel();
-        return _qteResultType;
     }
 }
