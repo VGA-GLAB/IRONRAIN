@@ -10,7 +10,7 @@ namespace Enemy.Tool
     /// 敵が射撃して攻撃するタイミングを入力から作成する。
     /// テキストファイルで出力される。
     /// </summary>
-    public class FireTimingAssetGenerator : MonoBehaviour
+    public class InputBufferTool : MonoBehaviour
     {
         [Header("Assetsからの相対パス")]
         [SerializeField] private string _directoryPath = "InGame/Enemy/";
