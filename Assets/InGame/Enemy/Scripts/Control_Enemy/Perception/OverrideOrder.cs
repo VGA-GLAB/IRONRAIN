@@ -45,7 +45,7 @@ namespace Enemy.Control
                 // プレイヤーを発見させる。
                 if (order.OrderType == EnemyOrder.Type.PlayerDetect)
                 {
-                    _blackBoard.IsPlayerDetected = true;
+                    _blackBoard.IsOrderedPlayerDetect = true;
                     _blackBoard.OrderedSpawnPoint = order.Point;
                 }
                 // 攻撃させる。

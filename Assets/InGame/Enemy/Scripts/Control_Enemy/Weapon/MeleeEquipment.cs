@@ -91,7 +91,7 @@ namespace Enemy.Control
         private void OnDrawGizmos()
         {
             // 攻撃範囲。
-            GizmosUtils.WireSphere(Origin(), _radius, ColorExtensions.ThinRed);
+            GizmosUtils.WireCircle(Origin(), _radius, ColorExtensions.ThinRed);
         }
     }
 }

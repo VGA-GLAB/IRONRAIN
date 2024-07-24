@@ -96,8 +96,8 @@ namespace Enemy.Control.Boss
         public void Draw()
         {
             // 自身とプレイヤーのエリア
-            _area?.DrawOnGizmos();
-            _playerArea?.DrawOnGizmos();
+            _area?.DrawOnGizmos(_transform);
+            _playerArea?.DrawOnGizmos(_player);
         }
     }
 }

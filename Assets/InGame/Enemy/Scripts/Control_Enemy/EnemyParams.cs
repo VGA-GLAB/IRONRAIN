@@ -14,117 +14,144 @@ namespace Enemy.Control
     }
 
     /// <summary>
+    /// 特殊な状態を設定し、行動を制限するための列挙型。
+    /// </summary>
+    public enum SpecialCondition
+    {
+        None,         // 特に行動制限なし、デフォルト
+        ManualAttack, // 外部からメソッドを呼ぶことでのみ、攻撃する。
+    }
+
+    /// <summary>
     /// 敵キャラクター個体毎のパラメータ。
     /// プランナーが弄る。
     /// </summary>
     public class EnemyParams : MonoBehaviour, IReadonlyEnemyParams
     {
-        // 接近
+        // 移動速度
         [System.Serializable]
-        public class AdvanceSettings
+        public class MoveSpeedSettings
         {
-            [Header("検知距離")]
-            [Min(0)]
-            [SerializeField] private float _distance = 33.0f;
-            [Header("移動速度")]
-            [Min(1.0f)]
-            [SerializeField] private float _moveSpeed = 12.0f;
-            [Header("スロット番号")]
-            [SerializeField] private SlotPool.Place _slotPlace;
+            [Tooltip("画面上に表示され、プレイヤーの正面に向かって移動中の速度。")]
+            [Range(1.0f, 100.0f)]
+            [SerializeField] private float _approach = 50.0f;
 
-            public float Distance => _distance;
-            public float MoveSpeed => _moveSpeed;
-            public SlotPool.Place SlotPlace => _slotPlace;
+            [Tooltip("プレイヤーの正面に移動完了、攻撃しつつ移動する際の速度。")]
+            [Range(1.0f, 100.0f)]
+            [SerializeField] private float _chase = 50.0f;
+
+            [Tooltip("生存時間を越え、画面外に撤退する際の速度。")]
+            [Range(1.0f, 100.0f)]
+            [SerializeField] private float _exit = 50.0f;
+
+            public float Approach => _approach;
+            public float Chase => _chase;
+            public float Exit => _exit;
         }
 
-        // 戦闘
+        // 攻撃
         [System.Serializable]
-        public class BattleSettings
+        public class AttackSettings
         {
-            [Header("最大体力")]
-            [Min(1)]
-            [SerializeField] private int _maxHp = 10;
-            [Range(0, 1.0f)]
-            [Header("瀕死状態になる体力(割合)")]
-            [SerializeField] private float _dying = 0.2f;
-            [Header("生存時間(秒)")]
-            [Min(1)]
-            [SerializeField] private float _lifeTime = 60.0f;
-            [Header("攻撃タイミングを記述したファイル")]
-            [Tooltip("記述されたタイミングをループする。")]
-            [SerializeField] private TextAsset _inputBufferAsset;
-            [Header("ファイルを使用する")]
-            [SerializeField] private bool _useInputBuffer;
-            [Header("ファイルを使用しない場合の攻撃間隔")]
-            [Min(0.01f)]
-            [SerializeField] private float _attackRate = 0.01f;
-            [Header("プレイヤーに向かう速さ")]
-            [Tooltip("登場後、この速さでプレイヤーに追従する")]
-            [Min(1.0f)]
-            [SerializeField] private float _chaseSpeed = 6.0f;
-            [Header("戦闘から撤退する際の速さ")]
-            [Min(1.0f)]
-            [SerializeField] private float _escapeSpeed = 6.0f;
-            [Header("視界の半径")]
             [Tooltip("この範囲にプレイヤーを捉えると攻撃してくる。")]
             [Min(0)]
-            [SerializeField] private float _fovRadius = 8.0f;
+            [SerializeField] private float _triggerRange = 8.0f;
 
-            public int MaxHp => _maxHp;
-            public float Dying => _dying;
-            public float LifeTime => _lifeTime;
-            public TextAsset InputBufferAsset => _inputBufferAsset;
+            [Tooltip("攻撃アニメーションの再生間隔。")]
+            [Range(0.01f, 10.0f)]
+            [SerializeField] private float _rate = 0.01f;
+
+            [Space(10)]
+
+            [Tooltip("入力バッファを使って攻撃タイミングを制御する場合は、Rateで設定した値は無視される。")]
+            [SerializeField] private bool _useInputBuffer;
+            [SerializeField] private TextAsset _inputBufferAsset;
+
+            public float TriggerRange => _triggerRange;
+            public float Rate => _rate;
             public bool UseInputBuffer => _useInputBuffer;
-            public float AttackRate => _attackRate;
-            public float ChaseSpeed => _chaseSpeed;
-            public float EscapeSpeed => _escapeSpeed;
-            public float FovRadius => _fovRadius;
+            public TextAsset InputBufferAsset => _inputBufferAsset;
         }
 
-        // その他の設定
+        // 特に弄る必要ないもの、設定できるが現状必要ないもの。
         [System.Serializable]
         public class OtherSettings
         {
-            [Header("チュートリアルの敵として扱う")]
-            [Tooltip("外部から攻撃命令をされた場合のみ攻撃する。")]
-            [SerializeField] private bool _isTutorial;
-            [Header("シーケンス設定")]
-            [SerializeField] private EnemyManager.Sequence _sequence;
-            [Header("種類ごとに共通したパラメータ")]
+            [Range(0.1f, 1.0f)]
+            [Tooltip("プレイヤーに接近する際のホーミング力")]
+            [SerializeField] private float _approachHomingPower = 0.5f;
+
+            [Range(0.1f, 100.0f)]
+            [Tooltip("前後左右に移動するアニメーションのブレンドする強さ")]
+            [SerializeField] private float _animationBlendPower = 100.0f;
+
+            [Range(0.1f, 1.0f)]
+            [Tooltip("接近完了とみなす距離の閾値")]
+            [SerializeField] private float _approachCompleteThreshold = 0.1f;
+
+            [Range(1.0f, 10.0f)]
+            [Tooltip("戦闘時に上下移動する際の速さ")]
+            [SerializeField] private float _verticalMoveSpeed = 1.5f;
+
+            [Range(0, 1.0f)]
+            [Tooltip("体力がこの割合を下回った場合は瀕死状態になる。")]
+            [SerializeField] private float _dying = 0.2f;
+
+            [Tooltip("種類ごとに共通したパラメータ。気持ち程度のFlyWeight。")]
             [SerializeField] private CommonParams _common;
 
-            public bool IsTutorial => _isTutorial;
-            public EnemyManager.Sequence Sequence => _sequence;
+            public float ApproachHomingPower => _approachHomingPower;
+            public float AnimationBlendPower => _animationBlendPower;
+            public float ApproachCompleteThreshold => _approachCompleteThreshold;
+            public float VerticalMoveSpeed => _verticalMoveSpeed;
+            public float Dying => _dying;
             public CommonParams Common => _common;
         }
 
-        // 必要に応じてプランナー用に外出しする。
-        public static class Const
-        {
-            // プレイヤーに接近する際のホーミング力
-            public const float HomingPower = 0.5f;
-            // 前後左右に移動するアニメーションのブレンドする強さ
-            public const float BlendTreeParameterMag = 100.0f;
-            // 接近完了とみなす距離の閾値
-            public const float ApproachCompleteThreshold = 0.1f;
-            // 戦闘時に上下移動する際の速さ
-            public const float VerticalMoveSpeed = 1.5f;
-        }
+        [Header("スロット番号")]
+        [SerializeField] private SlotPool.Place _slotPlace;
 
-        [Header("登場演出中の設定")]
-        [SerializeField] private AdvanceSettings _advance;
-        [Header("戦闘状態の設定")]
-        [SerializeField] private BattleSettings _battle;
-        [Header("基本的にそのままで良い設定")]
+        [Header("登場するシーケンス")]
+        [SerializeField] private EnemyManager.Sequence _sequence;
+
+        [Min(1)]
+        [Header("体力の最大値")]
+        [SerializeField] private int _maxHp = 100;
+
+        [Min(1)]
+        [Header("生存時間")]
+        [Tooltip("プレイヤーの正面に移動完了した後、計測開始する。")]
+        [SerializeField] private int _lifeTime = 60;
+
+        [Header("移動速度の設定")]
+        [SerializeField] private MoveSpeedSettings _moveSpeed;
+
+        [Header("攻撃の設定")]
+        [SerializeField] private AttackSettings _attack;
+
+        [Header("特殊な状態の設定")]
+        [SerializeField] private SpecialCondition _specialCondition;
+
+        [Space(10)]
+
+        [Header("特に弄る必要ない設定")]
         [SerializeField] private OtherSettings _other;
 
-        public AdvanceSettings Advance => _advance;
-        public BattleSettings Battle => _battle;
+        public SlotPool.Place SlotPlace => _slotPlace;
+        public int MaxHp => _maxHp;
+        public int LifeTime => _lifeTime;
+        public MoveSpeedSettings MoveSpeed => _moveSpeed;
+        public AttackSettings Attack => _attack;
+        public SpecialCondition SpecialCondition => _specialCondition;
         public OtherSettings Other => _other;
         public CommonParams Common => _other.Common;
 
+        // 視界に入った敵を攻撃するという処理になっている都合上、同じ値を参照するようにしている。
+        // 攻撃以外にも視界の用途が出来た場合は専用のパラメータを用意し、攻撃範囲と分ける必要あり。
+        public float FovRadius => _attack.TriggerRange;
+
         // インターフェースで外部から参照する。
         public EnemyType Type => _other.Common != null ? _other.Common.Type : EnemyType.Dummy;
-        public EnemyManager.Sequence Sequence => _other.Sequence;
+        public EnemyManager.Sequence Sequence => _sequence;
     }
 }

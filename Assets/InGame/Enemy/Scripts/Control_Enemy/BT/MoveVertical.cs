@@ -30,7 +30,7 @@ namespace Enemy.Control.BT
         {
             // 上に逃げる。
             _plan.Direction = Vector3.up;
-            _plan.Speed = _params.Battle.EscapeSpeed;
+            _plan.Speed = _params.MoveSpeed.Exit;
             _blackBoard.MovePlans.Enqueue(_plan);
 
             return State.Success;

@@ -150,7 +150,7 @@ namespace Enemy.Control.FSM
         {
             // チュートリアル用の敵の場合、攻撃状態になった瞬間に攻撃終了のフラグを立てる。
             // Animatorのenemy_assult_fire_lpステートを繰り返す遷移にHasExitTimeのチェックが入っている前提。
-            if (_params.Other.IsTutorial)
+            if (_params.SpecialCondition == SpecialCondition.ManualAttack)
             {
                 // この場合、1回攻撃のアニメーションが再生された後、アイドル状態に戻るはず。
                 _animation.SetTrigger(BodyAnimation.ParamName.AttackEndTrigger);

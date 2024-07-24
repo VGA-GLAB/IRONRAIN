@@ -74,9 +74,9 @@ namespace Enemy.Control.Boss
             // 点Pに接近する際のホーミング力。
             public const float HomingPower = 0.5f;
             // エリアの半径を調整するとプレイヤーと重なりにくくなる。
-            public static float AreaRadius = 0.5f;
+            public static float AreaRadius = 2.1f;
             // エリアの半径を調整するとボスと重なりにくくなる。
-            public static float PlayerAreaRadius = 0.5f;
+            public static float PlayerAreaRadius = 2.7f;
         }
 
         [Header("ボス戦開始~登場時の設定")]

@@ -33,7 +33,7 @@ namespace Enemy.Control
         private void HpBar()
         {
             Vector3 p = _transform.position + Vector3.up * 5.0f;
-            float f = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp;
+            float f = 1.0f * _blackBoard.Hp / _params.MaxHp;
             f = Mathf.Clamp01(f);
 
             GizmosUtils.Plane(p, 2.0f, 0.3f, ColorExtensions.DarkGray);
@@ -44,7 +44,7 @@ namespace Enemy.Control
         private void LifeTime()
         {
             Vector3 p = _transform.position + Vector3.up * 4.8f;
-            float f = 1.0f * _blackBoard.LifeTime / _params.Battle.LifeTime;
+            float f = 1.0f * _blackBoard.LifeTime / _params.LifeTime;
             f = Mathf.Clamp01(f);
 
             GizmosUtils.Plane(p, 2.0f, 0.1f, ColorExtensions.DarkGray);
