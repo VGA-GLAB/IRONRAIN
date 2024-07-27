@@ -5,13 +5,13 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 右手の人差し指でパネルを突く前提。
+// 両手の人差し指でパネルを突く前提。
 public class LockOnSystem : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
-    [Header("右手の人差し指")]
-    [SerializeField] private Transform _fingertip;
+    [Header("両手の人差し指")]
+    [SerializeField] private Transform[] _fingertip;
     [Header("指先の位置を示すパネル上のカーソル")]
     [SerializeField] private Transform _cursor;
     [Header("生成されたTargetの親")]
@@ -142,14 +142,23 @@ public class LockOnSystem : MonoBehaviour
     }
 
     // パネル上のカーソルのxy座標を指先に合わせる。
-    private void FingertipCursor(Transform fingertip, Transform cursor)
+    private void FingertipCursor(Transform[] fingertip, Transform cursor)
     {
         //Vector3 p = cursor.position;
         //p.x = fingertip.position.x;
         //p.y = fingertip.position.y;
 
         //cursor.position = p;
-        cursor.position = fingertip.position;
+        
+        //カーソルに近い方の指の位置を登録する
+        Transform fingerPostion;
+        if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
+            Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
+            fingerPostion = fingertip[0];
+        else
+            fingerPostion = fingertip[1];
+        
+        cursor.position = fingerPostion.position;
     }
 
     // カーソルとTargetがパネル上で接触しているかを判定。
