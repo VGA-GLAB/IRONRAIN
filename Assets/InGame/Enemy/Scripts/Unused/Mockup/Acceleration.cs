@@ -1,4 +1,6 @@
-﻿using Enemy.Extensions;
+﻿#if false
+
+using Enemy.Extensions;
 using UnityEngine;
 
 namespace Enemy.Unused
@@ -88,3 +90,5 @@ namespace Enemy.Unused
         }
     }
 }
+
+#endif

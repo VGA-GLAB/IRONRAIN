@@ -18,10 +18,6 @@
         /// プレイヤーのアサルトライフルを指定する際の名前
         /// </summary>
         public const string PlayerAssaultRifleWeaponName = "AssaultRifle";
-        /// <summary>
-        /// プレイヤーのロケットランチャーを指定する際の名前
-        /// </summary>
-        public const string PlayerRocketLauncherWeaponName = "RocketLauncher";
 
         /// <summary>
         /// ダメージ判定用のタグ一覧

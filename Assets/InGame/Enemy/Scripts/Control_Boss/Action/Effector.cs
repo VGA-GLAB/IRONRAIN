@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Control
+namespace Enemy.Control.Boss
 {
     /// <summary>
-    /// 敵本体が再生するエフェクト一覧
+    /// ボス本体が再生するエフェクト一覧
     /// </summary>
     [System.Serializable]
-    public class EnemyEffects
+    public class BossEffects
     {
         [SerializeField] private Effect _thruster;
         [SerializeField] private Effect _destroyed;
@@ -18,15 +19,12 @@ namespace Enemy.Control
         public Effect Trail => _trail;
     }
 
-    /// <summary>
-    /// 演出を再生する。
-    /// </summary>
     public class Effector
     {
-        private EnemyEffects _effects;
+        private BossEffects _effects;
         private IOwnerTime _ownerTime;
 
-        public Effector(EnemyEffects effects, IOwnerTime ownerTime)
+        public Effector(BossEffects effects, IOwnerTime ownerTime)
         {
             _effects = effects;
             _ownerTime = ownerTime;

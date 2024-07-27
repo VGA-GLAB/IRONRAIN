@@ -40,6 +40,9 @@ namespace Enemy.Control.Boss
         // Startでインスタンスが確保、Updateで値が更新され、Disableでnull。
         public CircleArea Area { get; set; }
         public CircleArea PlayerArea { get; set; }
+
+        // Perceptionクラスが書き込む。
+        // Updateで値が更新される。
         public Vector3 Forward { get; set; }
         public Vector3 PointP { get; set; }
         public Vector3 TransformToPointPDirection { get; set; }
@@ -48,6 +51,7 @@ namespace Enemy.Control.Boss
         public float TransformToPlayerSqrDistance { get; set; }
         public bool IsWithinMeleeRange { get; set; }
         public float ElapsedTime { get; set; }
+        public bool IsAppearCompleted { get; set; }
 
         // FireRateクラスが書き込む。
         // Updateで値が更新される。
@@ -66,10 +70,5 @@ namespace Enemy.Control.Boss
         public bool FunnelExpandTrigger { get; set; }
         public QteEventState.Step OrderdQteEventStep { get; set; }
         public bool IsBroken { get; set; } 
-
-        // ボス戦開始後、最初にボスの登場演出をするためのフラグ。
-        // 現状どういった演出なのか企画書に無いため、デフォルトでtrueにしておくことで登場ステートをスキップする。
-        // 本来はPerception層で操作する。
-        public bool IsAppearCompleted { get; set; } = true;
     }
 }

@@ -46,22 +46,20 @@ namespace Enemy.Control.FSM
             _isPlaying = false;
             _exitElapsed = 0;
 
-            // 撃破されたときの音
-            AudioWrapper.PlaySE("SE_Kill");
-
             // レーダーマップから消す。
             if (_agentScript != null) _agentScript.EnemyDestory();
         }
 
         protected override void Exit()
         {
+            // このステートから遷移しないので呼ばれない。
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
             // ステートの開始から少し経ったら後始末の準備完了フラグを立てる。
             _exitElapsed += _blackBoard.PausableDeltaTime;
-            if (_exitElapsed > 1.5f) // 値は適当。
+            if (_exitElapsed > _params.Other.BrokenDelay)
             {
                 _blackBoard.IsCleanupReady = true;
             }
@@ -87,13 +85,14 @@ namespace Enemy.Control.FSM
             // 設定ミスなどで対応しているアニメーションが無い場合。
             if (stateName == "") return;
 
-            // 死亡アニメーションとエフェクトを再生。
-#if false
+            // 死亡アニメーションはその瞬間に強制的に遷移させるため、ステートを指定して再生。
             _animation.Play(stateName);
-#elif true
-            _body.ModelEnable(false);
-            _effector.Play(EffectKey.Destroyed, _blackBoard);
-#endif
+
+            AudioWrapper.PlaySE("SE_Kill");
+
+            _effector.PlayDestroyedEffect();
+            _effector.ThrusterEnable(false);
+            _effector.TrailEnable(false);
 
             // 当たり判定を消す。
             _body.HitBoxEnable(false);

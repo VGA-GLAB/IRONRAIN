@@ -1,4 +1,6 @@
-﻿using Enemy.Control;
+﻿#if false
+
+using Enemy.Control;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -191,3 +193,6 @@ namespace Enemy.Unused
         }
     }
 }
+
+
+#endif

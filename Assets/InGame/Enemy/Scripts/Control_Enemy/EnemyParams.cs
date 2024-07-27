@@ -97,6 +97,13 @@ namespace Enemy.Control
             [Tooltip("体力がこの割合を下回った場合は瀕死状態になる。")]
             [SerializeField] private float _dying = 0.2f;
 
+            [Range(10.0f, 200.0f)]
+            [Tooltip("撤退時、プレイヤーとの距離がこの値を超えると画面から消える。")]
+            [SerializeField] private float _offScreenDistance = 100.0f;
+
+            [Tooltip("死亡アニメーションを再生開始から、ステートマシンを止めるまでのディレイ(秒)")]
+            [SerializeField] private float _brokenDelay = 2.5f;
+
             [Tooltip("種類ごとに共通したパラメータ。気持ち程度のFlyWeight。")]
             [SerializeField] private CommonParams _common;
 
@@ -105,6 +112,8 @@ namespace Enemy.Control
             public float ApproachCompleteThreshold => _approachCompleteThreshold;
             public float VerticalMoveSpeed => _verticalMoveSpeed;
             public float Dying => _dying;
+            public float OffScreenDistance => _offScreenDistance;
+            public float BrokenDelay => _brokenDelay;
             public CommonParams Common => _common;
         }
 

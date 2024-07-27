@@ -289,22 +289,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2566409710932305862, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2566409710932305862, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2566409710932305862, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2566409710932305862, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: _lifeTime
       value: 60
@@ -322,8 +306,20 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _moveSpeed._chase
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: _advance._slotPlace
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._offScreenDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_Name
@@ -521,6 +517,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 139027871}
     m_Modifications:
+    - target: {fileID: 574555572, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _equipment
+      value: 
+      objectReference: {fileID: 405785396}
     - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: _lifeTime
       value: 9999
@@ -540,6 +540,10 @@ PrefabInstance:
     - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: m_Name
       value: Enemy_QTETutorial_Shield_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: m_RootOrder
@@ -604,6 +608,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
   m_PrefabInstance: {fileID: 356978781}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &405785396 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 887635633871644316, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+  m_PrefabInstance: {fileID: 356978781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405785391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16588913c67fb2744bd6084d14abf755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &440847150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -643,6 +658,10 @@ PrefabInstance:
     - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_Name
       value: Enemy_TouchPanel_MachineGun_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_RootOrder
@@ -741,6 +760,10 @@ PrefabInstance:
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
       value: Enemy_TouchPanel_Launcher_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
@@ -959,6 +982,10 @@ PrefabInstance:
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
       value: Enemy_Attack_Launcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1236,6 +1263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_TouchPanel_Launcher_1
       objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.8
@@ -1330,6 +1361,10 @@ PrefabInstance:
     - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_Name
       value: Enemy_TouchPanel_MachineGun_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_RootOrder
@@ -1758,8 +1793,20 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _moveSpeed._chase
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: _advance._slotPlace
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._offScreenDistance
+      value: 40.3
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_Name
@@ -2185,7 +2232,7 @@ MonoBehaviour:
   _moveSpeed: 10
   _rotationSpeed: 55
   _forwardOffset: 1
-  _damage: 6
+  _damage: 55
   _range: 42
   _camera: {fileID: 1227665478}
 --- !u!135 &1758061613
@@ -2525,8 +2572,20 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _moveSpeed._chase
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: _advance._slotPlace
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._offScreenDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
       propertyPath: m_Name
@@ -2611,12 +2670,24 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _moveSpeed._chase
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _advance._distance
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _advance._slotPlace
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _other._offScreenDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5554409662223761141, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Enabled
@@ -2701,8 +2772,20 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _moveSpeed._chase
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _advance._distance
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _other._offScreenDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5554409662223761141, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Enabled

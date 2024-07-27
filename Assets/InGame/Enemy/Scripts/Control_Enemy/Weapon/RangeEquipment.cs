@@ -19,6 +19,8 @@ namespace Enemy.Control
             Target,  // 任意のターゲットに向ける。
         }
 
+        [Header("エフェクトの設定")]
+        [SerializeField] private Effect[] _muzzleEffects;
         [Header("アニメーションイベントに処理をフック")]
         [SerializeField] private AnimationEvent _animationEvent;
         [Header("射撃方法")]
@@ -81,6 +83,12 @@ namespace Enemy.Control
             LastAttackTiming = Time.time;
 
             OnShoot();
+
+            // マズルのエフェクトを再生
+            if (_muzzleEffects != null)
+            {
+                foreach (Effect e in _muzzleEffects) e.Play(_owner);
+            }
 
             // 前方に撃つ
             void FireToForward()

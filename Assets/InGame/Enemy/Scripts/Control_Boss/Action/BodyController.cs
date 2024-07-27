@@ -21,8 +21,9 @@ namespace Enemy.Control.Boss
         // 既に後始末処理を実行済みかを判定するフラグ。
         private bool _isCleanup;
 
-        public BodyController(Transform transform, BlackBoard blackBoard, Transform offset, Transform rotate, 
-            Transform[] models, Animator animator, Collider damageHitBox, IReadOnlyCollection<FunnelController> funnels)
+        public BodyController(Transform transform, BossParams bossParams, BlackBoard blackBoard, Transform offset, 
+            Transform rotate, Transform[] models, Animator animator, BossEffects effects, Collider[] hitBoxes, 
+            IReadOnlyCollection<FunnelController> funnels)
         {
             _blackBoard = blackBoard;
 
@@ -34,14 +35,16 @@ namespace Enemy.Control.Boss
             }
 
             // ボスのオブジェクトの構成が雑魚敵と同じ想定なので流用する。
-            Body body = new Body(transform, offset, rotate, models, damageHitBox);
+            Body body = new Body(transform, offset, rotate, models, hitBoxes);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
+            // エフェクトはボス用のもの
+            Effector effector = new Effector(effects, blackBoard);
             _stateTable = new Dictionary<StateKey, State>
             {
                 { StateKey.Idle, new Boss.FSM.IdleState(blackBoard) },
-                { StateKey.Appear, new AppearState(blackBoard) },
+                { StateKey.Appear, new AppearState(blackBoard, effector) },
                 { StateKey.Battle, new BattleState(blackBoard, body, bodyAnimation, funnels, agentScript) },
-                { StateKey.QteEvent, new QteEventState(blackBoard, agentScript) },
+                { StateKey.QteEvent, new QteEventState(blackBoard, bodyAnimation, effector, agentScript) },
             };
 
             // 初期状態では画面に表示されている。
@@ -55,7 +58,7 @@ namespace Enemy.Control.Boss
         {
             // ステートマシンを更新。
             _currentState = _currentState.Update(_stateTable);
-
+            
             return Result.Running; // <- 必要に応じて修正する。
         }
 

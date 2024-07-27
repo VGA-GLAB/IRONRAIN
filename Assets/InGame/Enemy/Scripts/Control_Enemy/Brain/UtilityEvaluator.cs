@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// キャラクターが取りうる行動の選択肢
+    /// キャラクターが取りうる行動の選択肢。
+    /// ステートと1対1で対応しているわけではなく、そのステート内での行動の選択に使用される。
     /// </summary>
     public enum Choice
     {

@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+﻿#if false
+
+using Cysharp.Threading.Tasks;
 using System.Threading;
-using UniRx;
 using UnityEngine;
 using Enemy.Unused.GPT;
 using System;
@@ -167,3 +168,5 @@ namespace Enemy.Unused
         }
     }
 }
+
+#endif

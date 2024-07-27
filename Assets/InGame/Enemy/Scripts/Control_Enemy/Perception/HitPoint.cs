@@ -110,7 +110,6 @@ namespace Enemy.Control
         {
             // 武器が空文字だった場合
             if (weapon == "") weapon = "Unknown";
-            Debug.Log(weapon);
 
             _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
         }
