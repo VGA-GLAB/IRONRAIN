@@ -61,10 +61,6 @@ namespace Enemy.Control
         public bool IsApproachCompleted { get; set; }
         public float LifeTime { get; set; }
 
-        // Perceptionクラスが書き込み、OverrideOrderクラスが必要に応じて上書きする。
-        // どちらのクラスもUpdateで値が更新される。
-        public bool IsPlayerDetected { get; set; }
-
         // FireRateクラスが書き込む。
         // Updateで値が更新される。
         public float NextAttackTime { get; set; }
@@ -80,6 +76,7 @@ namespace Enemy.Control
         // Updateで値が更新される。
         public bool OrderedAttackTrigger { get; set; }
         public bool IsOrderedPause { get; set; }
+        public bool IsOrderedPlayerDetect { get; set; }
         public Vector3? OrderedSpawnPoint { get; set; }
 
         // BrokenStateクラスもしくはEscapeStateクラスが書き込む。

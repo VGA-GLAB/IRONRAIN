@@ -22,8 +22,9 @@ namespace Enemy.Control.Boss
             public List<FunnelController> Funnels;
         }
 
-        [Header("撃破された際の演出(任意)")]
-        [SerializeField] private Effect _defeatedEffect;
+        [Header("エフェクトの設定")]
+        [SerializeField] private Effect _destroyedEffect;
+        [SerializeField] private Effect _trailEffect;
 
         private Transform _player;
         private BossController _boss;
@@ -97,6 +98,9 @@ namespace Enemy.Control.Boss
                         _transform.position, 
                         _boss.BlackBoard.Forward
                         );
+
+                    // 攻撃音
+                    AudioWrapper.PlaySE("SE_Funnel_Fire");
                 }
             }
         }
@@ -117,6 +121,9 @@ namespace Enemy.Control.Boss
 
             if (_boss == null) return;
 
+            // トレイルの演出再生
+            if (_trailEffect != null) _trailEffect.Play(_boss.BlackBoard);
+
             // ボス本体の円状の周囲に展開する。値は適当にベタ書き。
             float sin = Mathf.Sin(2 * Mathf.PI * Random.value);
             float cos = Mathf.Cos(2 * Mathf.PI * Random.value);
@@ -129,6 +136,9 @@ namespace Enemy.Control.Boss
 
             // レーダーに表示する。
             if (TryGetComponent(out AgentScript a)) a.EnemyGenerate();
+
+            // ファンネルが飛んでいる音(ループしなくて良い？)
+            AudioWrapper.PlaySE("SE_Funnel_Fly");
         }
 
         /// <summary>
@@ -150,10 +160,13 @@ namespace Enemy.Control.Boss
             _state = State.Defeated;
 
             // 撃破された際の演出
-            if (_defeatedEffect != null) _defeatedEffect.Play(_boss.BlackBoard);
+            if (_destroyedEffect != null) _destroyedEffect.Play(_boss.BlackBoard);
 
             // レーダーから消す。
             if (TryGetComponent(out AgentScript a)) a.EnemyDestory();
+
+            // トレイルの演出を停止。
+            if (_trailEffect != null) _trailEffect.Stop();
         }
     }
 }

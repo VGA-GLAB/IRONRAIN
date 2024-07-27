@@ -73,6 +73,7 @@ namespace Enemy.Control
         /// </summary>
         public virtual void DrawOnGizmos()
         {
+            Debug.Log("？？？");
             GizmosUtils.WireCircle(Point, Radius, Color.white);
         }
 

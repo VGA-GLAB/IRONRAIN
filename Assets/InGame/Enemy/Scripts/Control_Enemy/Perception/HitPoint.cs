@@ -47,7 +47,7 @@ namespace Enemy.Control
         /// </summary>
         public void Init()
         {
-            _blackBoard.Hp = _params.Battle.MaxHp;
+            _blackBoard.Hp = _params.MaxHp;
             _blackBoard.IsDying = false;
         }
 
@@ -69,7 +69,7 @@ namespace Enemy.Control
             while (_buffer.TryDequeue(out DamageBuffer damage))
             {
                 // 耐性がある、もしくはプレイヤーを検知していない状態。
-                if (IsArmor(damage.Source) || !_blackBoard.IsPlayerDetected)
+                if (IsArmor(damage.Source) || !_blackBoard.IsOrderedPlayerDetect)
                 {
                     _blackBoard.DamageSource = damage.Source;
                 }
@@ -79,7 +79,7 @@ namespace Enemy.Control
                     _blackBoard.Hp = Mathf.Max(0, _blackBoard.Hp);
                     _blackBoard.Damage += damage.Damage;
                     _blackBoard.DamageSource = damage.Source;
-                    _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.Battle.MaxHp <= _params.Battle.Dying;
+                    _blackBoard.IsDying = 1.0f * _blackBoard.Hp / _params.MaxHp <= _params.Other.Dying;
                 }
             }
         }
@@ -110,7 +110,6 @@ namespace Enemy.Control
         {
             // 武器が空文字だった場合
             if (weapon == "") weapon = "Unknown";
-            Debug.Log(weapon);
 
             _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
         }

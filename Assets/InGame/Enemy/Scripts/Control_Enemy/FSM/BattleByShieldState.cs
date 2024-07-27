@@ -60,10 +60,10 @@ namespace Enemy.Control.FSM
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
             // ダメージを受けた場合に音を再生。
-            if (_blackBoard.DamageSource != "")
-            {
-                AudioWrapper.PlaySE("SE_Missile_Hit");
-            }
+            string seName = "";
+            if (_blackBoard.DamageSource == Const.PlayerAssaultRifleWeaponName) seName = "SE_Damage_02";
+            else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
+            if (seName != "") AudioWrapper.PlaySE(seName);
 
             // 死亡もしくは撤退をチェック。
             bool isExit = false;

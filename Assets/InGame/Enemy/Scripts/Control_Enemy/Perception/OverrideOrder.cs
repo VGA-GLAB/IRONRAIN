@@ -45,7 +45,7 @@ namespace Enemy.Control
                 // プレイヤーを発見させる。
                 if (order.OrderType == EnemyOrder.Type.PlayerDetect)
                 {
-                    _blackBoard.IsPlayerDetected = true;
+                    _blackBoard.IsOrderedPlayerDetect = true;
                     _blackBoard.OrderedSpawnPoint = order.Point;
                 }
                 // 攻撃させる。
@@ -112,7 +112,8 @@ namespace Enemy.Control
         }
 
         /// <summary>
-        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にトリガー系の命令を元に戻す。
+        /// 同フレームの間だけtrueになるトリガー系の命令。
+        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にfalseに戻す。
         /// </summary>
         public void ClearOrderedTrigger()
         {

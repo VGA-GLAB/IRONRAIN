@@ -29,7 +29,7 @@ namespace Enemy.Control
             // 画面から非表示になるが、外部から安全に呼び出せるようにスケールを0にしておく。
             transform.localScale = Vector3.zero;
 
-            // 自信を登録
+            // 自身を登録
             EnemyManager.Register<INpc>(this);
         }
 
@@ -68,7 +68,8 @@ namespace Enemy.Control
                 // SetActiveで無効化中は動かない。
                 if (!gameObject.activeInHierarchy) { await UniTask.Yield(); continue; }
 
-                toTarget = tgt.position - t.position;
+                // 目標がnullになった場合はその向きのまま直進する。
+                if (tgt != null) toTarget = tgt.position - t.position;
 
                 // 移動と回転
                 t.position += toTarget.normalized * Time.deltaTime * _moveSpeed;
@@ -77,8 +78,11 @@ namespace Enemy.Control
                 await UniTask.Yield();
             }
 
-            // 目標にある程度近づいたら1撃で撃破するダメージを与える。
-            _target.GetComponent<IDamageable>().Damage(int.MaxValue);
+            if (_target != null)
+            {
+                // 目標にある程度近づいたら1撃で撃破するダメージを与える。
+                _target.GetComponent<IDamageable>().Damage(int.MaxValue);
+            }
 
             MoveForwardAsync(token).Forget();
         }
@@ -110,7 +114,7 @@ namespace Enemy.Control
             }
 
             // 目標の撃破距離を描画
-            GizmosUtils.WireSphere(transform.position, _defeatDistance, ColorExtensions.ThinRed);
+            GizmosUtils.WireCircle(transform.position, _defeatDistance, ColorExtensions.ThinRed);
         }
     }
 }
