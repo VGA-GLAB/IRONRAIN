@@ -12,13 +12,16 @@ namespace Enemy.Control.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private Effector _effector;
         private AgentScript _agentScript;
 
-        public ApproachState(BlackBoard blackBoard, Body body, BodyAnimation animation, AgentScript agentScript)
+        public ApproachState(BlackBoard blackBoard, Body body, BodyAnimation animation, Effector effector, 
+            AgentScript agentScript)
         {
             _blackBoard = blackBoard;
             _body = body;
             _animation = animation;
+            _effector = effector;
             _agentScript = agentScript;
         }
 
@@ -37,6 +40,10 @@ namespace Enemy.Control.FSM
 
             // レーダーマップに表示させる。
             if (_agentScript != null) _agentScript.EnemyGenerate();
+
+            // スラスター、トレイルの有効化。
+            _effector.ThrusterEnable(true);
+            _effector.TrailEnable(true);
         }
 
         protected override void Exit()
@@ -48,10 +55,10 @@ namespace Enemy.Control.FSM
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
             // ダメージを受けた場合に音を再生。
-            if (_blackBoard.DamageSource != "")
-            {
-                AudioWrapper.PlaySE("SE_Missile_Hit");
-            }
+            string seName = "";
+            if (_blackBoard.DamageSource == Const.PlayerAssaultRifleWeaponName) seName = "SE_Damage_02";
+            else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
+            if (seName != "") AudioWrapper.PlaySE(seName);
 
             // 死んだかチェック。
             bool isDead = false;

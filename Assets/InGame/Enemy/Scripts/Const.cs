@@ -15,9 +15,9 @@
         /// </summary>
         public const string PlayerMeleeWeaponName = "Melee";
         /// <summary>
-        /// プレイヤーの遠距離攻撃武器を指定する際の名前
+        /// プレイヤーのアサルトライフルを指定する際の名前
         /// </summary>
-        public const string PlayerRangeWeaponName = "Range";
+        public const string PlayerAssaultRifleWeaponName = "AssaultRifle";
 
         /// <summary>
         /// ダメージ判定用のタグ一覧

@@ -44,8 +44,9 @@ namespace Enemy.Control
             _escape = new Sequence(
                 "EscapeSeq",
                 new MoveVertical(enemyParams, blackBoard),
-                new HideIfOffScreen(blackBoard),
-                new WriteActionPlan(Choice.Escape, blackBoard)
+                // 以下2つの順番を入れ替えるとIdleステートが「逃げる」より「隠れる」を優先してしまうので注意。
+                new WriteActionPlan(Choice.Escape, blackBoard), 
+                new HideIfOffScreen(enemyParams, blackBoard)
                 );
 
             _broken = new Sequence(
@@ -81,7 +82,7 @@ namespace Enemy.Control
             else if (choice == Choice.Damaged) _damaged.Update();
 
             // ツリーを実行しても必ず行動として選択されるとは限らないので、
-            // ノードの実行のたびに値を変化させるとバグる。
+            // ノード側に保持している値型があるとバグる。
         }
 
         /// <summary>

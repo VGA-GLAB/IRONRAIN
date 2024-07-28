@@ -1,4 +1,6 @@
-﻿namespace Enemy.Unused.GPT
+﻿#if false
+
+namespace Enemy.Unused.GPT
 {
     /// <summary>
     /// AIにリクエストする内容
@@ -75,3 +77,5 @@
         }
     }
 }
+
+#endif

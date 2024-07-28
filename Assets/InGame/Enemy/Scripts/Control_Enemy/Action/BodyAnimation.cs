@@ -21,7 +21,7 @@ namespace Enemy.Control
     /// </summary>
     public class BodyAnimation
     {
-        // ボスを除く3種類の雑魚敵のステート名の定数。
+        // ボスを含む敵のステート名の定数。
         // 敵の種類ごとにそれぞれ別の名前かつ個数もまばらなので分ける。
         public static class StateName
         {
@@ -95,6 +95,12 @@ namespace Enemy.Control
                 public const string BladeLoop = "enemy_shield_lp";         // 刀構え
                 public const string BladeAttack = "enemy_shield_attack00"; // 刀攻撃
                 public const string Damage = "enemy_break00";
+                public const string QteSwordSet = "boss_sword_set";            // 左手破壊、刀構え
+                public const string QteSwordAttack_1 = "boss_sword_attack_01"; // 左手破壊、刀振り下ろす
+                public const string QteSowrdRepel_1 = "boss_sword_repel_01";   // 1回目QTE、刀構え直し
+                public const string QteSwordAttack_2 = "boss_sword_attack_02"; // 1回目QTE、刀振り下ろす
+                public const string QteSowrdRepel_2 = "boss_sword_repel_02";   // 2回目QTE、刀構え直し
+                public const string BossFinish = "boss_finish";
             }
         }
 
@@ -148,6 +154,12 @@ namespace Enemy.Control
             // TempBladeAttackSetTriggerで刀を構えた状態が前提。
             // ボスが刀で攻撃する。
             public const string TempBladeAttackTrigger = "TempBladeAttackTrigger";
+
+            // ボス戦QTEで刀を構え直す。
+            public const string TempBladeAttackClearTrigger = "TempBladeAttackClearTrigger";
+
+            // ボス戦QTEの2回目、ボスが死ぬ。
+            public const string FinishTrigger = "FinishTrigger";
         }
 
         // Animatorの各ステート

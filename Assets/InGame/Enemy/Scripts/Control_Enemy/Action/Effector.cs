@@ -4,15 +4,18 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// 再生する演出のキー
+    /// 敵本体が再生するエフェクト一覧
     /// </summary>
-    public enum EffectKey
+    [System.Serializable]
+    public class EnemyEffects
     {
-        Dummy,
-        Dying,
-        Fire,
-        Destroyed,
-        BladeAttack,
+        [SerializeField] private Effect _thruster;
+        [SerializeField] private Effect _destroyed;
+        [SerializeField] private Effect _trail;
+
+        public Effect Thruster => _thruster;
+        public Effect Destroyed => _destroyed;
+        public Effect Trail => _trail;
     }
 
     /// <summary>
@@ -20,50 +23,45 @@ namespace Enemy.Control
     /// </summary>
     public class Effector
     {
-        private Dictionary<EffectKey, Effect> _effects;
+        private EnemyEffects _effects;
+        private IOwnerTime _ownerTime;
 
-        public Effector(Effect[] effects)
+        public Effector(EnemyEffects effects, IOwnerTime ownerTime)
         {
-            Setup(effects);
-        }
-
-        // 再生する演出を準備
-        private void Setup(Effect[] effects)
-        {
-            _effects = new Dictionary<EffectKey, Effect>();
-
-            if (effects == null) return;
-
-            foreach(Effect e in effects)
-            {
-                if (_effects.ContainsKey(e.Key))
-                {
-                    Debug.LogWarning($"再生する演出が重複している: {e.Key}");
-                }
-                else _effects.Add(e.Key, e);
-            }
+            _effects = effects;
+            _ownerTime = ownerTime;
         }
 
         /// <summary>
-        /// 演出を再生。
+        /// スラスターの有効化/無効化
         /// </summary>
-        public void Play(EffectKey key, IOwnerTime ownerTime)
+        public void ThrusterEnable(bool value)
         {
-            if (_effects.TryGetValue(key, out var e) && !e.IsPlaying)
-            {
-                e.Play(ownerTime);
-            }
+            if (_effects.Thruster == null) return;
+
+            if (value) _effects.Thruster.Play(_ownerTime);
+            else _effects.Thruster.Stop();
         }
 
         /// <summary>
-        /// 演出を止める。
+        /// トレイルの有効化/無効化
         /// </summary>
-        public void Stop(EffectKey key)
+        public void TrailEnable(bool value)
         {
-            if (_effects.TryGetValue(key, out var e))
-            {
-                e.Stop();
-            }
+            if (_effects.Trail == null) return;
+
+            if (value) _effects.Trail.Play(_ownerTime);
+            else _effects.Trail.Stop();
+        }
+
+        /// <summary>
+        /// 死亡時の演出を再生
+        /// </summary>
+        public void PlayDestroyedEffect()
+        {
+            if (_effects.Destroyed == null) return;
+
+            _effects.Destroyed.Play(_ownerTime);
         }
     }
 }

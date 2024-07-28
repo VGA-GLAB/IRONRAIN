@@ -44,12 +44,12 @@ namespace Enemy.Control.BT
                 _blackBoard.Area.Point, 
                 _blackBoard.Slot.Point, 
                 _blackBoard.AreaToSlotDirection,
-                EnemyParams.Const.HomingPower
+                _params.Other.ApproachHomingPower
                 );
 
             // 接近か否かで速さが変わる。
             // 現状、接近か戦闘しかないのでこれで十分。
-            float speed = _plan.Choice == Choice.Approach ? _params.Advance.MoveSpeed : _params.Battle.ChaseSpeed;
+            float speed = _plan.Choice == Choice.Approach ? _params.MoveSpeed.Approach : _params.MoveSpeed.Chase;
             // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
             // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
             Vector3 delta = toSlot * speed * _blackBoard.PausableDeltaTime;
@@ -67,7 +67,7 @@ namespace Enemy.Control.BT
             warp.y = Mathf.Lerp(
                 _transform.position.y, 
                 _blackBoard.PlayerPosition.y, 
-                EnemyParams.Const.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
+                _params.Other.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
             );
 
             _plan.Position = warp;

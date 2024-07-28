@@ -77,6 +77,9 @@ namespace Enemy.Control.Boss
             
             // ボス戦開始からの経過時間を更新。
             if (_blackBoard.IsBossStarted) _blackBoard.ElapsedTime += Time.deltaTime;
+
+            // 仕様が決まっていないのでとりあえずの処理として、ボス戦開始から1秒後に登場完了とする。
+            if (_blackBoard.ElapsedTime > 1.0f) _blackBoard.IsAppearCompleted = true;
         }
 
         /// <summary>
@@ -96,8 +99,8 @@ namespace Enemy.Control.Boss
         public void Draw()
         {
             // 自身とプレイヤーのエリア
-            _area?.DrawOnGizmos();
-            _playerArea?.DrawOnGizmos();
+            _area?.DrawOnGizmos(_transform);
+            _playerArea?.DrawOnGizmos(_player);
         }
     }
 }

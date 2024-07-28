@@ -40,7 +40,7 @@ namespace Enemy.Control
             _area = new CircleArea(_transform.position, _params.Common.Area.Radius);
             _playerArea = new CircleArea(_player.position, _params.Common.Area.PlayerRadius);
             // スロット確保
-            _pool.TryRent(_params.Advance.SlotPlace, out _slot);
+            _pool.TryRent(_params.SlotPlace, out _slot);
 
             // エリアとスロットを黒板に書き込む。
             _blackBoard.Area = _area;
@@ -48,7 +48,7 @@ namespace Enemy.Control
             _blackBoard.Slot = _slot;
 
             // 生存時間の初期値を黒板に書き込む。
-            _blackBoard.LifeTime = _params.Battle.LifeTime;
+            _blackBoard.LifeTime = _params.LifeTime;
         }
 
         /// <summary>
@@ -70,21 +70,15 @@ namespace Enemy.Control
             _blackBoard.TransformToPlayerDirection = (_player.position - _transform.position).normalized;
             _blackBoard.TransformToPlayerDistance = (_player.position - _transform.position).magnitude;
 
-            // 自身とプレイヤーの距離が検知可能範囲内の場合は、プレイヤーを検知したフラグを立てる。
-            if (_blackBoard.TransformToPlayerDistance < _params.Advance.Distance)
-            {
-                _blackBoard.IsPlayerDetected = true;
-            }
-
             // プレイヤーを検知した状態ならば生存時間を減らす。
-            if (_blackBoard.IsPlayerDetected) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
+            if (_blackBoard.IsOrderedPlayerDetect) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
 
             // 自身のエリアからスロットへのベクトルを黒板に書き込む。
             _blackBoard.AreaToSlotDirection = (_slot.Point - _area.Point).normalized;
             _blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
 
             // スロットに到着した場合は、接近完了フラグを立てる。
-            if (_blackBoard.AreaToSlotSqrDistance < EnemyParams.Const.ApproachCompleteThreshold)
+            if (_blackBoard.AreaToSlotSqrDistance < _params.Other.ApproachCompleteThreshold)
             {
                 _blackBoard.IsApproachCompleted = true;
             }
@@ -111,21 +105,6 @@ namespace Enemy.Control
             // 自身とプレイヤーのエリアを、それぞれの高さに合わせて描画。
             _playerArea?.DrawOnGizmos(_player);
             _area?.DrawOnGizmos(_transform);
-
-            // エリアからスロットに向けた矢印
-            if (_slot != null)
-            {
-                // それぞれの高さに合わせて描画。
-                Vector3 sp = _slot.Point;
-                Vector3 ap = _area.Point;
-                if (_player != null) sp.y = _player.position.y;
-                if (_transform != null) ap.y = _transform.position.y;
-
-                GizmosUtils.Line(sp, ap, ColorExtensions.ThinWhite);
-            }
-
-            // プレイヤーを検知する範囲
-            GizmosUtils.WireCircle(_transform.position, _params.Advance.Distance, ColorExtensions.ThinGreen);
         }
     }
 }

@@ -12,27 +12,30 @@ namespace Enemy.Control.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private Effector _effector;
         private AgentScript _agentScript;
 
-        public EscapeState(BlackBoard blackBoard, Body body, BodyAnimation animation, AgentScript agentScript)
+        public EscapeState(BlackBoard blackBoard, Body body, BodyAnimation animation, Effector effector,
+            AgentScript agentScript)
         {
             _blackBoard = blackBoard;
             _body = body;
             _animation = animation;
+            _effector = effector;
             _agentScript = agentScript;
         }
 
         public override StateKey Key => StateKey.Escape;
 
         protected override void Enter()
-        {
+        {           
             // レーダーマップから消す。
             if (_agentScript != null) _agentScript.EnemyDestory();
         }
 
         protected override void Exit()
         {
-
+            // このステートから遷移しないので呼ばれない。
         }
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
@@ -59,7 +62,14 @@ namespace Enemy.Control.FSM
             // 画面から消えた場合は後始末の処理を呼んでも問題ない。
             while (_blackBoard.ActionPlans.TryDequeue(out ActionPlan plan))
             {
-                if (plan.Choice == Choice.Hide) _blackBoard.IsCleanupReady = true;
+                // このステートはExitを呼ばないのでこの条件分岐がExitの代わりになる。
+                if (plan.Choice == Choice.Hide) 
+                {
+                    _effector.ThrusterEnable(false);
+                    _effector.TrailEnable(false);
+                    
+                    _blackBoard.IsCleanupReady = true;
+                }
             }
         }
     }

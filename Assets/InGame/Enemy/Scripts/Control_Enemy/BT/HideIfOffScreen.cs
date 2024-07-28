@@ -7,11 +7,13 @@ namespace Enemy.Control.BT
     public class HideIfOffScreen : Node
     {
         private ActionPlan _plan;
+        private EnemyParams _params;
         private BlackBoard _blackBoard;
 
-        public HideIfOffScreen(BlackBoard blackBoard)
+        public HideIfOffScreen(EnemyParams enemyParams, BlackBoard blackBoard)
         {
             _plan = new ActionPlan(Choice.Hide);
+            _params = enemyParams;
             _blackBoard = blackBoard;
         }
 
@@ -26,7 +28,7 @@ namespace Enemy.Control.BT
         protected override State Stay()
         {
             // とりあえずプレイヤーとの距離で判定。
-            if (_blackBoard.TransformToPlayerDistance > 20.0f) // 値は適当。
+            if (_blackBoard.TransformToPlayerDistance > _params.Other.OffScreenDistance)
             {
                 _blackBoard.ActionPlans.Enqueue(_plan);
             }
