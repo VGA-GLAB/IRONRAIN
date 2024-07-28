@@ -22,6 +22,7 @@ namespace Enemy.Control.Boss
             public List<FunnelController> Funnels;
         }
 
+        [SerializeField] private Transform _model;
         [Header("エフェクトの設定")]
         [SerializeField] private Effect _destroyedEffect;
         [SerializeField] private Effect _trailEffect;
@@ -156,11 +157,15 @@ namespace Enemy.Control.Boss
         public void Damage(int value, string weapon)
         {
             // 仮なので体力はなし。
-            _transform.localScale = Vector3.zero;
+            _model.localScale = Vector3.zero;
             _state = State.Defeated;
 
             // 撃破された際の演出
-            if (_destroyedEffect != null) _destroyedEffect.Play(_boss.BlackBoard);
+            if (_destroyedEffect != null)
+            {
+                // 二回目のファンネル展開がすぐだとおかしくなるかも。
+                _destroyedEffect.PlayAsync(this.GetCancellationTokenOnDestroy()).Forget();
+            }
 
             // レーダーから消す。
             if (TryGetComponent(out AgentScript a)) a.EnemyDestory();

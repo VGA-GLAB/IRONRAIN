@@ -301,7 +301,7 @@ namespace Enemy.Control
         {
             // 命令をプレイヤーの左腕を破壊するに切り替え。
             _order.OrderType = EnemyOrder.Type.BreakLeftArm;
-
+            
             // ボスに命令
             if (_boss != null) _boss.Order(_order);
         }
@@ -313,7 +313,7 @@ namespace Enemy.Control
         {
             // 命令をQTEの1回目に切り替え。
             _order.OrderType = EnemyOrder.Type.BossFirstQTE;
-
+            
             // ボスに命令
             if (_boss != null) _boss.Order(_order);
         }
@@ -325,7 +325,7 @@ namespace Enemy.Control
         {
             // 命令を2回目のQTEに切り替え。
             _order.OrderType = EnemyOrder.Type.BossSecondQTE;
-
+            
             // ボスに命令
             if (_boss != null) _boss.Order(_order);
         }

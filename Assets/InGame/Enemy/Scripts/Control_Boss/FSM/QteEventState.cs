@@ -66,6 +66,7 @@ namespace Enemy.Control.Boss.FSM
 
         protected override void Enter()
         {
+            Debug.Log("QTEイベントシーケンスEnter");
         }
 
         protected override void Exit()
@@ -177,12 +178,10 @@ namespace Enemy.Control.Boss.FSM
             // QTE2回目、プレイヤーに殴られて死亡。
             _animation.SetTrigger(BodyAnimation.ParamName.FinishTrigger);
             _effector.PlayDestroyedEffect();
-
         }
 
         protected override void Stay()
-        {
-            
+        {            
         }
     }
 }
