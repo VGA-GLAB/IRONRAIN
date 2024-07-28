@@ -35,11 +35,24 @@ namespace Enemy.Control
         /// 近接攻撃の判定を消すタイミング。
         /// </summary>
         public event UnityAction OnMeleeAttackEnd;
+        
+        /// <summary>
+        /// ボス戦のQTEで、プレイヤーの武器とボスの武器がぶつかった際のエフェクトを出すタイミング。
+        /// </summary>
+        public event UnityAction OnWeaponCrashOnBossQteStart;
+        /// <summary>
+        /// ボス戦のQTEで、プレイヤーの武器とボスの武器がぶつかった際のエフェクトを消すタイミング。
+        /// </summary>
+        public event UnityAction OnWeaponCrashOnBossQteEnd;
 
         // アニメーションイベントに登録するメソッド群。
+        // ○○○.fbxのインスペクター、AnimationタブのEvents項目に、メソッド名を記述する。
         public void RangeFireStart() => OnRangeFireStart?.Invoke();
         public void RangeFireEnd() => OnRangeFireEnd?.Invoke();
         public void MeleeAttackStart() => OnMeleeAttackStart?.Invoke();
         public void MeleeAttackEnd() => OnMeleeAttackEnd?.Invoke();
+        // 以下はボス専用。
+        public void WeaponCrashOnBossQteStart() => OnWeaponCrashOnBossQteStart?.Invoke();
+        public void WeaponCrashOnBossQteEnd() => OnWeaponCrashOnBossQteEnd?.Invoke();
     }
 }

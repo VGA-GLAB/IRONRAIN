@@ -18,7 +18,7 @@
         /// <summary>
         /// プレイヤーを検知しているかを判定。
         /// </summary>
-        public bool IsPlayerDetected { get; }
+        public bool IsOrderedPlayerDetect { get; }
 
         /// <summary>
         /// プレイヤーへの接近が完了したかを判定。

@@ -13,12 +13,11 @@ namespace Enemy.Control
     [RequireComponent(typeof(EnemyParams))]
     public class EnemyController : MonoBehaviour, IDamageable
     {
-        [Header("自身やプレハブへの参照")]
         [SerializeField] private Transform _offset;
         [SerializeField] private Transform _rotate;
         [SerializeField] private Transform[] _models;
         [SerializeField] private Animator _animator;
-        [SerializeField] private Effect[] _effects;
+        [SerializeField] private EnemyEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
         [SerializeField] private Equipment _equipment;
 
@@ -101,7 +100,6 @@ namespace Enemy.Control
 
         private void OnEnable()
         {
-            // Perception
             _eyeSensor.Enable();
         }
 
@@ -109,14 +107,12 @@ namespace Enemy.Control
         {
             EnemyManager.Register(this);
 
-            // Perception
             _perception.Init();
             _hitPoint.Init();          
         }
 
         private void Update()
         {
-            // Perception
             _perception.Update();
             _eyeSensor.Update();
             _fireRate.UpdateIfAttacked();
@@ -124,7 +120,6 @@ namespace Enemy.Control
             // 命令で上書きするのでPerception層の一番最後。
             _overrideOrder.Update();
 
-            // Brain
             // 優先度順で全ての行動に対する制御を決める。
             // 後々、優先度の低い行動は省くような処理が入るかもしれない。
             IReadOnlyList<Choice> eval = _utilityEvaluator.Evaluate();
@@ -133,7 +128,6 @@ namespace Enemy.Control
                 _behaviorTree.Run(eval[i]);
             }
 
-            // Action
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
             // OnPreCleanup -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
@@ -148,22 +142,15 @@ namespace Enemy.Control
         // このタイミングで書き込んだ内容を消しているので、ギズモへの描画が難しい。
         private void LateUpdate()
         {
-            // Perception
             _eyeSensor.ClearCaptureTargets();
-            // 同フレームの間だけtrueになる所謂トリガーを扱うのでフレームの最後で戻しておく。
             _overrideOrder.ClearOrderedTrigger();
-
-            // Brain
             _behaviorTree.ClearBlackBoardWritedValues();
         }
 
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
-            // Perception
             _perception.Dispose();
-
-            // Action
             _bodyController.Dispose();
 
             // 次フレームのUpdateの後まで待つ。
@@ -173,7 +160,6 @@ namespace Enemy.Control
 
         private void OnDisable()
         {
-            // Perception
             _eyeSensor.Disable();
         }
 
@@ -183,10 +169,7 @@ namespace Enemy.Control
             // 死亡した敵かの判定が出来るようにするため。
             EnemyManager.Release(this);
 
-            // Perception
             _perception.Dispose();
-
-            // Action
             _bodyController.Dispose();
         }
 
@@ -200,41 +183,26 @@ namespace Enemy.Control
         /// <summary>
         /// 外部から敵の行動を制御する。
         /// </summary>
-        public void Order(EnemyOrder order)
-        {
-            _overrideOrder.Buffer(order);
-        }
+        public void Order(EnemyOrder order) => _overrideOrder.Buffer(order);
 
         /// <summary>
         /// 攻撃させる。
         /// </summary>
-        public void Attack()
-        {
-            _overrideOrder.Buffer(EnemyOrder.Type.Attack);
-        }
+        public void Attack() => _overrideOrder.Buffer(EnemyOrder.Type.Attack);
 
         /// <summary>
         /// ポーズさせる。
         /// </summary>
-        public void Pause()
-        {
-            _overrideOrder.Buffer(EnemyOrder.Type.Pause);
-        }
+        public void Pause() => _overrideOrder.Buffer(EnemyOrder.Type.Pause);
 
         /// <summary>
         /// ポーズを解除させる。
         /// </summary>
-        public void Resume()
-        {
-            _overrideOrder.Buffer(EnemyOrder.Type.Resume);
-        }
+        public void Resume() => _overrideOrder.Buffer(EnemyOrder.Type.Resume);
 
         /// <summary>
         /// ダメージ処理。
         /// </summary>
-        public void Damage(int value, string weapon)
-        {
-            _hitPoint.Damage(value, weapon);
-        }
+        public void Damage(int value, string weapon) => _hitPoint.Damage(value, weapon);
     }
 }

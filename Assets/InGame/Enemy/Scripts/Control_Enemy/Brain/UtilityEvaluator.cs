@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Enemy.Control
 {
     /// <summary>
-    /// キャラクターが取りうる行動の選択肢
+    /// キャラクターが取りうる行動の選択肢。
+    /// ステートと1対1で対応しているわけではなく、そのステート内での行動の選択に使用される。
     /// </summary>
     public enum Choice
     {
@@ -47,7 +48,7 @@ namespace Enemy.Control
             if (_blackBoard.Hp <= 0) { _order.Add(Choice.Broken); return _order; }
 
             // 接近検知範囲外の場合は画面から隠す
-            if (!_blackBoard.IsPlayerDetected) { _order.Add(Choice.Hide); return _order; }
+            if (!_blackBoard.IsOrderedPlayerDetect) { _order.Add(Choice.Hide); return _order; }
 
             // 接近が完了したフラグで判定。
             // 攻撃中にプレイヤーを追跡していると、離れることで接近の条件を満たすのを防ぐ。
@@ -59,8 +60,8 @@ namespace Enemy.Control
             // ダメージを受けた場合(耐性などで無効化された場合は除く)
             if (_blackBoard.Damage > 0) { _order.Add(Choice.Damaged); return _order; }
 
-            // チュートリアル用の敵の場合
-            if (_params.Other.IsTutorial)
+            // 手動で攻撃する状態が設定されている場合
+            if (_params.SpecialCondition == SpecialCondition.ManualAttack)
             {
                 // 外部から攻撃処理を呼び出すことで攻撃する。
                 if (_blackBoard.OrderedAttackTrigger) _order.Add(Choice.Attack);

@@ -40,7 +40,7 @@ namespace Enemy.Control.FSM
             {
                 if (plan.Choice == Choice.Hide) isExit = false;
             }
-
+            
             // 選ばれていない場合はアイドルに遷移。
             if(isExit) TryChangeState(stateTable[StateKey.Idle]);
         }

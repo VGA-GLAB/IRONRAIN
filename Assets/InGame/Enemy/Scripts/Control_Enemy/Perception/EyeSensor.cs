@@ -80,7 +80,7 @@ namespace Enemy.Control
             _current.Clear();
 
             // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
-            RaycastExtensions.OverlapSphere(Origin(), _params.Battle.FovRadius, col =>
+            RaycastExtensions.OverlapSphere(Origin(), _params.FovRadius, col =>
             {
                 // 前フレームと比較するため、視界に捉えたオブジェクトを識別。
                 if (col.CompareTags(Const.ViewTags)) _current.Add(col);
@@ -128,7 +128,7 @@ namespace Enemy.Control
         /// </summary>
         public void Draw()
         {
-            GizmosUtils.WireSphere(Origin(), _params.Battle.FovRadius, Color.green);
+            GizmosUtils.WireCircle(Origin(), _params.FovRadius, ColorExtensions.ThinGreen);
         }
     }
 }

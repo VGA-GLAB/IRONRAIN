@@ -234,7 +234,7 @@ namespace Enemy.DebugUse
         {
             if (GUI.Button(new Rect(x, y, w, h), "AttackSeq"))
             {
-                // 現状、唯一の視界で検知するタイプなので特になし。
+                _enemyManager.DetectPlayer(EnemyManager.Sequence.Attack);
             }
             else if (GUI.Button(new Rect(x, y + h, w, h), "TouchPanelSeq"))
             {

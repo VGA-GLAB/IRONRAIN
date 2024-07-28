@@ -24,7 +24,7 @@ namespace Enemy.Control
         private bool _isCleanup;
 
         public BodyController(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
-            Transform offset, Transform rotate, Transform[] models, Animator animator, Effect[] effects,
+            Transform offset, Transform rotate, Transform[] models, Animator animator, EnemyEffects effects,
             Collider[] hitBoxes)
         {
             _blackBoard = blackBoard;
@@ -34,18 +34,18 @@ namespace Enemy.Control
             // それぞれ対応するステートに渡して処理を呼んでもらう。
             if (!transform.TryGetComponent(out AgentScript agentScript))
             {
-                Debug.LogWarning($"{nameof(AgentScript)}がアタッチされていないため、レーダーマップに写らない");
+                Debug.LogWarning($"{nameof(AgentScript)}がアタッチされていないため、レーダーマップに写らない。");
             }
 
             // 各ステートにTransformやアニメーション、演出を操作するクラスを渡す。
             Body body = new Body(transform, offset, rotate, models, hitBoxes);
             BodyAnimation bodyAnimation = new BodyAnimation(animator);
-            Effector effector = new Effector(effects);
+            Effector effector = new Effector(effects, blackBoard);
             _stateTable = new Dictionary<StateKey, State>
             {
-                { StateKey.Approach, new ApproachState(blackBoard, body, bodyAnimation, agentScript) },
+                { StateKey.Approach, new ApproachState(blackBoard, body, bodyAnimation, effector, agentScript) },
                 { StateKey.Broken, new BrokenState(enemyParams, blackBoard, body, bodyAnimation, effector, agentScript) },
-                { StateKey.Escape, new EscapeState(blackBoard, body, bodyAnimation, agentScript) },
+                { StateKey.Escape, new EscapeState(blackBoard, body, bodyAnimation, effector, agentScript) },
                 { StateKey.Idle, new IdleState(blackBoard) },
                 { StateKey.Hide, new HideState(blackBoard, body) },
             };
