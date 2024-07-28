@@ -13,7 +13,7 @@ public class BGM : MonoBehaviour
     {
         if( _isPlay )
         {
-            CriSoundManager.Instance.BGM.Play("BGM", "BGM_Field", _volume);
+            CriSoundManager.Instance.BGM.Play("BGM", "BGM_MoonField", _volume);
         }
     }
 }
