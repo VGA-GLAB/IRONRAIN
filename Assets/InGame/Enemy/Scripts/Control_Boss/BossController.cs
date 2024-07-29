@@ -5,23 +5,18 @@ using VContainer;
 
 namespace Enemy.Control.Boss
 {
+    // 一時的に画面から消して動作を止めたい場合: xxx
+    // これ以上動かさず、削除する場合: xxx
+
     /// <summary>
     /// ボスを操作する。
-    /// 一時的に画面から消して動作を止めたい場合: xxx
-    /// これ以上動かさず、削除する場合: xxx
     /// </summary>
     [RequireComponent(typeof(BossParams))]
-    public class BossController : MonoBehaviour, IDamageable
+    public class BossController : Character, IDamageable
     {
-        [Header("自身やプレハブへの参照")]
-        [SerializeField] private Transform _offset;
-        [SerializeField] private Transform _rotate;
         [SerializeField] private Transform[] _models;
-        [SerializeField] private Animator _animator;
         [SerializeField] private BossEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
-        [SerializeField] private MeleeEquipment _meleeEquipment;
-        [SerializeField] private RangeEquipment _rangeEquipment;
 
         private BossParams _params;
 
@@ -72,17 +67,26 @@ namespace Enemy.Control.Boss
             _blackBoard = new BlackBoard();
             _funnels = new List<FunnelController>();
 
+            // Animatorが1つしか無い前提。
+            Animator animator = GetComponentInChildren<Animator>();
+            // ボス装備。
+            MeleeEquipment meleeEquip = GetComponent<MeleeEquipment>();
+            RangeEquipment rangeEquip = GetComponent<RangeEquipment>();
+            // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
+            Transform offset = FindDynamicOffset();
+            Transform rotate = FindRotate();
+
             // Perception
-            _perception = new Perception(transform, _params, _blackBoard, _rotate, _player, _pointP, _meleeEquipment);
-            _fireRate = new FireRate(_params, _blackBoard, _meleeEquipment, _rangeEquipment);
+            _perception = new Perception(transform, _params, _blackBoard, rotate, _player, _pointP, meleeEquip);
+            _fireRate = new FireRate(_params, _blackBoard, meleeEquip, rangeEquip);
             _hitPoint = new HitPoint(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
-            _bodyController = new BodyController(transform, _params, _blackBoard, _offset, _rotate, _models,
-                _animator, _effects, _hitBoxes, _funnels);
+            _bodyController = new BodyController(transform, _params, _blackBoard, offset, rotate, _models,
+                animator, _effects, _hitBoxes, _funnels);
         }
 
         private void Start()
@@ -108,7 +112,7 @@ namespace Enemy.Control.Boss
 
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
-            // OnPreCleanup -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
+            // 非表示前処理 -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
             if (_bodyController.Update() == BodyController.Result.Complete && !_isCleanupRunning)
             {
                 _isCleanupRunning = true;

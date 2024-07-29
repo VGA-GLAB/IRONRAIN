@@ -131,14 +131,14 @@ namespace Enemy.Control.Boss.FSM
                 // 攻撃のアニメーション再生をトリガー。
                 if (plan.Choice == Choice.BladeAttack)
                 {
-                    _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackSetTrigger);
+                    //_animation.SetTrigger(BodyAnimation.ParamName.近接攻撃構えのトリガー名);
                     _animation.ResetTrigger(BodyAnimation.ParamName.AttackSetTrigger);
                     break;
                 }
                 else if (plan.Choice == Choice.RifleFire)
                 {
                     _animation.SetTrigger(BodyAnimation.ParamName.AttackSetTrigger);
-                    _animation.ResetTrigger(BodyAnimation.ParamName.TempBladeAttackSetTrigger);
+                    //_animation.ResetTrigger(BodyAnimation.ParamName.近接攻撃構えのトリガー名);
                     break;
                 }
             }
@@ -169,7 +169,7 @@ namespace Enemy.Control.Boss.FSM
         private void StayBlade()
         {
             // 現状、特にプランナーから指示が無いので構え->攻撃を瞬時に行う。
-            _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackTrigger);
+            //_animation.SetTrigger(BodyAnimation.ParamName.近接攻撃のトリガー名);
         }
 
         // アニメーションが刀攻撃状態

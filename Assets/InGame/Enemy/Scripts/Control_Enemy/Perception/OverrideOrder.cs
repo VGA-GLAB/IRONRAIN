@@ -11,7 +11,7 @@ namespace Enemy.Control
     public class OverrideOrder
     {
         // 同フレーム内で処理できる命令の最大数。
-        const int OrderCapacity = 6;
+        private const int OrderCapacity = 6;
 
         private BlackBoard _blackBoard;
 
@@ -42,72 +42,107 @@ namespace Enemy.Control
             while (_buffer.Count > 0)
             {
                 EnemyOrder order = _buffer.Dequeue();
-                // プレイヤーを発見させる。
-                if (order.OrderType == EnemyOrder.Type.PlayerDetect)
-                {
-                    _blackBoard.IsOrderedPlayerDetect = true;
-                    _blackBoard.OrderedSpawnPoint = order.Point;
-                }
-                // 攻撃させる。
-                else if (order.OrderType == EnemyOrder.Type.Attack)
-                {
-                    _blackBoard.OrderedAttackTrigger = true;
-                }
-                // ポーズ
-                else if (order.OrderType == EnemyOrder.Type.Pause)
-                {
-                    _blackBoard.IsOrderedPause = true;
-                }
-                // ポーズ解除
-                else if (order.OrderType == EnemyOrder.Type.Resume)
-                {
-                    _blackBoard.IsOrderedPause = false;
-                }
-                // ボス戦開始
-                else if (order.OrderType == EnemyOrder.Type.BossStart)
-                {
-                    // HitPointクラスで、プレイヤーを検知していない状態の場合はダメージが入らないようにしている。
-                    // 状態にかかわらず死亡させたいので、HPを直接書きかえる。
-                    _blackBoard.Hp = 0;
-                    _blackBoard.IsDying = true;
-                }
-                // 自身を対象としてQTE開始
-                else if (order.OrderType == EnemyOrder.Type.QteStartTargeted)
-                {
-                    //
-                }
-                // 自身以外を対象としてQTE開始
-                else if (order.OrderType == EnemyOrder.Type.QteStartUntargeted)
-                {
-                    //
-                }
-                // 自身を対象としてQTE成功
-                else if (order.OrderType == EnemyOrder.Type.QteSuccessTargeted)
-                {
-                    // HitPointクラスで、プレイヤーを検知していない状態の場合はダメージが入らないようにしている。
-                    // 状態にかかわらず死亡させたいので、HPを直接書きかえる。
-                    _blackBoard.Hp = 0;
-                    _blackBoard.IsDying = true;
-                }
-                // 自身以外を対象としてQTE成功
-                else if (order.OrderType == EnemyOrder.Type.QteSuccessUntargeted)
-                {
-                    //
-                }
-                // 自身を対象としてQTE失敗
-                else if (order.OrderType == EnemyOrder.Type.QteFailureTargeted)
-                {
-                    //
-                }
-                // 自身以外を対象としてQTE失敗
-                else if (order.OrderType == EnemyOrder.Type.QteFailureUntargeted)
-                {
-                    //
-                }
 
-                // 命令をクリアしてプールに戻す。
+                // 黒板に書き込み -> 命令をクリアしてプールに戻す。
+                WriteToBlackBoard(order);
                 order.Clear();
                 _pool.Push(order);
+            }
+        }
+
+        // 命令に応じて黒板に書き込む。
+        private void WriteToBlackBoard(EnemyOrder order)
+        {
+            EnemyOrder.Type t = order.OrderType;
+
+            if (t == EnemyOrder.Type.PlayerDetect)
+            {
+                _blackBoard.IsOrderedPlayerDetect = true;
+                _blackBoard.OrderedSpawnPoint = order.Point;
+            }
+            else if (t == EnemyOrder.Type.Attack)
+            {
+                _blackBoard.OrderedAttackTrigger = true;
+            }
+            else if (t == EnemyOrder.Type.Pause)
+            {
+                _blackBoard.IsOrderedPause = true;
+            }
+            else if (t == EnemyOrder.Type.Resume)
+            {
+                _blackBoard.IsOrderedPause = false;
+            }
+            else if (t == EnemyOrder.Type.BossStart)
+            {
+                // HitPointクラスでプレイヤーを検知していない状態の場合はダメージが入らないようにしている。
+                // 状態にかかわらず死亡させたいのでHPを直接書きかえる。
+                _blackBoard.Hp = 0;
+                _blackBoard.IsDying = true;
+            }
+            else if (t == EnemyOrder.Type.QteStartTargeted)
+            {
+                //
+            }
+            else if (t == EnemyOrder.Type.QteStartUntargeted)
+            {
+                //
+            }
+            else if (t == EnemyOrder.Type.QteSuccessTargeted)
+            {
+                // BossStartと同じ理由、同じ処理。
+                _blackBoard.Hp = 0;
+                _blackBoard.IsDying = true;
+            }
+            else if (t == EnemyOrder.Type.QteSuccessUntargeted)
+            {
+                //
+            }
+            else if (t == EnemyOrder.Type.QteFailureTargeted)
+            {
+                //
+            }
+            else if (t == EnemyOrder.Type.QteFailureUntargeted)
+            {
+                //
+            }
+        }
+
+        /// <summary>
+        /// 命令をバッファに追加する。
+        /// 次のUpdateのタイミングで処理される。
+        /// </summary>
+        public void Buffer(EnemyOrder order)
+        {
+            if (TryRentPoolingOrder(out EnemyOrder o))
+            {
+                o.OrderType = order.OrderType;
+                o.Point = order.Point;
+                _buffer.Enqueue(o);
+            }
+        }
+
+        /// <summary>
+        /// 命令をバッファに追加する。
+        /// 次のUpdateのタイミングで処理される。
+        /// EnemyManager以外はOrderクラスのインスタンスを保持していないのでこっちで呼ぶ。
+        /// </summary>
+        public void Buffer(EnemyOrder.Type orderType)
+        {
+            if (TryRentPoolingOrder(out EnemyOrder o))
+            {
+                o.OrderType = orderType;
+                _buffer.Enqueue(o);
+            }
+        }
+
+        // プーリングされている命令を取り出す。
+        private bool TryRentPoolingOrder(out EnemyOrder order)
+        {
+            if (_pool.TryPop(out order)) return true;
+            else
+            {
+                Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
+                return false;
             }
         }
 
@@ -118,36 +153,6 @@ namespace Enemy.Control
         public void ClearOrderedTrigger()
         {
             _blackBoard.OrderedAttackTrigger = false;
-        }
-
-        /// <summary>
-        /// 命令をバッファに追加する。
-        /// 次のUpdateのタイミングで処理される。
-        /// </summary>
-        public void Buffer(EnemyOrder order)
-        {
-            if (_pool.TryPop(out EnemyOrder o))
-            {
-                o.OrderType = order.OrderType;
-                o.Point = order.Point;
-                _buffer.Enqueue(o);
-            }
-            else Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
-        }
-
-        /// <summary>
-        /// 命令をバッファに追加する。
-        /// 次のUpdateのタイミングで処理される。
-        /// EnemyManager以外はOrderクラスのインスタンスを保持していないのでこっちで呼ぶ。
-        /// </summary>
-        public void Buffer(EnemyOrder.Type orderType)
-        {
-            if (_pool.TryPop(out EnemyOrder o))
-            {
-                o.OrderType = orderType;
-                _buffer.Enqueue(o);
-            }
-            else Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
         }
     }
 }
