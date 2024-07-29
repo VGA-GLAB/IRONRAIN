@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.015986765, g: 0.019945912, b: 0.028999092, a: 1}
+  m_IndirectSpecularColor: {r: 0.016038813, g: 0.02003244, b: 0.029110247, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -17510,7 +17510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattleSeq_2
+      value: NPC_MultiBattle_Buddy_2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28426,6 +28426,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _specialCondition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_TouchPanel_MachineGun_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 210.6
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -28509,62 +28565,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _advance._slotPlace
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 9999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _specialCondition
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_TouchPanel_MachineGun_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -12.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 210.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28852,6 +28852,58 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _specialCondition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_TouchPanel_MachineGun_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 83.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 220.6
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -28931,58 +28983,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _other._sequence
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 9999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _specialCondition
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_TouchPanel_MachineGun_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -34
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 83.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 220.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -29379,7 +29379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattleSeq_4
+      value: NPC_MultiBattle_Buddy_4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -29457,7 +29457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattleSeq_1
+      value: NPC_MultiBattle_Buddy_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -29508,6 +29508,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._chaseSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_MultiBattle_MachineGun_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 516.5
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -29587,62 +29643,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _other._sequence
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 52
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._chaseSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_MultiBattle_MachineGun_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 516.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35439,6 +35439,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._chaseSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_MultiBattle_MachineGun_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 525
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -35518,62 +35574,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _advance._slotPlace
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 52
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._chaseSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_MultiBattle_MachineGun_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 525
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -43502,7 +43502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattleSeq_3
+      value: NPC_MultiBattle_Buddy_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49606,6 +49606,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _specialCondition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._isTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._chaseSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_Avoidance_MachineGun_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 200.1
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -49685,70 +49749,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _advance._slotPlace
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 9999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _specialCondition
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._isTutorial
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._chaseSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_Attack_MachineGun_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 146.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49865,8 +49865,72 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.size
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[7]
+      value: 1578471403179212856
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[8]
+      value: 1578471403179212860
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[9]
+      value: 1578471403179212864
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[10]
+      value: 1578471403179212866
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[11]
+      value: 1578471403179212868
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[12]
+      value: 1578471403179212871
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[13]
+      value: 1578471403179212889
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[14]
+      value: 1578471403179212892
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[15]
+      value: 1578471403179212894
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[16]
+      value: 1578471403179212896
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[17]
+      value: 1578471403179212901
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[18]
+      value: 1578471403179212906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1180733194320216064]
       value: Assembly-CSharp IronRain.SequenceSystem.WaitTutorialEnemyApproachSequence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[1578471633353441281]
+      value: Assembly-CSharp IronRain.SequenceSystem.WaitSequence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[1578471633353441281]._totalSec
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[1578471541103656981]._targetSeq
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212858]._qteStartDis
@@ -49875,6 +49939,10 @@ PrefabInstance:
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212818]._sequences.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[1578471403179212894]._sequences.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471541103656962]._sequences.Array.size
@@ -49887,6 +49955,10 @@ PrefabInstance:
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212818]._sequences.Array.data[2]
       value: 1578471403179212822
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[1578471403179212894]._sequences.Array.data[1]
+      value: 1578471633353441281
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471541103656962]._sequences.Array.data[1]
@@ -56414,6 +56486,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _lifeTime
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _slotPlace
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._maxHp
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _other._sequence
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _battle._chaseSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_Name
+      value: Enemy_MultiBattle_MachineGun_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 88.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 517.4
+      objectReference: {fileID: 0}
     - target: {fileID: -3124073900160410525, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: Image
       value: 
@@ -56497,62 +56625,6 @@ PrefabInstance:
     - target: {fileID: 7425195167688123802, guid: 20f0ce184fe6085448feb497522f95ca, type: 3}
       propertyPath: _advance._slotPlace
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _lifeTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _slotPlace
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._maxHp
-      value: 1500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _other._sequence
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 52
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _battle._chaseSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_Name
-      value: Enemy_MultiBattle_MachineGun_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 88.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 69b364d2dc8394e4fb7574c247dd7131, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 517.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62843,6 +62915,58 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2132766529}
     m_Modifications:
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _lifeTime
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _sequence
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _slotPlace
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _other._sequence
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _specialCondition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _advance._moveSpeed
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _advance._slotPlace
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _attack._triggerRange
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_Name
+      value: Enemy_QTETutorial_Shield_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 249.3
+      objectReference: {fileID: 0}
     - target: {fileID: -6778026856741032478, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: Image
       value: 
@@ -62922,58 +63046,6 @@ PrefabInstance:
     - target: {fileID: 3771377507711898171, guid: c31585eba920d224ea62c4193a93b16b, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _lifeTime
-      value: 9999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _sequence
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _slotPlace
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _other._sequence
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _specialCondition
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _advance._moveSpeed
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _advance._slotPlace
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: _attack._triggerRange
-      value: 33
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: m_Name
-      value: Enemy_QTETutorial_Shield_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998904032055883278, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 249.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
