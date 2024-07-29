@@ -11,19 +11,26 @@ namespace Enemy.Control
     /// </summary>
     public class MeleeEquipment : Equipment
     {
-        [Header("アニメーションイベントに処理をフック")]
-        [SerializeField] private AnimationEvent _animationEvent;
         [Header("攻撃エフェクト(任意)")]
         [SerializeField] private Effect _attackEffect;
-        [Header("向きの基準")]
-        [SerializeField] private Transform _rotate;
         [Header("範囲の設定")]
         [SerializeField] private float _forwardOffset;
         [SerializeField] private float _heightOffset;
         [Min(1.0f)]
         [SerializeField] private float _radius = 3.0f;
 
+        private Transform _rotate;
+        private AnimationEvent _animationEvent;
         private IOwnerTime _owner;
+
+        private void Awake()
+        {
+            // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
+            _rotate = transform.FindChildRecursive("Rotate");
+
+            // Animatorが1つだけの前提。
+            _animationEvent = GetComponentInChildren<AnimationEvent>();
+        }
 
         private void Start()
         {

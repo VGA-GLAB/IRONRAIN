@@ -118,11 +118,11 @@ namespace Enemy.Control.Boss.FSM
 
             // プレイヤーの入力があった場合は、刀を振り下ろす。
             // 現状、構え->攻撃の間に何か入力を挟む仕様が無いのでそのまま再生する。
-            _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackTrigger);
+            _animation.SetTrigger(BodyAnimation.ParamName.QteBladeAttackTrigger01);
 
             // 振り下ろした刀を構え直す。
             // これも特に仕様が無いのでそのまま再生する。
-            _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackClearTrigger);
+            _animation.SetTrigger(BodyAnimation.ParamName.QteBladeAttackClearTrigger01);
         }
 
         protected override void Stay()
@@ -145,11 +145,11 @@ namespace Enemy.Control.Boss.FSM
         protected override void Enter()
         {
             // QTE1回目、刀を振り下ろす。
-            _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackTrigger);
+            _animation.SetTrigger(BodyAnimation.ParamName.QteBladeAttackTrigger02);
 
             // 振り下ろした刀を構え直す。
             // これも特に仕様が無いのでそのまま再生する。
-            _animation.SetTrigger(BodyAnimation.ParamName.TempBladeAttackClearTrigger);
+            _animation.SetTrigger(BodyAnimation.ParamName.QteBladeAttackClearTrigger02);
         }
 
         protected override void Stay()
@@ -177,12 +177,10 @@ namespace Enemy.Control.Boss.FSM
             // QTE2回目、プレイヤーに殴られて死亡。
             _animation.SetTrigger(BodyAnimation.ParamName.FinishTrigger);
             _effector.PlayDestroyedEffect();
-
         }
 
         protected override void Stay()
-        {
-            
+        {            
         }
     }
 }

@@ -5,24 +5,20 @@ using VContainer;
 
 namespace Enemy.Control
 {
+    // 一時的に画面から消して動作を止めたい場合: xxx
+    // これ以上動かさず、削除する場合: SetActive(false)
+
     /// <summary>
     /// 敵を操作する。
-    /// 一時的に画面から消して動作を止めたい場合: xxx
-    /// これ以上動かさず、削除する場合: xxx
     /// </summary>
     [RequireComponent(typeof(EnemyParams))]
-    public class EnemyController : MonoBehaviour, IDamageable
+    public class EnemyController : Character, IDamageable
     {
-        [SerializeField] private Transform _offset;
-        [SerializeField] private Transform _rotate;
         [SerializeField] private Transform[] _models;
-        [SerializeField] private Animator _animator;
         [SerializeField] private EnemyEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
-        [SerializeField] private Equipment _equipment;
 
         private EnemyParams _params;
-
         // 注入する依存関係。
         private Transform _player;
         private SlotPool _surroundingPool;
@@ -77,21 +73,29 @@ namespace Enemy.Control
                 Debug.LogWarning($"依存関係の構築に失敗: Player:{_player}, SurroundingPool:{_surroundingPool}");
             }
 
+            // Animatorが1つしか無い前提。
+            Animator animator = GetComponentInChildren<Animator>();
+            // 雑魚敵は装備が1つ。
+            Equipment equip = GetComponent<Equipment>();
+            // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
+            Transform offset = FindDynamicOffset();
+            Transform rotate = FindRotate();
+
             _params = GetComponent<EnemyParams>();
             _blackBoard = new BlackBoard(gameObject.name);
 
             // Perception
             _perception = new Perception(transform, _params, _blackBoard, _player, _surroundingPool);
-            _fireRate = new FireRate(_params, _blackBoard, _equipment);
-            _eyeSensor = new EyeSensor(transform, _params, _blackBoard, _rotate);
+            _fireRate = new FireRate(_params, _blackBoard, equip);
+            _eyeSensor = new EyeSensor(transform, _params, _blackBoard, rotate);
             _hitPoint = new HitPoint(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);
             // Brain
             _utilityEvaluator = new UtilityEvaluator(_params, _blackBoard);
             _behaviorTree = new BehaviorTree(transform, _params, _blackBoard);
             // Action
-            _bodyController = new BodyController(transform, _params, _blackBoard, _offset, _rotate, _models, 
-                _animator, _effects, _hitBoxes);
+            _bodyController = new BodyController(transform, _params, _blackBoard, offset, rotate, _models,
+                animator, _effects, _hitBoxes);
 
 #if UNITY_EDITOR
             _debugStatusUI = new DebugStatusUI(transform, _params, _blackBoard);
@@ -130,7 +134,7 @@ namespace Enemy.Control
 
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
-            // OnPreCleanup -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
+            // 非表示前処理 -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
             if (_bodyController.Update() == BodyController.Result.Complete && !_isCleanupRunning)
             {
                 _isCleanupRunning = true;
@@ -183,7 +187,11 @@ namespace Enemy.Control
         /// <summary>
         /// 外部から敵の行動を制御する。
         /// </summary>
-        public void Order(EnemyOrder order) => _overrideOrder.Buffer(order);
+        public void Order(EnemyOrder order)
+        {
+            // Updateが呼ばれない状態ではバッファの命令を削除しないので弾く。
+            if (gameObject.activeSelf) _overrideOrder.Buffer(order);
+        }
 
         /// <summary>
         /// 攻撃させる。

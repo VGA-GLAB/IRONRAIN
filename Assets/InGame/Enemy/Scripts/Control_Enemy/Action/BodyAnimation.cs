@@ -147,16 +147,22 @@ namespace Enemy.Control
             // 盾持ちはGetDamageTriggerではなくこちらを使う。
             public const string BreakTrigger = "BreakTrigger";
 
-            // ボスの登場が完了し、戦闘状態で使用。
-            // ボスが刀を構える。
-            public const string TempBladeAttackSetTrigger = "TempBladeAttackSetTrigger";
+            // ボス戦のQTE、左腕を破壊する攻撃を構える。
+            public const string QteBladeAttackSetTrigger = "QteBladeAttackSetTrigger";
 
-            // TempBladeAttackSetTriggerで刀を構えた状態が前提。
-            // ボスが刀で攻撃する。
-            public const string TempBladeAttackTrigger = "TempBladeAttackTrigger";
+            // ボス戦のQTE演出、QteBladeAttackSetTriggerで刀を構えた状態が前提。
+            // プレイヤーの左手を破壊する攻撃を行う。
+            public const string QteBladeAttackTrigger01 = "QteBladeAttackTrigger01";
 
-            // ボス戦QTEで刀を構え直す。
-            public const string TempBladeAttackClearTrigger = "TempBladeAttackClearTrigger";
+            // ボス戦のQTE演出、左腕を破壊する攻撃を行った後、刀を構え直す。
+            public const string QteBladeAttackClearTrigger01 = "QteBladeAttackClearTrigger01";
+
+            // ボス戦のQTEの1回目、QteBladeAttackClearTrigger01で刀を構え直した状態が前提。
+            // 鍔迫り合いになる。
+            public const string QteBladeAttackTrigger02 = "QteBladeAttackTrigger02";
+
+            // ボス戦のQTEの1回目、鍔迫り合いで弾かれて再度プレイヤーに突っ込む。
+            public const string QteBladeAttackClearTrigger02 = "QteBladeAttackClearTrigger02";
 
             // ボス戦QTEの2回目、ボスが死ぬ。
             public const string FinishTrigger = "FinishTrigger";

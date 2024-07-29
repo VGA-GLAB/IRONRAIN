@@ -21,8 +21,6 @@ namespace Enemy.Control
 
         [Header("エフェクトの設定")]
         [SerializeField] private Effect[] _muzzleEffects;
-        [Header("アニメーションイベントに処理をフック")]
-        [SerializeField] private AnimationEvent _animationEvent;
         [Header("射撃方法")]
         [SerializeField] private AimMode _aimMode;
         [Header("飛ばす弾の設定")]
@@ -31,8 +29,10 @@ namespace Enemy.Control
         [Header("AimModeがTargetの場合")]
         [SerializeField] private Transform _target;
 
+        // 注入する依存関係
         private Transform _player;
 
+        private AnimationEvent _animationEvent;
         private IOwnerTime _owner;
 
         [Inject]
@@ -41,8 +41,17 @@ namespace Enemy.Control
             _player = player;
         }
 
+        private void Awake()
+        {
+            // Animatorが1つだけの前提。
+            _animationEvent = GetComponentInChildren<AnimationEvent>();
+        }
+
         private void Start()
         {
+            // マズルが設定されていない場合は自身から発射する。
+            if (_muzzle == null) _muzzle = transform;
+
             // 雑魚敵とボスの両用。
             if (TryGetComponent(out EnemyController e)) _owner = e.BlackBoard;
             else if (TryGetComponent(out BossController b)) _owner = b.BlackBoard;
@@ -62,27 +71,18 @@ namespace Enemy.Control
         // アニメーションイベントに登録して呼んでもらう。
         private void Shoot()
         {
-            if (_muzzle == null) return;
             if (_owner == null) { Debug.LogWarning("弾を発射する前に装備者への参照が必要。"); return; }
 
             // 射撃モード
             switch (_aimMode)
             {
-                case AimMode.Forward:
-                    FireToForward();
-                    break;
-                case AimMode.Player:
-                    FireToTarget(_player);
-                    break;
-                case AimMode.Target when _target != null:
-                    FireToTarget(_target);
-                    break;
+                case AimMode.Forward: Fire(_muzzle.forward); break;
+                case AimMode.Player: FireToTarget(_player); break;
+                case AimMode.Target: FireToTarget(_target); break;
             }
 
             // タイミングを更新。
             LastAttackTiming = Time.time;
-
-            OnShoot();
 
             // マズルのエフェクトを再生
             if (_muzzleEffects != null)
@@ -90,18 +90,23 @@ namespace Enemy.Control
                 foreach (Effect e in _muzzleEffects) e.Play(_owner);
             }
 
-            // 前方に撃つ
-            void FireToForward()
-            {
-                BulletPool.Fire(_owner, _key, _muzzle.position, _muzzle.forward);
-            }
+            OnShoot();
+        }
 
-            // 目標に向けて撃つ
-            void FireToTarget(Transform target)
-            {
-                Vector3 f = (target.position - _muzzle.position).normalized;
-                BulletPool.Fire(_owner, _key, _muzzle.position, f);
-            }
+        // 弾をプールから取り出して任意の方向に発射。
+        private void Fire(in Vector3 dir)
+        {
+            BulletPool.Fire(_owner, _key, _muzzle.position, dir);
+        }
+
+        // 任意の目標に向けて発射。
+        private void FireToTarget(Transform target)
+        {
+            // 射撃中に目標が死亡などでnullになった場合は正面に射撃しておく。
+            if (target == null) Fire(_muzzle.forward);
+
+            Vector3 dir = (target.position - _muzzle.position).normalized;
+            Fire(dir);
         }
 
         /// <summary>
