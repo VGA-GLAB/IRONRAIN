@@ -10,6 +10,7 @@ namespace IronRain.SequenceSystem
     public sealed class SequenceGroup : ISequence
     {
         [SerializeField] private string _groupName;
+        [SerializeField] private bool _isSkip = false;
         public string GroupName => _groupName;
         [SerializeReference, SubclassSelector] private ISequence[] _sequences;
 
@@ -24,17 +25,27 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            for (int i = 0; i < _sequences.Length; i++)
+            if (_isSkip)
             {
-                try
+                Skip();
+
+                await UniTask.CompletedTask;
+            }
+            else
+            {
+                for (int i = 0; i < _sequences.Length; i++)
                 {
-                    var index = i;
-                    await _sequences[i]
-                        .PlayAsync(ct, exceptionHandler + (x => ExceptionReceiver(x, index)));
-                }
-                catch (Exception e)
-                {
-                    ExceptionReceiver(e, i);
+                    try
+                    {
+                        var index = i;
+                        await _sequences[i]
+                            .PlayAsync(ct, exceptionHandler + (x => ExceptionReceiver(x, index)));
+                    }
+                    catch (OperationCanceledException e) { }
+                    catch (Exception e)
+                    {
+                        ExceptionReceiver(e, i);
+                    }
                 }
             }
         }

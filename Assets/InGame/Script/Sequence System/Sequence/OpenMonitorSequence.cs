@@ -13,7 +13,7 @@ namespace IronRain.SequenceSystem
         [SerializeField] private float _monitorOpenSec = 1F;
 
         private SequenceData _data;
-        private readonly int _openEyesAmountPropertyId = Shader.PropertyToID("_OpenEyesAmount");
+        private readonly int _openEyesAmountPropertyId = UnityEngine.Shader.PropertyToID("_OpenEyesAmount");
 
         private void SetParams(float totalSec, float monitorOpenSec)
         {
