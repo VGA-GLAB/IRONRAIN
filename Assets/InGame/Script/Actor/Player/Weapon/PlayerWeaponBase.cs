@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Enemy.Control;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +13,11 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     [SerializeField] protected PlayerWeaponParams _params;
     [SerializeField] protected string _shotSeCueName;
     [SerializeField] protected BulletPool _bulletPool;
+    [SerializeField] protected Transform _effectPos;
+    [SerializeField] protected Effect _muzzleFlashEffect;
+    [SerializeField] protected Effect _smokeEffect;
+    [SerializeField] protected Effect _cartridgeEffect;
+
 
     protected bool _isShotInput;
     [Tooltip("現在の弾数")]
@@ -22,6 +28,7 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     [Tooltip("リロード中かどうか")]
     private bool _isReload;
     private PlayerEnvroment _playerEnvroment;
+    private EffectOwnerTime _effectOwnerTime = new();
 
     public virtual void SetUp(PlayerEnvroment playerEnvroment) 
     {
@@ -55,6 +62,9 @@ public abstract class PlayerWeaponBase : MonoBehaviour
                 _params.ShotDamage,
                 _playerEnvroment.PlayerTransform.forward,
                 _params.WeaponName);
+
+            _muzzleFlashEffect.Play(_effectOwnerTime);
+            _smokeEffect.Play(_effectOwnerTime);
 
             CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
 
@@ -97,6 +107,11 @@ public abstract class PlayerWeaponBase : MonoBehaviour
         //アニメーション挟む
         _currentBullets = _params.MagazineSize;
         _isReload = false;
+    }
+
+    public class EffectOwnerTime : IOwnerTime 
+    {
+        public float PausableDeltaTime => ProvidePlayerInformation.TimeScale;
     }
 
 }

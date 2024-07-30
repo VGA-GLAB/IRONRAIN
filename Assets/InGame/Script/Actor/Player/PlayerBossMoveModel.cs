@@ -40,19 +40,24 @@ public class PlayerBossMoveModel : IPlayerStateModel
     public void FixedUpdate()
     {
         if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE) 
-            || !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
+            && !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
         {
             Move();
         }
         else 
         {
+            _playerEnvroment.PlayerTransform.parent = null;
             _rb.velocity = Vector2.zero;
         }
     }
 
     public void Update()
     {
-        _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+        if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
+            && !_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable))
+        {
+            _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+        }
     }
 
     public void Dispose()
