@@ -8,7 +8,6 @@ namespace IronRain.SequenceSystem
     {
         private SequenceData _data;
 
-
         public void SetData(SequenceData data)
         {
             _data = data;
@@ -17,6 +16,7 @@ namespace IronRain.SequenceSystem
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             _data.EnemyManager.BossFirstQte();
+            
             await _data.PlayerController.SeachState<PlayerQTE>().QTEModel.StartQTE(Guid.Empty, QteType.BossQte1);
         }
 

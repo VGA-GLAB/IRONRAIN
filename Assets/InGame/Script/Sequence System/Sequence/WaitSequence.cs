@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
     public sealed class WaitSequence : ISequence
     {
         /// <summary>このシーケンス全体の時間</summary>
-        [SerializeField] private float _totalSec = 0F;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         
         public void SetParams(float totalSec)
         {

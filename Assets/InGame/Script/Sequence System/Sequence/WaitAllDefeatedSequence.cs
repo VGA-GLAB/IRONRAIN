@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
 {
     public sealed class WaitAllDefeatedSequence : ISequence
     {
-        [SerializeField] private EnemyManager.Sequence _targetSeq;
+        [Header("どのSequenceの敵の撃破を待つのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
 
         private EnemyManager _enemyManager;
 

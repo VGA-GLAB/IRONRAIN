@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
 {
     public class LoadSceneSequence : ISequence
     {
-        [SerializeField] private string _loadScenenName;
+        [Header("読み込むシーンの名前"), SerializeField] private string _loadSceneName;
         
         public void SetData(SequenceData data)
         {
@@ -17,12 +17,12 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            await SceneManager.LoadSceneAsync(_loadScenenName).ToUniTask(cancellationToken: ct);
+            await SceneManager.LoadSceneAsync(_loadSceneName).ToUniTask(cancellationToken: ct);
         }
 
         public void Skip()
         {
-            SceneManager.LoadScene(_loadScenenName);
+            SceneManager.LoadScene(_loadSceneName);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
 {
     public sealed class TutorialEnemyAttackSequence : ISequence
     {
-        [SerializeField] private float _totalSec;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec;
         private EnemyController _tutorialEnemy;
 
         public void SetParams(float totalSec)

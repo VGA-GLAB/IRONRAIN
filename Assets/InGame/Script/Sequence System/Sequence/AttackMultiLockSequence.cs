@@ -15,6 +15,7 @@ namespace IronRain.SequenceSystem
 
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // マルチロックオンの攻撃呼び出し
             _playerController.SeachState<PlayerWeaponController>().WeaponModel.MulchShot();
             
             return UniTask.CompletedTask;

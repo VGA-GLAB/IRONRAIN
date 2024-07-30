@@ -7,8 +7,8 @@ namespace IronRain.SequenceSystem
 {
     public sealed class AddPlayerStateSequence : ISequence
     {
-        [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private PlayerStateType _addState;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
+        [Header("Playerに追加するState"), SerializeField] private PlayerStateType _addState;
 
         private PlayerController _playerController;
 
