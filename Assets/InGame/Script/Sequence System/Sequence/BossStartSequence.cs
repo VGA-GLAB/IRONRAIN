@@ -15,6 +15,7 @@ namespace IronRain.SequenceSystem
 
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // BossStart処理
             _data.PlayerController.SeachState<PlayerStoryEvent>().BossStart();
             _data.EnemyManager.BossStart();
 

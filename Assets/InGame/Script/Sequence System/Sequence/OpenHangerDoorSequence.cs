@@ -15,8 +15,8 @@ namespace IronRain.SequenceSystem
             Second
         }
         
-        [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private TargetDoor _targetDoor;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
+        [Header("どのドアを開けるか"), SerializeField] private TargetDoor _targetDoor;
         
         private HatchController _hatch;
         private SequenceData _data;

@@ -8,13 +8,13 @@ namespace IronRain.SequenceSystem
     public sealed class SoundSequence : ISequence
     {
         /// <summary>このシーケンス全体の時間</summary>
-        [SerializeField] private float _totalSec = 0F;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         /// <summary>CueSheetName</summary>
-        [SerializeField] private string _cueSheetName = "";
+        [Header("流すCueのCueSheetName"), SerializeField] private string _cueSheetName = "";
         /// <summary>CueName</summary>
-        [SerializeField] private string _cueName = "";
+        [Header("流すCue"), SerializeField] private string _cueName = "";
         /// <summary>何秒後に流すか</summary>
-        [SerializeField] private float _delaySec = 0F;
+        [Header("何秒後に流すのか"), SerializeField] private float _delaySec = 0F;
 
         public void SetParams(float totalSec, string cueSheetName, string cueName, float delaySec)
         {

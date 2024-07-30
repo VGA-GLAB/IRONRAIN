@@ -8,8 +8,8 @@ namespace IronRain.SequenceSystem
 {
     public class EnemyManagerDefeatThemAllSequence : ISequence
     {
-        [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private EnemyManager.Sequence _targetSeq;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
+        [Header("どのSequenceの敵を破壊するのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
 
         private EnemyManager _enemyManager;
 

@@ -7,7 +7,7 @@ namespace IronRain.SequenceSystem
 {
     public class StartChaseSequence : ISequence
     {
-        [SerializeField] private float _totalSec = 0F;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         private PlayerStoryEvent _playerStoryEvent;
 
         public void SetParams(float totalSec)

@@ -9,11 +9,11 @@ namespace IronRain.SequenceSystem
     {
         private TutorialTextBoxController _textBox;
         
-        [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private bool _clearText = true;
-        [SerializeField,TextArea] private string _text = "";
-        [SerializeField] private float _oneCharDuration = 0.05F;
-        [SerializeField] private float _delaySec = 0F;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
+        [Header("文字を更新する前に文字を消すか"), SerializeField] private bool _clearText = true;
+        [Header("Text"), SerializeField, TextArea] private string _text = "";
+        [Header("1文字を出力する時間(秒)"), SerializeField] private float _oneCharDuration = 0.05F;
+        [Header("文字の更新の開始をどのくらい遅らせるか(秒)"), SerializeField] private float _delaySec = 0F;
         
         public void SetData(SequenceData data)
         {

@@ -7,8 +7,8 @@ namespace IronRain.SequenceSystem
 {
     public class CloseTextBoxSequence : ISequence
     {
-        [SerializeField] private float _totalSec = 0f;
-        [SerializeField] private float _closeDuration = 1F;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0f;
+        [Header("テキストボックスを閉じる時間(秒)"), SerializeField] private float _closeDuration = 1F;
 
         private SequenceData _data;
         

@@ -9,8 +9,8 @@ namespace IronRain.SequenceSystem
 {
     public sealed class SequenceGroup : ISequence
     {
-        [SerializeField] private string _groupName;
-        [SerializeField] private bool _isSkip = false;
+        [Header("グループ名"), SerializeField] private string _groupName;
+        [Header("スキップするか"), SerializeField] private bool _isSkip = false;
         public string GroupName => _groupName;
         [SerializeReference, SubclassSelector] private ISequence[] _sequences;
 

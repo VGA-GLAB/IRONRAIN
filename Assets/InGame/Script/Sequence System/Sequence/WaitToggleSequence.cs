@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
     [Serializable]
     public sealed class WaitToggleSequence : ISequence
     {
-        [SerializeField] private InputProvider.InputType _toggleButton1 = InputProvider.InputType.Toggle1;
+        [Header("どの入力を待つのか"), SerializeField] private InputProvider.InputType _toggleButton1 = InputProvider.InputType.Toggle1;
         [SerializeField] private InputProvider.InputType _toggleButton2 = InputProvider.InputType.Toggle2;
 
         public void SetParams(InputProvider.InputType toggleButton1, InputProvider.InputType toggleButton2)

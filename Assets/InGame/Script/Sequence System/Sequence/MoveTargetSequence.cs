@@ -15,9 +15,9 @@ namespace IronRain.SequenceSystem
             Outside
         }
         
-        [SerializeField] private float _totalSec = 0F;
-        [SerializeField] private float _moveSec = 0F;
-        [SerializeField] private MoveTarget _target = MoveTarget.SecondDoor;
+        [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
+        [Header("この移動にかける時間(秒)"), SerializeField] private float _moveSec = 0F;
+        [Header("移動する目標地点"), SerializeField] private MoveTarget _target = MoveTarget.SecondDoor;
 
         private SequenceData _data;
         

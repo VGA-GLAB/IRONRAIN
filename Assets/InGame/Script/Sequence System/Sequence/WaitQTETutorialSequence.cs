@@ -9,14 +9,7 @@ namespace IronRain.SequenceSystem
 {
     public class WaitQTETutorialSequence : ISequence
     {
-        [SerializeField] private float _qteStartDis = 400F;
-        
         private SequenceData _data;
-
-        public void SetParams(float qteStartDis)
-        {
-            _qteStartDis = qteStartDis;
-        }
         
         public void SetData(SequenceData data)
         {
@@ -33,19 +26,13 @@ namespace IronRain.SequenceSystem
             {
                 var id = enemies[0].BlackBoard.ID;
 
-                await UniTask.WaitUntil(
-                    () => (_data.PlayerController.transform.position - enemies[0].transform.position).sqrMagnitude <
-                          _qteStartDis,
-                    PlayerLoopTiming.Update,
-                    ct);
+                await UniTask.WaitUntil(() => enemies[0].BlackBoard.IsApproachCompleted, PlayerLoopTiming.Update, ct);
+                await UniTask.WaitForSeconds(1.0f, cancellationToken: ct);
 
                 await WaitQTEAsync(id);
             }
-
-            _data.PlayerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
-            _data.PlayerController.PlayerEnvroment.RemoveState(PlayerStateType.NonTriggerQte);
         }
-        
+
         private async UniTask WaitQTEAsync(System.Guid id)
         {
             // 比較用
