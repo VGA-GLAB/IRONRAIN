@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // 両手の人差し指でパネルを突く前提。
@@ -74,6 +75,9 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
+        //パネルに触れた時の音
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+
         FingertipCursor(_fingertip, _cursor);
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
@@ -134,6 +138,8 @@ public class LockOnSystem : MonoBehaviour
                         // 新しく追加した場合は、Target同士を結ぶ線を引く。
                         _lineRenderer.positionCount++;
                         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                        //多重ロックオン発動時に流れる音
+                        CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                     }
                 }
             }
