@@ -14,7 +14,6 @@ public class LeverController : MonoBehaviour
     /// <summary>コントローラーの向いている方向</summary>
     public Vector3 ControllerDir => _controllerDir;
 
-    [SerializeField] private Transform _playerHandTransfrom;
     [Header("レバーの感度設定")]
     [SerializeField] private float _moveSpeed = 5;
     [Header("X移動制限")]
@@ -92,7 +91,6 @@ public class LeverController : MonoBehaviour
         if (_isLeverMove)
         {
             SetControllerDir();
-            MoveLimit(_playerHandTransfrom.transform.localPosition - _playerHandSavePos);
             var moveValue = _controllerMoveDir * _moveSpeed;
             transform.localPosition += moveValue;
         }
@@ -110,7 +108,6 @@ public class LeverController : MonoBehaviour
             _controllerDir = Vector3.zero;
         }
 
-        _playerHandSavePos = _playerHandTransfrom.transform.localPosition;
     }
 
     /// <summary>
