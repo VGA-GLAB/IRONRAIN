@@ -78,7 +78,7 @@ namespace Enemy.Control
             // 雑魚敵は装備が1つ。
             Equipment equip = GetComponent<Equipment>();
             // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
-            Transform offset = FindDynamicOffset();
+            Transform offset = FindOffset();
             Transform rotate = FindRotate();
 
             _params = GetComponent<EnemyParams>();

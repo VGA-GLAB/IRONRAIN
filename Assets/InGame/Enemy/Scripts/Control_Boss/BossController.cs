@@ -73,7 +73,7 @@ namespace Enemy.Control.Boss
             MeleeEquipment meleeEquip = GetComponent<MeleeEquipment>();
             RangeEquipment rangeEquip = GetComponent<RangeEquipment>();
             // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
-            Transform offset = FindDynamicOffset();
+            Transform offset = FindOffset();
             Transform rotate = FindRotate();
 
             // Perception

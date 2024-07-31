@@ -58,11 +58,11 @@ namespace Enemy.Control
             }
             else if (enemyParams.Type == EnemyType.Launcher)
             {
-                battleState = new BattleByLauncherState(blackBoard, body, bodyAnimation);
+                battleState = new BattleByLauncherState(enemyParams, blackBoard, body, bodyAnimation);
             }
             else if (enemyParams.Type == EnemyType.Shield)
             {
-                battleState = new BattleByShieldState(blackBoard, body, bodyAnimation);
+                battleState = new BattleByShieldState(enemyParams,blackBoard, body, bodyAnimation);
             }
             _stateTable.Add(StateKey.Battle, battleState);
 
