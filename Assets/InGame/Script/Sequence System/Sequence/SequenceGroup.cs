@@ -41,8 +41,7 @@ namespace IronRain.SequenceSystem
                         await _sequences[i]
                             .PlayAsync(ct, exceptionHandler + (x => ExceptionReceiver(x, index)));
                     }
-                    catch (OperationCanceledException e) { }
-                    catch (Exception e)
+                    catch (Exception e) when (e is not OperationCanceledException)
                     {
                         ExceptionReceiver(e, i);
                     }
