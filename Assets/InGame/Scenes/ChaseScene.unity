@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.015986765, g: 0.019945912, b: 0.028999092, a: 1}
+  m_IndirectSpecularColor: {r: 0.016038813, g: 0.02003244, b: 0.029110247, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -353,6 +353,10 @@ PrefabInstance:
       propertyPath: _robotController
       value: 
       objectReference: {fileID: 2667218937599446716}
+    - target: {fileID: 2724947002651407346, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2995647868222736376, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       propertyPath: m_Camera
       value: 
@@ -369,6 +373,10 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 4633842901574863}
+    - target: {fileID: 5132740912069421527, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8844451547734256595, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       propertyPath: m_Camera
       value: 
@@ -26264,6 +26272,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
+--- !u!114 &452585749 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6861016363197844066, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+  m_PrefabInstance: {fileID: 63516655}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9f338034892c44ebb62d97894772f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &483560614
 GameObject:
   m_ObjectHideFlags: 0
@@ -61925,7 +61944,7 @@ PrefabInstance:
     - target: {fileID: 8965791361194516971, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
       propertyPath: _ovrCameraRig
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 452585749}
     - target: {fileID: 8995065021926051533, guid: d037ad7dc7246794bb543607f7866b4a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -55.19319
