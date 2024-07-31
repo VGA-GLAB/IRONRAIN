@@ -43,7 +43,7 @@ namespace Enemy.Control.Boss
             {
                 { StateKey.Idle, new Boss.FSM.IdleState(blackBoard) },
                 { StateKey.Appear, new AppearState(blackBoard, effector) },
-                { StateKey.Battle, new BattleState(blackBoard, body, bodyAnimation, funnels, agentScript) },
+                { StateKey.Battle, new Boss.FSM.BattleState(blackBoard, body, bodyAnimation, funnels, agentScript) },
                 { StateKey.QteEvent, new QteEventState(blackBoard, bodyAnimation, effector, agentScript) },
             };
 

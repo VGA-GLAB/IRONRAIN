@@ -7,7 +7,7 @@ namespace Enemy.Control.FSM
     /// 移動しつつ攻撃するステート。
     /// 接近後、アイドル状態を経由して遷移してくる。
     /// </summary>
-    public class BattleByMachineGunState : State
+    public class BattleByMachineGunState : BattleState
     {
         private enum AnimationGroup
         {
@@ -17,22 +17,12 @@ namespace Enemy.Control.FSM
             Fire,  // FireLoop
         }
 
-        private EnemyParams _params;
-        private BlackBoard _blackBoard;
-        private Body _body;
-        private BodyAnimation _animation;
-
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleByMachineGunState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, 
-            BodyAnimation animation)
+        public BattleByMachineGunState(EnemyParams enemyParams, BlackBoard blackBoard, Body body, BodyAnimation animation)
+            : base(enemyParams, blackBoard, body, animation)
         {
-            _params = enemyParams;
-            _blackBoard = blackBoard;
-            _body = body;
-            _animation = animation;
-
             // アニメーションのステートの遷移をトリガーする。
             Register(BodyAnimation.StateName.MachineGun.Idle, AnimationGroup.Idle);
             Register(BodyAnimation.StateName.MachineGun.HoldStart, AnimationGroup.Hold);
@@ -47,8 +37,6 @@ namespace Enemy.Control.FSM
             }
         }
 
-        public override StateKey Key => StateKey.Battle;
-
         protected override void Enter()
         {
         }
@@ -61,54 +49,10 @@ namespace Enemy.Control.FSM
 
         protected override void Stay(IReadOnlyDictionary<StateKey, State> stateTable)
         {
-            // ダメージを受けた場合に音を再生。
-            string seName = "";
-            if (_blackBoard.DamageSource == Const.PlayerAssaultRifleWeaponName) seName = "SE_Damage_02";
-            else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
-            if (seName != "") AudioWrapper.PlaySE(seName);
-
-            // 死亡もしくは撤退をチェック。
-            bool isExit = false;
-            foreach (ActionPlan plan in _blackBoard.ActionPlans)
-            {
-                if (plan.Choice == Choice.Broken || plan.Choice == Choice.Escape) isExit = true;
-            }
-
-            // 死亡もしくは撤退の場合は、アイドル状態を経由して退場するステートに遷移する。
-            if (isExit) { TryChangeState(stateTable[StateKey.Idle]); return; }
-
-            // 左右どちらに移動したかを判定する用途。
-            Vector3 before = _body.TransformPosition;
-
-            // 移動を上書きする恐れがあるので、先に座標を直接書き換える。
-            while (_blackBoard.WarpPlans.TryDequeue(out ActionPlan.Warp plan))
-            {
-                if (plan.Choice == Choice.Chase) _body.Warp(plan.Position);
-            }
-            // 移動
-            while (_blackBoard.MovePlans.TryDequeue(out ActionPlan.Move plan))
-            {
-                if (plan.Choice == Choice.Chase)
-                {
-                    _body.Move(plan.Direction * plan.Speed * _blackBoard.PausableDeltaTime);
-                }
-            }
-            // 回転
-            while (_blackBoard.LookPlans.TryDequeue(out ActionPlan.Look plan))
-            {
-                if (plan.Choice == Choice.Chase) _body.Forward(plan.Forward);
-            }
-
-            /*
-            構え->攻撃のアニメーションをループする仕様上、
-            別レイヤーにある左右移動のアニメーションを並行して再生できない。
-
-            // 移動した方向ベクトルでアニメーションを制御。
-            // z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
-            bool isRightMove = _body.TransformPosition.x - before.x > 0;
-            _animation.SetBool(Const.AnimationParam.IsRightMove, isRightMove);
-            _animation.SetBool(Const.AnimationParam.IsLeftMove, !isRightMove);
-             */
+            // 継承元のBattleStateクラス、雑魚敵の共通したメソッド群。
+            PlayDamageSE();
+            if (BattleExit(stateTable)) return;
+            Move();
 
             // どのアニメーションが再生されているかによって処理を分ける。
             if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();

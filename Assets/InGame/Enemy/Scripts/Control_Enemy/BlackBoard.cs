@@ -78,6 +78,8 @@ namespace Enemy.Control
         public bool IsOrderedPause { get; set; }
         public bool IsOrderedPlayerDetect { get; set; }
         public Vector3? OrderedSpawnPoint { get; set; }
+        public bool IsQteRunning { get; set; }
+        public bool IsQteTargeted { get; set; }
 
         // BrokenStateクラスもしくはEscapeStateクラスが書き込む。
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。

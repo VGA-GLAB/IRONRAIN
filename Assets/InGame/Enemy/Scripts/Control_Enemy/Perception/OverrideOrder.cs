@@ -81,29 +81,39 @@ namespace Enemy.Control
             }
             else if (t == EnemyOrder.Type.QteStartTargeted)
             {
-                //
+                _blackBoard.IsQteRunning = true;
+                _blackBoard.IsQteTargeted = true;
+
+                _blackBoard.OrderedAttackTrigger = true;
             }
             else if (t == EnemyOrder.Type.QteStartUntargeted)
             {
-                //
+                _blackBoard.IsQteRunning = true;
+                _blackBoard.IsQteTargeted = false;
             }
             else if (t == EnemyOrder.Type.QteSuccessTargeted)
             {
                 // BossStartと同じ理由、同じ処理。
                 _blackBoard.Hp = 0;
                 _blackBoard.IsDying = true;
+
+                _blackBoard.IsQteRunning = false;
+                _blackBoard.IsQteTargeted = false;
             }
             else if (t == EnemyOrder.Type.QteSuccessUntargeted)
             {
-                //
+                _blackBoard.IsQteRunning = false;
+                _blackBoard.IsQteTargeted = false;
             }
             else if (t == EnemyOrder.Type.QteFailureTargeted)
             {
-                //
+                _blackBoard.IsQteRunning = false;
+                _blackBoard.IsQteTargeted = false;
             }
             else if (t == EnemyOrder.Type.QteFailureUntargeted)
             {
-                //
+                _blackBoard.IsQteRunning = false;
+                _blackBoard.IsQteTargeted = false;
             }
         }
 
