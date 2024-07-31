@@ -1,7 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Oculus.Interaction;
 using System.Collections.Generic;
 using System.Threading;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +22,15 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField] private float _cursorRadius = 0.015f;
     [SerializeField] private float _targetRadius = 0.03f;
 
+    [Header("マウス用")] 
+    [SerializeField] private bool _isMouseFlag;
+    [SerializeField, Tooltip("Rayのレイヤーマスク")]
+    LayerMask _layerMask;
+    [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
+    private bool _isMouseMultiLock;
+
     private bool _isSelect;
+    
 
     private List<Transform> _targets = new List<Transform>();
     private List<GameObject> _lockOn = new List<GameObject>();
@@ -37,6 +47,17 @@ public class LockOnSystem : MonoBehaviour
 
         // タッチパネルに触れて対象をロックオン。
         _event.WhenSelect.AddListener(Touch);
+    }
+
+    private void Update()
+    {
+        if (!_isMouseFlag)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Touch();
+        }
     }
 
     private async UniTaskVoid M()
@@ -151,14 +172,43 @@ public class LockOnSystem : MonoBehaviour
         //cursor.position = p;
         
         //カーソルに近い方の指の位置を登録する
-        Transform fingerPostion;
-        if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
-            Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
-            fingerPostion = fingertip[0];
+        Vector3 fingerPostion = cursor.position;
+        if (_isMouseFlag)
+        {
+            //Rayを飛ばすスタート位置を決める
+            var rayStartPosition = _rayOrigin.transform.position;
+            var mousePos = Input.mousePosition;
+            mousePos.z = 10f;
+            //マウスでRayを飛ばす方向を決める
+            var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            var direction = (worldMousePos - rayStartPosition).normalized;
+            //Hitしたオブジェクト格納用
+            RaycastHit hit;
+            Debug.DrawRay(rayStartPosition, direction, Color.red);
+            if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
+            {
+                Debug.Log("あたった");
+                fingerPostion.x = hit.point.x;
+                fingerPostion.y = hit.point.y;
+            }
+        }
         else
-            fingerPostion = fingertip[1];
+        {
+            if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
+                Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
+            {
+                fingerPostion.x = fingertip[0].position.x;
+                fingerPostion.y = fingertip[0].position.y;
+            }
+            else
+            {
+                fingerPostion.x = fingertip[1].position.x;
+                fingerPostion.y = fingertip[1].position.y;
+            }
+        }
         
-        cursor.position = fingerPostion.position;
+        
+        cursor.position = fingerPostion;
     }
 
     // カーソルとTargetがパネル上で接触しているかを判定。
