@@ -14,8 +14,8 @@ public abstract class PlayerWeaponBase : MonoBehaviour
     [SerializeField] protected string _shotSeCueName;
     [SerializeField] protected BulletPool _bulletPool;
     [SerializeField] protected Transform _effectPos;
-    [SerializeField] protected Effect _muzzleFlashEffect;
-    [SerializeField] protected Effect _smokeEffect;
+    [SerializeField] protected ParticleEffect _muzzleFlashEffect;
+    [SerializeField] protected ParticleEffect _smokeEffect;
     [SerializeField] protected Effect _cartridgeEffect;
 
 
