@@ -162,7 +162,7 @@ public class PlayerTrackingPhaseMoveModel : IPlayerStateModel
     private async UniTask ThrusterNextPointMove(Vector3 nextPoint)
     {
         await _playerEnvroment.PlayerTransform
-        .DOMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
+        .DOMoveX(nextPoint.x, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
         .ToUniTask(cancellationToken: _rootDestroyToken);
         _playerEnvroment.RemoveState(PlayerStateType.Thruster);
 
