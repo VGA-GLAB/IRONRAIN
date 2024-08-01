@@ -97,6 +97,7 @@ namespace Enemy.Control
         {
             _blackBoard.PlayerArea?.Draw();
             _blackBoard.Area?.Draw();
+            _blackBoard.Slot?.Draw();
         }
     }
 }

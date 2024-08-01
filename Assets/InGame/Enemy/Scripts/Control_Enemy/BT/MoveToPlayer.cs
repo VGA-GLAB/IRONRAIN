@@ -63,12 +63,6 @@ namespace Enemy.Control.BT
             {
                 warp = _blackBoard.Area.Point + delta;
             }
-            // y座標はプレイヤーの位置に少しずつ移動する。
-            warp.y = Mathf.Lerp(
-                _transform.position.y, 
-                _blackBoard.PlayerPosition.y, 
-                _params.Other.VerticalMoveSpeed * _blackBoard.PausableDeltaTime
-            );
 
             _plan.Position = warp;
             _blackBoard.WarpPlans.Enqueue(_plan);
