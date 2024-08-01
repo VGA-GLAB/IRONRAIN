@@ -14,13 +14,11 @@ namespace Enemy.Control.Boss
         private BlackBoard _blackBoard;
         private Transform _rotate;
         private Transform _player;
-        private Transform _pointP;
+        private DebugPointP _pointP;
         private MeleeEquipment _meleeEquip;
-        private CircleArea _area;
-        private CircleArea _playerArea;
 
         public Perception(Transform transform, BossParams bossParams, BlackBoard blackBoard, Transform rotate, 
-            Transform player, Transform pointP, MeleeEquipment meleeEquip)
+            Transform player, DebugPointP pointP, MeleeEquipment meleeEquip)
         {
             _transform = transform;
             _params = bossParams;
@@ -29,7 +27,6 @@ namespace Enemy.Control.Boss
             _player = player;
             _pointP = pointP;
             _meleeEquip = meleeEquip;
-            _area = new CircleArea(transform.position, BossParams.Const.AreaRadius);
         }
 
         /// <summary>
@@ -38,12 +35,9 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Init()
         {
-            // プレイヤーのエリアを作成する。
-            _playerArea = new CircleArea(_player.position, BossParams.Const.PlayerAreaRadius);
-            
-            // 黒板に書き込む。
-            _blackBoard.Area = _area;
-            _blackBoard.PlayerArea = _playerArea;
+            // エリアを作成、黒板に書き込む。
+            _blackBoard.Area = AreaCalculator.CreateBossArea(_transform.position);
+            _blackBoard.PlayerArea = AreaCalculator.CreatePlayerArea(_player);
         }
 
         /// <summary>
@@ -51,18 +45,21 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Update()
         {
-            // 前方向
+            // 自身の前方向
             _blackBoard.Forward = _rotate.forward;
 
             // 点Pの位置
-            _blackBoard.PointP = _pointP.position;
+            _blackBoard.PointP = _pointP.transform.position;
 
-            // エリアの位置をそれぞれの対象の位置に更新
-            _playerArea.Point = _player.position;
-            _area.Point = _transform.position;
+            // エリアの位置を更新
+            _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);
+            _blackBoard.Area.Point = AreaCalculator.AreaPoint(_transform);
 
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
-            if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
+            if (_blackBoard.Area.Collision(_blackBoard.PlayerArea))
+            {
+                _blackBoard.Area.Point = _blackBoard.Area.TouchPoint(_blackBoard.PlayerArea);
+            }
 
             // 自身から点Pへのベクトルを黒板に書き込む。
             _blackBoard.TransformToPointPDirection = (_blackBoard.PointP - _transform.position).normalized;
@@ -88,7 +85,6 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Dispose()
         {
-            // エリアの参照をnullにする。
             _blackBoard.Area = null;
             _blackBoard.PlayerArea = null;
         }
@@ -98,9 +94,8 @@ namespace Enemy.Control.Boss
         /// </summary>
         public void Draw()
         {
-            // 自身とプレイヤーのエリア
-            _area?.DrawOnGizmos(_transform);
-            _playerArea?.DrawOnGizmos(_player);
+            _blackBoard.PlayerArea?.Draw();
+            _blackBoard.Area?.Draw();
         }
     }
 }

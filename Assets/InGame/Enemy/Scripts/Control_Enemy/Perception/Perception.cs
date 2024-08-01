@@ -1,6 +1,4 @@
-﻿using Enemy.DebugUse;
-using Enemy.Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemy.Control
 {
@@ -13,21 +11,16 @@ namespace Enemy.Control
         private EnemyParams _params;
         private BlackBoard _blackBoard;
         private Transform _player;
-        private SlotPool _pool;
 
-        // エリアとスロットの計算は、プレイヤーがY軸以外で回転すると破綻する可能性がある。
-        private CircleArea _area;
-        private CircleArea _playerArea;
-        private Slot _slot;
+        // 破棄した後に更新処理がされないようのフラグ。
+        private bool _isDisposed;
 
-        public Perception(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, 
-            Transform player, SlotPool pool)
+        public Perception(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard, Transform player)
         {
             _transform = transform;
             _params = enemyParams;
             _blackBoard = blackBoard;
             _player = player;
-            _pool = pool;
         }
 
         /// <summary>
@@ -36,16 +29,10 @@ namespace Enemy.Control
         /// </summary>
         public void Init()
         {
-            // それぞれのエリアを作成
-            _area = new CircleArea(_transform.position, _params.Common.Area.Radius);
-            _playerArea = new CircleArea(_player.position, _params.Common.Area.PlayerRadius);
-            // スロット確保
-            _pool.TryRent(_params.SlotPlace, out _slot);
-
-            // エリアとスロットを黒板に書き込む。
-            _blackBoard.Area = _area;
-            _blackBoard.PlayerArea = _playerArea;
-            _blackBoard.Slot = _slot;
+            // エリアとスロットを作成、黒板に書き込む。
+            _blackBoard.Area = AreaCalculator.CreateArea(_transform.position);
+            _blackBoard.PlayerArea = AreaCalculator.CreatePlayerArea(_player);
+            _blackBoard.Slot = AreaCalculator.CreateSlot(_player, _params.Slot);
 
             // 生存時間の初期値を黒板に書き込む。
             _blackBoard.LifeTime = _params.LifeTime;
@@ -56,12 +43,18 @@ namespace Enemy.Control
         /// </summary>
         public void Update()
         {
-            // エリアの位置をそれぞれの対象の位置に更新。
-            _playerArea.Point = _player.position;
-            _area.Point = _transform.position;
+            if(_isDisposed) return;
+
+            // エリアとスロットの位置を更新。
+            _blackBoard.Area.Point = AreaCalculator.AreaPoint(_transform);
+            _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);
+            _blackBoard.Slot.Point = AreaCalculator.SlotPoint(_player, _params.Slot);
 
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
-            if (_area.Collision(_playerArea)) _area.Point = _area.TouchPoint(_playerArea);
+            if (_blackBoard.Area.Collision(_blackBoard.PlayerArea))
+            {
+                _blackBoard.Area.Point = _blackBoard.Area.TouchPoint(_blackBoard.PlayerArea);
+            }
 
             // プレイヤーの位置を黒板に書き込む。
             _blackBoard.PlayerPosition = _player.position;
@@ -74,8 +67,8 @@ namespace Enemy.Control
             if (_blackBoard.IsOrderedPlayerDetect) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
 
             // 自身のエリアからスロットへのベクトルを黒板に書き込む。
-            _blackBoard.AreaToSlotDirection = (_slot.Point - _area.Point).normalized;
-            _blackBoard.AreaToSlotSqrDistance = (_slot.Point - _area.Point).sqrMagnitude;
+            _blackBoard.AreaToSlotDirection = (_blackBoard.Slot.Point - _blackBoard.Area.Point).normalized;
+            _blackBoard.AreaToSlotSqrDistance = (_blackBoard.Slot.Point - _blackBoard.Area.Point).sqrMagnitude;
 
             // スロットに到着した場合は、接近完了フラグを立てる。
             if (_blackBoard.AreaToSlotSqrDistance < _params.Other.ApproachCompleteThreshold)
@@ -86,15 +79,15 @@ namespace Enemy.Control
 
         /// <summary>
         /// 後始末。
-        /// スロットを返却し、このクラスが黒板に書き込んだ参照をnullにする。
+        /// このクラスが黒板に書き込んだ参照をnullにする。
         /// </summary>
         public void Dispose()
         {
-            if (_pool != null) _pool.Return(_slot);
-
             _blackBoard.Area = null;
             _blackBoard.PlayerArea = null;
             _blackBoard.Slot = null;
+
+            _isDisposed = true;
         }
 
         /// <summary>
@@ -102,9 +95,9 @@ namespace Enemy.Control
         /// </summary>
         public void Draw()
         {
-            // 自身とプレイヤーのエリアを、それぞれの高さに合わせて描画。
-            _playerArea?.DrawOnGizmos(_player);
-            _area?.DrawOnGizmos(_transform);
+            _blackBoard.PlayerArea?.Draw();
+            _blackBoard.Area?.Draw();
+            _blackBoard.Slot?.Draw();
         }
     }
 }

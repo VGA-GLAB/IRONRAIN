@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VContainer;
 
 namespace Enemy.Control
 {
@@ -19,9 +18,6 @@ namespace Enemy.Control
         [SerializeField] private Collider[] _hitBoxes;
 
         private EnemyParams _params;
-        // 注入する依存関係。
-        private Transform _player;
-        private SlotPool _surroundingPool;
         // 自身の状態や周囲を認識して黒板に書き込むPerception層。
         private Perception _perception;
         private FireRate _fireRate;
@@ -58,21 +54,9 @@ namespace Enemy.Control
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
-        [Inject]
-        private void Construct(Transform player, SlotPool pool)
-        {
-            _player = player;
-            _surroundingPool = pool;
-        }
-
         private void Awake()
         {
-            // 依存関係をチェック
-            if (_player == null || _surroundingPool == null)
-            {
-                Debug.LogWarning($"依存関係の構築に失敗: Player:{_player}, SurroundingPool:{_surroundingPool}");
-            }
-
+            Transform player = FindPlayer();
             // Animatorが1つしか無い前提。
             Animator animator = GetComponentInChildren<Animator>();
             // 雑魚敵は装備が1つ。
@@ -85,7 +69,7 @@ namespace Enemy.Control
             _blackBoard = new BlackBoard(gameObject.name);
 
             // Perception
-            _perception = new Perception(transform, _params, _blackBoard, _player, _surroundingPool);
+            _perception = new Perception(transform, _params, _blackBoard, player.transform);
             _fireRate = new FireRate(_params, _blackBoard, equip);
             _eyeSensor = new EyeSensor(transform, _params, _blackBoard, rotate);
             _hitPoint = new HitPoint(_params, _blackBoard);
