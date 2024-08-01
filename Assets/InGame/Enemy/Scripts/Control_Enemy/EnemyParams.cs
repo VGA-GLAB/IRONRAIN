@@ -28,6 +28,20 @@ namespace Enemy.Control
     /// </summary>
     public class EnemyParams : MonoBehaviour, IReadonlyEnemyParams
     {
+        // スロット
+        [System.Serializable]
+        public class SlotSettings
+        {
+            [Tooltip("プレイヤーとの位置関係")]
+            [SerializeField] private SlotPlace _place = SlotPlace.Middle;
+            [Tooltip("プレイヤーとの距離")]
+            [Range(1.0f, 50.0f)]
+            [SerializeField] private float _forwardOffset = 25.0f;
+
+            public SlotPlace Place => _place;
+            public float ForwardOffset => _forwardOffset;
+        }
+
         // 移動速度
         [System.Serializable]
         public class MoveSpeedSettings
@@ -117,8 +131,8 @@ namespace Enemy.Control
             public CommonParams Common => _common;
         }
 
-        [Header("スロット番号")]
-        [SerializeField] private SlotPool.Place _slotPlace;
+        [Header("スロットの設定")]
+        [SerializeField] private SlotSettings _slot;
 
         [Header("登場するシーケンス")]
         [SerializeField] private EnemyManager.Sequence _sequence;
@@ -146,7 +160,7 @@ namespace Enemy.Control
         [Header("特に弄る必要ない設定")]
         [SerializeField] private OtherSettings _other;
 
-        public SlotPool.Place SlotPlace => _slotPlace;
+        public SlotSettings Slot => _slot;
         public int MaxHp => _maxHp;
         public int LifeTime => _lifeTime;
         public MoveSpeedSettings MoveSpeed => _moveSpeed;

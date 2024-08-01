@@ -77,14 +77,26 @@ namespace Enemy.Control.FSM
                 if (plan.Choice == Choice.Chase) _body.Forward(plan.Forward);
             }
 
-            // 別レイヤーにある左右移動のアニメーションを並行して再生できない？
+#if false
+            // 移動した方向ベクトルでアニメーションを制御。
+            // z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
+            float moved = _body.TransformPosition.x - before.x;
+            if (Mathf.Abs(moved) < Mathf.Epsilon)
             {
-                // 移動した方向ベクトルでアニメーションを制御。
-                // z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
-                //bool isRightMove = _body.TransformPosition.x - before.x > 0;
-                //_animation.SetBool(Const.AnimationParam.IsRightMove, isRightMove);
-                //_animation.SetBool(Const.AnimationParam.IsLeftMove, !isRightMove);
+                _animation.SetBool(BodyAnimation.ParamName.IsLeftMove, false);
+                _animation.SetBool(BodyAnimation.ParamName.IsRightMove, false);
             }
+            else if (moved < 0)
+            {
+                _animation.SetBool(BodyAnimation.ParamName.IsLeftMove, false);
+                _animation.SetBool(BodyAnimation.ParamName.IsRightMove, true);
+            }
+            else if (moved > 0)
+            {
+                _animation.SetBool(BodyAnimation.ParamName.IsLeftMove, true);
+                _animation.SetBool(BodyAnimation.ParamName.IsRightMove, false);
+            }
+#endif
         }
     }
 }

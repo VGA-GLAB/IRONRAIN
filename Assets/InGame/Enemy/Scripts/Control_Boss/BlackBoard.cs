@@ -38,8 +38,8 @@ namespace Enemy.Control.Boss
 
         // Perceptionクラスが書き込む。
         // Startでインスタンスが確保、Updateで値が更新され、Disableでnull。
-        public CircleArea Area { get; set; }
-        public CircleArea PlayerArea { get; set; }
+        public Area Area { get; set; }
+        public Area PlayerArea { get; set; }
 
         // Perceptionクラスが書き込む。
         // Updateで値が更新される。

@@ -19,10 +19,7 @@ namespace Enemy.Control.Boss
         [SerializeField] private Collider[] _hitBoxes;
 
         private BossParams _params;
-
-        // 注入する依存関係
-        private Transform _pointP;
-        private Transform _player;
+        private List<FunnelController> _funnels;
         // 自身の状態や周囲を認識して黒板に書き込むPerception層。
         private Perception _perception;
         private FireRate _fireRate;
@@ -36,8 +33,6 @@ namespace Enemy.Control.Boss
         // 各層で値を読み書きする用の黒板。
         private BlackBoard _blackBoard;
 
-        private List<FunnelController> _funnels;
-
         // 非表示にする非同期処理を実行中フラグ。
         // 二重に処理を呼ばないために必要。
         private bool _isCleanupRunning;
@@ -47,26 +42,14 @@ namespace Enemy.Control.Boss
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
-        // Transform2つだとVContainerでエラーが出るので、デバッグ用のクラスで注入している。
-        [Inject]
-        private void Construct(DebugPointP pointP, Transform player)
-        {
-            _pointP = pointP.transform;
-            _player = player;
-        }
-
         private void Awake()
         {
-            // 依存関係をチェック
-            if (_pointP == null || _player == null)
-            {
-                Debug.LogWarning($"依存関係の構築に失敗: PointP:{_pointP}, Player:{_player}");
-            }
-
             _params = GetComponent<BossParams>();
             _blackBoard = new BlackBoard();
             _funnels = new List<FunnelController>();
 
+            Transform player = FindPlayer();
+            DebugPointP pointP = FindAnyObjectByType<DebugPointP>();
             // Animatorが1つしか無い前提。
             Animator animator = GetComponentInChildren<Animator>();
             // ボス装備。
@@ -77,7 +60,7 @@ namespace Enemy.Control.Boss
             Transform rotate = FindRotate();
 
             // Perception
-            _perception = new Perception(transform, _params, _blackBoard, rotate, _player, _pointP, meleeEquip);
+            _perception = new Perception(transform, _params, _blackBoard, rotate, player, pointP, meleeEquip);
             _fireRate = new FireRate(_params, _blackBoard, meleeEquip, rangeEquip);
             _hitPoint = new HitPoint(_params, _blackBoard);
             _overrideOrder = new OverrideOrder(_blackBoard);

@@ -28,9 +28,9 @@ namespace Enemy.Control.Boss
         [SerializeField] private Effect _destroyedEffect;
         [SerializeField] private Effect _trailEffect;
 
+        private Transform _transform;
         private Transform _player;
         private BossController _boss;
-        private Transform _transform;
         private FunnelParams _params;
 
         // ボス本体を基準として展開するので、この値にボス本体の位置を足す。
@@ -44,15 +44,10 @@ namespace Enemy.Control.Boss
         // 現在の体力
         private int _currentHp;
 
-        [Inject]
-        private void Construct(Transform player)
-        {
-            _player = player;
-        }
-
         private void Awake()
         {
             _transform = transform;
+            _player = FindPlayer();
             _params = GetComponent<FunnelParams>();
 
             // メッセージの受信でボス本体を自身に登録。

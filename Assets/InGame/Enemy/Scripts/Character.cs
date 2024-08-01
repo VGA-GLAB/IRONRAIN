@@ -15,5 +15,6 @@ namespace Enemy
     {
         protected Transform FindOffset() => transform.FindChildRecursive("Offset");
         protected Transform FindRotate() => transform.FindChildRecursive("Rotate");
+        protected Transform FindPlayer() => GameObject.FindGameObjectWithTag(Const.PlayerTag).transform;
     }
 }
