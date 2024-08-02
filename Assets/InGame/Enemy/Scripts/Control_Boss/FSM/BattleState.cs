@@ -39,18 +39,18 @@ namespace Enemy.Control.Boss.FSM
             _agentScript = agentScript;
 
             // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimation.StateName.Boss.Idle, AnimationGroup.Idle);
-            Register(BodyAnimation.StateName.Boss.HoldStart, AnimationGroup.Hold);
-            Register(BodyAnimation.StateName.Boss.FireLoop, AnimationGroup.Fire);
-            Register(BodyAnimation.StateName.Boss.BladeStart, AnimationGroup.Blade);
-            Register(BodyAnimation.StateName.Boss.BladeAttack, AnimationGroup.BladeAttack);
+            Register(BodyAnimation.StateName.Boss.Idle, BodyAnimation.Layer.BaseLayer, AnimationGroup.Idle);
+            Register(BodyAnimation.StateName.Boss.HoldStart, BodyAnimation.Layer.BaseLayer, AnimationGroup.Hold);
+            Register(BodyAnimation.StateName.Boss.FireLoop, BodyAnimation.Layer.BaseLayer, AnimationGroup.Fire);
+            Register(BodyAnimation.StateName.Boss.BladeStart, BodyAnimation.Layer.BaseLayer, AnimationGroup.Blade);
+            Register(BodyAnimation.StateName.Boss.BladeAttack, BodyAnimation.Layer.BaseLayer, AnimationGroup.BladeAttack);
 
             // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
             // このメソッドで登録していないアニメーションのステートに遷移した場合、
             // _currentAnimGroupの値が元のままになるので注意。
-            void Register(string stateName, AnimationGroup animGroup)
+            void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
-                _animation.RegisterStateEnterCallback(Key, stateName, () => _currentAnimGroup = animGroup);
+                _animation.RegisterStateEnterCallback(Key, stateName, layerIndex, () => _currentAnimGroup = animGroup);
             }
         }
 

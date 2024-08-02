@@ -25,16 +25,16 @@ namespace Enemy.Control.FSM
             : base(enemyParams, blackBoard, body, animation)
         {
             // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimation.StateName.Shield.Idle, AnimationGroup.Idle);
-            Register(BodyAnimation.StateName.Shield.ShieldStart, AnimationGroup.Shield);
-            Register(BodyAnimation.StateName.Shield.Attack, AnimationGroup.Attack);
+            Register(BodyAnimation.StateName.Shield.Idle, BodyAnimation.Layer.UpperBody, AnimationGroup.Idle);
+            Register(BodyAnimation.StateName.Shield.ShieldStart, BodyAnimation.Layer.UpperBody, AnimationGroup.Shield);
+            Register(BodyAnimation.StateName.Shield.Attack, BodyAnimation.Layer.UpperBody, AnimationGroup.Attack);
 
             // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
             // このメソッドで登録していないアニメーションのステートに遷移した場合、
             // _currentAnimGroupの値が元のままになるので注意。
-            void Register(string stateName, AnimationGroup animGroup)
+            void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
-                _animation.RegisterStateEnterCallback(Key, stateName, () => _currentAnimGroup = animGroup);
+                _animation.RegisterStateEnterCallback(Key, stateName, layerIndex, () => _currentAnimGroup = animGroup);
             }
         }
 

@@ -77,7 +77,7 @@ namespace Enemy.Control.FSM
                 if (plan.Choice == Choice.Chase) _body.Forward(plan.Forward);
             }
 
-#if false
+#if true
             // 移動した方向ベクトルでアニメーションを制御。
             // z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
             float moved = _body.TransformPosition.x - before.x;

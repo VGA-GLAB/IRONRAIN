@@ -86,7 +86,7 @@ namespace Enemy.Control.FSM
             if (stateName == "") return;
 
             // 死亡アニメーションはその瞬間に強制的に遷移させるため、ステートを指定して再生。
-            _animation.Play(stateName);
+            _animation.Play(stateName, BodyAnimation.Layer.BaseLayer);
 
             AudioWrapper.PlaySE("SE_Kill");
 

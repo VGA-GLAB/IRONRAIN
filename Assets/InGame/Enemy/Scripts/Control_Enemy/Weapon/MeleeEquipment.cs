@@ -25,9 +25,7 @@ namespace Enemy.Control
 
         private void Awake()
         {
-            // 敵はオブジェクトの構成が統一されているので名前で取得で十分？
-            _rotate = transform.FindChildRecursive("Rotate");
-
+            _rotate = FindRotate();
             // Animatorが1つだけの前提。
             _animationEvent = GetComponentInChildren<AnimationEvent>();
         }
