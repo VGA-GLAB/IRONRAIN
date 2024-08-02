@@ -21,17 +21,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bgmat_Border
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 4800000, guid: c2b9fa17d34d7a242ba0d02158247370, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _BIAS_VERTEX
+  - _MAPPING_TRIPLANAR
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
@@ -91,27 +92,27 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriNormalTexX:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8fd75f12f4b14d149af0c40f14ff41af, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriNormalTexY:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8fd75f12f4b14d149af0c40f14ff41af, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriNormalTexZ:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8fd75f12f4b14d149af0c40f14ff41af, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriTexX:
-        m_Texture: {fileID: 2800000, guid: 44de285466a7cb5448e792fec5753f2f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5b7556b33030fcf4bbda3beab20cec13, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriTexY:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 5b7556b33030fcf4bbda3beab20cec13, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TriTexZ:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 5b7556b33030fcf4bbda3beab20cec13, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -146,12 +147,12 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Mapping: 0
+    - _Mapping: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlanarWeight: 0.5
+    - _PlanarWeight: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0
@@ -167,6 +168,6 @@ Material:
     - _BaseColor: {r: 0.41922393, g: 0.42295042, b: 0.4339623, a: 1}
     - _Color: {r: 0.4192239, g: 0.4229504, b: 0.43396226, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlanarScaleOffset: {r: 1, g: 1, b: 0, a: 0}
+    - _PlanarScaleOffset: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
