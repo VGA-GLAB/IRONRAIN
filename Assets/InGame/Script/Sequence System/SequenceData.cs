@@ -1,5 +1,5 @@
 using System;
-using Enemy.Control;
+using Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
 
