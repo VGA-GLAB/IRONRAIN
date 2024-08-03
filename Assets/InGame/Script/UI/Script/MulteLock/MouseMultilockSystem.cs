@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enemy.Control;
+using Enemy;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
