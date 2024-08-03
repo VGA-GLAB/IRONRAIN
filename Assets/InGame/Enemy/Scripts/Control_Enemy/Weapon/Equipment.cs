@@ -5,7 +5,7 @@ namespace Enemy.Control
     /// <summary>
     /// 敵の武器の基底クラス
     /// </summary>
-    public class Equipment : MonoBehaviour
+    public class Equipment : Character
     {
         /// <summary>
         /// 最後に攻撃の当たり判定を出したタイミング。

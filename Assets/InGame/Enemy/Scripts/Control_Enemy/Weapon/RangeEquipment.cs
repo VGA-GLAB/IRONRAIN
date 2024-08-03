@@ -2,7 +2,6 @@
 using Enemy.DebugUse;
 using Enemy.Extensions;
 using UnityEngine;
-using VContainer;
 
 namespace Enemy.Control
 {
@@ -29,20 +28,13 @@ namespace Enemy.Control
         [Header("AimModeがTargetの場合")]
         [SerializeField] private Transform _target;
 
-        // 注入する依存関係
         private Transform _player;
-
         private AnimationEvent _animationEvent;
         private IOwnerTime _owner;
 
-        [Inject]
-        private void Construct(Transform player)
-        {
-            _player = player;
-        }
-
         private void Awake()
         {
+            _player = FindPlayer();
             // Animatorが1つだけの前提。
             _animationEvent = GetComponentInChildren<AnimationEvent>();
         }
@@ -103,7 +95,7 @@ namespace Enemy.Control
         private void FireToTarget(Transform target)
         {
             // 射撃中に目標が死亡などでnullになった場合は正面に射撃しておく。
-            if (target == null) Fire(_muzzle.forward);
+            if (target == null) { Fire(_muzzle.forward); return; }
 
             Vector3 dir = (target.position - _muzzle.position).normalized;
             Fire(dir);

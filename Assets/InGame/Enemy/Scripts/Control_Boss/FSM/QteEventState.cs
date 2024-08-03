@@ -114,7 +114,7 @@ namespace Enemy.Control.Boss.FSM
         {
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
             // Attackの状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
-            _animation.Play(BodyAnimation.StateName.Boss.QteSwordSet);
+            _animation.Play(BodyAnimation.StateName.Boss.QteSwordSet, BodyAnimation.Layer.BaseLayer);
 
             // プレイヤーの入力があった場合は、刀を振り下ろす。
             // 現状、構え->攻撃の間に何か入力を挟む仕様が無いのでそのまま再生する。

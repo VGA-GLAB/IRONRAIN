@@ -1,4 +1,6 @@
-﻿namespace Enemy.Control.BT
+﻿using UnityEngine;
+
+namespace Enemy.Control.BT
 {
     /// <summary>
     /// プレイヤーを向く。
@@ -28,8 +30,11 @@
 
         protected override State Stay()
         {
+            Vector3 dir = _blackBoard.TransformToPlayerDirection;
+            dir.y = 0;
+
             // 前方向の値を変更することでプレイヤーの方向を向かせる。
-            _plan.Forward = _blackBoard.TransformToPlayerDirection;
+            _plan.Forward = dir;
             _blackBoard.LookPlans.Enqueue(_plan);
 
             return State.Success;

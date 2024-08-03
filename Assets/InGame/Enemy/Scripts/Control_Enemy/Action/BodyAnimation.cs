@@ -1,4 +1,5 @@
 ﻿using Enemy.Control.FSM;
+using Enemy.Extensions;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
@@ -168,6 +169,13 @@ namespace Enemy.Control
             public const string FinishTrigger = "FinishTrigger";
         }
 
+        // AnimatorControllerのレイヤー
+        public static class Layer
+        {
+            public const int BaseLayer = 0;
+            public const int UpperBody = 1;
+        }
+
         // Animatorの各ステート
         private class State
         {
@@ -176,21 +184,21 @@ namespace Enemy.Control
             // 再生終了時のコールバック
             public UnityAction OnPlayExit;
 
-            public State(string s)
+            public State(string s, int layerIndex)
             {
-                Name = s;
                 Hash = Animator.StringToHash(s);
+                LayerIndex = layerIndex;
                 OnPlayEnter = null;
                 OnPlayExit = null;
             }
 
-            public string Name { get; private set; }
             public int Hash { get; private set; }
+            public int LayerIndex { get; private set; }
         }
 
         private Animator _animator;
         // 文字列の定数値で各ステートを管理する。
-        private Dictionary<string, State> _stateTable;
+        private List<Dictionary<string, State>> _stateTable;
         // コールバックの解除を行うために、登録した匿名関数を保持しておく。
         // 身体側のステート毎に登録解除出来る。
         private Dictionary<StateKey, List<UnityAction>> _callbacks;
@@ -198,7 +206,7 @@ namespace Enemy.Control
         public BodyAnimation(Animator animator)
         {
             _animator = animator;
-            _stateTable = new Dictionary<string, State>();
+            _stateTable = new List<Dictionary<string, State>>();
             _callbacks = new Dictionary<StateKey, List<UnityAction>>();
 
             StateMachineTriggerCallback(_animator.gameObject);
@@ -207,48 +215,87 @@ namespace Enemy.Control
         // コールバックを登録しているステートをトリガー出来るように設定する。
         private void StateMachineTriggerCallback(GameObject owner)
         {
-            foreach (ObservableStateMachineTrigger trigger in _animator.GetBehaviours<ObservableStateMachineTrigger>())
+            // AnimatorControllerにアタッチされている数だけ辞書を作り、レイヤーごとに管理。
+            ObservableStateMachineTrigger[] triggers = _animator.GetBehaviours<ObservableStateMachineTrigger>();
+            for (int i = 0; i < triggers.Length; i++) _stateTable.Add(new Dictionary<string, State>());
+            
+            // レイヤーごとにコールバックを登録。
+            foreach (ObservableStateMachineTrigger t in triggers)
             {
                 // ステート開始のタイミングをトリガー。
-                trigger.OnStateEnterAsObservable().Subscribe(a => OnStateEnter(a.StateInfo)).AddTo(owner);
-
+                t.OnStateEnterAsObservable().Subscribe(a => OnStateEnter(a.StateInfo, a.LayerIndex)).AddTo(owner);
                 // ステート終了のタイミングをトリガー。
-                trigger.OnStateExitAsObservable().Subscribe(a => OnStateExit(a.StateInfo)).AddTo(owner);
+                t.OnStateExitAsObservable().Subscribe(a => OnStateExit(a.StateInfo, a.LayerIndex)).AddTo(owner);
             }
 
-            // ステート開始のコールバックを呼ぶ。
-            void OnStateEnter(AnimatorStateInfo info)
+            // ハッシュ値でどのステートかを判定し、ステート開始のコールバックを呼ぶ。
+            void OnStateEnter(AnimatorStateInfo info, int layerIndex)
             {
-                foreach (KeyValuePair<string, State> p in _stateTable)
+                foreach (KeyValuePair<string, State> p in _stateTable[layerIndex])
                 {
-                    // ハッシュ値でどのステートかを判定してコールバックを呼ぶ。
                     if (p.Value.Hash == info.shortNameHash) { p.Value.OnPlayEnter?.Invoke(); return; }
                 }
             }
 
-            // ステート終了のコールバックを呼ぶ。
-            void OnStateExit(AnimatorStateInfo info)
+            // ハッシュ値でどのステートかを判定し、ステート終了のコールバックを呼ぶ。
+            void OnStateExit(AnimatorStateInfo info, int layerIndex)
             {
-                foreach (KeyValuePair<string, State> p in _stateTable)
+                foreach (KeyValuePair<string, State> p in _stateTable[layerIndex])
                 {
-                    // ハッシュ値でどのステートかを判定してコールバックを呼ぶ。
                     if (p.Value.Hash == info.shortNameHash) { p.Value.OnPlayExit?.Invoke(); return; }
                 }
             }
+
+
+            //foreach (ObservableStateMachineTrigger trigger in )
+            //{
+            //    // ステート開始のタイミングをトリガー。
+            //    trigger.OnStateEnterAsObservable().Subscribe(a => OnStateEnter(a.StateInfo)).AddTo(owner);
+
+            //    // ステート終了のタイミングをトリガー。
+            //    trigger.OnStateExitAsObservable().Subscribe(a => OnStateExit(a.StateInfo)).AddTo(owner);
+
+            //    trigger.OnStateEnterAsObservable().Subscribe(a => M(a.StateInfo, a.LayerIndex)).AddTo(owner);
+            //}
+
+            //void M(AnimatorStateInfo info, int layerIndex)
+            //{
+            //    Debug.Log(info.shortNameHash + "を再生。レイヤーは" + layerIndex);
+            //}
+
+            //// ステート開始のコールバックを呼ぶ。
+            //void OnStateEnter(AnimatorStateInfo info)
+            //{
+            //    foreach (KeyValuePair<string, State> p in _stateTable)
+            //    {
+            //        // ハッシュ値でどのステートかを判定してコールバックを呼ぶ。
+            //        if (p.Value.Hash == info.shortNameHash) { p.Value.OnPlayEnter?.Invoke(); return; }
+            //    }
+            //}
+
+            //// ステート終了のコールバックを呼ぶ。
+            //void OnStateExit(AnimatorStateInfo info)
+            //{
+            //    foreach (KeyValuePair<string, State> p in _stateTable)
+            //    {
+            //        // ハッシュ値でどのステートかを判定してコールバックを呼ぶ。
+            //        if (p.Value.Hash == info.shortNameHash) { p.Value.OnPlayExit?.Invoke(); return; }
+            //    }
+            //}
         }
 
         // 辞書から指定したステートを取得。
         // 登録されていなければ、新しく登録して返す。
-        private State GetState(string stateName)
+        private State GetState(string stateName, int layerIndex)
         {
-            if (_stateTable.TryGetValue(stateName, out State state))
+            if (_stateTable[layerIndex].TryGetValue(stateName, out State state))
             {
                 return state;
             }
             else
             {
-                _stateTable.Add(stateName, new State(stateName));
-                return _stateTable[stateName];
+                _stateTable[layerIndex].Add(stateName, new State(stateName, layerIndex));
+                return _stateTable[layerIndex][stateName];
             }
         }
 
@@ -267,26 +314,26 @@ namespace Enemy.Control
         /// <summary>
         /// ステートを指定してアニメーションを再生。
         /// </summary>
-        public void Play(string stateName)
+        public void Play(string stateName, int layerIndex)
         {
-            _animator.Play(GetState(stateName).Hash);
+            _animator.Play(GetState(stateName, layerIndex).Hash);
         }
 
         /// <summary>
         /// ステート開始時のコールバックを登録。
         /// </summary>
-        public void RegisterStateEnterCallback(StateKey key, string stateName, UnityAction callback)
+        public void RegisterStateEnterCallback(StateKey key, string stateName, int layerIndex, UnityAction callback)
         {
-            GetState(stateName).OnPlayEnter += callback;
+            GetState(stateName, layerIndex).OnPlayEnter += callback;
             AddCallback(key, callback);
         }
 
         /// <summary>
         /// ステート終了時のコールバックを登録。
         /// </summary>
-        public void RegisterStateExitCallback(StateKey key, string stateName, UnityAction callback)
+        public void RegisterStateExitCallback(StateKey key, string stateName, int layerIndex, UnityAction callback)
         {
-            GetState(stateName).OnPlayExit += callback;
+            GetState(stateName, layerIndex).OnPlayExit += callback;
             AddCallback(key, callback);
         }
 
@@ -296,14 +343,17 @@ namespace Enemy.Control
         /// </summary>
         public void ReleaseStateCallback(StateKey key)
         {
-            // どのステートに対してコールバックを登録したかは保持していない。
-            // 全てのステートに対して総当たりで解除を試みる。
-            foreach (State s in _stateTable.Values)
+            foreach (Dictionary<string, State> t in _stateTable)
             {
-                foreach (UnityAction a in _callbacks[key])
+                // どのステートに対してコールバックを登録したかは保持していない。
+                // 全てのステートに対して総当たりで解除を試みる。
+                foreach (State s in t.Values)
                 {
-                    if (s.OnPlayEnter != null) { s.OnPlayEnter -= a; }
-                    if (s.OnPlayExit != null) { s.OnPlayExit -= a; }
+                    foreach (UnityAction a in _callbacks[key])
+                    {
+                        if (s.OnPlayEnter != null) { s.OnPlayEnter -= a; }
+                        if (s.OnPlayExit != null) { s.OnPlayExit -= a; }
+                    }
                 }
             }
         }
@@ -311,33 +361,21 @@ namespace Enemy.Control
         /// <summary>
         /// アニメーションのfloat型パラメータを設定する。
         /// </summary>
-        public void SetFloat(string name, float value)
-        {
-            _animator.SetFloat(name, value);
-        }
+        public void SetFloat(string name, float value) => _animator.SetFloat(name, value);
 
         /// <summary>
         /// アニメーションのbool型パラメータを設定する。
         /// </summary>
-        public void SetBool(string name, bool value)
-        {
-            _animator.SetBool(name, value);
-        }
+        public void SetBool(string name, bool value) => _animator.SetBool(name, value);
 
         /// <summary>
         /// アニメーションのトリガーを設定する。
         /// </summary>
-        public void SetTrigger(string name)
-        {
-            _animator.SetTrigger(name);
-        }
+        public void SetTrigger(string name) => _animator.SetTrigger(name);
 
         /// <summary>
         /// アニメーションのトリガーをリセットする。
         /// </summary>
-        public void ResetTrigger(string name)
-        {
-            _animator.ResetTrigger(name);
-        }
+        public void ResetTrigger(string name) => _animator.ResetTrigger(name);
     }
 }
