@@ -1,8 +1,11 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Oculus.Interaction;
 using System.Collections.Generic;
 using System.Threading;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // 両手の人差し指でパネルを突く前提。
@@ -20,7 +23,15 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField] private float _cursorRadius = 0.015f;
     [SerializeField] private float _targetRadius = 0.03f;
 
+    [Header("マウス用")] 
+    [SerializeField] private bool _isMouseFlag;
+    [SerializeField, Tooltip("Rayのレイヤーマスク")]
+    LayerMask _layerMask;
+    [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
+    private bool _isMouseMultiLock;
+
     private bool _isSelect;
+    
 
     private List<Transform> _targets = new List<Transform>();
     private List<GameObject> _lockOn = new List<GameObject>();
@@ -39,6 +50,17 @@ public class LockOnSystem : MonoBehaviour
         _event.WhenSelect.AddListener(Touch);
     }
 
+    private void Update()
+    {
+        if (!_isMouseFlag)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Touch();
+        }
+    }
+
     private async UniTaskVoid M()
     {
         Debug.Log("マルチロックオン開始");
@@ -53,6 +75,9 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
+        //パネルに触れた時の音
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+
         FingertipCursor(_fingertip, _cursor);
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
@@ -113,6 +138,8 @@ public class LockOnSystem : MonoBehaviour
                         // 新しく追加した場合は、Target同士を結ぶ線を引く。
                         _lineRenderer.positionCount++;
                         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                        //多重ロックオン発動時に流れる音
+                        CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                     }
                 }
             }
@@ -151,14 +178,43 @@ public class LockOnSystem : MonoBehaviour
         //cursor.position = p;
         
         //カーソルに近い方の指の位置を登録する
-        Transform fingerPostion;
-        if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
-            Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
-            fingerPostion = fingertip[0];
+        Vector3 fingerPostion = cursor.position;
+        if (_isMouseFlag)
+        {
+            //Rayを飛ばすスタート位置を決める
+            var rayStartPosition = _rayOrigin.transform.position;
+            var mousePos = Input.mousePosition;
+            mousePos.z = 10f;
+            //マウスでRayを飛ばす方向を決める
+            var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            var direction = (worldMousePos - rayStartPosition).normalized;
+            //Hitしたオブジェクト格納用
+            RaycastHit hit;
+            Debug.DrawRay(rayStartPosition, direction, Color.red);
+            if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
+            {
+                Debug.Log("あたった");
+                fingerPostion.x = hit.point.x;
+                fingerPostion.y = hit.point.y;
+            }
+        }
         else
-            fingerPostion = fingertip[1];
+        {
+            if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
+                Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
+            {
+                fingerPostion.x = fingertip[0].position.x;
+                fingerPostion.y = fingertip[0].position.y;
+            }
+            else
+            {
+                fingerPostion.x = fingertip[1].position.x;
+                fingerPostion.y = fingertip[1].position.y;
+            }
+        }
         
-        cursor.position = fingerPostion.position;
+        
+        cursor.position = fingerPostion;
     }
 
     // カーソルとTargetがパネル上で接触しているかを判定。
