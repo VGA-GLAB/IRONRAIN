@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -30,8 +31,10 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_checkPointCount == _mapObjectsList.Count - 2)
+            return;
         //マップを進める
-        if (_checkPointList[_checkPointCount].position.z >= _playerTransform.position.z)
+        if (_checkPointList[_checkPointCount].position.z <= _playerTransform.position.z)
             ChangeMap();
     }
 
