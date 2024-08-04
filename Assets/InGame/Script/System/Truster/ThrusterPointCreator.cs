@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ˆÄ‚PPoint‚ğ–‘O‚É¶¬
-/// ˆÄ‚Q¶‰E‚Ìƒ|ƒCƒ“ƒg‚ğæ“¾‚·‚é“x‚É¶¬
-/// ˆÄ‚R–‘O‚É”z’u
+/// æ¡ˆï¼‘Pointã‚’äº‹å‰ã«ç”Ÿæˆ
+/// æ¡ˆï¼’å·¦å³ã®ãƒã‚¤ãƒ³ãƒˆã‚’å–å¾—ã™ã‚‹åº¦ã«ç”Ÿæˆ
+/// æ¡ˆï¼“äº‹å‰ã«é…ç½®
 /// </summary>
 public class ThrusterPointContainer : MonoBehaviour
 {
@@ -14,17 +14,14 @@ public class ThrusterPointContainer : MonoBehaviour
     [SerializeField] private Transform _playerObj;
     [SerializeField] private Transform _insPos;
     [SerializeField] private Transform _centerPoint;
-    [Header("¶¬‚·‚éƒIƒuƒWƒFƒNƒg")]
+    [Header("ç”Ÿæˆã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
     [SerializeField]
     private GameObject _createObject;
-    [Header("¶¬‚·‚éƒIƒuƒWƒFƒNƒg‚Ì”")]
+    [Header("ç”Ÿæˆã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ•°")]
     [SerializeField]
     private int _objCount = 40;
-    [Header("”¼Œa")]
-    [SerializeField]
-    private float _radius = 5f;
 
-    [Tooltip("Œ»İ‚Ç‚±‚Ìƒ|ƒCƒ“ƒg‚É‚¢‚é‚©")]
+    [Tooltip("ç¾åœ¨ã©ã“ã®ãƒã‚¤ãƒ³ãƒˆã«ã„ã‚‹ã‹")]
     private int _nowPoint = 0;
 
     void Start()
@@ -33,18 +30,18 @@ public class ThrusterPointContainer : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒXƒ‰ƒXƒ^[ƒ|ƒCƒ“ƒg‚ğ¶¬‚·‚é
+    /// ã‚¹ãƒ©ã‚¹ã‚¿ãƒ¼ãƒã‚¤ãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
     /// </summary>
     private void InsThrusterPoint() 
     {
-        // sin ‚ÌüŠú‚Í 2ƒÎ
+        // sin ã®å‘¨æœŸã¯ 2Ï€
         var oneCycle = 2.0f * Mathf.PI;
-        //’†S“_‚Ü‚Å‚Ì‹——£
+        //ä¸­å¿ƒç‚¹ã¾ã§ã®è·é›¢
         var distance = (_playerObj.transform.position - _centerPoint.position).sqrMagnitude;
 
         for (var i = 0; i < _objCount; ++i)
         {
-            // üŠú‚ÌˆÊ’u (1.0 = 100% ‚Ì 2ƒÎ)
+            // å‘¨æœŸã®ä½ç½® (1.0 = 100% ã®æ™‚ 2Ï€)
             var point = ((float)i / _objCount) * oneCycle;
 
             var x = Mathf.Cos(point) * distance;
@@ -64,7 +61,7 @@ public class ThrusterPointContainer : MonoBehaviour
     }
 
     /// <summary>
-    /// Ÿ‚Ì¶‘¤‚Ìƒ|ƒCƒ“ƒg‚ÉˆÚ“®‚·‚é
+    /// æ¬¡ã®å·¦å´ã®ãƒã‚¤ãƒ³ãƒˆã«ç§»å‹•ã™ã‚‹
     /// </summary>
     public ThrusterPointData NextLeftPoint(float distance) 
     {
@@ -74,7 +71,7 @@ public class ThrusterPointContainer : MonoBehaviour
     }
 
     /// <summary>
-    /// Ÿ‚Ì‰E‘¤‚Ìƒ|ƒCƒ“ƒg‚ÉˆÚ“®‚·‚é
+    /// æ¬¡ã®å³å´ã®ãƒã‚¤ãƒ³ãƒˆã«ç§»å‹•ã™ã‚‹
     /// </summary>
     /// <returns></returns>
     public ThrusterPointData NextRightPoint(float distance) 
@@ -84,7 +81,7 @@ public class ThrusterPointContainer : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ|ƒCƒ“ƒg‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğXV
+    /// ãƒã‚¤ãƒ³ãƒˆã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’æ›´æ–°
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
