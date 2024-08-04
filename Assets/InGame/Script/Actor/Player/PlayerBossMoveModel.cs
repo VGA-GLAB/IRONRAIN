@@ -4,7 +4,6 @@ using System.Threading;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Enemy.Boss;
 
 public class PlayerBossMoveModel : IPlayerStateModel
 {

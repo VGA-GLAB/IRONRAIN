@@ -28,6 +28,8 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
+    [Header("マウス用当たり判定")]
+    [SerializeField, Tooltip("Rayを飛ばす起点")] private float _mouseTargetRadius = 1.0f;
     private bool _isMouseMultiLock;
 
     private bool _isSelect;
@@ -48,6 +50,11 @@ public class LockOnSystem : MonoBehaviour
 
         // タッチパネルに触れて対象をロックオン。
         _event.WhenSelect.AddListener(Touch);
+
+        if (_isMouseFlag)
+        {
+            _targetRadius = _mouseTargetRadius;
+        }
     }
 
     private void Update()
@@ -55,7 +62,7 @@ public class LockOnSystem : MonoBehaviour
         if (!_isMouseFlag)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_isMouseMultiLock)
         {
             Touch();
         }
@@ -111,8 +118,15 @@ public class LockOnSystem : MonoBehaviour
     public async UniTask<List<GameObject>> MultiLockOnAsync(CancellationToken token)
     {
         // パネルを指で突くまで待つ。
-        await UniTask.WaitUntil(() => _isSelect, cancellationToken: token);
-
+        if (_isMouseFlag)
+        {
+            await UniTask.WaitUntil(() => Input.GetMouseButtonDown(0), cancellationToken: token);
+        }
+        else
+        {
+            await UniTask.WaitUntil(() => _isSelect, cancellationToken: token);
+        }
+        
         // Targetの数は実行中に増減するのでマルチロックする直前にリスト化する。
         AllTargets(_targets, _parent);
 
@@ -122,30 +136,65 @@ public class LockOnSystem : MonoBehaviour
         // 線をリセット。
         _lineRenderer.positionCount = 0;
 
+        //マルチロックフラグを立てる
+        _isMouseMultiLock = true;
+        
         // パネルをなぞっている状態。
-        while (_isSelect)
+        if (_isMouseFlag)
         {
-            // カーソルの位置を指先に合わせる。
-            FingertipCursor(_fingertip, _cursor);
-
-            // カーソルと接触しているTargetを一時的に保持。
-            foreach (Transform t in _targets)
+            while (_isMouseMultiLock)
             {
-                if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+                await UniTask.Yield();
+                // カーソルの位置を指先に合わせる。
+                FingertipCursor(_fingertip, _cursor);
+               
+                // カーソルと接触しているTargetを一時的に保持。
+                foreach (Transform t in _targets)
                 {
-                    if (_temp.Add(t))
+                    if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                     {
-                        // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                        _lineRenderer.positionCount++;
-                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
-                        //多重ロックオン発動時に流れる音
-                        CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                        if (_temp.Add(t))
+                        {
+                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
+                            _lineRenderer.positionCount++;
+                            _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                            //多重ロックオン発動時に流れる音
+                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                        }
+                    }
+                }
+
+
+                if (Input.GetMouseButtonUp(0) && _isMouseMultiLock)
+                    _isMouseMultiLock = false;
+            }
+        }
+        else
+        {
+            while (_isSelect)
+            {
+                // カーソルの位置を指先に合わせる。
+                FingertipCursor(_fingertip, _cursor);
+
+                // カーソルと接触しているTargetを一時的に保持。
+                foreach (Transform t in _targets)
+                {
+                    if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+                    {
+                        if (_temp.Add(t))
+                        {
+                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
+                            _lineRenderer.positionCount++;
+                            _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                            //多重ロックオン発動時に流れる音
+                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                        }
                     }
                 }
             }
-
-            await UniTask.Yield();
         }
+        
+        await UniTask.Yield();
 
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         LockOnEnemies(_temp, _lockOn);
