@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Enemy;
-using UnityEngine;
+using Enemy.Control;
 
 namespace IronRain.SequenceSystem
 {
