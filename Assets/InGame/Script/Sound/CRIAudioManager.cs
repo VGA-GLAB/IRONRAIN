@@ -1,4 +1,4 @@
-// 日本語対応
+﻿// 日本語対応
 using CriWare;
 using System;
 using System.Collections.Concurrent;
@@ -276,6 +276,17 @@ public class CriAudioManager
         /// <param name="listener">リスナー</param>
         /// <param name="index">リスナーを変更したい音声のPlay時の戻り値</param>
         public void SetListener(CriAtomListener listener, int index);
+
+        /// <summary>再生音単位でAISACのコントロール値を設定する</summary>
+        /// <param name="playIndex">再生音のインデックス</param>
+        /// <param name="controlId">コントロールID</param>
+        /// <param name="value">コントロール値</param>
+        public void SetAisac(int playIndex, uint controlId, float value);
+
+        /// <summary>プレイヤー単位でAISACのコントロール値を設定する</summary>
+        /// <param name="controlId">コントロールID</param>
+        /// <param name="value">コントロール値</param>
+        public void SetAisacAll(uint controlId, float value);
     }
 
     /// <summary>BGMなどに使用する一つの音のみを出力するチャンネル</summary>
@@ -428,6 +439,19 @@ public class CriAudioManager
 
             _player.Set3dListener(listener.nativeListener);
             _player.Update(_cueData[index].Playback);
+        }
+
+        public void SetAisac(int playIndex, uint controlId, float value)
+        {
+            _player.SetAisacControl(controlId, value);
+            _player.Update(_cueData[playIndex].Playback);
+            Debug.Log($"AISAC Control ID: {controlId}, Value: {value}");
+        }
+
+        public void SetAisacAll(uint controlId, float value)
+        {
+            _player.SetAisacControl(controlId, value);
+            _player.UpdateAll();
         }
     }
 
@@ -590,6 +614,16 @@ public class CriAudioManager
             _listener = listener.nativeListener;
             _player.Set3dListener(_listener);
             _player.Update(_cueData[index].Playback);
+        }
+
+        public void SetAisac(int playIndex, uint controlId, float value)
+        {
+
+        }
+
+        public void SetAisacAll(uint controlId, float value)
+        {
+
         }
     }
 
