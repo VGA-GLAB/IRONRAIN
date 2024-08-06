@@ -207,9 +207,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 626564505}
-        m_TargetAssemblyTypeName: RightHighCircle, Assembly-CSharp
-        m_MethodName: ActiveGauge
+      - m_Target: {fileID: 1633743911}
+        m_TargetAssemblyTypeName: SideBarController, Assembly-CSharp
+        m_MethodName: StartGaugeAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -262,17 +262,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 781722503810592446, guid: 4cbff210d2d19c545b62c22d886abdc4, type: 3}
   m_PrefabInstance: {fileID: 7415349768922160129}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &626564505 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2272912288914396122, guid: 4cbff210d2d19c545b62c22d886abdc4, type: 3}
-  m_PrefabInstance: {fileID: 7415349768922160129}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 640c3865bda1da943943870b5d6aa8ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &730103735
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,17 +479,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &1240822783 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3510639339278276641, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
-  m_PrefabInstance: {fileID: 4672068841746860452}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1243585443 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1588866284114559716, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
@@ -862,27 +840,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1633743910 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1963313795275509231, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
+--- !u!114 &1633743911 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3248324289597160537, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
   m_PrefabInstance: {fileID: 4672068841746860452}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1633743911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633743910}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f28d9cc8685cc7344b3cd5e289554a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animationDuration: 1
-  _gaugeImage: {fileID: 1240822783}
-  _defaultFiillAmount: 0.5
-  _changeAmount: 0.2
 --- !u!1 &1641841139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1047,17 +1015,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SideBar
       objectReference: {fileID: 0}
-    - target: {fileID: 3510639339278276641, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
-      propertyPath: m_FillAmount
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1963313795275509231, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1633743911}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 475d2c551f4dd364c9fe47aa1baab161, type: 3}
 --- !u!1001 &7415349768922160129
 PrefabInstance:
