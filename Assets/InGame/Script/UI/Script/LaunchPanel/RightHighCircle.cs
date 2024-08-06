@@ -31,7 +31,7 @@ public class RightHighCircle : MonoBehaviour
     {
         // DoTweenを使ってゲージのfillAmountをアニメーション
         _gaugeImage.DOFillAmount(_targetFiillAmount, _animationDuration).SetEase(Ease.Linear)
-            .OnUpdate(UpdatePercentageText);
+            .OnUpdate(UpdatePercentageText).SetLink(this.gameObject);
     }
 
     /// <summary>
