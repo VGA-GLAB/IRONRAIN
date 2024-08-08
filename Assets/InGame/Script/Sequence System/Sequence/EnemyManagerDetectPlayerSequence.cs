@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Enemy.Control;
+using Enemy;
 using UnityEngine;
 
 namespace IronRain.SequenceSystem
