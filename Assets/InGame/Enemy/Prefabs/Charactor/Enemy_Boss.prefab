@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 8663796150137645788}
   m_Layer: 0
   m_Name: Enemy_Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,16 +116,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98291b76a2995614980eba86545c6976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _appear:
-    _moveSpeed: 12
-  _battle:
-    _moveSpeed: 12
-    _meleeAttack:
-      _rate: 0.01
-    _rangeAttack:
-      _inputBufferAsset: {fileID: 0}
-      _useInputBuffer: 0
-      _rate: 0.01
+  _moveSpeed:
+    _chase: 50
+  _meleeAttack:
+    _rate: 0.01
+    _triggerRange: 8
+  _rangeAttack:
+    _rate: 0.01
+    _useInputBuffer: 0
+    _inputBufferAsset: {fileID: 0}
+  _other:
+    _approachHomingPower: 0.5
 --- !u!114 &5808456780048057001
 MonoBehaviour:
   m_ObjectHideFlags: 0

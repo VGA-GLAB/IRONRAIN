@@ -1,5 +1,4 @@
-﻿using Enemy.Control;
-using Enemy.Extensions;
+﻿using Enemy.Extensions;
 using System;
 using System.Text;
 using UnityEngine;

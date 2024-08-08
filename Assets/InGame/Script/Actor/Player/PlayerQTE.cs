@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.InputSystem;
 using System.Threading;
 using UniRx;
-using Enemy.Control;
+using Enemy;
 
 public class PlayerQTE : PlayerComponentBase
 {
