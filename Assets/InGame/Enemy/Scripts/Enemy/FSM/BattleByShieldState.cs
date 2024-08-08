@@ -20,9 +20,9 @@
         public BattleByShieldState(StateRequiredRef requiredRef) : base(requiredRef)
         {
             // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
-            Register(BodyAnimationConst.Shield.ShieldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Shield);
-            Register(BodyAnimationConst.Shield.Attack, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Attack);
+            Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Idle);
+            Register(BodyAnimationConst.Shield.ShieldStart, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Shield);
+            Register(BodyAnimationConst.Shield.Attack, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Attack);
 
             // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
             // このメソッドで登録していないアニメーションのステートに遷移した場合、
