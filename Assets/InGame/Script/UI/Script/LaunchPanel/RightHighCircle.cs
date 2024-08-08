@@ -17,7 +17,7 @@ public class RightHighCircle : MonoBehaviour
     private float _targetFiillAmount;
 
     
-    private void Start()
+    private void Awake()
     {
         //ゲージを初期化
         _gaugeImage.fillAmount = 0.0f;

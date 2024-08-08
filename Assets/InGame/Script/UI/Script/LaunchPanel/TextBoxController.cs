@@ -12,7 +12,7 @@ public class TextBoxController : MonoBehaviour
     [Header("表示する文字列")] [TextArea(10, 20),SerializeField] private string _fullText;
     [Header("アニメーションの時間")] private float _typingAnimationTime = 3.0f;
 
-    private void Start()
+    private void Awake()
     {
         _textBox.text = "";
     }

@@ -23,7 +23,7 @@ public class CenterCircleManager : MonoBehaviour
     private int _memoryCount;
     private int _memoryInterval;
 
-    private void Start()
+    private void Awake()
     {
         //文字の初期化
         _percentText.text = "0%";

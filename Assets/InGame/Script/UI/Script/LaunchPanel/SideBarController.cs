@@ -25,7 +25,7 @@ public class SideBarController : MonoBehaviour
     private float _currentValue;
     
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         //ゲージを初期化する
         _gaugeImage.fillAmount = _defaultFiillAmount;
