@@ -1,8 +1,7 @@
-﻿using Enemy.DebugUse;
-using Enemy.Extensions;
+﻿using Enemy.Extensions;
 using UnityEngine;
 
-namespace Enemy.Control
+namespace Enemy.DebugUse
 {
     /// <summary>
     /// デバッグ用のステータスを表示するUI
@@ -13,11 +12,11 @@ namespace Enemy.Control
         private EnemyParams _params;
         private BlackBoard _blackBoard;
 
-        public DebugStatusUI(Transform transform, EnemyParams enemyParams, BlackBoard blackBoard)
+        public DebugStatusUI(RequiredRef requiredRef)
         {
-            _transform = transform;
-            _params = enemyParams;
-            _blackBoard = blackBoard;
+            _transform = requiredRef.Transform;
+            _params = requiredRef.EnemyParams;
+            _blackBoard = requiredRef.BlackBoard;
         }
 
         /// <summary>
