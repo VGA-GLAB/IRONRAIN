@@ -7,6 +7,8 @@ namespace IronRain.SequenceSystem
 {
     public sealed class AddPlayerStateSequence : ISequence
     {
+        [OpenScriptButton(typeof(AddPlayerStateSequence))]
+        [Description("プレイヤーに状態を付与するシーケンスです。\n次のシーケンスに移動するまでの時間と、追加する状態を指定できます。")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("Playerに追加するState"), SerializeField] private PlayerStateType _addState;
 

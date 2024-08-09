@@ -8,6 +8,8 @@ namespace IronRain.SequenceSystem
 {
     public class EnemyManagerDefeatThemAllSequence : ISequence
     {
+        [OpenScriptButton(typeof(EnemyManagerDefeatThemAllSequence))]
+        [Description("指定したシーケンスの敵をすべて破壊するシーケンスです。")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("どのSequenceの敵を破壊するのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
 

@@ -7,6 +7,8 @@ namespace IronRain.SequenceSystem
 {
     public sealed class SoundSequence : ISequence
     {
+        [OpenScriptButton(typeof(SoundSequence))]
+        [Description("CueSheetとCueNameを指定して、音を流すシーケンス")]
         /// <summary>このシーケンス全体の時間</summary>
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         /// <summary>CueSheetName</summary>
