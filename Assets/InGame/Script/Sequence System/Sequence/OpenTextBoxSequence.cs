@@ -9,6 +9,8 @@ namespace IronRain.SequenceSystem
     {
         private TutorialTextBoxController _tutorialText;
 
+        [OpenScriptButton(typeof(OpenTextBoxSequence))]
+        [Description("テキストボックスを開くシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("開く時間(秒)"), SerializeField] private float _openSec = 0F;
         [Header("開くまでに何秒遅らせるか"), SerializeField] private float _delaySec = 0F;

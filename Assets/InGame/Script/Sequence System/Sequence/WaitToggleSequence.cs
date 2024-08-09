@@ -8,6 +8,8 @@ namespace IronRain.SequenceSystem
     [Serializable]
     public sealed class WaitToggleSequence : ISequence
     {
+        [OpenScriptButton(typeof(WaitToggleSequence))]
+        [Description("指定した二つの入力があるまで、つぎのシーケンスへの遷移を待つシーケンス")]
         [Header("どの入力を待つのか"), SerializeField] private InputProvider.InputType _toggleButton1 = InputProvider.InputType.Toggle1;
         [SerializeField] private InputProvider.InputType _toggleButton2 = InputProvider.InputType.Toggle2;
 

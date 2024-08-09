@@ -8,6 +8,8 @@ namespace IronRain.SequenceSystem
 {
     public class EnemyManagerResumeSequence : ISequence
     {
+        [OpenScriptButton(typeof(EnemyManagerResumeSequence))]
+        [Description("ポーズしたシーケンスを、再生するためのシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("どのSequenceの敵をResumeするのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
 

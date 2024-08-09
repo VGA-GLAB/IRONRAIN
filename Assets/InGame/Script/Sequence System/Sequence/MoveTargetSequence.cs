@@ -15,6 +15,8 @@ namespace IronRain.SequenceSystem
             Outside
         }
         
+        [OpenScriptButton(typeof(MoveTargetSequence))]
+        [Description("格納庫内での移動を管理しているシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("この移動にかける時間(秒)"), SerializeField] private float _moveSec = 0F;
         [Header("移動する目標地点"), SerializeField] private MoveTarget _target = MoveTarget.SecondDoor;

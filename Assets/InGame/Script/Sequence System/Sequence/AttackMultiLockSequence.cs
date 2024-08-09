@@ -1,11 +1,15 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
+    [Serializable]
     public sealed class AttackMultiLockSequence : ISequence
     {
+        [OpenScriptButton(typeof(AttackMultiLockSequence))]
+        [Description("マルチロックオンの攻撃処理を行うシーケンス")]
         private PlayerController _playerController;
         
         public void SetData(SequenceData data)
