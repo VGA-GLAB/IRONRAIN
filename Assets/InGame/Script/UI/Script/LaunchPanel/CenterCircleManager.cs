@@ -109,7 +109,7 @@ public class CenterCircleManager : MonoBehaviour
     private void ForwardRotateAnimation(RectTransform rectTransform, float time)
     {
         // 回転アニメーションを無限ループさせる
-        rectTransform.DORotate(new Vector3(0, 0, 360), time, RotateMode.FastBeyond360)
+        rectTransform.DORotate(new Vector3(0, 0, 360), time, RotateMode.LocalAxisAdd)
             .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart).SetLink(rectTransform.gameObject);
     }
@@ -122,7 +122,7 @@ public class CenterCircleManager : MonoBehaviour
     private void ReverseRotateAnimation(RectTransform rectTransform, float time)
     {
         // 回転アニメーションを無限ループさせる
-        rectTransform.DORotate(new Vector3(0, 0, -360), time, RotateMode.FastBeyond360)
+        rectTransform.DORotate(new Vector3(0, 0, -360), time, RotateMode.LocalAxisAdd)
             .SetEase(Ease.Linear)
             .SetLoops(-1, LoopType.Restart).SetLink(rectTransform.gameObject);
     }
