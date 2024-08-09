@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class RocketLauncherWeapon : PlayerWeaponBase
+﻿namespace IronRain.Player
 {
+    public class RocketLauncherWeapon : PlayerWeaponBase
+    {
+    }
 }

@@ -1,15 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
-public class PlayerWeaponController : PlayerComponentBase
+namespace IronRain.Player
 {
-    public PlayerWeaponModel WeaponModel { get; private set; }
-
-    private void Awake()
+    public class PlayerWeaponController : PlayerComponentBase
     {
-        WeaponModel = _playerStateModel as PlayerWeaponModel;
+        public PlayerWeaponModel WeaponModel { get; private set; }
+
+        [SerializeField] private PlayerWeaponView _playerWeaponView; 
+
+        private void Awake()
+        {
+            WeaponModel = _playerStateModel as PlayerWeaponModel;
+            _playerStateView = _playerWeaponView;
+        }
     }
 }

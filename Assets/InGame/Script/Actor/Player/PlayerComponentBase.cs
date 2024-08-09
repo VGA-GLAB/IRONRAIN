@@ -5,41 +5,44 @@ using System.Threading;
 using UnityEngine;
 using System;
 
-public abstract class PlayerComponentBase : MonoBehaviour, IDisposable
+namespace IronRain.Player
 {
-    protected PlayerEnvroment _playerEnvroment;
-    protected PlayerSetting.PlayerParams _playerParams;
-    [SerializeReference, SubclassSelector]
-    protected IPlayerStateModel _playerStateModel;
-    protected IPlayerStateView _playerStateView;
-    protected CancellationToken _rootCancellOnDestroy;
-
-    public void SetUp(PlayerEnvroment playerEnvroment, CancellationToken token) 
+    public abstract class PlayerComponentBase : MonoBehaviour, IDisposable
     {
-        _playerEnvroment = playerEnvroment;
-        _playerParams = _playerEnvroment.PlayerSetting.PlayerParamsData;
-        _rootCancellOnDestroy = token;
-    }
+        protected PlayerEnvroment _playerEnvroment;
+        protected PlayerSetting.PlayerParams _playerParams;
+        [SerializeReference, SubclassSelector]
+        protected IPlayerStateModel _playerStateModel;
+        protected IPlayerStateView _playerStateView;
+        protected CancellationToken _rootCancellOnDestroy;
 
-    protected virtual void Start()
-    {
-        _playerStateView?.SetUp(_playerEnvroment, _rootCancellOnDestroy);
-        _playerStateModel?.SetUp(_playerEnvroment, _rootCancellOnDestroy);
-        _playerStateModel?.Start();
-    }
+        public void SetUp(PlayerEnvroment playerEnvroment, CancellationToken token)
+        {
+            _playerEnvroment = playerEnvroment;
+            _playerParams = _playerEnvroment.PlayerSetting.PlayerParamsData;
+            _rootCancellOnDestroy = token;
+        }
 
-    protected virtual void FixedUpdate() 
-    {
-      _playerStateModel?.FixedUpdate();
-    }
+        protected virtual void Start()
+        {
+            _playerStateView?.SetUp(_playerEnvroment, _rootCancellOnDestroy);
+            _playerStateModel?.SetUp(_playerEnvroment, _rootCancellOnDestroy);
+            _playerStateModel?.Start();
+        }
 
-    protected virtual void Update() 
-    {
-        _playerStateModel?.Update();
-    }
+        protected virtual void FixedUpdate()
+        {
+            _playerStateModel?.FixedUpdate();
+        }
 
-    public virtual void Dispose() 
-    {
-        _playerStateModel?.Dispose();
+        protected virtual void Update()
+        {
+            _playerStateModel?.Update();
+        }
+
+        public virtual void Dispose()
+        {
+            _playerStateModel?.Dispose();
+        }
     }
 }

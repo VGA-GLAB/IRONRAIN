@@ -1,159 +1,162 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 using System;
 
-public class LeverControllerMock : MonoBehaviour
+namespace IronRain.Player
 {
-    /// <summary>ƒRƒ“ƒgƒ[ƒ‰‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü</summary>
-    public Vector3 ControllerDir => _controllerDir;
-    [SerializeField] private InputActionProperty _controllerTriggerInput;
-    [SerializeField] private Transform _handTransfrom;
-    [Header("‘O•û‚ÌŠî€‚Æ‚È‚éƒ[ƒJƒ‹‹óŠÔƒxƒNƒgƒ‹")]
-    [SerializeField] private Vector3 _forward = Vector3.forward;
-    [Header("XŠp“x§ŒÀ")]
-    [SerializeField] private float _xMax, _xMin;
-    [Header("ZŠp“x§ŒÀ")]
-    [SerializeField] private float _zMax, _zMin;
-    [Header("ƒjƒ…[ƒgƒ‰ƒ‹‚Ì”ÍˆÍ")]
-    [SerializeField] private int _neutralRange;
-    [SerializeField] private float _rotateSpeed = 5;
-
-    private PlayerSetting _playerSetting;
-    private Vector3 _controllerRotate = Vector3.zero;
-    private Vector3 _controllerDir;
-    private Vector3 _defaultRotate;
-    private Vector3 _controllerSavePos;
-    private bool _isLeverMove = false;
-
-    void Start()
+    public class LeverControllerMock : MonoBehaviour
     {
-        _defaultRotate = transform.localEulerAngles;
-        //_xRGrabInteractable.firstSelectEntered.AddListener(x => _isLeverMove = true);
-        //_xRGrabInteractable.lastSelectExited.AddListener(x => _isLeverMove = false);
-    }
+        /// <summary>ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘</summary>
+        public Vector3 ControllerDir => _controllerDir;
+        [SerializeField] private InputActionProperty _controllerTriggerInput;
+        [SerializeField] private Transform _handTransfrom;
+        [Header("å‰æ–¹ã®åŸºæº–ã¨ãªã‚‹ãƒ­ãƒ¼ã‚«ãƒ«ç©ºé–“ãƒ™ã‚¯ãƒˆãƒ«")]
+        [SerializeField] private Vector3 _forward = Vector3.forward;
+        [Header("Xè§’åº¦åˆ¶é™")]
+        [SerializeField] private float _xMax, _xMin;
+        [Header("Zè§’åº¦åˆ¶é™")]
+        [SerializeField] private float _zMax, _zMin;
+        [Header("ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ©ãƒ«ã®ç¯„å›²")]
+        [SerializeField] private int _neutralRange;
+        [SerializeField] private float _rotateSpeed = 5;
 
-    void Update()
-    {
-        _isLeverMove = Convert.ToBoolean(_controllerTriggerInput.action.ReadValue<float>());
-        LeverRotate2();
-    }
+        private PlayerSetting _playerSetting;
+        private Vector3 _controllerRotate = Vector3.zero;
+        private Vector3 _controllerDir;
+        private Vector3 _defaultRotate;
+        private Vector3 _controllerSavePos;
+        private bool _isLeverMove = false;
 
-    /// <summary>
-    /// ƒŒƒo[‚Ìƒ[ƒe[ƒVƒ‡ƒ“‚ğ§Œä‚·‚é
-    /// </summary>
-    private void LeverRotate()
-    {
-        if (_isLeverMove)
+        void Start()
         {
-            var dir = _handTransfrom.position - transform.position;
-            // ƒ^[ƒQƒbƒg‚Ì•ûŒü‚Ö‚Ì‰ñ“]
-            //var lookAtRotation = Quaternion.LookRotation(dir, Vector3.up);
-            // ‰ñ“]•â³
-            //var offsetRotation = Quaternion.FromToRotation(_forward, Vector3.forward);
+            _defaultRotate = transform.localEulerAngles;
+            //_xRGrabInteractable.firstSelectEntered.AddListener(x => _isLeverMove = true);
+            //_xRGrabInteractable.lastSelectExited.AddListener(x => _isLeverMove = false);
+        }
 
-            transform.LookAt(_handTransfrom);
-            //transform.rotation = lookAtRotation * offsetRotation;
+        void Update()
+        {
+            _isLeverMove = Convert.ToBoolean(_controllerTriggerInput.action.ReadValue<float>());
+            LeverRotate2();
+        }
 
-            // Debug.Log($"xMax’l:{_xMax}Œ»İ‚ÌX{transform.localEulerAngles.x}”»’è:{_xMax < transform.localEulerAngles.x}");
-
-            //Šp“x§ŒÀ
-            if (_xMax < transform.localEulerAngles.x)
+        /// <summary>
+        /// ãƒ¬ãƒãƒ¼ã®ãƒ­ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ¶å¾¡ã™ã‚‹
+        /// </summary>
+        private void LeverRotate()
+        {
+            if (_isLeverMove)
             {
-                //var rotate = transform.localEulerAngles;
-                //rotate.x = _xMax;
-                //transform.localEulerAngles = rotate;
+                var dir = _handTransfrom.position - transform.position;
+                // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®æ–¹å‘ã¸ã®å›è»¢
+                //var lookAtRotation = Quaternion.LookRotation(dir, Vector3.up);
+                // å›è»¢è£œæ­£
+                //var offsetRotation = Quaternion.FromToRotation(_forward, Vector3.forward);
+
+                transform.LookAt(_handTransfrom);
+                //transform.rotation = lookAtRotation * offsetRotation;
+
+                // Debug.Log($"xMaxå€¤:{_xMax}ç¾åœ¨ã®X{transform.localEulerAngles.x}åˆ¤å®š:{_xMax < transform.localEulerAngles.x}");
+
+                //è§’åº¦åˆ¶é™
+                if (_xMax < transform.localEulerAngles.x)
+                {
+                    //var rotate = transform.localEulerAngles;
+                    //rotate.x = _xMax;
+                    //transform.localEulerAngles = rotate;
+                }
+                if (_xMin > transform.localEulerAngles.x)
+                {
+                    //var rotate = transform.localEulerAngles;
+                    //rotate.x = _xMin;
+                    //transform.localEulerAngles = rotate;
+                }
             }
-            if (_xMin > transform.localEulerAngles.x)
+        }
+
+        /// <summary>
+        /// ãƒ¬ãƒãƒ¼ã®ãƒ­ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ¶å¾¡ã™ã‚‹æ¡ˆãã®ï¼’
+        /// </summary>
+        private void LeverRotate2()
+        {
+            if (_isLeverMove)
             {
-                //var rotate = transform.localEulerAngles;
-                //rotate.x = _xMin;
-                //transform.localEulerAngles = rotate;
+                Vector3 dir = new();
+                //ãƒ¬ãƒãƒ¼åˆ¶å¾¡
+                dir = Anglelimit(_handTransfrom.transform.localPosition - _controllerSavePos);
+
+                var moveRotate = new Vector3(dir.z, 0, dir.x * -1);
+                _controllerRotate += moveRotate * _rotateSpeed;
+                transform.Rotate(moveRotate.x * _rotateSpeed, moveRotate.y, 0);
             }
-        }
-    }
-
-    /// <summary>
-    /// ƒŒƒo[‚Ìƒ[ƒe[ƒVƒ‡ƒ“‚ğ§Œä‚·‚éˆÄ‚»‚Ì‚Q
-    /// </summary>
-    private void LeverRotate2() 
-    {
-        if (_isLeverMove)
-        {
-            Vector3 dir = new();
-            //ƒŒƒo[§Œä
-            dir = Anglelimit(_handTransfrom.transform.localPosition - _controllerSavePos);
-            
-            var moveRotate = new Vector3(dir.z, 0, dir.x * -1);
-            _controllerRotate += moveRotate * _rotateSpeed;
-            transform.Rotate(moveRotate.x * _rotateSpeed, moveRotate.y, 0);
-        }
-        else 
-        {
-            //è‚ğ—£‚µ‚½‚Æ‚«ƒfƒtƒH‚ÌˆÊ’u‚É–ß‚·
-            transform.Rotate(_controllerRotate.x * -1, 0, 0);
-            _controllerRotate = Vector3.zero;
-        }
-        //Y•ûŒü‚Íg‚í‚È‚¢‚Ì‚ÅŒÅ’è
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);
-        SetControllerDir();
-        _controllerSavePos = _handTransfrom.transform.localPosition;
-    }
-
-    /// <summary>
-    /// Šp“x§ŒÀ‚·‚éŠÖ”
-    /// </summary>
-    /// <param name="dir"></param>
-    /// <returns></returns>
-    private Vector3 Anglelimit(Vector3 dir) 
-    {
-        Debug.Log(dir);
-        if (_xMax < _controllerRotate.x + (dir.z * _rotateSpeed)
-            || _xMin > _controllerRotate.x + (dir.z * _rotateSpeed))
-        {
-            dir.z = 0;
+            else
+            {
+                //æ‰‹ã‚’é›¢ã—ãŸã¨ããƒ‡ãƒ•ã‚©ã®ä½ç½®ã«æˆ»ã™
+                transform.Rotate(_controllerRotate.x * -1, 0, 0);
+                _controllerRotate = Vector3.zero;
+            }
+            //Yæ–¹å‘ã¯ä½¿ã‚ãªã„ã®ã§å›ºå®š
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);
+            SetControllerDir();
+            _controllerSavePos = _handTransfrom.transform.localPosition;
         }
 
-        if (_zMax < _controllerRotate.z + (dir.x * -1 * _rotateSpeed)
-            || _zMin > _controllerRotate.z + (dir.x * -1 * _rotateSpeed)) 
+        /// <summary>
+        /// è§’åº¦åˆ¶é™ã™ã‚‹é–¢æ•°
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private Vector3 Anglelimit(Vector3 dir)
         {
-            dir.x = 0;
+            Debug.Log(dir);
+            if (_xMax < _controllerRotate.x + (dir.z * _rotateSpeed)
+                || _xMin > _controllerRotate.x + (dir.z * _rotateSpeed))
+            {
+                dir.z = 0;
+            }
+
+            if (_zMax < _controllerRotate.z + (dir.x * -1 * _rotateSpeed)
+                || _zMin > _controllerRotate.z + (dir.x * -1 * _rotateSpeed))
+            {
+                dir.x = 0;
+            }
+
+            return dir;
         }
 
-        return dir;
-    }
+        /// <summary>
+        /// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+        /// </summary>
+        private void SetControllerDir()
+        {
+            if (_controllerRotate.x > 0 + _neutralRange)
+            {
+                _controllerDir.z = 1;
+            }
+            else if (_controllerRotate.x < -1 - _neutralRange)
+            {
+                _controllerDir.z = -1;
+            }
+            else
+            {
+                _controllerDir.z = 0;
+            }
 
-    /// <summary>
-    /// ƒRƒ“ƒgƒ[ƒ‰‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü‚ğƒZƒbƒg‚·‚é
-    /// </summary>
-    private void SetControllerDir() 
-    {
-        if (_controllerRotate.x > 0 + _neutralRange)
-        {
-            _controllerDir.z = 1;
-        }
-        else if (_controllerRotate.x < -1 - _neutralRange)
-        {
-            _controllerDir.z = -1;
-        }
-        else 
-        {
-            _controllerDir.z = 0;
-        }
-
-        if (_controllerRotate.x  > 0 + _neutralRange)
-        {
-            _controllerDir.x = 1;
-        }
-        else if (_controllerRotate.x < -1 - _neutralRange)
-        {
-            _controllerDir.x = -1;
-        }
-        else 
-        {
-            _controllerDir.x = 0;
+            if (_controllerRotate.x > 0 + _neutralRange)
+            {
+                _controllerDir.x = 1;
+            }
+            else if (_controllerRotate.x < -1 - _neutralRange)
+            {
+                _controllerDir.x = -1;
+            }
+            else
+            {
+                _controllerDir.x = 0;
+            }
         }
     }
 }
