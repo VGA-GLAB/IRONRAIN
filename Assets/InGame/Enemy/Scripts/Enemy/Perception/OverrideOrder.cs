@@ -39,6 +39,8 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
+            if (_blackBoard.CurrentState == FSM.StateKey.Delete) return;
+
             while (_buffer.Count > 0)
             {
                 EnemyOrder order = _buffer.Dequeue();

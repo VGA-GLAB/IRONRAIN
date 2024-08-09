@@ -18,6 +18,8 @@ namespace Enemy.FSM
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Approach;
+
             // 生成位置へワープする。
             if(_blackBoard.SpawnPoint != null)
             {

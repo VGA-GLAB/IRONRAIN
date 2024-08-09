@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Enemy.FSM;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy
@@ -27,6 +28,9 @@ namespace Enemy
 
         // 生成後、画面に表示させる際の位置。
         public Vector3? SpawnPoint { get; set; }
+
+        // 現在実行中のステート。Action層が書き込む。
+        public StateKey CurrentState { get; set; }
 
         // スロットの方向
         public Vector3 SlotDirection { get; set; }

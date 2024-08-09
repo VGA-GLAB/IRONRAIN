@@ -30,6 +30,8 @@
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Broken;
+
             _isPlaying = false;
             _exitElapsed = 0;
             

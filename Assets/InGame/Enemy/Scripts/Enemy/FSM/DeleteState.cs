@@ -16,6 +16,7 @@
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Delete;
             _blackBoard.IsCleanupReady = true;
 
             _body.ModelEnable(false);

@@ -36,7 +36,9 @@ namespace Enemy.Boss
 
             _states = stateRequiredRef.States;
             _states.Add(StateKey.Appear, new AppearState(stateRequiredRef));
-            _states.Add(StateKey.Battle, new BattleState(stateRequiredRef));
+            _states.Add(StateKey.Idle, new IdleState(stateRequiredRef));
+            _states.Add(StateKey.BladeAttack, new BladeAttackState(stateRequiredRef));
+            _states.Add(StateKey.LauncherFire, new LauncherFireState(stateRequiredRef));
             _states.Add(StateKey.QteEvent, new QteEventState(stateRequiredRef));
             _states.Add(StateKey.Hide, new HideState(stateRequiredRef));
 

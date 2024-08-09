@@ -106,8 +106,6 @@ namespace Enemy
             }
         }
 
-        // Updateのタイミングで視界に捉えたもの一覧を黒板に書き込み、LateUpdateでフレームを跨ぐ前に消す。
-        // このタイミングで書き込んだ内容を消しているので、ギズモへの描画が難しい。
         private void LateUpdate()
         {
             _eyeSensor.ClearCaptureTargets();
@@ -127,8 +125,7 @@ namespace Enemy
 
         private void OnDestroy()
         {
-            // 登録解除は死亡したタイミングではなく、ゲームが終了するタイミングになっている。
-            // 死亡した敵かの判定が出来るようにするため。
+            // 死亡した敵かの判定が出来るようにするため、ゲームが終了するタイミングで登録解除。
             EnemyManager.Release(this);
 
             _perception.Dispose();
@@ -145,11 +142,7 @@ namespace Enemy
         /// <summary>
         /// 外部から敵の行動を制御する。
         /// </summary>
-        public void Order(EnemyOrder order)
-        {
-            // Updateが呼ばれない状態ではバッファの命令を削除しないので弾く。
-            if (gameObject.activeSelf) _overrideOrder.Buffer(order);
-        }
+        public void Order(EnemyOrder order) => _overrideOrder.Buffer(order);
 
         /// <summary>
         /// 攻撃させる。

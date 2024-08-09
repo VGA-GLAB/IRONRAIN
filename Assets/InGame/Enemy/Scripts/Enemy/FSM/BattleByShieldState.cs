@@ -29,12 +29,13 @@
             // _currentAnimGroupの値が元のままになるので注意。
             void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
-                _animation.RegisterStateEnterCallback(StateKey.Battle, stateName, layerIndex, () => _currentAnimGroup = animGroup);
+                _animation.RegisterStateEnterCallback(nameof(BattleByLauncherState), stateName, layerIndex, () => _currentAnimGroup = animGroup);
             }
         }
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Battle;
         }
 
         protected override void Exit()
@@ -60,7 +61,7 @@
         public override void Dispose()
         {
             // コールバックの登録解除。
-            _animation.ReleaseStateCallback(StateKey.Battle);
+            _animation.ReleaseStateCallback(nameof(BattleByLauncherState));
         }
 
         // アニメーションがアイドル状態

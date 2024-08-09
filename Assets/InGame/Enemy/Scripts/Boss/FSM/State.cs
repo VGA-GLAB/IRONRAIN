@@ -10,10 +10,12 @@ namespace Enemy.Boss.FSM
     {
         Base,
         Appear,
-        Battle,
+        Idle,
         Hide,
         QteEvent,
         Delete,
+        BladeAttack,
+        LauncherFire,
     }
 
     /// <summary>

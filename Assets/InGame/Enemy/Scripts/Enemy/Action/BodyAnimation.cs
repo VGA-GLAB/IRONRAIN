@@ -1,4 +1,5 @@
 ﻿using Enemy.FSM;
+using System;
 using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
@@ -39,7 +40,7 @@ namespace Enemy
         private List<Dictionary<string, State>> _stateTable;
         // コールバックの解除を行うために、登録した匿名関数を保持しておく。
         // 身体側のステート毎に登録解除出来る。
-        private Dictionary<StateKey, List<UnityAction>> _callbacks;
+        private Dictionary<string, List<UnityAction>> _callbacks;
 
         public BodyAnimation(RequiredRef requiredRef)
         {
@@ -57,7 +58,7 @@ namespace Enemy
         private void StateMachineTriggerCallback(GameObject owner)
         {
             _stateTable = new List<Dictionary<string, State>>();
-            _callbacks = new Dictionary<StateKey, List<UnityAction>>();
+            _callbacks = new Dictionary<string, List<UnityAction>>();
 
             // AnimatorControllerにアタッチされている数だけ辞書を作り、レイヤーごとに管理。
             ObservableStateMachineTrigger[] triggers = _animator.GetBehaviours<ObservableStateMachineTrigger>();
@@ -108,7 +109,7 @@ namespace Enemy
 
         // コールバックを身体側のステート毎に保持しておき、一括で登録解除できるようにする。
         // ステートマシンの破棄時に身体側のステートごとに一括解除するため、EnterかExitかの区別はしない。
-        private void AddCallback(StateKey key, UnityAction callback)
+        private void AddCallback(string key, UnityAction callback)
         {
             if (!_callbacks.ContainsKey(key))
             {
@@ -129,7 +130,7 @@ namespace Enemy
         /// <summary>
         /// ステート開始時のコールバックを登録。
         /// </summary>
-        public void RegisterStateEnterCallback(StateKey key, string stateName, int layerIndex, UnityAction callback)
+        public void RegisterStateEnterCallback(string key, string stateName, int layerIndex, UnityAction callback)
         {
             GetState(stateName, layerIndex).OnPlayEnter += callback;
             AddCallback(key, callback);
@@ -138,7 +139,7 @@ namespace Enemy
         /// <summary>
         /// ステート終了時のコールバックを登録。
         /// </summary>
-        public void RegisterStateExitCallback(StateKey key, string stateName, int layerIndex, UnityAction callback)
+        public void RegisterStateExitCallback(string key, string stateName, int layerIndex, UnityAction callback)
         {
             GetState(stateName, layerIndex).OnPlayExit += callback;
             AddCallback(key, callback);
@@ -148,7 +149,7 @@ namespace Enemy
         /// ステートの遷移に登録したコールバックを解除する。
         /// EnterとExitの区別はせず、身体側のステート毎に一括で解除する。
         /// </summary>
-        public void ReleaseStateCallback(StateKey key)
+        public void ReleaseStateCallback(string key)
         {
             foreach (Dictionary<string, State> t in _stateTable)
             {
