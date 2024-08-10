@@ -7,13 +7,38 @@ namespace IronRain.SequenceSystem
 {
     public class SequencePlayer : MonoBehaviour
     {
+        private enum Sequence
+        {
+            PrepareStartSequence,
+            StartUpSequence,
+            PrepareSortieSequence,
+            SortieSequence,
+            FirstAnnounceSequence,
+            AvoidSequence,
+            AttackSequence,
+            TouchPanelSequence,
+            QTETutorialSequence,
+            MultiBattleSequence,
+            PurgeSequence,
+            FallSequence,
+            BossStartSequence,
+            FirstFunnelSequence,
+            ToggleButtonSequence,
+            SecondFunnelSequence,
+            BossAgainSequence,
+            BreakLeftArmSequence,
+            FirstBossQTESequence,
+            SecondQTESequence,
+            BossEndSequence
+        }
+        
         public ISequence CurrentSequence => _currentSequence;
 
         [SerializeField] private SequenceManager _manager;
         [SerializeField] private bool _playOnStart = true;
         [Header("スキップ機能")]
         [SerializeField] private bool _isSkip = false;
-        [SerializeField] private int _startIndex;
+        [SerializeField] private Sequence _startSequence;
 
         private ISequence[] _sequences;
         private ISequence _currentSequence;
@@ -34,13 +59,31 @@ namespace IronRain.SequenceSystem
         {
             var sequences = _manager.GetSequences();
 
+            // スキップする際にそのSequenceがあるか、そしてそのSequenceのインデックスを取得する
+            int startIndex = 0;
+
+            foreach (var seq in sequences)
+            {
+                if (seq is SequenceGroup group && group.GroupName == _startSequence.ToString())
+                {
+                    break;
+                }
+
+                startIndex++;
+            }
+
+            if (startIndex >= sequences.Length)
+            {
+                startIndex = 0;
+            }
+            
             for (int i = 0; i < sequences.Length; i++)
             {
                 _currentSequence = sequences[i];
                 
                 try
                 {
-                    if (_isSkip && i < _startIndex)
+                    if (_isSkip && i < startIndex)
                     {
                         _currentSequence.Skip();
                     }

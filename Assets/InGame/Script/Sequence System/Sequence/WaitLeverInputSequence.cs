@@ -13,8 +13,7 @@ namespace IronRain.SequenceSystem
         {
             await UniTask.WaitUntil(() =>
                 InputProvider.Instance.LeftLeverDir != Vector3.zero ||
-                InputProvider.Instance.RightLeverDir != Vector3.zero ||
-                UnityEngine.InputSystem.Keyboard.current.spaceKey.isPressed, cancellationToken: ct);
+                InputProvider.Instance.RightLeverDir != Vector3.zero);
         }
 
         public void Skip() { }

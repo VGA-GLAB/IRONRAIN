@@ -8,6 +8,8 @@ namespace IronRain.SequenceSystem
 {
     public class LoadSceneSequence : ISequence
     {
+        [OpenScriptButton(typeof(LoadSceneSequence))]
+        [Description("次のシーンを読み込むためのシーケンス")]
         [Header("読み込むシーンの名前"), SerializeField] private string _loadSceneName;
         
         public void SetData(SequenceData data)

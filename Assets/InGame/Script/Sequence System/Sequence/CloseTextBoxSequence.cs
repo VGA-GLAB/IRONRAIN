@@ -7,6 +7,8 @@ namespace IronRain.SequenceSystem
 {
     public class CloseTextBoxSequence : ISequence
     {
+        [OpenScriptButton(typeof(CloseTextBoxSequence))]
+        [Description("テキストボックスを閉じるためのシーケンスです。")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0f;
         [Header("テキストボックスを閉じる時間(秒)"), SerializeField] private float _closeDuration = 1F;
 

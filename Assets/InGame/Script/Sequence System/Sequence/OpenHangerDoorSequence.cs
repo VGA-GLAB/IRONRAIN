@@ -15,6 +15,8 @@ namespace IronRain.SequenceSystem
             Second
         }
         
+        [OpenScriptButton(typeof(OpenHangerDoorSequence))]
+        [Description("格納庫のドアを開けるシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("どのドアを開けるか"), SerializeField] private TargetDoor _targetDoor;
         

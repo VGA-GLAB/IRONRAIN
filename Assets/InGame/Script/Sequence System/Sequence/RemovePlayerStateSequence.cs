@@ -8,8 +8,10 @@ namespace IronRain.SequenceSystem
 {
     public sealed class RemovePlayerStateSequence : ISequence
     {
+        [OpenScriptButton(typeof(RemovePlayerStateSequence))]
+        [Description("プレイヤーの状態を解除するシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
-        [Header("削除するPlayerのState"), SerializeField] private PlayerStateType _removeState;
+        [Header("解除するPlayerのState"), SerializeField] private PlayerStateType _removeState;
 
         private PlayerController _playerController;
 
