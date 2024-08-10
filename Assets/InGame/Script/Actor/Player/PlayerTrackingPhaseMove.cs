@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class PlayerTrackingPhaseMove : PlayerComponentBase
+namespace IronRain.Player
 {
-    public PlayerTrackingPhaseMoveModel MoveModel { get; private set; }
-
-    private void Awake()
+    public class PlayerTrackingPhaseMove : PlayerComponentBase
     {
-        MoveModel = _playerStateModel as PlayerTrackingPhaseMoveModel;
+        public PlayerTrackingPhaseMoveModel MoveModel { get; private set; }
+
+        private void Awake()
+        {
+            MoveModel = _playerStateModel as PlayerTrackingPhaseMoveModel;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using IronRain.Player;
 
 public class MultilockSystem : MonoBehaviour
 {

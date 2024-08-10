@@ -2,6 +2,7 @@
 using Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
+using IronRain.Player;
 
 namespace IronRain.SequenceSystem
 {

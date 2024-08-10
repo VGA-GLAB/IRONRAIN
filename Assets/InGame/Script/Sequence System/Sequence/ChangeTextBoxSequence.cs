@@ -9,6 +9,8 @@ namespace IronRain.SequenceSystem
     {
         private TutorialTextBoxController _textBox;
         
+        [OpenScriptButton(typeof(ChangeTextBoxSequence))]
+        [Description("テキストボックスに文字を表示させるシーケンスです。")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("文字を更新する前に文字を消すか"), SerializeField] private bool _clearText = true;
         [Header("Text"), SerializeField, TextArea] private string _text = "";

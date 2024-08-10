@@ -9,6 +9,8 @@ namespace IronRain.SequenceSystem
     [Serializable]
     public sealed class OpenMonitorSequence : ISequence
     {
+        [OpenScriptButton(typeof(OpenMonitorSequence))]
+        [Description("コックピットの外を映すモニターを起動するシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("モニターが開く時間(秒)"), SerializeField] private float _monitorOpenSec = 1F;
 

@@ -8,6 +8,8 @@ namespace IronRain.SequenceSystem
 {
     public class TutorialEnemyPauseSequence : ISequence
     {
+        [OpenScriptButton(typeof(TutorialEnemyPauseSequence))]
+        [Description("攻撃を回避するチュートリアルで、敵を一時停止させるシーケンス")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         private EnemyController _tutorialEnemy;
 

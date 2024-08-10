@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class PlayerBossMove : PlayerComponentBase
+namespace IronRain.Player
 {
-    public PlayerBossMoveModel MoveModel { get; private set; }
-
-    private void Awake()
+    public class PlayerBossMove : PlayerComponentBase
     {
-        MoveModel = _playerStateModel as PlayerBossMoveModel;
-    }
+        public PlayerBossMoveModel MoveModel { get; private set; }
 
-    private void OnEnable()
-    {
-        MoveModel.ResetPos();
+        private void Awake()
+        {
+            MoveModel = _playerStateModel as PlayerBossMoveModel;
+        }
+
+        private void OnEnable()
+        {
+            MoveModel.ResetPos();
+        }
     }
 }
