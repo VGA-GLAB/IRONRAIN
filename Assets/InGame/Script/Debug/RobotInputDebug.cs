@@ -1,8 +1,7 @@
 ﻿using IronRain.SequenceSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using IronRain.Player;
 
 public class RobotInputDebug : MonoBehaviour
 {

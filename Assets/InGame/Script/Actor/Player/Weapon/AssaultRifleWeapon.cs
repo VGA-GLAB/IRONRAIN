@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class AssaultRifleWeapon : PlayerWeaponBase
+﻿namespace IronRain.Player
 {
-    
-    
+    public class AssaultRifleWeapon : PlayerWeaponBase
+    {
+
+
+    }
 }

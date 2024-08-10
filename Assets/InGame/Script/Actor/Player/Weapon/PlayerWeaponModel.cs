@@ -3,82 +3,97 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cysharp.Threading.Tasks;
 
-public class PlayerWeaponModel : IPlayerStateModel
+namespace IronRain.Player
 {
-    public PlayerWeaponBase CurrentWeapon => _playerWeaponList[_currentWeaponIndex];
-
-    [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
-
-    private bool _isWeaponChenge;
-    private bool _isShot;
-    //0始まり
-    private int _currentWeaponIndex;
-    private PlayerEnvroment _playerEnvroment;
-    private CancellationToken _rootCancellOnDestroy;
-
-    public void SetUp(PlayerEnvroment env, CancellationToken token)
+    public class PlayerWeaponModel : IPlayerStateModel
     {
-        _playerEnvroment = env;
-        _rootCancellOnDestroy = token;
-    }
+        public PlayerWeaponBase CurrentWeapon => _playerWeaponList[_currentWeaponIndex];
 
-    public void Start()
-    {
-        InputProvider.Instance.SetEnterInput(InputProvider.InputType.WeaponChenge, WeaponChenge);
-        for (int i = 0; i < _playerWeaponList.Count; i++)
+        [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
+
+        private bool _isWeaponChenge;
+        private bool _isShot;
+        //0始まり
+        private int _currentWeaponIndex;
+        private PlayerEnvroment _playerEnvroment;
+        private CancellationToken _rootCancellOnDestroy;
+
+        public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
-            _playerWeaponList[i].SetUp(_playerEnvroment);
+            _playerEnvroment = env;
+            _rootCancellOnDestroy = token;
         }
-    }
 
-    public void FixedUpdate()
-    {
-
-    }
-
-    public void Update()
-    {
-        Shot();
-    }
-
-    /// <summary>
-    /// 武器切り替え
-    /// </summary>
-    private void WeaponChenge()
-    {
-        if (_currentWeaponIndex + 1 < _playerWeaponList.Count)
+        public void Start()
         {
-            _currentWeaponIndex++;
+            InputProvider.Instance.SetEnterInputAsync(InputProvider.InputType.WeaponChenge, WeaponChenge);
+            for (int i = 0; i < _playerWeaponList.Count; i++)
+            {
+                _playerWeaponList[i].SetUp(_playerEnvroment);
+            }
         }
-        else
+
+        public void FixedUpdate()
         {
-            _currentWeaponIndex = 0;
+
         }
-        CriAudioManager.Instance.SE.Play("SE", "Change");
-    }
 
-    private void Shot()
-    {
-        _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton);
-        if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
-            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
-            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
-            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonAttack)
-            || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
-            || !_isShot) return;
-        
-        _playerWeaponList[_currentWeaponIndex].Shot();
-    }
+        public void Update()
+        {
+            Shot();
+        }
 
-    public void MulchShot() 
-    {
-        _playerWeaponList[_currentWeaponIndex].MulchShot();
-    }
+        /// <summary>
+        /// 武器切り替え
+        /// </summary>
+        private async UniTaskVoid WeaponChenge()
+        {
+            if (_playerWeaponList[_currentWeaponIndex].WeaponParam.WeaponType
+                == PlayerWeaponType.AssaultRifle)
+            {
+                await _playerEnvroment.PlayerAnimation.PlayerAssaultDusarm();
+            }
+            else
+            {
+                await _playerEnvroment.PlayerAnimation.PlayerRocketDisarm();
+            }
 
 
-    public void Dispose()
-    {
+            if (_currentWeaponIndex + 1 < _playerWeaponList.Count)
+            {
+                _currentWeaponIndex++;
+            }
+            else
+            {
+                _currentWeaponIndex = 0;
+            }
+            CriAudioManager.Instance.SE.Play("SE", "Change");
+        }
 
+        private void Shot()
+        {
+            _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton);
+            if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.SwitchingArms)
+                || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.RepairMode)
+                || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE)
+                || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonAttack)
+                || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
+                || !_isShot) return;
+
+            _playerWeaponList[_currentWeaponIndex].Shot();
+        }
+
+        public void MulchShot()
+        {
+            _playerWeaponList[_currentWeaponIndex].MulchShot();
+        }
+
+
+        public void Dispose()
+        {
+
+        }
     }
 }

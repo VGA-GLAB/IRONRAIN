@@ -1,13 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
 
-public interface IPlayerState: IDisposable
+namespace IronRain.Player
 {
-    public IPlayerStateModel PlayerStateModel { get;}
-    public IPlayerStateView PlayerStateView { get; }
+    public interface IPlayerState : IDisposable
+    {
+        public IPlayerStateModel PlayerStateModel { get; }
+        public IPlayerStateView PlayerStateView { get; }
 
-    public void SetUp(PlayerEnvroment env, CancellationToken token);
+        public void SetUp(PlayerEnvroment env, CancellationToken token);
+    }
 }
