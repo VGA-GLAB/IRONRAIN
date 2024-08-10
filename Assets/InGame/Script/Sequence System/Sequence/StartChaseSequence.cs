@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using IronRain.Player;
 
 namespace IronRain.SequenceSystem
 {
