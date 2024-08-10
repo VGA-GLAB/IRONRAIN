@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cysharp.Threading.Tasks;
 
 namespace IronRain.Player
 {
@@ -77,7 +78,7 @@ namespace IronRain.Player
 
             if (_currentBullets == 0)
             {
-                Reload();
+                Reload().Forget();
             }
         }
 
@@ -103,10 +104,11 @@ namespace IronRain.Player
         /// <summary>
         /// リロードの処理
         /// </summary>
-        protected virtual void Reload()
+        protected virtual async UniTask Reload()
         {
             _isReload = true;
             //アニメーション挟む
+            await UniTask.WaitForSeconds(_params.ReloadTime,false,PlayerLoopTiming.Update, this.GetCancellationTokenOnDestroy());
             _currentBullets = _params.MagazineSize;
             _isReload = false;
         }

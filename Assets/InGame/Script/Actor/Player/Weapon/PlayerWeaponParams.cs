@@ -12,6 +12,7 @@ namespace IronRain.Player
         public float ShotRate => _shotRate;
         public int MagazineSize => _magazineSize;
         public int ShotDamage => _shotDamege;
+        public float ReloadTime => _reloadTime;
 
         [Header("===武器の基本設定===")]
         [Header("武器の名前")]
@@ -24,5 +25,7 @@ namespace IronRain.Player
         [SerializeField] protected int _magazineSize;
         [Header("与えるダメージ量")]
         [SerializeField] protected int _shotDamege;
+        [Header("リロード時間")]
+        [SerializeField] protected float _reloadTime;
     }
 }
