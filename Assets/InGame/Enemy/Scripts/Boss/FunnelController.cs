@@ -7,12 +7,11 @@ namespace Enemy.Boss
     [RequireComponent(typeof(FunnelParams))]
     public class FunnelController : Character, IDamageable
     {
-        enum State
-        {
-            Unexpanded, // 未展開(デフォルト)
-            Expanded,   // 展開中
-            Defeated,   // 撃破された
-        }
+        // 状態
+        enum State { Unexpanded, Expanded, Defeated }
+
+        // 展開後の動作方法
+        enum Mode { Default, Right, Lfet }
 
         [SerializeField] private Transform _model;
         [SerializeField] private Transform _muzzle;
@@ -23,6 +22,7 @@ namespace Enemy.Boss
         [Header("弾のばらけ具合")]
 
         private Transform _transform;
+        private Transform _offset;
         private Transform _rotate;
         private Transform _player;
         private BossController _boss;
@@ -42,6 +42,7 @@ namespace Enemy.Boss
         private void Awake()
         {
             _transform = transform;
+            _offset = FindOffset();
             _rotate = FindRotate();
             _player = FindPlayer();
             _params = GetComponent<FunnelParams>();
@@ -127,17 +128,19 @@ namespace Enemy.Boss
         // ボスの周囲を浮遊するような動き。
         private void Move()
         {
+            const float Speed = 10.0f;
+
             Vector3 expandedPoint = _boss.transform.position + _expandOffset;
             Vector3 dir = expandedPoint - _transform.position;
-
-            if (dir.sqrMagnitude > 0.2f)
+            Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * Speed;
+            if (velo.sqrMagnitude <= dir.sqrMagnitude)
             {
-                _velocity += dir.normalized;
-                _velocity = Vector3.ClampMagnitude(_velocity, 33.0f);
+                _transform.position += velo;
             }
-
-            // 速度で移動。
-            _transform.position += _velocity * _boss.BlackBoard.PausableDeltaTime;
+            else
+            {
+                _transform.position = expandedPoint;
+            }
         }
 
         // プレイヤーを向く。
