@@ -26,8 +26,9 @@ public class CriAudioManager
     private CriAudioManager()
     {
         _masterVolume = new Volume();
-        _bgm = new CriSingleChannel(_masterVolume);
-        _se = new CriMultiChannel(_masterVolume);
+        _bgm = new (_masterVolume);
+        _se = new (_masterVolume);
+        _voice = new(_masterVolume);
     }
 
     /// <summary>マスターのボリューム</summary>
@@ -39,6 +40,9 @@ public class CriAudioManager
     /// <summary>SEを流すチャンネル</summary>
     private CriMultiChannel _se = default;
 
+    /// <summary>Voiceを流すチャンネル</summary>
+    private CriSingleChannel _voice = default;
+
     /// <summary>マスターボリューム</summary>
     public IVolume MasterVolume => _masterVolume;
 
@@ -47,6 +51,9 @@ public class CriAudioManager
 
     /// <summary>SEのチャンネル</summary>
     public ICustomChannel SE => _se;
+    
+    /// <summary>Voiceのチャンネル</summary>
+    public ICustomChannel Voice => _voice;
 
     /// <summary>SEのPlayerとPlayback</summary>
     private struct CriPlayerData
