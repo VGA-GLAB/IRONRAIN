@@ -18,6 +18,8 @@ namespace Enemy.Boss.FSM
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Idle;
+
             if (_agentScript != null) _agentScript.EnemyGenerate();
         }
 
