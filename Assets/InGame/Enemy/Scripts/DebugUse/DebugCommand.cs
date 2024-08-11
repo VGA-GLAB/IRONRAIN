@@ -7,8 +7,6 @@ namespace Enemy.DebugUse
 {
     public class DebugCommand : MonoBehaviour
     {
-        [Header("コマンドで敵やNPCに命令する")]
-        [SerializeField] private EnemyManager _enemyManager;
         [Header("コマンドラインの設定")]
         [SerializeField] private int _commandFontSize = 30;
         [Header("ボタンの設定")]
@@ -17,6 +15,7 @@ namespace Enemy.DebugUse
         [SerializeField] private float _buttonWidth = 300;
         [SerializeField] private float _buttonHeight = 70;
 
+        private EnemyManager _enemyManager;
         private GUIStyle _style = new GUIStyle();
         private GUIStyleState _state = new GUIStyleState();
         private StringBuilder _command = new StringBuilder();
@@ -26,6 +25,7 @@ namespace Enemy.DebugUse
 
         private void Awake()
         {
+            _enemyManager = GetComponent<EnemyManager>();
             _style.fontSize = _commandFontSize;
             _state.textColor = Color.green;
             _style.normal = _state;
@@ -87,6 +87,7 @@ namespace Enemy.DebugUse
             {
                 RunCommand();
                 _command.Clear();
+                _isEnable = false;
 
             }
         }
@@ -231,9 +232,9 @@ namespace Enemy.DebugUse
         // シーケンス再生のボタン
         private void SequenceEventButton(float x, float y, float w, float h)
         {
-            if (GUI.Button(new Rect(x, y, w, h), "AttackSeq"))
+            if (GUI.Button(new Rect(x, y, w, h), "AvoidanceSeq"))
             {
-                _enemyManager.DetectPlayer(EnemyManager.Sequence.Attack);
+                _enemyManager.DetectPlayer(EnemyManager.Sequence.Avoidance);
             }
             else if (GUI.Button(new Rect(x, y + h, w, h), "TouchPanelSeq"))
             {
@@ -261,15 +262,19 @@ namespace Enemy.DebugUse
             {
                 _enemyManager.FunnelExpand();
             }
-            else if (GUI.Button(new Rect(x, y + 7 * h, w, h), "BreakLeftArm"))
+            else if(GUI.Button(new Rect(x, y + 7 * h, w, h), "FunnelLaserSight"))
+            {
+                _enemyManager.FunnelLaserSight();
+            }
+            else if (GUI.Button(new Rect(x, y + 8 * h, w, h), "BreakLeftArm"))
             {
                 _enemyManager.BreakLeftArm();
             }
-            else if (GUI.Button(new Rect(x, y + 8 * h, w, h), "FirstBossQTE"))
+            else if (GUI.Button(new Rect(x, y + 9 * h, w, h), "FirstBossQTE"))
             {
                 _enemyManager.BossFirstQte();
             }
-            else if (GUI.Button(new Rect(x, y + 9 * h, w, h), "SecondQTE"))
+            else if (GUI.Button(new Rect(x, y + 10 * h, w, h), "SecondQTE"))
             {
                 _enemyManager.BossSecondQte();
             }

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Enemy.Boss.FSM
@@ -40,6 +39,7 @@ namespace Enemy.Boss.FSM
     {
         protected BossParams _params;
         protected BlackBoard _blackBoard;
+        protected DebugPointP _pointP;
         protected Body _body;
         protected BodyAnimation _animation;
         protected IReadOnlyCollection<FunnelController> _funnels;
@@ -48,6 +48,7 @@ namespace Enemy.Boss.FSM
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
+            _pointP = requiredRef.PointP;
             _body = requiredRef.Body;
             _animation = requiredRef.BodyAnimation;
             _funnels = requiredRef.Funnels;
@@ -63,7 +64,7 @@ namespace Enemy.Boss.FSM
         protected void PlayDamageSE()
         {
             string seName = "";
-            if (_blackBoard.DamageSource == Const.PlayerRangeWeaponName) seName = "SE_Damage_02";
+            if (_blackBoard.DamageSource == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
             else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
 
             if (seName != "") AudioWrapper.PlaySE(seName);
@@ -74,7 +75,7 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void FunnelExpand()
         {
-            // ファンネル展開。(EnterやExitのタイミングでトリガーされた場合展開されないのでは？)
+            // (EnterやExitのタイミングでトリガーされた場合展開されないのでは？)
             if (_blackBoard.FunnelExpandTrigger)
             {
                 foreach (FunnelController f in _funnels) f.Expand();
@@ -83,15 +84,26 @@ namespace Enemy.Boss.FSM
         }
 
         /// <summary>
+        /// ファンネルのレーザーサイトを表示
+        /// </summary>
+        protected void FunnelLaserSight()
+        {
+            if (_blackBoard.IsFunnelLaserSight)
+            {
+                foreach (FunnelController f in _funnels) f.LaserSight(true);
+            }
+        }
+
+        /// <summary>
         /// 点Pに向けて移動。
         /// </summary>
         protected void MoveToPointP()
         {
-            Vector3 dir = _blackBoard.TransformToPointPDirection;
+            Vector3 dir = _blackBoard.PointPDirection;
             Vector3 mpf = dir * _params.MoveSpeed.Chase * _blackBoard.PausableDeltaTime;
-            if (mpf.magnitude >= _blackBoard.TransformToPointPDistance)
+            if (mpf.magnitude >= _blackBoard.PointPDistance)
             {
-                _body.Warp(_blackBoard.PointP);
+                _body.Warp(_pointP.transform.position);
             }
             else
             {
@@ -104,9 +116,12 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void LookAtPlayer()
         {
-            Vector3 look = _blackBoard.TransformToPlayerDirection;
+            Vector3 look = _blackBoard.PlayerDirection;
             look.y = 0;
             _body.Forward(look);
         }
     }
 }
+
+// 次:ファンネルのレーザーサイト表示もトリガーにする必要あり、
+// ただし、そうするとファンネル展開と同じくEnterとExitだと呼ばれない問題あり。

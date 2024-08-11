@@ -215,6 +215,8 @@ namespace Enemy
         /// </summary>
         public void FunnelExpand() => OrderToBoss(EnemyOrder.Type.FunnelExpand);
 
+        public void FunnelLaserSight() => OrderToBoss(EnemyOrder.Type.FunnelLaserSight);
+
         /// <summary>
         /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
         /// </summary>
@@ -292,7 +294,7 @@ namespace Enemy
         private static void RegisterOrRelease<T>(T character, bool isRegister)
         {
             GameObject g = GameObject.FindGameObjectWithTag(Const.EnemySystemTag);
-            EnemyManager em = g.GetComponent<EnemyManager>();
+            if (g == null || !g.TryGetComponent(out EnemyManager em)) return;
 
             if (typeof(T) == typeof(EnemyController))
             {

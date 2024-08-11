@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Extensions;
 
 namespace Enemy.Boss
 {
@@ -10,8 +11,8 @@ namespace Enemy.Boss
         // 状態
         enum State { Unexpanded, Expanded, Defeated }
 
-        // 展開後の動作方法
-        enum Mode { Default, Right, Lfet }
+        // 展開モード
+        enum Mode { Default, Right, Left }
 
         [SerializeField] private Transform _model;
         [SerializeField] private Transform _muzzle;
@@ -19,7 +20,8 @@ namespace Enemy.Boss
         [Header("エフェクトの設定")]
         [SerializeField] private Effect _destroyedEffect;
         [SerializeField] private Effect _trailEffect;
-        [Header("弾のばらけ具合")]
+        [Header("展開モード")]
+        [SerializeField] private Mode _mode;
 
         private Transform _transform;
         private Transform _offset;
@@ -115,24 +117,39 @@ namespace Enemy.Boss
             _elapsed = Random.value;
         }
 
-        // ボス本体の円状の周囲に展開する。値は適当にベタ書き。
+        // ボス本体の左右もしくは周囲に展開する。
         private void SetExpandOffset()
         {
-            float sin = Mathf.Sin(2 * Mathf.PI * Random.value);
-            float cos = Mathf.Cos(2 * Mathf.PI * Random.value);
-            float dist = Random.Range(2.0f, 3.0f);
-            float h = Random.Range(1.5f, 2.5f);
-            _expandOffset = new Vector3(cos * dist, h, sin * dist);
+            if (_mode == Mode.Default)
+            {
+                const float MaxHeight = 8.0f;
+                const float MinHeight = 6.0f;
+                const float MaxSide = 6.0f;
+                const float MinSide = 4.0f;
+
+                float sin = Mathf.Sin(2 * Mathf.PI * Random.value);
+                float cos = Mathf.Cos(2 * Mathf.PI * Random.value);
+                float dist = Random.Range(MinSide, MaxSide);
+                float h = Random.Range(MinHeight, MaxHeight);
+                int lr = Random.value <= 0.5f ? 1 : -1;
+                _expandOffset = new Vector3(cos * dist * lr, h, sin * dist * lr);
+            }
+            else
+            {
+                const float Height = 10.0f;
+                const float Side = 5.0f;
+
+                if (_mode == Mode.Right) _expandOffset = new Vector3(Side, Height, 0);
+                else if (_mode == Mode.Left) _expandOffset = new Vector3(-Side, Height, 0);
+            }
         }
 
         // ボスの周囲を浮遊するような動き。
         private void Move()
         {
-            const float Speed = 10.0f;
-
             Vector3 expandedPoint = _boss.transform.position + _expandOffset;
             Vector3 dir = expandedPoint - _transform.position;
-            Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * Speed;
+            Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * _params.MoveSpeed;
             if (velo.sqrMagnitude <= dir.sqrMagnitude)
             {
                 _transform.position += velo;
@@ -231,6 +248,20 @@ namespace Enemy.Boss
             // 二回目のファンネル展開がすぐだとおかしくなるかも。
             if (value) _destroyedEffect.PlayAsync(this.GetCancellationTokenOnDestroy()).Forget();
             else _destroyedEffect.Stop();
+        }
+
+        /// <summary>
+        /// レーザーサイトの表示/非表示
+        /// </summary>
+        public void LaserSight(bool value)
+        {
+            if (!this.TryGetComponentInChildren(out LineRenderer line)) return;
+
+            const float Length = 10.0f;
+            Debug.Log("レーザーサイト");
+            line.enabled = value;
+            line.SetPosition(0, _muzzle.position);
+            line.SetPosition(1, _muzzle.position + _muzzle.forward * Length);
         }
     }
 }

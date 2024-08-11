@@ -27,6 +27,7 @@ namespace Enemy.Boss
                 states: new Dictionary<StateKey, State>(),
                 bossParams: requiredRef.BossParams,
                 blackBoard: requiredRef.BlackBoard,
+                pointP: requiredRef.PointP,
                 body: new Body(requiredRef),
                 bodyAnimation: new BodyAnimation(requiredRef),
                 effector: new Effector(requiredRef),
