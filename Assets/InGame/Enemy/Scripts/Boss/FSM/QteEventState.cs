@@ -43,6 +43,7 @@
         private BlackBoard _blackBoard;
         private AgentScript _agentScript;
 
+        private MoveToPlayerFrontStep _moveToPlayerFront;
         private BreakLeftArmStep _breakLeftArmStep;
         private FirstQteStep _firstQteStep;
         private SecondQteStep _secondQteStep;
@@ -59,6 +60,7 @@
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.QteEvent;
         }
 
         protected override void Exit()
@@ -71,6 +73,38 @@
             if (_blackBoard.OrderdQteEventStep == Step.BreakLeftArm) _breakLeftArmStep.Update();
             else if (_blackBoard.OrderdQteEventStep == Step.FirstQte) _firstQteStep.Update();
             else if (_blackBoard.OrderdQteEventStep == Step.SecondQte) _secondQteStep.Update();
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーの正面に移動
+    /// </summary>
+    public class MoveToPlayerFrontStep : QteEventStep
+    {
+        private BodyAnimation _animation;
+
+        public MoveToPlayerFrontStep(StateRequiredRef requiredRef)
+        {
+            _animation = requiredRef.BodyAnimation;
+        }
+
+        protected override void Enter()
+        {
+            // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
+            // Attackの状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
+            _animation.Play(BodyAnimationConst.Boss.QteSwordSet, BodyAnimationConst.Layer.BaseLayer);
+
+            // プレイヤーの入力があった場合は、刀を振り下ろす。
+            // 現状、構え->攻撃の間に何か入力を挟む仕様が無いのでそのまま再生する。
+            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackTrigger01);
+
+            // 振り下ろした刀を構え直す。
+            // これも特に仕様が無いのでそのまま再生する。
+            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClearTrigger01);
+        }
+
+        protected override void Stay()
+        {
         }
     }
 
@@ -153,6 +187,8 @@
             // QTE2回目、プレイヤーに殴られて死亡。
             _animation.SetTrigger(BodyAnimationConst.Param.FinishTrigger);
             _effector.PlayDestroyedEffect();
+
+            AudioWrapper.PlaySE("SE_Kill");
         }
 
         protected override void Stay()

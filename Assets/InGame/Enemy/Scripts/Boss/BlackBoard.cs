@@ -23,7 +23,7 @@ namespace Enemy.Boss
         public Area PlayerArea { get; set; }
 
         // 現在実行中のステート。Action層が書き込む。
-        public StateKey CurrentState { get; set; } // まだ
+        public StateKey CurrentState { get; set; }
 
         // 前方向
         public Vector3 Forward { get; set; }

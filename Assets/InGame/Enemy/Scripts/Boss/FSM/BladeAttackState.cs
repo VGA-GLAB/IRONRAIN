@@ -31,6 +31,8 @@ namespace Enemy.Boss.FSM
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.BladeAttack;
+
             //_animation.SetTrigger(近接攻撃構えのトリガー名);
             _animation.ResetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
         }

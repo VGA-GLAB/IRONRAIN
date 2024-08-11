@@ -6,15 +6,18 @@
     /// </summary>
     public class AppearState : State
     {
+        private BlackBoard _blackBoard;
         private Effector _effector;
 
         public AppearState(StateRequiredRef requiredRef) : base(requiredRef.States)
         {
+            _blackBoard = requiredRef.BlackBoard;
             _effector = requiredRef.Effector;
         }
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Appear;
         }
 
         protected override void Exit()
