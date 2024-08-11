@@ -37,5 +37,7 @@ namespace IronRain.SequenceSystem
         public LockOnSystem LockSystem => _lockSystem;
         [SerializeField] private RaderMap _raderMapMap;
         public RaderMap RaderMap => _raderMapMap;
+        [SerializeField] private AnnounceUiController _announceUiController;
+        public AnnounceUiController AnnounceUiController => _announceUiController;
     }
 }
