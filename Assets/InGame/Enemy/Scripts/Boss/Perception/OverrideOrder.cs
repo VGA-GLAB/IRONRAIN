@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Enemy.Boss.FSM;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy.Boss
@@ -9,9 +10,6 @@ namespace Enemy.Boss
     /// </summary>
     public class OverrideOrder
     {
-        // 同フレーム内で処理できる命令の最大数。
-        const int OrderCapacity = 6;
-
         private BlackBoard _blackBoard;
 
         // 予め命令用のインスタンスをプールしておき、命令をする際はプールしておいたインスタンスにコピーする。
@@ -26,10 +24,9 @@ namespace Enemy.Boss
             _pool = new Stack<EnemyOrder>();
             _buffer = new Queue<EnemyOrder>();
 
-            for (int i = 0; i < OrderCapacity; i++)
-            {
-                _pool.Push(new EnemyOrder());
-            }
+            // 同フレーム内で処理できる命令の最大数。命令をプールしておく。
+            const int OrderCapacity = 6;
+            for (int i = 0; i < OrderCapacity; i++) _pool.Push(new EnemyOrder());
         }
 
         /// <summary>
@@ -41,52 +38,34 @@ namespace Enemy.Boss
             while (_buffer.Count > 0)
             {
                 EnemyOrder order = _buffer.Dequeue();
-                // プレイヤーを発見させる。
-                if (order.OrderType == EnemyOrder.Type.BossStart)
-                {
-                    _blackBoard.IsBossStarted = true;
-                }
-                // ファンネル展開
-                else if (order.OrderType == EnemyOrder.Type.FunnelExpand)
-                {
-                    _blackBoard.FunnelExpandTrigger = true;
-                }
-                // プレイヤーの左手破壊
-                else if (order.OrderType == EnemyOrder.Type.BreakLeftArm)
-                {
-                    _blackBoard.IsQteEventStarted = true;
-                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.BreakLeftArm;
-                }
-                // QTE1回目
-                else if (order.OrderType == EnemyOrder.Type.BossFirstQTE)
-                {
-                    _blackBoard.IsQteEventStarted = true;
-                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.FirstQte;
-                }
-                // QTE2回目
-                else if (order.OrderType == EnemyOrder.Type.BossSecondQTE)
-                {
-                    _blackBoard.IsQteEventStarted = true;
-                    _blackBoard.OrderdQteEventStep = FSM.QteEventState.Step.SecondQte;
-                }
-                // ボス戦終了
-                else if (order.OrderType == EnemyOrder.Type.BossEnd)
-                {
-                    _blackBoard.IsBroken = true;
-                }
 
-                // 命令をクリアしてプールに戻す。
+                // 黒板に書き込み -> 命令をクリアしてプールに戻す。
+                WriteToBlackBoard(order);
                 order.Clear();
                 _pool.Push(order);
             }
         }
 
-        /// <summary>
-        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にトリガー系の命令を元に戻す。
-        /// </summary>
-        public void ClearOrderedTrigger()
+        // 命令に応じて黒板に書き込む。
+        private void WriteToBlackBoard(EnemyOrder order)
         {
-            _blackBoard.FunnelExpandTrigger = false;
+            EnemyOrder.Type t = order.OrderType;
+
+            if (t == EnemyOrder.Type.BossStart) { BossStart(); }
+            else if (t == EnemyOrder.Type.FunnelExpand) { FunnelExpand(); }
+            else if (t == EnemyOrder.Type.FunnelLaserSight) { FunnelLaserSight(); }
+            else if (t == EnemyOrder.Type.BreakLeftArm) { QteStart(); QteStep(QteEventState.Step.BreakLeftArm); }
+            else if (t == EnemyOrder.Type.BossFirstQTE) { QteStart(); QteStep(QteEventState.Step.FirstQte); }
+            else if (t == EnemyOrder.Type.BossSecondQTE) { QteStart(); QteStep(QteEventState.Step.SecondQte); }
+            else if (t == EnemyOrder.Type.BossEnd) { BossBroken(); }
+
+            // 黒板に書き込む命令一覧。
+            void BossStart() { _blackBoard.IsBossStarted = true; }
+            void FunnelExpand() { _blackBoard.FunnelExpandTrigger = true; }
+            void FunnelLaserSight() { _blackBoard.IsFunnelLaserSight = true; }
+            void QteStart() { _blackBoard.IsQteEventStarted = true; }
+            void QteStep(QteEventState.Step step) { _blackBoard.OrderdQteEventStep = step; }
+            void BossBroken() { _blackBoard.IsBroken = true; }
         }
 
         /// <summary>
@@ -95,12 +74,11 @@ namespace Enemy.Boss
         /// </summary>
         public void Buffer(EnemyOrder order)
         {
-            if (_pool.TryPop(out EnemyOrder o))
+            if (TryRentPoolingOrder(out EnemyOrder o))
             {
                 o.OrderType = order.OrderType;
                 _buffer.Enqueue(o);
             }
-            else Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
         }
 
         /// <summary>
@@ -110,12 +88,30 @@ namespace Enemy.Boss
         /// </summary>
         public void Buffer(EnemyOrder.Type orderType)
         {
-            if (_pool.TryPop(out EnemyOrder o))
+            if (TryRentPoolingOrder(out EnemyOrder o))
             {
                 o.OrderType = orderType;
                 _buffer.Enqueue(o);
             }
-            else Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
+        }
+
+        // プーリングされている命令を取り出す。
+        private bool TryRentPoolingOrder(out EnemyOrder order)
+        {
+            if (_pool.TryPop(out order)) return true;
+            else
+            {
+                Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にトリガー系の命令を元に戻す。
+        /// </summary>
+        public void ClearOrderedTrigger()
+        {
+            _blackBoard.FunnelExpandTrigger = false;
         }
     }
 }

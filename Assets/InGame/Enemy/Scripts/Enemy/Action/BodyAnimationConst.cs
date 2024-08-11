@@ -69,9 +69,9 @@
             public const string MoveRightStart = "all_move_right_st";
             public const string MoveRightLoop = "all_move_right_lp";
             public const string MoveRightEnd = "all_move_right_ed";
-            public const string HoldStart = "enemy_assault_hold_st";   // 銃構え
-            public const string HoldLoop = "enemy_assault_hold_lp";    // 銃構え
-            public const string FireLoop = "enemy_assault_fire_lp";    // 銃攻撃
+            public const string HoldStart = "enemy_rocket_hold_st";   // 銃構え
+            public const string HoldLoop = "enemy_rocket_hold_lp";    // 銃構え
+            public const string FireLoop = "enemy_rocket_fire_lp";    // 銃攻撃
             public const string BladeStart = "enemy_shield_st";        // 刀構え
             public const string BladeLoop = "enemy_shield_lp";         // 刀構え
             public const string BladeAttack = "enemy_shield_attack00"; // 刀攻撃

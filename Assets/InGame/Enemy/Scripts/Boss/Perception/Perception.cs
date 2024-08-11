@@ -15,6 +15,9 @@ namespace Enemy.Boss
         private DebugPointP _pointP;
         private MeleeEquipment _meleeEquip;
 
+        // 破棄した後に更新処理がされないようのフラグ。
+        private bool _isDisposed;
+
         public Perception(RequiredRef requiredRef)
         {
             _transform = requiredRef.Transform;
@@ -42,11 +45,10 @@ namespace Enemy.Boss
         /// </summary>
         public void Update()
         {
+            if (_isDisposed) return;
+
             // 自身の前方向
             _blackBoard.Forward = _rotate.forward;
-
-            // 点Pの位置
-            _blackBoard.PointP = _pointP.transform.position;
 
             // エリアの位置を更新
             _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);
@@ -59,12 +61,15 @@ namespace Enemy.Boss
             }
 
             // 自身から点Pへのベクトルを黒板に書き込む。
-            _blackBoard.TransformToPointPDirection = (_blackBoard.PointP - _transform.position).normalized;
-            _blackBoard.TransformToPointPDistance = (_blackBoard.PointP - _transform.position).magnitude;
+            Vector3 ppv = _pointP.transform.position - _transform.position;
+            float ppMag = ppv.magnitude;
+            _blackBoard.PointPDistance = ppMag;
+            _blackBoard.PointPDirection = ppMag > 1E-05F ? ppv / ppMag : Vector3.zero;
 
             // 自身からプレイヤーへのベクトルを黒板に書き込む。
-            _blackBoard.TransformToPlayerDirection = (_player.position - _transform.position).normalized;
-            _blackBoard.TransformToPlayerSqrDistance = (_player.position - _transform.position).sqrMagnitude;
+            Vector3 pv = _player.position - _transform.position;
+            _blackBoard.PlayerDirection = pv.normalized;
+            _blackBoard.PlayerSqrDistance = pv.sqrMagnitude;
 
             // プレイヤーが近接攻撃が届く範囲にいるか。
             _blackBoard.IsWithinMeleeRange = _meleeEquip.IsWithinRange(_player.position);
@@ -84,6 +89,8 @@ namespace Enemy.Boss
         {
             _blackBoard.Area = null;
             _blackBoard.PlayerArea = null;
+
+            _isDisposed = true;
         }
 
         /// <summary>

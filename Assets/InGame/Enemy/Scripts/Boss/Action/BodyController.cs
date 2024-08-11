@@ -27,6 +27,7 @@ namespace Enemy.Boss
                 states: new Dictionary<StateKey, State>(),
                 bossParams: requiredRef.BossParams,
                 blackBoard: requiredRef.BlackBoard,
+                pointP: requiredRef.PointP,
                 body: new Body(requiredRef),
                 bodyAnimation: new BodyAnimation(requiredRef),
                 effector: new Effector(requiredRef),
@@ -36,7 +37,9 @@ namespace Enemy.Boss
 
             _states = stateRequiredRef.States;
             _states.Add(StateKey.Appear, new AppearState(stateRequiredRef));
-            _states.Add(StateKey.Battle, new BattleState(stateRequiredRef));
+            _states.Add(StateKey.Idle, new IdleState(stateRequiredRef));
+            _states.Add(StateKey.BladeAttack, new BladeAttackState(stateRequiredRef));
+            _states.Add(StateKey.LauncherFire, new LauncherFireState(stateRequiredRef));
             _states.Add(StateKey.QteEvent, new QteEventState(stateRequiredRef));
             _states.Add(StateKey.Hide, new HideState(stateRequiredRef));
 

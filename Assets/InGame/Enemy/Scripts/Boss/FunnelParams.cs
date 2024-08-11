@@ -17,8 +17,13 @@ namespace Enemy.Boss
         [Tooltip("値を大きくすると、プレイヤーの正面に弾が飛んでくる確率が上がる。")]
         [SerializeField] private float _accuracy;
 
+        [Range(5.0f, 20.0f)]
+        [Header("ボスを追跡する速さ")]
+        [SerializeField] private float _moveSpeed;
+
         public int MaxHp => _maxHp;
         public float FireRate => _fireRate;
         public float Accuracy => _accuracy;
+        public float MoveSpeed => _moveSpeed;
     }
 }

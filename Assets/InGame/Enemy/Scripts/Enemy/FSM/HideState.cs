@@ -16,6 +16,8 @@
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Hide;
+
             _body.ModelEnable(false);
         }
 

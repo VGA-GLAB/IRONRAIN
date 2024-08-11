@@ -2,6 +2,8 @@
 using Enemy.Extensions;
 using UnityEngine;
 using Enemy.Boss;
+using System.Buffers;
+using System;
 
 namespace Enemy
 {
@@ -47,37 +49,10 @@ namespace Enemy
             _animationEvent.OnMeleeAttackStart -= Collision;
         }
 
-        // 当たり判定を出してダメージを与える。
-        private void Collision()
+        private void OnDrawGizmosSelected()
         {
-            // 球状の当たり判定なので対象が上下にズレている場合は当たらない場合がある。
-            RaycastExtensions.OverlapSphere(Origin(), _radius, col =>
-            {
-                if (col == null) return;
-                
-                // コライダーと同じオブジェクトにコンポーネントが付いている前提。
-                if (col.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
-            });
-            
-            // 判定の瞬間の演出
-            if (_attackEffect != null) _attackEffect.Play(_owner);
-
-            OnCollision();
-
-            // タイミングを更新。
-            LastAttackTiming = Time.time;
-        }
-
-        // 攻撃の基準となる座標を返す。
-        private Vector3 Origin()
-        {
-            if (_rotate == null) return transform.position;
-
-            // Y軸以外で回転しても正常な値を返す
-            Vector3 f = _rotate.forward * _forwardOffset;
-            Vector3 h = _rotate.up * _heightOffset;
-
-            return transform.position + f + h;
+            // 攻撃範囲。
+            GizmosUtils.WireCircle(Origin(), _radius, ColorExtensions.ThinRed);
         }
 
         /// <summary>
@@ -93,10 +68,56 @@ namespace Enemy
         /// </summary>
         protected virtual void OnCollision() { }
 
-        private void OnDrawGizmosSelected()
+        // 当たり判定を出してダメージを与える。
+        private void Collision()
         {
-            // 攻撃範囲。
-            GizmosUtils.WireCircle(Origin(), _radius, ColorExtensions.ThinRed);
+            Damage();
+            AttackEffect();
+            OnCollision();
+
+            // タイミングを更新。
+            LastAttackTiming = Time.time;
+        }
+
+        // 球状の当たり判定に引っかかった対象にダメージを与える。
+        private void Damage()
+        {
+            const int HitCapacity = 6;
+
+            Collider[] results = ArrayPool<Collider>.Shared.Rent(HitCapacity);
+            
+            if (Physics.OverlapSphereNonAlloc(Origin(), _radius, results) > 0)
+            {
+                // レイにヒットしたオブジェクトに対して処理を実行
+                foreach (Collider col in results)
+                {
+                    if (col == null) break;
+
+                    // コライダーと同じオブジェクトにコンポーネントが付いている前提。
+                    if (col.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
+                }
+            }
+            
+            Array.Clear(results, 0, results.Length);
+            ArrayPool<Collider>.Shared.Return(results);
+        }
+
+        // 判定の瞬間の演出
+        private void AttackEffect()
+        {
+            if (_attackEffect != null) _attackEffect.Play(_owner);
+        }
+
+        // 攻撃の基準となる座標を返す。
+        private Vector3 Origin()
+        {
+            if (_rotate == null) return transform.position;
+
+            // Y軸以外で回転しても正常な値を返す
+            Vector3 f = _rotate.forward * _forwardOffset;
+            Vector3 h = _rotate.up * _heightOffset;
+
+            return transform.position + f + h;
         }
     }
 }

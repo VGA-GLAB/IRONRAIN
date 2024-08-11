@@ -43,7 +43,7 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
-            if(_isDisposed) return;
+            if (_isDisposed || _blackBoard.CurrentState == FSM.StateKey.Hide) return;
 
             // エリアとスロットの位置を更新。
             _blackBoard.Area.Point = AreaCalculator.AreaPoint(_transform);

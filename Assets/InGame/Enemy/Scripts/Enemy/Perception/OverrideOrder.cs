@@ -9,9 +9,6 @@ namespace Enemy
     /// </summary>
     public class OverrideOrder
     {
-        // 同フレーム内で処理できる命令の最大数。
-        private const int OrderCapacity = 6;
-
         private BlackBoard _blackBoard;
 
         // 予め命令用のインスタンスをプールしておき、命令をする際はプールしておいたインスタンスにコピーする。
@@ -26,11 +23,9 @@ namespace Enemy
             _pool = new Stack<EnemyOrder>();
             _buffer = new Queue<EnemyOrder>();
 
-            // 命令をプールしておく。
-            for (int i = 0; i < OrderCapacity; i++)
-            {
-                _pool.Push(new EnemyOrder());
-            }
+            // 同フレーム内で処理できる命令の最大数。命令をプールしておく。
+            const int OrderCapacity = 6;
+            for (int i = 0; i < OrderCapacity; i++) _pool.Push(new EnemyOrder());
         }
 
         /// <summary>
@@ -39,6 +34,8 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
+            if (_blackBoard.CurrentState == FSM.StateKey.Delete) return;
+
             while (_buffer.Count > 0)
             {
                 EnemyOrder order = _buffer.Dequeue();

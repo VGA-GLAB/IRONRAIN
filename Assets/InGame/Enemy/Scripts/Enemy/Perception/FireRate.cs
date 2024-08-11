@@ -56,6 +56,8 @@ namespace Enemy
         /// </summary>
         public void UpdateIfAttacked()
         {
+            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+
             // 最後に攻撃したタイミングが次の攻撃タイミングより前の場合はそのまま
             if (_equip.LastAttackTiming <= _blackBoard.NextAttackTime) return;
 

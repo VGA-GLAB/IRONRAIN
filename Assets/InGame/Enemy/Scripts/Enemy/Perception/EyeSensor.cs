@@ -34,6 +34,8 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
+            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+
             // とりあえずプレイヤーのみ検知で十分。
             const int PlayerLayer = 1 << 6;
             if (Physics.OverlapSphereNonAlloc(Origin(), _params.FovRadius, _result, PlayerLayer) > 0)
@@ -60,6 +62,7 @@ namespace Enemy
         /// </summary>
         public void ClearCaptureTargets()
         {
+            // フレームを跨ぐ前に消しているので、ギズモへの描画が難しい。
             _blackBoard.FovStay.Clear();
         }
 

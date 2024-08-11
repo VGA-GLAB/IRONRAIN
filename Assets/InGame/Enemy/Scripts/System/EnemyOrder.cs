@@ -10,17 +10,18 @@ namespace Enemy
         public enum Type
         {
             None,
-            PlayerDetect,    // プレイヤーを発見状態にさせる。
-            Pause,           // ポーズ。
-            Resume,          // ポーズ解除。
-            Attack,          // 攻撃させる。
-            QteTriggerEnter, // QTEの判定に触れた(盾持ちの敵が自身に命令)。
-            BossStart,       // ボス戦開始。
-            FunnelExpand,    // ファンネル展開。
-            BreakLeftArm,    // プレイヤーの左腕破壊。
-            BossFirstQTE,    // ボス戦QTE1回目。
-            BossSecondQTE,   // ボス戦QTE2回目。
-            BossEnd,         // ボス戦終了。
+            PlayerDetect,     // プレイヤーを発見状態にさせる。
+            Pause,            // ポーズ。
+            Resume,           // ポーズ解除。
+            Attack,           // 攻撃させる。
+            QteTriggerEnter,  // QTEの判定に触れた(盾持ちの敵が自身に命令)。
+            BossStart,        // ボス戦開始。
+            FunnelExpand,     // ファンネル展開。
+            FunnelLaserSight, // ファンネルのレーザーサイト表示。
+            BreakLeftArm,     // プレイヤーの左腕破壊。
+            BossFirstQTE,     // ボス戦QTE1回目。
+            BossSecondQTE,    // ボス戦QTE2回目。
+            BossEnd,          // ボス戦終了。
             QteStartTargeted,   // 自身を対象としてQTE開始。
             QteStartUntargeted, // 自身以外を対象としてQTE開始。
             QteSuccessTargeted,   // 自身を対象としてQTE成功。

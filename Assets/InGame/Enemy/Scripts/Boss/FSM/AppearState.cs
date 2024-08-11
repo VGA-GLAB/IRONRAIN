@@ -28,7 +28,7 @@
 
             /* 登場演出ｺｺ */
 
-            TryChangeState(StateKey.Battle);
+            TryChangeState(StateKey.Idle);
         }
 
         public override void Dispose()

@@ -20,21 +20,22 @@
         public BattleByShieldState(StateRequiredRef requiredRef) : base(requiredRef)
         {
             // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
-            Register(BodyAnimationConst.Shield.ShieldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Shield);
-            Register(BodyAnimationConst.Shield.Attack, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Attack);
+            Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Idle);
+            Register(BodyAnimationConst.Shield.ShieldStart, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Shield);
+            Register(BodyAnimationConst.Shield.Attack, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Attack);
 
             // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
             // このメソッドで登録していないアニメーションのステートに遷移した場合、
             // _currentAnimGroupの値が元のままになるので注意。
             void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
-                _animation.RegisterStateEnterCallback(StateKey.Battle, stateName, layerIndex, () => _currentAnimGroup = animGroup);
+                _animation.RegisterStateEnterCallback(nameof(BattleByLauncherState), stateName, layerIndex, () => _currentAnimGroup = animGroup);
             }
         }
 
         protected override void Enter()
         {
+            _blackBoard.CurrentState = StateKey.Battle;
         }
 
         protected override void Exit()
@@ -60,7 +61,7 @@
         public override void Dispose()
         {
             // コールバックの登録解除。
-            _animation.ReleaseStateCallback(StateKey.Battle);
+            _animation.ReleaseStateCallback(nameof(BattleByLauncherState));
         }
 
         // アニメーションがアイドル状態

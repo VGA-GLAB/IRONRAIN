@@ -56,6 +56,8 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
+            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+
             // 一度初期化
             _blackBoard.Damage = 0;
             _blackBoard.DamageSource = "";
@@ -96,8 +98,9 @@ namespace Enemy
                 weaponName == Const.PlayerMeleeWeaponName) return true;
 
             // 遠距離攻撃無効化
-            if (_params.Common.Tactical.Armor == Armor.Range &&
-                weaponName == Const.PlayerRangeWeaponName) return true;
+            if (_params.Common.Tactical.Armor == Armor.Range && 
+                (weaponName == Const.PlayerRifleWeaponName || 
+                weaponName == Const.PlayerLauncherWeaponName)) return true;
 
             return false;
         }
@@ -110,7 +113,7 @@ namespace Enemy
         {
             // 武器が空文字だった場合
             if (weapon == "") weapon = "Unknown";
-
+            
             _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
         }
     }

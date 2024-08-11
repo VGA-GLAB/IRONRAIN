@@ -23,7 +23,9 @@ namespace Enemy.FSM
         }
 
         protected override void Enter()
-        {           
+        {
+            _blackBoard.CurrentState = StateKey.Escape;
+
             // レーダーマップから消す。
             if (_agentScript != null) _agentScript.EnemyDestory();
         }
