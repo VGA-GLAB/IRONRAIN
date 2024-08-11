@@ -13,7 +13,7 @@ namespace VRSupport
         // ラベルはデバイス側で定義されており、任意で追加できないのでこれで全部。
         public enum Label
         {
-            COUCH, BED, SCREEN, TABLE, LAMP, STORAGE, OTHER
+            COUCH, BED, SCREEN, TABLE, LAMP, STORAGE, PLANT, OTHER
         }
 
         // ラベルに対応したオブジェクトを位置合わせする。
