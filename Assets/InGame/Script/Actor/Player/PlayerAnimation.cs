@@ -54,6 +54,21 @@ namespace IronRain.Player
             PlayerLoopTiming.Update, _token);
         }
 
+        //
+        public async UniTask QteGuard() 
+        {
+            _anim.SetTrigger("PlayerGuardTrigger");
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+            PlayerLoopTiming.Update, _token);
+        }
+
+        public async UniTask QteFinish()
+        {
+            _anim.SetTrigger("PileFinishTrigger");
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+            PlayerLoopTiming.Update, _token);
+        }
+
         /// <summary>
         /// アニメーションを指定した時間で止める
         /// </summary>
