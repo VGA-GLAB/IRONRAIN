@@ -16,11 +16,24 @@ public class RaderMap : MonoBehaviour
     /// 敵UIのリスト(GameObject:実際の敵、Image:Ui)
     /// </summary>
     public Dictionary<GameObject, Image> EnemyMaps = new Dictionary<GameObject, Image>();
+    [Header("プレイヤーの位置")]
     [SerializeField, Tooltip("プレイヤーの位置")] private Transform _player;
+    [Header("レーダーの中心のオブジェクト")]
     [SerializeField, Tooltip("UIの真ん中")] private Image _center;
+    [Header("レーダーの端までの長さ")]
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
+    [Header("レーダーの半径")]
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
+    [Header("ロックオン可能距離")]
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
+    [Header("ボス戦フラグ")]
+    [SerializeField, Tooltip("ボス戦フラグ")] private bool _isBossScene = false;
+    [Header("ボス戦でレーダー横の倍率")]
+    [SerializeField] private float _width = 1f;
+    /// <summary>
+    /// ボスオブジェクト
+    /// </summary>
+    private GameObject _bossGameObject = default;
     /// <summary>Centerからのオフセット</summary>
     private Vector3 _offset;
     /// <summary>現在ロックされているエネミー</summary>
@@ -45,13 +58,8 @@ public class RaderMap : MonoBehaviour
     }
 
     private bool _isTouch = false;
-    //private MouseMultilockSystem _mouseMultilockSystem;
+    
 
-    //private MultilockSystem _multilockSystem;
-
-    //[SerializeField] private bool _isMouse = true;
-
-    //private UiPokeInteraction _pokeInteractionBase;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,20 +70,67 @@ public class RaderMap : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < _enemies.Count; i++)
+        if(!_isBossScene)
         {
-            AgentScript _agent = _enemies[i].GetComponent<AgentScript>();
+            for (int i = 0; i < _enemies.Count; i++)
+            {
+                AgentScript agent = _enemies[i].GetComponent<AgentScript>();
 
-            Vector3 enemyDir = _enemies[i].transform.position;
-            //敵の高さとプレイヤーの高さを合わせる
-            enemyDir.y = _player.position.y;
-            enemyDir = _enemies[i].transform.position - _player.position;
+                Vector3 enemyDir = _enemies[i].transform.position;
+                //敵の高さとプレイヤーの高さを合わせる
+                enemyDir.y = _player.position.y;
+                enemyDir = _enemies[i].transform.position - _player.position;
 
-            enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
-            enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
+                enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
+                enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
 
-            //赤点の位置を決める
-            _agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                //赤点の位置を決める
+                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+            }
+        }
+        else
+        {
+            //ボス戦用のUi処理
+            for (int i = 0; i < _enemies.Count; i++)
+            {
+                AgentScript agent = _enemies[i].GetComponent<AgentScript>();
+
+                //ボスオブジェクトを設定する
+                if (_bossGameObject == null && agent.IsBoss)
+                {
+                    _bossGameObject = agent.gameObject;
+                }
+
+                if(_bossGameObject != null)
+                {
+                    if(agent.IsBoss)
+                    {
+                        Vector3 enemyDir = _enemies[i].transform.position;
+                        //敵の高さとプレイヤーの高さを合わせる
+                        enemyDir.y = _player.position.y;
+                        enemyDir = _enemies[i].transform.position - _player.position;
+
+                        enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
+                        enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
+
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                    } //ボスの位置を決める
+                    else
+                    {
+                        Vector3 enemyDir = _enemies[i].transform.position;
+                        //ボスの位置を決める
+                        enemyDir.z = _bossGameObject.transform.position.z;
+                        enemyDir = _enemies[i].transform.position - _bossGameObject.transform.position;
+
+                        enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせる
+
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _width + _offset.x, enemyDir.y * _radius + _offset.y, _offset.z);
+                    }//ファンネルの位置を決める
+                }
+
+            }
         }
     }
 
@@ -214,7 +269,7 @@ public class RaderMap : MonoBehaviour
         //EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
         //ロックオンUiを表示する
         var rockonUi = EnemyMaps[agentScript.gameObject].gameObject.GetComponent<EnemyUi>();
-        rockonUi._rockonUi.SetActive(true);
+        rockonUi.LockOnUi.SetActive(true);
 
         //前のターゲットと違うかを判定
         if (nearEnemy.obj != _nowRockEnemy)
@@ -242,6 +297,10 @@ public class RaderMap : MonoBehaviour
         }
         else
         {
+            //視野角内にあるかを判定する
+            if (!IsVisible(enemyObject))
+                return;
+            
             //全てのエネミーのロックオンを外す
             ResetUi();
             //パネルタッチでのロックオン状態にする
@@ -252,16 +311,15 @@ public class RaderMap : MonoBehaviour
             //EnemyMaps[enemyAgent.gameObject].color = enemyAgent._rockonColor;
             //ロックオンUiを表示する
             var rockonUi = EnemyMaps[enemyAgent.gameObject].gameObject.GetComponent<EnemyUi>();
-            rockonUi._rockonUi.SetActive(true);
+            rockonUi.LockOnUi.SetActive(true);
 
             _nowRockEnemy = enemyAgent.gameObject;
             _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
             
             //ターゲットが切り替わる音を出す
             CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
+            _isTouch = true;
         }
-
-        _isTouch = true;
     }
 
     /// <summary>
@@ -278,7 +336,7 @@ public class RaderMap : MonoBehaviour
             //EnemyMaps[enemy].color = agent._defultColor;
             //エネミーのロックオンUiをすべて非表示にする
             var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
-            enemyUi._rockonUi.SetActive(false);
+            enemyUi.LockOnUi.SetActive(false);
         }
     }
     //視野角をギズモ化
@@ -319,7 +377,7 @@ public class RaderMap : MonoBehaviour
             //EnemyMaps[agentScript.gameObject].color = agentScript._rockonColor;
             //ロックオンされている敵のロックオンUiをすべて表示にする
             var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
-            enemyUi._rockonUi.SetActive(true);
+            enemyUi.LockOnUi.SetActive(true);
         }
     }
 
