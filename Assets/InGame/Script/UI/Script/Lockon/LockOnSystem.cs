@@ -155,6 +155,9 @@ public class LockOnSystem : MonoBehaviour
                     {
                         if (_temp.Add(t))
                         {
+                            //TargetのロックオンUiをオンにする
+                            var enemyUi = t.GetComponent<EnemyUi>();
+                            enemyUi.LockOnUi.SetActive(true);
                             // 新しく追加した場合は、Target同士を結ぶ線を引く。
                             _lineRenderer.positionCount++;
                             _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
@@ -183,6 +186,9 @@ public class LockOnSystem : MonoBehaviour
                     {
                         if (_temp.Add(t))
                         {
+                            //TargetのロックオンUiをオンにする
+                            var enemyUi = t.GetComponent<EnemyUi>();
+                            enemyUi.LockOnUi.SetActive(true);
                             // 新しく追加した場合は、Target同士を結ぶ線を引く。
                             _lineRenderer.positionCount++;
                             _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
