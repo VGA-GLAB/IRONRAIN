@@ -205,7 +205,17 @@ public class LockOnSystem : MonoBehaviour
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         LockOnEnemies(_temp, _lockOn);
 
+        LineRendererReset();
+
         return _lockOn;
+    }
+
+    /// <summary>
+    /// LineRendereをリセットする
+    /// </summary>
+    public void LineRendererReset()
+    {
+        _lineRenderer.positionCount = 0;
     }
 
     // 生成されたTargetの親を調べ、Targetのみをリストに詰める。
