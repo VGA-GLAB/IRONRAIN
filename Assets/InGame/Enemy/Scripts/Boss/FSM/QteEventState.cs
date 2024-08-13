@@ -1,28 +1,34 @@
-﻿namespace Enemy.Boss.FSM
+﻿using UnityEngine;
+using Enemy.Extensions;
+
+namespace Enemy.Boss.FSM
 {
     /// <summary>
     /// QTEの各ステップを管理する。
     /// </summary>
     public abstract class QteEventStep
     {
+        public enum Result { Running, Complete };
+
         private bool _isEnter = true;
 
         protected abstract void Enter();
-        protected abstract void Stay();
+        protected abstract Result Stay();
 
         /// <summary>
         /// 最初の1回はEnterが呼ばれ、以降はStayが呼ばれる。
         /// </summary>
-        public void Update()
+        public Result Update()
         {
             if (_isEnter)
             {
                 _isEnter = false;
                 Enter();
+                return Result.Complete;
             }
             else
             {
-                Stay();
+                return Stay();
             }
         }
     }
@@ -43,7 +49,7 @@
         private BlackBoard _blackBoard;
         private AgentScript _agentScript;
 
-        private MoveToPlayerFrontStep _moveToPlayerFront;
+        private QteEventStep _moveToPlayerFront;
         private BreakLeftArmStep _breakLeftArmStep;
         private FirstQteStep _firstQteStep;
         private SecondQteStep _secondQteStep;
@@ -81,10 +87,15 @@
     /// </summary>
     public class MoveToPlayerFrontStep : QteEventStep
     {
+        private BossParams _params;
+        private BlackBoard _blackBoard;
+        private Body _body;
         private BodyAnimation _animation;
 
         public MoveToPlayerFrontStep(StateRequiredRef requiredRef)
         {
+            _blackBoard = requiredRef.BlackBoard;
+            _body = requiredRef.Body;
             _animation = requiredRef.BodyAnimation;
         }
 
@@ -93,18 +104,32 @@
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
             // Attackの状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
             _animation.Play(BodyAnimationConst.Boss.QteSwordSet, BodyAnimationConst.Layer.BaseLayer);
-
-            // プレイヤーの入力があった場合は、刀を振り下ろす。
-            // 現状、構え->攻撃の間に何か入力を挟む仕様が無いのでそのまま再生する。
-            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackTrigger01);
-
-            // 振り下ろした刀を構え直す。
-            // これも特に仕様が無いのでそのまま再生する。
-            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClearTrigger01);
         }
 
         protected override void Stay()
         {
+            Vector3 v = VectorExtensions.Homing(
+                _blackBoard.Area.Point,
+                _blackBoard.PlayerArea.Point,
+                _blackBoard.PlayerDirection,
+                _params.Other.ApproachHomingPower
+                );
+            Vector3 velo = v * _params.Qte.ToPlayerFrontMoveSpeed * _blackBoard.PausableDeltaTime;
+
+            // 移動
+            if (velo.sqrMagnitude >= _blackBoard.PlayerSqrDistance)
+            {
+                _body.Warp(_blackBoard.Area.Point);
+            }
+            else
+            {
+                _body.Warp(_blackBoard.Area.Point + velo);
+            }
+
+            // 回転
+            Vector3 dir = _blackBoard.PlayerDirection;
+            dir.y = 0;
+            _body.Forward(dir);
         }
     }
 
