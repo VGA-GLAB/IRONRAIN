@@ -60,15 +60,15 @@ namespace IronRain.Player
             {
                 if (qteType == QteType.NormalQte)
                 {
-                    qteResult = await QTE(endCts, startToken);
+                    qteResult = await QTE(startToken);
                 }
                 else if (qteType == QteType.BossQte1)
                 {
-                    qteResult = await BossQTE1(endCts, startToken);
+                    qteResult = await BossQTE1(startToken);
                 }
                 else if (qteType == QteType.BossQte2)
                 {
-                    qteResult = await BossQTE2(endCts, startToken);
+                    qteResult = await BossQTE2(startToken);
                 }
 
             }
@@ -87,7 +87,7 @@ namespace IronRain.Player
         /// <param name="endCts"></param>
         /// <param name="startToken"></param>
         /// <returns></returns>
-        public async UniTask<QTEResultType> QTE(CancellationTokenSource endCts, CancellationToken startToken)
+        public async UniTask<QTEResultType> QTE(CancellationToken startToken)
         {
             _qteResultType = QTEResultType.Failure;
 
@@ -142,7 +142,7 @@ namespace IronRain.Player
         /// <param name="endCts"></param>
         /// <param name="startToken"></param>
         /// <returns></returns>
-        public async UniTask<QTEResultType> BossQTE1(CancellationTokenSource endCts, CancellationToken startToken)
+        public async UniTask<QTEResultType> BossQTE1(CancellationToken startToken)
         {
             _playerEnvroment.PlayerTransform.parent = null;
             _qteResultType = QTEResultType.Failure;
@@ -156,14 +156,16 @@ namespace IronRain.Player
 
                 _qteType.Value = QTEState.QTE1;
                 await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
-                await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
-                await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
+                await tutorialTextBoxController.DoTextChangeAsync("左レバーを引いてください。", 0.05f, startToken);
+                await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, startToken);
+                await _playerEnvroment.PlayerAnimation.QteGuard();
                 tutorialTextBoxController.ClearText();
 
-                await tutorialTextBoxController.DoTextChangeAsync("左レバーを引いてください。", 0.05f, startToken);
+                await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE2;
-                await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, startToken);
+                await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
                 tutorialTextBoxController.ClearText();
+                await _playerEnvroment.PlayerAnimation.QteGuard();
 
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
@@ -176,7 +178,71 @@ namespace IronRain.Player
             return _qteResultType;
         }
 
-        public async UniTask<QTEResultType> BossQTE2(CancellationTokenSource endCts, CancellationToken startToken)
+
+        public async UniTask BossQte1Callseparately(QTEState qteProgressType, CancellationToken token)
+        {
+            switch (qteProgressType)
+            {
+                case QTEState.QTE1:
+                    {
+                        if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _qteType.Value = QTEState.QTE1;
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
+                        break;
+                    }
+                case QTEState.QTE2:
+                    {
+                        if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _qteType.Value = QTEState.QTE2;
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
+                        _qteResultType = QTEResultType.Success;
+                        _qteType.Value = QTEState.QTENone;
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+
+        public async UniTask BossQte2Callseparately(QTEState qteProgressType, CancellationToken token) 
+        {
+            switch (qteProgressType)
+            {
+                case QTEState.QTE1:
+                    {
+                        if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _qteType.Value = QTEState.QTE1;
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
+                        break;
+                    }
+                case QTEState.QTE2:
+                    {
+                        if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _qteType.Value = QTEState.QTE2;
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
+                        _qteResultType = QTEResultType.Success;
+                        _qteType.Value = QTEState.QTENone;
+                        break;
+                    }
+                case QTEState.QTE3:
+                    {
+                        if (_qteType.Value != QTEState.QTE2) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _qteType.Value = QTEState.QTE3;
+                        await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, token);
+                        _qteResultType = QTEResultType.Success;
+                        _qteType.Value = QTEState.QTENone;
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+
+        public async UniTask<QTEResultType> BossQTE2(CancellationToken startToken)
         {
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
             {
@@ -218,7 +284,7 @@ namespace IronRain.Player
         /// QTEの失敗判定
         /// </summary>
         /// <returns></returns>
-        private async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
+        public async UniTask QTEFailureJudgment(CancellationTokenSource startCts, CancellationToken endToken)
         {
             //失敗までの時間を計測
             await UniTask.WaitForSeconds(_playerParams.QteTimeLimit, true, PlayerLoopTiming.Update, endToken);
