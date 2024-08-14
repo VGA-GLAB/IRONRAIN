@@ -258,7 +258,7 @@ namespace Enemy.Boss
             if (!this.TryGetComponentInChildren(out LineRenderer line)) return;
 
             const float Length = 10.0f;
-            Debug.Log("レーザーサイト");
+
             line.enabled = value;
             line.SetPosition(0, _muzzle.position);
             line.SetPosition(1, _muzzle.position + _muzzle.forward * Length);

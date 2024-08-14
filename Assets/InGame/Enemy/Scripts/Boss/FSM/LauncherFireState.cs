@@ -53,6 +53,7 @@ namespace Enemy.Boss.FSM
         {
             PlayDamageSE();
             FunnelExpand();
+            FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
 

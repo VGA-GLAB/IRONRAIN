@@ -4,6 +4,8 @@ using UniRx;
 using UnityEngine;
 using Enemy.Boss;
 using Enemy.NPC;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace Enemy
 {
@@ -215,27 +217,44 @@ namespace Enemy
         /// </summary>
         public void FunnelExpand() => OrderToBoss(EnemyOrder.Type.FunnelExpand);
 
+        /// <summary>
+        /// ボス戦でファンネルのレーザーサイト表示。
+        /// </summary>
         public void FunnelLaserSight() => OrderToBoss(EnemyOrder.Type.FunnelLaserSight);
 
         /// <summary>
-        /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
+        /// ボス戦QTE、刀を振り上げつつプレイヤーの正面に移動。
+        /// </summary>
+        public async UniTask MoveBossToPlayerFrontAsync(CancellationToken token)
+        {
+            OrderToBoss(EnemyOrder.Type.MoveToPlayerFront);
+            await UniTask.WaitUntil(() => _boss.BlackBoard.IsStandingOnQtePosition, cancellationToken: token);
+        }
+
+        /// <summary>
+        /// ボス戦QTE演出のみ、刀を振り下ろし、プレイヤーの左腕を破壊する。
         /// </summary>
         public void BreakLeftArm() => OrderToBoss(EnemyOrder.Type.BreakLeftArm);
 
         /// <summary>
-        /// BreakLeftArmメソッド呼び出し後、1回目のQTEを行う。
+        /// ボス戦QTE、プレイヤーの左腕を破壊したモーションから、1回目の鍔迫り合いのために刀を振り上げる。
         /// </summary>
-        public void BossFirstQte() => OrderToBoss(EnemyOrder.Type.BossFirstQTE);
+        public void QteCombatReady() => OrderToBoss(EnemyOrder.Type.QteCombatReady);
 
         /// <summary>
-        /// ボス戦の終盤、プレイヤーの左腕を破壊するシーケンス開始に合わせて呼ぶ。
+        /// ボス戦QTE、1回目の鍔迫り合い、振り下ろす->弾かれる->再度突っ込んでくる。
         /// </summary>
-        public void BossSecondQte() => OrderToBoss(EnemyOrder.Type.BossSecondQTE);
+        public void FirstQteCombatAction() => OrderToBoss(EnemyOrder.Type.FirstQteCombatAction);
 
         /// <summary>
-        /// ボス戦終了。
+        /// ボス戦QTE、2回目の鍔迫り合い、振り下ろす->弾かれる->再度突っ込んでくる。
         /// </summary>
-        public void BossEnd() => OrderToBoss(EnemyOrder.Type.BossEnd);
+        public void SecondQteCombatAction() => OrderToBoss(EnemyOrder.Type.SecondQteCombatAction);
+
+        /// <summary>
+        /// ボス戦QTE、パイルバンカーでボスが貫かれる。
+        /// </summary>
+        public void PenetrateBoss() => OrderToBoss(EnemyOrder.Type.PenetrateBoss);
 
         /// <summary>
         /// シーケンスを指定してNPCのイベントを実行。

@@ -18,12 +18,14 @@ namespace Enemy
             BossStart,        // ボス戦開始。
             FunnelExpand,     // ファンネル展開。
             FunnelLaserSight, // ファンネルのレーザーサイト表示。
-            BreakLeftArm,     // プレイヤーの左腕破壊。
-            BossFirstQTE,     // ボス戦QTE1回目。
-            BossSecondQTE,    // ボス戦QTE2回目。
-            BossEnd,          // ボス戦終了。
-            QteStartTargeted,   // 自身を対象としてQTE開始。
-            QteStartUntargeted, // 自身以外を対象としてQTE開始。
+            MoveToPlayerFront,     // プレイヤーの正面に移動。
+            BreakLeftArm,          // プレイヤーの左腕破壊。
+            QteCombatReady,        // 左腕破壊->鍔迫り合い。
+            FirstQteCombatAction,  // 鍔迫り合い1回目。
+            SecondQteCombatAction, // 鍔迫り合い2回目。
+            PenetrateBoss,         // パイルバンカーでボスが貫かれる。
+            QteStartTargeted,     // 自身を対象としてQTE開始。
+            QteStartUntargeted,   // 自身以外を対象としてQTE開始。
             QteSuccessTargeted,   // 自身を対象としてQTE成功。
             QteSuccessUntargeted, // 自身以外を対象としてQTE成功。
             QteFailureTargeted,   // 自身を対象としてQTE失敗。

@@ -61,10 +61,20 @@ namespace Enemy.Boss
         public bool IsFunnelLaserSight { get; set; }
         // QTEイベントが開始されたフラグ。
         public bool IsQteEventStarted { get; set; }
-        // QTEイベントの進捗。
-        public QteEventState.Step OrderdQteEventStep { get; set; }
+        // QTEを行う位置に立っているかのフラグ。Action層が書き込む。
+        public bool IsStandingOnQtePosition { get; set; }
+        // QTEイベント、左腕を破壊する演出開始フラグ。
+        public bool IsBreakLeftArm { get; set; }
+        // QTEイベント、左腕破壊->鍔迫り合い1回目。
+        public bool IsQteCombatReady { get; set; }
+        // QTEイベント、鍔迫り合い1回目の入力がされたフラグ。
+        public bool IsFirstCombatInputed { get; set; }
+        // QTEイベント、鍔迫り合い2回目の入力がされたフラグ。
+        public bool IsSecondCombatInputed { get; set; }
+        // QTEイベント、パイルバンカーで貫く入力がされたフラグ。
+        public bool IsPenetrateInputed { get; set; }
         // QTEを経てボスが破壊されたフラグ。
-        public bool IsBroken { get; set; }
+        public bool IsBroken { get; set; } // まだ
 
         // 現状ボス戦ではポーズ処理が無いが一応。
         public float PausableDeltaTime => Time.deltaTime;
