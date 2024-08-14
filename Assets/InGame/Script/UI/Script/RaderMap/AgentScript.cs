@@ -15,6 +15,8 @@ public class AgentScript : MonoBehaviour
     [SerializeField] public Image Image;
     /// <summary>ロックオン状態 </summary>
     public bool IsRockon = false;
+    [Header("ボスフラグ")]
+    public bool IsBoss = false;
     /// <summary>マップに表示するイメージのデフォルトの色 </summary>
     [SerializeField] public Color _defultColor;
     /// <summary>マップに表示するイメージのロックオン時の色 </summary>
