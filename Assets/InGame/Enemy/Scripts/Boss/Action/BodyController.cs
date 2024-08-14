@@ -43,7 +43,7 @@ namespace Enemy.Boss
             _states.Add(StateKey.QteEvent, new QteEventState(stateRequiredRef));
             _states.Add(StateKey.Hide, new HideState(stateRequiredRef));
 
-            // 初期状態では画面に表示されている。
+            // 初期状態
             _currentState = _states[StateKey.Hide];
         }
 

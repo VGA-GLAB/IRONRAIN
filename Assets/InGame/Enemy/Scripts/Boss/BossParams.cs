@@ -55,6 +55,32 @@ namespace Enemy.Boss
             public TextAsset InputBufferAsset => _inputBufferAsset;
         }
 
+        // QTE
+        [System.Serializable]
+        public class QteSettings
+        {
+            [Tooltip("プレイヤーの正面に移動する際の速さ")]
+            [Range(10.0f, 30.0f)]
+            [SerializeField] private float _toPlayerFrontMoveSpeed = 10.0f;
+
+            [Tooltip("プレイヤーと殴り合う距離。この距離まで近づいた後に各QTEを行う。")]
+            [Range(1.0f, 10.0f)]
+            [SerializeField] private float _socialDistance = 20.0f;
+
+            [Tooltip("鍔迫り合いで吹き飛ばされる力")]
+            [Range(1.0f, 30.0f)]
+            [SerializeField] private float _knockBackPower = 15.0f;
+
+            [Tooltip("鍔迫り合いで吹き飛ばされた後、再び突っ込んでくる速さ")]
+            [Range(1.0f, 30.0f)]
+            [SerializeField] private float _chargeSpeed = 15.0f;
+
+            public float ToPlayerFrontMoveSpeed => _toPlayerFrontMoveSpeed;
+            public float SocialSqrDistance => _socialDistance * _socialDistance;
+            public float KnockBackPower => _knockBackPower;
+            public float ChargeSpeed => _chargeSpeed;
+        }
+
         // 特に弄る必要ないもの、設定できるが現状必要ないもの。
         [System.Serializable]
         public class OtherSettings
@@ -75,6 +101,9 @@ namespace Enemy.Boss
         [Header("遠距離攻撃の設定")]
         [SerializeField] private RangeAttackSettings _rangeAttack;
 
+        [Header("QTEの設定")]
+        [SerializeField] private QteSettings _qte;
+
         [Space(10)]
 
         [Header("特に弄る必要ない設定")]
@@ -83,6 +112,7 @@ namespace Enemy.Boss
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
+        public QteSettings Qte => _qte;
         public OtherSettings Other => _other;
     }
 }

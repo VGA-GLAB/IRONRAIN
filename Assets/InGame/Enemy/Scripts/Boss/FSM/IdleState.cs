@@ -31,6 +31,7 @@ namespace Enemy.Boss.FSM
         {
             PlayDamageSE();
             FunnelExpand();
+            FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
 
@@ -42,12 +43,12 @@ namespace Enemy.Boss.FSM
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
             else if (_blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time)
             {
-                TryChangeState(StateKey.BladeAttack);
+                ///TryChangeState(StateKey.BladeAttack);
             }
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
             else if (_blackBoard.NextRangeAttackTime < Time.time)
             {
-                TryChangeState(StateKey.LauncherFire);
+                //TryChangeState(StateKey.LauncherFire);
             }
         }
     }
