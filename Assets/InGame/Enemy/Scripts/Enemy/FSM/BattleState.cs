@@ -55,10 +55,10 @@ namespace Enemy.FSM
         protected void MoveToSlot(float speed)
         {
             // 移動前後の位置を比較して左右どちらに移動したかを判定する。
-            Vector3 before = _body.TransformPosition;
+            Vector3 before = _body.Position;
             MoveToSlot(MovementPerFrame(speed));
             LookAtPlayer();
-            Vector3 after = _body.TransformPosition;
+            Vector3 after = _body.Position;
 
             MoveAnimation(after - before);
         }

@@ -45,6 +45,7 @@ namespace Enemy.Boss.FSM
         {
             PlayDamageSE();
             FunnelExpand();
+            FunnelLaserSight();
 
             // アニメーションが無いので攻撃できない。
             TryChangeState(StateKey.Idle);

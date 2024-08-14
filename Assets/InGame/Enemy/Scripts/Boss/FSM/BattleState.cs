@@ -75,7 +75,7 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void FunnelExpand()
         {
-            // (EnterやExitのタイミングでトリガーされた場合展開されないのでは？)
+            // EnterやExitのタイミングでトリガーされた場合展開されないのでは？
             if (_blackBoard.FunnelExpandTrigger)
             {
                 foreach (FunnelController f in _funnels) f.Expand();
@@ -122,6 +122,3 @@ namespace Enemy.Boss.FSM
         }
     }
 }
-
-// 次:ファンネルのレーザーサイト表示もトリガーにする必要あり、
-// ただし、そうするとファンネル展開と同じくEnterとExitだと呼ばれない問題あり。

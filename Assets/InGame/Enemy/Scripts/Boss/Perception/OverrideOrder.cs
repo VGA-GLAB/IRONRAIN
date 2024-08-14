@@ -1,5 +1,4 @@
-﻿using Enemy.Boss.FSM;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy.Boss
@@ -54,18 +53,23 @@ namespace Enemy.Boss
             if (t == EnemyOrder.Type.BossStart) { BossStart(); }
             else if (t == EnemyOrder.Type.FunnelExpand) { FunnelExpand(); }
             else if (t == EnemyOrder.Type.FunnelLaserSight) { FunnelLaserSight(); }
-            else if (t == EnemyOrder.Type.BreakLeftArm) { QteStart(); QteStep(QteEventState.Step.BreakLeftArm); }
-            else if (t == EnemyOrder.Type.BossFirstQTE) { QteStart(); QteStep(QteEventState.Step.FirstQte); }
-            else if (t == EnemyOrder.Type.BossSecondQTE) { QteStart(); QteStep(QteEventState.Step.SecondQte); }
-            else if (t == EnemyOrder.Type.BossEnd) { BossBroken(); }
+            else if (t == EnemyOrder.Type.MoveToPlayerFront) { QteStart(); }
+            else if (t == EnemyOrder.Type.BreakLeftArm) { QteStart(); BreakLeftArm(); }
+            else if (t == EnemyOrder.Type.QteCombatReady) { QteStart(); QteCombatReady(); }
+            else if (t == EnemyOrder.Type.FirstQteCombatAction) { QteStart(); FirstCombat(); }
+            else if (t == EnemyOrder.Type.SecondQteCombatAction) { QteStart(); SecondCombat(); }
+            else if (t == EnemyOrder.Type.PenetrateBoss) { QteStart(); PenetrateBoss(); }
 
             // 黒板に書き込む命令一覧。
             void BossStart() { _blackBoard.IsBossStarted = true; }
             void FunnelExpand() { _blackBoard.FunnelExpandTrigger = true; }
             void FunnelLaserSight() { _blackBoard.IsFunnelLaserSight = true; }
             void QteStart() { _blackBoard.IsQteEventStarted = true; }
-            void QteStep(QteEventState.Step step) { _blackBoard.OrderdQteEventStep = step; }
-            void BossBroken() { _blackBoard.IsBroken = true; }
+            void BreakLeftArm() { _blackBoard.IsBreakLeftArm = true; }
+            void QteCombatReady() { _blackBoard.IsQteCombatReady = true; }
+            void FirstCombat() { _blackBoard.IsFirstCombatInputed = true; }
+            void SecondCombat() { _blackBoard.IsSecondCombatInputed = true; }
+            void PenetrateBoss() { _blackBoard.IsPenetrateInputed = true; }
         }
 
         /// <summary>

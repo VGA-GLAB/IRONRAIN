@@ -34,7 +34,7 @@ namespace Enemy
         /// <summary>
         /// 位置
         /// </summary>
-        public Vector3 TransformPosition => _transform.position;
+        public Vector3 Position => _transform.position;
 
         /// <summary>
         /// オブジェクト自体を無効化して非表示にする。
