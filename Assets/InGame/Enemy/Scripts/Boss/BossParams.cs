@@ -20,7 +20,36 @@ namespace Enemy.Boss
             public float Chase => _chase;
         }
 
-        // 近距離攻撃
+        // 技ごとの設定の基底クラス
+        public class Skill
+        {
+            [Min(0)]
+            [SerializeField] private int _damage = 1;
+
+            [Tooltip("チャージ後、この距離までプレイヤーとの間合いを詰めてから攻撃する。")]
+            [Range(1.0f, 5.0f)]
+            [SerializeField] private float _distance = 4.0f;
+
+            public int Damage => _damage;
+            public float SprDistance => _distance * _distance;
+            public virtual string ID => nameof(Skill);
+        }
+
+        // 下段斬り
+        [System.Serializable]
+        public class GedanGiri : Skill
+        {
+            public override string ID => nameof(GedanGiri);
+        }
+
+        // 溜め突き
+        [System.Serializable]
+        public class ChargeThrust : Skill
+        {
+            public override string ID=> nameof(ChargeThrust);
+        }
+
+        // 近接攻撃
         [System.Serializable]
         public class MeleeAttackSettings
         {
@@ -32,8 +61,20 @@ namespace Enemy.Boss
             [Min(0)]
             [SerializeField] private float _triggerRange = 8.0f;
 
+            [Tooltip("ジェットパックのチャージ後、突撃してくる際の速さ")]
+            [Min(1.0f)]
+            [SerializeField] private float _chargeSpeed = 50.0f;
+
+            [Header("下段斬り")]
+            [SerializeField] private GedanGiri _gedanGiri;
+            [Header("溜め突き")]
+            [SerializeField] private ChargeThrust _chargeThrust;
+
             public float Rate => _rate;
             public float TriggerRange => _triggerRange;
+            public float ChargeSpeed => _chargeSpeed;
+            public GedanGiri GedanGiri => _gedanGiri;
+            public ChargeThrust ChargeThrust => _chargeThrust;
         }
 
         // 遠距離攻撃
