@@ -11,24 +11,37 @@ namespace Enemy.Boss.FSM
     {
         private bool _isEnter = true;
 
+        public abstract string ID { get; }
+
         protected abstract void Enter();
-        protected abstract void Stay();
+        protected abstract BattleActionStep Stay();
 
         /// <summary>
         /// 最初の1回はEnterが呼ばれ、以降はStayが呼ばれる。
         /// </summary>
-        public void Update()
+        public BattleActionStep Update()
         {
             if (_isEnter)
             {
                 _isEnter = false;
                 Enter();
+                return this;
             }
             else
             {
-                Stay();
+                return Stay();
             }
         }
+
+        /// <summary>
+        /// 再度Enterから呼ばれるようになる。
+        /// </summary>
+        public void Reset() => _isEnter = true;
+
+        /// <summary>
+        /// ステートマシンを破棄するタイミングに合わせて諸々を破棄出来る。
+        /// </summary>
+        public virtual void Dispose() { }
     }
 
     /// <summary>

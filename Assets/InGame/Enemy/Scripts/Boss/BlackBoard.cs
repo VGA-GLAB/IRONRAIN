@@ -33,7 +33,7 @@ namespace Enemy.Boss
         public float PointPDistance { get; set; }
         // プレイヤーの方向
         public Vector3 PlayerDirection { get; set; }
-        // プレイヤーの方向の二乗
+        // プレイヤーの距離の二乗
         public float PlayerSqrDistance { get; set; }
 
         // 戦闘開始からの経過時間

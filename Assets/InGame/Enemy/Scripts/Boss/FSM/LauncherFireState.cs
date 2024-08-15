@@ -9,44 +9,34 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherFireState : BattleState
     {
-        private enum Step { Other, Hold, Fire };
-
         // 構え->攻撃
-        LauncherHoldStep _launcherHold;
-        LauncherFireStep _launcherFire;
+        private BattleActionStep _launcherHold;
+        private BattleActionStep _launcherFire;
+        private BattleActionStep _launcherCooldown;
+        private BattleActionStep _launcherFireEnd;
 
-        Step _currentStep;
+        private BattleActionStep _currentStep;
 
         public LauncherFireState(StateRequiredRef requiredRef) : base(requiredRef)
         {
-            _launcherHold = new LauncherHoldStep(requiredRef);
-            _launcherFire = new LauncherFireStep(requiredRef);
-
-            _animation.RegisterStateEnterCallback(
-                nameof(LauncherFireState), 
-                BodyAnimationConst.Boss.HoldStart, 
-                BodyAnimationConst.Layer.UpperBody, 
-                () => _currentStep = Step.Hold
-                );
-
-            _animation.RegisterStateEnterCallback(
-                nameof(LauncherFireState),
-                BodyAnimationConst.Boss.FireLoop,
-                BodyAnimationConst.Layer.UpperBody,
-                () => _currentStep = Step.Fire
-                );
+            _launcherFireEnd = new LauncherFireEndStep();
+            _launcherCooldown = new LauncherCooldownStep(requiredRef, _launcherFireEnd);
+            _launcherFire = new LauncherFireStep(requiredRef, _launcherCooldown);
+            _launcherHold = new LauncherHoldStep(requiredRef, _launcherFire);
         }
 
         protected override void Enter()
         {
             _blackBoard.CurrentState = StateKey.LauncherFire;
-
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
-            // _animation.ResetTrigger(近接攻撃構えのトリガー名);
+            _currentStep = _launcherHold;
         }
 
         protected override void Exit()
         {
+            _launcherHold.Reset();
+            _launcherFire.Reset();
+            _launcherCooldown.Reset();
+            _launcherFireEnd.Reset();
         }
 
         protected override void Stay()
@@ -57,14 +47,17 @@ namespace Enemy.Boss.FSM
             MoveToPointP();
             LookAtPlayer();
 
-            if (_currentStep == Step.Hold) _launcherHold.Update();
-            else if (_currentStep == Step.Fire) _launcherFire.Update();
+            _currentStep = _currentStep.Update();
+
+            // 終了ステップまで到達したらアイドル状態に戻る。
+            if (_currentStep.ID == nameof(LauncherFireEndStep)) TryChangeState(StateKey.Idle);
         }
 
         public override void Dispose()
         {
-            // コールバックの登録解除。
-            _animation.ReleaseStateCallback(nameof(LauncherFireState));
+            // コールバックをステップごとに登録しているので登録解除させる。
+            _launcherHold.Dispose();
+            _launcherFire.Dispose();
         }
     }
 
@@ -73,21 +66,58 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherHoldStep : BattleActionStep
     {
-        BodyAnimation _animation;
+        private BodyAnimation _animation;
+        private BattleActionStep _fire;
 
-        public LauncherHoldStep(StateRequiredRef requiredRef)
+        private bool _isTransition;
+
+        public LauncherHoldStep(StateRequiredRef requiredRef, BattleActionStep fire)
         {
             _animation = requiredRef.BodyAnimation;
+            _fire = fire;
+
+            // 構えのアニメーション再生をトリガーする。
+            {
+                string state = BodyAnimationConst.Boss.HoldStart;
+                int layer = BodyAnimationConst.Layer.UpperBody;
+                _animation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
+            }
+            // Exitのコールバックが不安定なので、発射のEnterを検知して、次のステップに遷移させる用途。
+            {
+                string state = BodyAnimationConst.Boss.FireLoop;
+                int layer = BodyAnimationConst.Layer.UpperBody;
+                _animation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
+            }
         }
+
+        public override string ID => nameof(LauncherHoldStep);
 
         protected override void Enter()
         {
+            _animation.SetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
+            _animation.ResetTrigger(BodyAnimationConst.Param.BladeAttackTrigger);
         }
 
-        protected override void Stay()
+        private void OnHoldAnimationStateEnter()
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
             _animation.SetTrigger(BodyAnimationConst.Param.AttackTrigger);
+        }
+
+        private void OnFireAnimationStateEnter()
+        {
+            _isTransition = true;
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            if (_isTransition) return _fire;
+            else return this;
+        }
+
+        public override void Dispose()
+        {
+            _animation.ReleaseStateCallback(ID);
         }
     }
 
@@ -96,27 +126,92 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherFireStep : BattleActionStep
     {
-        BlackBoard _blackBoard;
-        BodyAnimation _animation;
+        private BlackBoard _blackBoard;
+        private BodyAnimation _animation;
+        private BattleActionStep _cooldown;
 
-        public LauncherFireStep(StateRequiredRef requiredRef)
+        public LauncherFireStep(StateRequiredRef requiredRef, BattleActionStep cooldown)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animation = requiredRef.BodyAnimation;
+            _cooldown = cooldown;
         }
+
+        public override string ID => nameof(LauncherFireStep);
+
+        protected override void Enter()
+        {
+            // 構えのステップで発射のアニメーション開始を検知しているので
+            // このメソッドが呼ばれている時点で既に発射のアニメーションが再生開始している。
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            // 近接攻撃の条件を満たした。
+            bool isMelee = _blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time;
+            // QTE開始
+            bool isQte = _blackBoard.IsQteEventStarted;
+
+            if(isMelee || isQte)
+            {
+                // 射撃のアニメーションが繰り返されるようになっているため、
+                // 手動で射撃終了をトリガーする必要がある。
+                _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
+                
+                return _cooldown;
+            }
+            else
+            {
+                return this;
+            }
+        }
+    }
+
+    /// <summary>
+    /// アニメーションの終了を待って攻撃終了させる。
+    /// </summary>
+    public class LauncherCooldownStep : BattleActionStep
+    {
+        private BlackBoard _blackBoard;
+        private BattleActionStep _fireEnd;
+
+        private float _timer;
+
+        public LauncherCooldownStep(StateRequiredRef requiredRef, BattleActionStep fireEnd)
+        {
+            _blackBoard = requiredRef.BlackBoard;
+            _fireEnd = fireEnd;
+        }
+
+        public override string ID => nameof(LauncherCooldownStep);
+
+        protected override void Enter()
+        {
+            _timer = 2.0f; // アニメーションに合う用に手動で設定。
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            _timer -= _blackBoard.PausableDeltaTime;
+            if (_timer <= 0) return _fireEnd;
+            else return this;
+        }
+    }
+
+    /// <summary>
+    /// ロケットランチャーでの攻撃終了。
+    /// </summary>
+    public class LauncherFireEndStep : BattleActionStep
+    {
+        public override string ID => nameof(LauncherFireEndStep);
 
         protected override void Enter()
         {
         }
 
-        protected override void Stay()
+        protected override BattleActionStep Stay()
         {
-            // 射撃のアニメーションのステートが繰り返されるようになっているため、
-            // 手動で射撃終了をトリガーしないと近接攻撃出来ない。
-            if (_blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time)
-            {
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
-            }
+            return this;
         }
     }
 }

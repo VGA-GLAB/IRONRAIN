@@ -33,7 +33,12 @@ namespace Enemy.Boss
         private bool _isCleanupRunning;
 
         /// <summary>
-        /// 敵の状態を参照する。実行中に変化する値はこっち。
+        /// ボスの状態を参照する。実行中に変化しない値はこっち。
+        /// </summary>
+        public IReadonlyBossParams Params => _params;
+
+        /// <summary>
+        /// ボスの状態を参照する。実行中に変化する値はこっち。
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
