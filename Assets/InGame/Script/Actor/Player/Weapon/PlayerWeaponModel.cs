@@ -90,6 +90,19 @@ namespace IronRain.Player
             _playerWeaponList[_currentWeaponIndex].MulchShot();
         }
 
+        public PlayerWeaponBase GetWepaon(PlayerWeaponType playerWeaponType)
+        {
+            for (int i = 0; i < _playerWeaponList.Count; i++) 
+            {
+                if (_playerWeaponList[i].WeaponParam.WeaponType == playerWeaponType) 
+                {
+                    return _playerWeaponList[i];
+                }
+            }
+
+            return null;
+        }
+
 
         public void Dispose()
         {
