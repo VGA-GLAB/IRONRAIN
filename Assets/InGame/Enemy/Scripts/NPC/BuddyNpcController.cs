@@ -15,6 +15,7 @@ namespace Enemy.NPC
     public class BuddyNpcController : Character, INpc
     {
         [SerializeField] private Character _target;
+        [SerializeField] private Effect _effect;
 
         private Transform _rotate;
         private BuddyNpcParams _params;
@@ -75,12 +76,14 @@ namespace Enemy.NPC
         private void View()
         {         
             transform.localScale = Vector3.one;
+            _effect.Play(null);
         }
 
         // 画面から非表示になるが、外部から安全に呼び出せるようにスケールを0にしておく。
         private void Hide()
         {
             transform.localScale = Vector3.zero;
+            _effect.Stop();
         }
 
         // 目標を撃破後、そのまま直進する。
@@ -119,8 +122,10 @@ namespace Enemy.NPC
         // 現在向いている方向に直進する。
         private async UniTaskVoid MoveForwardAsync(CancellationToken token)
         {
+            const float LifeTime = 10.0f;
+
             Transform t = transform;
-            while (true)
+            for (float f = LifeTime; f > 0; f -= Time.deltaTime)
             {
                 if (token.IsCancellationRequested) return;
 
@@ -132,6 +137,8 @@ namespace Enemy.NPC
 
                 await UniTask.Yield();
             }
+
+            Hide();
         }
     }
 }
