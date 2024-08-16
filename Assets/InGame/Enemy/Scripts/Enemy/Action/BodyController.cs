@@ -51,7 +51,7 @@ namespace Enemy
             {
                 EnemyType t = requiredRef.EnemyParams.Type;
                 BattleState b = null;
-                if (t == EnemyType.Assault) b = new BattleByMachineGunState(stateRequiredRef);
+                if (t == EnemyType.Assault) b = new BattleByAssaultState(stateRequiredRef);
                 if (t == EnemyType.Launcher) b = new BattleByLauncherState(stateRequiredRef);
                 if (t == EnemyType.Shield) b = new BattleByShieldState(stateRequiredRef);
                 _states.Add(StateKey.Battle, b);
@@ -69,7 +69,7 @@ namespace Enemy
             // アニメーション速度はステートに依存しない。
             // ポーズ時にアニメーションが止まる。
             _animator.SetFloat(BodyAnimationConst.Param.PlaySpeed, _blackBoard.PausableTimeScale);
-            Debug.Log("現在の時間スケール " + _blackBoard.PausableTimeScale);
+            
             // ステートマシンを更新。
             _currentState = _currentState.Update();
 

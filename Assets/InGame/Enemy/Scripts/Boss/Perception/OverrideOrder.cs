@@ -62,7 +62,7 @@ namespace Enemy.Boss
 
             // 黒板に書き込む命令一覧。
             void BossStart() { _blackBoard.IsBossStarted = true; }
-            void FunnelExpand() { _blackBoard.FunnelExpandTrigger = true; }
+            void FunnelExpand() { _blackBoard.FunnelExpand = Trigger.Ordered; }
             void FunnelLaserSight() { _blackBoard.IsFunnelLaserSight = true; }
             void QteStart() { _blackBoard.IsQteEventStarted = true; }
             void BreakLeftArm() { _blackBoard.IsBreakLeftArm = true; }
@@ -108,14 +108,6 @@ namespace Enemy.Boss
                 Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
                 return false;
             }
-        }
-
-        /// <summary>
-        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にトリガー系の命令を元に戻す。
-        /// </summary>
-        public void ClearOrderedTrigger()
-        {
-            _blackBoard.FunnelExpandTrigger = false;
         }
     }
 }

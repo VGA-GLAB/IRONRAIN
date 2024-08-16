@@ -109,7 +109,6 @@ namespace Enemy
         private void LateUpdate()
         {
             _eyeSensor.ClearCaptureTargets();
-            _overrideOrder.ClearOrderedTrigger();
         }
 
         // 後始末、Update内から呼び出す。

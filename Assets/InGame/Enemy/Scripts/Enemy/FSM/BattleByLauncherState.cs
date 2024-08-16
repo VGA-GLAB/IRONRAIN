@@ -82,6 +82,7 @@
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
             _animation.SetTrigger(BodyAnimationConst.Param.AttackTrigger);
+            AttackTrigger();
         }
 
         // アニメーションが攻撃状態

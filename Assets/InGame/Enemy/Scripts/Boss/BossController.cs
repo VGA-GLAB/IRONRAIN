@@ -98,11 +98,6 @@ namespace Enemy.Boss
             }
         }
 
-        private void LateUpdate()
-        {
-            _overrideOrder.ClearOrderedTrigger();
-        }
-
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {

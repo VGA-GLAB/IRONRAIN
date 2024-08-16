@@ -3,7 +3,7 @@
     public partial class BodyAnimationConst
     {
         // 銃持ちの雑魚のAnimatorControllerのステート名
-        public static class MachineGun
+        public static class Assault
         {
             public const string Idle = "Idle";
             public const string MoveFrontLoop = "all_move_front_lp";

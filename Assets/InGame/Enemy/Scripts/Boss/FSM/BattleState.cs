@@ -88,9 +88,10 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void FunnelExpand()
         {
-            // EnterやExitのタイミングでトリガーされた場合展開されないのでは？
-            if (_blackBoard.FunnelExpandTrigger)
+            if (_blackBoard.FunnelExpand == Trigger.Ordered)
             {
+                _blackBoard.FunnelExpand = Trigger.Executed;
+
                 foreach (FunnelController f in _funnels) f.Expand();
                 AudioWrapper.PlaySE("SE_Funnel");
             }

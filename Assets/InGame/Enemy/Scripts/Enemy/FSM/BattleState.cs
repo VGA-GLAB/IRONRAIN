@@ -128,12 +128,22 @@ namespace Enemy.FSM
         {
             if (_params.SpecialCondition == SpecialCondition.ManualAttack)
             {
-                return _blackBoard.OrderedAttackTrigger;
+                return _blackBoard.OrderedAttack == Trigger.Ordered;
             }
             else
             {
-                return _blackBoard.NextAttackTime < Time.time && CheckAttackRange();
+                return _blackBoard.Attack ==Trigger.Ordered && CheckAttackRange();
             }
+        }
+
+        /// <summary>
+        /// 攻撃のアニメーション再生処理を呼んだタイミングで同時に呼ぶ。
+        /// 黒板に攻撃したことを書き込む。
+        /// </summary>
+        public void AttackTrigger()
+        {
+            _blackBoard.OrderedAttack = Trigger.Executed;
+            _blackBoard.Attack = Trigger.Executed;
         }
 
         // プレイヤーが攻撃範囲内にいるかチェック。

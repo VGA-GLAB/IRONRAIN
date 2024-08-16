@@ -41,12 +41,12 @@ namespace Enemy.Boss.FSM
                 TryChangeState(StateKey.QteEvent); 
             }
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time)
+            else if (_blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered)
             {
                 TryChangeState(StateKey.BladeAttack);
             }
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.NextRangeAttackTime < Time.time)
+            else if (_blackBoard.RangeAttack == Trigger.Ordered)
             {
                 TryChangeState(StateKey.LauncherFire);
             }

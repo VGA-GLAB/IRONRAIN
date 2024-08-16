@@ -4,7 +4,20 @@ using UnityEngine;
 
 namespace Enemy
 {
-    // コメントに特に記述が無い場合は、Perception層が書き込む。
+    /// <summary>
+    /// Perception層とAction層が互いに書き込む。
+    /// 命令されたら1度だけ実行し、実行したことを命令する側で検知する。
+    /// </summary>
+    public enum Trigger
+    {
+        None,     // 命令されておらず、実行していない。
+        Ordered,  // 命令された。
+        Executed, // 実行した。
+    }
+
+    /// <summary>
+    /// コメントに特に記述が無い場合は、Perception層が書き込む。
+    /// </summary>
     public class BlackBoard : IReadonlyBlackBoard
     {
         public BlackBoard(string name = "")
@@ -47,9 +60,9 @@ namespace Enemy
         public int Hp { get; set; }
 
         // 命令やメソッド呼び出しで攻撃させるトリガー。
-        public bool OrderedAttackTrigger { get; set; }
+        public Trigger OrderedAttack { get; set; }
         // 次に攻撃可能になる時間。
-        public float NextAttackTime { get; set; }
+        public Trigger Attack { get; set; }
 
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }
@@ -77,7 +90,5 @@ namespace Enemy
         public float PausableDeltaTime => Time.deltaTime * PausableTimeScale;
         // スローやポーズ処理を行う用途のTimeScale。
         public float PausableTimeScale => ProvidePlayerInformation.TimeScale * (IsPause ? 0 : 1);
-
-
     }
 }

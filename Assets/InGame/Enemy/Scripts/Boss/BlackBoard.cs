@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Enemy.Boss
 {
     /// <summary>
-    /// キャラクターの情報を各層で共有する。
+    /// コメントに特に記述が無い場合は、Perception層が書き込む。
     /// </summary>
     public class BlackBoard : IReadonlyBlackBoard
     {
@@ -38,18 +38,18 @@ namespace Enemy.Boss
 
         // 戦闘開始からの経過時間
         public float ElapsedTime { get; set; }
-        // 次に遠距離攻撃が可能になる時間
-        public float NextRangeAttackTime { get; set; }
-        // 次に近距離攻撃が可能になる時間
-        public float NextMeleeAttackTime { get; set; }
 
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }
         // このフレームで自身にダメージを与えた武器。
         public string DamageSource { get; set; }
 
-        // ファンネルを展開するタイミングのトリガー
-        public bool FunnelExpandTrigger { get; set; }
+        // ファンネルを展開。
+        public Trigger FunnelExpand { get; set; }
+        // 遠距離攻撃。
+        public Trigger RangeAttack { get; set; }
+        // 近接攻撃。
+        public Trigger MeleeAttack { get; set; }
 
         // ボス戦開始フラグ。
         public bool IsBossStarted { get; set; }

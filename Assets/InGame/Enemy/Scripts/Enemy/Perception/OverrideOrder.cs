@@ -53,11 +53,11 @@ namespace Enemy
             EnemyOrder.Type t = order.OrderType;
 
             if (t == EnemyOrder.Type.PlayerDetect) { PlayerDetect(); SpawnPoint(order.Point); }
-            else if (t == EnemyOrder.Type.Attack) { AttackTrigger(true); }
+            else if (t == EnemyOrder.Type.Attack) { AttackTrigger(); }
             else if (t == EnemyOrder.Type.Pause) { Pause(true); }
             else if (t == EnemyOrder.Type.Resume) { Pause(false); }
             else if (t == EnemyOrder.Type.BossStart) { Die(); }
-            else if (t == EnemyOrder.Type.QteStartTargeted) { Qte(run: true, tgt: true); AttackTrigger(true); }
+            else if (t == EnemyOrder.Type.QteStartTargeted) { Qte(run: true, tgt: true); AttackTrigger(); }
             else if (t == EnemyOrder.Type.QteStartUntargeted) { Qte(run: true, tgt: false); }
             else if (t == EnemyOrder.Type.QteSuccessTargeted) { Qte(run: false, tgt: false); Die(); }
             else if (t == EnemyOrder.Type.QteSuccessUntargeted) { Qte(run: false, tgt: false); }
@@ -67,7 +67,7 @@ namespace Enemy
             // 黒板に書き込む命令一覧。
             void PlayerDetect() { _blackBoard.IsPlayerDetect = true; }
             void SpawnPoint(Vector3? p) { _blackBoard.SpawnPoint = p; }
-            void AttackTrigger(bool b) { _blackBoard.OrderedAttackTrigger = b; }
+            void AttackTrigger() { _blackBoard.OrderedAttack = Trigger.Ordered; }
             void Pause(bool b) { _blackBoard.IsPause = b; }
             void Die() { _blackBoard.Hp = 0; _blackBoard.IsDying = true; }
             void Qte(bool run, bool tgt) { _blackBoard.IsQteRunning = run; _blackBoard.IsQteTargeted = tgt; }
@@ -110,15 +110,6 @@ namespace Enemy
                 Debug.LogWarning($"敵の命令がキャパオーバー: {_blackBoard.Name}");
                 return false;
             }
-        }
-
-        /// <summary>
-        /// 同フレームの間だけtrueになるトリガー系の命令。
-        /// LateUpdateで呼ぶことで、次のフレームを跨ぐ前にfalseに戻す。
-        /// </summary>
-        public void ClearOrderedTrigger()
-        {
-            _blackBoard.OrderedAttackTrigger = false;
         }
     }
 }

@@ -58,7 +58,7 @@
 
             // 再生するアニメーション名が敵の種類によって違う。
             string stateName = "";
-            if (_params.Type == EnemyType.Assault) stateName = BodyAnimationConst.MachineGun.Damage;
+            if (_params.Type == EnemyType.Assault) stateName = BodyAnimationConst.Assault.Damage;
             else if (_params.Type == EnemyType.Launcher) stateName = BodyAnimationConst.Launcher.Damage;
             else if (_params.Type == EnemyType.Shield) stateName = BodyAnimationConst.Shield.Damage;
 

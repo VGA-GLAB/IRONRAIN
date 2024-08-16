@@ -148,7 +148,7 @@ namespace Enemy.Boss.FSM
         protected override BattleActionStep Stay()
         {
             // 近接攻撃の条件を満たした。
-            bool isMelee = _blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time;
+            bool isMelee = _blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered;
             // QTE開始
             bool isQte = _blackBoard.IsQteEventStarted;
 

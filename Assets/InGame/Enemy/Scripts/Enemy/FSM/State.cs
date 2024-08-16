@@ -40,11 +40,13 @@ namespace Enemy.FSM
         }
 
         /// <summary>
-        /// 1度の呼び出しでステートの段階に応じてEnter,Stay,Exitのうちどれか1つが実行される。
+        /// 1度の呼び出しでステートの段階に応じてEnter、Stay、Exitのうちどれか1つが実行される。
         /// 次の呼び出しで実行されるステートを返す。
         /// </summary>
         public State Update()
         {
+            Always();
+
             if (_stage == Stage.Enter)
             {
                 Enter();
@@ -68,6 +70,11 @@ namespace Enemy.FSM
         protected abstract void Enter();
         protected abstract void Stay();
         protected abstract void Exit();
+
+        /// <summary>
+        /// Enter、Stay、Exit、全てのタイミングで呼び出される。
+        /// </summary>
+        protected virtual void Always() { }
 
         /// <summary>
         /// ゲーム終了時にステートを破棄するタイミングで呼ぶ処理。

@@ -4,7 +4,7 @@
     /// 移動しつつ攻撃するステート。
     /// 接近後、アイドル状態を経由して遷移してくる。
     /// </summary>
-    public class BattleByMachineGunState : BattleState
+    public class BattleByAssaultState : BattleState
     {
         private enum AnimationGroup
         {
@@ -17,12 +17,12 @@
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleByMachineGunState(StateRequiredRef requiredRef) : base(requiredRef)
+        public BattleByAssaultState(StateRequiredRef requiredRef) : base(requiredRef)
         {
             // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.MachineGun.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
-            Register(BodyAnimationConst.MachineGun.HoldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Hold);
-            Register(BodyAnimationConst.MachineGun.FireLoop, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Fire);
+            Register(BodyAnimationConst.Assault.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
+            Register(BodyAnimationConst.Assault.HoldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Hold);
+            Register(BodyAnimationConst.Assault.FireLoop, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Fire);
 
             // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
             // このメソッドで登録していないアニメーションのステートに遷移した場合、
@@ -79,6 +79,7 @@
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
             _animation.SetTrigger(BodyAnimationConst.Param.AttackTrigger);
+            AttackTrigger();
         }
 
         // アニメーションが攻撃状態

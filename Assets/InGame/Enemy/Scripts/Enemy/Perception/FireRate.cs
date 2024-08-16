@@ -11,9 +11,10 @@ namespace Enemy
         private BlackBoard _blackBoard;
         private Equipment _equip;
 
+        // 攻撃タイミングがリストの要素になっており、攻撃時間が来たら添え字を更新する。
         private IReadOnlyList<float> _timing;
-        // 攻撃する度にこの値を更新し、次の攻撃タイミングを計算する。
         private int _index;
+        private float _nextTime;
 
         public FireRate(RequiredRef requiredRef)
         {
@@ -46,7 +47,7 @@ namespace Enemy
             }
 
             // 最初の攻撃タイミングを設定
-            _blackBoard.NextAttackTime = Time.time + timing[_index];
+            _nextTime = Time.time + timing[_index];
 
             return timing;
         }
@@ -58,8 +59,11 @@ namespace Enemy
         {
             if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
 
-            // 最後に攻撃したタイミングが次の攻撃タイミングより前の場合はそのまま
-            if (_equip.LastAttackTiming <= _blackBoard.NextAttackTime) return;
+            // 実際に弾が発射もしくは刀を振ったタイミングではなく、
+            // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
+            if (Time.time <= _nextTime || _blackBoard.Attack == Trigger.Ordered) return;
+
+            _blackBoard.Attack = Trigger.Ordered;
 
             _index++;
             _index %= _timing.Count;
@@ -68,7 +72,7 @@ namespace Enemy
             float t = _timing[_index];
             if (_index > 0) t -= _timing[_index - 1];
 
-            _blackBoard.NextAttackTime = Time.time + t;
+            _nextTime = Time.time + t;
         }
     }
 }

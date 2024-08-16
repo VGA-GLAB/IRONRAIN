@@ -12,11 +12,13 @@ namespace Enemy.Boss
         private Equipment _meleeEquip;
         private RangeEquipment _rangeEquip;
 
+        // 攻撃タイミングがリストの要素になっており、攻撃時間が来たら添え字を更新する。
         private IReadOnlyList<float> _rangeTiming;
         private IReadOnlyList<float> _meleeTiming;
-        // 攻撃する度にこの値を更新し、次の攻撃タイミングを計算する。
         private int _rangeIndex;
         private int _meleeIndex;
+        private float _nextRangeTime;
+        private float _nextMeleeTime;
 
         public FireRate(RequiredRef requiredRef)
         {
@@ -52,7 +54,7 @@ namespace Enemy.Boss
             }
 
             // 最初の攻撃タイミングを設定
-            _blackBoard.NextRangeAttackTime = Time.time + timing[_rangeIndex];
+            _nextRangeTime = Time.time + timing[_rangeIndex];
 
             return timing;
         }
@@ -67,7 +69,7 @@ namespace Enemy.Boss
             };
 
             // 最初の攻撃タイミングを設定
-            _blackBoard.NextMeleeAttackTime = Time.time + timing[_meleeIndex];
+            _nextMeleeTime = Time.time + timing[_meleeIndex];
 
             return timing;
         }
@@ -77,9 +79,13 @@ namespace Enemy.Boss
         /// </summary>
         public void UpdateIfAttacked()
         {
-            // 最後に遠距離攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_blackBoard.NextRangeAttackTime < _rangeEquip.LastAttackTiming)
+            // 実際に弾が発射もしくは刀を振ったタイミングではなく、
+            // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
+
+            if (_nextRangeTime < Time.time && _blackBoard.RangeAttack != Trigger.Ordered)
             {
+                _blackBoard.RangeAttack = Trigger.Ordered;
+
                 _rangeIndex++;
                 _rangeIndex %= _rangeTiming.Count;
 
@@ -87,12 +93,14 @@ namespace Enemy.Boss
                 float t = _rangeTiming[_rangeIndex];
                 if (_rangeIndex > 0) t -= _rangeTiming[_rangeIndex - 1];
 
-                _blackBoard.NextRangeAttackTime = Time.time + t;
+                _nextRangeTime = Time.time + t;
             }
 
             // 最後に近接攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_blackBoard.NextMeleeAttackTime < _meleeEquip.LastAttackTiming)
+            if (_nextMeleeTime < Time.time && _blackBoard.MeleeAttack != Trigger.Ordered)
             {
+                _blackBoard.RangeAttack = Trigger.Ordered;
+
                 _meleeIndex++;
                 _meleeIndex %= _meleeTiming.Count;
 
@@ -100,7 +108,7 @@ namespace Enemy.Boss
                 float t = _meleeTiming[_meleeIndex];
                 if (_meleeIndex > 0) t -= _meleeTiming[_meleeIndex - 1];
 
-                _blackBoard.NextMeleeAttackTime = Time.time + t;
+                _nextMeleeTime = Time.time + t;
             }
         }
     }
