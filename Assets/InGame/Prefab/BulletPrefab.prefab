@@ -252,12 +252,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f27e4a6bede0874293f7971c2d32808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 100
+  _speed: 200
   _rb: {fileID: 4246290431388295697}
   _particleArray:
   - {fileID: 1887824811438574843}
   - {fileID: 1887824811438574845}
   _sphereCollider: {fileID: 4101072675191191800}
+  _offset: {x: 0, y: 5, z: 0}
 --- !u!54 &4246290431388295697
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -449,7 +450,9 @@ PrefabInstance:
       propertyPath: InitialModule.startLifetime.scalar
       value: 0.1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114000011937077392, guid: 6ff1350c2a91520479532984ca642474, type: 3}
+    - {fileID: 114000012328206700, guid: 6ff1350c2a91520479532984ca642474, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

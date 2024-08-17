@@ -13,6 +13,7 @@ namespace IronRain.Player
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private ParticleSystem[] _particleArray;
         [SerializeField] private SphereCollider _sphereCollider;
+        [SerializeField] private Vector3 _offset;
         [Tooltip("ロックオンしている敵")]
         private GameObject _lockOnEnemy;
 
@@ -32,7 +33,7 @@ namespace IronRain.Player
             ///一旦完全追従に
             if (_lockOnEnemy && _lockOnEnemy.activeSelf)
             {
-                transform.LookAt(_lockOnEnemy.transform);
+                transform.LookAt(_lockOnEnemy.transform.position + _offset);
                 _rb.velocity = transform.forward * _speed * ProvidePlayerInformation.TimeScale;
             }
             else if (_lockOnEnemy && !_lockOnEnemy.activeSelf)
