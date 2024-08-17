@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
+using RootMotion.FinalIK;
 
 namespace IronRain.Player
 {
@@ -12,6 +13,10 @@ namespace IronRain.Player
         public PlayerWeaponBase CurrentWeapon => _playerWeaponList[_currentWeaponIndex];
 
         [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
+        [SerializeField] private RootMotion.FinalIK.FABRIK _fabrIk;
+        [SerializeField] private RaderMap _raderMap;
+        [SerializeField] private float _aimSpeed;
+        [SerializeField] private Transform _defaultAimTarget;
 
         private bool _isWeaponChenge;
         private bool _isShot;
@@ -43,6 +48,14 @@ namespace IronRain.Player
         public void Update()
         {
             Shot();
+            if (_raderMap.GetRockEnemy != null)
+            {
+                _fabrIk.solver.target = _raderMap.GetRockEnemy.transform;
+            }
+            else 
+            {
+                _fabrIk.solver.target = _defaultAimTarget;
+            }
         }
 
         /// <summary>
