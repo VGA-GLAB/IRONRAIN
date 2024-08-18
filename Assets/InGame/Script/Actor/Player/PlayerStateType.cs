@@ -19,4 +19,6 @@ public enum PlayerStateType
     NonTriggerQte = 64,
     /// <summary>前進不可</summary>
     NonMoveForward = 128,
+    /// <summary>BossQte突入
+    EnterBossQte = 256,
 }

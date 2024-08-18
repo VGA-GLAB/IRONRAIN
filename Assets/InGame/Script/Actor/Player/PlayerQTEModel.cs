@@ -144,6 +144,8 @@ namespace IronRain.Player
         /// <returns></returns>
         public async UniTask<QTEResultType> BossQTE1(CancellationToken startToken)
         {
+            _playerEnvroment.AddState(PlayerStateType.EnterBossQte);
+            _playerEnvroment.PlayerTransform.position = _playerEnvroment.PlayerTransform.parent.position;
             _playerEnvroment.PlayerTransform.parent = null;
             _qteResultType = QTEResultType.Failure;
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
