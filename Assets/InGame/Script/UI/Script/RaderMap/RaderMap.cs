@@ -26,8 +26,13 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
     [Header("ロックオン可能距離")]
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
+    [Header("ボス戦")]
     [Header("ボス戦フラグ")]
     [SerializeField, Tooltip("ボス戦フラグ")] public bool IsBossScene = false;
+    [Header("ボス戦でのレーダーの半径")]
+    [SerializeField] private float _bossRadius = 0.001f;
+    [Header("ボス戦でのレーダーの端までの長さ")]
+    [SerializeField] private float _bossRaderLength = 120f;
     [Header("ボス戦でレーダー横の倍率")]
     [SerializeField] private float _widthLeverage = 1f;
     [Header("ボス戦でのファンネルの縦方向の位置補正")]
@@ -467,6 +472,15 @@ public class RaderMap : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ボス戦開始時に呼ばれる処理
+    /// </summary>
+    public void BossButtleStart()
+    {
+        IsBossScene = true;
+        _radius = _bossRadius;
+        _raderLength = _bossRaderLength;
+    }
     public async UniTask WaitTouchPanelAsync(CancellationToken ct)
     {
         _isTouch = false;
