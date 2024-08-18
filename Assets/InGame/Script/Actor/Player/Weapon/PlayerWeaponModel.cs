@@ -4,12 +4,14 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
-using RootMotion.FinalIK;
+using System;
 
 namespace IronRain.Player
 {
     public class PlayerWeaponModel : IPlayerStateModel
     {
+        public event Action OnShot;
+        public event Action OnWeaponChange;
         public PlayerWeaponBase CurrentWeapon => _playerWeaponList[_currentWeaponIndex];
 
         [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
@@ -33,7 +35,7 @@ namespace IronRain.Player
 
         public void Start()
         {
-            InputProvider.Instance.SetEnterInputAsync(InputProvider.InputType.WeaponChenge, WeaponChenge);
+            InputProvider.Instance.SetEnterInputAsync(InputProvider.InputType.TwoButton, WeaponChenge);
             for (int i = 0; i < _playerWeaponList.Count; i++)
             {
                 _playerWeaponList[i].SetUp(_playerEnvroment);
@@ -63,6 +65,8 @@ namespace IronRain.Player
         /// </summary>
         private async UniTaskVoid WeaponChenge()
         {
+            _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(false);
+
             if (_playerWeaponList[_currentWeaponIndex].WeaponParam.WeaponType
                 == PlayerWeaponType.AssaultRifle)
             {
@@ -73,6 +77,8 @@ namespace IronRain.Player
                 await _playerEnvroment.PlayerAnimation.PlayerRocketDisarm();
             }
 
+            OnWeaponChange?.Invoke();
+
 
             if (_currentWeaponIndex + 1 < _playerWeaponList.Count)
             {
@@ -82,9 +88,14 @@ namespace IronRain.Player
             {
                 _currentWeaponIndex = 0;
             }
-            CriAudioManager.Instance.SE.Play("SE", "Change");
+
+            _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(true);
+            CriAudioManager.Instance.SE.Play("SE", "SE_Change");
         }
 
+        /// <summary>
+        /// 弾の発射
+        /// </summary>
         private void Shot()
         {
             _isShot = InputProvider.Instance.GetStayInput(InputProvider.InputType.OneButton);
@@ -95,6 +106,7 @@ namespace IronRain.Player
                 || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
                 || !_isShot) return;
 
+            OnShot?.Invoke();
             _playerWeaponList[_currentWeaponIndex].Shot();
         }
 
@@ -119,7 +131,8 @@ namespace IronRain.Player
 
         public void Dispose()
         {
-
+            OnShot = null;
+            OnWeaponChange = null;
         }
     }
 }

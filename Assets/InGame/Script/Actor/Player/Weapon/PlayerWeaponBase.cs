@@ -12,7 +12,9 @@ namespace IronRain.Player
     {
         public PlayerWeaponParams WeaponParam => _params;
         public int CurrentBullets => _currentBullets;
+        public GameObject WeaponObject => _weaponObject;
 
+        [SerializeField] protected GameObject _weaponObject;
         [SerializeField] protected PlayerWeaponParams _params;
         [SerializeField] protected string _shotSeCueName;
         [SerializeField] protected BulletPool _bulletPool;
