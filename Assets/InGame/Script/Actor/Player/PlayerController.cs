@@ -54,6 +54,7 @@ namespace IronRain.Player
             {
                 _playerStateList[i].Dispose();
             }
+            _playerEnvroment.Dispose();
         }
 
         /// <summary>

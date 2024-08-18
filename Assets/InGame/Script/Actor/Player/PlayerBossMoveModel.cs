@@ -15,6 +15,7 @@ namespace IronRain.Player
         [SerializeField] private Transform _pointP;
 
         private float _totalThrusterMove;
+        private CancellationTokenSource _thrusterCancell;
         private PlayerEnvroment _playerEnvroment;
         private PlayerSetting.PlayerParams _params;
         private Transform _transform;
@@ -33,7 +34,9 @@ namespace IronRain.Player
 
         public void Start()
         {
+            _thrusterCancell = new CancellationTokenSource();
             _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+            _playerEnvroment.OnStateChange += ThrusterCancell;
             SumTheta();
         }
         public void FixedUpdate()
@@ -84,7 +87,8 @@ namespace IronRain.Player
                     {
                         await _playerEnvroment.PlayerTransform
                         .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
-                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint);
+                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                        .ToUniTask(cancellationToken: _thrusterCancell.Token);
                         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                         _playerEnvroment.RemoveState(PlayerStateType.Thruster);
                     });
@@ -102,7 +106,8 @@ namespace IronRain.Player
                     {
                         await _playerEnvroment.PlayerTransform
                         .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
-                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint);
+                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                        .ToUniTask(cancellationToken: _thrusterCancell.Token);
                         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                         _playerEnvroment.RemoveState(PlayerStateType.Thruster);
                     });
@@ -113,6 +118,16 @@ namespace IronRain.Player
             {
             }
         }
+
+        private void  ThrusterCancell(PlayerStateType playerState) 
+        {
+            if (playerState.HasFlag(PlayerStateType.EnterBossQte)) 
+            {
+                Debug.Log("の巣戦は言った");
+                _thrusterCancell.Cancel();
+            } 
+        }
+
 
         /// <summary>
         /// 次にスラスターで移動するポイント
