@@ -46,6 +46,8 @@ Shader "Custom/3DGround"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceData.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
+
+            #include "../Curve/VertexCurve.hlsl"
             
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
@@ -63,6 +65,8 @@ Shader "Custom/3DGround"
 
             #pragma multi_compile _MAPPING_PLANAR _MAPPING_TRIPLANAR
             #pragma multi_compile _BIAS_VERTEX _BIAS_FRAGMENT
+            #pragma multi_compile _CURVE_TYPE_NONE _CURVE_TYPE_CAMERA_FORWARD _CURVE_TYPE_CAMERA_DISTANCE _CURVE_TYPE_WORLD_FORWARD
+
             
             struct Attributes
             {
@@ -130,6 +134,10 @@ Shader "Custom/3DGround"
             float4 _PlanarScaleOffset;
 
             float _PlanarWeight;
+
+            float _CurveFactor;
+            float _CurveOffset;
+            float _CurveStrength;
             CBUFFER_END
 
             float3 CulcBias(float3 absNormal, float weight)
@@ -152,15 +160,18 @@ Shader "Custom/3DGround"
                 UNITY_TRANSFER_INSTANCE_ID(input, output);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 
-                VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
+                VertexPositionInputs curvedVertexInput;
+                CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength,
+                    GetVertexPositionInputs(input.positionOS.xyz), curvedVertexInput);
+                
                 VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS, input.tangentOS);
 
-                float3 viewDirWS = GetWorldSpaceViewDir(vertexInput.positionWS);
-                output.vertexLight = VertexLighting(vertexInput.positionWS, normalInput.normalWS);
-                output.fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
+                float3 viewDirWS = GetWorldSpaceViewDir(curvedVertexInput.positionWS);
+                output.vertexLight = VertexLighting(curvedVertexInput.positionWS, normalInput.normalWS);
+                output.fogFactor = ComputeFogFactor(curvedVertexInput.positionCS.z);
 
-                output.positionHCS = vertexInput.positionCS;
-                output.positionWS = vertexInput.positionWS;
+                output.positionHCS = curvedVertexInput.positionCS;
+                output.positionWS = curvedVertexInput.positionWS;
                 output.normalWS = normalInput.normalWS;
                 output.tangentWS = normalInput.tangentWS;
                 output.bitangentWS = normalInput.bitangentWS;
@@ -169,7 +180,7 @@ Shader "Custom/3DGround"
                 OUTPUT_SH(output.normalWS, output.vertexSH);
 
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
-                output.shadowCoord = GetShadowCoord(vertexInput);
+                output.shadowCoord = GetShadowCoord(curvedVertexInput);
 
                 #if defined(_BIAS_VERTEX)
                 output.normalBias = pow(abs(output.normalWS), _PlanarWeight);
