@@ -475,7 +475,7 @@ public class RaderMap : MonoBehaviour
     /// <summary>
     /// ボス戦開始時に呼ばれる処理
     /// </summary>
-    public void BossButtleStart()
+    public void BossBattleStart()
     {
         IsBossScene = true;
         _radius = _bossRadius;
