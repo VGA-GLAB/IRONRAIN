@@ -1,7 +1,9 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using IronRain.Player;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,9 +25,9 @@ public class WeaponUiManager : MonoBehaviour
     [Header("アサルトライフルのUiオブジェクト")]
     [SerializeField] private GameObject _assultUiGameObject;
     [Header("残弾の最大値テキスト")]
-    [SerializeField] private Text _assultBulletMaxText;
+    [SerializeField] private TextMeshProUGUI _assultBulletMaxText;
     [Header("残弾数テキスト")]
-    [SerializeField] private Text _assultBulletCurrentText;
+    [SerializeField] private TextMeshProUGUI _assultBulletCurrentText;
     [Header("武器残弾ゲージ")]
     [SerializeField] private Image _assultBulletWeaponGauge;
     [Header("円残弾ゲージ")]
@@ -48,9 +50,9 @@ public class WeaponUiManager : MonoBehaviour
     [Header("ロケットランチャーのUiオブジェクト")]
     [SerializeField] private GameObject _rocketLauncherUiGameObject;
     [Header("残弾の最大値テキスト")]
-    [SerializeField] private Text _rocketLauncherBulletMaxText;
+    [SerializeField] private TextMeshProUGUI _rocketLauncherBulletMaxText;
     [Header("残弾数テキスト")]
-    [SerializeField] private Text _rocketLauncherBulletCurrentText;
+    [SerializeField] private TextMeshProUGUI _rocketLauncherBulletCurrentText;
     [Header("武器残弾ゲージ")]
     [SerializeField] private Image _rocketLauncherBulletWeaponGauge;
     [Header("円残弾ゲージ")]
@@ -110,19 +112,33 @@ public class WeaponUiManager : MonoBehaviour
         _rocketLauncherBulletCurrentText.text = _rocketLauncherCurrentCount.ToString();
         _rocketLauncherBulletWeaponGauge.fillAmount = 1.0f;
         _rocketLauncherBulletCircleGauge.fillAmount = 1.0f;
+
+        //武器Uiの切り替え
+        if (WeaponUiState == WeaponUiState.Assault)
+        {
+            _assultUiGameObject.transform.SetAsLastSibling();
+        }
+        else
+        {
+            _rocketLauncherUiGameObject.transform.SetAsLastSibling();
+        }
         
-        ChangeWeapon(WeaponUiState);
+        if (_weaponController != null)
+        {
+            _weaponController.WeaponModel.OnShot += WeaponShot;
+            _weaponController.WeaponModel.OnWeaponChange += ChangeWeapon;
+        }
     }
 
     /// <summary>
     /// 弾を打つときに呼ぶ処理
     /// </summary>
-    public bool WeaponShot()
+    public void WeaponShot()
     {
         if (WeaponUiState == WeaponUiState.Assault)
         {
             if (IsAssultReload)
-                return false;
+                return;
 
             _assultCurrentCount--;
             //テキストを更新
@@ -155,7 +171,7 @@ public class WeaponUiManager : MonoBehaviour
         else
         {
             if (IsRocketLauncherReload)
-                return false;
+                return;
 
             _rocketLauncherCurrentCount--;
             //テキストを更新
@@ -189,27 +205,22 @@ public class WeaponUiManager : MonoBehaviour
                 sequence.Play();
             }
         }
-        return true;
     }
 
     /// <summary>
     /// 武器切り替えを行う処理
     /// </summary>
-    /// <param name="changeState"></param>
-    public void ChangeWeapon(WeaponUiState changeState)
+    public void ChangeWeapon()
     {
-        WeaponUiState = changeState;
-
-        //切り替え音を鳴らす
-        CriAudioManager.Instance.SE.Play("SE", "SE_Change");
-
-        if (changeState == WeaponUiState.Assault)
+        if (WeaponUiState == WeaponUiState.Assault)
         {
-            _assultUiGameObject.transform.SetAsLastSibling();
+            _rocketLauncherUiGameObject.transform.SetAsLastSibling();
+            WeaponUiState = WeaponUiState.RocketLauncher;
         }
         else
         {
-            _rocketLauncherUiGameObject.transform.SetAsLastSibling();
+            _assultUiGameObject.transform.SetAsLastSibling();
+            WeaponUiState = WeaponUiState.Assault;
         }
     }
 
@@ -234,6 +245,14 @@ public class WeaponUiManager : MonoBehaviour
     }
 
 
+    private void OnDisable()
+    {
+        if (_weaponController != null)
+        {
+            _weaponController.WeaponModel.OnShot -= WeaponShot;
+            _weaponController.WeaponModel.OnWeaponChange -= ChangeWeapon;
+        }
+    }
 
     ////////////////テスト用////////////////////
     public void ChangeWeaponTest()
