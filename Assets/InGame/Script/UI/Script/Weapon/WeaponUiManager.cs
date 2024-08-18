@@ -199,8 +199,11 @@ public class WeaponUiManager : MonoBehaviour
     public void ChangeWeapon(WeaponUiState changeState)
     {
         WeaponUiState = changeState;
-        
-        if(changeState == WeaponUiState.Assault)
+
+        //切り替え音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Change");
+
+        if (changeState == WeaponUiState.Assault)
         {
             _assultUiGameObject.transform.SetAsLastSibling();
         }
@@ -235,8 +238,10 @@ public class WeaponUiManager : MonoBehaviour
     ////////////////テスト用////////////////////
     public void ChangeWeaponTest()
     {
-        
-        if(WeaponUiState == WeaponUiState.Assault)
+        //切り替え音を鳴らす
+        CriAudioManager.Instance.SE.Play("SE", "SE_Change");
+
+        if (WeaponUiState == WeaponUiState.Assault)
         {
             _rocketLauncherUiGameObject.transform.SetAsLastSibling();
             WeaponUiState = WeaponUiState.RocketLauncher;
