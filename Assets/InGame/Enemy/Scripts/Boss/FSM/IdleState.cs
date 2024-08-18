@@ -11,7 +11,7 @@ namespace Enemy.Boss.FSM
     {
         private AgentScript _agentScript;
 
-        public IdleState(StateRequiredRef requiredRef) : base(requiredRef)
+        public IdleState(RequiredRef requiredRef) : base(requiredRef)
         {
             _agentScript = requiredRef.AgentScript;
         }
@@ -30,23 +30,27 @@ namespace Enemy.Boss.FSM
         protected override void Stay()
         {
             PlayDamageSE();
-            FunnelExpand();
             FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
-
+            
+            // ファンネル展開。
+            if (_blackBoard.FunnelExpand == Trigger.Ordered)
+            {
+                TryChangeState(StateKey.FunnelExpand);
+            }
             // QTEイベントが始まった場合は遷移。
-            if (_blackBoard.IsQteEventStarted)
+            else if (_blackBoard.IsQteEventStarted)
             { 
                 TryChangeState(StateKey.QteEvent); 
             }
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.IsWithinMeleeRange && _blackBoard.NextMeleeAttackTime < Time.time)
+            else if (_blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered)
             {
                 TryChangeState(StateKey.BladeAttack);
             }
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.NextRangeAttackTime < Time.time)
+            else if (_blackBoard.RangeAttack == Trigger.Ordered)
             {
                 TryChangeState(StateKey.LauncherFire);
             }

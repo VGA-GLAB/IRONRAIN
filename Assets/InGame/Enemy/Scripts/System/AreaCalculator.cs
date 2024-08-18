@@ -56,14 +56,14 @@ namespace Enemy
             // プレイヤーの位置
             Vector3 p = player.position;
             // 中心から左側に向けて並べていく。
-            p += -player.right * Space * (int)place;
-            p += player.right * (length / 2) * Space;
+            p += player.right * Space * (int)place;
+            p += -player.right * (length / 2) * Space;
             // 前方向のオフセットを加算
             p += player.forward * forwardOffset;
             // 上下方向のオフセットを加算
             p += Vector3.up * UpperOffset;
             // 偶数個の場合
-            if (length % 2 == 0) p += -player.right * Space / 2;
+            if (length % 2 == 0) p += player.right * Space / 2;
 
             return p;
         }

@@ -10,7 +10,7 @@ namespace Enemy
     public enum BulletKey
     {
         Dummy,
-        MachineGun,
+        Assault,
         Launcher,
         Funnel,
         // ここに追加

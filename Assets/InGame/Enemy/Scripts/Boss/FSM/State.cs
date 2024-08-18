@@ -16,6 +16,8 @@ namespace Enemy.Boss.FSM
         Delete,
         BladeAttack,
         LauncherFire,
+        FunnelAttack,
+        FunnelExpand,
     }
 
     /// <summary>
@@ -46,6 +48,8 @@ namespace Enemy.Boss.FSM
         /// </summary>
         public State Update()
         {
+            Always();
+
             if (_stage == Stage.Enter)
             {
                 Enter();
@@ -69,6 +73,11 @@ namespace Enemy.Boss.FSM
         protected abstract void Enter();
         protected abstract void Stay();
         protected abstract void Exit();
+
+        /// <summary>
+        /// Enter、Stay、Exit、全てのタイミングで呼び出される。
+        /// </summary>
+        protected virtual void Always() { }
 
         /// <summary>
         /// ゲーム終了時にステートを破棄するタイミングで呼ぶ処理。

@@ -23,14 +23,14 @@ namespace Enemy.Boss
 
         private void OnEnable()
         {
-            _animationEvent.OnWeaponCrashOnBossQteStart += PlayWeaponCrashEffect;
-            _animationEvent.OnWeaponCrashOnBossQteEnd += StopWeaponCrashEffect;
+            _animationEvent.OnWeaponCrash += PlayWeaponCrashEffect;
+            _animationEvent.OnWeaponCrash += StopWeaponCrashEffect;
         }
 
         private void OnDisable()
         {
-            _animationEvent.OnWeaponCrashOnBossQteStart -= PlayWeaponCrashEffect;
-            _animationEvent.OnWeaponCrashOnBossQteEnd -= StopWeaponCrashEffect;
+            _animationEvent.OnWeaponCrash -= PlayWeaponCrashEffect;
+            _animationEvent.OnWeaponCrash -= StopWeaponCrashEffect;
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace Enemy.Boss.FSM
 
         private BattleActionStep _currentStep;
 
-        public BladeAttackState(StateRequiredRef requiredRef) : base(requiredRef)
+        public BladeAttackState(RequiredRef requiredRef) : base(requiredRef)
         {
             PreAttackData preAttackData = new PreAttackData();
 
@@ -63,7 +63,6 @@ namespace Enemy.Boss.FSM
         protected override void Stay()
         {
             PlayDamageSE();
-            FunnelExpand();
             FunnelLaserSight();
 
             _currentStep = _currentStep.Update();
@@ -89,7 +88,7 @@ namespace Enemy.Boss.FSM
 
         private float _timer;
 
-        public ChargeJetPackStep(StateRequiredRef requiredRef, BattleActionStep approachToPlayer)
+        public ChargeJetPackStep(RequiredRef requiredRef, BattleActionStep approachToPlayer)
         {
             _blackBoard = requiredRef.BlackBoard;
             _body = requiredRef.Body;
@@ -109,7 +108,7 @@ namespace Enemy.Boss.FSM
             // プレイヤーの方を向く。
             Vector3 f = _blackBoard.PlayerDirection;
             f.y = 0;
-            _body.Forward(f);
+            _body.LookForward(f);
 
             // 時間が来たら遷移。
             _timer -= _blackBoard.PausableDeltaTime;
@@ -132,7 +131,7 @@ namespace Enemy.Boss.FSM
         private PreAttackData _preAttackData;
         private BossParams.Skill _selected;
 
-        public ApproachToPlayerStep(StateRequiredRef requiredRef, 
+        public ApproachToPlayerStep(RequiredRef requiredRef, 
             BattleActionStep gedanGidi, BattleActionStep chargeThrust, PreAttackData preAttackData)
         {
             _params = requiredRef.BossParams;
@@ -190,7 +189,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private BattleActionStep _passing;
 
-        public GedanGiriStep(StateRequiredRef requiredRef, BattleActionStep passing)
+        public GedanGiriStep(RequiredRef requiredRef, BattleActionStep passing)
         {
             _animation = requiredRef.BodyAnimation;
             _passing = passing;
@@ -200,8 +199,8 @@ namespace Enemy.Boss.FSM
 
         protected override void Enter()
         {
-            _animation.SetTrigger(BodyAnimationConst.Param.BladeAttackTrigger);
-            _animation.ResetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.BladeAttack);
+            _animation.ResetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()
@@ -218,7 +217,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private BattleActionStep _passing;
 
-        public ChargeThrustStep(StateRequiredRef requiredRef, BattleActionStep passing)
+        public ChargeThrustStep(RequiredRef requiredRef, BattleActionStep passing)
         {
             _animation = requiredRef.BodyAnimation;
             _passing = passing;
@@ -229,8 +228,8 @@ namespace Enemy.Boss.FSM
         protected override void Enter()
         {
             // 現状、モーションが出来ていないので下斬りと同じ物を再生しておく。
-            _animation.SetTrigger(BodyAnimationConst.Param.BladeAttackTrigger);
-            _animation.ResetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.BladeAttack);
+            _animation.ResetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()
@@ -251,7 +250,7 @@ namespace Enemy.Boss.FSM
         private BattleActionStep _bladeCooldown;
         private PreAttackData _preAttackData;
 
-        public PassingStep(StateRequiredRef requiredRef, BattleActionStep bladeCooldown, PreAttackData preAttackData)
+        public PassingStep(RequiredRef requiredRef, BattleActionStep bladeCooldown, PreAttackData preAttackData)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -297,7 +296,7 @@ namespace Enemy.Boss.FSM
 
         private float _timer;
 
-        public BladeCooldownStep(StateRequiredRef requiredRef, BattleActionStep bladeAttackEnd)
+        public BladeCooldownStep(RequiredRef requiredRef, BattleActionStep bladeAttackEnd)
         {
             _blackBoard = requiredRef.BlackBoard;
             _bladeAttackEnd = bladeAttackEnd;

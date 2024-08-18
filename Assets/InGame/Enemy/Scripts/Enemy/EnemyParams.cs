@@ -8,7 +8,7 @@ namespace Enemy
     public enum EnemyType
     {
         Dummy,      // 未割当の場合に返る値
-        MachineGun, // 銃持ち
+        Assault, // 銃持ち
         Launcher,   // ランチャー持ち
         Shield,     // シールド持ち
     }

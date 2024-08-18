@@ -10,7 +10,7 @@ namespace Enemy.FSM
         private Effector _effector;
         private AgentScript _agentScript;
 
-        public ApproachState(StateRequiredRef requiredRef) : base(requiredRef)
+        public ApproachState(RequiredRef requiredRef) : base(requiredRef)
         {
             _effector = requiredRef.Effector;
             _agentScript = requiredRef.AgentScript;
@@ -37,7 +37,7 @@ namespace Enemy.FSM
         protected override void Exit()
         {
             // 接近アニメーション終了をトリガー。
-            _animation.SetTrigger(BodyAnimationConst.Param.ApproachEndTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
         }
 
         protected override void Stay()

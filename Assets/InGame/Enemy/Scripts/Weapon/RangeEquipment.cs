@@ -2,6 +2,7 @@
 using Enemy.Extensions;
 using UnityEngine;
 using Enemy.Boss;
+using UnityEngine.Events;
 
 namespace Enemy
 {
@@ -17,6 +18,11 @@ namespace Enemy
             Player,  // プレイヤーに向ける。
             Target,  // 任意のターゲットに向ける。
         }
+
+        /// <summary>
+        /// 弾を発射するタイミングのコールバック。
+        /// </summary>
+        public event UnityAction OnShootAction;
 
         [Header("エフェクトの設定")]
         [SerializeField] private Effect[] _muzzleEffects;
@@ -83,6 +89,7 @@ namespace Enemy
             }
 
             OnShoot();
+            OnShootAction?.Invoke();
         }
 
         // 弾をプールから取り出して任意の方向に発射。

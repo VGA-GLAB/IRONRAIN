@@ -13,7 +13,7 @@ namespace Enemy.Boss
     [RequireComponent(typeof(BossParams))]
     public class BossController : Character, IDamageable
     {
-        [SerializeField] private Transform[] _models;
+        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private BossEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
 
@@ -42,6 +42,17 @@ namespace Enemy.Boss
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
 
+        [ContextMenu("3DモデルのRendererへの参照を取得")]
+        private void GetRendererAll()
+        {
+            List<Renderer> r = new List<Renderer>();
+            foreach (Renderer sm in GetComponentsInChildren<SkinnedMeshRenderer>()) r.Add(sm);
+            foreach (Renderer m in GetComponentsInChildren<MeshRenderer>()) r.Add(m);
+            _renderers = r.ToArray();
+
+            foreach (var v in _renderers) Debug.Log($"{name}: {v}");
+        }
+
         private void Awake()
         {
             // 必要な参照をまとめる。
@@ -53,7 +64,7 @@ namespace Enemy.Boss
                 bossParams: GetComponent<BossParams>(),
                 blackBoard: new BlackBoard(gameObject.name),
                 animator: GetComponentInChildren<Animator>(),
-                models: _models,
+                renderers: _renderers,
                 effects: _effects,
                 hitBoxes: _hitBoxes,
                 meleeEquip: GetComponent<MeleeEquipment>(),
@@ -96,11 +107,6 @@ namespace Enemy.Boss
                 _isCleanupRunning = true;
                 StartCoroutine(CleanupAsync());
             }
-        }
-
-        private void LateUpdate()
-        {
-            _overrideOrder.ClearOrderedTrigger();
         }
 
         // 後始末、Update内から呼び出す。

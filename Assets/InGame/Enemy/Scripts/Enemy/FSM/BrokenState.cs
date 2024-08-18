@@ -18,7 +18,7 @@
         // 後々はアニメーションの終了にフックするので必要なくなる。
         private float _exitElapsed;
 
-        public BrokenState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public BrokenState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.EnemyParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -58,7 +58,7 @@
 
             // 再生するアニメーション名が敵の種類によって違う。
             string stateName = "";
-            if (_params.Type == EnemyType.MachineGun) stateName = BodyAnimationConst.MachineGun.Damage;
+            if (_params.Type == EnemyType.Assault) stateName = BodyAnimationConst.Assault.Damage;
             else if (_params.Type == EnemyType.Launcher) stateName = BodyAnimationConst.Launcher.Damage;
             else if (_params.Type == EnemyType.Shield) stateName = BodyAnimationConst.Shield.Damage;
 

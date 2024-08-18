@@ -52,7 +52,7 @@ namespace Enemy.Boss.FSM
 
         private QteEventStep _currentStep;
 
-        public QteEventState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public QteEventState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _blackBoard = requiredRef.BlackBoard;
             _agentScript = requiredRef.AgentScript;
@@ -96,7 +96,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private QteEventStep _breakLeftArm;
 
-        public MoveToPlayerFrontStep(StateRequiredRef requiredRef, QteEventStep breakLeftArm)
+        public MoveToPlayerFrontStep(RequiredRef requiredRef, QteEventStep breakLeftArm)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -138,7 +138,7 @@ namespace Enemy.Boss.FSM
             // 回転
             Vector3 dir = _blackBoard.PlayerDirection;
             dir.y = 0;
-            _body.Forward(dir);
+            _body.LookForward(dir);
 
             // 左腕破壊の位置にいるフラグが立っているかつ、左腕破壊の命令がされている場合。
             if (_blackBoard.IsStandingOnQtePosition && _blackBoard.IsBreakLeftArm) return _breakLeftArm;
@@ -155,7 +155,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private QteEventStep _firstCombat;
 
-        public BreakLeftArmStep(StateRequiredRef requiredRef, QteEventStep firstCombat)
+        public BreakLeftArmStep(RequiredRef requiredRef, QteEventStep firstCombat)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animation = requiredRef.BodyAnimation;
@@ -167,7 +167,7 @@ namespace Enemy.Boss.FSM
         protected override void Enter()
         {
             // プレイヤーの入力があった場合は、刀を振り下ろす。
-            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackTrigger01);
+            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack01);
         }
 
         protected override QteEventStep Stay()
@@ -187,7 +187,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private QteEventStep _firstCombatDelay;
 
-        public FirstCombatStep(StateRequiredRef requiredRef, QteEventStep firstCombatDelay)
+        public FirstCombatStep(RequiredRef requiredRef, QteEventStep firstCombatDelay)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animation = requiredRef.BodyAnimation;
@@ -199,7 +199,7 @@ namespace Enemy.Boss.FSM
         protected override void Enter()
         {
             // 振り下ろした刀を構え直す。
-            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClearTrigger01);
+            _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClear01);
         }
 
         protected override QteEventStep Stay()
@@ -207,7 +207,7 @@ namespace Enemy.Boss.FSM
             if (_blackBoard.IsFirstCombatInputed)
             {
                 // 鍔迫り合い1回目、刀を振り下ろす。
-                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackTrigger02);
+                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack02);
                 return _firstCombatDelay;
             }
             else
@@ -231,7 +231,7 @@ namespace Enemy.Boss.FSM
         private Vector3 _force;
         private float _timer;
 
-        public knockBackStep(StateRequiredRef requiredRef, QteEventStep secondCombat)
+        public knockBackStep(RequiredRef requiredRef, QteEventStep secondCombat)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -247,7 +247,7 @@ namespace Enemy.Boss.FSM
             const float SwingDownDelay = 0.5f;
 
             _timer = SwingDownDelay;
-            _force = -_blackBoard.Forward.normalized * _params.Qte.KnockBackPower;
+            _force = -_body.Forward * _params.Qte.KnockBackPower;
         }
 
         protected override QteEventStep Stay()
@@ -284,7 +284,7 @@ namespace Enemy.Boss.FSM
 
         private Vector3 _force;
 
-        public SecondCombatStep(StateRequiredRef requiredRef, QteEventStep penetrate)
+        public SecondCombatStep(RequiredRef requiredRef, QteEventStep penetrate)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -323,8 +323,8 @@ namespace Enemy.Boss.FSM
             // 現状、距離を詰め終わったかの判定をしていないのでシーケンス側で配慮が必要。
             if (_blackBoard.IsSecondCombatInputed)
             {
-                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackTrigger02);
-                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClearTrigger02);
+                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack02);
+                _animation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClear02);
                 return _penetrate;
             }
             else
@@ -348,7 +348,7 @@ namespace Enemy.Boss.FSM
 
         private Vector3 _force;
 
-        public PenetrateStep(StateRequiredRef requiredRef, QteEventStep complete)
+        public PenetrateStep(RequiredRef requiredRef, QteEventStep complete)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -384,7 +384,7 @@ namespace Enemy.Boss.FSM
             // 現状、距離を詰め終わったかの判定をしていないのでシーケンス側で配慮が必要。
             if (_blackBoard.IsPenetrateInputed)
             {
-                _animation.SetTrigger(BodyAnimationConst.Param.FinishTrigger);
+                _animation.SetTrigger(BodyAnimationConst.Param.Finish);
                 _effector.PlayDestroyedEffect();
 
                 AudioWrapper.PlaySE("SE_Kill");
@@ -403,7 +403,7 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class CompleteStep : QteEventStep
     {
-        public CompleteStep(StateRequiredRef _)
+        public CompleteStep(RequiredRef _)
         {
         }
 

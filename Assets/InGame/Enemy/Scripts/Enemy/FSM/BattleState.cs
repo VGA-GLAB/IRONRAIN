@@ -14,7 +14,7 @@ namespace Enemy.FSM
         protected Body _body;
         protected BodyAnimation _animation;
 
-        public BattleState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.EnemyParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -96,7 +96,7 @@ namespace Enemy.FSM
             Vector3 dir = _blackBoard.PlayerDirection;
             dir.y = 0;
 
-            _body.Forward(dir);
+            _body.LookForward(dir);
         }
 
         // 移動した方向ベクトルでアニメーションを制御。
@@ -128,12 +128,22 @@ namespace Enemy.FSM
         {
             if (_params.SpecialCondition == SpecialCondition.ManualAttack)
             {
-                return _blackBoard.OrderedAttackTrigger;
+                return _blackBoard.OrderedAttack == Trigger.Ordered;
             }
             else
             {
-                return _blackBoard.NextAttackTime < Time.time && CheckAttackRange();
+                return _blackBoard.Attack ==Trigger.Ordered && CheckAttackRange();
             }
+        }
+
+        /// <summary>
+        /// 攻撃のアニメーション再生処理を呼んだタイミングで同時に呼ぶ。
+        /// 黒板に攻撃したことを書き込む。
+        /// </summary>
+        public void AttackTrigger()
+        {
+            _blackBoard.OrderedAttack = Trigger.Executed;
+            _blackBoard.Attack = Trigger.Executed;
         }
 
         // プレイヤーが攻撃範囲内にいるかチェック。
