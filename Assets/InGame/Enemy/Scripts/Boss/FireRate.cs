@@ -99,7 +99,7 @@ namespace Enemy.Boss
             // 最後に近接攻撃したタイミングが次の攻撃タイミングより後の場合
             if (_nextMeleeTime < Time.time && _blackBoard.MeleeAttack != Trigger.Ordered)
             {
-                _blackBoard.RangeAttack = Trigger.Ordered;
+                _blackBoard.MeleeAttack = Trigger.Ordered;
 
                 _meleeIndex++;
                 _meleeIndex %= _meleeTiming.Count;

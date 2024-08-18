@@ -11,7 +11,7 @@ namespace Enemy.Boss.FSM
     {
         private AgentScript _agentScript;
 
-        public IdleState(StateRequiredRef requiredRef) : base(requiredRef)
+        public IdleState(RequiredRef requiredRef) : base(requiredRef)
         {
             _agentScript = requiredRef.AgentScript;
         }
@@ -30,13 +30,17 @@ namespace Enemy.Boss.FSM
         protected override void Stay()
         {
             PlayDamageSE();
-            FunnelExpand();
             FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
-
+            
+            // ファンネル展開。
+            if (_blackBoard.FunnelExpand == Trigger.Ordered)
+            {
+                TryChangeState(StateKey.FunnelExpand);
+            }
             // QTEイベントが始まった場合は遷移。
-            if (_blackBoard.IsQteEventStarted)
+            else if (_blackBoard.IsQteEventStarted)
             { 
                 TryChangeState(StateKey.QteEvent); 
             }

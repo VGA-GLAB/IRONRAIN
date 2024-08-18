@@ -5,7 +5,7 @@
         private BlackBoard _blackBoard;
         private Body _body;
 
-        public HideState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public HideState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _blackBoard = requiredRef.BlackBoard;
             _body = requiredRef.Body;
@@ -15,12 +15,12 @@
         {
             _blackBoard.CurrentState = StateKey.Hide;
 
-            _body.ModelEnable(false);
+            _body.RendererEnable(false);
         }
 
         protected override void Exit()
         {
-            _body.ModelEnable(true);
+            _body.RendererEnable(true);
         }
 
         protected override void Stay()

@@ -14,11 +14,16 @@
             Fire,  // FireLoop
         }
 
+        private AssaultEquipment _equipment;
+
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleByAssaultState(StateRequiredRef requiredRef) : base(requiredRef)
+        public BattleByAssaultState(RequiredRef requiredRef) : base(requiredRef)
         {
+            _equipment = requiredRef.Equipment as AssaultEquipment;
+            _equipment.OnShootAction += OnShoot;
+
             // アニメーションのステートの遷移をトリガーする。
             Register(BodyAnimationConst.Assault.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
             Register(BodyAnimationConst.Assault.HoldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Hold);
@@ -33,6 +38,12 @@
             }
         }
 
+        private void OnShoot()
+        {
+            // 弾を発射したタイミングで攻撃を実行したことを黒板に書き込む。
+            AttackTrigger();
+        }
+
         protected override void Enter()
         {
             _blackBoard.CurrentState = StateKey.Battle;
@@ -41,7 +52,7 @@
         protected override void Exit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
         }
 
         protected override void Stay()
@@ -60,6 +71,8 @@
 
         public override void Dispose()
         {
+            _equipment.OnShootAction -= OnShoot;
+
             // コールバックの登録解除。
             _animation.ReleaseStateCallback(nameof(BattleByLauncherState));
         }
@@ -70,7 +83,7 @@
             // 攻撃可能な場合は武器構えのアニメーション再生。
             if (IsAttack())
             {
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
+                _animation.SetTrigger(BodyAnimationConst.Param.AttackSet);
             }
         }
 
@@ -78,8 +91,7 @@
         private void StayHold()
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackTrigger);
-            AttackTrigger();
+            _animation.SetTrigger(BodyAnimationConst.Param.Attack);
         }
 
         // アニメーションが攻撃状態
@@ -90,7 +102,7 @@
             if (_params.SpecialCondition == SpecialCondition.ManualAttack)
             {
                 // この場合、1回攻撃のアニメーションが再生された後、アイドル状態に戻るはず。
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
+                _animation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
             }
         }
 

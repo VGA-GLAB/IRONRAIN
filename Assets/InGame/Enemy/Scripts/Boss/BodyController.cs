@@ -22,26 +22,15 @@ namespace Enemy.Boss
         {
             _blackBoard = requiredRef.BlackBoard;
 
-            // 各ステートに必要な参照をまとめる。
-            StateRequiredRef stateRequiredRef = new StateRequiredRef(
-                states: new Dictionary<StateKey, State>(),
-                bossParams: requiredRef.BossParams,
-                blackBoard: requiredRef.BlackBoard,
-                pointP: requiredRef.PointP,
-                body: new Body(requiredRef),
-                bodyAnimation: new BodyAnimation(requiredRef),
-                effector: new Effector(requiredRef),
-                funnels: requiredRef.Funnels,
-                agentScript: requiredRef.Transform.GetComponent<AgentScript>()
-                );
-
-            _states = stateRequiredRef.States;
-            _states.Add(StateKey.Appear, new AppearState(stateRequiredRef));
-            _states.Add(StateKey.Idle, new IdleState(stateRequiredRef));
-            _states.Add(StateKey.BladeAttack, new BladeAttackState(stateRequiredRef));
-            _states.Add(StateKey.LauncherFire, new LauncherFireState(stateRequiredRef));
-            _states.Add(StateKey.QteEvent, new QteEventState(stateRequiredRef));
-            _states.Add(StateKey.Hide, new HideState(stateRequiredRef));
+            _states = requiredRef.States;
+            _states.Add(StateKey.Appear, new AppearState(requiredRef));
+            _states.Add(StateKey.Idle, new IdleState(requiredRef));
+            _states.Add(StateKey.BladeAttack, new BladeAttackState(requiredRef));
+            _states.Add(StateKey.LauncherFire, new LauncherFireState(requiredRef));
+            _states.Add(StateKey.QteEvent, new QteEventState(requiredRef));
+            _states.Add(StateKey.Hide, new HideState(requiredRef));
+            _states.Add(StateKey.FunnelExpand, new FunnelExpandState(requiredRef));
+            _states.Add(StateKey.FunnelAttack, new FunnelAttackState(requiredRef));
 
             // 初期状態
             _currentState = _states[StateKey.Hide];

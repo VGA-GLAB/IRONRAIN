@@ -1,6 +1,6 @@
 ﻿namespace Enemy
 {
-    public class MachineGunEquipment : RangeEquipment
+    public class AssaultEquipment : RangeEquipment
     {
         protected override void OnShoot()
         {

@@ -57,7 +57,7 @@ namespace Enemy.Boss.FSM
         protected BodyAnimation _animation;
         protected IReadOnlyCollection<FunnelController> _funnels;
 
-        public BattleState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -81,20 +81,6 @@ namespace Enemy.Boss.FSM
             else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
 
             if (seName != "") AudioWrapper.PlaySE(seName);
-        }
-
-        /// <summary>
-        /// ファンネル展開
-        /// </summary>
-        protected void FunnelExpand()
-        {
-            if (_blackBoard.FunnelExpand == Trigger.Ordered)
-            {
-                _blackBoard.FunnelExpand = Trigger.Executed;
-
-                foreach (FunnelController f in _funnels) f.Expand();
-                AudioWrapper.PlaySE("SE_Funnel");
-            }
         }
 
         /// <summary>
@@ -132,7 +118,7 @@ namespace Enemy.Boss.FSM
         {
             Vector3 look = _blackBoard.PlayerDirection;
             look.y = 0;
-            _body.Forward(look);
+            _body.LookForward(look);
         }
     }
 }

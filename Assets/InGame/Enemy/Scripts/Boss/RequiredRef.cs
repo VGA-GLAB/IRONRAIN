@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Boss.FSM;
 
 namespace Enemy.Boss
 {
     public class RequiredRef
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
-            BossParams bossParams, BlackBoard blackBoard, Animator animator, Transform[] models, BossEffects effects, 
+            BossParams bossParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, BossEffects effects, 
             Collider[] hitBoxes, MeleeEquipment meleeEquip, RangeEquipment rangeEquip, List<FunnelController> funnels,
             DebugPointP pointP)
         {
@@ -17,13 +18,19 @@ namespace Enemy.Boss
             BossParams = bossParams;
             BlackBoard = blackBoard;
             Animator = animator;
-            Models = models;
+            Renderers = renderers;
             Effects = effects;
             HitBoxes = hitBoxes;
             MeleeEquip = meleeEquip;
             RangeEquip = rangeEquip;
             Funnels = funnels;
             PointP = pointP;
+
+            States = new Dictionary<StateKey, State>();
+            Body = new Body(this);
+            BodyAnimation = new BodyAnimation(this);
+            Effector = new Effector(this);
+            AgentScript = transform.GetComponent<AgentScript>();
         }
 
         public Transform Transform { get; private set; }
@@ -33,12 +40,18 @@ namespace Enemy.Boss
         public BossParams BossParams { get; private set; }
         public BlackBoard BlackBoard { get; private set; }
         public Animator Animator { get; private set; }
-        public Transform[] Models { get; private set; }
+        public Renderer[] Renderers { get; private set; }
         public BossEffects Effects { get; private set; }
         public Collider[] HitBoxes { get; private set; }
         public MeleeEquipment MeleeEquip { get; private set; }
         public RangeEquipment RangeEquip { get; private set; }
         public List<FunnelController> Funnels { get; private set; }
         public DebugPointP PointP { get; private set; }
+
+        public Dictionary<StateKey, State> States { get; private set; }
+        public Body Body { get; private set; }
+        public BodyAnimation BodyAnimation { get; private set; }
+        public Effector Effector { get; private set; }
+        public AgentScript AgentScript { get; private set; }
     }
 }

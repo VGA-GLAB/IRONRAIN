@@ -16,6 +16,8 @@ namespace Enemy.Boss.FSM
         Delete,
         BladeAttack,
         LauncherFire,
+        FunnelAttack,
+        FunnelExpand,
     }
 
     /// <summary>

@@ -17,7 +17,7 @@
         // 現在のアニメーションのステートによって処理を分岐するために使用する。
         private AnimationGroup _currentAnimGroup;
 
-        public BattleByShieldState(StateRequiredRef requiredRef) : base(requiredRef)
+        public BattleByShieldState(RequiredRef requiredRef) : base(requiredRef)
         {
             // アニメーションのステートの遷移をトリガーする。
             Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Idle);
@@ -41,7 +41,7 @@
         protected override void Exit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
         }
 
         protected override void Stay()
@@ -70,7 +70,7 @@
             // 攻撃可能な場合は武器構えのアニメーション再生。
             if (IsAttack())
             {
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
+                _animation.SetTrigger(BodyAnimationConst.Param.AttackSet);
             }
         }
 

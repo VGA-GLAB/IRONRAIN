@@ -14,7 +14,7 @@ namespace Enemy.FSM
         protected Body _body;
         protected BodyAnimation _animation;
 
-        public BattleState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.EnemyParams;
             _blackBoard = requiredRef.BlackBoard;
@@ -96,7 +96,7 @@ namespace Enemy.FSM
             Vector3 dir = _blackBoard.PlayerDirection;
             dir.y = 0;
 
-            _body.Forward(dir);
+            _body.LookForward(dir);
         }
 
         // 移動した方向ベクトルでアニメーションを制御。

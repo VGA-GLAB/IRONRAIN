@@ -13,7 +13,7 @@ namespace Enemy.FSM
         private Effector _effector;
         private AgentScript _agentScript;
 
-        public EscapeState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public EscapeState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.EnemyParams;
             _blackBoard = requiredRef.BlackBoard;

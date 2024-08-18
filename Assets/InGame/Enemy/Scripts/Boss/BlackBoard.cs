@@ -8,7 +8,7 @@ namespace Enemy.Boss
     /// </summary>
     public class BlackBoard : IReadonlyBlackBoard
     {
-        public BlackBoard(string name = "")
+        public BlackBoard(string name)
         {
             ID = System.Guid.NewGuid();
             Name = name;
@@ -25,8 +25,6 @@ namespace Enemy.Boss
         // 現在実行中のステート。Action層が書き込む。
         public StateKey CurrentState { get; set; }
 
-        // 前方向
-        public Vector3 Forward { get; set; }
         // 点Pの方向
         public Vector3 PointPDirection { get; set; }
         // 点Pとの距離

@@ -18,7 +18,7 @@
         // 後々はアニメーションの終了にフックするので必要なくなる。
         private float _exitElapsed;
 
-        public BrokenState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public BrokenState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _params = requiredRef.EnemyParams;
             _blackBoard = requiredRef.BlackBoard;

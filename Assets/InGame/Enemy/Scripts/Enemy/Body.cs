@@ -10,7 +10,7 @@ namespace Enemy
         private Transform _transform;
         private Transform _offset;
         private Transform _rotate;
-        private Transform[] _models;
+        private Renderer[] _renderers;
         private Collider[] _hitBoxes;
 
         public Body(RequiredRef requiredRef)
@@ -18,7 +18,7 @@ namespace Enemy
             _transform = requiredRef.Transform;
             _offset = requiredRef.Offset;
             _rotate = requiredRef.Rotate;
-            _models = requiredRef.Models;
+            _renderers = requiredRef.Renderers;
             _hitBoxes = requiredRef.HitBoxes;
         }
 
@@ -27,14 +27,14 @@ namespace Enemy
             _transform = requiredRef.Transform;
             _offset = requiredRef.Offset;
             _rotate = requiredRef.Rotate;
-            _models = requiredRef.Models;
+            _renderers = requiredRef.Renderers;
             _hitBoxes = requiredRef.HitBoxes;
         }
 
-        /// <summary>
-        /// 位置
-        /// </summary>
         public Vector3 Position => _transform.position;
+        public Vector3 Forward => _rotate.forward;
+        public Vector3 Right => _rotate.right;
+        public Vector3 Up => _rotate.up;
 
         /// <summary>
         /// オブジェクト自体を無効化して非表示にする。
@@ -49,11 +49,11 @@ namespace Enemy
         /// 3Dモデルのみを表示/非表示にする。
         /// 生成後、撃破されていないが画面から消したい場合に有効。
         /// </summary>
-        public void ModelEnable(bool value)
+        public void RendererEnable(bool value)
         {
-            foreach (Transform t in _models)
+            foreach (Renderer r in _renderers)
             {
-                t.localScale = value ? Vector3.one : Vector3.zero;
+                r.enabled = value;
             }
         }
 
@@ -62,11 +62,11 @@ namespace Enemy
         /// </summary>
         public bool IsModelEnabled()
         {
-            // ModelEnableメソッドで全ての3Dモデルに対して一括で表示/非表示の処理をしているが
+            // RendererEnableメソッドで全ての3Dモデルに対して一括で表示/非表示の処理をしているが
             // 一応全てが表示されているか判定する。
-            foreach (Transform t in _models)
+            foreach (Renderer r in _renderers)
             {
-                if (t.localScale != Vector3.zero) return true;
+                if (r.enabled) return true;
             }
 
             return false;
@@ -111,7 +111,7 @@ namespace Enemy
         /// <summary>
         /// 前方向を変更する。
         /// </summary>
-        public void Forward(in Vector3 forward)
+        public void LookForward(in Vector3 forward)
         {
             _rotate.forward = forward;
         }

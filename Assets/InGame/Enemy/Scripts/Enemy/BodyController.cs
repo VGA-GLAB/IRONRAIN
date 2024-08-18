@@ -28,32 +28,21 @@ namespace Enemy
             _blackBoard = requiredRef.BlackBoard;
             _animator = requiredRef.Animator;
 
-            // 各ステートに必要な参照をまとめる。
-            StateRequiredRef stateRequiredRef = new StateRequiredRef(
-                states: new Dictionary<StateKey, State>(),
-                enemyParams: requiredRef.EnemyParams,
-                blackBoard: requiredRef.BlackBoard,
-                body: new Body(requiredRef),
-                bodyAnimation: new BodyAnimation(requiredRef),
-                effector: new Effector(requiredRef),
-                agentScript: requiredRef.Transform.GetComponent<AgentScript>()
-                );
-
             // ステートを作成し、辞書で管理。
-            _states = stateRequiredRef.States;
-            _states.Add(StateKey.Approach, new ApproachState(stateRequiredRef));
-            _states.Add(StateKey.Broken, new BrokenState(stateRequiredRef));
-            _states.Add(StateKey.Escape, new EscapeState(stateRequiredRef));
-            _states.Add(StateKey.Hide, new HideState(stateRequiredRef));
-            _states.Add(StateKey.Delete, new DeleteState(stateRequiredRef));
+            _states = requiredRef.States;
+            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
+            _states.Add(StateKey.Broken, new BrokenState(requiredRef));
+            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
+            _states.Add(StateKey.Hide, new HideState(requiredRef));
+            _states.Add(StateKey.Delete, new DeleteState(requiredRef));
 
             // 戦闘ステートは装備によって違う。
             {
                 EnemyType t = requiredRef.EnemyParams.Type;
                 BattleState b = null;
-                if (t == EnemyType.Assault) b = new BattleByAssaultState(stateRequiredRef);
-                if (t == EnemyType.Launcher) b = new BattleByLauncherState(stateRequiredRef);
-                if (t == EnemyType.Shield) b = new BattleByShieldState(stateRequiredRef);
+                if (t == EnemyType.Assault) b = new BattleByAssaultState(requiredRef);
+                if (t == EnemyType.Launcher) b = new BattleByLauncherState(requiredRef);
+                if (t == EnemyType.Shield) b = new BattleByShieldState(requiredRef);
                 _states.Add(StateKey.Battle, b);
             }
 

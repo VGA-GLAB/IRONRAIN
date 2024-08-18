@@ -75,6 +75,9 @@
             public const string BladeStart = "enemy_shield_st";        // 刀構え
             public const string BladeLoop = "enemy_shield_lp";         // 刀構え
             public const string BladeAttack = "enemy_shield_attack00"; // 刀攻撃
+            public const string FunnelExpand = "boss_funnel_injection"; // ファンネル展開
+            public const string FunnelFire = "boss_funnel_fire";        // ファンネル攻撃
+            public const string FunnelDestroy = "boss_funnel_destroy";  // ファンネル破壊
             public const string Damage = "enemy_break00";
             public const string QteSwordSet = "boss_sword_set";            // 左手破壊、刀構え
             public const string QteSwordAttack_1 = "boss_sword_attack_01"; // 左手破壊、刀振り下ろす
@@ -94,7 +97,7 @@
             public const string SpeedY = "SpeedY";
 
             // プレイヤーを検知~接近が完了したタイミングをトリガー。
-            public const string ApproachEndTrigger = "FinishFirstMoveTrigger";
+            public const string ApproachEnd = "FinishFirstMoveTrigger";
 
             // trueでアイドルから右に移動、falseで右に移動からアイドルに遷移。
             public const string IsRightMove = "IsRightMove";
@@ -103,40 +106,49 @@
             public const string IsLeftMove = "IsLeftMove";
 
             // 武器を構える。
-            public const string AttackSetTrigger = "AttackSetTrigger";
+            public const string AttackSet = "AttackSetTrigger";
 
             // 武器で攻撃する。
-            public const string AttackTrigger = "AttackTrigger";
+            public const string Attack = "AttackTrigger";
 
             // 武器を下げてアイドル状態に戻る。
-            public const string AttackEndTrigger = "AttackEndTrigger";
+            public const string AttackEnd = "AttackEndTrigger";
 
             // 刀で攻撃する。現状ボス専用。
-            public const string BladeAttackTrigger = "BladeAttackTrigger00";
+            public const string BladeAttack = "BladeAttackTrigger00";
 
             // ダメージを受ける。
-            public const string GetDamageTrigger = "GetDamageTrigger";
+            public const string GetDamage = "GetDamageTrigger";
+
+            // ファンネル攻撃。
+            public const string FunnelFire = "FunnelFireTrigger";
+
+            // ファンネル展開。
+            public const string FunnelExpand = "FunnelInjectionTrigger";
+
+            // ファンネル破壊。
+            public const string FunnelDestroy = "FunnelDestroyTrigger";
 
             // プレイヤーがQTE成功。盾持ちはGetDamageTriggerではなくこちらを使う。
-            public const string BreakTrigger = "BreakTrigger";
+            public const string Break = "BreakTrigger";
 
             // ボス戦のQTE、左腕を破壊する攻撃を構える。
-            public const string QteBladeAttackSetTrigger = "QteBladeAttackSetTrigger";
+            public const string QteBladeAttackSet = "QteBladeAttackSetTrigger";
 
             // プレイヤーの左手を破壊する攻撃を行う。
-            public const string QteBladeAttackTrigger01 = "QteBladeAttackTrigger01";
+            public const string QteBladeAttack01 = "QteBladeAttackTrigger01";
 
             // ボス戦のQTE演出、左腕を破壊する攻撃を行った後、刀を構え直す。
-            public const string QteBladeAttackClearTrigger01 = "QteBladeAttackClearTrigger01";
+            public const string QteBladeAttackClear01 = "QteBladeAttackClearTrigger01";
 
             // 鍔迫り合いになる。
-            public const string QteBladeAttackTrigger02 = "QteBladeAttackTrigger02";
+            public const string QteBladeAttack02 = "QteBladeAttackTrigger02";
 
             // ボス戦のQTEの1回目、鍔迫り合いで弾かれて再度プレイヤーに突っ込む。
-            public const string QteBladeAttackClearTrigger02 = "QteBladeAttackClearTrigger02";
+            public const string QteBladeAttackClear02 = "QteBladeAttackClearTrigger02";
 
             // ボス戦QTEの2回目、ボスが死ぬ。
-            public const string FinishTrigger = "FinishTrigger";
+            public const string Finish = "FinishTrigger";
         }
 
         // AnimatorControllerのレイヤー

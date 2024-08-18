@@ -8,9 +8,7 @@ namespace Enemy.Boss
     public class Perception
     {
         private Transform _transform;
-        private BossParams _params;
         private BlackBoard _blackBoard;
-        private Transform _rotate;
         private Transform _player;
         private DebugPointP _pointP;
         private MeleeEquipment _meleeEquip;
@@ -21,9 +19,7 @@ namespace Enemy.Boss
         public Perception(RequiredRef requiredRef)
         {
             _transform = requiredRef.Transform;
-            _params = requiredRef.BossParams;
             _blackBoard = requiredRef.BlackBoard;
-            _rotate = requiredRef.Rotate;
             _player = requiredRef.Player;
             _pointP = requiredRef.PointP;
             _meleeEquip = requiredRef.MeleeEquip;
@@ -46,9 +42,6 @@ namespace Enemy.Boss
         public void Update()
         {
             if (_isDisposed) return;
-
-            // 自身の前方向
-            _blackBoard.Forward = _rotate.forward;
 
             // エリアの位置を更新
             _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);

@@ -17,7 +17,7 @@ namespace Enemy.Boss.FSM
 
         private BattleActionStep _currentStep;
 
-        public LauncherFireState(StateRequiredRef requiredRef) : base(requiredRef)
+        public LauncherFireState(RequiredRef requiredRef) : base(requiredRef)
         {
             _launcherFireEnd = new LauncherFireEndStep();
             _launcherCooldown = new LauncherCooldownStep(requiredRef, _launcherFireEnd);
@@ -42,7 +42,6 @@ namespace Enemy.Boss.FSM
         protected override void Stay()
         {
             PlayDamageSE();
-            FunnelExpand();
             FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
@@ -71,7 +70,7 @@ namespace Enemy.Boss.FSM
 
         private bool _isTransition;
 
-        public LauncherHoldStep(StateRequiredRef requiredRef, BattleActionStep fire)
+        public LauncherHoldStep(RequiredRef requiredRef, BattleActionStep fire)
         {
             _animation = requiredRef.BodyAnimation;
             _fire = fire;
@@ -94,14 +93,14 @@ namespace Enemy.Boss.FSM
 
         protected override void Enter()
         {
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackSetTrigger);
-            _animation.ResetTrigger(BodyAnimationConst.Param.BladeAttackTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+            _animation.ResetTrigger(BodyAnimationConst.Param.BladeAttack);
         }
 
         private void OnHoldAnimationStateEnter()
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackTrigger);
+            _animation.SetTrigger(BodyAnimationConst.Param.Attack);
         }
 
         private void OnFireAnimationStateEnter()
@@ -122,7 +121,7 @@ namespace Enemy.Boss.FSM
     }
 
     /// <summary>
-    /// ロケットランチャー発射。
+    /// ロケットランチャー発射 -> リロード -> 構え を繰り返す。
     /// </summary>
     public class LauncherFireStep : BattleActionStep
     {
@@ -130,7 +129,7 @@ namespace Enemy.Boss.FSM
         private BodyAnimation _animation;
         private BattleActionStep _cooldown;
 
-        public LauncherFireStep(StateRequiredRef requiredRef, BattleActionStep cooldown)
+        public LauncherFireStep(RequiredRef requiredRef, BattleActionStep cooldown)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animation = requiredRef.BodyAnimation;
@@ -151,12 +150,14 @@ namespace Enemy.Boss.FSM
             bool isMelee = _blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered;
             // QTE開始
             bool isQte = _blackBoard.IsQteEventStarted;
+            // ファンネル展開
+            bool isFunnel = _blackBoard.FunnelExpand == Trigger.Ordered;
 
-            if(isMelee || isQte)
+            if(isMelee || isQte || isFunnel)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
                 // 手動で射撃終了をトリガーする必要がある。
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackEndTrigger);
+                _animation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
                 
                 return _cooldown;
             }
@@ -177,7 +178,7 @@ namespace Enemy.Boss.FSM
 
         private float _timer;
 
-        public LauncherCooldownStep(StateRequiredRef requiredRef, BattleActionStep fireEnd)
+        public LauncherCooldownStep(RequiredRef requiredRef, BattleActionStep fireEnd)
         {
             _blackBoard = requiredRef.BlackBoard;
             _fireEnd = fireEnd;

@@ -12,7 +12,7 @@ namespace Enemy.Boss
         enum State { Unexpanded, Expanded, Defeated }
 
         // 展開モード
-        enum Mode { Default, Right, Left }
+        enum Mode { Trace, Right, Left }
 
         [SerializeField] private Transform _model;
         [SerializeField] private Transform _muzzle;
@@ -28,6 +28,7 @@ namespace Enemy.Boss
         private Transform _rotate;
         private Transform _player;
         private BossController _boss;
+        private Transform _bossRotate;
         private FunnelParams _params;
 
         // ボス本体を基準として展開するので、この値にボス本体の位置を足す。
@@ -62,7 +63,9 @@ namespace Enemy.Boss
             if (_state != State.Expanded) return;
 
             Move();
-            LookAtPlayer();
+
+            if (_mode == Mode.Right || _mode == Mode.Left) LookAtPlayer();
+            else LookBossForward();
 
             if (FireTrigger())
             {
@@ -81,6 +84,7 @@ namespace Enemy.Boss
                 if (g.TryGetComponent(out FunnelController f))
                 {
                     f._boss = boss;
+                    f._bossRotate = boss.FindRotate();
                     funnels.Add(f);
                 }
             }
@@ -120,7 +124,7 @@ namespace Enemy.Boss
         // ボス本体の左右もしくは周囲に展開する。
         private void SetExpandOffset()
         {
-            if (_mode == Mode.Default)
+            if (_mode == Mode.Trace)
             {
                 const float MaxHeight = 8.0f;
                 const float MinHeight = 6.0f;
@@ -144,26 +148,29 @@ namespace Enemy.Boss
             }
         }
 
-        // ボスの周囲を浮遊するような動き。
+        // ボスの前方向を基準にオフセットされた位置に移動。
         private void Move()
         {
-            Vector3 expandedPoint = _boss.transform.position + _expandOffset;
-            Vector3 dir = expandedPoint - _transform.position;
+            Vector3 dx = _bossRotate.right * _expandOffset.x;
+            Vector3 dy = _bossRotate.up * _expandOffset.y;
+            Vector3 dz = _bossRotate.forward * _expandOffset.z;
+            Vector3 p = _boss.transform.position + dx + dy + dz;
+            Vector3 dir = p - _transform.position;
             Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * _params.MoveSpeed;
-            if (velo.sqrMagnitude <= dir.sqrMagnitude)
-            {
-                _transform.position += velo;
-            }
-            else
-            {
-                _transform.position = expandedPoint;
-            }
+            if (velo.sqrMagnitude <= dir.sqrMagnitude) _transform.position += velo;
+            else _transform.position = p;
         }
 
         // プレイヤーを向く。
         private void LookAtPlayer()
         {
             _rotate.forward = _player.position - _transform.position;
+        }
+
+        // ボスの正面を向く。
+        private void LookBossForward()
+        {
+            _rotate.forward = _bossRotate.forward;
         }
 
         // 一定時間で攻撃をトリガー。
@@ -184,7 +191,7 @@ namespace Enemy.Boss
             float rx = Random.value * _params.Accuracy;
             float ry = Random.value * _params.Accuracy;
             float rz = Random.value * _params.Accuracy;
-            Vector3 forward = _boss.BlackBoard.Forward + new Vector3(rx, ry, rz);
+            Vector3 forward = _bossRotate.forward + new Vector3(rx, ry, rz);
 
             BulletPool.Fire(owner, BulletKey.Funnel, muzzle, forward);
         }

@@ -62,7 +62,7 @@ namespace Enemy
             // 実際に弾が発射もしくは刀を振ったタイミングではなく、
             // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
             if (Time.time <= _nextTime || _blackBoard.Attack == Trigger.Ordered) return;
-
+            
             _blackBoard.Attack = Trigger.Ordered;
 
             _index++;

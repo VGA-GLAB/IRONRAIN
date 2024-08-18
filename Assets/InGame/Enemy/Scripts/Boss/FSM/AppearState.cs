@@ -9,7 +9,7 @@
         private BlackBoard _blackBoard;
         private Effector _effector;
 
-        public AppearState(StateRequiredRef requiredRef) : base(requiredRef.States)
+        public AppearState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             _blackBoard = requiredRef.BlackBoard;
             _effector = requiredRef.Effector;
