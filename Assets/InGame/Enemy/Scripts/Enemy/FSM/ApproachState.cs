@@ -7,48 +7,47 @@ namespace Enemy.FSM
     /// </summary>
     public class ApproachState : BattleState
     {
-        private Effector _effector;
-        private AgentScript _agentScript;
-
-        public ApproachState(RequiredRef requiredRef) : base(requiredRef)
-        {
-            _effector = requiredRef.Effector;
-            _agentScript = requiredRef.AgentScript;
-        }
+        public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Approach;
+            Ref.BlackBoard.CurrentState = StateKey.Approach;
 
             // 生成位置へワープする。
-            if(_blackBoard.SpawnPoint != null)
+            Vector3? spawnPoint = Ref.BlackBoard.SpawnPoint;
+            if(spawnPoint != null)
             {
-                _body.Warp((Vector3)_blackBoard.SpawnPoint);
+                Ref.Body.Warp((Vector3)spawnPoint);
             }
 
             // レーダーマップに表示させる。
-            if (_agentScript != null) _agentScript.EnemyGenerate();
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyGenerate();
 
             // スラスター、トレイルの有効化。
-            _effector.ThrusterEnable(true);
-            _effector.TrailEnable(true);
+            Ref.Effector.ThrusterEnable(true);
+            Ref.Effector.TrailEnable(true);
         }
 
         protected override void Exit()
         {
             // 接近アニメーション終了をトリガー。
-            _animation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
         }
 
         protected override void Stay()
         {
             // 継承元のBattleStateクラス、雑魚敵の共通したメソッド群。
             PlayDamageSE();
+
             if (BattleExit()) return;
-            MoveToSlot(_params.MoveSpeed.Approach);
+
+            float spd = Ref.EnemyParams.MoveSpeed.Approach;
+            MoveToSlot(spd);
 
             // 接近アニメーション終了は次フレームでExitが呼ばれたタイミング。
-            if (_blackBoard.IsApproachCompleted) TryChangeState(StateKey.Battle);
+            bool isCompleted = Ref.BlackBoard.IsApproachCompleted;
+            if (isCompleted) TryChangeState(StateKey.Battle);
         }
     }
 }

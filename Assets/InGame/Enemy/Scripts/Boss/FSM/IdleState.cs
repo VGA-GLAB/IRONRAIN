@@ -9,18 +9,15 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class IdleState : BattleState
     {
-        private AgentScript _agentScript;
-
-        public IdleState(RequiredRef requiredRef) : base(requiredRef)
-        {
-            _agentScript = requiredRef.AgentScript;
-        }
+        public IdleState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Idle;
+            Ref.BlackBoard.CurrentState = StateKey.Idle;
 
-            if (_agentScript != null) _agentScript.EnemyGenerate();
+            // 登場後、戦闘開始と同時にレーダーマップに表示。
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyGenerate();
         }
 
         protected override void Exit()
@@ -33,27 +30,23 @@ namespace Enemy.Boss.FSM
             FunnelLaserSight();
             MoveToPointP();
             LookAtPlayer();
-            
+
             // ファンネル展開。
-            if (_blackBoard.FunnelExpand == Trigger.Ordered)
-            {
-                TryChangeState(StateKey.FunnelExpand);
-            }
+            bool isFunnelExpand = Ref.BlackBoard.FunnelExpand == Trigger.Ordered;
+            if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
+
             // QTEイベントが始まった場合は遷移。
-            else if (_blackBoard.IsQteEventStarted)
-            { 
-                TryChangeState(StateKey.QteEvent); 
-            }
+            bool isQteStarted = Ref.BlackBoard.IsQteStarted;
+            if (isQteStarted) { TryChangeState(StateKey.QteEvent); return; }
+
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered)
-            {
-                TryChangeState(StateKey.BladeAttack);
-            }
+            bool isMeleeRange = Ref.BlackBoard.IsWithinMeleeRange;
+            bool isMelee = Ref.BlackBoard.MeleeAttack == Trigger.Ordered;
+            if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
+
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            else if (_blackBoard.RangeAttack == Trigger.Ordered)
-            {
-                TryChangeState(StateKey.LauncherFire);
-            }
+            bool isRange = Ref.BlackBoard.RangeAttack == Trigger.Ordered;
+            if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
         }
     }
 }

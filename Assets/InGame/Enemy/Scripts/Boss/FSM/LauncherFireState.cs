@@ -10,33 +10,28 @@ namespace Enemy.Boss.FSM
     public class LauncherFireState : BattleState
     {
         // 構え->攻撃
-        private BattleActionStep _launcherHold;
-        private BattleActionStep _launcherFire;
-        private BattleActionStep _launcherCooldown;
-        private BattleActionStep _launcherFireEnd;
-
+        private BattleActionStep[] _steps;
         private BattleActionStep _currentStep;
 
         public LauncherFireState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _launcherFireEnd = new LauncherFireEndStep();
-            _launcherCooldown = new LauncherCooldownStep(requiredRef, _launcherFireEnd);
-            _launcherFire = new LauncherFireStep(requiredRef, _launcherCooldown);
-            _launcherHold = new LauncherHoldStep(requiredRef, _launcherFire);
+            _steps = new BattleActionStep[4];
+            _steps[3] = new LauncherFireEndStep(requiredRef, null);
+            _steps[2] = new LauncherCooldownStep(requiredRef, _steps[3]);
+            _steps[1] = new LauncherFireStep(requiredRef, _steps[2]);
+            _steps[0] = new LauncherHoldStep(requiredRef, _steps[1]);
         }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.LauncherFire;
-            _currentStep = _launcherHold;
+            Ref.BlackBoard.CurrentState = StateKey.LauncherFire;
+
+            _currentStep = _steps[0];
         }
 
         protected override void Exit()
         {
-            _launcherHold.Reset();
-            _launcherFire.Reset();
-            _launcherCooldown.Reset();
-            _launcherFireEnd.Reset();
+            foreach (BattleActionStep s in _steps) s.Reset();
         }
 
         protected override void Stay()
@@ -54,9 +49,7 @@ namespace Enemy.Boss.FSM
 
         public override void Dispose()
         {
-            // コールバックをステップごとに登録しているので登録解除させる。
-            _launcherHold.Dispose();
-            _launcherFire.Dispose();
+            foreach (BattleActionStep s in _steps) s.Dispose();
         }
     }
 
@@ -65,27 +58,21 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherHoldStep : BattleActionStep
     {
-        private BodyAnimation _animation;
-        private BattleActionStep _fire;
-
         private bool _isTransition;
 
-        public LauncherHoldStep(RequiredRef requiredRef, BattleActionStep fire)
+        public LauncherHoldStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next)
         {
-            _animation = requiredRef.BodyAnimation;
-            _fire = fire;
-
             // 構えのアニメーション再生をトリガーする。
             {
                 string state = BodyAnimationConst.Boss.HoldStart;
                 int layer = BodyAnimationConst.Layer.UpperBody;
-                _animation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
             }
             // Exitのコールバックが不安定なので、発射のEnterを検知して、次のステップに遷移させる用途。
             {
                 string state = BodyAnimationConst.Boss.FireLoop;
                 int layer = BodyAnimationConst.Layer.UpperBody;
-                _animation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
             }
         }
 
@@ -93,14 +80,14 @@ namespace Enemy.Boss.FSM
 
         protected override void Enter()
         {
-            _animation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-            _animation.ResetTrigger(BodyAnimationConst.Param.BladeAttack);
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.ResetTrigger(BodyAnimationConst.Param.BladeAttack);
         }
 
         private void OnHoldAnimationStateEnter()
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
-            _animation.SetTrigger(BodyAnimationConst.Param.Attack);
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
         }
 
         private void OnFireAnimationStateEnter()
@@ -110,13 +97,13 @@ namespace Enemy.Boss.FSM
 
         protected override BattleActionStep Stay()
         {
-            if (_isTransition) return _fire;
+            if (_isTransition) return Next[0];
             else return this;
         }
 
         public override void Dispose()
         {
-            _animation.ReleaseStateCallback(ID);
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
         }
     }
 
@@ -125,16 +112,7 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherFireStep : BattleActionStep
     {
-        private BlackBoard _blackBoard;
-        private BodyAnimation _animation;
-        private BattleActionStep _cooldown;
-
-        public LauncherFireStep(RequiredRef requiredRef, BattleActionStep cooldown)
-        {
-            _blackBoard = requiredRef.BlackBoard;
-            _animation = requiredRef.BodyAnimation;
-            _cooldown = cooldown;
-        }
+        public LauncherFireStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
 
         public override string ID => nameof(LauncherFireStep);
 
@@ -146,20 +124,22 @@ namespace Enemy.Boss.FSM
 
         protected override BattleActionStep Stay()
         {
+            BlackBoard bb = Ref.BlackBoard;
+
             // 近接攻撃の条件を満たした。
-            bool isMelee = _blackBoard.IsWithinMeleeRange && _blackBoard.MeleeAttack == Trigger.Ordered;
+            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack == Trigger.Ordered;
             // QTE開始
-            bool isQte = _blackBoard.IsQteEventStarted;
+            bool isQte = bb.IsQteStarted;
             // ファンネル展開
-            bool isFunnel = _blackBoard.FunnelExpand == Trigger.Ordered;
+            bool isFunnel = bb.FunnelExpand == Trigger.Ordered;
 
             if(isMelee || isQte || isFunnel)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
                 // 手動で射撃終了をトリガーする必要がある。
-                _animation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
+                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
                 
-                return _cooldown;
+                return Next[0];
             }
             else
             {
@@ -173,16 +153,9 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherCooldownStep : BattleActionStep
     {
-        private BlackBoard _blackBoard;
-        private BattleActionStep _fireEnd;
-
         private float _timer;
 
-        public LauncherCooldownStep(RequiredRef requiredRef, BattleActionStep fireEnd)
-        {
-            _blackBoard = requiredRef.BlackBoard;
-            _fireEnd = fireEnd;
-        }
+        public LauncherCooldownStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
 
         public override string ID => nameof(LauncherCooldownStep);
 
@@ -193,8 +166,9 @@ namespace Enemy.Boss.FSM
 
         protected override BattleActionStep Stay()
         {
-            _timer -= _blackBoard.PausableDeltaTime;
-            if (_timer <= 0) return _fireEnd;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _timer -= dt;
+            if (_timer <= 0) return Next[0];
             else return this;
         }
     }
@@ -204,6 +178,8 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class LauncherFireEndStep : BattleActionStep
     {
+        public LauncherFireEndStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
+
         public override string ID => nameof(LauncherFireEndStep);
 
         protected override void Enter()

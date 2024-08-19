@@ -9,18 +9,12 @@ namespace Enemy.FSM
     /// </summary>
     public class BattleState : State
     {
-        protected EnemyParams _params;
-        protected BlackBoard _blackBoard;
-        protected Body _body;
-        protected BodyAnimation _animation;
-
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _params = requiredRef.EnemyParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _body = requiredRef.Body;
-            _animation = requiredRef.BodyAnimation;
+            Ref = requiredRef;
         }
+
+        protected RequiredRef Ref { get; private set; }
 
         protected override void Enter() { }
         protected override void Exit() { }
@@ -31,10 +25,11 @@ namespace Enemy.FSM
         /// </summary>
         protected void PlayDamageSE()
         {
+            string source = Ref.BlackBoard.DamageSource;
             string seName = "";
-            if (_blackBoard.DamageSource == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
-            else if (_blackBoard.DamageSource == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
-            else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
+            if (source == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
+            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
+            else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
             
             if (seName != "") AudioWrapper.PlaySE(seName);
         }
@@ -44,8 +39,8 @@ namespace Enemy.FSM
         /// </summary>
         protected bool BattleExit()
         {
-            if (_blackBoard.Hp <= 0) { TryChangeState(StateKey.Broken); return true; }
-            else if (_blackBoard.LifeTime <= 0) { TryChangeState(StateKey.Escape); return true; }
+            if (Ref.BlackBoard.Hp <= 0) { TryChangeState(StateKey.Broken); return true; }
+            else if (Ref.BlackBoard.LifeTime <= 0) { TryChangeState(StateKey.Escape); return true; }
 
             return false;
         }
@@ -56,10 +51,10 @@ namespace Enemy.FSM
         protected void MoveToSlot(float speed)
         {
             // 移動前後の位置を比較して左右どちらに移動したかを判定する。
-            Vector3 before = _body.Position;
+            Vector3 before = Ref.Body.Position;
             MoveToSlot(MovementPerFrame(speed));
             LookAtPlayer();
-            Vector3 after = _body.Position;
+            Vector3 after = Ref.Body.Position;
 
             MoveAnimation(after - before);
         }
@@ -68,56 +63,62 @@ namespace Enemy.FSM
         private Vector3 MovementPerFrame(float speed)
         {
             Vector3 v = VectorExtensions.Homing(
-                _blackBoard.Area.Point,
-                _blackBoard.Slot.Point,
-                _blackBoard.SlotDirection,
-                _params.Other.ApproachHomingPower
+                Ref.BlackBoard.Area.Point,
+                Ref.BlackBoard.Slot.Point,
+                Ref.BlackBoard.SlotDirection,
+                Ref.EnemyParams.Other.ApproachHomingPower
                 );
-
-            return v * speed * _blackBoard.PausableDeltaTime;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            return v * speed * dt;
         }
 
         // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
         // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
         private void MoveToSlot(in Vector3 mpf)
         {
-            if (mpf.sqrMagnitude >= _blackBoard.SlotSqrDistance)
+            Vector3 p;
+
+            float sqrDist = Ref.BlackBoard.SlotSqrDistance;
+            if (mpf.sqrMagnitude >= sqrDist)
             {
-                _body.Warp(_blackBoard.Slot.Point);
+                p = Ref.BlackBoard.Slot.Point;
             }
             else
             {
-                _body.Warp(_blackBoard.Area.Point + mpf);
+                p = Ref.BlackBoard.Area.Point + mpf;
             }
+
+            Ref.Body.Warp(p);
         }
 
         // プレイヤーを向かせる。
         private void LookAtPlayer()
         {
-            Vector3 dir = _blackBoard.PlayerDirection;
+            Vector3 dir = Ref.BlackBoard.PlayerDirection;
             dir.y = 0;
 
-            _body.LookForward(dir);
+            Ref.Body.LookForward(dir);
         }
 
         // 移動した方向ベクトルでアニメーションを制御。
         // z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
         private void MoveAnimation(in Vector3 moveDir)
         {
+            BodyAnimation anim = Ref.BodyAnimation;
             if (Mathf.Abs(moveDir.x) < Mathf.Epsilon)
             {
-                _animation.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
-                _animation.SetBool(BodyAnimationConst.Param.IsRightMove, false);
+                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
+                anim.SetBool(BodyAnimationConst.Param.IsRightMove, false);
             }
             else if (moveDir.x < 0)
             {
-                _animation.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
-                _animation.SetBool(BodyAnimationConst.Param.IsRightMove, true);
+                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
+                anim.SetBool(BodyAnimationConst.Param.IsRightMove, true);
             }
             else if (moveDir.x > 0)
             {
-                _animation.SetBool(BodyAnimationConst.Param.IsLeftMove, true);
-                _animation.SetBool(BodyAnimationConst.Param.IsRightMove, false);
+                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, true);
+                anim.SetBool(BodyAnimationConst.Param.IsRightMove, false);
             }
         }
 
@@ -127,13 +128,16 @@ namespace Enemy.FSM
         /// </summary>
         public bool IsAttack()
         {
-            if (_params.SpecialCondition == SpecialCondition.ManualAttack)
+            SpecialCondition condition = Ref.EnemyParams.SpecialCondition;
+            if (condition == SpecialCondition.ManualAttack)
             {
-                return _blackBoard.OrderedAttack == Trigger.Ordered;
+                Trigger attack = Ref.BlackBoard.OrderedAttack;
+                return attack == Trigger.Ordered;
             }
             else
             {
-                return _blackBoard.Attack ==Trigger.Ordered && CheckAttackRange();
+                Trigger attack = Ref.BlackBoard.Attack;
+                return attack ==Trigger.Ordered && CheckAttackRange();
             }
         }
 
@@ -143,14 +147,14 @@ namespace Enemy.FSM
         /// </summary>
         public void AttackTrigger()
         {
-            _blackBoard.OrderedAttack = Trigger.Executed;
-            _blackBoard.Attack = Trigger.Executed;
+            Ref.BlackBoard.OrderedAttack = Trigger.Executed;
+            Ref.BlackBoard.Attack = Trigger.Executed;
         }
 
         // プレイヤーが攻撃範囲内にいるかチェック。
         private bool CheckAttackRange()
         {
-            foreach (Collider c in _blackBoard.FovStay)
+            foreach (Collider c in Ref.BlackBoard.FovStay)
             {
                 if (c.CompareTag(Const.PlayerTag)) return true;
             }

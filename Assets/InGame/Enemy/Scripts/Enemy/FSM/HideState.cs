@@ -5,34 +5,36 @@
     /// </summary>
     public class HideState : State
     {
-        private BlackBoard _blackBoard;
-        private Body _body;
-
         public HideState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _body = requiredRef.Body;
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; set; }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Hide;
+            Ref.BlackBoard.CurrentState = StateKey.Hide;
 
-            _body.RendererEnable(false);         
+            Ref.Body.RendererEnable(false);         
         }
 
         protected override void Exit()
         {
             // 接近する場合は生存中のフラグが立っているので画面に表示させる。
-            _body.RendererEnable(_blackBoard.IsAlive);
+            bool isAlive = Ref.BlackBoard.IsAlive;
+            Ref.Body.RendererEnable(isAlive);
         }
 
         protected override void Stay()
         {
             // プレイヤーを検知した場合は接近
-            if (_blackBoard.IsPlayerDetect) TryChangeState(StateKey.Approach);
+            bool isDetect = Ref.BlackBoard.IsPlayerDetect;
+            if (isDetect) { TryChangeState(StateKey.Approach); return; }
+
             // 死亡した場合は削除
-            else if (!_blackBoard.IsAlive) TryChangeState(StateKey.Delete);
+            bool isDead = !Ref.BlackBoard.IsAlive;
+            if (isDead) { TryChangeState(StateKey.Delete); return; }
         }
     }
 }
