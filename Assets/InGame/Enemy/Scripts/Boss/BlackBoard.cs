@@ -58,7 +58,7 @@ namespace Enemy.Boss
         // ファンネルのレーザーサイト表示されるフラグ。
         public bool IsFunnelLaserSight { get; set; }
         // QTEイベントが開始されたフラグ。
-        public bool IsQteEventStarted { get; set; }
+        public bool IsQteStarted { get; set; }
         // QTEを行う位置に立っているかのフラグ。Action層が書き込む。
         public bool IsStandingOnQtePosition { get; set; }
         // QTEイベント、左腕を破壊する演出開始フラグ。

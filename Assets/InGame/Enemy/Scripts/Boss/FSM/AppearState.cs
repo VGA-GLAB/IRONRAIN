@@ -6,18 +6,16 @@
     /// </summary>
     public class AppearState : State
     {
-        private BlackBoard _blackBoard;
-        private Effector _effector;
-
         public AppearState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _effector = requiredRef.Effector;
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; set; }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Appear;
+            Ref.BlackBoard.CurrentState = StateKey.Appear;
         }
 
         protected override void Exit()
@@ -26,8 +24,8 @@
 
         protected override void Stay()
         {
-            _effector.ThrusterEnable(true);
-            _effector.TrailEnable(true);
+            Ref.Effector.ThrusterEnable(true);
+            Ref.Effector.TrailEnable(true);
 
             /* 登場演出ｺｺ */
 

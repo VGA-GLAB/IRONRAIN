@@ -5,13 +5,6 @@
     /// </summary>
     public class BrokenState : State
     {
-        private EnemyParams _params;
-        private BlackBoard _blackBoard;
-        private Body _body;
-        private BodyAnimation _animation;
-        private Effector _effector;
-        private AgentScript _agentScript;
-
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;
         // 死亡演出が終わるまで待つためのタイマー。
@@ -20,23 +13,21 @@
 
         public BrokenState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _params = requiredRef.EnemyParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _body = requiredRef.Body;
-            _animation = requiredRef.BodyAnimation;
-            _effector = requiredRef.Effector;
-            _agentScript = requiredRef.AgentScript;
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; set; }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Broken;
+            Ref.BlackBoard.CurrentState = StateKey.Broken;
 
             _isPlaying = false;
             _exitElapsed = 0;
-            
+
             // レーダーマップから消す。
-            if (_agentScript != null) _agentScript.EnemyDestory();
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyDestory();
         }
 
         protected override void Exit()
@@ -46,36 +37,37 @@
         protected override void Stay()
         {
             // ステートの開始から少し経ったら削除状態に遷移。
-            _exitElapsed += _blackBoard.PausableDeltaTime;
-            if (_exitElapsed > _params.Other.BrokenDelay)
-            {
-                TryChangeState(StateKey.Delete);
-            }
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            float delay = Ref.EnemyParams.Other.BrokenDelay;
+            _exitElapsed += dt;
+            if (_exitElapsed > delay) TryChangeState(StateKey.Delete);
 
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;
             _isPlaying = true;
 
             // 再生するアニメーション名が敵の種類によって違う。
+            EnemyType type = Ref.EnemyParams.Type;
             string stateName = "";
-            if (_params.Type == EnemyType.Assault) stateName = BodyAnimationConst.Assault.Damage;
-            else if (_params.Type == EnemyType.Launcher) stateName = BodyAnimationConst.Launcher.Damage;
-            else if (_params.Type == EnemyType.Shield) stateName = BodyAnimationConst.Shield.Damage;
+            if (type == EnemyType.Assault) stateName = BodyAnimationConst.Assault.Damage;
+            else if (type == EnemyType.Launcher) stateName = BodyAnimationConst.Launcher.Damage;
+            else if (type == EnemyType.Shield) stateName = BodyAnimationConst.Shield.Damage;
 
             // 設定ミスなどで対応しているアニメーションが無い場合。
             if (stateName == "") return;
 
             // 死亡アニメーションはその瞬間に強制的に遷移させるため、ステートを指定して再生。
-            _animation.Play(stateName, BodyAnimationConst.Layer.BaseLayer);
+            int layer = BodyAnimationConst.Layer.BaseLayer;
+            Ref.BodyAnimation.Play(stateName, layer);
 
             AudioWrapper.PlaySE("SE_Kill");
 
-            _effector.PlayDestroyedEffect();
-            _effector.ThrusterEnable(false);
-            _effector.TrailEnable(false);
+            Ref.Effector.PlayDestroyedEffect();
+            Ref.Effector.ThrusterEnable(false);
+            Ref.Effector.TrailEnable(false);
 
             // 当たり判定を消す。
-            _body.HitBoxEnable(false);
+            Ref.Body.HitBoxEnable(false);
         }
     }
 }

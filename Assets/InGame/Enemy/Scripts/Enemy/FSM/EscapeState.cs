@@ -7,44 +7,41 @@ namespace Enemy.FSM
     /// </summary>
     public class EscapeState : State
     {
-        private EnemyParams _params;
-        private BlackBoard _blackBoard;
-        private Body _body;
-        private Effector _effector;
-        private AgentScript _agentScript;
-
         public EscapeState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _params = requiredRef.EnemyParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _body = requiredRef.Body;
-            _effector = requiredRef.Effector;
-            _agentScript = requiredRef.AgentScript;
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; set; }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Escape;
+            Ref.BlackBoard.CurrentState = StateKey.Escape;
 
             // レーダーマップから消す。
-            if (_agentScript != null) _agentScript.EnemyDestory();
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyDestory();
         }
 
         protected override void Exit()
         {
             // エフェクトを消す。
-            _effector.ThrusterEnable(false);
-            _effector.TrailEnable(false);
+            Ref.Effector.ThrusterEnable(false);
+            Ref.Effector.TrailEnable(false);
         }
 
         protected override void Stay()
         {
             // 上方向に移動。
-            Vector3 up = Vector3.up * _params.MoveSpeed.Exit * _blackBoard.PausableDeltaTime;
-            _body.Move(up);
+            float spd = Ref.EnemyParams.MoveSpeed.Exit;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 up = Vector3.up * spd * dt;
+            Ref.Body.Move(up);
 
             // 画面外に出た場合は削除状態に遷移。
-            if (_blackBoard.PlayerDistance > _params.Other.OffScreenDistance)
+            float dist = Ref.BlackBoard.PlayerDistance;
+            float offScreen = Ref.EnemyParams.Other.OffScreenDistance;
+            if (dist > offScreen)
             {
                 TryChangeState(StateKey.Delete);
             }
