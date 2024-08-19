@@ -145,8 +145,8 @@ namespace IronRain.Player
         public async UniTask<QTEResultType> BossQTE1(CancellationToken startToken)
         {
             _playerEnvroment.AddState(PlayerStateType.EnterBossQte);
-            _playerEnvroment.PlayerTransform.position = _playerEnvroment.PlayerTransform.parent.position;
             _playerEnvroment.PlayerTransform.parent = null;
+
             _qteResultType = QTEResultType.Failure;
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.QTE))
             {
@@ -188,15 +188,16 @@ namespace IronRain.Player
                 case QTEState.QTE1:
                     {
                         if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                        _playerEnvroment.AddState(PlayerStateType.EnterBossQte);
                         _qteType.Value = QTEState.QTE1;
-                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
                         break;
                     }
                 case QTEState.QTE2:
                     {
                         if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE2;
-                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
+                        await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
                         _qteResultType = QTEResultType.Success;
                         _qteType.Value = QTEState.QTENone;
                         break;
