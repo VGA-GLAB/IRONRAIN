@@ -65,10 +65,8 @@ MonoBehaviour:
   - rid: 4919532094182391929
   - rid: 1578471403179212889
   - rid: 1578471403179212892
-  - rid: 4919532094182391943
-  - rid: 4919532094182391946
-  - rid: 4919532094182391951
-  - rid: 4919532094182391956
+  - rid: 4919532116294500358
+  - rid: 4919532116294500355
   references:
     version: 2
     RefIds:
@@ -284,7 +282,7 @@ MonoBehaviour:
     - rid: 1578471403179212870
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 40
+        _totalSec: 3
     - rid: 1578471403179212871
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -626,93 +624,21 @@ MonoBehaviour:
       data:
         _totalSec: 1
         _closeDuration: 1
-    - rid: 4919532094182391943
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: BreakLeftArmSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 4919532094182391944
-        - rid: 4919532094182391945
-    - rid: 4919532094182391944
-      type: {class: BreakLeftArmSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 4919532094182391945
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-    - rid: 4919532094182391946
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: FirstBossQTESequence
-        _isSkip: 0
-        _sequences:
-        - rid: 4919532094182391947
-        - rid: 4919532094182391948
-        - rid: 4919532094182391949
-        - rid: 4919532094182391950
-    - rid: 4919532094182391947
-      type: {class: BossFirstQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 4919532094182391948
-      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-        _openSec: 1
-        _delaySec: 0
-    - rid: 4919532094182391949
-      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-        _clearText: 1
-        _text: "QTE\u7D42\u4E86"
-        _oneCharDuration: 0.05
-        _delaySec: 0
-    - rid: 4919532094182391950
-      type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-        _closeDuration: 1
-    - rid: 4919532094182391951
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: SecondQTESequence
-        _isSkip: 0
-        _sequences:
-        - rid: 4919532094182391952
-        - rid: 4919532094182391953
-        - rid: 4919532094182391954
-        - rid: 4919532094182391955
-    - rid: 4919532094182391952
-      type: {class: BossSecondQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 4919532094182391953
-      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-        _openSec: 1
-        _delaySec: 0
-    - rid: 4919532094182391954
-      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1.5
-        _clearText: 1
-        _text: "QTE2\u7D42\u4E86"
-        _oneCharDuration: 0.05
-        _delaySec: 0
-    - rid: 4919532094182391955
-      type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-        _closeDuration: 1
-    - rid: 4919532094182391956
+    - rid: 4919532116294500355
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: BossEndSequence
         _isSkip: 0
         _sequences:
-        - rid: 4919532094182391957
-    - rid: 4919532094182391957
+        - rid: 4919532116294500356
+    - rid: 4919532116294500356
       type: {class: LoadSceneSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _loadSceneName: StartScene
+    - rid: 4919532116294500358
+      type: {class: GroupDataSequencer, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupData: {fileID: 11400000, guid: 75c6c19c19de79a419b048d46916e013, type: 2}
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
