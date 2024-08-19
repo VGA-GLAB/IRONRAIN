@@ -64,7 +64,7 @@ namespace Enemy.Boss
             void BossStart() { _blackBoard.IsBossStarted = true; }
             void FunnelExpand() { _blackBoard.FunnelExpand = Trigger.Ordered; }
             void FunnelLaserSight() { _blackBoard.IsFunnelLaserSight = true; }
-            void QteStart() { _blackBoard.IsQteEventStarted = true; }
+            void QteStart() { _blackBoard.IsQteStarted = true; }
             void BreakLeftArm() { _blackBoard.IsBreakLeftArm = true; }
             void QteCombatReady() { _blackBoard.IsQteCombatReady = true; }
             void FirstCombat() { _blackBoard.IsFirstCombatInputed = true; }

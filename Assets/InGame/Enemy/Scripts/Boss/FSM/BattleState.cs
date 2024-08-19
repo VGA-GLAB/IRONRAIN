@@ -5,67 +5,17 @@ using UnityEngine;
 namespace Enemy.Boss.FSM
 {
     /// <summary>
-    /// 戦闘中の各行動を、更に動作単位で分けて管理する。
-    /// </summary>
-    public abstract class BattleActionStep
-    {
-        private bool _isEnter = true;
-
-        public abstract string ID { get; }
-
-        protected abstract void Enter();
-        protected abstract BattleActionStep Stay();
-
-        /// <summary>
-        /// 最初の1回はEnterが呼ばれ、以降はStayが呼ばれる。
-        /// </summary>
-        public BattleActionStep Update()
-        {
-            if (_isEnter)
-            {
-                _isEnter = false;
-                Enter();
-                return this;
-            }
-            else
-            {
-                return Stay();
-            }
-        }
-
-        /// <summary>
-        /// 再度Enterから呼ばれるようになる。
-        /// </summary>
-        public void Reset() => _isEnter = true;
-
-        /// <summary>
-        /// ステートマシンを破棄するタイミングに合わせて諸々を破棄出来る。
-        /// </summary>
-        public virtual void Dispose() { }
-    }
-
-    /// <summary>
     /// 戦闘中の各行動をステートで管理するための基底クラス。
     /// Stayで呼ぶ前提のメソッドのみを持ち、呼び出し自体は行わない。
     /// </summary>
     public class BattleState : State
     {
-        protected BossParams _params;
-        protected BlackBoard _blackBoard;
-        protected DebugPointP _pointP;
-        protected Body _body;
-        protected BodyAnimation _animation;
-        protected IReadOnlyCollection<FunnelController> _funnels;
-
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _params = requiredRef.BossParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _pointP = requiredRef.PointP;
-            _body = requiredRef.Body;
-            _animation = requiredRef.BodyAnimation;
-            _funnels = requiredRef.Funnels;
+            Ref = requiredRef;
         }
+
+        protected RequiredRef Ref { get; private set; }
 
         protected override void Enter() { }
         protected override void Exit() { }
@@ -76,10 +26,11 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void PlayDamageSE()
         {
+            string source = Ref.BlackBoard.DamageSource;
             string seName = "";
-            if (_blackBoard.DamageSource == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
-            else if (_blackBoard.DamageSource == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
-            else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
+            if (source == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
+            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
+            else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
 
             if (seName != "") AudioWrapper.PlaySE(seName);
         }
@@ -89,9 +40,10 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void FunnelLaserSight()
         {
-            if (_blackBoard.IsFunnelLaserSight)
+            bool isView = Ref.BlackBoard.IsFunnelLaserSight;
+            if (isView)
             {
-                foreach (FunnelController f in _funnels) f.LaserSight(true);
+                foreach (FunnelController f in Ref.Funnels) f.LaserSight(true);
             }
         }
 
@@ -100,16 +52,23 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void MoveToPointP()
         {
-            Vector3 dir = _blackBoard.PointPDirection;
-            Vector3 mpf = dir * _params.MoveSpeed.Chase * _blackBoard.PausableDeltaTime;
-            if (mpf.magnitude >= _blackBoard.PointPDistance)
+            Vector3 p;
+
+            Vector3 dir = Ref.BlackBoard.PointPDirection;
+            float spd = Ref.BossParams.MoveSpeed.Chase;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 mpf = dir * spd * dt;
+            float dist = Ref.BlackBoard.PointPDistance;
+            if (mpf.magnitude >= dist)
             {
-                _body.Warp(_pointP.transform.position);
+                p = Ref.PointP.transform.position;
             }
             else
             {
-                _body.Warp(_blackBoard.Area.Point + mpf);
+                p = Ref.BlackBoard.Area.Point + mpf;
             }
+
+            Ref.Body.Warp(p);
         }
 
         /// <summary>
@@ -117,9 +76,10 @@ namespace Enemy.Boss.FSM
         /// </summary>
         protected void LookAtPlayer()
         {
-            Vector3 look = _blackBoard.PlayerDirection;
+            Vector3 look = Ref.BlackBoard.PlayerDirection;
             look.y = 0;
-            _body.LookForward(look);
+
+            Ref.Body.LookForward(look);
         }
     }
 }

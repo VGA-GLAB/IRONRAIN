@@ -5,21 +5,19 @@
     /// </summary>
     public class DeleteState : State
     {
-        private BlackBoard _blackBoard;        
-        private Body _body;
-
         public DeleteState(RequiredRef requiredRef) : base(requiredRef.States)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _body = requiredRef.Body;
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; set; }
 
         protected override void Enter()
         {
-            _blackBoard.CurrentState = StateKey.Delete;
-            _blackBoard.IsCleanupReady = true;
+            Ref.BlackBoard.CurrentState = StateKey.Delete;
+            Ref.BlackBoard.IsCleanupReady = true;
 
-            _body.RendererEnable(false);
+            Ref.Body.RendererEnable(false);
         }
 
         protected override void Exit()
