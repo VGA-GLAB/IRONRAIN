@@ -82,7 +82,6 @@ namespace IronRain.Player
                 {
                     _playerEnvroment.AddState(PlayerStateType.Thruster);
                     var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
-                    Debug.Log("左スラスター");
                     UniTask.Create(async () =>
                     {
                         await _playerEnvroment.PlayerTransform
