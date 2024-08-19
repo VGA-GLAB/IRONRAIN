@@ -29,6 +29,7 @@ namespace Enemy.Boss
             States = new Dictionary<StateKey, State>();
             Body = new Body(this);
             BodyAnimation = new BodyAnimation(this);
+            AnimationEvent = Animator.GetComponent<AnimationEvent>();
             Effector = new Effector(this);
             AgentScript = transform.GetComponent<AgentScript>();
         }
@@ -51,6 +52,7 @@ namespace Enemy.Boss
         public Dictionary<StateKey, State> States { get; private set; }
         public Body Body { get; private set; }
         public BodyAnimation BodyAnimation { get; private set; }
+        public AnimationEvent AnimationEvent { get; private set; }
         public Effector Effector { get; private set; }
         public AgentScript AgentScript { get; private set; }
     }

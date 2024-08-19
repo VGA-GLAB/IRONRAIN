@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace HM
 {
-    public class Patrol : MonoBehaviour
+    public class Patrol : MonoBehaviour, IDamageable
     {
+        [SerializeField] float _speed = 1.0f;
         [SerializeField] Transform[] _waypoints;
 
         void Start()
@@ -28,11 +29,9 @@ namespace HM
 
         IEnumerator PatrolAsync(int a, int b)
         {
-            const float Speed = 1.0f;
-
             Vector3 from = _waypoints[a].position;
             Vector3 to = _waypoints[b].position;
-            for (float t = 0; t < 1.0f; t += Time.deltaTime * Speed)
+            for (float t = 0; t < 1.0f; t += Time.deltaTime * _speed)
             {
                 transform.position = Vector3.Lerp(from, to, t);
                 yield return null;
@@ -51,6 +50,11 @@ namespace HM
                 Gizmos.color = new Color(1, 1, 1, 0.2f);
                 Gizmos.DrawLine(from, to);
             }
+        }
+
+        public void Damage(int value, string weapon = "")
+        {
+            Debug.Log($"{name}: {weapon}で{value}のダメージを受けた。");
         }
     }
 }
