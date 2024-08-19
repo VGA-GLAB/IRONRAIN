@@ -5,13 +5,56 @@ using UnityEngine;
 
 public class UiZoom : MonoBehaviour
 {
-    [SerializeField, Tooltip("ズームしたいパネル")] private RectTransform _zoomPanel;
-    [SerializeField, Tooltip("拡大が完了する時間")] private float _zoomTime;
-    [SerializeField, Tooltip("拡大する大きさ")] private float _scale;
-    [SerializeField, Tooltip("部位ごとのRectTransform")] private RectTransform[] _rectTransforms;
-    [SerializeField, Tooltip("初期状態のパネル")] private RectTransform _normalPanelSize;
+    [Header("ズームしたいパネル")]
+    [SerializeField] private RectTransform _zoomPanel;
+    [Header("拡大する時")]
+    [Header("移動時間")]
+    [SerializeField] private float _expansionMoveTime;
+    [Header("拡大時間")]
+    [SerializeField] private float _expansionZoomTime;
+    [Header("拡大するスケール")]
+    [SerializeField] private float _expansionScale;
+    [Header("縮小する時")]
+    [Header("移動時間")]
+    [SerializeField] private float _reductionMoveTime;
+    [Header("拡大時間")]
+    [SerializeField] private float _reductionZoomTime;
+    [Header("部位ごとのRectTransform")]
+    [SerializeField] private RectTransform[] _rectTransforms;
+    [Header("初期状態のパネル位置")]
+    [SerializeField] private RectTransform _normalPanelPosition;
+    [Header("初期状態のスケール")]
+    [SerializeField] private float _normalSize;
+    [Header("移動時のオフセット(0から頭、左腕、右腕、左足、右足)")]
+    [SerializeField] private Vector2[] _uiOffset;
+    [Header("ボタン")]
+    [SerializeField] private GameObject[] _uiButton;
+    [Header("VR用あたり判定")]
+    [SerializeField] private GameObject[] _vrCollider;
+    [Header("マウス用")]
+    [SerializeField] private bool _isMouse = false;
     /// <summary>パネルが現在ズーム状態かの判定 </summary>
     private bool _isZoom = false;
+
+    private void Start()
+    {
+        if(_isMouse)
+        {
+            for(int i = 0; i < _uiButton.Length; i++)
+            {
+                _uiButton[i].SetActive(true);
+                _vrCollider[i].SetActive(false);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _uiButton.Length; i++)
+            {
+                _uiButton[i].SetActive(false);
+                _vrCollider[i].SetActive(true);
+            }
+        }
+    }
 
     public void OnButtomZoom(int num)
     {
@@ -33,9 +76,9 @@ public class UiZoom : MonoBehaviour
         //Sequenceの生成
         var sequence = DOTween.Sequence().SetLink(_zoomPanel.gameObject);
         //RectTransformでパネルを移動させる
-        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(-_rectTransforms[num].anchoredPosition.x, -_rectTransforms[num].anchoredPosition.y), _zoomTime));
+        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(-_rectTransforms[num].anchoredPosition.x - _uiOffset[num].x, -_rectTransforms[num].anchoredPosition.y -_uiOffset[num].y), _expansionMoveTime));
         //ズームさせる
-        sequence.Join(_zoomPanel.DOScale(_scale, _scale));
+        sequence.Join(_zoomPanel.DOScale(_expansionScale, _expansionZoomTime));
         sequence.Play();
     }
 
@@ -47,9 +90,9 @@ public class UiZoom : MonoBehaviour
         //Sequenceの生成
         var sequence = DOTween.Sequence().SetLink(_zoomPanel.gameObject);
         //RectTransformでパネルを移動させる
-        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(_normalPanelSize.anchoredPosition.x, _normalPanelSize.anchoredPosition.y), _zoomTime));
+        sequence.Append(_zoomPanel.DOAnchorPos(new Vector2(_normalPanelPosition.anchoredPosition.x, _normalPanelPosition.anchoredPosition.y), _reductionMoveTime));
         //スケールを元に戻す
-        sequence.Join(_zoomPanel.DOScale(1f, 1f));
+        sequence.Join(_zoomPanel.DOScale(_normalSize, _reductionZoomTime));
         sequence.Play();
     }
 }

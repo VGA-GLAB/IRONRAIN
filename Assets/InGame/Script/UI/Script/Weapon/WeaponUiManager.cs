@@ -72,19 +72,21 @@ public class WeaponUiManager : MonoBehaviour
 
     private void Awake()
     {
-        //データを取ってくる
-        if(_weaponController != null)
-        {
-            _assultBase = _weaponController.WeaponModel.GetWepaon(PlayerWeaponType.AssaultRifle);
-            _rocketBase = _weaponController.WeaponModel.GetWepaon(PlayerWeaponType.RocketLauncher);
-        }  
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        //データを取ってくる
+        if (_weaponController != null)
+        {
+            _assultBase = _weaponController.WeaponModel.GetWepaon(PlayerWeaponType.AssaultRifle);
+            _rocketBase = _weaponController.WeaponModel.GetWepaon(PlayerWeaponType.RocketLauncher);
+        }
+
         //初期化する
-        if(_assultBase != null)
+        if (_assultBase != null)
         {
             var assultParam = _assultBase.WeaponParam;
             _assultBulletMaxCount = assultParam.MagazineSize;
