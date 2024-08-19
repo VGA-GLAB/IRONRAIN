@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.015986765, g: 0.019945912, b: 0.028999092, a: 1}
+  m_IndirectSpecularColor: {r: 0.015911594, g: 0.020126771, b: 0.02895359, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -215,6 +215,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: f5f7bd8af66c7394d96f40a4b35864d8, type: 3}
+    - target: {fileID: 1503125866920650482, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1721053562377265071, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.04
@@ -15662,6 +15666,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bbde04c92fe30a4c86cfab2e050d6cb, type: 3}
+--- !u!114 &336228362 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 124285629272590657, guid: 17c072d6bfaa2434181d7e4b66796ece, type: 3}
+  m_PrefabInstance: {fileID: 385259471939688371}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6d412edfd8b934fafb8bfa078c54ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &360081740
 GameObject:
   m_ObjectHideFlags: 0
@@ -40477,6 +40492,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1574850036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6625300880246249809, guid: 17c072d6bfaa2434181d7e4b66796ece, type: 3}
+  m_PrefabInstance: {fileID: 385259471939688371}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0eba29a9e560241bb72214c7bb47bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1599669622 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6714434057482994552, guid: 17c072d6bfaa2434181d7e4b66796ece, type: 3}
@@ -40528,15 +40554,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 52876117135305751, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _startSequence
-      value: 11
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3503134301487715534, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: m_Name
       value: SequenceManager
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _debugSequenceList.Array.data[19]
+      value: 4919532094182391956
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212846]
       value: Assembly-CSharp IronRain.SequenceSystem.EnemyManagerDetectPlayerSequence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[4919532116294500352]
+      value: Assembly-CSharp IronRain.SequenceSystem.GroupDataSequencer
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212843]._isSkip
@@ -40555,13 +40589,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
-      propertyPath: managedReferences[1578471403179212870]._totalSec
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212846]._targetSeq
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: managedReferences[4919532116294500352]._groupData
+      value: 
+      objectReference: {fileID: 11400000, guid: 75c6c19c19de79a419b048d46916e013, type: 2}
     - target: {fileID: 7270267471246126463, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: managedReferences[1578471403179212907]._loadSceneName
       value: StartScene
@@ -40747,6 +40781,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1654192457}
     - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _sequenceData._playerAnimation
+      value: 
+      objectReference: {fileID: 336228362}
+    - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _sequenceData._playerController
       value: 
       objectReference: {fileID: 3543236557207909205}
@@ -40762,6 +40800,10 @@ PrefabInstance:
       propertyPath: _sequenceData._hangerOutsideTarget
       value: 
       objectReference: {fileID: 1929721380}
+    - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _sequenceData._announceUiController
+      value: 
+      objectReference: {fileID: 1574850036}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
