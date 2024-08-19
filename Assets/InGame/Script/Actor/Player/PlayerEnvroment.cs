@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace IronRain.Player
 {
-    public class PlayerEnvroment
+    public class PlayerEnvroment : System.IDisposable
     {
+        public System.Action<PlayerStateType> OnStateChange;
         public Transform PlayerTransform { get; private set; }
         public PlayerSetting PlayerSetting { get; private set; }
         public PlayerStateType PlayerState { get; private set; }
@@ -33,6 +34,7 @@ namespace IronRain.Player
         public void AddState(PlayerStateType state)
         {
             PlayerState |= state;
+            OnStateChange?.Invoke(PlayerState);
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace IronRain.Player
         public void RemoveState(PlayerStateType state)
         {
             PlayerState &= ~state;
+            OnStateChange?.Invoke(PlayerState);
         }
 
         /// <summary>
@@ -68,6 +71,11 @@ namespace IronRain.Player
             }
             Debug.LogError("指定されたステートが見つかりませんでした");
             return default;
+        }
+
+        public void Dispose()
+        {
+            OnStateChange = null;
         }
     }
 }

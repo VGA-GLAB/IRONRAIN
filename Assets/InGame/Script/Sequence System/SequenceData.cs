@@ -39,5 +39,7 @@ namespace IronRain.SequenceSystem
         public RaderMap RaderMap => _raderMapMap;
         [SerializeField] private AnnounceUiController _announceUiController;
         public AnnounceUiController AnnounceUiController => _announceUiController;
+        [SerializeField] private PlayerAnimation _playerAnimation;
+        public PlayerAnimation PlayerAnimation => _playerAnimation;
     }
 }

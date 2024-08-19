@@ -247,6 +247,7 @@ namespace Enemy.Boss.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private AnimationEvent _animationEvent;
         private BattleActionStep _bladeCooldown;
         private PreAttackData _preAttackData;
 
@@ -256,11 +257,20 @@ namespace Enemy.Boss.FSM
             _blackBoard = requiredRef.BlackBoard;
             _body = requiredRef.Body;
             _animation = requiredRef.BodyAnimation;
+            _animationEvent = requiredRef.AnimationEvent;
             _bladeCooldown = bladeCooldown;
             _preAttackData = preAttackData;
+
+            // すれ違い後にターンするので、とりあえずこのステップで音の再生をトリガーしておく。
+            _animationEvent.OnTurn += OnTurn;
         }
 
         public override string ID => nameof(PassingStep);
+
+        private void OnTurn()
+        {
+            AudioWrapper.PlaySE("SE_Turn_01");
+        }
 
         protected override void Enter()
         {
@@ -268,6 +278,7 @@ namespace Enemy.Boss.FSM
 
         protected override BattleActionStep Stay()
         {
+            // プレイヤーの座標まで直線移動、そのままの向きで一定距離離れる。
             float sqrDist = (_blackBoard.Area.Point - _preAttackData.PlayerPosition).sqrMagnitude;
             if (sqrDist < _preAttackData.SqrDistance)
             {
@@ -284,6 +295,11 @@ namespace Enemy.Boss.FSM
                 return _bladeCooldown;
             }
         }
+
+        public override void Dispose()
+        {
+            _animationEvent.OnTurn -= OnTurn;
+        }
     }
 
     /// <summary>
@@ -291,7 +307,7 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class BladeCooldownStep : BattleActionStep
     {
-        public BlackBoard _blackBoard;
+        private BlackBoard _blackBoard;
         private BattleActionStep _bladeAttackEnd;
 
         private float _timer;

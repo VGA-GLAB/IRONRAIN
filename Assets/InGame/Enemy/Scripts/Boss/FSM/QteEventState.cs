@@ -31,6 +31,11 @@ namespace Enemy.Boss.FSM
                 return Stay();
             }
         }
+
+        /// <summary>
+        /// ステートマシンを破棄するタイミングに合わせて諸々を破棄出来る。
+        /// </summary>
+        public virtual void Dispose() { }
     }
 
     /// <summary>
@@ -82,6 +87,18 @@ namespace Enemy.Boss.FSM
         protected override void Stay()
         {
             _currentStep = _currentStep.Update();
+        }
+
+        public override void Dispose()
+        {
+            _moveToPlayerFront.Dispose();
+            _breakLeftArm.Dispose();
+            _firstCombat.Dispose();
+            _firstCombatknockBack.Dispose();
+            _secondCombat.Dispose();
+            _secondCombatknockBack.Dispose();
+            _penetrate.Dispose();
+            _complete.Dispose();
         }
     }
 
@@ -185,16 +202,27 @@ namespace Enemy.Boss.FSM
     {
         private BlackBoard _blackBoard;
         private BodyAnimation _animation;
+        private AnimationEvent _animationEvent;
+        private Effector _effector;
         private QteEventStep _firstCombatDelay;
 
         public FirstCombatStep(RequiredRef requiredRef, QteEventStep firstCombatDelay)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animation = requiredRef.BodyAnimation;
+            _animationEvent = requiredRef.AnimationEvent;
+            _effector = requiredRef.Effector;
             _firstCombatDelay = firstCombatDelay;
+
+            _animationEvent.OnWeaponCrash += OnWeaponCrash;
         }
 
         public override string ID => nameof(FirstCombatStep);
+
+        private void OnWeaponCrash()
+        {
+            _effector.PlayWeaponCrash();
+        }
 
         protected override void Enter()
         {
@@ -214,6 +242,11 @@ namespace Enemy.Boss.FSM
             {
                 return this;
             }
+        }
+
+        public override void Dispose()
+        {
+            _animationEvent.OnWeaponCrash -= OnWeaponCrash;
         }
     }
 
@@ -280,6 +313,8 @@ namespace Enemy.Boss.FSM
         private BlackBoard _blackBoard;
         private Body _body;
         private BodyAnimation _animation;
+        private AnimationEvent _animationEvent;
+        private Effector _effector;
         private QteEventStep _penetrate;
 
         private Vector3 _force;
@@ -290,10 +325,19 @@ namespace Enemy.Boss.FSM
             _blackBoard = requiredRef.BlackBoard;
             _body = requiredRef.Body;
             _animation = requiredRef.BodyAnimation;
+            _animationEvent = requiredRef.AnimationEvent;
+            _effector = requiredRef.Effector;
             _penetrate = penetrate;
+
+            _animationEvent.OnWeaponCrash += OnWeaponCrash;
         }
 
         public override string ID => nameof(SecondCombatStep);
+
+        private void OnWeaponCrash()
+        {
+            _effector.PlayWeaponCrash();
+        }
 
         protected override void Enter()
         {
@@ -331,6 +375,11 @@ namespace Enemy.Boss.FSM
             {
                 return this;
             }
+        }
+
+        public override void Dispose()
+        {
+            _animationEvent.OnWeaponCrash -= OnWeaponCrash;
         }
     }
 
@@ -385,7 +434,7 @@ namespace Enemy.Boss.FSM
             if (_blackBoard.IsPenetrateInputed)
             {
                 _animation.SetTrigger(BodyAnimationConst.Param.Finish);
-                _effector.PlayDestroyedEffect();
+                _effector.PlayDestroyed();
 
                 AudioWrapper.PlaySE("SE_Kill");
 

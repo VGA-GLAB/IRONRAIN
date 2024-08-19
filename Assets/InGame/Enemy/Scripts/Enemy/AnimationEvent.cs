@@ -35,7 +35,11 @@ namespace Enemy
         /// 近接攻撃の判定を消すタイミング。
         /// </summary>
         public event UnityAction OnMeleeAttackEnd;
-        
+
+        /// <summary>
+        /// ボス戦、刀攻撃でボスがターンしたタイミング。
+        /// </summary>
+        public event UnityAction OnTurn;
         /// <summary>
         /// ボス戦のQTEで、プレイヤーの武器とボスの武器がぶつかった際のエフェクトを出すタイミング。
         /// </summary>
@@ -48,6 +52,7 @@ namespace Enemy
         public void MeleeAttackStart() => OnMeleeAttackStart?.Invoke();
         public void MeleeAttackEnd() => OnMeleeAttackEnd?.Invoke();
         // 以下はボス専用。
+        public void Turn() => OnTurn?.Invoke();
         public void WeaponCrash() => OnWeaponCrash?.Invoke();
     }
 }

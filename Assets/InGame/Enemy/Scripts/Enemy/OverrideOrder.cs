@@ -34,13 +34,10 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Delete) return;
-
+            // 黒板に書き込み -> 命令をクリアしてプールに戻す。
             while (_buffer.Count > 0)
             {
                 EnemyOrder order = _buffer.Dequeue();
-
-                // 黒板に書き込み -> 命令をクリアしてプールに戻す。
                 WriteToBlackBoard(order);
                 order.Clear();
                 _pool.Push(order);
@@ -104,6 +101,9 @@ namespace Enemy
         // プーリングされている命令を取り出す。
         private bool TryRentPoolingOrder(out EnemyOrder order)
         {
+            // 既に画面から削除されている場合は命令を無効化。
+            if (_blackBoard.IsCleanupReady) { order = null; return false; }
+
             if (_pool.TryPop(out order)) return true;
             else
             {

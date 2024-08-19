@@ -33,6 +33,7 @@ namespace Enemy.FSM
         {
             string seName = "";
             if (_blackBoard.DamageSource == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
+            else if (_blackBoard.DamageSource == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
             else if (_blackBoard.DamageSource == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
             
             if (seName != "") AudioWrapper.PlaySE(seName);
