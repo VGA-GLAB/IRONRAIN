@@ -4,53 +4,60 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace IronRain.SequenceSystem
+public class LaunchTimeLineController : MonoBehaviour
 {
-    public class LaunchTimeLineController : MonoBehaviour
+    [SerializeField] private PlayableDirector _playableDirector;  // PlayableDirectorコンポーネントへの参照
+    [SerializeField] private TimelineAsset _timeline;  // 再生するTimelineアセット
+    [Header("Uiの親オブジェクト")]
+    [SerializeField] private GameObject _launchUi;
+    [Header("それぞれのUiアニメーションスクリプト")]
+    [SerializeField] private RightHighCircle[] _rightHighCircles;
+    [SerializeField] private SideBarController[] _sideBarController;
+    [SerializeField] private TextBoxController _textBoxController;
+    [SerializeField] private PulseController _pulseController;
+    [SerializeField] private CenterCircleManager _centerCircleManager;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        [SerializeField] private PlayableDirector _playableDirector;  // PlayableDirectorコンポーネントへの参照
-        [SerializeField] private TimelineAsset _timeline;  // 再生するTimelineアセット
-        [Header("Uiの親オブジェクト")]
-        [SerializeField] private GameObject _launchUi;
-        [Header("それぞれのUiアニメーションスクリプト")]
-        [SerializeField] private RightHighCircle[] _rightHighCircles;
-        [SerializeField] private SideBarController[] _sideBarController;
-        [SerializeField] private TextBoxController _textBoxController;
-        [SerializeField] private PulseController _pulseController;
-        [SerializeField] private CenterCircleManager _centerCircleManager;
+        // TimelineAssetをPlayableDirectorに設定
+        _playableDirector.playableAsset = _timeline;
+        _launchUi.SetActive(false);
+    }
 
-        // Start is called before the first frame update
-        void Start()
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
         {
-            // TimelineAssetをPlayableDirectorに設定
-            _playableDirector.playableAsset = _timeline;
-            _launchUi.SetActive(false);
+            _playableDirector.Play();
+            Debug.Log("押された");
+        }
+    }
+
+    /// <summary>
+    /// タイムラインをスタートさせる
+    /// </summary>
+    public void PlayTimeLine()
+    {
+        _playableDirector.Play();
+        Debug.Log("押された");
+    }
+
+    public void StartAnimation()
+    {
+        for(int i = 0; i < _rightHighCircles.Length; i++)
+        {
+            _rightHighCircles[i].ActiveGauge();
         }
 
-        // Update is called once per frame
-        void Update()
+        for(int i = 0; i < _sideBarController.Length; i++)
         {
-            if(Input.GetKeyDown(KeyCode.P))
-            {
-                _playableDirector.Play();
-            }
+            _sideBarController[i].StartGaugeAnimation();
         }
 
-        public void StartAnimation()
-        {
-            for(int i = 0; i < _rightHighCircles.Length; i++)
-            {
-                _rightHighCircles[i].ActiveGauge();
-            }
-
-            for(int i = 0; i < _sideBarController.Length; i++)
-            {
-                _sideBarController[i].StartGaugeAnimation();
-            }
-
-            _textBoxController.WriteText();
-            _pulseController.StartScroll();
-            _centerCircleManager.ActiveAnimation();
-        }
+        _textBoxController.WriteText();
+        _pulseController.StartScroll();
+        _centerCircleManager.ActiveAnimation();
     }
 }
