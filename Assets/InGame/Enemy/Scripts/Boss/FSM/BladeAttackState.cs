@@ -291,7 +291,7 @@ namespace Enemy.Boss.FSM
     /// </summary>
     public class BladeCooldownStep : BattleActionStep
     {
-        public BlackBoard _blackBoard;
+        private BlackBoard _blackBoard;
         private BattleActionStep _bladeAttackEnd;
 
         private float _timer;
