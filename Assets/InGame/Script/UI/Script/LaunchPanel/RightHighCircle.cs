@@ -1,13 +1,14 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RightHighCircle : MonoBehaviour
 {
     [Header("％テキストを入れるオブジェクト")]
-    [SerializeField] private Text _percentText;
+    [SerializeField] private TextMeshProUGUI _percentText;
     [Header("動かす時間")]
     [SerializeField] private float _animationDuration = 2.0f;
     [Header("アニメーションさせるImageオブジェクト")]
