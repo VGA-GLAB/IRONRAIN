@@ -7,13 +7,21 @@ using UnityEngine.UI;
 
 public class CenterCircleManager : MonoBehaviour
 {
-    [Header("内側の線")] [SerializeField] private RectTransform _insideLine;
-    [SerializeField, Tooltip("左回転フラグ")] private bool _isInSideLeftRotate;
-    [Header("1回転する秒数")] [SerializeField] private float _insideRotateTime = 2.0f;
-    [Header("外側の線")] [SerializeField] private RectTransform _outsideLine;
-    [SerializeField, Tooltip("左回転フラグ")] private bool _isOutSideLeftRotate;
-    [Header("1回転する秒数")] [SerializeField] private float _outsideRotateTime = 2.0f;
-    
+    [Header("内側の白線")] [SerializeField] private RectTransform _insideWhiteLine;
+    [SerializeField, Tooltip("左回転フラグ")] private bool _isInSideWhiteLeftRotate;
+    [Header("1回転する秒数")] [SerializeField] private float _insideWhiteRotateTime = 2.0f;
+    [Header("外側の白線")] [SerializeField] private RectTransform _outsideLine;
+    [SerializeField, Tooltip("左回転フラグ")] private bool _isOutSideWhiteLeftRotate;
+    [Header("1回転する秒数")] [SerializeField] private float _outsideWhiteRotateTime = 2.0f;
+    [Header("内側の青線")]
+    [SerializeField] private RectTransform _insideBlueLine;
+    [SerializeField, Tooltip("左回転フラグ")] private bool _isInSideBlueLeftRotate;
+    [Header("1回転する秒数")][SerializeField] private float _insideBlueRotateTime = 2.0f;
+    [Header("真ん中の青線")]
+    [SerializeField] private RectTransform _centerBlueLine;
+    [SerializeField, Tooltip("左回転フラグ")] private bool _isCenterBlueLeftRotate;
+    [Header("1回転する秒数")][SerializeField] private float _insideCenterRotateTime = 2.0f;
+
     [Header("％テキストを入れるオブジェクト")]
     [SerializeField] private TextMeshProUGUI _percentText;
     [Header("動かす時間")]
@@ -85,10 +93,10 @@ public class CenterCircleManager : MonoBehaviour
     /// </summary>
     private void InsideLineAnimation()
     {
-        if (!_isInSideLeftRotate)
-            ForwardRotateAnimation(_insideLine, _insideRotateTime);
+        if (!_isInSideWhiteLeftRotate)
+            ForwardRotateAnimation(_insideWhiteLine, _insideWhiteRotateTime);
         else
-            ReverseRotateAnimation(_insideLine, _insideRotateTime);
+            ReverseRotateAnimation(_insideWhiteLine, _insideWhiteRotateTime);
     }
 
     /// <summary>
@@ -96,10 +104,10 @@ public class CenterCircleManager : MonoBehaviour
     /// </summary>
     private void OutsideLineAnimation()
     {
-        if (!_isOutSideLeftRotate)
-            ForwardRotateAnimation(_outsideLine, _outsideRotateTime);
+        if (!_isOutSideWhiteLeftRotate)
+            ForwardRotateAnimation(_outsideLine, _outsideWhiteRotateTime);
         else
-            ReverseRotateAnimation(_outsideLine, _outsideRotateTime);
+            ReverseRotateAnimation(_outsideLine, _outsideWhiteRotateTime);
     }
 
     /// <summary>
