@@ -391,7 +391,6 @@ public class CriSoundManager : SingletonMonoBehaviour<CriSoundManager>
     /// <summary>BGMなどに使用する、一つの音のみを出力するチャンネル</summary>
     private class CriSingleChannel : AbstractCriChannel, ICustomChannel
     {
-        public CriAtomExPlayer _test = new CriAtomExPlayer();
         /// <summary>現在再生中のAcb</summary>
         private CriAtomExAcb _currentAcb = null;
 
