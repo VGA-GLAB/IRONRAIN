@@ -176,6 +176,7 @@ public class LockOnSystem : MonoBehaviour
         {
             while (_isSelect)
             {
+                await UniTask.Yield();
                 // カーソルの位置を指先に合わせる。
                 FingertipCursor(_fingertip, _cursor);
 
