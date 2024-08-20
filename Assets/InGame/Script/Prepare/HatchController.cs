@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,6 +24,7 @@ public sealed class HatchController : MonoBehaviour
 
     public void Open()
     {
+        _smoke.Play();
         _underDoor.Play();
         _overDoor.Play();
     }

@@ -18,8 +18,8 @@ namespace IronRain.SequenceSystem
         public Transform HangerOutsideTarget => _hangerOutsideTarget;
         [SerializeField] private TutorialTextBoxController _textBox;
         public TutorialTextBoxController TextBox => _textBox;
-        [SerializeField] private Material[] _monitorMaterials;
-        public Material[] MonitorMaterials => _monitorMaterials;
+        [SerializeField] private Renderer[] _monitorRenderer;
+        public Material[] MonitorMaterials => Array.ConvertAll(_monitorRenderer, x => x.material);
         [SerializeField] private HatchController _firstHatch;
         public HatchController FirstHatch => _firstHatch;
         [SerializeField] private HatchController _secondHatch;
