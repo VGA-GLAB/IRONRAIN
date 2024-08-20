@@ -78,7 +78,7 @@ namespace IronRain.Player
                 _currentBullets--;
             }
 
-            if (_currentBullets == 0)
+            if (_currentBullets == 0 && !_isReload)
             {
                 Reload().Forget();
             }
