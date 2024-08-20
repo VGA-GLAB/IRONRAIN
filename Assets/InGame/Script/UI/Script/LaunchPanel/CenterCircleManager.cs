@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,7 @@ public class CenterCircleManager : MonoBehaviour
     [Header("1回転する秒数")] [SerializeField] private float _outsideRotateTime = 2.0f;
     
     [Header("％テキストを入れるオブジェクト")]
-    [SerializeField] private Text _percentText;
+    [SerializeField] private TextMeshProUGUI _percentText;
     [Header("動かす時間")]
     [SerializeField] private float _gaugeAnimationDuration = 5.0f;
     [Header("メモリリスト")]
