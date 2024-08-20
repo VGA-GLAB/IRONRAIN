@@ -237,13 +237,8 @@ public class LockOnSystem : MonoBehaviour
     // パネル上のカーソルのxy座標を指先に合わせる。
     private void FingertipCursor(Transform[] fingertip, Transform cursor)
     {
-        //Vector3 p = cursor.position;
-        //p.x = fingertip.position.x;
-        //p.y = fingertip.position.y;
 
-        //cursor.position = p;
-        
-        //カーソルに近い方の指の位置を登録する
+        ////カーソルに近い方の指の位置を登録する
         Vector3 fingerPostion = cursor.position;
         if (_isMouseFlag)
         {
@@ -269,17 +264,13 @@ public class LockOnSystem : MonoBehaviour
             if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
                 Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
             {
-                fingerPostion.x = fingertip[0].position.x;
-                fingerPostion.y = fingertip[0].position.y;
+                fingerPostion = fingertip[0].position;
             }
             else
             {
-                fingerPostion.x = fingertip[1].position.x;
-                fingerPostion.y = fingertip[1].position.y;
+                fingerPostion = fingertip[1].position;
             }
         }
-        
-        
         cursor.position = fingerPostion;
     }
 
