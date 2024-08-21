@@ -1,39 +1,45 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
-/// <summary>MonoBehaviour‚ğŒp³‚µ‚½ƒVƒ“ƒOƒ‹ƒgƒ“</summary>
+/// <summary>MonoBehaviourã‚’ç¶™æ‰¿ã—ãŸã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³</summary>
 public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
-    /// <summary>ƒCƒ“ƒXƒ^ƒ“ƒX</summary>
+    /// <summary>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</summary>
     private static T _instance;
 
-    /// <summary>ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌƒvƒƒpƒeƒB</summary>
+    /// <summary>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£</summary>
     public static T Instance
     {
         get
         {
-            // ƒCƒ“ƒXƒ^ƒ“ƒX‚ªnull‚Ìê‡
+            // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒnullã®å ´åˆ
             if (_instance == null)
             {
-                // CriSoundManagerƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‘¶İ‚µ‚È‚¢ê‡
-                if (FindObjectOfType<T>() == null)
-                {
-                    // V‚µ‚¢ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µACriSoundManager‚ğ•t—^‚·‚é
-                    GameObject singleton = new GameObject();
-                    singleton.name = typeof(T).ToString();
-                    _instance = singleton.AddComponent<T>();
-
-                    // ƒV[ƒ“•ÏX‚É”jŠü‚µ‚È‚¢‚æ‚¤‚É‚·‚é
-                    DontDestroyOnLoad(singleton);
-                }
-                // CriSoundManagerƒIƒuƒWƒFƒNƒg‚ªƒV[ƒ“ã‚É‘¶İ‚·‚é‚ªƒCƒ“ƒXƒ^ƒ“ƒX‚ªnull‚Ìê‡
                 _instance = FindObjectOfType<T>();
-            }
 
+                if (_instance == null)
+                {
+                    GameObject singleton = new GameObject();
+                    _instance = singleton.AddComponent<T>();
+                    singleton.name = typeof(T).ToString() + " (Singleton)";
+
+                    // ã‚·ãƒ¼ãƒ³å¤‰æ›´æ™‚ã«ç ´æ£„ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
+                    DontDestroyOnLoad(singleton);
+                }    
+            }
             return _instance;
         }
-        private set
+    }
+
+    protected virtual void Awake()
+    {
+        if (_instance == null)
         {
-            _instance = value;
+            _instance = this as T;  
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

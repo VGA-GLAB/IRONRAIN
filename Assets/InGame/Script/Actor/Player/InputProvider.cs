@@ -23,6 +23,10 @@ public class InputProvider
     public bool IsRightLeverMove { get; private set; }    
     /// <summary>左レバーが動かせるか</summary>
     public bool IsLeftLeverMove { get; private set; }
+    /// <summary三番目のレバーの向き</summary>
+    public Vector2 ThreeLeverDir { get; private set; }
+    /// <summary>四番目のレバー向き</summary>
+    public Vector2 FourLeverDir { get; private set; }
     public static InputProvider Instance => _instance;
 
     [Tooltip("InputSystemで生成したクラス")]
@@ -106,6 +110,14 @@ public class InputProvider
             _throttle = context.ReadValue<float>();
             LeftLeverInputDir = new Vector2(0, _throttle * -1);
         };
+        _inputMap.Lever.ForceButtonRz.performed += context =>
+        {
+            var a = context.ReadValue<float>();
+            if (a == 1) 
+            {
+                ExecuteInput(InputType.FourButton, InputMode.Enter);
+            }
+        };
         _inputMap.XRILeftHand.Throttle.canceled += context => LeftLeverInputDir = Vector2.zero;
     }
 
@@ -133,10 +145,14 @@ public class InputProvider
         _inputMap.Lever.WASD.canceled += context => RightLeverInputDir = Vector2.zero;     
         _inputMap.Lever.LeftLever.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
         _inputMap.Lever.LeftLever.canceled += context => LeftLeverInputDir = Vector2.zero;  
-        _inputMap.Lever.LeverThree.performed += context => ExecuteInput(InputType.ThreeLever, InputMode.Enter);
-        _inputMap.Lever.LeverThree.canceled += context => ExecuteInput(InputType.ThreeLever, InputMode.Exit);
-        _inputMap.Lever.LeverFour.performed += context => ExecuteInput(InputType.FourLever, InputMode.Enter);
-        _inputMap.Lever.LeverFour.canceled += context => ExecuteInput(InputType.FourLever, InputMode.Exit);
+        _inputMap.Lever.LeverThree.performed += context => ThreeLeverDir = context.ReadValue<Vector2>();
+        _inputMap.Lever.LeverThree.canceled += context => ThreeLeverDir = Vector2.zero;
+        _inputMap.Lever.LeverFour.performed += context => FourLeverDir = context.ReadValue<Vector2>();
+        _inputMap.Lever.LeverFour.canceled += context => FourLeverDir = Vector2.zero;
+        _inputMap.Lever.Enter.performed += context => ExecuteInput(InputType.Enter, InputMode.Enter);
+        _inputMap.Lever.Enter.canceled += context => ExecuteInput(InputType.Enter, InputMode.Exit);
+
+
     }
 
     /// <summary>
@@ -328,5 +344,7 @@ public class InputProvider
         Toggle5,        
         /// <summary>toggleボタンその6</summary>
         Toggle6,
+        /// <summary>Enterキー</summary>
+        Enter,
     }
 }

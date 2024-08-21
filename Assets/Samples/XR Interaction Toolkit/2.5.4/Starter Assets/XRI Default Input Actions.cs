@@ -718,6 +718,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e5e6510-8957-40de-be2d-169f52847406"",
+                    ""path"": ""<HID::Thrustmaster TWCS Throttle>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throttle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2889,21 +2900,21 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": ""LeverThree"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""f62c08f0-d649-4021-82d2-5b428f3ee02f"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""LeverFour"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""85dfb3e1-1dbe-4265-bf91-d3e8bdb41eff"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""WeaponChenge"",
@@ -2913,6 +2924,24 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""38505f92-3459-4e9d-82b1-3302c95cdfc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ForceButtonRz"",
+                    ""type"": ""Value"",
+                    ""id"": ""c878d7b2-1bde-4e51-adbb-fdf429a628f4"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -2926,28 +2955,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""WASD"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""23694b34-19a8-4ab7-877c-7d7c8b6120b2"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""WASD"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""8e913ba1-1cd3-477e-9ab8-c31a505f1324"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""WASD"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
@@ -3050,17 +3057,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d3c9a75b-c4d4-4843-ace7-7f8e0d365963"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeverThree"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7caa2d9a-a3e6-4e3b-8f71-4c8ebe47bff3"",
                     ""path"": ""<HID::Thrustmaster T.Flight Hotas 4>/stick/down"",
                     ""interactions"": """",
@@ -3071,15 +3067,37 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""a2e82fcc-1ad5-4cf1-af8c-a4c439906304"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""name"": ""2D Vector"",
+                    ""id"": ""da66ec0c-5450-40fb-8605-77e60547e2b0"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeverFour"",
-                    ""isComposite"": false,
+                    ""action"": ""LeverThree"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""0c22d4e9-38af-467f-9f91-0c83e55b53e7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverThree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b566415c-c179-49aa-b8e2-9bc4986ecbfb"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverThree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -3091,6 +3109,39 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""LeverFour"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""40eccd63-b0b9-4c2f-b7f3-f9bb240256d5"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverFour"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""95efbc9f-4fa8-420d-a611-7f24cfb10be6"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""50b1c258-da9f-4ec1-8572-197789fa49db"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeverFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -3107,6 +3158,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": """",
                     ""id"": ""f1463da0-b5a8-499e-9d93-394512c11af8"",
                     ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Force Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ec2e209-3fde-496a-ad80-b5eebd85dd00"",
+                    ""path"": ""<HID::Thrustmaster TWCS Throttle>/button3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3210,6 +3272,28 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""WeaponChenge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2443d92-5356-43e9-aee5-67745fc4fd71"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9abbdce2-bb07-48a3-b770-9a00ee1cfb69"",
+                    ""path"": ""<HID::Thrustmaster TWCS Throttle>/rz"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForceButtonRz"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3530,6 +3614,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_Lever_LeverThree = m_Lever.FindAction("LeverThree", throwIfNotFound: true);
         m_Lever_LeverFour = m_Lever.FindAction("LeverFour", throwIfNotFound: true);
         m_Lever_WeaponChenge = m_Lever.FindAction("WeaponChenge", throwIfNotFound: true);
+        m_Lever_Enter = m_Lever.FindAction("Enter", throwIfNotFound: true);
+        m_Lever_ForceButtonRz = m_Lever.FindAction("ForceButtonRz", throwIfNotFound: true);
         // Toggle
         m_Toggle = asset.FindActionMap("Toggle", throwIfNotFound: true);
         m_Toggle_Toggle1 = m_Toggle.FindAction("Toggle1", throwIfNotFound: true);
@@ -4711,6 +4797,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_Lever_LeverThree;
     private readonly InputAction m_Lever_LeverFour;
     private readonly InputAction m_Lever_WeaponChenge;
+    private readonly InputAction m_Lever_Enter;
+    private readonly InputAction m_Lever_ForceButtonRz;
     public struct LeverActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -4725,6 +4813,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @LeverThree => m_Wrapper.m_Lever_LeverThree;
         public InputAction @LeverFour => m_Wrapper.m_Lever_LeverFour;
         public InputAction @WeaponChenge => m_Wrapper.m_Lever_WeaponChenge;
+        public InputAction @Enter => m_Wrapper.m_Lever_Enter;
+        public InputAction @ForceButtonRz => m_Wrapper.m_Lever_ForceButtonRz;
         public InputActionMap Get() { return m_Wrapper.m_Lever; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4764,6 +4854,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @WeaponChenge.started += instance.OnWeaponChenge;
             @WeaponChenge.performed += instance.OnWeaponChenge;
             @WeaponChenge.canceled += instance.OnWeaponChenge;
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
+            @ForceButtonRz.started += instance.OnForceButtonRz;
+            @ForceButtonRz.performed += instance.OnForceButtonRz;
+            @ForceButtonRz.canceled += instance.OnForceButtonRz;
         }
 
         private void UnregisterCallbacks(ILeverActions instance)
@@ -4798,6 +4894,12 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @WeaponChenge.started -= instance.OnWeaponChenge;
             @WeaponChenge.performed -= instance.OnWeaponChenge;
             @WeaponChenge.canceled -= instance.OnWeaponChenge;
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
+            @ForceButtonRz.started -= instance.OnForceButtonRz;
+            @ForceButtonRz.performed -= instance.OnForceButtonRz;
+            @ForceButtonRz.canceled -= instance.OnForceButtonRz;
         }
 
         public void RemoveCallbacks(ILeverActions instance)
@@ -5062,6 +5164,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnLeverThree(InputAction.CallbackContext context);
         void OnLeverFour(InputAction.CallbackContext context);
         void OnWeaponChenge(InputAction.CallbackContext context);
+        void OnEnter(InputAction.CallbackContext context);
+        void OnForceButtonRz(InputAction.CallbackContext context);
     }
     public interface IToggleActions
     {

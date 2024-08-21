@@ -6,6 +6,8 @@ Shader "Custom/2DMonitor"
         _OpenEyesAmount ("OpenEyesAmount", Range(0, 1)) = 0
         _OpenEyesOffset ("OpenEyesOffset", Range(-1, 1)) = 0
         _CloseEyesColor ("CloseEyesColor", Color) = (0, 0, 0, 1)
+        _CrackTex ("CrackTexture", 2D) = "white" {}
+        _CrackAmount ("CrackAmount", Range(0, 1)) = 0
     }
     SubShader
     {
@@ -40,13 +42,17 @@ Shader "Custom/2DMonitor"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+            TEXTURE2D(_CrackTex);
+            SAMPLER(sampler_CrackTex);
 
             CBUFFER_START(UnityPerMaterial)
             
             float4 _MainTex_ST;
+            float4 _CrackTex_ST;
             float _OpenEyesAmount;
             float _OpenEyesOffset;
             half4 _CloseEyesColor;
+            float _CrackAmount;
 
             CBUFFER_END
 
@@ -72,6 +78,15 @@ Shader "Custom/2DMonitor"
                 // sample the texture
                 half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.uv);
 
+                // Crack
+                half4 crackCol = SAMPLE_TEXTURE2D(_CrackTex, sampler_CrackTex, i.uv);
+                crackCol.rgb *= crackCol.a;
+
+                // Crackをしきい値で区切る
+                crackCol.rgb = lerp(0, crackCol.rgb, _CrackAmount);
+
+                col.rgb = saturate(crackCol.rgb + col.rgb);
+                
                 col.rgb = MixFog(col.rgb, i.fogFactor);
 
                 float v = abs(i.uv.y * 2 + _OpenEyesOffset - 1);

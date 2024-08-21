@@ -13,6 +13,8 @@ public class LockOnSystem : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
+    [Header("マルチロックの敵の最低数")]
+    [SerializeField] private int _minMultiLockCount = 2;
     [Header("両手の人差し指")]
     [SerializeField] private Transform[] _fingertip;
     [Header("指先の位置を示すパネル上のカーソル")]
@@ -28,8 +30,7 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
-    [Header("マウス用当たり判定")]
-    [SerializeField, Tooltip("Rayを飛ばす起点")] private float _mouseTargetRadius = 1.0f;
+    [SerializeField, Tooltip("マウス時のあたり判定")] private float _mouseTargetRadius = 1.0f;
     private bool _isMouseMultiLock;
 
     private bool _isSelect;
@@ -208,6 +209,18 @@ public class LockOnSystem : MonoBehaviour
 
         LineRendererReset();
 
+        // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
+        if (_temp.Count < _minMultiLockCount)
+        {
+            foreach(Transform t in _temp)
+            {
+                //TargetのロックオンUiをオンにする
+                var enemyUi = t.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(false);
+            }
+            return await MultiLockOnAsync(token);
+        }
+
         return _lockOn;
     }
 
@@ -237,13 +250,8 @@ public class LockOnSystem : MonoBehaviour
     // パネル上のカーソルのxy座標を指先に合わせる。
     private void FingertipCursor(Transform[] fingertip, Transform cursor)
     {
-        //Vector3 p = cursor.position;
-        //p.x = fingertip.position.x;
-        //p.y = fingertip.position.y;
 
-        //cursor.position = p;
-        
-        //カーソルに近い方の指の位置を登録する
+        ////カーソルに近い方の指の位置を登録する
         Vector3 fingerPostion = cursor.position;
         if (_isMouseFlag)
         {
@@ -260,8 +268,7 @@ public class LockOnSystem : MonoBehaviour
             if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
             {
                 Debug.Log("あたった");
-                fingerPostion.x = hit.point.x;
-                fingerPostion.y = hit.point.y;
+                fingerPostion = hit.point;
             }
         }
         else
@@ -269,17 +276,13 @@ public class LockOnSystem : MonoBehaviour
             if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
                 Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
             {
-                fingerPostion.x = fingertip[0].position.x;
-                fingerPostion.y = fingertip[0].position.y;
+                fingerPostion = fingertip[0].position;
             }
             else
             {
-                fingerPostion.x = fingertip[1].position.x;
-                fingerPostion.y = fingertip[1].position.y;
+                fingerPostion = fingertip[1].position;
             }
         }
-        
-        
         cursor.position = fingerPostion;
     }
 
@@ -297,7 +300,7 @@ public class LockOnSystem : MonoBehaviour
     private void LockOnEnemies(HashSet<Transform> temp, List<GameObject> lockOn)
     {
         lockOn.Clear();
-
+        
         // それぞれのTargetが、対応したEnemyへの参照を持っている。
         foreach (Transform t in temp)
         {
