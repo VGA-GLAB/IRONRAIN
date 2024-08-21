@@ -21,4 +21,6 @@ public enum PlayerStateType
     NonMoveForward = 128,
     /// <summary>BossQte突入
     EnterBossQte = 256,
+    /// <summary>マルチロックオン時 </summary>
+    MultiLockOn = 512,
 }
