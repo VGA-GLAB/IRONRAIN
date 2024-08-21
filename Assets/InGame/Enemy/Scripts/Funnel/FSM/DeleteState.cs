@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Funnel.FSM
+namespace Enemy.Funnel
 {
-    public class DeleteState : State
+    public class DeleteState : State<StateKey>
     {
         public DeleteState(RequiredRef requiredRef) : base(requiredRef.States)
         {

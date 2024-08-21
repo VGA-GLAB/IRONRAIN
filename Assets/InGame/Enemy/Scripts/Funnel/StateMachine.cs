@@ -1,13 +1,20 @@
-﻿using Enemy.FSM;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy
+namespace Enemy.Funnel
 {
-    /// <summary>
-    /// 黒板に書き込まれた内容を基にオブジェクトを制御する。
-    /// </summary>
-    public class BodyController
+    public enum StateKey
+    {
+        Base,
+        Hide,
+        Expand,
+        Battle,
+        Return,
+        Delete,
+    }
+
+    public class StateMachine
     {
         // アニメーションなど、EnemyControllerのイベント関数外での処理を扱う。
         // そのため、結果を返して完了まで待ってもらう。
@@ -17,34 +24,24 @@ namespace Enemy
         private Animator _animator;
 
         // ステートベースで制御する。
-        private Dictionary<StateKey, State> _states;
-        private State _currentState;
+        private Dictionary<StateKey, State<StateKey>> _states;
+        private State<StateKey> _currentState;
 
         // 既に後始末処理を実行済みかを判定するフラグ。
         private bool _isCleanup;
 
-        public BodyController(RequiredRef requiredRef)
+        public StateMachine(RequiredRef requiredRef)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animator = requiredRef.Animator;
 
             // ステートを作成し、辞書で管理。
             _states = requiredRef.States;
-            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
-            _states.Add(StateKey.Broken, new BrokenState(requiredRef));
-            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
             _states.Add(StateKey.Hide, new HideState(requiredRef));
+            _states.Add(StateKey.Expand, new ExpandState(requiredRef));
+            _states.Add(StateKey.Battle, new BattleState(requiredRef));
+            _states.Add(StateKey.Return, new ReturnState(requiredRef));
             _states.Add(StateKey.Delete, new DeleteState(requiredRef));
-
-            // 戦闘ステートは装備によって違う。
-            {
-                EnemyType t = requiredRef.EnemyParams.Type;
-                BattleState b = null;
-                if (t == EnemyType.Assault) b = new BattleByAssaultState(requiredRef);
-                if (t == EnemyType.Launcher) b = new BattleByLauncherState(requiredRef);
-                if (t == EnemyType.Shield) b = new BattleByShieldState(requiredRef);
-                _states.Add(StateKey.Battle, b);
-            }
 
             // 初期状態では画面に表示しない。
             _currentState = _states[StateKey.Hide];
@@ -58,7 +55,7 @@ namespace Enemy
             // アニメーション速度はステートに依存しない。
             // ポーズ時にアニメーションが止まる。
             _animator.SetFloat(BodyAnimationConst.Param.PlaySpeed, _blackBoard.PausableTimeScale);
-            
+
             // ステートマシンを更新。
             _currentState = _currentState.Update();
 
@@ -78,7 +75,7 @@ namespace Enemy
             else _isCleanup = true;
 
             // ステートマシンを破棄。
-            foreach(KeyValuePair<StateKey, State> s in _states)
+            foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }

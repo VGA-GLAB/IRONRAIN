@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Funnel.FSM
+namespace Enemy.Funnel
 {
-    public class ExpandState : State
+    public class ExpandState : State<StateKey>
     {
         public ExpandState(RequiredRef requiredRef) : base(requiredRef.States)
         {

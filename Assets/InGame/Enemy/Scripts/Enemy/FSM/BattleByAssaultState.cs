@@ -1,4 +1,4 @@
-﻿namespace Enemy.FSM
+﻿namespace Enemy
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。

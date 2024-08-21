@@ -1,6 +1,6 @@
-﻿namespace Enemy.Boss.FSM
+﻿namespace Enemy.Boss
 {
-    public class HideState : State
+    public class HideState : State<StateKey>
     {
         public HideState(RequiredRef requiredRef) : base(requiredRef.States)
         {

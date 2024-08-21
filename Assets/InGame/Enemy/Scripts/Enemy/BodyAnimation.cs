@@ -1,6 +1,4 @@
-﻿using Enemy.FSM;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;

@@ -8,7 +8,6 @@ namespace Enemy.Funnel
     [RequireComponent(typeof(FunnelParams))]
     public class FunnelController : Character, IDamageable
     {
-        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Transform _muzzle;
         [SerializeField] private FunnelEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
@@ -17,21 +16,10 @@ namespace Enemy.Funnel
         private Perception _perception;
         private HitPoint _hitPoint;
         // Action層
-        private BodyController _bodyController;
+        private StateMachine _stateMachine;
 
         // ボスを登録するまで動かさないフラグ。
         private bool _isRegistered;
-
-        [ContextMenu("3DモデルのRendererへの参照を取得")]
-        private void GetRendererAll()
-        {
-            List<Renderer> r = new List<Renderer>();
-            foreach (Renderer sm in GetComponentsInChildren<SkinnedMeshRenderer>()) r.Add(sm);
-            foreach (Renderer m in GetComponentsInChildren<MeshRenderer>()) r.Add(m);
-            _renderers = r.ToArray();
-
-            foreach (var v in _renderers) Debug.Log($"{name}: {v}");
-        }
 
         /// <summary>
         /// タグで全ファンネルを検索、ボスを登録し、引数のリストに全ファンネルを詰めて返す。
@@ -68,7 +56,7 @@ namespace Enemy.Funnel
 
             _perception = new Perception(requiredRef);
             _hitPoint = new HitPoint(requiredRef);
-            _bodyController = new BodyController(requiredRef);
+            _stateMachine = new StateMachine(requiredRef);
 
             _isRegistered = true;
         }
@@ -79,7 +67,7 @@ namespace Enemy.Funnel
 
             _perception.Update();
             _hitPoint.Update();
-            _bodyController.Update();
+            _stateMachine.Update();
         }
 
         /// <summary>

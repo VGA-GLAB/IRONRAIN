@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中、ロケットランチャーで攻撃するステート。
@@ -127,11 +127,11 @@ namespace Enemy.Boss.FSM
             BlackBoard bb = Ref.BlackBoard;
 
             // 近接攻撃の条件を満たした。
-            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack == Trigger.Ordered;
+            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack.IsOrdered();
             // QTE開始
             bool isQte = bb.IsQteStarted;
             // ファンネル展開
-            bool isFunnel = bb.FunnelExpand == Trigger.Ordered;
+            bool isFunnel = bb.FunnelExpand.IsOrdered();
 
             if(isMelee || isQte || isFunnel)
             {

@@ -64,7 +64,7 @@ namespace Enemy
             // 黒板に書き込む命令一覧。
             void PlayerDetect() { _blackBoard.IsPlayerDetect = true; }
             void SpawnPoint(Vector3? p) { _blackBoard.SpawnPoint = p; }
-            void AttackTrigger() { _blackBoard.OrderedAttack = Trigger.Ordered; }
+            void AttackTrigger() { _blackBoard.OrderedAttack.Order(); }
             void Pause(bool b) { _blackBoard.IsPause = b; }
             void Die() { _blackBoard.Hp = 0; }
             void Qte(bool run, bool tgt) { _blackBoard.IsQteRunning = run; _blackBoard.IsQteTargeted = tgt; }

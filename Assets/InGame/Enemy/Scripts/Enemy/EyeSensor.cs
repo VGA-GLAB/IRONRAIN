@@ -34,7 +34,7 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+            if (_blackBoard.CurrentState == StateKey.Hide) return;
 
             // とりあえずプレイヤーのみ検知で十分。
             const int PlayerLayer = 1 << 6;

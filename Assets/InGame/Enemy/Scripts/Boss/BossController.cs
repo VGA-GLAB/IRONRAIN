@@ -14,7 +14,6 @@ namespace Enemy.Boss
     [RequireComponent(typeof(BossParams))]
     public class BossController : Character, IDamageable
     {
-        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private BossEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
 
@@ -27,7 +26,7 @@ namespace Enemy.Boss
         private HitPoint _hitPoint;
         private OverrideOrder _overrideOrder;
         // Action層
-        private BodyController _bodyController;
+        private StateMachine _stateMachine;
 
         // 非表示にする非同期処理を実行中フラグ。
         // 二重に処理を呼ばないために必要。
@@ -42,17 +41,6 @@ namespace Enemy.Boss
         /// ボスの状態を参照する。実行中に変化する値はこっち。
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
-
-        [ContextMenu("3DモデルのRendererへの参照を取得")]
-        private void GetRendererAll()
-        {
-            List<Renderer> r = new List<Renderer>();
-            foreach (Renderer sm in GetComponentsInChildren<SkinnedMeshRenderer>()) r.Add(sm);
-            foreach (Renderer m in GetComponentsInChildren<MeshRenderer>()) r.Add(m);
-            _renderers = r.ToArray();
-
-            foreach (var v in _renderers) Debug.Log($"{name}: {v}");
-        }
 
         private void Awake()
         {
@@ -82,7 +70,7 @@ namespace Enemy.Boss
             _fireRate = new FireRate(requiredRef);
             _hitPoint = new HitPoint(requiredRef);
             _overrideOrder = new OverrideOrder(requiredRef);
-            _bodyController = new BodyController(requiredRef);
+            _stateMachine = new StateMachine(requiredRef);
         }
 
         private void Start()
@@ -103,7 +91,7 @@ namespace Enemy.Boss
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
             // 非表示前処理 -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
-            if (_bodyController.Update() == BodyController.Result.Complete && !_isCleanupRunning)
+            if (_stateMachine.Update() == StateMachine.Result.Complete && !_isCleanupRunning)
             {
                 _isCleanupRunning = true;
                 StartCoroutine(CleanupAsync());
@@ -114,7 +102,7 @@ namespace Enemy.Boss
         private IEnumerator CleanupAsync()
         {
             _perception.Dispose();
-            _bodyController.Dispose();
+            _stateMachine.Dispose();
 
             // 次フレームのUpdateの後まで待つ。
             yield return null;
@@ -128,7 +116,7 @@ namespace Enemy.Boss
             EnemyManager.Release(this);
 
             _perception.Dispose();
-            _bodyController.Dispose();
+            _stateMachine.Dispose();
         }
 
         private void OnDrawGizmosSelected()

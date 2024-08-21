@@ -1,5 +1,4 @@
-﻿using Enemy.Boss.FSM;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemy.Boss
 {

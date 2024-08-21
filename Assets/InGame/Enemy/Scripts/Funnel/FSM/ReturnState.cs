@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Funnel.FSM
+namespace Enemy.Funnel
 {
-    public class ReturnState : State
+    public class ReturnState : State<StateKey>
     {
         public ReturnState(RequiredRef requiredRef) : base(requiredRef.States)
         {
@@ -28,7 +28,7 @@ namespace Enemy.Funnel.FSM
             float dt = Ref.BlackBoard.PausableDeltaTime;
             float spd = Ref.FunnelParams.MoveSpeed;
             Vector3 velo = dir.normalized * dt * spd;
-            if (velo.sqrMagnitude <= dir.sqrMagnitude) Ref.Body.Move(velo);
+            if (Ref.BlackBoard.BossSqrDistance > 200.0f) Ref.Body.Move(velo);
             else
             {
                 TryChangeState(StateKey.Hide);

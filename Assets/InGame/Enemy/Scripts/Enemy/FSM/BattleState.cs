@@ -1,13 +1,13 @@
 ﻿using Enemy.Extensions;
 using UnityEngine;
 
-namespace Enemy.FSM
+namespace Enemy
 {
     /// <summary>
     /// 接近状態と雑魚3種類それぞれの戦闘状態の基底クラス。
     /// Stayで呼ぶ前提のメソッドのみを持ち、呼び出し自体は行わない。
     /// </summary>
-    public class BattleState : State
+    public class BattleState : State<StateKey>
     {
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
@@ -132,12 +132,12 @@ namespace Enemy.FSM
             if (condition == SpecialCondition.ManualAttack)
             {
                 Trigger attack = Ref.BlackBoard.OrderedAttack;
-                return attack == Trigger.Ordered;
+                return attack.IsOrdered();
             }
             else
             {
                 Trigger attack = Ref.BlackBoard.Attack;
-                return attack ==Trigger.Ordered && CheckAttackRange();
+                return attack.IsOrdered() && CheckAttackRange();
             }
         }
 
@@ -147,8 +147,8 @@ namespace Enemy.FSM
         /// </summary>
         public void AttackTrigger()
         {
-            Ref.BlackBoard.OrderedAttack = Trigger.Executed;
-            Ref.BlackBoard.Attack = Trigger.Executed;
+            Ref.BlackBoard.OrderedAttack.Execute();
+            Ref.BlackBoard.Attack.Execute();
         }
 
         // プレイヤーが攻撃範囲内にいるかチェック。

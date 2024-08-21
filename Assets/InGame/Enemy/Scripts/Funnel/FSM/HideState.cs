@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Funnel.FSM
+namespace Enemy.Funnel
 {
-    public class HideState : State
+    public class HideState : State<StateKey>
     {
         public HideState(RequiredRef requiredRef) : base(requiredRef.States)
         {
@@ -19,18 +19,23 @@ namespace Enemy.Funnel.FSM
 
             Ref.Body.RendererEnable(false);
             Ref.Body.HitBoxEnable(false);
+            Ref.Effector.TrailEnable(false);
         }
 
         protected override void Exit()
         {
             Ref.Body.RendererEnable(true);
             Ref.Body.HitBoxEnable(true);
+            Ref.Effector.TrailEnable(true);
         }
 
         protected override void Stay()
         {
-            bool isExpand = Ref.BlackBoard.IsExpand;
-            if (isExpand) { TryChangeState(StateKey.Expand); return; }
+            if (Ref.BlackBoard.Expand.Execute()) 
+            {
+                TryChangeState(StateKey.Expand); 
+                return; 
+            }
         }
     }
 }

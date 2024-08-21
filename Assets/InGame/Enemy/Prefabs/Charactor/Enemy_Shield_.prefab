@@ -88,8 +88,8 @@ MonoBehaviour:
   _maxHp: 100
   _lifeTime: 60
   _moveSpeed:
-    _approach: 50
-    _chase: 50
+    _approach: 300
+    _chase: 300
     _exit: 50
   _attack:
     _triggerRange: 33
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16588913c67fb2744bd6084d14abf755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _renderers: []
   _attackEffect: {fileID: 0}
   _forwardOffset: 13.5
   _heightOffset: 0
@@ -475,7 +476,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_Size.y
-      value: 8
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_Size.z

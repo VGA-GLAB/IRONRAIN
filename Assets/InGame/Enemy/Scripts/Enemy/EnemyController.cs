@@ -14,7 +14,6 @@ namespace Enemy
     [RequireComponent(typeof(EnemyParams))]
     public class EnemyController : Character, IDamageable
     {
-        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private EnemyEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
 
@@ -27,7 +26,7 @@ namespace Enemy
         private HitPoint _hitPoint;
         private OverrideOrder _overrideOrder;
         // Action層
-        private BodyController _bodyController;
+        private StateMachine _stateMachine;
         // デバッグ用なので本番環境では不要。
         private DebugStatusUI _debugStatusUI;
 
@@ -50,17 +49,6 @@ namespace Enemy
         /// 敵の状態を参照する。実行中に変化する値はこっち。
         /// </summary>
         public IReadonlyBlackBoard BlackBoard => _blackBoard;
-
-        [ContextMenu("3DモデルのRendererへの参照を取得")]
-        private void GetRendererAll()
-        {
-            List<Renderer> r = new List<Renderer>();
-            foreach (Renderer sm in GetComponentsInChildren<SkinnedMeshRenderer>()) r.Add(sm);
-            foreach (Renderer m in GetComponentsInChildren<MeshRenderer>()) r.Add(m);
-            _renderers = r.ToArray();
-
-            foreach (var v in _renderers) Debug.Log($"{name}: {v}");
-        }
 
         private void Awake()
         {
@@ -87,7 +75,7 @@ namespace Enemy
             _eyeSensor = new EyeSensor(requiredRef);
             _hitPoint = new HitPoint(requiredRef);
             _overrideOrder = new OverrideOrder(requiredRef);
-            _bodyController = new BodyController(requiredRef);
+            _stateMachine = new StateMachine(requiredRef);
             _debugStatusUI = new DebugStatusUI(requiredRef);
         }
 
@@ -96,7 +84,7 @@ namespace Enemy
             EnemyManager.Register(this);
 
             _perception.Init();
-            _hitPoint.Init();          
+            _hitPoint.Init();
         }
 
         private void Update()
@@ -111,7 +99,7 @@ namespace Enemy
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
             // 非表示前処理 -> LateUpdate -> 次フレームのUpdate -> 非表示 の順で呼ばれる。
-            if (_bodyController.Update() == BodyController.Result.Complete && !_isCleanupRunning)
+            if (_stateMachine.Update() == StateMachine.Result.Complete && !_isCleanupRunning)
             {
                 _isCleanupRunning = true;
                 StartCoroutine(CleanupAsync());
@@ -127,7 +115,7 @@ namespace Enemy
         private IEnumerator CleanupAsync()
         {
             _perception.Dispose();
-            _bodyController.Dispose();
+            _stateMachine.Dispose();
 
             // 次フレームのUpdateの後まで待つ。
             yield return null;
@@ -140,7 +128,7 @@ namespace Enemy
             EnemyManager.Release(this);
 
             _perception.Dispose();
-            _bodyController.Dispose();
+            _stateMachine.Dispose();
         }
 
         private void OnDrawGizmosSelected()

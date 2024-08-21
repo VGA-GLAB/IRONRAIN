@@ -20,9 +20,11 @@ namespace Enemy.Funnel
         {
             Vector3 bd = Ref.Boss.transform.position - Ref.Transform.position;
             Ref.BlackBoard.BossDirection = bd.normalized;
+            Ref.BlackBoard.BossSqrDistance = bd.sqrMagnitude;
 
             Vector3 pd = Ref.Player.position - Ref.Transform.position;
             Ref.BlackBoard.PlayerDirection = pd.normalized;
+            Ref.BlackBoard.PlayerSqrDistance = pd.sqrMagnitude;
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace Enemy.Funnel
             ExpandMode mode = Ref.FunnelParams.ExpandMode;
             Ref.BlackBoard.ExpandOffset = ExpandOffset(mode);
 
-            Ref.BlackBoard.IsExpand = true;
+            Ref.BlackBoard.Expand.Order();
         }
 
         // オフセットの位置を計算して返す。
@@ -72,7 +74,7 @@ namespace Enemy.Funnel
         /// </summary>
         public void FireOrder()
         {
-            //
+
         }
     }
 }

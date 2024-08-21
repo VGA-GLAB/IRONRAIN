@@ -1,9 +1,9 @@
-﻿namespace Enemy.FSM
+﻿namespace Enemy
 {
     /// <summary>
     /// 撃破されたステート。
     /// </summary>
-    public class BrokenState : State
+    public class BrokenState : State<StateKey>
     {
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;

@@ -47,15 +47,15 @@ namespace Enemy
         public class MoveSpeedSettings
         {
             [Tooltip("画面上に表示され、プレイヤーの正面に向かって移動中の速度。")]
-            [Range(1.0f, 100.0f)]
-            [SerializeField] private float _approach = 50.0f;
+            [Range(1.0f, 1000.0f)]
+            [SerializeField] private float _approach = 250.0f;
 
             [Tooltip("プレイヤーの正面に移動完了、攻撃しつつ移動する際の速度。")]
-            [Range(1.0f, 100.0f)]
-            [SerializeField] private float _chase = 50.0f;
+            [Range(1.0f, 1000.0f)]
+            [SerializeField] private float _chase = 250.0f;
 
             [Tooltip("生存時間を越え、画面外に撤退する際の速度。")]
-            [Range(1.0f, 100.0f)]
+            [Range(1.0f, 1000.0f)]
             [SerializeField] private float _exit = 50.0f;
 
             public float Approach => _approach;

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Funnel;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中の各行動をステートで管理するための基底クラス。
     /// Stayで呼ぶ前提のメソッドのみを持ち、呼び出し自体は行わない。
     /// </summary>
-    public class BattleState : State
+    public class BattleState : State<StateKey>
     {
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {

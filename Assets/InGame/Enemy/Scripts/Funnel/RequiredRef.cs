@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Enemy.Funnel.FSM;
 using Enemy.Boss;
 
 namespace Enemy.Funnel
@@ -23,7 +22,7 @@ namespace Enemy.Funnel
             Effects = effects;
             HitBoxes = hitBoxes;
 
-            States = new Dictionary<StateKey, State>();
+            States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
             BodyAnimation = new BodyAnimation(this);
             AnimationEvent = Animator.GetComponent<AnimationEvent>();
@@ -45,7 +44,7 @@ namespace Enemy.Funnel
         public FunnelEffects Effects { get; private set; }
         public Collider[] HitBoxes { get; private set; }
 
-        public Dictionary<StateKey, State> States { get; private set; }
+        public Dictionary<StateKey, State<StateKey>> States { get; private set; }
         public Body Body { get; private set; }
         public BodyAnimation BodyAnimation { get; private set; }
         public AnimationEvent AnimationEvent { get; private set; }

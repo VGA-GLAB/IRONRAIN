@@ -57,22 +57,23 @@ namespace Enemy
         /// </summary>
         public void UpdateIfAttacked()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+            if (_blackBoard.CurrentState == StateKey.Hide) return;
 
             // 実際に弾が発射もしくは刀を振ったタイミングではなく、
             // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
-            if (Time.time <= _nextTime || _blackBoard.Attack == Trigger.Ordered) return;
-            
-            _blackBoard.Attack = Trigger.Ordered;
+            if (Time.time <= _nextTime) return;
 
-            _index++;
-            _index %= _timing.Count;
+            if (_blackBoard.Attack.Order())
+            {
+                _index++;
+                _index %= _timing.Count;
 
-            // 次のタイミングまでの時間
-            float t = _timing[_index];
-            if (_index > 0) t -= _timing[_index - 1];
+                // 次のタイミングまでの時間
+                float t = _timing[_index];
+                if (_index > 0) t -= _timing[_index - 1];
 
-            _nextTime = Time.time + t;
+                _nextTime = Time.time + t;
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Enemy.Funnel
         {
             BlackBoard bb = Ref.BlackBoard;
 
-            if (bb.CurrentState == FSM.StateKey.Hide) return;
+            if (bb.CurrentState == StateKey.Hide) return;
 
             // 一度初期化
             bb.Damage = 0;
@@ -41,7 +41,7 @@ namespace Enemy.Funnel
             while (_buffer.TryDequeue(out DamageBuffer damage))
             {
                 // 耐性がある、もしくはプレイヤーを検知していない状態。
-                if (IsArmor(damage.Source) || !bb.IsPlayerDetect)
+                if (IsArmor(damage.Source))
                 {
                     bb.DamageSource = damage.Source;
                 }

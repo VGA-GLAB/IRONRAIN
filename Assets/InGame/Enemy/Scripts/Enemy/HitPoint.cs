@@ -55,7 +55,7 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+            if (_blackBoard.CurrentState == StateKey.Hide) return;
 
             // 一度初期化
             _blackBoard.Damage = 0;

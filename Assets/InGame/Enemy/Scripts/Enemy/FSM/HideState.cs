@@ -1,9 +1,9 @@
-﻿namespace Enemy.FSM
+﻿namespace Enemy
 {
     /// <summary>
     /// 生成後、画面に表示されていない状態のステート。
     /// </summary>
-    public class HideState : State
+    public class HideState : State<StateKey>
     {
         public HideState(RequiredRef requiredRef) : base(requiredRef.States)
         {

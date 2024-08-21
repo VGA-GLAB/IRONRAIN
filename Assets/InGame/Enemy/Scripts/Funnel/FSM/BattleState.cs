@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Funnel.FSM
+namespace Enemy.Funnel
 {
-    public class BattleState : State
+    public class BattleState : State<StateKey>
     {
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
@@ -20,7 +20,6 @@ namespace Enemy.Funnel.FSM
 
         protected override void Exit()
         {
-            Debug.Log("ﾔﾗﾚﾁｬｯﾀ");
         }
 
         protected override void Stay()
@@ -50,11 +49,8 @@ namespace Enemy.Funnel.FSM
                 Ref.Body.LookForward(f);
             }
 
-            bool isFire = Ref.BlackBoard.Fire == Trigger.Ordered;
-            if (isFire)
+            if (Ref.BlackBoard.Fire.Order())
             {
-                Ref.BlackBoard.Fire = Trigger.Executed;
-
                 IOwnerTime owner = Ref.Boss.BlackBoard;
                 Vector3 muzzle = Ref.Muzzle.position;
 

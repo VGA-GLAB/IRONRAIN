@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Enemy.Funnel.FSM;
 
 namespace Enemy.Funnel
 {
@@ -25,8 +24,12 @@ namespace Enemy.Funnel
 
         // ボスの方向
         public Vector3 BossDirection { get; set; }
+        // ボスの距離の二乗
+        public float BossSqrDistance { get; set; }
         // プレイヤーの方向
         public Vector3 PlayerDirection { get; set; }
+        // プレイヤーの距離の二乗
+        public float PlayerSqrDistance { get; set; }
 
         // 現在の体力
         public int Hp { get; set; }
@@ -37,11 +40,11 @@ namespace Enemy.Funnel
 
         // ボスからの命令で攻撃させるトリガー。
         public Trigger Fire { get; set; }
+        // ボスからの命令で展開させるトリガー。
+        public Trigger Expand { get; set; }
 
         // プレイヤーを検知しているかのフラグ。
         public bool IsPlayerDetect { get; set; }
-        // 展開フラグ。
-        public bool IsExpand { get; set; }
         // 生存中かのフラグ。
         public bool IsAlive => Hp > 0;
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。Action層が書き込む。
