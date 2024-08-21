@@ -2911,6 +2911,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ThirdButtonRz",
+                    "type": "Value",
+                    "id": "c878d7b2-1bde-4e51-adbb-fdf429a628f4",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -3252,6 +3261,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9abbdce2-bb07-48a3-b770-9a00ee1cfb69",
+                    "path": "<HID::Thrustmaster TWCS Throttle>/rz",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThirdButtonRz",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
