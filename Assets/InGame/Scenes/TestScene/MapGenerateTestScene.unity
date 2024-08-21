@@ -172,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &229679986
 RectTransform:
   m_ObjectHideFlags: 0
@@ -191,7 +191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: -158}
+  m_AnchoredPosition: {x: -15, y: -278}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &229679987
@@ -1326,10 +1326,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3095747093526144556}
-        m_TargetAssemblyTypeName: HpManager, Assembly-CSharp
-        m_MethodName: BodyDamage
-        m_Mode: 3
+      - m_Target: {fileID: 7430618719558182624}
+        m_TargetAssemblyTypeName: AnnounceUiController, Assembly-CSharp
+        m_MethodName: TestNoImage
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1737,7 +1737,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Damage
+  m_Text: NoImage
 --- !u!222 &1070337392
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2196,17 +2196,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 580851025379610815, guid: 37e339aaf185c7e4b8569583235f23ef, type: 3}
   m_PrefabInstance: {fileID: 7661012813960113018}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1714431242 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5862484509427092227, guid: 37e339aaf185c7e4b8569583235f23ef, type: 3}
-  m_PrefabInstance: {fileID: 7661012813960113018}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89984222f260e9e4ab7f6585021466df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1798121617
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,7 +2214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1798121618
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2244,7 +2233,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 187, y: -158}
+  m_AnchoredPosition: {x: 187, y: -274}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1798121619
@@ -2291,9 +2280,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1714431242}
-        m_TargetAssemblyTypeName: WeaponUiManager, Assembly-CSharp
-        m_MethodName: WeaponShotTest
+      - m_Target: {fileID: 7430618719558182624}
+        m_TargetAssemblyTypeName: AnnounceUiController, Assembly-CSharp
+        m_MethodName: TestRyan
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2805,6 +2794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DetailPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 341133162565132412, guid: 687a5627edc4d6d488a185a52bf71bb0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 341133162565132415, guid: 687a5627edc4d6d488a185a52bf71bb0, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2899,17 +2892,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 341133162565132415, guid: 687a5627edc4d6d488a185a52bf71bb0, type: 3}
   m_PrefabInstance: {fileID: 3095747093526144554}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3095747093526144556 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7646068599678868117, guid: 687a5627edc4d6d488a185a52bf71bb0, type: 3}
-  m_PrefabInstance: {fileID: 3095747093526144554}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 990215cf6c425e44891137569245e826, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7430618719558182622
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3002,13 +2984,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1946442374549990771, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946442374549990771, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 2655608671517492238, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
       propertyPath: m_Name
       value: AnouuncePanel
       objectReference: {fileID: 0}
     - target: {fileID: 2655608671517492238, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6542003624143761688, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6542003624143761688, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 7005135328316601537, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7005135328316601537, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777817732318222749, guid: 36ebc3cf1f0b50f49889298a82e28c7a, type: 3}
+      propertyPath: _receptionInterval
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
