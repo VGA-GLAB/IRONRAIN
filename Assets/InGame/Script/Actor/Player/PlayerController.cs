@@ -18,6 +18,7 @@ namespace IronRain.Player
         [SerializeField] private PlayerAnimation _playerAnimation;
         [SerializeField] private PlayerSound _playerSound;
         [SerializeField] private AnimationEventProvider _animationEventProvider;
+        [SerializeField] private PlayerHp _playerHp;
 
         private PlayerEnvroment _playerEnvroment;
 
@@ -53,6 +54,9 @@ namespace IronRain.Player
                     InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle6);
                 });
             }
+
+            _playerHp.Setup(_playerEnvroment);
+            
         }
 
         private void OnDestroy()
