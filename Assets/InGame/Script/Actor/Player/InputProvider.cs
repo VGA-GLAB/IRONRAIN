@@ -110,12 +110,12 @@ public class InputProvider
             _throttle = context.ReadValue<float>();
             LeftLeverInputDir = new Vector2(0, _throttle * -1);
         };
-        _inputMap.Lever.ThirdButtonRz.performed += context =>
+        _inputMap.Lever.ForceButtonRz.performed += context =>
         {
             var a = context.ReadValue<float>();
             if (a == 1) 
             {
-                ExecuteInput(InputType.ThreeButton, InputMode.Enter);
+                ExecuteInput(InputType.FourButton, InputMode.Enter);
             }
         };
         _inputMap.XRILeftHand.Throttle.canceled += context => LeftLeverInputDir = Vector2.zero;
