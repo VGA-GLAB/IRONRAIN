@@ -2935,7 +2935,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ThirdButtonRz"",
+                    ""name"": ""ForceButtonRz"",
                     ""type"": ""Value"",
                     ""id"": ""c878d7b2-1bde-4e51-adbb-fdf429a628f4"",
                     ""expectedControlType"": ""Axis"",
@@ -3293,7 +3293,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ThirdButtonRz"",
+                    ""action"": ""ForceButtonRz"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3615,7 +3615,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_Lever_LeverFour = m_Lever.FindAction("LeverFour", throwIfNotFound: true);
         m_Lever_WeaponChenge = m_Lever.FindAction("WeaponChenge", throwIfNotFound: true);
         m_Lever_Enter = m_Lever.FindAction("Enter", throwIfNotFound: true);
-        m_Lever_ThirdButtonRz = m_Lever.FindAction("ThirdButtonRz", throwIfNotFound: true);
+        m_Lever_ForceButtonRz = m_Lever.FindAction("ForceButtonRz", throwIfNotFound: true);
         // Toggle
         m_Toggle = asset.FindActionMap("Toggle", throwIfNotFound: true);
         m_Toggle_Toggle1 = m_Toggle.FindAction("Toggle1", throwIfNotFound: true);
@@ -4798,7 +4798,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_Lever_LeverFour;
     private readonly InputAction m_Lever_WeaponChenge;
     private readonly InputAction m_Lever_Enter;
-    private readonly InputAction m_Lever_ThirdButtonRz;
+    private readonly InputAction m_Lever_ForceButtonRz;
     public struct LeverActions
     {
         private @XRIDefaultInputActions m_Wrapper;
@@ -4814,7 +4814,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         public InputAction @LeverFour => m_Wrapper.m_Lever_LeverFour;
         public InputAction @WeaponChenge => m_Wrapper.m_Lever_WeaponChenge;
         public InputAction @Enter => m_Wrapper.m_Lever_Enter;
-        public InputAction @ThirdButtonRz => m_Wrapper.m_Lever_ThirdButtonRz;
+        public InputAction @ForceButtonRz => m_Wrapper.m_Lever_ForceButtonRz;
         public InputActionMap Get() { return m_Wrapper.m_Lever; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4857,9 +4857,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Enter.started += instance.OnEnter;
             @Enter.performed += instance.OnEnter;
             @Enter.canceled += instance.OnEnter;
-            @ThirdButtonRz.started += instance.OnThirdButtonRz;
-            @ThirdButtonRz.performed += instance.OnThirdButtonRz;
-            @ThirdButtonRz.canceled += instance.OnThirdButtonRz;
+            @ForceButtonRz.started += instance.OnForceButtonRz;
+            @ForceButtonRz.performed += instance.OnForceButtonRz;
+            @ForceButtonRz.canceled += instance.OnForceButtonRz;
         }
 
         private void UnregisterCallbacks(ILeverActions instance)
@@ -4897,9 +4897,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @Enter.started -= instance.OnEnter;
             @Enter.performed -= instance.OnEnter;
             @Enter.canceled -= instance.OnEnter;
-            @ThirdButtonRz.started -= instance.OnThirdButtonRz;
-            @ThirdButtonRz.performed -= instance.OnThirdButtonRz;
-            @ThirdButtonRz.canceled -= instance.OnThirdButtonRz;
+            @ForceButtonRz.started -= instance.OnForceButtonRz;
+            @ForceButtonRz.performed -= instance.OnForceButtonRz;
+            @ForceButtonRz.canceled -= instance.OnForceButtonRz;
         }
 
         public void RemoveCallbacks(ILeverActions instance)
@@ -5165,7 +5165,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnLeverFour(InputAction.CallbackContext context);
         void OnWeaponChenge(InputAction.CallbackContext context);
         void OnEnter(InputAction.CallbackContext context);
-        void OnThirdButtonRz(InputAction.CallbackContext context);
+        void OnForceButtonRz(InputAction.CallbackContext context);
     }
     public interface IToggleActions
     {
