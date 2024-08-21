@@ -102,26 +102,29 @@ namespace IronRain.Player
                 _qteType.Value = QTEState.QTE1;
                 Debug.Log("QTE1");
                 await _playerEnvroment.PlayerAnimation.QteAttack();
-                await _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f);
+                _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f).Forget();
                 await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを引いてください。", 0.05f, startToken);
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, startToken);
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
+                await _playerEnvroment.PlayerAnimation.NextAnim();
                 tutorialTextBoxController.ClearText();
 
-                await _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f);
+                _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f).Forget();
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE2;
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
+                await _playerEnvroment.PlayerAnimation.NextAnim();
                 tutorialTextBoxController.ClearText();
 
-                await _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f);
+                _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f).Forget();
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーの[R2]を押してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE3;
                 await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
                 _qteType.Value = QTEState.QTENone;
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
+                await _playerEnvroment.PlayerAnimation.NextAnim();
                 tutorialTextBoxController.ClearText();
 
                 ProvidePlayerInformation.TimeScale = 1f;

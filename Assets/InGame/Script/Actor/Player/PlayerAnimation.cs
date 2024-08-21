@@ -87,6 +87,12 @@ namespace IronRain.Player
             _anim.speed = ProvidePlayerInformation.TimeScale;
         }
 
+        public async UniTask NextAnim() 
+        {
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.1,
+     PlayerLoopTiming.Update, _token);
+        }
+
         public async UniTask PlayerAssaultDusarm()
         {
             _anim.SetTrigger("AssaultDisarmTrigger");
