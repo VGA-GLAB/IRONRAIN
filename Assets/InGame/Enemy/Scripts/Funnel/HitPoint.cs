@@ -1,53 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy
+namespace Enemy.Funnel
 {
-    /// <summary>
-    /// ダメージ耐性
-    /// </summary>
-    public enum Armor
-    {
-        None,       // 耐性なし
-        Melee,      // 近接攻撃に耐性
-        Range,      // 遠距離攻撃に耐性
-        Invincible, // 無敵の人
-    }
-
-    /// <summary>
-    /// ダメージ情報を一時的に保持する用途。
-    /// </summary>
-    public struct DamageBuffer
-    {
-        public int Damage;
-        public string Source;
-    }
-
-    /// <summary>
-    /// HPの変化を管理する。
-    /// 攻撃で受けたダメージの反映、瀕死と死亡の状態フラグもここ。
-    /// </summary>
     public class HitPoint
     {
-        private EnemyParams _params;
-        private BlackBoard _blackBoard;
-
         // Updateで黒板に反映し、毎フレームクリアされる。
         private Queue<DamageBuffer> _buffer;
 
         public HitPoint(RequiredRef requiredRef)
         {
-            _params = requiredRef.EnemyParams;
-            _blackBoard = requiredRef.BlackBoard;
+            Ref = requiredRef;
             _buffer = new Queue<DamageBuffer>();
         }
+
+        private RequiredRef Ref { get; set; }
 
         /// <summary>
         /// 初期値を黒板に書き込む。
         /// </summary>
         public void Init()
         {
-            _blackBoard.Hp = _params.MaxHp;
+            Ref.BlackBoard.Hp = Ref.FunnelParams.MaxHp;
         }
 
         /// <summary>
@@ -55,11 +30,13 @@ namespace Enemy
         /// </summary>
         public void Update()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
+            BlackBoard bb = Ref.BlackBoard;
+
+            if (bb.CurrentState == FSM.StateKey.Hide) return;
 
             // 一度初期化
-            _blackBoard.Damage = 0;
-            _blackBoard.DamageSource = "";
+            bb.Damage = 0;
+            bb.DamageSource = "";
 
             // Damageメソッド自体が呼ばれていない場合。
             if (_buffer.Count == 0) return;
@@ -70,34 +47,36 @@ namespace Enemy
             while (_buffer.TryDequeue(out DamageBuffer damage))
             {
                 // 耐性がある、もしくはプレイヤーを検知していない状態。
-                if (IsArmor(damage.Source) || !_blackBoard.IsPlayerDetect)
+                if (IsArmor(damage.Source) || !bb.IsPlayerDetect)
                 {
-                    _blackBoard.DamageSource = damage.Source;
+                    bb.DamageSource = damage.Source;
                 }
                 else
                 {
-                    _blackBoard.Hp -= damage.Damage;
-                    _blackBoard.Hp = Mathf.Max(0, _blackBoard.Hp);
-                    _blackBoard.Damage += damage.Damage;
-                    _blackBoard.DamageSource = damage.Source;
+                    bb.Hp -= damage.Damage;
+                    bb.Hp = Mathf.Max(0, bb.Hp);
+                    bb.Damage += damage.Damage;
+                    bb.DamageSource = damage.Source;
                 }
             }
         }
 
         // ダメージ耐性
         // 無効化した:true、しなかった:false
-        private bool IsArmor(string weaponName)
+        private bool IsArmor(string weaponName) // staticで十分
         {
+            Armor armor = Ref.FunnelParams.Armor;
+
             // 無敵
-            if (_params.Common.Tactical.Armor == Armor.Invincible) return true;
-            
+            if (armor == Armor.Invincible) return true;
+
             // 近接攻撃無効化
-            if (_params.Common.Tactical.Armor == Armor.Melee &&
+            if (armor == Armor.Melee &&
                 weaponName == Const.PlayerMeleeWeaponName) return true;
 
             // 遠距離攻撃無効化
-            if (_params.Common.Tactical.Armor == Armor.Range && 
-                (weaponName == Const.PlayerRifleWeaponName || 
+            if (armor == Armor.Range &&
+                (weaponName == Const.PlayerRifleWeaponName ||
                 weaponName == Const.PlayerLauncherWeaponName)) return true;
 
             return false;
@@ -111,7 +90,7 @@ namespace Enemy
         {
             // 武器が空文字だった場合
             if (weapon == "") weapon = "Unknown";
-            
+
             _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
         }
     }

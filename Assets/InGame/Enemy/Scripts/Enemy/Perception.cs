@@ -39,7 +39,7 @@ namespace Enemy
         }
 
         /// <summary>
-        /// 各値を更新
+        /// 各値を更新。
         /// </summary>
         public void Update()
         {

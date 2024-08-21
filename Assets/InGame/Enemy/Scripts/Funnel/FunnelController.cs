@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Extensions;
+using Enemy.Boss;
 
-namespace Enemy.Boss
+namespace Enemy.Funnel
 {
     [RequireComponent(typeof(FunnelParams))]
     public class FunnelController : Character, IDamageable
@@ -11,25 +12,32 @@ namespace Enemy.Boss
         // 状態
         enum State { Unexpanded, Expanded, Defeated }
 
-        // 展開モード
-        enum Mode { Trace, Right, Left }
-
-        [SerializeField] private Transform _model;
+        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Transform _muzzle;
-        [SerializeField] private Collider _hitBox;
-        [Header("エフェクトの設定")]
-        [SerializeField] private Effect _destroyedEffect;
-        [SerializeField] private Effect _trailEffect;
-        [Header("展開モード")]
-        [SerializeField] private Mode _mode;
+        [SerializeField] private FunnelEffects _effects;
+        [SerializeField] private Collider[] _hitBoxes;
 
-        private Transform _transform;
-        private Transform _offset;
-        private Transform _rotate;
-        private Transform _player;
-        private BossController _boss;
-        private Transform _bossRotate;
-        private FunnelParams _params;
+        //[SerializeField] private Transform _model;
+        //[Header("エフェクトの設定")]
+        //[SerializeField] private Effect _destroyedEffect;
+        //[SerializeField] private Effect _trailEffect;
+        //[Header("展開モード")]
+        //[SerializeField] private Mode _mode;
+
+        //private Transform _transform;
+        //private Transform _offset;
+        //private Transform _rotate;
+        //private Transform _player;
+        //private BossController _boss;
+        //private Transform _bossRotate;
+        //private FunnelParams _params;
+
+        // Perception層
+        private Perception _perception;
+        private HitPoint _hitPoint;
+        private OverrideOrder _overrideOrder;
+        // Action層
+        private BodyController _bodyController;
 
         // ボス本体を基準として展開するので、この値にボス本体の位置を足す。
         private Vector3 _expandOffset;
@@ -44,17 +52,19 @@ namespace Enemy.Boss
 
         private void Awake()
         {
-            _transform = transform;
-            _offset = FindOffset();
-            _rotate = FindRotate();
-            _player = FindPlayer();
-            _params = GetComponent<FunnelParams>();
+
+
+            //_transform = transform;
+            //_offset = FindOffset();
+            //_rotate = FindRotate();
+            //_player = FindPlayer();
+            //_params = GetComponent<FunnelParams>();
         }
 
         private void Start()
         {
-            ResetStatus();
-            Hide();
+            //ResetStatus();
+            //Hide();
         }
 
         private void Update()
@@ -81,13 +91,29 @@ namespace Enemy.Boss
         {
             foreach (GameObject g in GameObject.FindGameObjectsWithTag(Const.EnemyTag))
             {
-                if (g.TryGetComponent(out FunnelController f))
-                {
-                    f._boss = boss;
-                    f._bossRotate = boss.FindRotate();
-                    funnels.Add(f);
-                }
+                if (!g.TryGetComponent(out FunnelController f)) continue;
+
+                f.Register(boss);
+                funnels.Add(f);
             }
+        }
+
+        private void Register(BossController boss)
+        {
+            // 必要な参照をまとめる。
+            RequiredRef requiredRef = new RequiredRef(
+                transform: transform,
+                player: FindPlayer(),
+                offset: FindOffset(),
+                rotate: FindRotate(),
+                funnelParams: GetComponent<FunnelParams>(),
+                blackBoard: new BlackBoard(gameObject.name),
+                animator: GetComponentInChildren<Animator>(),
+                renderers: _renderers,
+                effects: _effects,
+                hitBoxes: _hitBoxes,
+                boss: boss
+                );
         }
 
         /// <summary>
@@ -121,57 +147,30 @@ namespace Enemy.Boss
             _elapsed = Random.value;
         }
 
-        // ボス本体の左右もしくは周囲に展開する。
-        private void SetExpandOffset()
-        {
-            if (_mode == Mode.Trace)
-            {
-                const float MaxHeight = 8.0f;
-                const float MinHeight = 6.0f;
-                const float MaxSide = 6.0f;
-                const float MinSide = 4.0f;
-
-                float sin = Mathf.Sin(2 * Mathf.PI * Random.value);
-                float cos = Mathf.Cos(2 * Mathf.PI * Random.value);
-                float dist = Random.Range(MinSide, MaxSide);
-                float h = Random.Range(MinHeight, MaxHeight);
-                int lr = Random.value <= 0.5f ? 1 : -1;
-                _expandOffset = new Vector3(cos * dist * lr, h, sin * dist * lr);
-            }
-            else
-            {
-                const float Height = 10.0f;
-                const float Side = 5.0f;
-
-                if (_mode == Mode.Right) _expandOffset = new Vector3(Side, Height, 0);
-                else if (_mode == Mode.Left) _expandOffset = new Vector3(-Side, Height, 0);
-            }
-        }
-
         // ボスの前方向を基準にオフセットされた位置に移動。
-        private void Move()
-        {
-            Vector3 dx = _bossRotate.right * _expandOffset.x;
-            Vector3 dy = _bossRotate.up * _expandOffset.y;
-            Vector3 dz = _bossRotate.forward * _expandOffset.z;
-            Vector3 p = _boss.transform.position + dx + dy + dz;
-            Vector3 dir = p - _transform.position;
-            Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * _params.MoveSpeed;
-            if (velo.sqrMagnitude <= dir.sqrMagnitude) _transform.position += velo;
-            else _transform.position = p;
-        }
+        //private void Move()
+        //{
+        //    Vector3 dx = _bossRotate.right * _expandOffset.x;
+        //    Vector3 dy = _bossRotate.up * _expandOffset.y;
+        //    Vector3 dz = _bossRotate.forward * _expandOffset.z;
+        //    Vector3 p = _boss.transform.position + dx + dy + dz;
+        //    Vector3 dir = p - _transform.position;
+        //    Vector3 velo = dir.normalized * _boss.BlackBoard.PausableDeltaTime * _params.MoveSpeed;
+        //    if (velo.sqrMagnitude <= dir.sqrMagnitude) _transform.position += velo;
+        //    else _transform.position = p;
+        //}
 
         // プレイヤーを向く。
-        private void LookAtPlayer()
-        {
-            _rotate.forward = _player.position - _transform.position;
-        }
+        //private void LookAtPlayer()
+        //{
+        //    _rotate.forward = _player.position - _transform.position;
+        //}
 
         // ボスの正面を向く。
-        private void LookBossForward()
-        {
-            _rotate.forward = _bossRotate.forward;
-        }
+        //private void LookBossForward()
+        //{
+        //    _rotate.forward = _bossRotate.forward;
+        //}
 
         // 一定時間で攻撃をトリガー。
         private bool FireTrigger()
@@ -218,14 +217,14 @@ namespace Enemy.Boss
         private void View()
         {
             _model.localScale = Vector3.one;
-            _hitBox.enabled = true;
+            _hitBoxes.enabled = true;
         }
 
         // 画面から隠す。
         private void Hide()
         {
             _model.localScale = Vector3.zero;
-            _hitBox.enabled = false;
+            _hitBoxes.enabled = false;
         }
 
         // レーダーマップに表示/非表示

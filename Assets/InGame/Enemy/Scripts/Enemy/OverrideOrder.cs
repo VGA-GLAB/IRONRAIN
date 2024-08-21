@@ -66,7 +66,7 @@ namespace Enemy
             void SpawnPoint(Vector3? p) { _blackBoard.SpawnPoint = p; }
             void AttackTrigger() { _blackBoard.OrderedAttack = Trigger.Ordered; }
             void Pause(bool b) { _blackBoard.IsPause = b; }
-            void Die() { _blackBoard.Hp = 0; _blackBoard.IsDying = true; }
+            void Die() { _blackBoard.Hp = 0; }
             void Qte(bool run, bool tgt) { _blackBoard.IsQteRunning = run; _blackBoard.IsQteTargeted = tgt; }
         }
 

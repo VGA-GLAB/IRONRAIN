@@ -79,8 +79,6 @@ namespace Enemy
         public bool IsQteRunning { get; set; }
         // 自身がQTEの対象かのフラグ。
         public bool IsQteTargeted { get; set; }
-        // 瀕死状態かのフラグ。
-        public bool IsDying { get; set; }
         // 生存中かのフラグ。
         public bool IsAlive => Hp > 0;
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。Action層が書き込む。
