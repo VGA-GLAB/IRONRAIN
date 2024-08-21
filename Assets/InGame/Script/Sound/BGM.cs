@@ -7,7 +7,7 @@ public class BGM : SingletonMonoBehaviour<BGM>
     [SerializeField, Range(0, 2f)] private float _volume = 1.0f;
 
     /// <summary>BGMの列挙型</summary>
-    private enum BGMID
+    public enum BGMID
     {
         /// <summary>格納庫1(環境音)</summary>
         BGM_Hanger_Ambient_01,
