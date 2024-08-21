@@ -13,17 +13,11 @@ namespace Enemy.Funnel
         {
             Ref = requiredRef;
             _buffer = new Queue<DamageBuffer>();
+
+            Ref.BlackBoard.Hp = Ref.FunnelParams.MaxHp;
         }
 
         private RequiredRef Ref { get; set; }
-
-        /// <summary>
-        /// 初期値を黒板に書き込む。
-        /// </summary>
-        public void Init()
-        {
-            Ref.BlackBoard.Hp = Ref.FunnelParams.MaxHp;
-        }
 
         /// <summary>
         /// ダメージの体力への反映、死亡状態のフラグの制御。

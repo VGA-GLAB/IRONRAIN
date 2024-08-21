@@ -35,6 +35,9 @@ namespace Enemy.Funnel
         // このフレームで自身にダメージを与えた武器。
         public string DamageSource { get; set; }
 
+        // ボスからの命令で攻撃させるトリガー。
+        public Trigger Fire { get; set; }
+
         // プレイヤーを検知しているかのフラグ。
         public bool IsPlayerDetect { get; set; }
         // 展開フラグ。

@@ -6,8 +6,6 @@ namespace Enemy.Funnel
 {
     public class Perception
     {
-        private Vector3? _buffer;
-
         public Perception(RequiredRef requiredRef)
         {
             Ref = requiredRef;
@@ -20,13 +18,6 @@ namespace Enemy.Funnel
         /// </summary>
         public void Update()
         {
-            // 計算したオフセットを黒板に1度だけ書き込む。
-            if (_buffer != null)
-            {
-                Ref.BlackBoard.ExpandOffset = _buffer;
-                _buffer = null;
-            }
-
             Vector3 bd = Ref.Boss.transform.position - Ref.Transform.position;
             Ref.BlackBoard.BossDirection = bd.normalized;
 
@@ -35,12 +26,19 @@ namespace Enemy.Funnel
         }
 
         /// <summary>
-        /// ボス本体の左右もしくは周囲に展開するオフセットを計算。
-        /// 黒板に書き込まれるのは次のUpdateのタイミング。
+        /// ボス本体の左右もしくは周囲に展開させるための命令を黒板に書き込む。
         /// </summary>
-        public void ExpandOffset()
+        public void ExpandOrder()
         {
             ExpandMode mode = Ref.FunnelParams.ExpandMode;
+            Ref.BlackBoard.ExpandOffset = ExpandOffset(mode);
+
+            Ref.BlackBoard.IsExpand = true;
+        }
+
+        // オフセットの位置を計算して返す。
+        private static Vector3 ExpandOffset(ExpandMode mode)
+        {
             if (mode == ExpandMode.Trace)
             {
                 const float MaxHeight = 8.0f;
@@ -53,16 +51,28 @@ namespace Enemy.Funnel
                 float dist = Random.Range(MinSide, MaxSide);
                 float h = Random.Range(MinHeight, MaxHeight);
                 int lr = Random.value <= 0.5f ? 1 : -1;
-                _buffer = new Vector3(cos * dist * lr, h, sin * dist * lr);
+                
+                return new Vector3(cos * dist * lr, h, sin * dist * lr);
             }
             else
             {
                 const float Height = 10.0f;
                 const float Side = 5.0f;
 
-                if (mode == ExpandMode.Right) _buffer = new Vector3(Side, Height, 0);
-                else if (mode == ExpandMode.Left) _buffer = new Vector3(-Side, Height, 0);
+                int lr = default;
+                if (mode == ExpandMode.Right) lr = 1;
+                else if (mode == ExpandMode.Left) lr = -1;
+
+                return new Vector3(lr * Side, Height, 0);
             }
+        }
+
+        /// <summary>
+        /// 攻撃命令を黒板に書き込む。
+        /// </summary>
+        public void FireOrder()
+        {
+            //
         }
     }
 }

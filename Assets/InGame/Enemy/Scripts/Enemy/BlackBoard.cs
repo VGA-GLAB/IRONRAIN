@@ -61,7 +61,7 @@ namespace Enemy
 
         // 命令やメソッド呼び出しで攻撃させるトリガー。
         public Trigger OrderedAttack { get; set; }
-        // 次に攻撃可能になる時間。
+        // 時間経過で攻撃させるトリガー。
         public Trigger Attack { get; set; }
 
         // このフレームに受けたダメージ量。

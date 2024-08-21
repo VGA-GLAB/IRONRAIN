@@ -21,6 +21,12 @@ namespace Enemy.Funnel.FSM
             if (agent != null) agent.EnemyGenerate();
 
             Ref.Effector.TrailEnable(true);
+
+            // ファンネルが飛んでいる音(ループしなくて良い？)
+            AudioWrapper.PlaySE("SE_Funnel_Fly");
+
+            Vector3 boss = Ref.Boss.transform.position;
+            Ref.Body.Warp(boss);
         }
 
         protected override void Exit()

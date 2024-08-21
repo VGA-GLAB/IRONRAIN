@@ -10,7 +10,7 @@ namespace Enemy.Funnel
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, FunnelParams funnelParams,
             BlackBoard blackBoard, Animator animator, Renderer[] renderers, FunnelEffects effects, Collider[] hitBoxes,
-            BossController boss)
+            BossController boss, Transform muzzle)
         {
             Transform = transform;
             Player = player;
@@ -31,6 +31,7 @@ namespace Enemy.Funnel
             AgentScript = transform.GetComponent<AgentScript>();
             Boss = boss;
             BossRotate = boss.FindRotate();
+            Muzzle = muzzle;
         }
 
         public Transform Transform { get; private set; }
@@ -52,5 +53,6 @@ namespace Enemy.Funnel
         public AgentScript AgentScript { get; private set; }
         public BossController Boss { get; set; }
         public Transform BossRotate { get; set; }
+        public Transform Muzzle { get; private set; }
     }
 }

@@ -20,6 +20,7 @@ namespace Enemy.Funnel.FSM
 
         protected override void Exit()
         {
+            Debug.Log("ﾔﾗﾚﾁｬｯﾀ");
         }
 
         protected override void Stay()
@@ -49,7 +50,7 @@ namespace Enemy.Funnel.FSM
                 Ref.Body.LookForward(f);
             }
 
-            bool isFire = Ref.BlackBoard.Fire == Trigger.Ordered;         
+            bool isFire = Ref.BlackBoard.Fire == Trigger.Ordered;
             if (isFire)
             {
                 Ref.BlackBoard.Fire = Trigger.Executed;
