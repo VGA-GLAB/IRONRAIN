@@ -27,6 +27,16 @@ namespace IronRain.Player
         {
             _hp = Mathf.Max(_hp - value, 0);
             _mainCamera.DOShakePosition(_time, _strength);
+
+            if (weapon == PlayerWeaponType.AssaultRifle.ToString())
+            {
+                CriAudioManager.Instance.SE.Play("SE", "SE_Damage_02");
+            }
+            else if (weapon == PlayerWeaponType.RocketLauncher.ToString()) 
+            {
+                CriAudioManager.Instance.SE.Play("SE", "SE_Damage_01");
+            }
+
             _hpManager.BodyDamage(value);
             if (_hp == 0)
             {
