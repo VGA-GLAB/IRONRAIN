@@ -16,13 +16,21 @@ namespace IronRain.Player
         [SerializeField] private RaderMap _playerMap;
         [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
         [SerializeField] private PlayerAnimation _playerAnimation;
+        [SerializeField] private PlayerSound _playerSound;
+        [SerializeField] private AnimationEventProvider _animationEventProvider;
+        [SerializeField] private PlayerHp _playerHp;
 
         private PlayerEnvroment _playerEnvroment;
 
         private void Awake()
         {
+            SetUp();
+        }
+
+        private void SetUp()
+        {
             _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap,
-                _playerStateList, _playerAnimation, _tutorialTextBoxController);
+                _playerStateList, _playerAnimation, _tutorialTextBoxController, _animationEventProvider);
 
             for (int i = 0; i < _playerStateList.Count; i++)
             {
@@ -46,6 +54,9 @@ namespace IronRain.Player
                     InputProvider.Instance.CallEnterInput(InputProvider.InputType.Toggle6);
                 });
             }
+
+            _playerHp.Setup(_playerEnvroment);
+            
         }
 
         private void OnDestroy()
