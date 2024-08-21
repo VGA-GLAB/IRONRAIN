@@ -16,13 +16,20 @@ namespace IronRain.Player
         [SerializeField] private RaderMap _playerMap;
         [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
         [SerializeField] private PlayerAnimation _playerAnimation;
+        [SerializeField] private PlayerSound _playerSound;
+        [SerializeField] private AnimationEventProvider _animationEventProvider;
 
         private PlayerEnvroment _playerEnvroment;
 
         private void Awake()
         {
+            SetUp();
+        }
+
+        private void SetUp()
+        {
             _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap,
-                _playerStateList, _playerAnimation, _tutorialTextBoxController);
+                _playerStateList, _playerAnimation, _tutorialTextBoxController, _animationEventProvider);
 
             for (int i = 0; i < _playerStateList.Count; i++)
             {
