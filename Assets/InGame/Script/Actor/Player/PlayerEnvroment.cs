@@ -11,13 +11,18 @@ namespace IronRain.Player
         public PlayerStateType PlayerState { get; private set; }
         public RaderMap RaderMap { get; private set; }
         public PlayerAnimation PlayerAnimation { get; private set; }
+        public AnimationEventProvider AnimationEventProvider { get; private set; }
         public TutorialTextBoxController TutorialTextBoxCon { get; private set; }
 
         private List<PlayerComponentBase> _playerComponentList;
 
-        public PlayerEnvroment(Transform playerTransform, PlayerSetting playerSetting,
-            RaderMap raderMap, List<PlayerComponentBase> playerComponentList,
-            PlayerAnimation playerAnimation, TutorialTextBoxController tutorialTextBoxController)
+        public PlayerEnvroment(Transform playerTransform,
+            PlayerSetting playerSetting,
+            RaderMap raderMap,
+            List<PlayerComponentBase> playerComponentList,
+            PlayerAnimation playerAnimation,
+            TutorialTextBoxController tutorialTextBoxController,
+            AnimationEventProvider animationEventProvider)
         {
             PlayerTransform = playerTransform;
             PlayerSetting = playerSetting;
@@ -25,6 +30,7 @@ namespace IronRain.Player
             _playerComponentList = playerComponentList;
             PlayerAnimation = playerAnimation;
             TutorialTextBoxCon = tutorialTextBoxController;
+            AnimationEventProvider = animationEventProvider;
         }
 
         /// <summary>

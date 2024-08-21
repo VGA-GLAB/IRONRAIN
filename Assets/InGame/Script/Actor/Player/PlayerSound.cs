@@ -1,22 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IronRain.Player;
 
 public class PlayerSound : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    private PlayerEnvroment _playerEnvroment;
+    private AnimationEventProvider _animationEventProvider;
+
     void Start()
     {
+     
+
+    }
+
+    public void SetUp(PlayerEnvroment playerEnvroment)
+    {
+        _playerEnvroment = playerEnvroment;
+        _animationEventProvider = playerEnvroment.AnimationEventProvider;
+
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle1, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle2, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle3, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle4, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle5, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
         InputProvider.Instance.SetEnterInput(InputProvider.InputType.Toggle6, () => CriAudioManager.Instance.SE.Play("SE", "SE_Toggle"));
-    }
 
-    private void Update()
-    {
-        
+        _animationEventProvider.OnBlokenArm += () => { CriAudioManager.Instance.SE.Play("SE", "SE_BlokenArm"); };
+        _animationEventProvider.OnPileBunkerBack += () => { CriAudioManager.Instance.SE.Play("SE", "SE_PileBunker_Retrun"); };
+        _animationEventProvider.OnPileBunkerHit += () => {
+            Debug.Log("当たった");
+            CriAudioManager.Instance.SE.Play("SE", "SE_PileBunker_Hit"); };
+        _animationEventProvider.OnPileBunkerInjection += () => { CriAudioManager.Instance.SE.Play("SE", "SE_PileBunker"); };
     }
 }
