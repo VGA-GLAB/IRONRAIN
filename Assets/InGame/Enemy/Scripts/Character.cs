@@ -30,5 +30,16 @@ namespace Enemy
         public Transform FindOffset() => transform.FindChildRecursive("Offset");
         public Transform FindRotate() => transform.FindChildRecursive("Rotate");
         protected Transform FindPlayer() => GameObject.FindGameObjectWithTag(Const.PlayerTag).transform;
+
+        // 以下は任意、必ず存在するとは限らない。
+        public bool TryFindDamageHitBox(out Transform result) => TryFind(out result, "DamageHitBox");
+        public bool TryFindShootingTarget(out Transform result) => TryFind(out result, "ShootingTarget");
+        
+        // 子を再帰的にFindする。
+        private bool TryFind(out Transform result, string name)
+        {
+            result = transform.FindChildRecursive(name);
+            return result != null;
+        }
     }
 }
