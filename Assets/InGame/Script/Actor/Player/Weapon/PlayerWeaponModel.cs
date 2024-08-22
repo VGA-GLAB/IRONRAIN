@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System;
+using Random = UnityEngine.Random;
 
 namespace IronRain.Player
 {
@@ -19,6 +20,8 @@ namespace IronRain.Player
         [SerializeField] private RaderMap _raderMap;
         [SerializeField] private float _aimSpeed;
         [SerializeField] private Transform _defaultAimTarget;
+        [SerializeField] private Transform _homingMissilePos;
+        [SerializeField] private GameObject _homingMissilePrefab;
 
         private bool _isWeaponChenge;
         private bool _isShot;
@@ -112,7 +115,18 @@ namespace IronRain.Player
 
         public void MulchShot()
         {
-            _playerWeaponList[_currentWeaponIndex].MulchShot();
+            Transform boss = GameObject.Find("Enemy_Boss").transform;
+            for (int i = 0; i < 10; i++) 
+            {
+                HomingMissile m = GameObject.Instantiate(_homingMissilePrefab, _homingMissilePos.position, Quaternion.identity).GetComponent<HomingMissile>();
+                Transform[] funnels = boss.GetComponentsInChildren<Transform>();
+                Transform target = funnels[Random.Range(0, funnels.Length)];
+                float x = Random.value;
+                float y = Random.value;
+                float z = Random.value;
+                Vector3 launch = new Vector3(x, y, z);
+                m.Fire(target, launch);
+            }
         }
 
         public PlayerWeaponBase GetWepaon(PlayerWeaponType playerWeaponType)
