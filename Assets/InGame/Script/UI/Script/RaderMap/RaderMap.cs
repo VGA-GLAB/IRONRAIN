@@ -70,7 +70,15 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
+    /// <summary>
+    /// タッチ判定
+    /// </summary>
     private bool _isTouch = false;
+
+    /// <summary>
+    /// タッチパネルシーケンスに入った時に呼ぶ処理
+    /// </summary>
+    private bool _isStartTouchPanel = false;
     
 
     // Start is called before the first frame update
