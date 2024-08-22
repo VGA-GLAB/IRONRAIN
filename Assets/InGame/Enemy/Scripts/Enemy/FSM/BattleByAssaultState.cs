@@ -35,7 +35,7 @@
             void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
                 Ref.BodyAnimation.RegisterStateEnterCallback(
-                    nameof(BattleByLauncherState), 
+                    nameof(BattleByAssaultState), 
                     stateName, 
                     layerIndex, 
                     () => _currentAnimGroup = animGroup
@@ -68,7 +68,8 @@
             if (BattleExit()) return;
 
             float spd = Ref.EnemyParams.MoveSpeed.Chase;
-            MoveToSlot(spd);
+            //MoveToSlot(spd);
+            WarpToSlot(spd);
 
             // どのアニメーションが再生されているかによって処理を分ける。
             if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
@@ -82,7 +83,7 @@
             _equipment.OnShootAction -= OnShoot;
 
             // コールバックの登録解除。
-            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByLauncherState));
+            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByAssaultState));
         }
 
         // アニメーションがアイドル状態

@@ -49,8 +49,10 @@ namespace Enemy.Funnel
                 Ref.Body.LookForward(f);
             }
 
-            if (Ref.BlackBoard.Fire.Order())
+            if (Ref.BlackBoard.Fire.IsWaitingExecute())
             {
+                Ref.BlackBoard.Fire.Execute();
+
                 IOwnerTime owner = Ref.Boss.BlackBoard;
                 Vector3 muzzle = Ref.Muzzle.position;
 

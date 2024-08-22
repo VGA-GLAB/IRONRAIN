@@ -19,13 +19,7 @@ namespace Enemy
 
         private EnemyParams _params;
         private BlackBoard _blackBoard;
-        // Perception層
         private Perception _perception;
-        private FireRate _fireRate;
-        private EyeSensor _eyeSensor;
-        private HitPoint _hitPoint;
-        private OverrideOrder _overrideOrder;
-        // Action層
         private StateMachine _stateMachine;
         // デバッグ用なので本番環境では不要。
         private DebugStatusUI _debugStatusUI;
@@ -71,10 +65,6 @@ namespace Enemy
             _blackBoard = requiredRef.BlackBoard;
 
             _perception = new Perception(requiredRef);
-            _fireRate = new FireRate(requiredRef);
-            _eyeSensor = new EyeSensor(requiredRef);
-            _hitPoint = new HitPoint(requiredRef);
-            _overrideOrder = new OverrideOrder(requiredRef);
             _stateMachine = new StateMachine(requiredRef);
             _debugStatusUI = new DebugStatusUI(requiredRef);
         }
@@ -83,18 +73,12 @@ namespace Enemy
         {
             EnemyManager.Register(this);
 
-            _perception.Init();
-            _hitPoint.Init();
+            _perception.InitializeOnStart();
         }
 
         private void Update()
         {
             _perception.Update();
-            _eyeSensor.Update();
-            _fireRate.UpdateIfAttacked();
-            _hitPoint.Update();
-            // 命令で上書きするのでPerception層の一番最後。
-            _overrideOrder.Update();
 
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
@@ -106,15 +90,9 @@ namespace Enemy
             }
         }
 
-        private void LateUpdate()
-        {
-            _eyeSensor.ClearCaptureTargets();
-        }
-
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
-            _perception.Dispose();
             _stateMachine.Dispose();
 
             // 次フレームのUpdateの後まで待つ。
@@ -127,13 +105,11 @@ namespace Enemy
             // 死亡した敵かの判定が出来るようにするため、ゲームが終了するタイミングで登録解除。
             EnemyManager.Release(this);
 
-            _perception.Dispose();
             _stateMachine.Dispose();
         }
 
         private void OnDrawGizmosSelected()
         {
-            _eyeSensor?.Draw();
             _perception?.Draw();
             _debugStatusUI?.Draw();
         }
@@ -141,26 +117,26 @@ namespace Enemy
         /// <summary>
         /// 外部から敵の行動を制御する。
         /// </summary>
-        public void Order(EnemyOrder order) => _overrideOrder.Buffer(order);
+        public void Order(EnemyOrder order) => _perception.Order(order);
 
         /// <summary>
         /// 攻撃させる。
         /// </summary>
-        public void Attack() => _overrideOrder.Buffer(EnemyOrder.Type.Attack);
+        public void Attack() => _perception.Order(EnemyOrder.Type.Attack);
 
         /// <summary>
         /// ポーズさせる。
         /// </summary>
-        public void Pause() => _overrideOrder.Buffer(EnemyOrder.Type.Pause);
+        public void Pause() => _perception.Order(EnemyOrder.Type.Pause);
 
         /// <summary>
         /// ポーズを解除させる。
         /// </summary>
-        public void Resume() => _overrideOrder.Buffer(EnemyOrder.Type.Resume);
+        public void Resume() => _perception.Order(EnemyOrder.Type.Resume);
 
         /// <summary>
         /// ダメージ処理。
         /// </summary>
-        public void Damage(int value, string weapon) => _hitPoint.Damage(value, weapon);
+        public void Damage(int value, string weapon) => _perception.Damage(value, weapon);
     }
 }

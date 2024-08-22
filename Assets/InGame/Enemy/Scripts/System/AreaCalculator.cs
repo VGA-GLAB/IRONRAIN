@@ -80,7 +80,7 @@ namespace Enemy
         /// <summary>
         /// スロットの位置を計算する。
         /// </summary>
-        public static Vector3 SlotPoint(Transform player, EnemyParams.SlotSettings settings)
+        public static Vector3 SlotPoint(Transform player, SlotSettings settings)
         {
             return SlotPoint(player, settings.Place, settings.ForwardOffset);
         }
@@ -97,7 +97,7 @@ namespace Enemy
         /// <summary>
         /// 任意の位置にスロットを作成して返す。
         /// </summary>
-        public static Area CreateSlot(Transform player, EnemyParams.SlotSettings settings)
+        public static Area CreateSlot(Transform player, SlotSettings settings)
         {
             return CreateSlot(player, settings.Place, settings.ForwardOffset);
         }

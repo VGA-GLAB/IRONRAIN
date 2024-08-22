@@ -8,7 +8,7 @@ namespace Enemy
     /// Perception層とAction層が互いに書き込む。
     /// 命令されたら1度だけ実行し、実行したことを命令する側で検知する。
     /// </summary>
-    public struct Trigger
+    public class Trigger
     {
         private enum State
         {
@@ -21,34 +21,23 @@ namespace Enemy
         private State _state;
 
         /// <summary>
-        /// 命令まだの場合は、一度だけ命令し、値を命令済みに変更。
+        /// 命令済みに変更。
         /// </summary>
-        public bool Order()
-        {
-            if (!IsOrdered())
-            {
-                _state = State.Ordered;
-                return true;
-            }
-            else return false;
-        }
+        public void Order() => _state = State.Ordered;
 
         /// <summary>
-        /// 命令済みかどうかを返す。
+        /// 命令済みで実行待ちの状態かどうかを返す。
         /// </summary>
-        public bool IsOrdered() => _state == State.Ordered;
+        public bool IsWaitingExecute() => _state == State.Ordered;
 
         /// <summary>
-        /// 命令されている場合は、一度だけ実行し、値を実行済みに変更。
+        /// 実行済みかどうかを返す。
         /// </summary>
-        public bool Execute()
-        {
-            if (_state == State.Ordered)
-            {
-                _state = State.Executed;
-                return true;
-            }
-            else return false;
-        }
+        public bool IsExecuted() => _state == State.Executed;
+
+        /// <summary>
+        /// 実行済みに変更。
+        /// </summary>
+        public void Execute() => _state = State.Executed;
     }
 }

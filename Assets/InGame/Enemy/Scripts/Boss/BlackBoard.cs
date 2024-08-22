@@ -11,6 +11,9 @@ namespace Enemy.Boss
         {
             ID = System.Guid.NewGuid();
             Name = name;
+            FunnelExpand = new Trigger();
+            RangeAttack = new Trigger();
+            MeleeAttack = new Trigger();
         }
 
         // 外部から個体毎の判定をするための値。

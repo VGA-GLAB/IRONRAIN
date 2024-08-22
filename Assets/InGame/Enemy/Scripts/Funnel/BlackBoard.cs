@@ -10,6 +10,8 @@ namespace Enemy.Funnel
         {
             ID = System.Guid.NewGuid();
             Name = name;
+            Fire = new Trigger();
+            Expand = new Trigger();
         }
 
         // 外部から個体毎の判定をするための値。

@@ -59,6 +59,17 @@ namespace Enemy
             MoveAnimation(after - before);
         }
 
+        protected void WarpToSlot(float speed)
+        {
+            // 移動前後の位置を比較して左右どちらに移動したかを判定する。
+            Vector3 before = Ref.Body.Position;
+            WarpToSlot();
+            LookAtPlayer();
+            Vector3 after = Ref.Body.Position;
+
+            MoveAnimation(after - before);
+        }
+
         // スロットの位置へ向かうベクトルを返す。
         private Vector3 MovementPerFrame(float speed)
         {
@@ -68,27 +79,51 @@ namespace Enemy
                 Ref.BlackBoard.SlotDirection,
                 Ref.EnemyParams.Other.ApproachHomingPower
                 );
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            return v * speed * dt;
+            //float dt = Ref.BlackBoard.PausableDeltaTime;
+            //return v * speed * dt;
+
+            return v;
         }
 
+        float _t;
         // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
         // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
         private void MoveToSlot(in Vector3 mpf)
         {
-            Vector3 p;
+            float speed = Ref.EnemyParams.MoveSpeed.Chase;
+            Vector3 d = Ref.BlackBoard.SlotDirection;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 bp = Ref.Body.Position;
 
-            float sqrDist = Ref.BlackBoard.SlotSqrDistance;
-            if (mpf.sqrMagnitude >= sqrDist)
-            {
-                p = Ref.BlackBoard.Slot.Point;
-            }
-            else
-            {
-                p = Ref.BlackBoard.Area.Point + mpf;
-            }
+            float sr = Ref.BlackBoard.Slot.Radius;
 
-            Ref.Body.Warp(p);
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+
+            _t += dt * speed;
+
+            Vector3 l = Vector3.Lerp(bp, sp, _t);
+            Ref.Body.Warp(l);
+
+            //Vector3 p;
+
+            //float sqrDist = Ref.BlackBoard.SlotSqrDistance;
+            //if (mpf.sqrMagnitude >= sqrDist)
+            //{
+            //    p = Ref.BlackBoard.Slot.Point;
+            //}
+            //else
+            //{
+            //    p = Ref.BlackBoard.Area.Point + mpf;
+            //}
+
+            //Ref.Body.Warp(p);
+        }
+
+        // 仮:スロット位置にワープ
+        private void WarpToSlot()
+        {
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            Ref.Body.Warp(sp);
         }
 
         // プレイヤーを向かせる。
@@ -132,12 +167,12 @@ namespace Enemy
             if (condition == SpecialCondition.ManualAttack)
             {
                 Trigger attack = Ref.BlackBoard.OrderedAttack;
-                return attack.IsOrdered();
+                return attack.IsWaitingExecute();
             }
             else
             {
                 Trigger attack = Ref.BlackBoard.Attack;
-                return attack.IsOrdered() && CheckAttackRange();
+                return attack.IsWaitingExecute() && CheckAttackRange();
             }
         }
 

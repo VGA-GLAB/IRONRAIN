@@ -31,8 +31,10 @@ namespace Enemy.Funnel
 
         protected override void Stay()
         {
-            if (Ref.BlackBoard.Expand.Execute()) 
+            if (Ref.BlackBoard.Expand.IsWaitingExecute()) 
             {
+                Ref.BlackBoard.Expand.Execute();
+
                 TryChangeState(StateKey.Expand); 
                 return; 
             }

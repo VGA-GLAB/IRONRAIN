@@ -69,7 +69,8 @@
             if (BattleExit()) return;
 
             float spd = Ref.EnemyParams.MoveSpeed.Chase;
-            MoveToSlot(spd);
+            //MoveToSlot(spd);
+            WarpToSlot(spd);
 
             // どのアニメーションが再生されているかによって処理を分ける。
             if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();

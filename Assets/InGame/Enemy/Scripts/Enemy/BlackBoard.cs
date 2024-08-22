@@ -13,6 +13,8 @@ namespace Enemy
             ID = System.Guid.NewGuid();
             Name = name;
             FovStay = new HashSet<Collider>();
+            OrderedAttack = new Trigger();
+            Attack = new Trigger();
         }
 
         // 外部から個体毎の判定をするための値。

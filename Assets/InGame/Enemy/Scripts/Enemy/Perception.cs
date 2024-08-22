@@ -2,102 +2,162 @@
 
 namespace Enemy
 {
-    /// <summary>
-    /// 必要な情報を黒板に書き込む。
-    /// </summary>
     public class Perception
     {
-        private Transform _transform;
-        private EnemyParams _params;
-        private BlackBoard _blackBoard;
-        private Transform _player;
-
-        // 破棄した後に更新処理がされないようのフラグ。
-        private bool _isDisposed;
+        private FireRate _fireRate;
+        private EyeSensor _eyeSensor;
+        private HitPoint _hitPoint;
+        private OverwriteOrder _overwriteOrder;
 
         public Perception(RequiredRef requiredRef)
         {
-            _transform = requiredRef.Transform;
-            _params = requiredRef.EnemyParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _player = requiredRef.Player;
+            Ref = requiredRef;
         }
 
-        /// <summary>
-        /// 初期化。
-        /// スロットを借りて、他必要な値を黒板に書き込む。
-        /// </summary>
-        public void Init()
+        private RequiredRef Ref { get; set; }
+
+        public void InitializeOnStart()
         {
-            // エリアとスロットを作成、黒板に書き込む。
-            _blackBoard.Area = AreaCalculator.CreateArea(_transform.position);
-            _blackBoard.PlayerArea = AreaCalculator.CreatePlayerArea(_player);
-            _blackBoard.Slot = AreaCalculator.CreateSlot(_player, _params.Slot);
+            BlackBoard bb = Ref.BlackBoard;
 
-            // 生存時間の初期値を黒板に書き込む。
-            _blackBoard.LifeTime = _params.LifeTime;
+            // 自身のエリア
+            Vector3 p = Ref.Transform.position;
+            bb.Area = AreaCalculator.CreateArea(p);
+
+            // プレイヤーのエリア
+            bb.PlayerArea = AreaCalculator.CreatePlayerArea(Ref.Player);
+
+            // スロット
+            SlotSettings slot = Ref.EnemyParams.Slot;
+            bb.Slot = AreaCalculator.CreateSlot(Ref.Player, slot);
+
+            // 生存時間
+            bb.LifeTime = Ref.EnemyParams.LifeTime;
+
+            // 攻撃間隔、視界、体力、命令
+            _fireRate = new FireRate(Ref);
+            _eyeSensor = new EyeSensor(Ref);
+            _hitPoint = new HitPoint(Ref);
+            _overwriteOrder = new OverwriteOrder(Ref.BlackBoard.Name);
         }
 
         /// <summary>
-        /// 各値を更新。
+        /// 値を更新。
         /// </summary>
         public void Update()
         {
-            if (_isDisposed || _blackBoard.CurrentState == StateKey.Hide) return;
+            Calculate();
+            Overwrite();
+        }
+
+        // 必要な値を計算し、黒板に書き込む。
+        private void Calculate()
+        {
+            BlackBoard bb = Ref.BlackBoard;
+
+            bool isHide = bb.CurrentState == StateKey.Hide;
+            if (isHide) return;
 
             // エリアとスロットの位置を更新。
-            _blackBoard.Area.Point = AreaCalculator.AreaPoint(_transform);
-            _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);
-            _blackBoard.Slot.Point = AreaCalculator.SlotPoint(_player, _params.Slot);
+            bb.Area.Point = AreaCalculator.AreaPoint(Ref.Transform);
+            bb.PlayerArea.Point = AreaCalculator.AreaPoint(Ref.Player);
+            bb.Slot.Point = AreaCalculator.SlotPoint(Ref.Player, Ref.EnemyParams.Slot);
 
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
-            if (_blackBoard.Area.Collision(_blackBoard.PlayerArea))
+            if (bb.Area.Collision(bb.PlayerArea))
             {
-                _blackBoard.Area.Point = _blackBoard.Area.TouchPoint(_blackBoard.PlayerArea);
+                bb.Area.Point = bb.Area.TouchPoint(bb.PlayerArea);
             }
 
             // 自身からプレイヤーへのベクトルを黒板に書き込む。
-            Vector3 pv = _player.position - _transform.position;
+            Vector3 pv = Ref.Player.position - Ref.Transform.position;
             float pMag = pv.magnitude;
-            _blackBoard.PlayerDistance = pMag;
-            _blackBoard.PlayerDirection = pMag > 1E-05F ? pv / pMag : Vector3.zero;
+            bb.PlayerDistance = pMag;
+            bb.PlayerDirection = pMag > 1E-05F ? pv / pMag : Vector3.zero;
 
-                // プレイヤーを検知した状態ならば生存時間を減らす。
-            if (_blackBoard.IsPlayerDetect) _blackBoard.LifeTime -= _blackBoard.PausableDeltaTime;
+            // プレイヤーを検知した状態ならば生存時間を減らす。
+            if (bb.IsPlayerDetect) bb.LifeTime -= bb.PausableDeltaTime;
 
             // 自身のエリアからスロットへのベクトルを黒板に書き込む。
-            Vector3 sv = _blackBoard.Slot.Point - _blackBoard.Area.Point;
-            _blackBoard.SlotDirection = sv.normalized;
-            _blackBoard.SlotSqrDistance = sv.sqrMagnitude;
+            Vector3 sv = bb.Slot.Point - bb.Area.Point;
+            bb.SlotDirection = sv.normalized;
+            bb.SlotSqrDistance = sv.sqrMagnitude;
 
             // スロットに到着した場合は、接近完了フラグを立てる。
-            if (_blackBoard.SlotSqrDistance < _params.Other.ApproachCompleteThreshold)
+            float threshold = Ref.EnemyParams.Other.ApproachCompleteThreshold;
+            if (bb.SlotSqrDistance < threshold)
             {
-                _blackBoard.IsApproachCompleted = true;
+                bb.IsApproachCompleted = true;
             }
+
+            // 攻撃タイミングを更新。
+            _fireRate.UpdateIfAttacked();
+
+            // 視界を更新。
+            _eyeSensor.Update();
+
+            // 体力を更新。
+            _hitPoint.Update();
+        }
+
+        // 黒板の値を外部からの命令で上書きする。
+        private void Overwrite()
+        {
+            BlackBoard bb = Ref.BlackBoard;
+
+            bool isDelete = bb.CurrentState == StateKey.Delete;
+            if (isDelete) return;
+
+            foreach (EnemyOrder order in _overwriteOrder.ForEach())
+            {
+                EnemyOrder.Type t = order.OrderType;
+
+                if (t == EnemyOrder.Type.PlayerDetect) { PlayerDetect(); SpawnPoint(order.Point); }
+                else if (t == EnemyOrder.Type.Attack) { AttackTrigger(); }
+                else if (t == EnemyOrder.Type.Pause) { Pause(true); }
+                else if (t == EnemyOrder.Type.Resume) { Pause(false); }
+                else if (t == EnemyOrder.Type.BossStart) { Die(); }
+                else if (t == EnemyOrder.Type.QteStartTargeted) { Qte(run: true, tgt: true); AttackTrigger(); }
+                else if (t == EnemyOrder.Type.QteStartUntargeted) { Qte(run: true, tgt: false); }
+                else if (t == EnemyOrder.Type.QteSuccessTargeted) { Qte(run: false, tgt: false); Die(); }
+                else if (t == EnemyOrder.Type.QteSuccessUntargeted) { Qte(run: false, tgt: false); }
+                else if (t == EnemyOrder.Type.QteFailureTargeted) { Qte(run: false, tgt: false); }
+                else if (t == EnemyOrder.Type.QteFailureUntargeted) { Qte(run: false, tgt: false); }
+            }
+
+            void PlayerDetect() { bb.IsPlayerDetect = true; }
+            void SpawnPoint(Vector3? p) { bb.SpawnPoint = p; }
+            void AttackTrigger() { bb.OrderedAttack.Order(); }
+            void Pause(bool b) { bb.IsPause = b; }
+            void Die() { _hitPoint.Damage(int.MaxValue / 2, ""); }
+            void Qte(bool run, bool tgt) { bb.IsQteRunning = run; bb.IsQteTargeted = tgt; }
         }
 
         /// <summary>
-        /// 後始末。
-        /// このクラスが黒板に書き込んだ参照をnullにする。
+        /// ダメージ処理。
         /// </summary>
-        public void Dispose()
-        {
-            _blackBoard.Area = null;
-            _blackBoard.PlayerArea = null;
-            _blackBoard.Slot = null;
+        public void Damage(int value, string weapon) => _hitPoint.Damage(value, weapon);
 
-            _isDisposed = true;
-        }
+        /// <summary>
+        /// EnemyManagerからの命令。
+        /// </summary>
+        public void Order(EnemyOrder order) => _overwriteOrder.Buffer(order);
+
+        /// <summary>
+        /// EnemyManager以外から呼び出し。
+        /// </summary>
+        public void Order(EnemyOrder.Type type) => _overwriteOrder.Buffer(type);
 
         /// <summary>
         /// 描画。
         /// </summary>
         public void Draw()
         {
-            _blackBoard.PlayerArea?.Draw();
-            _blackBoard.Area?.Draw();
-            _blackBoard.Slot?.Draw();
+            Ref.BlackBoard.PlayerArea?.Draw();
+            Ref.BlackBoard.Area?.Draw();
+            Ref.BlackBoard.Slot?.Draw();
+
+            _eyeSensor?.Draw();
         }
     }
 }

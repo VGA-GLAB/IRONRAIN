@@ -127,11 +127,11 @@ namespace Enemy.Boss
             BlackBoard bb = Ref.BlackBoard;
 
             // 近接攻撃の条件を満たした。
-            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack.IsOrdered();
+            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack.IsWaitingExecute();
             // QTE開始
             bool isQte = bb.IsQteStarted;
             // ファンネル展開
-            bool isFunnel = bb.FunnelExpand.IsOrdered();
+            bool isFunnel = bb.FunnelExpand.IsWaitingExecute();
 
             if(isMelee || isQte || isFunnel)
             {

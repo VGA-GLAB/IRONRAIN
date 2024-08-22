@@ -82,7 +82,7 @@ namespace Enemy.Boss
             // 実際に弾が発射もしくは刀を振ったタイミングではなく、
             // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
 
-            if (_nextRangeTime < Time.time && _blackBoard.RangeAttack.Order())
+            if (_nextRangeTime < Time.time && _blackBoard.RangeAttack.IsExecuted())
             {
                 _rangeIndex++;
                 _rangeIndex %= _rangeTiming.Count;
@@ -92,10 +92,12 @@ namespace Enemy.Boss
                 if (_rangeIndex > 0) t -= _rangeTiming[_rangeIndex - 1];
 
                 _nextRangeTime = Time.time + t;
+
+                _blackBoard.RangeAttack.Order();
             }
 
             // 最後に近接攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_nextMeleeTime < Time.time && _blackBoard.MeleeAttack.Order())
+            if (_nextMeleeTime < Time.time && _blackBoard.MeleeAttack.IsExecuted())
             {
                 _meleeIndex++;
                 _meleeIndex %= _meleeTiming.Count;
@@ -105,6 +107,8 @@ namespace Enemy.Boss
                 if (_meleeIndex > 0) t -= _meleeTiming[_meleeIndex - 1];
 
                 _nextMeleeTime = Time.time + t;
+
+                _blackBoard.MeleeAttack.Order();
             }
         }
     }
