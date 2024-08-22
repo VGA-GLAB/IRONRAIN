@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Enemy.Extensions;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// QTEの各ステップをIDで管理する。
@@ -49,7 +49,7 @@ namespace Enemy.Boss.FSM
     /// <summary>
     /// 左腕破壊~2回目のQTEまでの一連のイベントのステート。
     /// </summary>
-    public class QteEventState : State
+    public class QteEventState : State<StateKey>
     {
         private QteEventStep[] _steps;
         private QteEventStep _currentStep;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Enemy.FSM;
 
 namespace Enemy
 {
@@ -22,7 +21,7 @@ namespace Enemy
             HitBoxes = hitBoxes;
             Equipment = equipment;
 
-            States = new Dictionary<StateKey, State>();
+            States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
             BodyAnimation = new BodyAnimation(this);
             Effector = new Effector(this);
@@ -41,7 +40,7 @@ namespace Enemy
         public Collider[] HitBoxes { get; private set; }
         public Equipment Equipment { get; private set; }
 
-        public Dictionary<StateKey, State> States { get; private set; }
+        public Dictionary<StateKey, State<StateKey>> States { get; private set; }
         public Body Body { get; private set; }
         public BodyAnimation BodyAnimation { get; private set; }
         public Effector Effector { get; private set; }

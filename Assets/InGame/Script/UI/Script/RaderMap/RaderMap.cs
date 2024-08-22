@@ -24,6 +24,8 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Tooltip("レーダーの大きさ")] private float _raderLength = 30f;
     [Header("レーダーの半径")]
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
+    [Header("Xを倍にする縮尺")]
+    [SerializeField] private float _scaleFactor = 1.5f;
     [Header("ロックオン可能距離")]
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
     [Header("ボス戦")]
@@ -93,10 +95,11 @@ public class RaderMap : MonoBehaviour
                 enemyDir = _enemies[i].transform.position - _player.position;
 
                 enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
-                enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
-
+                
+                enemyDir.x = Mathf.Clamp(enemyDir.x * _scaleFactor, -_raderLength, _raderLength); // ベクトルの長さを制限
+                enemyDir.z = Mathf.Clamp(enemyDir.z * _scaleFactor, -_raderLength, _raderLength);
                 //赤点の位置を決める
-                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x + _offset.x, enemyDir.z  + _offset.y, _offset.z);
             }
         }
         else

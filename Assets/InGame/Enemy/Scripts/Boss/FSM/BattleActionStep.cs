@@ -1,4 +1,4 @@
-﻿namespace Enemy.Boss.FSM
+﻿namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中の各行動を、更に動作単位で分けて管理する。

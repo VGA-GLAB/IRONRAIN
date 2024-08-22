@@ -31,6 +31,15 @@ namespace Enemy
             _hitBoxes = requiredRef.HitBoxes;
         }
 
+        public Body(Funnel.RequiredRef requiredRef)
+        {
+            _transform = requiredRef.Transform;
+            _offset = requiredRef.Offset;
+            _rotate = requiredRef.Rotate;
+            _renderers = requiredRef.Renderers;
+            _hitBoxes = requiredRef.HitBoxes;
+        }
+
         public Vector3 Position => _transform.position;
         public Vector3 Forward => _rotate.forward;
         public Vector3 Right => _rotate.right;

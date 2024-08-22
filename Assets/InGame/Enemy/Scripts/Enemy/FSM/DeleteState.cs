@@ -1,9 +1,9 @@
-﻿namespace Enemy.FSM
+﻿namespace Enemy
 {
     /// <summary>
     /// 画面から削除され、もう使わない状態のステート。
     /// </summary>
-    public class DeleteState : State
+    public class DeleteState : State<StateKey>
     {
         public DeleteState(RequiredRef requiredRef) : base(requiredRef.States)
         {

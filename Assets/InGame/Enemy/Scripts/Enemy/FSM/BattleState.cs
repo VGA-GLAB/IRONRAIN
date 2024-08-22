@@ -1,13 +1,13 @@
 ﻿using Enemy.Extensions;
 using UnityEngine;
 
-namespace Enemy.FSM
+namespace Enemy
 {
     /// <summary>
     /// 接近状態と雑魚3種類それぞれの戦闘状態の基底クラス。
     /// Stayで呼ぶ前提のメソッドのみを持ち、呼び出し自体は行わない。
     /// </summary>
-    public class BattleState : State
+    public class BattleState : State<StateKey>
     {
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
@@ -59,6 +59,17 @@ namespace Enemy.FSM
             MoveAnimation(after - before);
         }
 
+        protected void WarpToSlot(float speed)
+        {
+            // 移動前後の位置を比較して左右どちらに移動したかを判定する。
+            Vector3 before = Ref.Body.Position;
+            WarpToSlot();
+            LookAtPlayer();
+            Vector3 after = Ref.Body.Position;
+
+            MoveAnimation(after - before);
+        }
+
         // スロットの位置へ向かうベクトルを返す。
         private Vector3 MovementPerFrame(float speed)
         {
@@ -68,27 +79,51 @@ namespace Enemy.FSM
                 Ref.BlackBoard.SlotDirection,
                 Ref.EnemyParams.Other.ApproachHomingPower
                 );
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            return v * speed * dt;
+            //float dt = Ref.BlackBoard.PausableDeltaTime;
+            //return v * speed * dt;
+
+            return v;
         }
 
+        float _t;
         // エリアの中心位置からスロット方向へ1フレームぶん移動した位置へワープさせる。
         // エリアの半径が小さすぎない限り、移動させても飛び出すことは無い。
         private void MoveToSlot(in Vector3 mpf)
         {
-            Vector3 p;
+            float speed = Ref.EnemyParams.MoveSpeed.Chase;
+            Vector3 d = Ref.BlackBoard.SlotDirection;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 bp = Ref.Body.Position;
 
-            float sqrDist = Ref.BlackBoard.SlotSqrDistance;
-            if (mpf.sqrMagnitude >= sqrDist)
-            {
-                p = Ref.BlackBoard.Slot.Point;
-            }
-            else
-            {
-                p = Ref.BlackBoard.Area.Point + mpf;
-            }
+            float sr = Ref.BlackBoard.Slot.Radius;
 
-            Ref.Body.Warp(p);
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+
+            _t += dt * speed;
+
+            Vector3 l = Vector3.Lerp(bp, sp, _t);
+            Ref.Body.Warp(l);
+
+            //Vector3 p;
+
+            //float sqrDist = Ref.BlackBoard.SlotSqrDistance;
+            //if (mpf.sqrMagnitude >= sqrDist)
+            //{
+            //    p = Ref.BlackBoard.Slot.Point;
+            //}
+            //else
+            //{
+            //    p = Ref.BlackBoard.Area.Point + mpf;
+            //}
+
+            //Ref.Body.Warp(p);
+        }
+
+        // 仮:スロット位置にワープ
+        private void WarpToSlot()
+        {
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            Ref.Body.Warp(sp);
         }
 
         // プレイヤーを向かせる。
@@ -132,12 +167,12 @@ namespace Enemy.FSM
             if (condition == SpecialCondition.ManualAttack)
             {
                 Trigger attack = Ref.BlackBoard.OrderedAttack;
-                return attack == Trigger.Ordered;
+                return attack.IsWaitingExecute();
             }
             else
             {
                 Trigger attack = Ref.BlackBoard.Attack;
-                return attack ==Trigger.Ordered && CheckAttackRange();
+                return attack.IsWaitingExecute() && CheckAttackRange();
             }
         }
 
@@ -147,8 +182,8 @@ namespace Enemy.FSM
         /// </summary>
         public void AttackTrigger()
         {
-            Ref.BlackBoard.OrderedAttack = Trigger.Executed;
-            Ref.BlackBoard.Attack = Trigger.Executed;
+            Ref.BlackBoard.OrderedAttack.Execute();
+            Ref.BlackBoard.Attack.Execute();
         }
 
         // プレイヤーが攻撃範囲内にいるかチェック。

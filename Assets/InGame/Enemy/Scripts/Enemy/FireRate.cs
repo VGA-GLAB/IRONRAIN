@@ -3,14 +3,8 @@ using UnityEngine;
 
 namespace Enemy
 {
-    /// <summary>
-    /// 攻撃タイミングを管理する。
-    /// </summary>
     public class FireRate
     {
-        private BlackBoard _blackBoard;
-        private Equipment _equip;
-
         // 攻撃タイミングがリストの要素になっており、攻撃時間が来たら添え字を更新する。
         private IReadOnlyList<float> _timing;
         private int _index;
@@ -18,61 +12,79 @@ namespace Enemy
 
         public FireRate(RequiredRef requiredRef)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _equip = requiredRef.Equipment;
-            _timing = InitTiming(requiredRef.EnemyParams);
+            Ref = requiredRef;
+
+            AttackSettings settings = requiredRef.EnemyParams.Attack;
+            Initialize(settings);
         }
 
+        private RequiredRef Ref { get; set; }
+
         // 攻撃タイミングを初期化
-        private IReadOnlyList<float> InitTiming(EnemyParams enemyParams)
+        private void Initialize(AttackSettings settings)
         {
-            List<float> timing = new List<float>();
-
-            if (enemyParams.Attack.UseInputBuffer && enemyParams.Attack.InputBufferAsset != null)
+            bool useInputBuffer = settings.UseInputBuffer;
+            bool isAssigned = settings.InputBufferAsset != null;
+            if (useInputBuffer && isAssigned)
             {
-                // テキストファイルの文字列から攻撃タイミングを作成
-                string text = enemyParams.Attack.InputBufferAsset.ToString();
-                foreach (string s in text.Split("\n"))
-                {
-                    if (s == "") continue;
-
-                    if (float.TryParse(s, out float f)) timing.Add(f);
-                    else Debug.LogWarning($"攻撃タイミングの初期化、float型に変換できない値: {s}");
-                }
+                _timing = TimingFromAsset(settings);
             }
             else
             {
-                // 一定間隔で攻撃
-                timing.Add(enemyParams.Attack.Rate);
+                _timing = TimingFromRate(settings);
             }
 
-            // 最初の攻撃タイミングを設定
-            _nextTime = Time.time + timing[_index];
+            // 現在の時間からn秒後を最初の攻撃タイミングとして設定。
+            _index = 0;
+            _nextTime = Time.time + _timing[_index];
+        }
+
+        // テキストファイルの文字列から攻撃タイミングを作成
+        private IReadOnlyList<float> TimingFromAsset(AttackSettings settings)
+        {
+            List<float> timing = new List<float>();
+
+            string text = settings.InputBufferAsset.ToString();
+            foreach (string s in text.Split("\n"))
+            {
+                if (s == "") continue;
+
+                if (float.TryParse(s, out float f)) timing.Add(f);
+                else Debug.LogWarning($"攻撃タイミングの初期化、float型に変換できない値: {s}");
+            }
+
+            return timing;
+        }
+
+        // 設定したパラメータを基に、一定間隔の攻撃タイミングを作成。
+        private IReadOnlyList<float> TimingFromRate(AttackSettings settings)
+        {
+            List<float> timing = new List<float> { settings.Rate };
 
             return timing;
         }
 
         /// <summary>
-        /// 攻撃を行った場合は攻撃タイミングを更新する。
+        /// 攻撃を行った場合は攻撃タイミングを更新し、黒板に書き込む。
         /// </summary>
         public void UpdateIfAttacked()
         {
-            if (_blackBoard.CurrentState == FSM.StateKey.Hide) return;
-
             // 実際に弾が発射もしくは刀を振ったタイミングではなく、
             // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
-            if (Time.time <= _nextTime || _blackBoard.Attack == Trigger.Ordered) return;
-            
-            _blackBoard.Attack = Trigger.Ordered;
+            bool isCooldown = Time.time <= _nextTime;
+            bool isWaiting = Ref.BlackBoard.Attack.IsWaitingExecute();
+            if (isCooldown || isWaiting) return;
 
             _index++;
             _index %= _timing.Count;
 
-            // 次のタイミングまでの時間
+            // 1つ前のタイミングとの差を取ることで、次のタイミングまでの時間を計算。
             float t = _timing[_index];
             if (_index > 0) t -= _timing[_index - 1];
 
             _nextTime = Time.time + t;
+
+            Ref.BlackBoard.Attack.Order();
         }
     }
 }

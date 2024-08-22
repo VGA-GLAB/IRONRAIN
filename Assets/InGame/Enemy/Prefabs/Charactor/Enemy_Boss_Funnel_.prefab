@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff805784e313db4bb1d3b6ad25af8ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _expandMode: 0
   _maxHp: 100
   _fireRate: 0.1
   _accuracy: 0.2
@@ -131,12 +132,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ef07c46c83bfa4fafb7c9df23d28ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _model: {fileID: 6880249356871894200}
+  _renderers:
+  - {fileID: 6017338693380436107}
+  - {fileID: 696003464885407902}
   _muzzle: {fileID: 6237803711034779576}
-  _hitBox: {fileID: 6505151752988918803}
-  _destroyedEffect: {fileID: 6297016862723654576}
-  _trailEffect: {fileID: 8330729061132994193}
-  _mode: 0
+  _effects:
+    _destroyed: {fileID: 6297016862723654576}
+    _trail: {fileID: 8330729061132994193}
+  _hitBoxes:
+  - {fileID: 6505151752988918803}
 --- !u!114 &460735362279088601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,8 +499,47 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -2975479040737324606, guid: c931986f276cd974f86511400d181714, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5040773445340875944, guid: c931986f276cd974f86511400d181714, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8171575021653761672}
   m_SourcePrefab: {fileID: 100100000, guid: c931986f276cd974f86511400d181714, type: 3}
+--- !u!137 &696003464885407902 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 991140486774122482, guid: c931986f276cd974f86511400d181714, type: 3}
+  m_PrefabInstance: {fileID: 317941876672067436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4728184558208531396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5040773445340875944, guid: c931986f276cd974f86511400d181714, type: 3}
+  m_PrefabInstance: {fileID: 317941876672067436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8171575021653761672
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4728184558208531396}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 82c1b6b6341e00d45b9661964fc482f7, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!137 &6017338693380436107 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6334435861654210535, guid: c931986f276cd974f86511400d181714, type: 3}
+  m_PrefabInstance: {fileID: 317941876672067436}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6880249356871894200 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6562307768231392212, guid: c931986f276cd974f86511400d181714, type: 3}

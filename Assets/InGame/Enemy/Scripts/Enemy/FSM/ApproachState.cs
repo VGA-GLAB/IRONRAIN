@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Enemy.FSM
+namespace Enemy
 {
     /// <summary>
     /// 画面に表示され、スロット位置まで接近するステート。

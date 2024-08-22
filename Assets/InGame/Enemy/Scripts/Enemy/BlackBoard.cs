@@ -1,20 +1,8 @@
-﻿using Enemy.FSM;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy
 {
-    /// <summary>
-    /// Perception層とAction層が互いに書き込む。
-    /// 命令されたら1度だけ実行し、実行したことを命令する側で検知する。
-    /// </summary>
-    public enum Trigger
-    {
-        None,     // 命令されておらず、実行していない。
-        Ordered,  // 命令された。
-        Executed, // 実行した。
-    }
-
     /// <summary>
     /// コメントに特に記述が無い場合は、Perception層が書き込む。
     /// </summary>
@@ -25,6 +13,8 @@ namespace Enemy
             ID = System.Guid.NewGuid();
             Name = name;
             FovStay = new HashSet<Collider>();
+            OrderedAttack = new Trigger();
+            Attack = new Trigger();
         }
 
         // 外部から個体毎の判定をするための値。
@@ -61,7 +51,7 @@ namespace Enemy
 
         // 命令やメソッド呼び出しで攻撃させるトリガー。
         public Trigger OrderedAttack { get; set; }
-        // 次に攻撃可能になる時間。
+        // 時間経過で攻撃させるトリガー。
         public Trigger Attack { get; set; }
 
         // このフレームに受けたダメージ量。
@@ -79,8 +69,6 @@ namespace Enemy
         public bool IsQteRunning { get; set; }
         // 自身がQTEの対象かのフラグ。
         public bool IsQteTargeted { get; set; }
-        // 瀕死状態かのフラグ。
-        public bool IsDying { get; set; }
         // 生存中かのフラグ。
         public bool IsAlive => Hp > 0;
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。Action層が書き込む。

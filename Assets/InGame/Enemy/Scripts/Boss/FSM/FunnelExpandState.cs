@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Funnel;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中、ファンネルを展開するステート。
@@ -65,7 +66,7 @@ namespace Enemy.Boss.FSM
             AudioWrapper.PlaySE("SE_Funnel");
 
             // このタイミングで黒板に実行を書き込んでいるが、ステートのExitでも良いかも？
-            Ref.BlackBoard.FunnelExpand = Trigger.Executed;
+            Ref.BlackBoard.FunnelExpand.Execute();
         }
 
         protected override BattleActionStep Stay()

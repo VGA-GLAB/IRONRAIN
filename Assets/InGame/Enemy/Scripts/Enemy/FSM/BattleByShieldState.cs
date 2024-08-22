@@ -1,4 +1,4 @@
-﻿namespace Enemy.FSM
+﻿namespace Enemy
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。
@@ -30,7 +30,7 @@
             void Register(string stateName, int layerIndex, AnimationGroup animGroup)
             {
                 Ref.BodyAnimation.RegisterStateEnterCallback(
-                    nameof(BattleByLauncherState), 
+                    nameof(BattleByShieldState), 
                     stateName, 
                     layerIndex, 
                     () => _currentAnimGroup = animGroup
@@ -57,7 +57,8 @@
             if (BattleExit()) return;
 
             float spd = Ref.EnemyParams.MoveSpeed.Chase;
-            MoveToSlot(spd);
+            //MoveToSlot(spd);
+            WarpToSlot(spd);
 
             // どのアニメーションが再生されているかによって処理を分ける。
             if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
@@ -69,7 +70,7 @@
         public override void Dispose()
         {
             // コールバックの登録解除。
-            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByLauncherState));
+            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByShieldState));
         }
 
         // アニメーションがアイドル状態

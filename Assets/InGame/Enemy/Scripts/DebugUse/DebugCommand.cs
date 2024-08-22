@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Enemy.Funnel;
 using UnityEngine;
 
 namespace Enemy.DebugUse
@@ -67,7 +68,7 @@ namespace Enemy.DebugUse
             {
                 _enemyManager.FunnelExpand();
             }
-            else if(EventRunButton(7, "FunnelLaserSight"))
+            else if (EventRunButton(7, "FunnelLaserSight"))
             {
                 _enemyManager.FunnelLaserSight();
             }
@@ -94,6 +95,11 @@ namespace Enemy.DebugUse
             else if (EventRunButton(13, "PenetrateBoss"))
             {
                 _enemyManager.PenetrateBoss();
+            }
+            else if (EventRunButton(14, "DefeatAllFunnel"))
+            {
+                FunnelController[] f = FindObjectsByType<FunnelController>(FindObjectsSortMode.None);
+                foreach (FunnelController g in f) g.Damage(int.MaxValue / 2, "DebugCommand");
             }
         }
 
