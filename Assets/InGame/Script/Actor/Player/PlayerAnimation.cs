@@ -9,6 +9,7 @@ namespace IronRain.Player
     public class PlayerAnimation : MonoBehaviour
     {
         [SerializeField] private Animator _anim;
+        [SerializeField] private Animator _pileAnim;
         [SerializeField] private GameObject _fallObj;
         [SerializeField] private Transform _fallInsPos;
         private CancellationToken _token;
@@ -64,6 +65,20 @@ namespace IronRain.Player
             _anim.SetTrigger("PileFinishTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
             PlayerLoopTiming.Update, _token);
+        }
+
+        public async UniTask PileFire() 
+        {
+            _pileAnim.SetTrigger("FireTrigger");
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+                PlayerLoopTiming.Update, _token);
+        }
+
+        public async UniTask PileFinish()
+        {
+            _pileAnim.SetTrigger("FinishTrigger");
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95,
+                PlayerLoopTiming.Update, _token);
         }
 
         /// <summary>

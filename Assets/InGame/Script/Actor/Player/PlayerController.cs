@@ -58,6 +58,7 @@ namespace IronRain.Player
             }
 
             _playerHp.Setup(_playerEnvroment);
+            _playerSound.SetUp(_playerEnvroment);
             
         }
 
