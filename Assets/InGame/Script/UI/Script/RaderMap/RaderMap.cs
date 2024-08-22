@@ -70,7 +70,15 @@ public class RaderMap : MonoBehaviour
         get { return _multiLockEnemys; }
     }
 
+    /// <summary>
+    /// タッチ判定
+    /// </summary>
     private bool _isTouch = false;
+
+    /// <summary>
+    /// タッチパネルシーケンスに入った時に呼ぶ処理
+    /// </summary>
+    private bool _isStartTouchPanel = false;
     
 
     // Start is called before the first frame update
@@ -412,7 +420,9 @@ public class RaderMap : MonoBehaviour
             
             //ターゲットが切り替わる音を出す
             CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
-            _isTouch = true;
+
+            if(_isStartTouchPanel)
+                _isTouch = true;
         }
     }
 
@@ -473,6 +483,14 @@ public class RaderMap : MonoBehaviour
             var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
             enemyUi.LockOnUi.SetActive(true);
         }
+    }
+
+    /// <summary>
+    /// タッチパネルシーケンスが始まる時に呼ばれる処理
+    /// </summary>
+    public void TouchPanelStart()
+    {
+        _isStartTouchPanel = true;
     }
 
     /// <summary>
