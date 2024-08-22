@@ -20,12 +20,7 @@ namespace Enemy.Boss
         private BossParams _params;
         private BlackBoard _blackBoard;
         private List<FunnelController> _funnels;
-        // Perception層
         private Perception _perception;
-        private FireRate _fireRate;
-        private HitPoint _hitPoint;
-        private OverrideOrder _overrideOrder;
-        // Action層
         private StateMachine _stateMachine;
 
         // 非表示にする非同期処理を実行中フラグ。
@@ -67,9 +62,6 @@ namespace Enemy.Boss
             _funnels = requiredRef.Funnels;
 
             _perception = new Perception(requiredRef);
-            _fireRate = new FireRate(requiredRef);
-            _hitPoint = new HitPoint(requiredRef);
-            _overrideOrder = new OverrideOrder(requiredRef);
             _stateMachine = new StateMachine(requiredRef);
         }
 
@@ -78,15 +70,12 @@ namespace Enemy.Boss
             EnemyManager.Register(this);
             FunnelController.RegisterOwner(this, _funnels);
 
-            _perception.Init();
+            _perception.InitializeOnStart();
         }
 
         private void Update()
         {
             _perception.Update();
-            _fireRate.UpdateIfAttacked();
-            _hitPoint.Update();
-            _overrideOrder.Update();
             
             // オブジェクトに諸々を反映させているので結果をハンドリングする。
             // 完了が返ってきた場合は、続けて後始末処理を呼び出す。
@@ -101,7 +90,6 @@ namespace Enemy.Boss
         // 後始末、Update内から呼び出す。
         private IEnumerator CleanupAsync()
         {
-            _perception.Dispose();
             _stateMachine.Dispose();
 
             // 次フレームのUpdateの後まで待つ。
@@ -115,7 +103,6 @@ namespace Enemy.Boss
             // 死亡した敵かの判定が出来るようにするため。
             EnemyManager.Release(this);
 
-            _perception.Dispose();
             _stateMachine.Dispose();
         }
 
@@ -127,11 +114,11 @@ namespace Enemy.Boss
         /// <summary>
         /// 外部から敵の行動を制御する。
         /// /// </summary>
-        public void Order(EnemyOrder order) => _overrideOrder.Buffer(order);
+        public void Order(EnemyOrder order) => _perception.Order(order);
 
         /// <summary>
         /// ダメージ処理。
         /// </summary>
-        public void Damage(int value, string weapon = "") => _hitPoint.Damage(value, weapon);
+        public void Damage(int value, string weapon = "") => _perception.Damage(value, weapon);
     }
 }

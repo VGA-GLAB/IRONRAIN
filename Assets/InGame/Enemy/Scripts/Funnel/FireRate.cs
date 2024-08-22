@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy
+namespace Enemy.Funnel
 {
     public class FireRate
     {
@@ -14,52 +15,26 @@ namespace Enemy
         {
             Ref = requiredRef;
 
-            AttackSettings settings = requiredRef.EnemyParams.Attack;
-            Initialize(settings);
+            float rate = requiredRef.FunnelParams.FireRate;
+            Initialize(rate);
         }
 
         private RequiredRef Ref { get; }
 
         // 攻撃タイミングを初期化
-        private void Initialize(AttackSettings settings)
+        private void Initialize(float rate)
         {
-            bool useInputBuffer = settings.UseInputBuffer;
-            bool isAssigned = settings.InputBufferAsset != null;
-            if (useInputBuffer && isAssigned)
-            {
-                _timing = TimingFromAsset(settings);
-            }
-            else
-            {
-                _timing = TimingFromRate(settings);
-            }
+            _timing = TimingFromRate(rate);
 
             // 現在の時間からn秒後を最初の攻撃タイミングとして設定。
             _index = 0;
             _nextTime = Time.time + _timing[_index];
         }
 
-        // テキストファイルの文字列から攻撃タイミングを作成
-        private IReadOnlyList<float> TimingFromAsset(AttackSettings settings)
-        {
-            List<float> timing = new List<float>();
-
-            string text = settings.InputBufferAsset.ToString();
-            foreach (string s in text.Split("\n"))
-            {
-                if (s == "") continue;
-
-                if (float.TryParse(s, out float f)) timing.Add(f);
-                else Debug.LogWarning($"攻撃タイミングの初期化、float型に変換できない値: {s}");
-            }
-
-            return timing;
-        }
-
         // 設定したパラメータを基に、一定間隔の攻撃タイミングを作成。
-        private IReadOnlyList<float> TimingFromRate(AttackSettings settings)
+        private IReadOnlyList<float> TimingFromRate(float rate)
         {
-            List<float> timing = new List<float> { settings.Rate };
+            List<float> timing = new List<float> { rate };
 
             return timing;
         }

@@ -12,10 +12,7 @@ namespace Enemy.Funnel
         [SerializeField] private FunnelEffects _effects;
         [SerializeField] private Collider[] _hitBoxes;
 
-        // Perception層
         private Perception _perception;
-        private HitPoint _hitPoint;
-        // Action層
         private StateMachine _stateMachine;
 
         // ボスを登録するまで動かさないフラグ。
@@ -55,8 +52,9 @@ namespace Enemy.Funnel
                 );
 
             _perception = new Perception(requiredRef);
-            _hitPoint = new HitPoint(requiredRef);
             _stateMachine = new StateMachine(requiredRef);
+
+            _perception.InitializeOnStart();
 
             _isRegistered = true;
         }
@@ -66,33 +64,18 @@ namespace Enemy.Funnel
             if (!_isRegistered) return;
 
             _perception.Update();
-            _hitPoint.Update();
             _stateMachine.Update();
         }
 
         /// <summary>
         /// ファンネルを展開。
         /// </summary>
-        public void Expand()
-        {
-            _perception.ExpandOrder();
-        }
-
-        /// <summary>
-        /// ファンネルに攻撃を命令。
-        /// </summary>
-        public void Fire()
-        {
-            _perception.FireOrder();
-        }
+        public void Expand() => _perception.Order(EnemyOrder.Type.FunnelExpand);
 
         /// <summary>
         /// 攻撃を受けた。
         /// </summary>
-        public void Damage(int value, string _)
-        {
-            _hitPoint.Damage(value, _);
-        }
+        public void Damage(int value, string _) => _perception.Damage(value, _);
 
         /// <summary>
         /// レーザーサイトの表示/非表示

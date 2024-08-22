@@ -105,7 +105,7 @@ namespace Enemy.Boss
         // 書き込んで後続のステップに渡す。
         private PreAttackData _preAttackData;
         // 遷移の判定用の値は技ごとに違う。
-        private BossParams.Skill _selected;
+        private Skill _selected;
 
         public ApproachToPlayerStep(RequiredRef requiredRef, PreAttackData preAttackData, 
             BattleActionStep gedanGidi, BattleActionStep chargeThrust) : base(requiredRef, gedanGidi, chargeThrust) 
@@ -124,7 +124,7 @@ namespace Enemy.Boss
             _preAttackData.PlayerPosition = bb.PlayerArea.Point;
 
             // 技ごとに接近距離を設定しているので、このタイミングでどの技を使うか決める。
-            BossParams.MeleeAttackSettings melee = Ref.BossParams.MeleeAttackConfig;
+            MeleeAttackSettings melee = Ref.BossParams.MeleeAttackConfig;
             if (Random.value < 0.5f) _selected = melee.GedanGiri;
             else _selected = melee.ChargeThrust;
         }
@@ -148,7 +148,7 @@ namespace Enemy.Boss
             else
             {
                 // Enterのタイミングで決定した技に遷移。
-                bool isGedanGiri = _selected.ID == nameof(BossParams.GedanGiri);
+                bool isGedanGiri = _selected.ID == nameof(GedanGiri);
                 if (isGedanGiri) return Next[0];
                 else return Next[1];
             }

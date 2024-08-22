@@ -14,15 +14,11 @@ namespace Enemy
         Invincible, // 無敵の人
     }
 
-    /// <summary>
-    /// HPの変化を管理する。
-    /// 攻撃で受けたダメージの反映、瀕死と死亡の状態フラグもここ。
-    /// </summary>
     public class HitPoint
     {
         // Updateで黒板に反映し、毎フレームクリアされる。
-        int _damage;
-        string _damageSource;
+        private int _damage;
+        private string _damageSource;
 
         public HitPoint(RequiredRef requiredRef)
         {
@@ -70,7 +66,12 @@ namespace Enemy
         private bool IsArmor(string weaponName)
         {
             Armor armor = Ref.EnemyParams.Common.Tactical.Armor;
+            return IsArmor(weaponName, armor);
+        }
 
+        // ダメージ耐性
+        public static bool IsArmor(string weaponName, Armor armor)
+        {
             // 無敵
             if (armor == Armor.Invincible) return true;
 

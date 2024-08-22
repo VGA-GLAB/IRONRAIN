@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Enemy.DebugUse;
 using System.Collections.Generic;
 
 namespace Enemy
@@ -21,8 +20,6 @@ namespace Enemy
         private BlackBoard _blackBoard;
         private Perception _perception;
         private StateMachine _stateMachine;
-        // デバッグ用なので本番環境では不要。
-        private DebugStatusUI _debugStatusUI;
 
         // 非表示にする非同期処理を実行中フラグ。
         // 二重に処理を呼ばないために必要。
@@ -39,6 +36,7 @@ namespace Enemy
                 return _params;
             }
         }
+
         /// <summary>
         /// 敵の状態を参照する。実行中に変化する値はこっち。
         /// </summary>
@@ -66,7 +64,6 @@ namespace Enemy
 
             _perception = new Perception(requiredRef);
             _stateMachine = new StateMachine(requiredRef);
-            _debugStatusUI = new DebugStatusUI(requiredRef);
         }
 
         private void Start()
@@ -111,7 +108,6 @@ namespace Enemy
         private void OnDrawGizmosSelected()
         {
             _perception?.Draw();
-            _debugStatusUI?.Draw();
         }
 
         /// <summary>

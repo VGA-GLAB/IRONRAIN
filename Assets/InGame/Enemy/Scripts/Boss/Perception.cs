@@ -2,97 +2,149 @@
 
 namespace Enemy.Boss
 {
-    /// <summary>
-    /// 必要な情報を黒板に書き込む。
-    /// </summary>
     public class Perception
     {
-        private Transform _transform;
-        private BlackBoard _blackBoard;
-        private Transform _player;
-        private DebugPointP _pointP;
-        private MeleeEquipment _meleeEquip;
-
-        // 破棄した後に更新処理がされないようのフラグ。
-        private bool _isDisposed;
+        private FireRate _fireRate;
+        private HitPoint _hitPoint;
+        private OverwriteOrder _overwriteOrder;
 
         public Perception(RequiredRef requiredRef)
         {
-            _transform = requiredRef.Transform;
-            _blackBoard = requiredRef.BlackBoard;
-            _player = requiredRef.Player;
-            _pointP = requiredRef.PointP;
-            _meleeEquip = requiredRef.MeleeEquip;
+            Ref = requiredRef;
         }
 
+        private RequiredRef Ref { get; set; }
+
         /// <summary>
-        /// 初期化。
-        /// エリアを作成し、他必要な値を黒板に書き込む。
+        /// 初期化。Startのタイミングで呼ぶ想定。
         /// </summary>
-        public void Init()
+        public void InitializeOnStart()
         {
-            // エリアを作成、黒板に書き込む。
-            _blackBoard.Area = AreaCalculator.CreateBossArea(_transform.position);
-            _blackBoard.PlayerArea = AreaCalculator.CreatePlayerArea(_player);
+            // 自身のエリア
+            Vector3 p = Ref.Transform.position;
+            Ref.BlackBoard.Area = AreaCalculator.CreateBossArea(p);
+
+            // プレイヤーのエリア
+            Ref.BlackBoard.PlayerArea = AreaCalculator.CreatePlayerArea(Ref.Player);
+
+            // 攻撃間隔、体力、命令
+            _fireRate = new FireRate(Ref);
+            _hitPoint = new HitPoint(Ref);
+            _overwriteOrder = new OverwriteOrder(Ref.BlackBoard.Name);
         }
 
         /// <summary>
-        /// 各値を更新
+        /// 値を更新。
         /// </summary>
         public void Update()
         {
-            if (_isDisposed) return;
+            Calculate();
+            Overwrite();
+        }
+
+        // 必要な値を計算し、黒板に書き込む。
+        private void Calculate()
+        {
+            BlackBoard bb = Ref.BlackBoard;
+
+            bool isHide = bb.CurrentState == StateKey.Hide;
+            if (isHide) return;
 
             // エリアの位置を更新
-            _blackBoard.PlayerArea.Point = AreaCalculator.AreaPoint(_player);
-            _blackBoard.Area.Point = AreaCalculator.AreaPoint(_transform);
+            bb.Area.Point = AreaCalculator.AreaPoint(Ref.Transform);
+            bb.PlayerArea.Point = AreaCalculator.AreaPoint(Ref.Player);
 
             // プレイヤーのエリアと接触していた場合、自身のエリアをめり込まない丁度の位置に戻す。
-            if (_blackBoard.Area.Collision(_blackBoard.PlayerArea))
+            if (bb.Area.Collision(bb.PlayerArea))
             {
-                _blackBoard.Area.Point = _blackBoard.Area.TouchPoint(_blackBoard.PlayerArea);
+                bb.Area.Point = bb.Area.TouchPoint(bb.PlayerArea);
             }
 
             // 自身から点Pへのベクトルを黒板に書き込む。
-            Vector3 ppv = _pointP.transform.position - _transform.position;
+            Vector3 ppv = Ref.PointP.transform.position - Ref.Transform.position;
             float ppMag = ppv.magnitude;
-            _blackBoard.PointPDistance = ppMag;
-            _blackBoard.PointPDirection = ppMag > 1E-05F ? ppv / ppMag : Vector3.zero;
+            bb.PointPDistance = ppMag;
+            bb.PointPDirection = ppMag > 1E-05F ? ppv / ppMag : Vector3.zero;
 
             // 自身からプレイヤーへのベクトルを黒板に書き込む。
-            Vector3 pv = _player.position - _transform.position;
-            _blackBoard.PlayerDirection = pv.normalized;
-            _blackBoard.PlayerSqrDistance = pv.sqrMagnitude;
+            Vector3 pv = Ref.Player.position - Ref.Transform.position;
+            bb.PlayerDirection = pv.normalized;
+            bb.PlayerSqrDistance = pv.sqrMagnitude;
 
             // プレイヤーが近接攻撃が届く範囲にいるか。
-            _blackBoard.IsWithinMeleeRange = _meleeEquip.IsWithinRange(_player.position);
-            
+            Vector3 pp = Ref.Player.position;
+            bb.IsWithinMeleeRange = Ref.MeleeEquip.IsWithinRange(pp);
+
             // ボス戦開始からの経過時間を更新。
-            if (_blackBoard.IsBossStarted) _blackBoard.ElapsedTime += Time.deltaTime;
+            if (bb.IsBossStarted) bb.ElapsedTime += Time.deltaTime;
 
             // 仕様が決まっていないのでとりあえずの処理として、ボス戦開始から1秒後に登場完了とする。
-            if (_blackBoard.ElapsedTime > 1.0f) _blackBoard.IsAppearCompleted = true;
+            if (bb.ElapsedTime > 1.0f) bb.IsAppearCompleted = true;
+
+            // 攻撃タイミングを更新。
+            _fireRate.UpdateIfAttacked();
+
+            // 体力を更新。
+            _hitPoint.Update();
+        }
+
+        // 黒板の値を外部からの命令で上書きする。
+        private void Overwrite()
+        {
+            BlackBoard bb = Ref.BlackBoard;
+
+            bool isDelete = bb.CurrentState == StateKey.Delete;
+            if (isDelete) return;
+
+            foreach (EnemyOrder order in _overwriteOrder.ForEach())
+            {
+                EnemyOrder.Type t = order.OrderType;
+
+                if (t == EnemyOrder.Type.BossStart) { BossStart(); }
+                else if (t == EnemyOrder.Type.FunnelExpand) { FunnelExpand(); }
+                else if (t == EnemyOrder.Type.FunnelLaserSight) { FunnelLaserSight(); }
+                else if (t == EnemyOrder.Type.MoveToPlayerFront) { QteStart(); }
+                else if (t == EnemyOrder.Type.BreakLeftArm) { QteStart(); BreakLeftArm(); }
+                else if (t == EnemyOrder.Type.QteCombatReady) { QteStart(); QteCombatReady(); }
+                else if (t == EnemyOrder.Type.FirstQteCombatAction) { QteStart(); FirstCombat(); }
+                else if (t == EnemyOrder.Type.SecondQteCombatAction) { QteStart(); SecondCombat(); }
+                else if (t == EnemyOrder.Type.PenetrateBoss) { QteStart(); PenetrateBoss(); }
+            }
+
+            // 黒板に書き込む命令一覧。
+            void BossStart() { bb.IsBossStarted = true; }
+            void FunnelExpand() { bb.FunnelExpand.Order(); }
+            void FunnelLaserSight() { bb.IsFunnelLaserSight = true; }
+            void QteStart() { bb.IsQteStarted = true; }
+            void BreakLeftArm() { bb.IsBreakLeftArm = true; }
+            void QteCombatReady() { bb.IsQteCombatReady = true; }
+            void FirstCombat() { bb.IsFirstCombatInputed = true; }
+            void SecondCombat() { bb.IsSecondCombatInputed = true; }
+            void PenetrateBoss() { bb.IsPenetrateInputed = true; }
         }
 
         /// <summary>
-        /// 後始末。
-        /// このクラスが黒板に書き込んだ参照をnullにする。
+        /// ダメージ処理。
         /// </summary>
-        public void Dispose()
-        {
-            _blackBoard.Area = null;
-            _blackBoard.PlayerArea = null;
+        public void Damage(int value, string weapon) => _hitPoint.Damage(value, weapon);
 
-            _isDisposed = true;
-        }
+        /// <summary>
+        /// EnemyManagerからの命令。
+        /// </summary>
+        public void Order(EnemyOrder order) => _overwriteOrder.Buffer(order);
+
+        /// <summary>
+        /// EnemyManager以外から呼び出し。
+        /// </summary>
+        public void Order(EnemyOrder.Type type) => _overwriteOrder.Buffer(type);
 
         /// <summary>
         /// 描画。
         /// </summary>
         public void Draw()
         {
-            _blackBoard.PlayerArea?.Draw();
-            _blackBoard.Area?.Draw();
+            Ref.BlackBoard.PlayerArea?.Draw();
+            Ref.BlackBoard.Area?.Draw();
         }
     }
 }

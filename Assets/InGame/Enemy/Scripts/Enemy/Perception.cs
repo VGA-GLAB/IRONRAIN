@@ -16,6 +16,9 @@ namespace Enemy
 
         private RequiredRef Ref { get; set; }
 
+        /// <summary>
+        /// 初期化。Startのタイミングで呼ぶ想定。
+        /// </summary>
         public void InitializeOnStart()
         {
             BlackBoard bb = Ref.BlackBoard;

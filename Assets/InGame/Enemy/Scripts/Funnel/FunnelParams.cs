@@ -3,9 +3,25 @@
 namespace Enemy.Funnel
 {
     /// <summary>
-    /// 展開する位置と、その後の動作が違う。
+    /// 攻撃方法
     /// </summary>
-    public enum ExpandMode { Trace, Right, Left }
+    public enum FireMode { Forward, Player }
+
+    // 展開
+    [System.Serializable]
+    public class ExpandSettings
+    {
+        [Header("高さ")]
+        [SerializeField] private float _height = 8.0f;
+        [Header("横方向の位置")]
+        [SerializeField] private float _side = 5.0f;
+        [Header("前後のオフセット")]
+        [SerializeField] private float _offset;
+
+        public float Height => _height;
+        public float Side => _side;
+        public float Offset => _offset;
+    }
 
     /// <summary>
     /// ファンネルの個体毎のパラメータ。
@@ -13,9 +29,8 @@ namespace Enemy.Funnel
     /// </summary>
     public class FunnelParams : MonoBehaviour
     {
-        [Header("展開した際の挙動")]
-        [Tooltip("RightとLeftがそれぞれ1つずつ、それ以外はTraceが規定。")]
-        [SerializeField] private ExpandMode _expandMode;
+        [Header("展開時の設定")]
+        [SerializeField] private ExpandSettings _expand;
 
         [Min(1)]
         [Header("体力の最大値")]
@@ -24,6 +39,11 @@ namespace Enemy.Funnel
         [Range(0.01f, 10.0f)]
         [Header("攻撃間隔")]
         [SerializeField] private float _fireRate = 1.0f;
+        [Tooltip("最初の弾を発射するタイミングがズレる。")]
+        [SerializeField] private bool _randomFirstShot;
+
+        [Header("攻撃方法")]
+        [SerializeField] private FireMode _fireMode;
 
         [Range(0, 1.0f)]
         [Header("攻撃の精度")]
@@ -34,7 +54,8 @@ namespace Enemy.Funnel
         [Header("ボスを追跡する速さ")]
         [SerializeField] private float _moveSpeed;
 
-        public ExpandMode ExpandMode => _expandMode;
+        public FireMode FireMode => _fireMode;
+        public ExpandSettings Expand => _expand;
         public int MaxHp => _maxHp;
         public float FireRate => _fireRate;
         public float Accuracy => _accuracy;
