@@ -1,10 +1,10 @@
-﻿namespace Enemy.Boss.FSM
+﻿namespace Enemy.Boss
 {
     /// <summary>
     /// 登場するステート。
     /// ボス戦開始後、一番最初に実行される。
     /// </summary>
-    public class AppearState : State
+    public class AppearState : State<StateKey>
     {
         public AppearState(RequiredRef requiredRef) : base(requiredRef.States)
         {

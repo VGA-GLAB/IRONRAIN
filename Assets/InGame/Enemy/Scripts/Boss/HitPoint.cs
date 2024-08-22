@@ -1,5 +1,15 @@
 ﻿using System.Collections.Generic;
 
+// 仮
+namespace Enemy
+{
+    public struct DamageBuffer
+    {
+        public string Source;
+        public int Damage;
+    }
+}
+
 namespace Enemy.Boss
 {
     /// <summary>

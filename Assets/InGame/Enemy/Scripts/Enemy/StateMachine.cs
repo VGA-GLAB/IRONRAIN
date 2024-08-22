@@ -1,13 +1,20 @@
-﻿using Enemy.FSM;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemy
 {
-    /// <summary>
-    /// 黒板に書き込まれた内容を基にオブジェクトを制御する。
-    /// </summary>
-    public class BodyController
+    public enum StateKey
+    {
+        Base,
+        Approach,
+        Battle,
+        Broken,
+        Escape,
+        Hide,
+        Delete,
+    }
+
+    public class StateMachine
     {
         // アニメーションなど、EnemyControllerのイベント関数外での処理を扱う。
         // そのため、結果を返して完了まで待ってもらう。
@@ -17,13 +24,13 @@ namespace Enemy
         private Animator _animator;
 
         // ステートベースで制御する。
-        private Dictionary<StateKey, State> _states;
-        private State _currentState;
+        private Dictionary<StateKey, State<StateKey>> _states;
+        private State<StateKey> _currentState;
 
         // 既に後始末処理を実行済みかを判定するフラグ。
         private bool _isCleanup;
 
-        public BodyController(RequiredRef requiredRef)
+        public StateMachine(RequiredRef requiredRef)
         {
             _blackBoard = requiredRef.BlackBoard;
             _animator = requiredRef.Animator;
@@ -78,7 +85,7 @@ namespace Enemy
             else _isCleanup = true;
 
             // ステートマシンを破棄。
-            foreach(KeyValuePair<StateKey, State> s in _states)
+            foreach(KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }

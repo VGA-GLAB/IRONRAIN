@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 登場後、戦闘するステート。
@@ -32,7 +32,7 @@ namespace Enemy.Boss.FSM
             LookAtPlayer();
 
             // ファンネル展開。
-            bool isFunnelExpand = Ref.BlackBoard.FunnelExpand == Trigger.Ordered;
+            bool isFunnelExpand = Ref.BlackBoard.FunnelExpand.IsWaitingExecute();
             if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
 
             // QTEイベントが始まった場合は遷移。
@@ -41,11 +41,11 @@ namespace Enemy.Boss.FSM
 
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
             bool isMeleeRange = Ref.BlackBoard.IsWithinMeleeRange;
-            bool isMelee = Ref.BlackBoard.MeleeAttack == Trigger.Ordered;
+            bool isMelee = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
             if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
 
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            bool isRange = Ref.BlackBoard.RangeAttack == Trigger.Ordered;
+            bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
             if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
         }
     }

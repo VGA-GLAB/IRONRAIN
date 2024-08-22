@@ -154,11 +154,11 @@ MonoBehaviour:
   _maxHp: 100
   _lifeTime: 60
   _moveSpeed:
-    _approach: 50
-    _chase: 50
+    _approach: 5
+    _chase: 1
     _exit: 50
   _attack:
-    _triggerRange: 8
+    _triggerRange: 33
     _rate: 0.01
     _useInputBuffer: 0
     _inputBufferAsset: {fileID: 0}
@@ -205,6 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0f9dad2b162f44e95d43d4f32a482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _renderers: []
   _muzzleEffects:
   - {fileID: 7317716378867833853}
   - {fileID: 8904529507676448942}
@@ -692,15 +693,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_Size.y
-      value: 8
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_Size.z
-      value: 2.7
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_Center.y
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
+      propertyPath: m_Center.z
+      value: -2.19
       objectReference: {fileID: 0}
     - target: {fileID: 8286360832386888934, guid: e90563625144c1941b096316ef406917, type: 3}
       propertyPath: m_IsTrigger

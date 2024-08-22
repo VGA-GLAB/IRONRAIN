@@ -1,9 +1,22 @@
-﻿using Enemy.Boss.FSM;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Enemy.Boss
 {
-    public class BodyController
+    public enum StateKey
+    {
+        Base,
+        Appear,
+        Idle,
+        Hide,
+        QteEvent,
+        Delete,
+        BladeAttack,
+        LauncherFire,
+        FunnelAttack,
+        FunnelExpand,
+    }
+
+    public class StateMachine
     {
         // アニメーションなど、BossControllerのイベント関数外での処理を扱う。
         // そのため、結果を返して完了まで待ってもらう。
@@ -12,13 +25,13 @@ namespace Enemy.Boss
         private BlackBoard _blackBoard;
 
         // ステートベースで制御する。
-        private Dictionary<StateKey, State> _states;
-        private State _currentState;
+        private Dictionary<StateKey, State<StateKey>> _states;
+        private State<StateKey> _currentState;
 
         // 既に後始末処理を実行済みかを判定するフラグ。
         private bool _isCleanup;
 
-        public BodyController(RequiredRef requiredRef)
+        public StateMachine(RequiredRef requiredRef)
         {
             _blackBoard = requiredRef.BlackBoard;
 
@@ -58,7 +71,7 @@ namespace Enemy.Boss
             else _isCleanup = true;
 
             // ステートマシンを破棄。
-            foreach (KeyValuePair<StateKey, State> s in _states)
+            foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }

@@ -62,7 +62,7 @@ namespace Enemy.Boss
 
             // 黒板に書き込む命令一覧。
             void BossStart() { _blackBoard.IsBossStarted = true; }
-            void FunnelExpand() { _blackBoard.FunnelExpand = Trigger.Ordered; }
+            void FunnelExpand() { _blackBoard.FunnelExpand.Order(); }
             void FunnelLaserSight() { _blackBoard.IsFunnelLaserSight = true; }
             void QteStart() { _blackBoard.IsQteStarted = true; }
             void BreakLeftArm() { _blackBoard.IsBreakLeftArm = true; }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 攻撃前と後で同じ位置関係に戻す必要があるため、ステップ間で攻撃前のデータを共有する必要がある。

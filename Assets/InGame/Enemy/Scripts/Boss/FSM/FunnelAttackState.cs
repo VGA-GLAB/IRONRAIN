@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.Boss.FSM
+namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中、ファンネルに攻撃を命じるステート。

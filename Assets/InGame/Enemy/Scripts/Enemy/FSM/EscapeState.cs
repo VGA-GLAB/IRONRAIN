@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Enemy.FSM
+namespace Enemy
 {
     /// <summary>
     /// 画面外に逃げ出すステート
     /// </summary>
-    public class EscapeState : State
+    public class EscapeState : State<StateKey>
     {
         public EscapeState(RequiredRef requiredRef) : base(requiredRef.States)
         {

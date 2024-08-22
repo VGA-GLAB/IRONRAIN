@@ -1,27 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy.FSM
+namespace Enemy
 {
-    /// <summary>
-    /// ステートを指定するキー
-    /// </summary>
-    public enum StateKey
-    {
-        Base,
-        Approach,
-        Battle,  
-        Broken,  
-        Escape,  
-        Hide,    
-        Delete,
-    }
-
     /// <summary>
     /// ステートマシンの各種ステートはこのクラスを継承する。
     /// </summary>
     [System.Serializable]
-    public abstract class State
+    public abstract class State<TKey>
     {
         private enum Stage
         {
@@ -31,10 +17,10 @@ namespace Enemy.FSM
         }
 
         private Stage _stage;
-        private State _next;
-        private IReadOnlyDictionary<StateKey, State> _states;
+        private State<TKey> _next;
+        private IReadOnlyDictionary<TKey, State<TKey>> _states;
 
-        public State(IReadOnlyDictionary<StateKey, State> states)
+        public State(IReadOnlyDictionary<TKey, State<TKey>> states)
         {
             _states = states;
         }
@@ -43,7 +29,7 @@ namespace Enemy.FSM
         /// 1度の呼び出しでステートの段階に応じてEnter、Stay、Exitのうちどれか1つが実行される。
         /// 次の呼び出しで実行されるステートを返す。
         /// </summary>
-        public State Update()
+        public State<TKey> Update()
         {
             Always();
 
@@ -84,7 +70,7 @@ namespace Enemy.FSM
         /// <summary>
         /// Enterが呼ばれている状態かつ、ステートの遷移処理を呼んでいない場合のみ遷移可能。
         /// </summary>
-        public bool TryChangeState(StateKey next)
+        public bool TryChangeState(TKey next)
         {
             if (_stage == Stage.Enter)
             {

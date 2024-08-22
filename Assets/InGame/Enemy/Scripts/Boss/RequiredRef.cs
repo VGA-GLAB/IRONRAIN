@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Enemy.Boss.FSM;
+using Enemy.Funnel;
 
 namespace Enemy.Boss
 {
@@ -26,7 +26,7 @@ namespace Enemy.Boss
             Funnels = funnels;
             PointP = pointP;
 
-            States = new Dictionary<StateKey, State>();
+            States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
             BodyAnimation = new BodyAnimation(this);
             AnimationEvent = Animator.GetComponent<AnimationEvent>();
@@ -49,7 +49,7 @@ namespace Enemy.Boss
         public List<FunnelController> Funnels { get; private set; }
         public DebugPointP PointP { get; private set; }
 
-        public Dictionary<StateKey, State> States { get; private set; }
+        public Dictionary<StateKey, State<StateKey>> States { get; private set; }
         public Body Body { get; private set; }
         public BodyAnimation BodyAnimation { get; private set; }
         public AnimationEvent AnimationEvent { get; private set; }

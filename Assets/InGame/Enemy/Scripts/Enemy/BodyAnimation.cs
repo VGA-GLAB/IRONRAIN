@@ -1,6 +1,4 @@
-﻿using Enemy.FSM;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -49,6 +47,12 @@ namespace Enemy
         }
 
         public BodyAnimation(Boss.RequiredRef requiredRef)
+        {
+            _animator = requiredRef.Animator;
+            StateMachineTriggerCallback(_animator.gameObject);
+        }
+
+        public BodyAnimation(Funnel.RequiredRef requiredRef)
         {
             _animator = requiredRef.Animator;
             StateMachineTriggerCallback(_animator.gameObject);
