@@ -6,6 +6,10 @@ namespace Enemy.Funnel
 {
     public class Perception
     {
+        private FireRate _fireRate;
+        private HitPoint _hitPoint;
+        private OverwriteOrder _overwriteOrder;
+
         public Perception(RequiredRef requiredRef)
         {
             Ref = requiredRef;
@@ -14,67 +18,85 @@ namespace Enemy.Funnel
         private RequiredRef Ref { get; set; }
 
         /// <summary>
-        /// 各値を更新。
+        /// 初期化。Startのタイミングで呼ぶ想定。
+        /// </summary>
+        public void InitializeOnStart()
+        {
+            // 攻撃間隔、体力、命令
+            _fireRate = new FireRate(Ref);
+            _hitPoint = new HitPoint(Ref);
+            _overwriteOrder = new OverwriteOrder(Ref.BlackBoard.Name);
+        }
+
+        /// <summary>
+        /// 値を更新。
         /// </summary>
         public void Update()
         {
-            Vector3 bd = Ref.Boss.transform.position - Ref.Transform.position;
-            Ref.BlackBoard.BossDirection = bd.normalized;
-            Ref.BlackBoard.BossSqrDistance = bd.sqrMagnitude;
-
-            Vector3 pd = Ref.Player.position - Ref.Transform.position;
-            Ref.BlackBoard.PlayerDirection = pd.normalized;
-            Ref.BlackBoard.PlayerSqrDistance = pd.sqrMagnitude;
+            Calculate();
+            Overwrite();
         }
 
-        /// <summary>
-        /// ボス本体の左右もしくは周囲に展開させるための命令を黒板に書き込む。
-        /// </summary>
-        public void ExpandOrder()
+        // 必要な値を計算し、黒板に書き込む。
+        private void Calculate()
         {
-            ExpandMode mode = Ref.FunnelParams.ExpandMode;
-            Ref.BlackBoard.ExpandOffset = ExpandOffset(mode);
+            BlackBoard bb = Ref.BlackBoard;
 
-            Ref.BlackBoard.Expand.Order();
+            // 自身からボスへのベクトルを黒板に書き込む。
+            Vector3 bdir = Ref.Boss.transform.position - Ref.Transform.position;
+            bb.BossDirection = bdir.normalized;
+            bb.BossSqrDistance = bdir.sqrMagnitude;
+
+            // 自身からプレイヤーへのベクトルを黒板に書き込む。
+            Vector3 pdir = Ref.Player.position - Ref.Transform.position;
+            bb.PlayerDirection = pdir.normalized;
+            bb.PlayerSqrDistance = pdir.sqrMagnitude;
+
+            // 攻撃タイミングを更新。
+            _fireRate.UpdateIfAttacked();
+
+            // 体力を更新。
+            _hitPoint.Update();
         }
 
-        // オフセットの位置を計算して返す。
-        private static Vector3 ExpandOffset(ExpandMode mode)
+        // 黒板の値をボスからの命令で上書きする。
+        private void Overwrite()
         {
-            if (mode == ExpandMode.Trace)
+            BlackBoard bb = Ref.BlackBoard;
+
+            bool isDelete = bb.CurrentState == StateKey.Delete;
+            if (isDelete) return;
+
+            foreach (EnemyOrder order in _overwriteOrder.ForEach())
             {
-                const float MaxHeight = 8.0f;
-                const float MinHeight = 6.0f;
-                const float MaxSide = 6.0f;
-                const float MinSide = 4.0f;
+                EnemyOrder.Type t = order.OrderType;
 
-                float sin = Mathf.Sin(2 * Mathf.PI * Random.value);
-                float cos = Mathf.Cos(2 * Mathf.PI * Random.value);
-                float dist = Random.Range(MinSide, MaxSide);
-                float h = Random.Range(MinHeight, MaxHeight);
-                int lr = Random.value <= 0.5f ? 1 : -1;
-                
-                return new Vector3(cos * dist * lr, h, sin * dist * lr);
-            }
-            else
-            {
-                const float Height = 10.0f;
-                const float Side = 5.0f;
-
-                int lr = default;
-                if (mode == ExpandMode.Right) lr = 1;
-                else if (mode == ExpandMode.Left) lr = -1;
-
-                return new Vector3(lr * Side, Height, 0);
+                if (t == EnemyOrder.Type.FunnelExpand) ExpandOrder();
             }
         }
 
-        /// <summary>
-        /// 攻撃命令を黒板に書き込む。
-        /// </summary>
-        public void FireOrder()
+        // ボス本体の周囲に展開させるための命令を黒板に書き込む。
+        private void ExpandOrder()
         {
+            BlackBoard bb = Ref.BlackBoard;
 
+            if (bb.Expand.IsWaitingExecute()) return;
+            else bb.Expand.Order();
+
+            float x = Ref.FunnelParams.Expand.Side;
+            float y = Ref.FunnelParams.Expand.Height;
+            float z = Ref.FunnelParams.Expand.Offset;
+            Ref.BlackBoard.ExpandOffset = new Vector3(x, y, z);
         }
+
+        /// <summary>
+        /// ダメージ処理。
+        /// </summary>
+        public void Damage(int value, string weapon) => _hitPoint.Damage(value, weapon);
+
+        /// <summary>
+        /// EnemyManager以外から呼び出し。
+        /// </summary>
+        public void Order(EnemyOrder.Type type) => _overwriteOrder.Buffer(type);
     }
 }

@@ -37,8 +37,8 @@ namespace Enemy.Funnel
             if (velo.sqrMagnitude <= dir.sqrMagnitude) Ref.Body.Move(velo);
             else Ref.Body.Warp(p);
 
-            ExpandMode mode = Ref.FunnelParams.ExpandMode;
-            if (mode == ExpandMode.Right || mode == ExpandMode.Left)
+            FireMode mode = Ref.FunnelParams.FireMode;
+            if (mode == FireMode.Player)
             {
                 Vector3 f = Ref.BlackBoard.PlayerDirection;
                 Ref.Body.LookForward(f);
@@ -49,9 +49,9 @@ namespace Enemy.Funnel
                 Ref.Body.LookForward(f);
             }
 
-            if (Ref.BlackBoard.Fire.IsWaitingExecute())
+            if (Ref.BlackBoard.Attack.IsWaitingExecute())
             {
-                Ref.BlackBoard.Fire.Execute();
+                Ref.BlackBoard.Attack.Execute();
 
                 IOwnerTime owner = Ref.Boss.BlackBoard;
                 Vector3 muzzle = Ref.Muzzle.position;

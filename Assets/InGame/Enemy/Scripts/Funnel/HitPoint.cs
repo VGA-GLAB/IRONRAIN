@@ -21,7 +21,7 @@ namespace Enemy.Funnel
         private RequiredRef Ref { get; set; }
 
         /// <summary>
-        /// ダメージの体力への反映、死亡状態のフラグの制御。
+        /// バッファを基にダメージ情報とHPを黒板に書き込む。
         /// </summary>
         public void Update()
         {

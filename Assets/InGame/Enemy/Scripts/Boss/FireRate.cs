@@ -15,13 +15,13 @@ namespace Enemy.Boss
 
         public FireRate(RequiredRef requiredRef)
         {
+            Ref = requiredRef;
+
             Initialize(requiredRef.BossParams.RangeAttackConfig);
             Initialize(requiredRef.BossParams.MeleeAttackConfig);
-
-            Ref = requiredRef;
         }
 
-        private RequiredRef Ref { get; set; }
+        private RequiredRef Ref { get; }
 
         // 遠距離攻撃タイミングを初期化
         private void Initialize(RangeAttackSettings settings)
@@ -105,6 +105,7 @@ namespace Enemy.Boss
             bool isCooldown = Time.time <= _nextRangeTime;
             bool isWaiting = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
             if (isCooldown || isWaiting) return;
+            else Ref.BlackBoard.RangeAttack.Order();
 
             _rangeIndex++;
             _rangeIndex %= _rangeTiming.Count;
@@ -114,8 +115,6 @@ namespace Enemy.Boss
             if (_rangeIndex > 0) t -= _rangeTiming[_rangeIndex - 1];
 
             _nextRangeTime = Time.time + t;
-
-            Ref.BlackBoard.RangeAttack.Order();
         }
 
         // 近接攻撃のタイミング更新
@@ -124,6 +123,7 @@ namespace Enemy.Boss
             bool isCooldown = Time.time <= _nextMeleeTime;
             bool isWaiting = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
             if (isCooldown || isWaiting) return;
+            else Ref.BlackBoard.MeleeAttack.Order();
 
             _meleeIndex++;
             _meleeIndex %= _meleeTiming.Count;
@@ -133,8 +133,6 @@ namespace Enemy.Boss
             if (_meleeIndex > 0) t -= _meleeTiming[_meleeIndex - 1];
 
             _nextMeleeTime = Time.time + t;
-
-            Ref.BlackBoard.MeleeAttack.Order();
         }
     }
 }
