@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 
 public enum AnnounceUiType
@@ -65,7 +66,7 @@ public class AnnounceUiController : MonoBehaviour
     /// アナウンスパネルを切り替える
     /// </summary>
     /// <param name="announceUiType">変更後のアナウンス状態</param>
-    public async UniTaskVoid ChangeAnnounceUi(AnnounceUiType announceUiType)
+    public async UniTask ChangeAnnounceUi(AnnounceUiType announceUiType, CancellationToken cancellationToken = default)
     {
         //前兆音を鳴らす
         CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
@@ -76,7 +77,7 @@ public class AnnounceUiController : MonoBehaviour
             _characterObject.color = color;
             _backGroundObject.sprite = _connectingBackGroundSprite;
             _frameObject.sprite = _connectingFrameSprite;
-            await AnimationConnecting();
+            await AnimationConnecting(cancellationToken);
         }
         
         switch(announceUiType)
@@ -108,7 +109,7 @@ public class AnnounceUiController : MonoBehaviour
     /// 接続中のアニメーション
     /// </summary>
     /// <returns></returns>
-    private IEnumerator AnimationConnecting()
+    private async UniTask AnimationConnecting(CancellationToken cancellationToken)
     {
         for (int i = 0; i < 2; i++)
         {
@@ -116,7 +117,7 @@ public class AnnounceUiController : MonoBehaviour
             {
                 _characterObject.sprite = _receptionSprite[j];
 
-                yield return new WaitForSeconds(_receptionInterval);
+                await UniTask.Delay(TimeSpan.FromSeconds(_receptionInterval), cancellationToken: cancellationToken);
             }
         }
     }
