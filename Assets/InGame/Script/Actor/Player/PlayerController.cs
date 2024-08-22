@@ -10,6 +10,7 @@ namespace IronRain.Player
     public class PlayerController : MonoBehaviour
     {
         public PlayerEnvroment PlayerEnvroment => _playerEnvroment;
+        public Transform ShootingTarget => _shootingTarget;
 
         [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
         [SerializeField] private PlayerSetting _playerSetting;
@@ -19,6 +20,7 @@ namespace IronRain.Player
         [SerializeField] private PlayerSound _playerSound;
         [SerializeField] private AnimationEventProvider _animationEventProvider;
         [SerializeField] private PlayerHp _playerHp;
+        [SerializeField] private Transform _shootingTarget;
 
         private PlayerEnvroment _playerEnvroment;
 
