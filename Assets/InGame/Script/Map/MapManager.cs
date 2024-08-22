@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,15 @@ public class MapManager : MonoBehaviour
                 _mapObjectsList[i].SetActive(true);
             else
                 _mapObjectsList[i].SetActive(false);
+        }
+
+        for(int i = 0; i < _checkPointList.Count; i++)
+        {
+            var meshRendere = _checkPointList[i].gameObject.GetComponent<MeshRenderer>();
+            if(meshRendere != null)
+            {
+                meshRendere.enabled = false;
+            }
         }
     }
 
