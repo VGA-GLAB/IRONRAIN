@@ -59,6 +59,7 @@ namespace IronRain.Player
 
         public void SetVisible(bool isVisible)
         {
+            if(_weaponName != PlayerWeaponType.RocketLauncher.ToString())
             if (isVisible)
             {
                 for (int i = 0; i < _particleArray.Length; i++)

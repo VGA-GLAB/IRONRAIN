@@ -26,9 +26,6 @@ namespace IronRain.Player
             {
                 _anim.speed = ProvidePlayerInformation.TimeScale;
             }
-
-            Debug.Log(_anim.speed);
-
         }
 
         public async UniTask JetpackPurgeAnim()
