@@ -107,7 +107,7 @@ namespace IronRain.Player
                 || !_isShot) return;
 
             OnShot?.Invoke();
-            _playerWeaponList[_currentWeaponIndex].Shot();
+            _playerWeaponList[_currentWeaponIndex].ShotTrigger();
         }
 
         public void MulchShot()
