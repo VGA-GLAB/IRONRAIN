@@ -3,15 +3,8 @@ using UnityEngine;
 
 namespace Enemy.Boss
 {
-    /// <summary>
-    /// 攻撃タイミングを管理する。
-    /// </summary>
     public class FireRate
     {
-        private BlackBoard _blackBoard;
-        private Equipment _meleeEquip;
-        private RangeEquipment _rangeEquip;
-
         // 攻撃タイミングがリストの要素になっており、攻撃時間が来たら添え字を更新する。
         private IReadOnlyList<float> _rangeTiming;
         private IReadOnlyList<float> _meleeTiming;
@@ -22,55 +15,76 @@ namespace Enemy.Boss
 
         public FireRate(RequiredRef requiredRef)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _meleeEquip = requiredRef.MeleeEquip;
-            _rangeEquip = requiredRef.RangeEquip;
-            _rangeTiming = InitRangeTiming(requiredRef.BossParams);
-            _meleeTiming = InitMeleeTiming(requiredRef.BossParams);
+            Initialize(requiredRef.BossParams.RangeAttackConfig);
+            Initialize(requiredRef.BossParams.MeleeAttackConfig);
+
+            Ref = requiredRef;
         }
 
+        private RequiredRef Ref { get; set; }
+
         // 遠距離攻撃タイミングを初期化
-        private IReadOnlyList<float> InitRangeTiming(BossParams bossParams)
+        private void Initialize(RangeAttackSettings settings)
         {
-            List<float> timing = new List<float>();
-
-            if (bossParams.RangeAttackConfig.UseInputBuffer &&
-                bossParams.RangeAttackConfig.InputBufferAsset)
+            bool useInputBuffer = settings.UseInputBuffer;
+            bool isAssigned = settings.InputBufferAsset != null;
+            if (useInputBuffer && isAssigned)
             {
-                // テキストファイルの文字列から攻撃タイミングを作成
-                string text = bossParams.RangeAttackConfig.InputBufferAsset.ToString();
-                foreach (string s in text.Split("\n"))
-                {
-                    if (s == "") continue;
-
-                    if (float.TryParse(s, out float f)) timing.Add(f);
-                    else Debug.LogWarning($"攻撃タイミングの初期化、float型に変換できない値: {s}");
-                }
+                _rangeTiming = TimingFromAsset(settings);
             }
             else
             {
-                // 一定間隔で攻撃
-                timing.Add(bossParams.RangeAttackConfig.Rate);
+                _rangeTiming = TimingFromRate(settings);
             }
 
-            // 最初の攻撃タイミングを設定
-            _nextRangeTime = Time.time + timing[_rangeIndex];
+            // 現在の時間からn秒後を最初の攻撃タイミングとして設定。
+            _rangeIndex = 0;
+            _nextRangeTime = Time.time + _rangeTiming[_rangeIndex];
+        }
+
+        // 近接攻撃タイミングを初期化
+        private void Initialize(MeleeAttackSettings settings)
+        {
+            _meleeTiming = TimingFromRate(settings);
+
+            // 現在の時間からn秒後を最初の攻撃タイミングとして設定。
+            _meleeIndex = 0;
+            _nextMeleeTime = Time.time + _meleeTiming[_meleeIndex];
+        }
+
+        // テキストファイルの文字列から遠距離攻撃タイミングを作成
+        private static IReadOnlyList<float> TimingFromAsset(RangeAttackSettings settings)
+        {
+            List<float> timing = new List<float>();
+
+            string text = settings.InputBufferAsset.ToString();
+            foreach (string s in text.Split("\n"))
+            {
+                if (s == "") continue;
+
+                if (float.TryParse(s, out float f)) timing.Add(f);
+                else Debug.LogWarning($"攻撃タイミングの初期化、float型に変換できない値: {s}");
+            }
 
             return timing;
         }
 
-        // 近接攻撃のタイミングを初期化
-        private IReadOnlyList<float> InitMeleeTiming(BossParams bossParams)
+        // 設定したパラメータを基に、一定間隔の遠距離攻撃タイミングを作成。
+        private static IReadOnlyList<float> TimingFromRate(RangeAttackSettings settings)
         {
-            // 一定間隔で攻撃
-            List<float> timing = new List<float>
-            {
-                bossParams.MeleeAttackConfig.Rate
-            };
+            return TimingFromRate(settings.Rate);
+        }
 
-            // 最初の攻撃タイミングを設定
-            _nextMeleeTime = Time.time + timing[_meleeIndex];
+        // 設定したパラメータを基に、一定間隔の近接攻撃タイミングを作成。
+        private static IReadOnlyList<float> TimingFromRate(MeleeAttackSettings settings)
+        {
+            return TimingFromRate(settings.Rate);
+        }
 
+        // リストに詰めて返す。
+        private static IReadOnlyList<float> TimingFromRate(float rate)
+        {
+            List<float> timing = new List<float> { rate };
             return timing;
         }
 
@@ -81,35 +95,46 @@ namespace Enemy.Boss
         {
             // 実際に弾が発射もしくは刀を振ったタイミングではなく、
             // ステート側で攻撃の処理を行ったタイミングから次の攻撃タイミングを計算している。
+            UpdateRangeTiming();
+            UpdateMeleeTiming();
+        }
 
-            if (_nextRangeTime < Time.time && _blackBoard.RangeAttack.IsExecuted())
-            {
-                _rangeIndex++;
-                _rangeIndex %= _rangeTiming.Count;
+        // 遠距離攻撃のタイミング更新
+        private void UpdateRangeTiming()
+        {
+            bool isCooldown = Time.time <= _nextRangeTime;
+            bool isWaiting = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
+            if (isCooldown || isWaiting) return;
 
-                // 次のタイミングまでの時間
-                float t = _rangeTiming[_rangeIndex];
-                if (_rangeIndex > 0) t -= _rangeTiming[_rangeIndex - 1];
+            _rangeIndex++;
+            _rangeIndex %= _rangeTiming.Count;
 
-                _nextRangeTime = Time.time + t;
+            // 次のタイミングまでの時間
+            float t = _rangeTiming[_rangeIndex];
+            if (_rangeIndex > 0) t -= _rangeTiming[_rangeIndex - 1];
 
-                _blackBoard.RangeAttack.Order();
-            }
+            _nextRangeTime = Time.time + t;
 
-            // 最後に近接攻撃したタイミングが次の攻撃タイミングより後の場合
-            if (_nextMeleeTime < Time.time && _blackBoard.MeleeAttack.IsExecuted())
-            {
-                _meleeIndex++;
-                _meleeIndex %= _meleeTiming.Count;
+            Ref.BlackBoard.RangeAttack.Order();
+        }
 
-                // 次のタイミングまでの時間
-                float t = _meleeTiming[_meleeIndex];
-                if (_meleeIndex > 0) t -= _meleeTiming[_meleeIndex - 1];
+        // 近接攻撃のタイミング更新
+        private void UpdateMeleeTiming()
+        {
+            bool isCooldown = Time.time <= _nextMeleeTime;
+            bool isWaiting = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
+            if (isCooldown || isWaiting) return;
 
-                _nextMeleeTime = Time.time + t;
+            _meleeIndex++;
+            _meleeIndex %= _meleeTiming.Count;
 
-                _blackBoard.MeleeAttack.Order();
-            }
+            // 次のタイミングまでの時間
+            float t = _meleeTiming[_meleeIndex];
+            if (_meleeIndex > 0) t -= _meleeTiming[_meleeIndex - 1];
+
+            _nextMeleeTime = Time.time + t;
+
+            Ref.BlackBoard.MeleeAttack.Order();
         }
     }
 }

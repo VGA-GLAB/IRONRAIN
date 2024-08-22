@@ -38,6 +38,8 @@ namespace Enemy.Boss
 
         // 戦闘開始からの経過時間
         public float ElapsedTime { get; set; }
+        // 現在の体力
+        public int Hp { get; set; }
 
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }
