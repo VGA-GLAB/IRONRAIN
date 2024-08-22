@@ -420,9 +420,7 @@ public class RaderMap : MonoBehaviour
             
             //ターゲットが切り替わる音を出す
             CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
-
-            if(_isStartTouchPanel)
-                _isTouch = true;
+            _isTouch = true;
         }
     }
 
@@ -483,14 +481,6 @@ public class RaderMap : MonoBehaviour
             var enemyUi = EnemyMaps[enemy].gameObject.GetComponent<EnemyUi>();
             enemyUi.LockOnUi.SetActive(true);
         }
-    }
-
-    /// <summary>
-    /// タッチパネルシーケンスが始まる時に呼ばれる処理
-    /// </summary>
-    public void TouchPanelStart()
-    {
-        _isStartTouchPanel = true;
     }
 
     /// <summary>
