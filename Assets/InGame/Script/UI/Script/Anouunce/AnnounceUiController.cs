@@ -78,6 +78,7 @@ public class AnnounceUiController : MonoBehaviour
             _backGroundObject.sprite = _connectingBackGroundSprite;
             _frameObject.sprite = _connectingFrameSprite;
             await AnimationConnecting(cancellationToken);
+            CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
         }
         
         switch(announceUiType)
