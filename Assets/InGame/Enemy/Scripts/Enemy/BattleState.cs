@@ -56,7 +56,7 @@ namespace Enemy
                 Ref.BlackBoard.Area.Point,
                 Ref.BlackBoard.Slot.Point,
                 Ref.BlackBoard.SlotDirection,
-                Ref.EnemyParams.Other.ApproachHomingPower
+                0.5f // 適当。
                 );
             float dt = Ref.BlackBoard.PausableDeltaTime;
             return v * dt;

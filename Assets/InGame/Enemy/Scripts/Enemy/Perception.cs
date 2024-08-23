@@ -14,7 +14,7 @@ namespace Enemy
             Ref = requiredRef;
         }
 
-        private RequiredRef Ref { get; set; }
+        private RequiredRef Ref { get; }
 
         /// <summary>
         /// 初期化。Startのタイミングで呼ぶ想定。
@@ -41,7 +41,7 @@ namespace Enemy
             _fireRate = new FireRate(Ref);
             _eyeSensor = new EyeSensor(Ref);
             _hitPoint = new HitPoint(Ref);
-            _overwriteOrder = new OverwriteOrder(Ref.BlackBoard.Name);
+            _overwriteOrder = new OverwriteOrder(bb.Name);
         }
 
         /// <summary>

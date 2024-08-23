@@ -32,7 +32,7 @@ namespace Enemy.Funnel
             Vector3 p = bp + dx + dy + dz;
             Vector3 dir = p - Ref.Body.Position;
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            float spd = Ref.FunnelParams.MoveSpeed;
+            float spd = Ref.FunnelParams.MoveSpeed.Chase;
             Vector3 velo = dir.normalized * dt * spd;
             if (velo.sqrMagnitude <= dir.sqrMagnitude) Ref.Body.Move(velo);
             else Ref.Body.Warp(p);

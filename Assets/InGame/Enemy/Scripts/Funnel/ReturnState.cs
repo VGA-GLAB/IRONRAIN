@@ -6,6 +6,11 @@ namespace Enemy.Funnel
 {
     public class ReturnState : State<StateKey>
     {
+        // Lerpで動かす。
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
         public ReturnState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             Ref = requiredRef;
@@ -16,6 +21,9 @@ namespace Enemy.Funnel
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Return;
+
+            _start = Ref.Transform.position;
+            _lerp = 0;
         }
 
         protected override void Exit()
@@ -24,15 +32,34 @@ namespace Enemy.Funnel
 
         protected override void Stay()
         {
-            Vector3 dir = Ref.BlackBoard.BossDirection;
+            UpdateLerpEnd();
+            MoveToOffsetedPoint();
+
+            if (IsMoveCompleted()) TryChangeState(StateKey.Hide);
+        }
+
+        // ボスが動いているので、Enterのタイミングで戻る位置を固定できない。
+        private void UpdateLerpEnd()
+        {
+            _end = Ref.Boss.transform.position;
+        }
+
+        // Lerpで移動。
+        private void MoveToOffsetedPoint()
+        {
+            Vector3 l = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(l);
+
+            float speed = Ref.FunnelParams.MoveSpeed.Return;
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            float spd = Ref.FunnelParams.MoveSpeed;
-            Vector3 velo = dir.normalized * dt * spd;
-            if (Ref.BlackBoard.BossSqrDistance > 200.0f) Ref.Body.Move(velo);
-            else
-            {
-                TryChangeState(StateKey.Hide);
-            }
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
+        }
+
+        // 移動完了。
+        private bool IsMoveCompleted()
+        {
+            return _lerp >= 1;
         }
     }
 }

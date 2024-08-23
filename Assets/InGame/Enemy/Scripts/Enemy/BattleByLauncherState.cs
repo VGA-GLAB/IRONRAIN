@@ -81,19 +81,17 @@
         // アニメーションがアイドル状態
         private void StayIdle()
         {
-            // 攻撃可能な場合は武器構えのアニメーション再生。
-            if (IsAttack())
-            {
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-            }
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
         // アニメーションが武器構え状態
         private void StayHold()
         {
-            // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
-            AttackTrigger();
+            if (IsAttack())
+            {
+                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
+                AttackTrigger();
+            }
         }
 
         // アニメーションが攻撃状態
