@@ -39,16 +39,17 @@ Transform:
   - {fileID: 2871160614045718770}
   - {fileID: 4763880993920013930}
   - {fileID: 5635320748383747019}
+  - {fileID: 1682087278067151759}
+  - {fileID: 1697855583723914173}
+  - {fileID: 906817546808351926}
+  - {fileID: 5201715155646723389}
   - {fileID: 6922388490434404760}
   - {fileID: 3944286491013499093}
   - {fileID: 4828078857206950707}
   - {fileID: 4745672775164413555}
   - {fileID: 6839132187333104050}
   - {fileID: 441973697677775185}
-  - {fileID: 1682087278067151759}
-  - {fileID: 1697855583723914173}
-  - {fileID: 906817546808351926}
-  - {fileID: 5201715155646723389}
+  - {fileID: 9105375283366720777}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -122,7 +123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_Avoidance_Assault_1
+      value: Enemy_0_Assault_m
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -142,6 +143,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 911288636974658026}
     m_Modifications:
+    - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2458642673587600366, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: _target
       value: 
@@ -200,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattle_Buddy_4
+      value: NPC_3_Buddy_4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -221,6 +226,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 911288636974658026}
     m_Modifications:
     - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _fireMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: _moveSpeed
       value: 20
       objectReference: {fileID: 0}
@@ -230,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss_Funnel_1
+      value: Funnel_1
       objectReference: {fileID: 0}
     - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_RootOrder
@@ -347,12 +356,16 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: _attack._triggerRange
       value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_MultiBattle_Assault_1
+      value: Enemy_3_Assault_m
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -420,6 +433,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _sequenceID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _slot._place
       value: 1
       objectReference: {fileID: 0}
@@ -449,7 +466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
-      value: Enemy_TouchPanel_Launcher_2
+      value: Enemy_1_Launcher_ml
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_IsActive
@@ -521,9 +538,17 @@ PrefabInstance:
       propertyPath: _moveSpeed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._side
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._height
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss_Funnel_5
+      value: Funnel_5
       objectReference: {fileID: 0}
     - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_RootOrder
@@ -640,6 +665,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
+      propertyPath: _sequenceID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: _slot._place
       value: 4
       objectReference: {fileID: 0}
@@ -653,7 +682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_TouchPanel_Assault_2
+      value: Enemy_1_Assault_r
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -673,6 +702,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 911288636974658026}
     m_Modifications:
+    - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2458642673587600366, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: _moveSpeed
       value: 72
@@ -727,7 +760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattle_Buddy_3
+      value: NPC_3_Buddy_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -747,6 +780,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 911288636974658026}
     m_Modifications:
+    - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2458642673587600366, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: _moveSpeed
       value: 72
@@ -801,7 +838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattle_Buddy_2
+      value: NPC_3_Buddy_2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -824,6 +861,10 @@ PrefabInstance:
     - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: _moveSpeed
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
+      propertyPath: _sequenceID
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 890572457523480805, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: _defeatDistance
@@ -887,7 +928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8747123558820505335, guid: 43bce4ced377545438ab9e8094553a31, type: 3}
       propertyPath: m_Name
-      value: NPC_MultiBattle_Buddy_1
+      value: NPC_3_Buddy_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -960,6 +1001,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
+      propertyPath: _sequenceID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: _slot._place
       value: 3
       objectReference: {fileID: 0}
@@ -973,7 +1018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_TouchPanel_Assault_1
+      value: Enemy_1_Assault_mr
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -984,6 +1029,84 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3528341852886661301, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
   m_PrefabInstance: {fileID: 6684336959268526285}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6826161668002377637
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 911288636974658026}
+    m_Modifications:
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._side
+      value: -9
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._height
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_Name
+      value: Funnel_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1290.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+--- !u!4 &9105375283366720777 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+  m_PrefabInstance: {fileID: 6826161668002377637}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7006382159891029215
 PrefabInstance:
@@ -997,9 +1120,13 @@ PrefabInstance:
       propertyPath: _moveSpeed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._side
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss_Funnel_3
+      value: Funnel_3
       objectReference: {fileID: 0}
     - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_RootOrder
@@ -1109,7 +1236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7322955871657262202, guid: 7915e71a7c7165d48b84004d1b9b39d2, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss
+      value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 7322955871657262202, guid: 7915e71a7c7165d48b84004d1b9b39d2, type: 3}
       propertyPath: m_IsActive
@@ -1145,9 +1272,13 @@ PrefabInstance:
       propertyPath: _expandMode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._side
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss_Funnel_2
+      value: Funnel_2
       objectReference: {fileID: 0}
     - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_RootOrder
@@ -1248,6 +1379,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _slot._place
       value: 1
       objectReference: {fileID: 0}
@@ -1277,7 +1412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
-      value: Enemy_MultiBattle_Launcher_2
+      value: Enemy_3_Launcher_ml
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_RootOrder
@@ -1346,6 +1481,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _slot._place
       value: 0
       objectReference: {fileID: 0}
@@ -1355,7 +1494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
-      value: Enemy_MultiBattle_Launcher_1
+      value: Enemy_3_Launcher_l
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883278, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_RootOrder
@@ -1468,6 +1607,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: _slot._place
       value: 3
       objectReference: {fileID: 0}
@@ -1477,7 +1620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_MultiBattle_Assault_2
+      value: Enemy_3_Assault_mr
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1526,6 +1669,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
+      propertyPath: _sequenceID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: _slot._place
       value: 0
       objectReference: {fileID: 0}
@@ -1555,7 +1702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_Name
-      value: Enemy_TouchPanel_Launcher_1
+      value: Enemy_1_Launcher_l
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 75a99600e2fa00647909ee630747aa41, type: 3}
       propertyPath: m_IsActive
@@ -1636,6 +1783,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
+      propertyPath: _sequenceID
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367666349068593964, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: _other._sequence
       value: 6
       objectReference: {fileID: 0}
@@ -1661,7 +1812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: m_Name
-      value: Enemy_QTETutorial_Shield_1
+      value: Enemy_2_Shield_m
       objectReference: {fileID: 0}
     - target: {fileID: 5998904032055883265, guid: 415792af56e65db49b31fb6b6da84768, type: 3}
       propertyPath: m_IsActive
@@ -1778,12 +1929,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 911288636974658026}
     m_Modifications:
     - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _fireMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: _moveSpeed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._side
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4580619599906792111, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
+      propertyPath: _expand._height
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1879672015258820467, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_Name
-      value: Enemy_Boss_Funnel_4
+      value: Funnel_4
       objectReference: {fileID: 0}
     - target: {fileID: 2371056475005688492, guid: aca8e56350d38384ca68b4e20ee3a4b0, type: 3}
       propertyPath: m_RootOrder
@@ -1896,6 +2059,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
+      propertyPath: _sequenceID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780662915658270668, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: _slot._place
       value: 4
       objectReference: {fileID: 0}
@@ -1905,7 +2072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6953283358309888737, guid: c6682cff1d4d4ce448570ac6b38d0eb9, type: 3}
       propertyPath: m_Name
-      value: Enemy_MultiBattle_Assault_3
+      value: Enemy_3_Assault_r
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

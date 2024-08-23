@@ -15,7 +15,7 @@ namespace Enemy.NPC
         /// <summary>
         /// どのシーケンスに登場するのかを判定
         /// </summary>
-        EnemyManager.Sequence Sequence { get; }
+        int SequenceID { get; }
 
         /// <summary>
         /// イベントを実行
