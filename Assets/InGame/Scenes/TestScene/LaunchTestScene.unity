@@ -407,7 +407,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456707101}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -2285,6 +2285,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1721053562377265071, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721053562377265071, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 1980727225265452019, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       propertyPath: m_SizeDelta.x
       value: 300
@@ -2550,7 +2558,13 @@ PrefabInstance:
       addedObject: {fileID: 768937161}
     - targetCorrespondingSourceObject: {fileID: 5988006136282229561, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1319051365}
+      addedObject: {fileID: 1319051372}
+    - targetCorrespondingSourceObject: {fileID: 5988006136282229561, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1319051371}
+    - targetCorrespondingSourceObject: {fileID: 5988006136282229561, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1319051370}
     - targetCorrespondingSourceObject: {fileID: 2093062330659662188, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1449404111}
@@ -2711,18 +2725,57 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5988006136282229561, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
   m_PrefabInstance: {fileID: 1279496658}
   m_PrefabAsset: {fileID: 0}
---- !u!225 &1319051365
-CanvasGroup:
+--- !u!114 &1319051370
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1319051360}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.18431373}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 79dfa83adcf72d541946168c849ba331, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1319051371
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319051360}
+  m_CullTransparentMesh: 1
+--- !u!114 &1319051372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319051360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &1329632447
 GameObject:
   m_ObjectHideFlags: 0
@@ -3713,7 +3766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6717103488334232096, guid: c008b982a5ef7864d9482e32fdee1579, type: 3}
       propertyPath: m_SceneBindings.Array.size
-      value: 60
+      value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 6717103488334232096, guid: c008b982a5ef7864d9482e32fdee1579, type: 3}
       propertyPath: m_SceneBindings.Array.data[1].key
@@ -3839,6 +3892,14 @@ PrefabInstance:
       propertyPath: m_SceneBindings.Array.data[59].key
       value: 
       objectReference: {fileID: 8835098477267412867, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
+    - target: {fileID: 6717103488334232096, guid: c008b982a5ef7864d9482e32fdee1579, type: 3}
+      propertyPath: m_SceneBindings.Array.data[61].key
+      value: 
+      objectReference: {fileID: 6361863203787986043, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
+    - target: {fileID: 6717103488334232096, guid: c008b982a5ef7864d9482e32fdee1579, type: 3}
+      propertyPath: m_SceneBindings.Array.data[62].key
+      value: 
+      objectReference: {fileID: -4816715433396542628, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
     - target: {fileID: 6717103488334232096, guid: c008b982a5ef7864d9482e32fdee1579, type: 3}
       propertyPath: m_SceneBindings.Array.data[0].value
       value: 
