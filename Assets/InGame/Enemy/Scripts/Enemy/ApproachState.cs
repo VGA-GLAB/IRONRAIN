@@ -5,8 +5,10 @@ namespace Enemy
     /// <summary>
     /// 画面に表示され、スロット位置まで接近するステート。
     /// </summary>
-    public class ApproachState : BattleState
+    public class ApproachState : PlayableState
     {
+        private float _lerp;
+
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Enter()
@@ -33,21 +35,53 @@ namespace Enemy
         {
             // 接近アニメーション終了をトリガー。
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
+
+            // 接近完了フラグ。
+            Ref.BlackBoard.IsApproachCompleted = true;
         }
 
         protected override void Stay()
         {
-            // 継承元のBattleStateクラス、雑魚敵の共通したメソッド群。
             PlayDamageSE();
 
-            if (BattleExit()) return;
+            if (ExitIfDeadOrTimeOver()) return;
 
-            float spd = Ref.EnemyParams.MoveSpeed.Approach;
-            MoveToSlot(spd);
+            Vector3 before = Ref.Body.Position;
+            MoveToSlot();
+            LookAtPlayer();
+            Vector3 after = Ref.Body.Position;
+            MoveAnimation(after - before);
 
-            // 接近アニメーション終了は次フレームでExitが呼ばれたタイミング。
-            bool isCompleted = Ref.BlackBoard.IsApproachCompleted;
-            if (isCompleted) TryChangeState(StateKey.Battle);
+            if (IsMoveCompleted()) TryChangeState(StateKey.Battle);
+        }
+
+        // Lerpで移動。
+        private void MoveToSlot()
+        {
+            Vector3 bp = Ref.Body.Position;
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            Vector3 l = Vector3.Lerp(bp, sp, _lerp);
+            Ref.Body.Warp(l);
+
+            float speed = Ref.EnemyParams.MoveSpeed.Chase;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
+        }
+
+        // プレイヤーを向かせる。
+        private void LookAtPlayer()
+        {
+            Vector3 dir = Ref.BlackBoard.PlayerDirection;
+            dir.y = 0;
+
+            Ref.Body.LookForward(dir);
+        }
+
+        // 移動完了。
+        bool IsMoveCompleted()
+        {
+            return _lerp >= 1;
         }
     }
 }

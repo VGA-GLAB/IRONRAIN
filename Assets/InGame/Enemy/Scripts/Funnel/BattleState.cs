@@ -61,6 +61,7 @@ namespace Enemy.Funnel
                 float ry = Random.value * ac;
                 float rz = Random.value * ac;
                 Vector3 bf = Ref.BossRotate.forward;
+                if (mode == FireMode.Player) bf = Ref.BlackBoard.PlayerDirection;
                 Vector3 forward = bf + new Vector3(rx, ry, rz);
 
                 BulletPool.Fire(owner, BulletKey.Funnel, muzzle, forward);
