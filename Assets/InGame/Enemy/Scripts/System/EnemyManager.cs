@@ -11,31 +11,28 @@ namespace Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
-        /// <summary>
-        /// シーケンス単位での制御をする際に使用する列挙型。
-        /// </summary>
-        public enum Sequence
-        {
-            None,           
-            FirstAnaunnce, // 追跡:最初に敵が1体だけ出てくる。
-            Avoidance,     // 追跡:敵が先に攻撃してくる。
-            Attack,        // 追跡:プレイヤーが1機倒す。
-            TouchPanel,    // 追跡:敵を複数対出す。
-            Lever,         // 追跡:レバー操作。(敵は関係なし？)
-            QTETutorial,   // 追跡:盾持ちが出現、QTEする。
-            MultiBattle,   // 追跡:乱戦中に味方機が登場。
-            Purge,         // 追跡:装備パージ。(敵は関係なし？)
-            Fall,          // ボス:時期が落下。
-            BossStart,     // ボス:ボス戦開始。
-            FirstFunnel,   // ボス:ファンネル展開
-            ToggleButton,  // ボス:多重ロックオン(敵は関係なし？)
-            SecondFunnel,  // ボス:ファンネル復活
-            BossAgain,     // ボス:通常戦闘
-            BreakLeftArm,  // ボス:プレイヤー左腕破壊。
-            FirstBossQTE,  // ボス:QTE1回目
-            SecondQTE,     // ボス:QTE2回目
-            BossEnd,       // ボス:ボス戦終了演出。
-        }
+        //public enum Sequence
+        //{
+        //    None,           
+        //    FirstAnaunnce, // 追跡:最初に敵が1体だけ出てくる。
+        //    Avoidance,     // 追跡:敵が先に攻撃してくる。
+        //    Attack,        // 追跡:プレイヤーが1機倒す。
+        //    TouchPanel,    // 追跡:敵を複数対出す。
+        //    Lever,         // 追跡:レバー操作。(敵は関係なし？)
+        //    QTETutorial,   // 追跡:盾持ちが出現、QTEする。
+        //    MultiBattle,   // 追跡:乱戦中に味方機が登場。
+        //    Purge,         // 追跡:装備パージ。(敵は関係なし？)
+        //    Fall,          // ボス:時期が落下。
+        //    BossStart,     // ボス:ボス戦開始。
+        //    FirstFunnel,   // ボス:ファンネル展開
+        //    ToggleButton,  // ボス:多重ロックオン(敵は関係なし？)
+        //    SecondFunnel,  // ボス:ファンネル復活
+        //    BossAgain,     // ボス:通常戦闘
+        //    BreakLeftArm,  // ボス:プレイヤー左腕破壊。
+        //    FirstBossQTE,  // ボス:QTE1回目
+        //    SecondQTE,     // ボス:QTE2回目
+        //    BossEnd,       // ボス:ボス戦終了演出。
+        //}
 
         // 登録されたボス。
         private BossController _boss;
@@ -97,12 +94,12 @@ namespace Enemy
         /// </summary>
         /// <param name="enemies">この引数に敵への参照を入れて返す。</param>
         /// <returns>敵を1体以上取得:true 取得できる敵がいない:false</returns>
-        public bool TryGetEnemies(Sequence sequence, List<EnemyController> enemies)
+        public bool TryGetEnemies(int id, List<EnemyController> enemies)
         {        
             if (_enemies == null) return false;
 
             enemies.Clear();
-            foreach (EnemyController e in EnemiesInSequence(sequence))
+            foreach (EnemyController e in EnemiesInSequence(id))
             {
                 enemies.Add(e);
             }
@@ -122,17 +119,17 @@ namespace Enemy
         /// <summary>
         /// 引数で指定したシーケンスに登場する敵が全員死亡しているかを判定する。
         /// </summary>
-        public bool IsAllDefeated(Sequence sequence)
+        public bool IsAllDefeated(int id)
         {
-            return EnemiesInSequence(sequence).All(e => !e.BlackBoard.IsAlive);
+            return EnemiesInSequence(id).All(e => !e.BlackBoard.IsAlive);
         }
 
         /// <summary>
         /// 引数で指定したシーケンスの敵を全て撃破する。
         /// </summary>
-        public void DefeatThemAll(Sequence sequence)
+        public void DefeatThemAll(int id)
         {
-            foreach (EnemyController e in EnemiesInSequence(sequence))
+            foreach (EnemyController e in EnemiesInSequence(id))
             {
                 // 極大ダメージを与えて体力を0にする。
                 e.Damage(int.MaxValue / 2, "");
@@ -145,9 +142,9 @@ namespace Enemy
         /// 引数で指定したシーケンスに登場する敵全員に対して
         /// 画面上に出現、プレイヤーに接近するように命令する。
         /// </summary>
-        public void DetectPlayer(Sequence sequence)
+        public void DetectPlayer(int id)
         {
-            OrderToEnemies(sequence, EnemyOrder.Type.PlayerDetect);
+            OrderToEnemies(id, EnemyOrder.Type.PlayerDetect);
         }
 
         /// <summary>
@@ -155,7 +152,7 @@ namespace Enemy
         /// 画面上に出現、プレイヤーに接近するように命令する。
         /// </summary>
         /// <param name="point">出現位置</param>
-        public void Spawn(Vector3 point, Sequence sequence)
+        public void Spawn(Vector3 point, int id)
         {
             // 命令をプレイヤー検出に書き換え。
             _order.OrderType = EnemyOrder.Type.PlayerDetect;
@@ -165,7 +162,7 @@ namespace Enemy
             int length = 0;
             foreach (EnemyController e in _enemies)
             {
-                if (e.Params.Sequence == sequence)
+                if (e.Params.SequenceID == id)
                 {
                     center += e.transform.position;
                     length++;
@@ -176,7 +173,7 @@ namespace Enemy
             // 中心点を引数の位置としてそこからのベクトルを足す。
             foreach (EnemyController e in _enemies)
             {
-                if (e.Params.Sequence == sequence)
+                if (e.Params.SequenceID == id)
                 {
                     Vector3 dist = center - e.transform.position;
                     _order.Point = point + dist;
@@ -189,17 +186,17 @@ namespace Enemy
         /// <summary>
         /// シーケンスを指定してポーズ
         /// </summary>
-        public void Pause(Sequence sequence)
+        public void Pause(int id)
         {
-            OrderToEnemies(sequence, EnemyOrder.Type.Pause);
+            OrderToEnemies(id, EnemyOrder.Type.Pause);
         }
 
         /// <summary>
         /// シーケンスを指定してポーズ解除
         /// </summary>
-        public void Resume(Sequence sequence)
+        public void Resume(int id)
         {
-            OrderToEnemies(sequence, EnemyOrder.Type.Resume);
+            OrderToEnemies(id, EnemyOrder.Type.Resume);
         }
 
         /// <summary>
@@ -259,20 +256,20 @@ namespace Enemy
         /// <summary>
         /// シーケンスを指定してNPCのイベントを実行。
         /// </summary>
-        public void PlayNpcEvent(Sequence sequence)
+        public void PlayNpcEvent(int id)
         {
-            foreach (INpc npc in NpcInSequecne(sequence))
+            foreach (INpc npc in NpcInSequecne(id))
             {
                 npc.Play();
             }
         }
 
         // シーケンスと種類を指定して敵に命令。
-        private void OrderToEnemies(Sequence sequence, EnemyOrder.Type type)
+        private void OrderToEnemies(int id, EnemyOrder.Type type)
         {
             _order.OrderType = type;
 
-            foreach (EnemyController e in EnemiesInSequence(sequence))
+            foreach (EnemyController e in EnemiesInSequence(id))
             {
                 e.Order(_order);
             }
@@ -288,15 +285,15 @@ namespace Enemy
         }
 
         // シーケンス毎の敵を取得。
-        private IEnumerable<EnemyController> EnemiesInSequence(Sequence sequence)
+        private IEnumerable<EnemyController> EnemiesInSequence(int id)
         {
-            return _enemies.Where(a => a.Params.Sequence == sequence);
+            return _enemies.Where(a => a.Params.SequenceID == id);
         }
 
         // シーケンス毎のNPCを取得。
-        private IEnumerable<INpc> NpcInSequecne(Sequence sequence)
+        private IEnumerable<INpc> NpcInSequecne(int id)
         {
-            return _npcs.Where(a => a.Sequence == sequence);
+            return _npcs.Where(a => a.SequenceID == id);
         }
 
         /// <summary>

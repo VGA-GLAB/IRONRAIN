@@ -2,7 +2,6 @@
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。
-    /// 接近後、アイドル状態を経由して遷移してくる。
     /// </summary>
     public class BattleByShieldState : BattleState
     {
@@ -49,17 +48,8 @@
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
         }
 
-        protected override void Stay()
+        protected override void StayIfBattle()
         {
-            // 継承元のBattleStateクラス、雑魚敵の共通したメソッド群。
-            PlayDamageSE();
-
-            if (BattleExit()) return;
-
-            float spd = Ref.EnemyParams.MoveSpeed.Chase;
-            //MoveToSlot(spd);
-            WarpToSlot(spd);
-
             // どのアニメーションが再生されているかによって処理を分ける。
             if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
             else if (_currentAnimGroup == AnimationGroup.Shield) StayShield();

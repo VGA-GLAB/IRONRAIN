@@ -18,6 +18,7 @@ namespace IronRain.Player
         private GameObject _lockOnEnemy;
 
         private Vector3 _shotDir;
+        private Transform _shootingTarget;
         private int _damege;
         private string _weaponName;
 
@@ -28,15 +29,28 @@ namespace IronRain.Player
             _shotDir = shotDir;
             _weaponName = weaponName;
         }
+
+        private void Start()
+        {
+            if (_lockOnEnemy.GetComponent<Enemy.EnemyController>().TryFindShootingTarget(out Transform shootingTarget))
+            {
+                _shootingTarget = shootingTarget;
+            }
+
+            if (!_shootingTarget) 
+            {
+                Debug.LogError($"{_lockOnEnemy.name}のshootingTargetがNullです");
+            }
+        }
         private void Update()
         {
             ///一旦完全追従に
-            if (_lockOnEnemy && _lockOnEnemy.activeSelf)
+            if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf)
             {
-                transform.LookAt(_lockOnEnemy.transform.position + _offset);
+                transform.LookAt(_shootingTarget.position + _offset);
                 _rb.velocity = transform.forward * _speed * ProvidePlayerInformation.TimeScale;
             }
-            else if (_lockOnEnemy && !_lockOnEnemy.activeSelf)
+            else if (_shootingTarget && _lockOnEnemy && !_lockOnEnemy.activeSelf)
             {
                 _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
             }
@@ -59,6 +73,7 @@ namespace IronRain.Player
 
         public void SetVisible(bool isVisible)
         {
+            if(_weaponName != PlayerWeaponType.RocketLauncher.ToString())
             if (isVisible)
             {
                 for (int i = 0; i < _particleArray.Length; i++)

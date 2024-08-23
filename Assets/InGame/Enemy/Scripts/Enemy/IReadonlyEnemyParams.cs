@@ -12,6 +12,6 @@
         /// <summary>
         /// 登場するシーケンスを判定する。
         /// </summary>
-        public EnemyManager.Sequence Sequence { get; }
+        public int SequenceID { get; }
     }
 }

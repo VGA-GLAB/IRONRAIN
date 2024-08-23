@@ -41,20 +41,20 @@ namespace Enemy.DebugUse
         {
             if (EventRunButton(0, "AvoidanceSeq"))
             {
-                _enemyManager.DetectPlayer(EnemyManager.Sequence.Avoidance);
+                _enemyManager.DetectPlayer(0);
             }
             else if (EventRunButton(1, "TouchPanelSeq"))
             {
-                _enemyManager.DetectPlayer(EnemyManager.Sequence.TouchPanel);
+                _enemyManager.DetectPlayer(1);
             }
             else if (EventRunButton(2, "QTETutorialSeq"))
             {
-                _enemyManager.DetectPlayer(EnemyManager.Sequence.QTETutorial);
+                _enemyManager.DetectPlayer(2);
             }
             else if (EventRunButton(3, "MultiBattleSeq"))
             {
-                _enemyManager.DetectPlayer(EnemyManager.Sequence.MultiBattle);
-                _enemyManager.PlayNpcEvent(EnemyManager.Sequence.MultiBattle);
+                _enemyManager.DetectPlayer(3);
+                _enemyManager.PlayNpcEvent(3);
             }
             else if (EventRunButton(4, "BossStartSeq"))
             {

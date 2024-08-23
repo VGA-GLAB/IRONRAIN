@@ -86,13 +86,6 @@ namespace Enemy
             bb.SlotDirection = sv.normalized;
             bb.SlotSqrDistance = sv.sqrMagnitude;
 
-            // スロットに到着した場合は、接近完了フラグを立てる。
-            float threshold = Ref.EnemyParams.Other.ApproachCompleteThreshold;
-            if (bb.SlotSqrDistance < threshold)
-            {
-                bb.IsApproachCompleted = true;
-            }
-
             // 攻撃タイミングを更新。
             _fireRate.UpdateIfAttacked();
 

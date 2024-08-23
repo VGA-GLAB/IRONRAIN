@@ -10,11 +10,11 @@ namespace IronRain.SequenceSystem
     {
         [OpenScriptButton(typeof(WaitAllDefeatedSequence))]
         [Description("指定したシーケンスの敵がすべて破壊されるまで、つぎのシーケンスに遷移するのを待つシーケンス")]
-        [Header("どのSequenceの敵の撃破を待つのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
+        [Header("対象のSequenceのID"), SerializeField] private int _targetSeq;
 
         private EnemyManager _enemyManager;
 
-        private void SetParams(EnemyManager.Sequence targetSeq)
+        private void SetParams(int targetSeq)
         {
             _targetSeq = targetSeq;
         }
