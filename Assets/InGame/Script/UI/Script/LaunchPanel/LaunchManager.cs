@@ -13,7 +13,7 @@ using UnityEngine.Video;
 
 public class LaunchManager : MonoBehaviour
 {
-    [Header("ActiveUi")] 
+    [Header("ActiveUi")] [SerializeField] private GameObject _activeUiObject;
     [SerializeField] private Image _activeUiBackGround;
     [SerializeField] private Image _activeUiButton;
     [SerializeField] private float _startAnimationDuration = 1f;
@@ -32,7 +32,11 @@ public class LaunchManager : MonoBehaviour
         backGroundcolor.a = 0;
         _activeUiBackGround.color = backGroundcolor;
         
-        var buttonColor = _activeUiButton.color;
+        var rawImageColor = _activeUiButton.color;
+        rawImageColor.a = 0;
+        _activeUiButton.color = rawImageColor;
+        
+        var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
         buttonColor.a = 0;
         _activeUiButton.color = buttonColor;
         
@@ -70,9 +74,12 @@ public class LaunchManager : MonoBehaviour
         startSequence.Kill();
         
         //テスト用
-        ButtonActive();
+        //ButtonActive();
     }
 
+    /// <summary>
+    /// ボタンを押せるようにする処理
+    /// </summary>
     public void ButtonActive()
     {
         if (_activeUiButton.TryGetComponent(out Collider collider))
@@ -93,19 +100,22 @@ public class LaunchManager : MonoBehaviour
     /// <param name="token"></param>
     public async UniTask StartLaunchSequence(CancellationToken token = default)
     {
+        var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
+        buttonColor.a = 1;
+        _activeUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
         //アニメーション再生
         _activeUiAnimation.Play();
         _activeUiBackGround.gameObject.SetActive(false);
         _activeUiButton.gameObject.SetActive(false);
         
         await UniTask.Delay(TimeSpan.FromSeconds(_animationWait));
-        Debug.Log("終了");
+        //Debug.Log("終了");
     }
 
     private void StartLaunchTimeLine(VideoPlayer vp)
     {
-        Debug.Log("再生された");
-        _activeUiAnimation.gameObject.SetActive(false);
+        //Debug.Log("再生された");
+        _activeUiObject.gameObject.SetActive(false);
         //_launchPlayableDirector.Play();
     }
 }
