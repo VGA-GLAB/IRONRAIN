@@ -11,11 +11,11 @@ namespace IronRain.SequenceSystem
         [OpenScriptButton(typeof(EnemyManagerDetectPlayerSequence))]
         [Description("対象のシーケンスの敵を出現させるシーケンスです。")]
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
-        [Header("どのSequenceの敵を出現させるのか"), SerializeField] private EnemyManager.Sequence _targetSeq;
+        [Header("敵を出現させる対象のID(整数)"), SerializeField] private int _targetSeq;
 
         private EnemyManager _enemyManager;
         
-        public void SetParams(float totalSec, EnemyManager.Sequence targetSeq)
+        public void SetParams(float totalSec, int targetSeq)
         {
             _totalSec = totalSec;
             _targetSeq = targetSeq;
