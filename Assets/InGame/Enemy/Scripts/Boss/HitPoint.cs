@@ -1,85 +1,61 @@
 ﻿using System.Collections.Generic;
-
-// 仮
-namespace Enemy
-{
-    public struct DamageBuffer
-    {
-        public string Source;
-        public int Damage;
-    }
-}
+using UnityEngine;
 
 namespace Enemy.Boss
 {
-    /// <summary>
-    /// HPの変化を管理する。
-    /// 攻撃で受けたダメージの反映、瀕死と死亡の状態フラグもここ。
-    /// </summary>
     public class HitPoint
     {
-        private BossParams _params;
-        private BlackBoard _blackBoard;
-
         // Updateで黒板に反映し、毎フレームクリアされる。
-        private Queue<DamageBuffer> _buffer;
+        private int _damage;
+        private string _damageSource;
 
         public HitPoint(RequiredRef requiredRef)
         {
-            _params = requiredRef.BossParams;
-            _blackBoard = requiredRef.BlackBoard;
-            _buffer = new Queue<DamageBuffer>();
+            Ref = requiredRef;
+
+            // 体力の初期値
+            Ref.BlackBoard.Hp = Ref.BossParams.MaxHp;
         }
 
+        private RequiredRef Ref { get; set; }
+
         /// <summary>
-        /// ダメージの体力への反映、死亡状態のフラグの制御。
+        /// バッファを基にダメージ情報とHPを黒板に書き込む。
         /// </summary>
         public void Update()
         {
-            // 一度初期化
-            _blackBoard.Damage = 0;
-            _blackBoard.DamageSource = "";
+            BlackBoard bb = Ref.BlackBoard;
+            bb.Damage = _damage;
+            bb.DamageSource = _damageSource;
 
-            // Damageメソッド自体が呼ばれていない場合。
-            if (_buffer.Count == 0) return;
-
-            // 受けたダメージを処理する。
-            // 同一フレームに複数回ダメージを受けた場合は、
-            // 一番最後に処理されたダメージを与えた武器がダメージソースとして書き込まれる。
-            while (_buffer.TryDequeue(out DamageBuffer damage))
+            if (_damage > 0)
             {
-                // 耐性がある、もしくはプレイヤーを検知していない状態。
-                if (IsArmor(damage.Source))
-                {
-                    _blackBoard.DamageSource = damage.Source;
-                }
-                else
-                {
-                    _blackBoard.Damage += damage.Damage;
-                    _blackBoard.DamageSource = damage.Source;
-                }
+                bb.Hp -= _damage;
+                bb.Hp = Mathf.Max(0, bb.Hp);
             }
-        }
 
-        // ダメージ耐性
-        // 無効化した:true、しなかった:false
-        private bool IsArmor(string _)
-        {
-            /* ダメージ耐性処理ｺｺ */
-
-            return false;
+            _damage = 0;
+            _damageSource = "";
         }
 
         /// <summary>
-        /// ダメージを受ける処理。
-        /// 次のUpdateのタイミングまで黒板には書き込まない。
+        /// 外部からUpdate以外のタイミングでも呼ばれる想定。
+        /// ダメージを計算し、次のUpdateのタイミングで黒板に書き込むため、バッファに保持しておく。
         /// </summary>
         public void Damage(int value, string weapon)
         {
-            // 武器が空文字だった場合
-            if (weapon == "") weapon = "Unknown";
+            if (IsArmor(weapon)) value = 0;
 
-            _buffer.Enqueue(new DamageBuffer() { Damage = value, Source = weapon });
+            _damage += value;
+            // 同一フレームに複数回ダメージを受けた場合、最後に処理された武器がダメージソースになる。
+            _damageSource = weapon;
+        }
+
+        // ダメージ耐性。常に無敵状態。
+        private bool IsArmor(string weaponName)
+        {
+            Armor armor = Ref.BossParams.Armor;
+            return Enemy.HitPoint.IsArmor(weaponName, armor);
         }
     }
 }

@@ -16,6 +16,9 @@ namespace Enemy
 
         private RequiredRef Ref { get; set; }
 
+        /// <summary>
+        /// 初期化。Startのタイミングで呼ぶ想定。
+        /// </summary>
         public void InitializeOnStart()
         {
             BlackBoard bb = Ref.BlackBoard;
@@ -82,13 +85,6 @@ namespace Enemy
             Vector3 sv = bb.Slot.Point - bb.Area.Point;
             bb.SlotDirection = sv.normalized;
             bb.SlotSqrDistance = sv.sqrMagnitude;
-
-            // スロットに到着した場合は、接近完了フラグを立てる。
-            float threshold = Ref.EnemyParams.Other.ApproachCompleteThreshold;
-            if (bb.SlotSqrDistance < threshold)
-            {
-                bb.IsApproachCompleted = true;
-            }
 
             // 攻撃タイミングを更新。
             _fireRate.UpdateIfAttacked();

@@ -21,7 +21,7 @@ namespace Enemy.NPC
         private BuddyNpcParams _params;
 
         GameObject INpc.GameObject => gameObject;
-        EnemyManager.Sequence INpc.Sequence => EnemyManager.Sequence.MultiBattle;
+        int INpc.SequenceID => _params.SequenceID;
 
         private void Awake()
         {

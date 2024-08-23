@@ -33,7 +33,7 @@ namespace IronRain.Player
         [Tooltip("リロード中かどうか")]
         private bool _isReload;
         private PlayerEnvroment _playerEnvroment;
-        private EffectOwnerTime _effectOwnerTime = new();
+        protected EffectOwnerTime _effectOwnerTime = new();
 
         public virtual void SetUp(PlayerEnvroment playerEnvroment)
         {
@@ -60,20 +60,21 @@ namespace IronRain.Player
                 _isFire = true;
             }
         }
-        public virtual void Shot()
+        
+        /// <summary>
+        /// ショットボタンが押された時
+        /// </summary>
+        public virtual void ShotTrigger()
         {
             if (_isFire && 0 < _currentBullets && !_isReload)
             {
                 //後でオブジェクトプールに
-                var bulletCon = _bulletPool.GetBullet();
+                var bulletCon = _bulletPool.GetBullet(_params.WeaponType);
                 bulletCon.SetUp(
                     _playerEnvroment.RaderMap.GetRockEnemy,
                     _params.ShotDamage,
                     _playerEnvroment.PlayerTransform.forward,
                     _params.WeaponName);
-
-                _muzzleFlashEffect.Play(_effectOwnerTime);
-                _smokeEffect.Play(_effectOwnerTime);
 
                 CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
 
@@ -88,23 +89,31 @@ namespace IronRain.Player
             }
         }
 
+        /// <summary>
+        /// 弾が出たとき
+        /// </summary>
+        public virtual void OnShot() 
+        {
+
+        }
+
 
         /// <summary>
         /// マルチショット
         /// </summary>
         public void MulchShot()
         {
-            var lockOnEnemys = _playerEnvroment.RaderMap.MultiLockEnemys;
+            //var lockOnEnemys = _playerEnvroment.RaderMap.MultiLockEnemys;
 
-            for (int i = 0; i < lockOnEnemys.Count; i++)
-            {
-                var bulletCon = _bulletPool.GetBullet();
-                bulletCon.SetUp(
-                    _playerEnvroment.RaderMap.MultiLockEnemys[i],
-                    _params.ShotDamage,
-                    _playerEnvroment.PlayerTransform.forward,
-                    _params.WeaponName);
-            }
+            //for (int i = 0; i < lockOnEnemys.Count; i++)
+            //{
+            //    var bulletCon = _bulletPool.GetBullet();
+            //    bulletCon.SetUp(
+            //        _playerEnvroment.RaderMap.MultiLockEnemys[i],
+            //        _params.ShotDamage,
+            //        _playerEnvroment.PlayerTransform.forward,
+            //        _params.WeaponName);
+            //}
         }
 
         /// <summary>

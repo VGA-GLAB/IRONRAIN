@@ -10,7 +10,7 @@ namespace Enemy.Funnel
         {
             ID = System.Guid.NewGuid();
             Name = name;
-            Fire = new Trigger();
+            Attack = new Trigger();
             Expand = new Trigger();
         }
 
@@ -41,7 +41,7 @@ namespace Enemy.Funnel
         public string DamageSource { get; set; }
 
         // ボスからの命令で攻撃させるトリガー。
-        public Trigger Fire { get; set; }
+        public Trigger Attack { get; set; }
         // ボスからの命令で展開させるトリガー。
         public Trigger Expand { get; set; }
 

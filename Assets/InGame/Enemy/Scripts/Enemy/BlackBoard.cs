@@ -3,9 +3,6 @@ using UnityEngine;
 
 namespace Enemy
 {
-    /// <summary>
-    /// コメントに特に記述が無い場合は、Perception層が書き込む。
-    /// </summary>
     public class BlackBoard : IReadonlyBlackBoard
     {
         public BlackBoard(string name = "")
@@ -32,7 +29,7 @@ namespace Enemy
         // 生成後、画面に表示させる際の位置。
         public Vector3? SpawnPoint { get; set; }
 
-        // 現在実行中のステート。Action層が書き込む。
+        // 現在実行中のステート。ステート側が書き込む。
         public StateKey CurrentState { get; set; }
 
         // スロットの方向
@@ -61,7 +58,7 @@ namespace Enemy
 
         // プレイヤーを検知しているかのフラグ。
         public bool IsPlayerDetect { get; set; }
-        // プレイヤーを検知後、戦闘開始位置まで接近したかのフラグ。
+        // プレイヤーを検知後、戦闘開始位置まで接近したかのフラグ。ステート側が書き込む。
         public bool IsApproachCompleted { get; set; }
         // ポーズ中かのフラグ。
         public bool IsPause { get; set; }
@@ -71,7 +68,7 @@ namespace Enemy
         public bool IsQteTargeted { get; set; }
         // 生存中かのフラグ。
         public bool IsAlive => Hp > 0;
-        // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。Action層が書き込む。
+        // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。ステート側が書き込む。
         public bool IsCleanupReady { get; set; }
 
         // スローやポーズ処理を反映したDeltaTime。

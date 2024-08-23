@@ -134,8 +134,8 @@ namespace Enemy
         [Header("スロットの設定")]
         [SerializeField] private SlotSettings _slot;
 
-        [Header("登場するシーケンス")]
-        [SerializeField] private EnemyManager.Sequence _sequence;
+        [Header("登場するシーケンスのID")]
+        [SerializeField] private int _sequenceID;
 
         [Min(1)]
         [Header("体力の最大値")]
@@ -175,6 +175,24 @@ namespace Enemy
 
         // インターフェースで外部から参照する。
         public EnemyType Type => _other.Common != null ? _other.Common.Type : EnemyType.Dummy;
-        public EnemyManager.Sequence Sequence => _sequence;
+        public int SequenceID => _sequenceID;
+
+        // インスペクターでパラメータ弄った場合に勝手に名前を変更する。
+        private void OnValidate()
+        {
+            string slotID = "";
+            if (_slot.Place == SlotPlace.Left) slotID = "l";
+            else if (_slot.Place == SlotPlace.MiddleLeft) slotID = "ml";
+            else if (_slot.Place == SlotPlace.Middle) slotID = "m";
+            else if (_slot.Place == SlotPlace.MiddleRight) slotID = "mr";
+            else if (_slot.Place == SlotPlace.Right) slotID = "r";
+
+            string weaponID = "";
+            if (TryGetComponent(out AssaultEquipment _)) weaponID = "Assault";
+            else if (TryGetComponent(out LauncherEquipment _)) weaponID = "Launcher";
+            else if (TryGetComponent(out ShieldEquipment _)) weaponID = "Shield";
+
+            name = $"Enemy_{SequenceID}_{weaponID}_{slotID}";
+        }
     }
 }

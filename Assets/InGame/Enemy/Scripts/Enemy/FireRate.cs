@@ -18,7 +18,7 @@ namespace Enemy
             Initialize(settings);
         }
 
-        private RequiredRef Ref { get; set; }
+        private RequiredRef Ref { get; }
 
         // 攻撃タイミングを初期化
         private void Initialize(AttackSettings settings)
@@ -74,6 +74,7 @@ namespace Enemy
             bool isCooldown = Time.time <= _nextTime;
             bool isWaiting = Ref.BlackBoard.Attack.IsWaitingExecute();
             if (isCooldown || isWaiting) return;
+            else Ref.BlackBoard.Attack.Order();
 
             _index++;
             _index %= _timing.Count;
@@ -83,8 +84,6 @@ namespace Enemy
             if (_index > 0) t -= _timing[_index - 1];
 
             _nextTime = Time.time + t;
-
-            Ref.BlackBoard.Attack.Order();
         }
     }
 }
