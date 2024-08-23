@@ -41,6 +41,8 @@ namespace IronRain.Player
                 CriAudioManager.Instance.SE.Play("SE", "SE_Damage_01");
             }
 
+            WindowCrack();
+            
             _hpManager.BodyDamage(value);
             if (_hp == 0)
             {

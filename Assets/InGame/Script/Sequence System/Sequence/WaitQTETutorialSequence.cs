@@ -4,11 +4,16 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Enemy;
 using IronRain.Player;
+using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
     public class WaitQTETutorialSequence : ISequence
     {
+        [OpenScriptButton(typeof(WaitTutorialEnemyApproachSequence))]
+        [Description("TutorialのQTEを待つSequence")]
+        [Header("QTETutorialSequenceのID"), SerializeField]
+        private int _qteSequenceId = 0;
         private SequenceData _data;
         
         public void SetData(SequenceData data)
@@ -22,7 +27,7 @@ namespace IronRain.SequenceSystem
             _data.PlayerController.PlayerEnvroment.AddState(PlayerStateType.NonTriggerQte);
             _data.PlayerController.PlayerEnvroment.AddState(PlayerStateType.NonAttack);
 
-            if (_data.EnemyManager.TryGetEnemies(EnemyManager.Sequence.QTETutorial, enemies))
+            if (_data.EnemyManager.TryGetEnemies(_qteSequenceId, enemies))
             {
                 var id = enemies[0].BlackBoard.ID;
 
