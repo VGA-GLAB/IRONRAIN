@@ -23,13 +23,42 @@ public class LaunchManager : MonoBehaviour
     [Header("起動シーケンスのタイムライン")] [SerializeField]
     private PlayableDirector _launchPlayableDirector;
 
+    [Header("それぞれのアニメーション")] [Header("機体")] 
+    [SerializeField] private VideoPlayer _detailUiAnimation;
+
+    [Header("アナウンス")] [SerializeField] private VideoPlayer _announceUiAnimation;
+    [Header("武器")] [SerializeField] private VideoPlayer _weaponUiAnimation;
+    
     [Header("タイムラインが始まってから次のシーケンスに行くまで待つ秒数")] [SerializeField]
     private float _animationWait = 3f;
 
     private bool _isActivate;
+
+    [Header("最初に透明にしたいオブジェクト")] 
+    [Header("起動Ui")]
+    [SerializeField]private CanvasGroup _launcherUi;
+    [Header("武器Ui２種")]
+    [SerializeField]private CanvasGroup _assultUi;
+    [SerializeField]private CanvasGroup _rocketLauncherUi;
+    [Header("アナウンス")]
+    [SerializeField]private CanvasGroup _announceUi;
+    [Header("詳細Ui")]
+    [SerializeField]private CanvasGroup _detailUi;
+    [Header("ミニマップ")]
+    [SerializeField]private CanvasGroup _minimapUi;
+
+    [Header("アニメーションを再生する間隔")] [SerializeField]
+    private float _animationInterval = 0.1f;
     // Start is called before the first frame update
     void Start()
     {
+        _launcherUi.alpha = 0;
+        _assultUi.alpha = 0;
+        _rocketLauncherUi.alpha = 0;
+        _announceUi.alpha = 0;
+        _detailUi.alpha = 0;
+        _minimapUi.alpha = 0;
+        
         var backGroundcolor = _activeUiBackGround.color;
         backGroundcolor.a = 0;
         _activeUiBackGround.color = backGroundcolor;
@@ -76,7 +105,7 @@ public class LaunchManager : MonoBehaviour
         startSequence.Kill();
         
         //テスト用
-        //ButtonActive();
+        ButtonActive();
     }
 
     /// <summary>
@@ -127,6 +156,52 @@ public class LaunchManager : MonoBehaviour
     {
         //Debug.Log("再生された");
         _activeUiObject.gameObject.SetActive(false);
-        //_launchPlayableDirector.Play();
+        _launchPlayableDirector.Play();
+    }
+
+    public void CallStartLaunchUiAnimation()
+    {
+        StartCoroutine(StartLaunchUiAnimation());
+    }
+    private  IEnumerator StartLaunchUiAnimation()
+    {
+        _detailUiAnimation.loopPointReached += (vp) => FinishAnimation(vp, _detailUi, _detailUiAnimation);
+        _announceUiAnimation.loopPointReached += (vp) => FinishAnimation(vp, _announceUi, _announceUiAnimation);
+        _weaponUiAnimation.loopPointReached += (vp) => FinishAnimation(vp, _assultUi, _rocketLauncherUi, _weaponUiAnimation);
+        
+        var detailColor = _detailUiAnimation.gameObject.GetComponent<RawImage>().color;
+        detailColor.a = 1;
+        _detailUiAnimation.gameObject.GetComponent<RawImage>().color = detailColor;
+        //アニメーション再生
+        _detailUiAnimation.Play();
+        
+        yield return new WaitForSeconds(_animationInterval);
+        
+        var announcelColor = _announceUiAnimation.gameObject.GetComponent<RawImage>().color;
+        detailColor.a = 1;
+        _announceUiAnimation.gameObject.GetComponent<RawImage>().color = announcelColor;
+        //アニメーション再生
+        _announceUiAnimation.Play();
+        
+        yield return new WaitForSeconds(_animationInterval);
+        
+        var weaponColor = _weaponUiAnimation.gameObject.GetComponent<RawImage>().color;
+        weaponColor.a = 1;
+        _weaponUiAnimation.gameObject.GetComponent<RawImage>().color = weaponColor;
+        //アニメーション再生
+        _weaponUiAnimation.Play();
+    }
+
+    private void FinishAnimation(VideoPlayer vp, CanvasGroup canvasGroup, VideoPlayer videoPlayer)
+    {
+        canvasGroup.alpha = 1f;
+        videoPlayer.gameObject.SetActive(false);
+    }
+
+    private void FinishAnimation(VideoPlayer vp, CanvasGroup canvasGroup0, CanvasGroup canvasGroup1, VideoPlayer videoPlayer)
+    {
+        canvasGroup0.alpha = 1f;
+        canvasGroup1.alpha = 1f;
+        videoPlayer.gameObject.SetActive(false);
     }
 }

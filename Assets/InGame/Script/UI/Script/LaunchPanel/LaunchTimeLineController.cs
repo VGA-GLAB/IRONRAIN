@@ -22,7 +22,7 @@ public class LaunchTimeLineController : MonoBehaviour
     {
         // TimelineAssetをPlayableDirectorに設定
         _playableDirector.playableAsset = _timeline;
-        _launchUi.SetActive(false);
+        //_launchUi.SetActive(false);
     }
 
     // Update is called once per frame
