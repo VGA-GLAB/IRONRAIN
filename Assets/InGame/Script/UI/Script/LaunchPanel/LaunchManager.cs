@@ -25,6 +25,8 @@ public class LaunchManager : MonoBehaviour
 
     [Header("タイムラインが始まってから次のシーケンスに行くまで待つ秒数")] [SerializeField]
     private float _animationWait = 3f;
+
+    private bool _isActivate;
     // Start is called before the first frame update
     void Start()
     {
@@ -93,7 +95,15 @@ public class LaunchManager : MonoBehaviour
             button._isButtonActive = true;
         }
     }
-    
+
+    /// <summary>
+    /// 起動シーケンスアニメーションが終わるのを待つ
+    /// </summary>
+    /// <param name="ct"></param>
+    public async UniTask WaitLaunchAnimation(CancellationToken ct)
+    {
+        await UniTask.WaitUntil(() => _isActivate, cancellationToken: ct);
+    }
     /// <summary>
     /// 起動シーケンスのアニメーションをスタートさせる
     /// </summary>
@@ -109,6 +119,7 @@ public class LaunchManager : MonoBehaviour
         _activeUiButton.gameObject.SetActive(false);
         
         await UniTask.Delay(TimeSpan.FromSeconds(_animationWait));
+        _isActivate = true;
         //Debug.Log("終了");
     }
 
