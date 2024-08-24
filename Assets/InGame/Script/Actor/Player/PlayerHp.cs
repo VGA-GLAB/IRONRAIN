@@ -30,7 +30,7 @@ namespace IronRain.Player
         public void Damage(int value, string weapon = "")
         {
             _hp = Mathf.Max(_hp - value, 0);
-            _mainCamera.DOShakePosition(_time, _strength);
+            //_mainCamera.DOShakePosition(_time, _strength);
 
             if (weapon == PlayerWeaponType.AssaultRifle.ToString())
             {
