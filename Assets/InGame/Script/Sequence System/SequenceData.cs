@@ -41,5 +41,7 @@ namespace IronRain.SequenceSystem
         public AnnounceUiController AnnounceUiController => _announceUiController;
         [SerializeField] private PlayerAnimation _playerAnimation;
         public PlayerAnimation PlayerAnimation => _playerAnimation;
+        [SerializeField] private LaunchManager _launchManager;
+        public LaunchManager LaunchManager => _launchManager;
     }
 }
