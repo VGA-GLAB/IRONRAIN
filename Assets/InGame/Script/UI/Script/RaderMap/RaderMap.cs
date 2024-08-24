@@ -420,7 +420,8 @@ public class RaderMap : MonoBehaviour
             
             //ターゲットが切り替わる音を出す
             CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
-            _isTouch = true;
+            if(_isStartTouchPanel)
+                _isTouch = true;
         }
     }
 
@@ -494,7 +495,9 @@ public class RaderMap : MonoBehaviour
     }
     public async UniTask WaitTouchPanelAsync(CancellationToken ct)
     {
-        _isTouch = false;
+        _isStartTouchPanel = true;
         await UniTask.WaitUntil(() => _isTouch, cancellationToken: ct);
+
+        Debug.Log("通った");
     }
 }
