@@ -48,12 +48,12 @@ namespace Enemy
         {
             float dt = Ref.BlackBoard.PausableDeltaTime;
 
-            // プレイヤーの後方へ徐々に移動していく。
+            // 落下しつつプレイヤーの後方へ徐々に移動していく。
             const float Broken = 0.05f;
             Vector3 slot = Ref.BlackBoard.Slot.Point;
             slot.x = _brokenPosition.x;
             Vector3 lerp = Vector3.Lerp(slot, _brokenPosition, Broken);
-            _fallY *= 0.998f;
+            _fallY *= 0.998f; // 適当。
             lerp.y = _fallY;
             Ref.Body.Warp(lerp);
 

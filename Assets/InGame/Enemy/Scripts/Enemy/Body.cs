@@ -127,6 +127,14 @@ namespace Enemy
         }
 
         /// <summary>
+        /// 動的オフセットの座標を変更する。
+        /// </summary>
+        public void OffsetWarp(in Vector3 position)
+        {
+            _offset.localPosition = position;
+        }
+
+        /// <summary>
         /// 前方向を変更する。
         /// </summary>
         public void LookForward(in Vector3 forward)
