@@ -1,26 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Enemy
 {
     public class HomingBullet : Bullet
     {
-        [Header("誘導の強さ")]
-        [Range(0f, 1.0f)]
-        [SerializeField] private float _homingPower = 0.5f;
+        [Range(0, 10)]
+        [SerializeField] private int _homingPower = 1;
 
         private Transform _player;
+        private Vector3 _initial;
         private Vector3 _velocity;
-        private float _period;
+        bool _isHoming;
 
         public override void Shoot(Vector3 direction, IOwnerTime ownerTime)
         {
             base.Shoot(direction, ownerTime);
 
             _player = FindPlayer();
-            _velocity = Vector3.zero;
-            _period = _lifeTime;
+            _initial = direction;
+            _velocity = direction;
+            _isHoming = true;
         }
 
         private static Transform FindPlayer()
@@ -28,17 +30,26 @@ namespace Enemy
             return GameObject.FindGameObjectWithTag(Const.PlayerTag).transform;
         }
 
-        protected override void StayShooting(float deltaTime)
+        protected override void StayShooting(float _)
         {
-            Vector3 diff = _player.position - _transform.position;
-            Vector3 acc = (diff - _velocity * _period) * 2.0f / (_period * _period);
+            Vector3 target = (_player.position - _transform.position).normalized;
+            Vector3 forward = _velocity.normalized;
 
-            _period -= Time.deltaTime;
-            _period = Mathf.Min(0, _period);
+            // 90度以上だと戻ってくるような挙動をしてしまうのでホーミングを無効化。
+            if (Angle(_initial, forward) >= 90.0f) _isHoming = false;
 
-            _velocity += acc * Time.deltaTime;
-            _transform.position += _velocity * Time.deltaTime;
+            if (_isHoming)
+            {
+                _velocity = Vector3.Lerp(forward, target, Time.deltaTime * _homingPower);
+            }
+
+            _transform.position += _velocity * Time.deltaTime * _speed;
+        }
+
+        private static float Angle(in Vector3 a, in Vector3 b)
+        {
+            float dot = (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+            return Mathf.Acos(dot) * Mathf.Rad2Deg;
         }
     }
 }
-// https://learning.unity3d.jp/263/

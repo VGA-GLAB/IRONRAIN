@@ -15,9 +15,9 @@ namespace Enemy
 
         [SerializeField] private Collider _trigger;
         [SerializeField] private Renderer _renderer;
-        [Header("エフェクトの設定")]
         [SerializeField] private Effect _trailEffect;
         [SerializeField] private Effect _explosionEffect;
+
         [Header("パラメータ設定")]
         [SerializeField] protected float _lifeTime = 1.0f;
         [SerializeField] protected float _speed = 10.0f;
