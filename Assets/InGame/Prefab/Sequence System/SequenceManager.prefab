@@ -56,7 +56,7 @@ MonoBehaviour:
   - rid: 4919532165985468428
   - rid: 1578471541103656976
   - rid: 4919532094182391916
-  - rid: 1578471403179212856
+  - rid: 4919532223501959170
   - rid: 1578471403179212860
   - rid: 1578471403179212864
   - rid: 1578471403179212866
@@ -122,27 +122,6 @@ MonoBehaviour:
       data:
         _totalSec: 0
         _addState: 168
-    - rid: 1578471403179212856
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: QTETutorialSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 1578471403179212857
-        - rid: 1578471403179212858
-        - rid: 1578471403179212859
-    - rid: 1578471403179212857
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 6
-    - rid: 1578471403179212858
-      type: {class: WaitQTETutorialSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 1578471403179212859
-      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _removeState: 168
     - rid: 1578471403179212860
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -474,6 +453,29 @@ MonoBehaviour:
         _removeState: 32
     - rid: 4919532165985468445
       type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 4919532223501959170
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: QTETutorialSequence
+        _isSkip: 0
+        _sequences:
+        - rid: 4919532223501959171
+        - rid: 4919532223501959172
+        - rid: 4919532223501959173
+    - rid: 4919532223501959171
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 6
+    - rid: 4919532223501959172
+      type: {class: WaitQTETutorialSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteSequenceId: 0
+    - rid: 4919532223501959173
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 168
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
