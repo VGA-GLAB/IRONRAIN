@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!320 &6717103488334232096
 PlayableDirector:
@@ -167,9 +167,11 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 8835098477267412867, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
     value: {fileID: 4964890489199877125}
-  - key: {fileID: -7768059735275541191, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
+  - key: {fileID: 6361863203787986043, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
     value: {fileID: 0}
-  - key: {fileID: 3609300006343418545, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
+  - key: {fileID: 1111097842292438771, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4816715433396542628, guid: bd7c656b294de9946ad8ebb94e9f206a, type: 2}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
@@ -217,6 +219,7 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 0be770bd595b2494aaa31c0778108c80, type: 2}
+    - {fileID: 11400000, guid: 2a54c25a03cfb7640a92354ed042cc4c, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -224,6 +227,20 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: IronRain.SequenceSystem.LaunchTimeLineController,
             Assembly-CSharp
           m_MethodName: StartAnimation
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: LaunchManager, Assembly-CSharp
+          m_MethodName: CallStartLaunchUiAnimation
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
