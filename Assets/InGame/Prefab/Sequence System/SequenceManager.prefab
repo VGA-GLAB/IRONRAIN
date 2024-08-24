@@ -58,6 +58,8 @@ MonoBehaviour:
   - rid: 4919532094182391916
   - rid: 4919532223501959170
   - rid: 1578471403179212860
+  - rid: 7776351511825612808
+  - rid: 7776351511825612810
   - rid: 1578471403179212864
   - rid: 1578471403179212866
   - rid: 1578471403179212868
@@ -135,12 +137,12 @@ MonoBehaviour:
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 7
+        _targetSeq: 3
     - rid: 1578471403179212862
       type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 7
+        _targetSeq: 3
     - rid: 1578471403179212863
       type: {class: WaitGoalPointSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 1578471403179212864
@@ -264,12 +266,12 @@ MonoBehaviour:
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 2
+        _targetSeq: 1
     - rid: 4919532094182391920
       type: {class: EnemyManagerPauseSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 2
+        _targetSeq: 1
     - rid: 4919532094182391921
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -283,7 +285,7 @@ MonoBehaviour:
       type: {class: EnemyManagerResumeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0.1
-        _targetSeq: 2
+        _targetSeq: 1
     - rid: 4919532094182391927
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -292,7 +294,7 @@ MonoBehaviour:
     - rid: 4919532094182391928
       type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _targetSeq: 2
+        _targetSeq: 1
     - rid: 4919532116294500355
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -466,16 +468,40 @@ MonoBehaviour:
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 3
+        _targetSeq: 2
     - rid: 4919532223501959172
       type: {class: WaitQTETutorialSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _qteSequenceId: 3
+        _qteSequenceId: 2
     - rid: 4919532223501959173
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _removeState: 168
+    - rid: 7776351511825612808
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 4
+        _isSkip: 0
+        _sequences:
+        - rid: 7776351511825612809
+    - rid: 7776351511825612809
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+        _targetSeq: 4
+    - rid: 7776351511825612810
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 5
+        _isSkip: 0
+        _sequences:
+        - rid: 7776351511825612811
+    - rid: 7776351511825612811
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+        _targetSeq: 5
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,7 +520,10 @@ MonoBehaviour:
     _secondHatchTarget: {fileID: 0}
     _hangerOutsideTarget: {fileID: 0}
     _textBox: {fileID: 0}
-    _monitorRenderer: []
+    _monitorRenderer:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     _firstHatch: {fileID: 0}
     _secondHatch: {fileID: 0}
     _playerStoryEvent: {fileID: 0}
@@ -521,4 +550,4 @@ MonoBehaviour:
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
   _isSkip: 0
-  _startSequence: 6
+  _startSequence: 5
