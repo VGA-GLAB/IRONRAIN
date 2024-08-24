@@ -37,6 +37,7 @@ public class LaunchManager : MonoBehaviour
     private float _animationWait = 3f;
 
     private bool _isActivate;
+    private bool _isTouch;
 
     [Header("最初に透明にしたいオブジェクト")]
     [Header("起動Ui")]
@@ -137,6 +138,12 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void ButtonActive()
     {
+        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonCotroller active))
+        {
+            if (active._isButtonActive)
+                return;
+        }
+
         if (_activeUiButton.TryGetComponent(out Collider collider))
         {
             // Colliderを非アクティブにする
@@ -163,6 +170,10 @@ public class LaunchManager : MonoBehaviour
     /// <param name="token"></param>
     public async UniTask StartLaunchSequence(CancellationToken token = default)
     {
+        if (_isTouch)
+            return;
+
+        _isTouch = true;
         var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
         buttonColor.a = 1;
         _activeUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
