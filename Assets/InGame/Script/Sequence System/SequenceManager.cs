@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace IronRain.SequenceSystem
@@ -9,12 +10,26 @@ namespace IronRain.SequenceSystem
 
         public ISequence[] GetSequences()
         {
-            foreach (var seq in _loader.GetSequences())
+            var sequences = _loader.GetSequences();
+            
+            for (int i = 0; i < sequences.Length; i++)
             {
-                seq.SetData(_sequenceData);
+                try
+                {
+                    sequences[i].SetData(_sequenceData);
+                }
+                catch (Exception e)
+                {
+                    ExceptionReceiver(e, i);
+                }
             }
-
-            return _loader.GetSequences();
+            return sequences;
+        }
+        
+        private void ExceptionReceiver(Exception e, int index)
+        {
+            Debug.LogError($"{name}の Element{index}");
+            throw e;
         }
     }
 }

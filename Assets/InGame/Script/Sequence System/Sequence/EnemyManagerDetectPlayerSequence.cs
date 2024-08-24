@@ -10,6 +10,7 @@ namespace IronRain.SequenceSystem
     {
         [OpenScriptButton(typeof(EnemyManagerDetectPlayerSequence))]
         [Description("対象のシーケンスの敵を出現させるシーケンスです。")]
+        [Header("スキップした際に敵を出現させるかどうか"), SerializeField] private bool _isSkipSpawn = false;
         [Header("このSequenceを抜けるまでの時間(秒)"), SerializeField] private float _totalSec = 0F;
         [Header("敵を出現させる対象のID(整数)"), SerializeField] private int _targetSeq;
 
@@ -35,7 +36,10 @@ namespace IronRain.SequenceSystem
 
         public void Skip()
         {
-            _enemyManager.DetectPlayer(_targetSeq);
+            if (_isSkipSpawn)
+            {
+                _enemyManager.DetectPlayer(_targetSeq);
+            }
         }
     }
 }
