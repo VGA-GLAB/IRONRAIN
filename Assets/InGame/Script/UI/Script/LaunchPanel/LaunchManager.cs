@@ -276,6 +276,8 @@ public class LaunchManager : MonoBehaviour
         {
             button._isButtonActive = true;
         }
+
+        _isActivate = true;
     }
 
     /// <summary>
@@ -290,5 +292,6 @@ public class LaunchManager : MonoBehaviour
         _announceUi.alpha = 1;
         _detailUi.alpha = 1;
         _minimapUi.alpha = 1;
+        _isTouch = true;
     }
 }
