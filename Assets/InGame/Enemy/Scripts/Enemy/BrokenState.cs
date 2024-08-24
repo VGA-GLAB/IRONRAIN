@@ -36,11 +36,13 @@
 
         protected override void Stay()
         {
+            // アニメーションに合わせて手動で設定。
+            const float Delay = 2.5f;
+
             // ステートの開始から少し経ったら削除状態に遷移。
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            float delay = Ref.EnemyParams.Other.BrokenDelay;
             _exitElapsed += dt;
-            if (_exitElapsed > delay) TryChangeState(StateKey.Delete);
+            if (_exitElapsed > Delay) TryChangeState(StateKey.Delete);
 
             // 一度だけ再生すれば良い。
             if (_isPlaying) return;

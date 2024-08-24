@@ -41,16 +41,16 @@ namespace Enemy
     public class MoveSpeedSettings
     {
         [Tooltip("画面上に表示され、プレイヤーの正面に向かって移動中の速度。")]
-        [Range(1.0f, 1000.0f)]
-        [SerializeField] private float _approach = 250.0f;
+        [Min(1.0f)]
+        [SerializeField] private float _approach = 1.0f;
 
         [Tooltip("プレイヤーの正面に移動完了、攻撃しつつ移動する際の速度。")]
-        [Range(1.0f, 1000.0f)]
-        [SerializeField] private float _chase = 250.0f;
+        [Min(1.0f)]
+        [SerializeField] private float _chase = 1.0f;
 
         [Tooltip("生存時間を越え、画面外に撤退する際の速度。")]
-        [Range(1.0f, 1000.0f)]
-        [SerializeField] private float _exit = 50.0f;
+        [Min(1.0f)]
+        [SerializeField] private float _exit = 1.0f;
 
         public float Approach => _approach;
         public float Chase => _chase;
@@ -81,50 +81,6 @@ namespace Enemy
         public TextAsset InputBufferAsset => _inputBufferAsset;
     }
 
-    // 特に弄る必要ないもの、設定できるが現状必要ないもの。
-    [System.Serializable]
-    public class OtherSettings
-    {
-        [Range(0.1f, 1.0f)]
-        [Tooltip("プレイヤーに接近する際のホーミング力")]
-        [SerializeField] private float _approachHomingPower = 0.5f;
-
-        [Range(0.1f, 100.0f)]
-        [Tooltip("前後左右に移動するアニメーションのブレンドする強さ")]
-        [SerializeField] private float _animationBlendPower = 100.0f;
-
-        [Range(0.1f, 1.0f)]
-        [Tooltip("接近完了とみなす距離の閾値")]
-        [SerializeField] private float _approachCompleteThreshold = 0.1f;
-
-        [Range(1.0f, 10.0f)]
-        [Tooltip("戦闘時に上下移動する際の速さ")]
-        [SerializeField] private float _verticalMoveSpeed = 1.5f;
-
-        [Range(0, 1.0f)]
-        [Tooltip("体力がこの割合を下回った場合は瀕死状態になる。")]
-        [SerializeField] private float _dying = 0.2f;
-
-        [Range(10.0f, 200.0f)]
-        [Tooltip("撤退時、プレイヤーとの距離がこの値を超えると画面から消える。")]
-        [SerializeField] private float _offScreenDistance = 100.0f;
-
-        [Tooltip("死亡アニメーションを再生開始から、ステートマシンを止めるまでのディレイ(秒)")]
-        [SerializeField] private float _brokenDelay = 2.5f;
-
-        [Tooltip("種類ごとに共通したパラメータ。気持ち程度のFlyWeight。")]
-        [SerializeField] private CommonParams _common;
-
-        public float ApproachHomingPower => _approachHomingPower;
-        public float AnimationBlendPower => _animationBlendPower;
-        public float ApproachCompleteThreshold => _approachCompleteThreshold;
-        public float VerticalMoveSpeed => _verticalMoveSpeed;
-        public float Dying => _dying;
-        public float OffScreenDistance => _offScreenDistance;
-        public float BrokenDelay => _brokenDelay;
-        public CommonParams Common => _common;
-    }
-
     /// <summary>
     /// 敵キャラクター個体毎のパラメータ。
     /// プランナーが弄る。
@@ -149,6 +105,10 @@ namespace Enemy
         [Header("移動速度の設定")]
         [SerializeField] private MoveSpeedSettings _moveSpeed;
 
+        [Min(0)]
+        [Header("レーン移動する際のディレイ")]
+        [SerializeField] private float _laneChangeDelay = 1.0f;
+
         [Header("攻撃の設定")]
         [SerializeField] private AttackSettings _attack;
 
@@ -157,25 +117,22 @@ namespace Enemy
 
         [Space(10)]
 
-        [Header("特に弄る必要ない設定")]
-        [SerializeField] private OtherSettings _other;
+        [SerializeField] private CommonParams _common;
 
         public SlotSettings Slot => _slot;
+        public int SequenceID => _sequenceID;
         public int MaxHp => _maxHp;
         public int LifeTime => _lifeTime;
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
+        public float LaneChangeDelay => _laneChangeDelay;
         public AttackSettings Attack => _attack;
         public SpecialCondition SpecialCondition => _specialCondition;
-        public OtherSettings Other => _other;
-        public CommonParams Common => _other.Common;
+        public CommonParams Common => _common;
+        public EnemyType Type => Common != null ? Common.Type : EnemyType.Dummy;
 
         // 視界に入った敵を攻撃するという処理になっている都合上、同じ値を参照するようにしている。
         // 攻撃以外にも視界の用途が出来た場合は専用のパラメータを用意し、攻撃範囲と分ける必要あり。
         public float FovRadius => _attack.TriggerRange;
-
-        // インターフェースで外部から参照する。
-        public EnemyType Type => _other.Common != null ? _other.Common.Type : EnemyType.Dummy;
-        public int SequenceID => _sequenceID;
 
         // インスペクターでパラメータ弄った場合に勝手に名前を変更する。
         private void OnValidate()

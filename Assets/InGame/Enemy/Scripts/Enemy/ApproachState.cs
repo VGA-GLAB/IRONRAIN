@@ -79,7 +79,7 @@ namespace Enemy
         }
 
         // 移動完了。
-        bool IsMoveCompleted()
+        private bool IsMoveCompleted()
         {
             return _lerp >= 1;
         }

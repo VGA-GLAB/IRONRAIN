@@ -8,20 +8,34 @@ namespace Enemy
     /// </summary>
     public abstract class BattleState : PlayableState
     {
+        // レーン移動するための値。
+        private float _delay;
+        private float _save;
+
         public BattleState(RequiredRef requiredRef) : base(requiredRef)
         {
         }
 
-        protected override void Enter() { }
-        protected override void Exit() { }      
+        protected sealed override void Enter() 
+        {
+            ResetMoveParams();
+            OnEnter();
+        }
+        protected sealed override void Exit()
+        {
+            OnExit();
+        }      
         protected sealed override void Stay() 
         {
             PlayDamageSE();
             if (ExitIfDeadOrTimeOver()) return;
-            WarpToSlot();
+            MoveToSlot();
 
             StayIfBattle();
         }
+
+        protected abstract void OnEnter();
+        protected abstract void OnExit();
 
         /// <summary>
         /// ダメージ音、死亡または時間切れで遷移、アニメーション付きの移動。
@@ -32,21 +46,62 @@ namespace Enemy
         /// <summary>
         /// スロットの位置に座標を変更。
         /// </summary>
-        protected void WarpToSlot()
+        protected void MoveToSlot()
         {
             Vector3 before = Ref.Body.Position;
 
-            Vector3 sp = Ref.BlackBoard.Slot.Point;
-            Ref.Body.Warp(sp);
-
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            dir.y = 0;
-            Ref.Body.LookForward(dir);
-
+            LookAtPlayer();
+            Move();
+            
             Vector3 after = Ref.Body.Position;
 
             // 移動前後の位置を比較して左右どちらに移動したかを判定する。
-            MoveAnimation(after - before);
+            if (IsMoving()) MoveAnimation(after - before);
+        }
+
+        // プレイヤーがレーンを移動したら多少遅れて敵も同じように移動する。
+        private void Move()
+        {
+            // ディレイの値は -n ~ 0 の範囲をとる。
+            // Lerpの t の値が0以下の場合は、返る値が a と等しいので、ディレイが0以下の間は移動を行わない。
+            float bodyX = Ref.Body.Position.x;
+            float slotX = Ref.BlackBoard.Slot.Point.x;
+            float lerped = Mathf.Lerp(bodyX, slotX, Time.deltaTime + _delay);
+
+            // レーンの幅以上の横移動をしたかつ、ディレイが0になり、敵もレーン移動し始めた場合。
+            const float LaneWidth = 1.0f; // 手動。
+            if (Mathf.Abs(slotX - _save) > LaneWidth && _delay >= 0)
+            {
+                ResetMoveParams();
+            }
+
+            _delay += Time.deltaTime;
+            _delay = Mathf.Min(0, _delay);
+
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            sp.x = lerped;
+            Ref.Body.Warp(sp);
+        }
+
+        // レーン移動までのディレイの値で移動しているかを判定する。
+        private bool IsMoving()
+        {
+            return _delay >= 0;
+        }
+
+        // プレイヤーがレーン移動を開始する度にリセットする。
+        private void ResetMoveParams()
+        {
+            _delay = -Ref.EnemyParams.LaneChangeDelay;
+            _save = Ref.BlackBoard.Slot.Point.x;
+        }
+
+        // プレイヤー方向に向く。
+        private void LookAtPlayer()
+        {
+            Vector3 dir = Ref.BlackBoard.PlayerDirection;
+            dir.y = 0;
+            Ref.Body.LookForward(dir);
         }
 
         // スロットの位置へ向かうベクトルを返す。
@@ -56,7 +111,7 @@ namespace Enemy
                 Ref.BlackBoard.Area.Point,
                 Ref.BlackBoard.Slot.Point,
                 Ref.BlackBoard.SlotDirection,
-                Ref.EnemyParams.Other.ApproachHomingPower
+                0.5f // 適当。
                 );
             float dt = Ref.BlackBoard.PausableDeltaTime;
             return v * dt;

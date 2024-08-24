@@ -38,10 +38,12 @@ namespace Enemy
             Vector3 up = Vector3.up * spd * dt;
             Ref.Body.Move(up);
 
+            // プレイヤーが見えない距離を適当に設定。
+            const float OffScreenDist = 100.0f;
+
             // 画面外に出た場合は削除状態に遷移。
             float dist = Ref.BlackBoard.PlayerDistance;
-            float offScreen = Ref.EnemyParams.Other.OffScreenDistance;
-            if (dist > offScreen)
+            if (dist > OffScreenDist)
             {
                 TryChangeState(StateKey.Delete);
             }

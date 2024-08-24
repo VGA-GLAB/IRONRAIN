@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Enemy
+namespace Enemy.NPC
 {
     public enum StateKey
     {
-        Base,
-        Approach,
-        Battle,
-        Broken,
-        Escape,
         Hide,
+        Approach,
+        Action,
+        Escape,
         Delete,
     }
 
@@ -33,21 +32,11 @@ namespace Enemy
 
             // ステートを作成し、辞書で管理。
             _states = requiredRef.States;
-            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
-            _states.Add(StateKey.Broken, new BrokenState(requiredRef));
-            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
             _states.Add(StateKey.Hide, new HideState(requiredRef));
+            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
+            _states.Add(StateKey.Action, new ActionState(requiredRef));
+            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
             _states.Add(StateKey.Delete, new DeleteState(requiredRef));
-
-            // 戦闘ステートは装備によって違う。
-            {
-                EnemyType t = requiredRef.EnemyParams.Type;
-                BattleState b = null;
-                if (t == EnemyType.Assault) b = new BattleByAssaultState(requiredRef);
-                if (t == EnemyType.Launcher) b = new BattleByLauncherState(requiredRef);
-                if (t == EnemyType.Shield) b = new BattleByShieldState(requiredRef);
-                _states.Add(StateKey.Battle, b);
-            }
 
             // 初期状態では画面に表示しない。
             _currentState = _states[StateKey.Hide];
@@ -60,18 +49,11 @@ namespace Enemy
         /// </summary>
         public Result Update()
         {
-            // アニメーション速度はステートに依存しない。
-            // ポーズ時にアニメーションが止まる。
-            string param = BodyAnimationConst.Param.PlaySpeed;
-            float speed = Ref.BlackBoard.PausableTimeScale;
-            Ref.Animator.SetFloat(param, speed);
-            
             // ステートマシンを更新。
             _currentState = _currentState.Update();
 
-            // ステート内で後始末の準備完了フラグが立った場合は、これ以上更新しなくて良い。
-            bool isCompleted = Ref.BlackBoard.IsCleanupReady;
-            if (isCompleted) return Result.Complete;
+            bool isComplete = Ref.BlackBoard.CurrentState == StateKey.Delete;
+            if (isComplete) return Result.Complete;
             else return Result.Running;
         }
 
@@ -86,14 +68,10 @@ namespace Enemy
             else _isCleanup = true;
 
             // ステートマシンを破棄。
-            foreach(KeyValuePair<StateKey, State<StateKey>> s in _states)
+            foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }
-
-            // ステートを破棄した時点でAnimatorに関する操作もこれ以上しない。
-            // 警告対策のためAnimatorを無効化しておく。
-            Ref.Animator.enabled = false;
         }
     }
 }
