@@ -15,16 +15,16 @@ namespace Enemy
 
         [SerializeField] private Collider _trigger;
         [SerializeField] private Renderer _renderer;
-        [Header("エフェクトの設定")]
         [SerializeField] private Effect _trailEffect;
         [SerializeField] private Effect _explosionEffect;
+
         [Header("パラメータ設定")]
-        [SerializeField] private float _lifeTime = 1.0f;
-        [SerializeField] private float _speed = 10.0f;
+        [SerializeField] protected float _lifeTime = 1.0f;
+        [SerializeField] protected float _speed = 10.0f;
         [SerializeField] private int _damage = 1;
 
+        protected Transform _transform;
         private IOwnerTime _ownerTime;
-        private Transform _transform;
         private Vector3 _direction;
         private float _elapsed;
 
@@ -53,7 +53,7 @@ namespace Enemy
         /// 弾を撃ちだす。
         /// 一定時間経過で非アクティブになる。
         /// </summary>
-        public void Shoot(Vector3 direction, IOwnerTime ownerTime)
+        public virtual void Shoot(Vector3 direction, IOwnerTime ownerTime)
         {
             _renderer.enabled = true;
             _direction = direction.normalized;
@@ -78,7 +78,7 @@ namespace Enemy
         }
 
         // 発射後、飛翔中
-        private void StayShooting(float deltaTime)
+        protected virtual void StayShooting(float deltaTime)
         {
             _transform.position += _direction * deltaTime * _speed;
         }

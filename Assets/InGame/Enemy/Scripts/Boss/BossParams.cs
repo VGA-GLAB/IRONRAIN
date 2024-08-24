@@ -125,6 +125,9 @@ namespace Enemy.Boss
         [Header("移動速度の設定")]
         [SerializeField] private MoveSpeedSettings _moveSpeed;
 
+        [Header("プレイヤーを向く間隔")]
+        [SerializeField] private float _lookDuration = 2.0f;
+
         [Header("近距離攻撃の設定")]
         [SerializeField] private MeleeAttackSettings _meleeAttack;
 
@@ -135,6 +138,7 @@ namespace Enemy.Boss
         [SerializeField] private QteSettings _qte;
 
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
+        public float LookDuration => _lookDuration;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
         public QteSettings Qte => _qte;

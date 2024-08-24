@@ -35,12 +35,14 @@ namespace Enemy
         [SerializeField] private Transform _target;
 
         private Transform _player;
+        private Transform _rotate;
         private AnimationEvent _animationEvent;
         private IOwnerTime _owner;
 
         private void Awake()
         {
             _player = FindPlayer();
+            _rotate = FindRotate();
             // Animatorが1つだけの前提。
             _animationEvent = GetComponentInChildren<AnimationEvent>();
         }
@@ -74,7 +76,7 @@ namespace Enemy
             // 射撃モード
             switch (_aimMode)
             {
-                case AimMode.Forward: Fire(_muzzle.forward); break;
+                case AimMode.Forward: Fire(_rotate.forward); break;
                 case AimMode.Player: FireToTarget(_player); break;
                 case AimMode.Target: FireToTarget(_target); break;
             }

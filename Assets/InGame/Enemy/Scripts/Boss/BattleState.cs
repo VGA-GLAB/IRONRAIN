@@ -16,6 +16,9 @@ namespace Enemy.Boss
             Ref = requiredRef;
         }
 
+        // 一定間隔でプレイヤーを向かせる。
+        private float _playerLookElapsed;
+
         protected RequiredRef Ref { get; private set; }
 
         protected override void Enter() { }
@@ -77,8 +80,26 @@ namespace Enemy.Boss
         /// </summary>
         protected void LookAtPlayer()
         {
-            Vector3 look = Ref.BlackBoard.PlayerDirection;
-            look.y = 0;
+            BlackBoard bb = Ref.BlackBoard;
+            float dt = bb.PausableDeltaTime;
+
+            bb.PlayerLookElapsed += dt;
+
+            // ボスの前方向に射撃するファンネルを機能させるために一定間隔。
+            float duration = Ref.BossParams.LookDuration;
+            if (bb.PlayerLookElapsed > duration)
+            {
+                bb.PlayerLookElapsed = 0;
+
+                Vector3 pd = bb.PlayerDirection;
+                pd.y = 0;
+                bb.LookDirection = pd;
+            }
+
+            const float LookSpeed = 5.0f; // 適当。
+            Vector3 a = Ref.Body.Forward;
+            Vector3 b = bb.LookDirection;
+            Vector3 look = Vector3.Lerp(a, b, dt * LookSpeed);
 
             Ref.Body.LookForward(look);
         }

@@ -13,6 +13,7 @@ namespace Enemy
         Assault,
         Launcher,
         Funnel,
+        BossLauncher,
         // ここに追加
     }
 

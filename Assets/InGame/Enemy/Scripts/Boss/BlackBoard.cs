@@ -46,6 +46,11 @@ namespace Enemy.Boss
         // このフレームで自身にダメージを与えた武器。
         public string DamageSource { get; set; }
 
+        // 一定間隔でプレイヤーを向くための経過時間。BattleStateが管理する。
+        public float PlayerLookElapsed { get; set; }
+        // 戦闘中、向く方向。一定間隔で更新される。BattleStateが管理する。
+        public Vector3 LookDirection { get; set; }
+
         // ファンネルを展開。
         public Trigger FunnelExpand { get; set; }
         // 遠距離攻撃。
