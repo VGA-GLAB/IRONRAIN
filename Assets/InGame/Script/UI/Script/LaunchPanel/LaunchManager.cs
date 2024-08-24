@@ -138,11 +138,8 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void ButtonActive()
     {
-        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonCotroller active))
-        {
-            if (active._isButtonActive)
-                return;
-        }
+        if (_isActivate)
+            return;
 
         if (_activeUiButton.TryGetComponent(out Collider collider))
         {
@@ -248,17 +245,53 @@ public class LaunchManager : MonoBehaviour
         videoPlayer.gameObject.SetActive(false);
     }
 
+
     /// <summary>
-    /// シーケンスをスキップする際に呼ぶ処理
+    /// Activate Animationをスキップする
     /// </summary>
-    public void SkipLaunchSequence()
+
+    public void SkipStartActive()
     {
+
+        var backGroundcolor = _activeUiBackGround.color;
+        backGroundcolor.a = 1;
+        _activeUiBackGround.color = backGroundcolor;
+        var rawImageColor = _activeUiButton.color;
+        rawImageColor.a = 1;
+        _activeUiButton.color = rawImageColor;
+    }
+
+    /// <summary>
+    /// ButtonActiveをスキップする
+    /// </summary>
+    public void SkipButtonActive()
+    {
+        if (_activeUiButton.TryGetComponent(out Collider collider))
+        {
+            // Colliderを非アクティブにする
+            collider.enabled = true;
+        }
+
+        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonCotroller button))
+        {
+            button._isButtonActive = true;
+        }
+
+        _isActivate = true;
+    }
+
+    /// <summary>
+    /// LaunchAnimationをスキップする際に呼ぶ処理
+    /// </summary>
+    public void SkipLaunchAnimation()
+    {
+        _activeUiObject.gameObject.SetActive(false);
         _launcherUi.alpha = 1;
         _assultUi.alpha = 1;
         _rocketLauncherUi.alpha = 1;
         _announceUi.alpha = 1;
         _detailUi.alpha = 1;
         _minimapUi.alpha = 1;
-        _activeUiObject.gameObject.SetActive(false);
+        _isTouch = true;
     }
 }
