@@ -20,7 +20,7 @@ Varyings CurveTerrainForwardVertex(Attributes input)
 
     VertexPositionInputs curvedVertexInput;
     
-    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength,vertexInput, curvedVertexInput);
+    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, _CurveHeightOffset, vertexInput, curvedVertexInput);
     
     output.Color = input.Color;
     output.PositionCS = curvedVertexInput.positionCS;
