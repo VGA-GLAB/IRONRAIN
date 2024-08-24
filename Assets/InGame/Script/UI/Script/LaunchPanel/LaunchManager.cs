@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,9 +13,13 @@ using UnityEngine.Video;
 
 public class LaunchManager : MonoBehaviour
 {
+    [Header("テストフラグ")]
+    [SerializeField]
+    private bool _isTest;
     [Header("ActiveUi")] [SerializeField] private GameObject _activeUiObject;
     [SerializeField] private Image _activeUiBackGround;
     [SerializeField] private Image _activeUiButton;
+    [Header("ActiveUiのアニメーション秒数")]
     [SerializeField] private float _startAnimationDuration = 1f;
 
     [Header("アニメーション")] [SerializeField] private VideoPlayer _activeUiAnimation;
@@ -25,7 +29,7 @@ public class LaunchManager : MonoBehaviour
 
     [Header("それぞれのアニメーション")] [Header("機体")] 
     [SerializeField] private VideoPlayer _detailUiAnimation;
-
+    [Header("マップ")][SerializeField] private VideoPlayer _mapUiAnimation;
     [Header("アナウンス")] [SerializeField] private VideoPlayer _announceUiAnimation;
     [Header("武器")] [SerializeField] private VideoPlayer _weaponUiAnimation;
     
@@ -34,7 +38,7 @@ public class LaunchManager : MonoBehaviour
 
     private bool _isActivate;
 
-    [Header("最初に透明にしたいオブジェクト")] 
+    [Header("最初に透明にしたいオブジェクト")]
     [Header("起動Ui")]
     [SerializeField]private CanvasGroup _launcherUi;
     [Header("武器Ui２種")]
@@ -58,7 +62,7 @@ public class LaunchManager : MonoBehaviour
         _announceUi.alpha = 0;
         _detailUi.alpha = 0;
         _minimapUi.alpha = 0;
-        
+
         var backGroundcolor = _activeUiBackGround.color;
         backGroundcolor.a = 0;
         _activeUiBackGround.color = backGroundcolor;
@@ -67,10 +71,27 @@ public class LaunchManager : MonoBehaviour
         rawImageColor.a = 0;
         _activeUiButton.color = rawImageColor;
         
-        var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
-        buttonColor.a = 0;
-        _activeUiButton.color = buttonColor;
-        
+        //videoplayerのrawImageを透明にする
+        var activeRowImage = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
+        activeRowImage.a = 0;
+        _activeUiAnimation.gameObject.GetComponent<RawImage>().color = activeRowImage;
+
+        var detailUiAnimationrowImage = _detailUiAnimation.gameObject.GetComponent<RawImage>().color;
+        detailUiAnimationrowImage.a = 0;
+        _detailUiAnimation.gameObject.GetComponent<RawImage>().color = detailUiAnimationrowImage;
+
+        var mapUiAnimationRowImage = _mapUiAnimation.gameObject.GetComponent<RawImage>().color;
+        mapUiAnimationRowImage.a = 0;
+        _mapUiAnimation.gameObject.GetComponent<RawImage>().color = mapUiAnimationRowImage;
+
+        var announceUiAnimationRowImage = _announceUiAnimation.gameObject.GetComponent<RawImage>().color;
+        announceUiAnimationRowImage.a = 0;
+        _announceUiAnimation.gameObject.GetComponent<RawImage>().color = announceUiAnimationRowImage;
+
+        var weaponUiAnimationRowImage = _weaponUiAnimation.gameObject.GetComponent<RawImage>().color;
+        weaponUiAnimationRowImage.a = 0;
+        _weaponUiAnimation.gameObject.GetComponent<RawImage>().color = weaponUiAnimationRowImage;
+
         if (_activeUiButton.TryGetComponent(out Collider collider))
         {
             // Colliderを非アクティブにする
@@ -78,7 +99,7 @@ public class LaunchManager : MonoBehaviour
         }
 
         _activeUiAnimation.loopPointReached += StartLaunchTimeLine;
-
+        _mapUiAnimation.loopPointReached += ActiveLauch;
     }
 
     // Update is called once per frame
@@ -105,7 +126,10 @@ public class LaunchManager : MonoBehaviour
         startSequence.Kill();
         
         //テスト用
-        ButtonActive();
+        if(_isTest)
+        {
+            ButtonActive();
+        }
     }
 
     /// <summary>
@@ -156,6 +180,14 @@ public class LaunchManager : MonoBehaviour
     {
         //Debug.Log("再生された");
         _activeUiObject.gameObject.SetActive(false);
+        var buttonColor = _mapUiAnimation.gameObject.GetComponent<RawImage>().color;
+        buttonColor.a = 1;
+        _mapUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
+        _mapUiAnimation.Play();
+    }
+
+    private void ActiveLauch(VideoPlayer vp)
+    {
         _launchPlayableDirector.Play();
     }
 
@@ -178,7 +210,7 @@ public class LaunchManager : MonoBehaviour
         yield return new WaitForSeconds(_animationInterval);
         
         var announcelColor = _announceUiAnimation.gameObject.GetComponent<RawImage>().color;
-        detailColor.a = 1;
+        announcelColor.a = 1;
         _announceUiAnimation.gameObject.GetComponent<RawImage>().color = announcelColor;
         //アニメーション再生
         _announceUiAnimation.Play();
