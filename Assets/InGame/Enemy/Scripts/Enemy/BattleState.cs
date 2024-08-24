@@ -23,6 +23,7 @@ namespace Enemy
         }
         protected sealed override void Exit()
         {
+            MoveToSlot();
             OnExit();
         }      
         protected sealed override void Stay() 

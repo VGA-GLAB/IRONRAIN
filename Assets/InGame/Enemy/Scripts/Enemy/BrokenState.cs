@@ -1,10 +1,16 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     /// <summary>
     /// 撃破されたステート。
     /// </summary>
     public class BrokenState : State<StateKey>
     {
+        // 死亡した位置から徐々にプレイヤーの後方に移動するため、死亡時の位置。
+        private Vector3 _brokenPosition;
+        // 徐々に落下していく。
+        private float _fallY;
         // 一度だけアニメーションやエフェクトを再生するためのフラグ
         private bool _isPlaying;
         // 死亡演出が終わるまで待つためのタイマー。
@@ -22,6 +28,10 @@
         {
             Ref.BlackBoard.CurrentState = StateKey.Broken;
 
+            // Enterのタイミングで記録した位置とStayのスロット位置のLerp。
+            _brokenPosition = Ref.Body.Position;
+            _fallY = _brokenPosition.y;
+
             _isPlaying = false;
             _exitElapsed = 0;
 
@@ -36,11 +46,19 @@
 
         protected override void Stay()
         {
-            // アニメーションに合わせて手動で設定。
-            const float Delay = 2.5f;
-
-            // ステートの開始から少し経ったら削除状態に遷移。
             float dt = Ref.BlackBoard.PausableDeltaTime;
+
+            // プレイヤーの後方へ徐々に移動していく。
+            const float Broken = 0.05f;
+            Vector3 slot = Ref.BlackBoard.Slot.Point;
+            slot.x = _brokenPosition.x;
+            Vector3 lerp = Vector3.Lerp(slot, _brokenPosition, Broken);
+            _fallY *= 0.998f;
+            lerp.y = _fallY;
+            Ref.Body.Warp(lerp);
+
+            // アニメーションに合わせて手動で設定。少し経ったら削除状態に遷移。
+            const float Delay = 2.5f;
             _exitElapsed += dt;
             if (_exitElapsed > Delay) TryChangeState(StateKey.Delete);
 
