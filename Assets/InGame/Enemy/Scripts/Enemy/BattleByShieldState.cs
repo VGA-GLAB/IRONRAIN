@@ -37,12 +37,12 @@
             }
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Battle;
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
@@ -66,19 +66,18 @@
         // アニメーションがアイドル状態
         private void StayIdle()
         {
-            // 攻撃可能な場合は武器構えのアニメーション再生。
-            if (IsAttack())
-            {
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-            }
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
         // アニメーションが盾構え状態
         private void StayShield()
         {
-            // 現状、チュートリアルでしか出番が無いので、構え->攻撃を行わずに
-            // 構えで止めておくことで、QTETutorialが必ず成功する。
-            //_animation.SetTrigger(BodyAnimation.ParamName.AttackTrigger);
+            // 攻撃可能な場合は武器構えのアニメーション再生。
+            if (IsAttack())
+            {
+                // 現在の仕様だと、特に攻撃しない。
+                //_animation.SetTrigger(BodyAnimation.ParamName.AttackTrigger);
+            }
         }
 
         // アニメーションが攻撃状態

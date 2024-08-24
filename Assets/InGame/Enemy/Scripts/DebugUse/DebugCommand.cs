@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
-using Enemy.Funnel;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Funnel;
+using Cysharp.Threading.Tasks;
 
 namespace Enemy.DebugUse
 {
@@ -16,10 +17,13 @@ namespace Enemy.DebugUse
         
         // コマンド入力可能状態
         private bool _isEnable;
+        // 配置されている敵のシーケンスID一覧。
+        private List<int> _sequenceID;
 
         private void Awake()
         {
             _enemyManager = GetComponent<EnemyManager>();
+            _sequenceID = new List<int>();
         }
 
         private void Update()
@@ -28,85 +32,105 @@ namespace Enemy.DebugUse
             if (Input.GetKeyDown(KeyCode.Slash))
             {
                 _isEnable = !_isEnable;
+                CheckSequenceID();
             }
         }
 
         private void OnGUI()
         {
-            if (_isEnable) EventRunButton(_buttonX, _buttonY, _buttonWidth, _buttonHeight);
+            if (_isEnable) EventRunButton();
+        }
+
+        private void CheckSequenceID()
+        {
+            _sequenceID.Clear();
+
+            // プランナーが0から連番でシーケンスIDを割り当ててくれる想定。
+            for (int i = 0; i < 100; i++) 
+            {
+                if (_enemyManager.TryGetEnemies(i, new List<EnemyController>()))
+                {
+                    _sequenceID.Add(i);
+                }
+            }
         }
 
         // イベント実行のボタン
-        private void EventRunButton(float x, float y, float w, float h)
+        private void EventRunButton()
         {
-            if (EventRunButton(0, "AvoidanceSeq"))
+            // シーン上の敵を呼び出し。
+            for (int i = 0; i < _sequenceID.Count; i++)
             {
-                _enemyManager.DetectPlayer(0);
+                if (EventRunButton(i, $"シーケンス {_sequenceID[i]} の敵を生成"))
+                {
+                    _enemyManager.DetectPlayer(_sequenceID[i]);
+                }
             }
-            else if (EventRunButton(1, "TouchPanelSeq"))
-            {
-                _enemyManager.DetectPlayer(1);
-            }
-            else if (EventRunButton(2, "QTETutorialSeq"))
-            {
-                _enemyManager.DetectPlayer(2);
-            }
-            else if (EventRunButton(3, "MultiBattleSeq"))
+
+            // 道中のイベント
+            float offset = _buttonWidth;
+            if (EventRunButton(0, "味方機体のイベント再生", offset))
             {
                 _enemyManager.DetectPlayer(3);
                 _enemyManager.PlayNpcEvent(3);
             }
-            else if (EventRunButton(4, "BossStartSeq"))
+
+            // ボス戦関係のコマンド
+            offset = _buttonWidth * 2;
+            if (EventRunButton(0, "ボス戦開始", offset))
             {
                 _enemyManager.BossStart();
             }
-            else if (EventRunButton(5, "FirstFunnel"))
+            else if (EventRunButton(1, "1回目のファンネル展開", offset))
             {
                 _enemyManager.FunnelExpand();
             }
-            else if (EventRunButton(6, "SecondFunnel"))
+            else if (EventRunButton(2, "2回目のファンネル展開", offset))
             {
                 _enemyManager.FunnelExpand();
             }
-            else if (EventRunButton(7, "FunnelLaserSight"))
+            else if (EventRunButton(3, "ファンネルのレーザーサイト表示", offset))
             {
                 _enemyManager.FunnelLaserSight();
             }
-            else if (EventRunButton(8, "MoveBossToPlayerFrontAsync"))
-            {
-                _enemyManager.MoveBossToPlayerFrontAsync(this.GetCancellationTokenOnDestroy()).Forget();
-            }
-            else if (EventRunButton(9, "BreakLeftArm"))
-            {
-                _enemyManager.BreakLeftArm();
-            }
-            else if (EventRunButton(10, "QteCombatReady"))
-            {
-                _enemyManager.QteCombatReady();
-            }
-            else if (EventRunButton(11, "FirstQteCombatAction"))
-            {
-                _enemyManager.FirstQteCombatAction();
-            }
-            else if (EventRunButton(12, "SecondQteCombatAction"))
-            {
-                _enemyManager.SecondQteCombatAction();
-            }
-            else if (EventRunButton(13, "PenetrateBoss"))
-            {
-                _enemyManager.PenetrateBoss();
-            }
-            else if (EventRunButton(14, "DefeatAllFunnel"))
+            else if (EventRunButton(4, "ファンネルを全て破壊", offset))
             {
                 FunnelController[] f = FindObjectsByType<FunnelController>(FindObjectsSortMode.None);
                 foreach (FunnelController g in f) g.Damage(int.MaxValue / 2, "DebugCommand");
             }
+
+            // ボス戦QTEのコマンド
+            offset = _buttonWidth * 3;
+            if (EventRunButton(0, "プレイヤーの正面まで移動", offset))
+            {
+                _enemyManager.MoveBossToPlayerFrontAsync(this.GetCancellationTokenOnDestroy()).Forget();
+            }
+            else if (EventRunButton(1, "左腕破壊", offset))
+            {
+                _enemyManager.BreakLeftArm();
+            }
+            else if (EventRunButton(2, "構え直し", offset))
+            {
+                _enemyManager.QteCombatReady();
+            }
+            else if (EventRunButton(3, "1回目の鍔迫り合い", offset))
+            {
+                _enemyManager.FirstQteCombatAction();
+            }
+            else if (EventRunButton(4, "2回目の鍔迫り合い", offset))
+            {
+                _enemyManager.SecondQteCombatAction();
+            }
+            else if (EventRunButton(5, "貫かれて死亡", offset))
+            {
+                _enemyManager.PenetrateBoss();
+            }
         }
 
         // イベント実行のボタン
-        private bool EventRunButton(int index, string label)
+        private bool EventRunButton(int index, string label, float xOffset = 0)
         {
-            float x = _buttonX;
+            float x = _buttonX + xOffset;
             float y = _buttonY + index * _buttonHeight;
             float w = _buttonWidth;
             float h = _buttonHeight;

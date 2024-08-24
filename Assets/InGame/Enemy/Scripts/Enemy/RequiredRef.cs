@@ -28,22 +28,22 @@ namespace Enemy
             AgentScript = transform.GetComponent<AgentScript>();
         }
 
-        public Transform Transform { get; private set; }
-        public Transform Player { get; private set; }
-        public Transform Offset { get; private set; }   
-        public Transform Rotate { get; private set; }
-        public EnemyParams EnemyParams { get; private set; }
-        public BlackBoard BlackBoard { get; private set; }
-        public Animator Animator { get; private set; }
-        public Renderer[] Renderers { get; private set; }
-        public EnemyEffects Effects { get; private set; }
-        public Collider[] HitBoxes { get; private set; }
-        public Equipment Equipment { get; private set; }
+        public Transform Transform { get; }
+        public Transform Player { get; }
+        public Transform Offset { get; }   
+        public Transform Rotate { get; }
+        public EnemyParams EnemyParams { get; }
+        public BlackBoard BlackBoard { get; }
+        public Animator Animator { get; }
+        public Renderer[] Renderers { get; }
+        public EnemyEffects Effects { get; }
+        public Collider[] HitBoxes { get; }
+        public Equipment Equipment { get; }
 
-        public Dictionary<StateKey, State<StateKey>> States { get; private set; }
-        public Body Body { get; private set; }
-        public BodyAnimation BodyAnimation { get; private set; }
-        public Effector Effector { get; private set; }
-        public AgentScript AgentScript { get; private set; }
+        public Dictionary<StateKey, State<StateKey>> States { get; }
+        public Body Body { get; }
+        public BodyAnimation BodyAnimation { get; }
+        public Effector Effector { get; }
+        public AgentScript AgentScript { get; }
     }
 }

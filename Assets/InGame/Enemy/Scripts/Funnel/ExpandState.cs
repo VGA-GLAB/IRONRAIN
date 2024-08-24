@@ -6,6 +6,11 @@ namespace Enemy.Funnel
 {
     public class ExpandState : State<StateKey>
     {
+        // Lerpで動かす。
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
         public ExpandState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             Ref = requiredRef;
@@ -25,8 +30,19 @@ namespace Enemy.Funnel
             // ファンネルが飛んでいる音(ループしなくて良い？)
             AudioWrapper.PlaySE("SE_Funnel_Fly");
 
+            // ボスの位置に座標を変更し、そこから展開する。
             Vector3 boss = Ref.Boss.transform.position;
             Ref.Body.Warp(boss);
+
+            // 展開時、ボスは立ち止まっている想定なので、Enterで展開位置を固定しても違和感ない？
+            _start = Ref.Transform.position;
+            Vector3 offset = (Vector3)Ref.BlackBoard.ExpandOffset;
+            Vector3 ox = Ref.Body.Right * offset.x;
+            Vector3 oy = Ref.Body.Up * offset.y;
+            Vector3 oz = Ref.Body.Forward * offset.z;
+            Vector3 bp = Ref.Boss.transform.position;
+            _end = bp + ox + oy + oz;
+            _lerp = 0;
         }
 
         protected override void Exit()
@@ -35,22 +51,27 @@ namespace Enemy.Funnel
 
         protected override void Stay()
         {
-            Vector3 offset = (Vector3)Ref.BlackBoard.ExpandOffset;
-            Vector3 dx = Ref.Body.Right * offset.x;
-            Vector3 dy = Ref.Body.Up * offset.y;
-            Vector3 dz = Ref.Body.Forward * offset.z;
-            Vector3 bp = Ref.Boss.transform.position;
-            Vector3 p = bp + dx + dy + dz;
-            Vector3 dir = p - Ref.Body.Position;
+            MoveToOffsetedPoint();
+
+            if (IsMoveCompleted()) TryChangeState(StateKey.Battle);
+        }
+
+        // Lerpで移動。
+        private void MoveToOffsetedPoint()
+        {
+            Vector3 l = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(l);
+
+            float speed = Ref.FunnelParams.MoveSpeed.Expand;
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            float spd = Ref.FunnelParams.MoveSpeed;
-            Vector3 velo = dir.normalized * dt * spd;
-            if (velo.sqrMagnitude <= dir.sqrMagnitude) Ref.Body.Move(velo);
-            else
-            {
-                Ref.Body.Warp(p);
-                TryChangeState(StateKey.Battle);
-            }
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
+        }
+
+        // 移動完了。
+        bool IsMoveCompleted()
+        {
+            return _lerp >= 1;
         }
     }
 }

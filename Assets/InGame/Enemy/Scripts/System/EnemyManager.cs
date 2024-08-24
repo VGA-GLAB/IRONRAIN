@@ -39,7 +39,7 @@ namespace Enemy
         // 登録された敵。
         private HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
         // 登録されたNPC。
-        private HashSet<INpc> _npcs = new HashSet<INpc>();
+        private HashSet<BuddyNpcController> _npcs = new HashSet<BuddyNpcController>();
         // 登録された敵に対して命令。
         // 命令の処理を呼び出す度に書き換えて使いまわす。
         private EnemyOrder _order = new EnemyOrder();
@@ -258,7 +258,7 @@ namespace Enemy
         /// </summary>
         public void PlayNpcEvent(int id)
         {
-            foreach (INpc npc in NpcInSequecne(id))
+            foreach (BuddyNpcController npc in NpcInSequecne(id))
             {
                 npc.Play();
             }
@@ -291,9 +291,9 @@ namespace Enemy
         }
 
         // シーケンス毎のNPCを取得。
-        private IEnumerable<INpc> NpcInSequecne(int id)
+        private IEnumerable<BuddyNpcController> NpcInSequecne(int id)
         {
-            return _npcs.Where(a => a.SequenceID == id);
+            return _npcs.Where(a => a.Params.SequenceID == id);
         }
 
         /// <summary>
@@ -322,10 +322,10 @@ namespace Enemy
                 if (isRegister) em._boss = character as BossController;
                 else em._boss = null;
             }
-            else if (typeof(T) == typeof(INpc))
+            else if (typeof(T) == typeof(BuddyNpcController))
             {
-                if (isRegister) em._npcs.Add(character as INpc);
-                else em._npcs.Remove(character as INpc);
+                if (isRegister) em._npcs.Add(character as BuddyNpcController);
+                else em._npcs.Remove(character as BuddyNpcController);
             }
         }
     }

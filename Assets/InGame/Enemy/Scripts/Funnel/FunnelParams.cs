@@ -23,6 +23,22 @@ namespace Enemy.Funnel
         public float Offset => _offset;
     }
 
+    // 移動速度
+    [System.Serializable]
+    public class MoveSpeedSettings
+    {
+        [Min(1.0f)]
+        [SerializeField] private float _expand = 1.0f;
+        [Min(1.0f)]
+        [SerializeField] private float _chase = 1.0f;
+        [Min(1.0f)]
+        [SerializeField] private float _return = 1.0f;
+
+        public float Expand => _expand;
+        public float Chase => _chase;
+        public float Return => _return;
+    }
+
     /// <summary>
     /// ファンネルの個体毎のパラメータ。
     /// プランナーが弄る。
@@ -50,16 +66,15 @@ namespace Enemy.Funnel
         [Tooltip("値を大きくすると、プレイヤーの正面に弾が飛んでくる確率が上がる。")]
         [SerializeField] private float _accuracy;
 
-        [Range(5.0f, 20.0f)]
-        [Header("ボスを追跡する速さ")]
-        [SerializeField] private float _moveSpeed;
+        [Header("移動速度の設定")]
+        [SerializeField] private MoveSpeedSettings _moveSpeed;
 
         public FireMode FireMode => _fireMode;
         public ExpandSettings Expand => _expand;
         public int MaxHp => _maxHp;
         public float FireRate => _fireRate;
         public float Accuracy => _accuracy;
-        public float MoveSpeed => _moveSpeed;
+        public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public Armor Armor { get => Armor.None; }
     }
 }

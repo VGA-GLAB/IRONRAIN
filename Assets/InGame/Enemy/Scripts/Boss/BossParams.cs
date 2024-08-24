@@ -115,17 +115,6 @@ namespace Enemy.Boss
         public float ChargeSpeed => _chargeSpeed;
     }
 
-    // 特に弄る必要ないもの、設定できるが現状必要ないもの。
-    [System.Serializable]
-    public class OtherSettings
-    {
-        [Range(0.1f, 1.0f)]
-        [Tooltip("プレイヤーに接近する際のホーミング力")]
-        [SerializeField] private float _approachHomingPower = 0.5f;
-
-        public float ApproachHomingPower => _approachHomingPower;
-    }
-
     /// <summary>
     /// ボスキャラクターのパラメータ
     /// プランナーが弄る。
@@ -145,16 +134,10 @@ namespace Enemy.Boss
         [Header("QTEの設定")]
         [SerializeField] private QteSettings _qte;
 
-        [Space(10)]
-
-        [Header("特に弄る必要ない設定")]
-        [SerializeField] private OtherSettings _other;
-
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
         public QteSettings Qte => _qte;
-        public OtherSettings Other => _other;
 
         // 雑魚と共通化させるために一応パラメータを設定しておく。
         public int MaxHp => int.MaxValue / 2;
