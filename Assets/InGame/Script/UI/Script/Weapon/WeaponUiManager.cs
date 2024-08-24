@@ -78,6 +78,7 @@ public class WeaponUiManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _weaponController = FindObjectOfType<PlayerWeaponController>();
         //データを取ってくる
         if (_weaponController != null)
         {
