@@ -236,4 +236,18 @@ public class LaunchManager : MonoBehaviour
         canvasGroup1.alpha = 1f;
         videoPlayer.gameObject.SetActive(false);
     }
+
+    /// <summary>
+    /// シーケンスをスキップする際に呼ぶ処理
+    /// </summary>
+    public void SkipLaunchSequence()
+    {
+        _launcherUi.alpha = 1;
+        _assultUi.alpha = 1;
+        _rocketLauncherUi.alpha = 1;
+        _announceUi.alpha = 1;
+        _detailUi.alpha = 1;
+        _minimapUi.alpha = 1;
+        _activeUiObject.gameObject.SetActive(false);
+    }
 }
