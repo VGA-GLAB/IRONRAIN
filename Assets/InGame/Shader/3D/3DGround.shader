@@ -135,9 +135,7 @@ Shader "Custom/3DGround"
 
             float _PlanarWeight;
 
-            float _CurveFactor;
-            float _CurveOffset;
-            float _CurveStrength;
+            VERTEX_CURVE_UNIFORM;
             CBUFFER_END
 
             float3 CulcBias(float3 absNormal, float weight)
@@ -161,7 +159,7 @@ Shader "Custom/3DGround"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 
                 VertexPositionInputs curvedVertexInput;
-                CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength,
+                CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, _CurveHeightOffset,
                     GetVertexPositionInputs(input.positionOS.xyz), curvedVertexInput);
                 
                 VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS, input.tangentOS);

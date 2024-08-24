@@ -37,7 +37,7 @@ Varyings CurveTerrainShadowCasterVertex(Attributes input)
     TerrainInstancing(input.PositionOS, input.NormalOS, input.UV0);
 
     VertexPositionInputs curvedPositionInput;
-    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, GetVertexPositionInputs(input.PositionOS), curvedPositionInput);
+    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, _CurveHeightOffset,GetVertexPositionInputs(input.PositionOS), curvedPositionInput);
     
     float3 positionWS = curvedPositionInput.positionWS;
     float3 normalWS = TransformObjectToWorldNormal(input.NormalOS);
