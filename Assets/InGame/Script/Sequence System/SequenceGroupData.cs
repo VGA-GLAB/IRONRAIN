@@ -16,9 +16,16 @@ namespace IronRain.SequenceSystem
 
         public void SetData(SequenceData data)
         {
-            foreach (var seq in _sequences)
+            for (int i = 0; i < _sequences.Length; i++)
             {
-                seq.SetData(data);
+                try
+                {
+                    _sequences[i].SetData(data);
+                }
+                catch (Exception e)
+                {
+                    ExceptionReceiver(e, i);
+                }
             }
         }
 
@@ -49,9 +56,16 @@ namespace IronRain.SequenceSystem
         /// <summary>スキップする関数</summary>
         public void Skip()
         {
-            foreach (var seq in _sequences)
+            for (int i = 0; i < _sequences.Length; i++)
             {
-                seq.Skip();
+                try
+                {
+                    _sequences[i].Skip();
+                }
+                catch (Exception e)
+                {
+                    ExceptionReceiver(e, i);
+                }
             }
         }
     }

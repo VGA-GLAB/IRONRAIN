@@ -32,7 +32,6 @@ namespace IronRain.LensFlare
             var sqrtDist = (transform.position - _forwardCamera.transform.position).magnitude;
             var time = sqrtDist / _distance;
             
-            Debug.Log($"{sqrtDist} {time}");
             // アルファを更新
             var alpha = _alphaCurve.Evaluate(time);
             foreach (var mat in _childrenMats)

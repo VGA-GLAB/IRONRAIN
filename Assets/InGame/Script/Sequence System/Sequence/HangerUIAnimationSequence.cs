@@ -58,6 +58,24 @@ namespace IronRain.SequenceSystem
 
         public void Skip()
         {
+            switch (_animType)
+            {
+                case AnimType.StartActive:
+                {
+                    _launchManager.SkipStartActive();
+                    break;
+                }
+                case AnimType.ButtonActive:
+                {
+                    _launchManager.SkipButtonActive();
+                    break;
+                }
+                case AnimType.WaitLaunch:
+                {
+                    _launchManager.SkipLaunchAnimation();
+                    break;
+                }
+            }
         }
     }
 }

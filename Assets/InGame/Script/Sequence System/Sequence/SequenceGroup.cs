@@ -15,9 +15,16 @@ namespace IronRain.SequenceSystem
         
         public void SetData(SequenceData data)
         {
-            foreach (var sec in _sequences)
+            for (int i = 0; i < _sequences.Length; i++)
             {
-                sec.SetData(data);
+                try
+                {
+                    _sequences[i].SetData(data);
+                }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    ExceptionReceiver(e, i);
+                }
             }
         }
 
@@ -57,7 +64,14 @@ namespace IronRain.SequenceSystem
         {
             for (int i = 0; i < _sequences.Length; i++)
             {
-                _sequences[i].Skip();
+                try
+                {
+                    _sequences[i].Skip();
+                }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    ExceptionReceiver(e, i);
+                }
             }
         }
     }
