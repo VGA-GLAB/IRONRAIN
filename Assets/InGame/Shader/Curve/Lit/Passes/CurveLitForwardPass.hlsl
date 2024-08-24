@@ -17,7 +17,7 @@ Varyings CurveLitPassVertex(Attributes input)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
     VertexPositionInputs curvedPosInput;
-    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, GetVertexPositionInputs(input.PositionOS.xyz), curvedPosInput);
+    CalcVertexCurve(_CurveFactor, _CurveOffset, _CurveStrength, _CurveHeightOffset,GetVertexPositionInputs(input.PositionOS.xyz), curvedPosInput);
 
     VertexNormalInputs normalInput = GetVertexNormalInputs(input.NormalOS, input.TangentOS);
 

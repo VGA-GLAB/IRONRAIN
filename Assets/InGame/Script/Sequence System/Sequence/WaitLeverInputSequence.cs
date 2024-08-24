@@ -34,10 +34,10 @@ namespace IronRain.SequenceSystem
                 }
                 case LeverType.SortieInput:
                 {
-                    await UniTask.WaitUntil(() =>
-                        InputProvider.Instance.ThreeLeverDir.y > 0 ||
-                        InputProvider.Instance.FourLeverDir.y > 0,
-                        cancellationToken: ct);
+                    await UniTask.WhenAll(
+                        UniTask.WaitUntil(() => InputProvider.Instance.ThreeLeverDir.y > 0, cancellationToken: ct),
+                        UniTask.WaitUntil(() => InputProvider.Instance.FourLeverDir.y > 0, cancellationToken: ct)
+                    );
                     break;
                 }
                 default:
