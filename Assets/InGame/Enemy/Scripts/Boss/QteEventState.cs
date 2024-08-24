@@ -117,7 +117,7 @@ namespace Enemy.Boss
                 Ref.BlackBoard.Area.Point,
                 Ref.BlackBoard.PlayerArea.Point,
                 Ref.BlackBoard.PlayerDirection,
-                Ref.BossParams.Other.ApproachHomingPower
+                0.5f // 適当。
                 );
             float spd = Ref.BossParams.Qte.ToPlayerFrontMoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;

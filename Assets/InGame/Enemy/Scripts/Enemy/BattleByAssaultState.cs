@@ -48,12 +48,12 @@
             AttackTrigger();
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Battle;
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);

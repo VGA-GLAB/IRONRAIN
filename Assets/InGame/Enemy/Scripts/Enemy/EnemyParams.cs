@@ -105,6 +105,10 @@ namespace Enemy
         [Header("移動速度の設定")]
         [SerializeField] private MoveSpeedSettings _moveSpeed;
 
+        [Min(0)]
+        [Header("レーン移動する際のディレイ")]
+        [SerializeField] private float _laneChangeDelay = 1.0f;
+
         [Header("攻撃の設定")]
         [SerializeField] private AttackSettings _attack;
 
@@ -116,20 +120,19 @@ namespace Enemy
         [SerializeField] private CommonParams _common;
 
         public SlotSettings Slot => _slot;
+        public int SequenceID => _sequenceID;
         public int MaxHp => _maxHp;
         public int LifeTime => _lifeTime;
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
+        public float LaneChangeDelay => _laneChangeDelay;
         public AttackSettings Attack => _attack;
         public SpecialCondition SpecialCondition => _specialCondition;
         public CommonParams Common => _common;
+        public EnemyType Type => Common != null ? Common.Type : EnemyType.Dummy;
 
         // 視界に入った敵を攻撃するという処理になっている都合上、同じ値を参照するようにしている。
         // 攻撃以外にも視界の用途が出来た場合は専用のパラメータを用意し、攻撃範囲と分ける必要あり。
         public float FovRadius => _attack.TriggerRange;
-
-        // インターフェースで外部から参照する。
-        public EnemyType Type => Common != null ? Common.Type : EnemyType.Dummy;
-        public int SequenceID => _sequenceID;
 
         // インスペクターでパラメータ弄った場合に勝手に名前を変更する。
         private void OnValidate()
