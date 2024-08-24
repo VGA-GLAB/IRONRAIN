@@ -119,10 +119,11 @@ public class RaderMap : MonoBehaviour
             List<GameObject> fannels = new List<GameObject>();
             //ボスのx軸
             float bossXPosition = 0f;
+            float bossYPosition = 0f;
             
             //ここから
             //軸の判定
-            string bossDirection;
+            string bossDirection = null;
             
             //ボス戦用のUi処理
             for (int i = 0; i < _enemies.Count; i++)
@@ -143,17 +144,13 @@ public class RaderMap : MonoBehaviour
                         //敵の高さとプレイヤーの高さを合わせる
                         enemyDir.y = _player.position.y;
                         enemyDir = _enemies[i].transform.position - _player.position;
-
-                        enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
-                        enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
-                        //赤点の位置を決める
-                        agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
-                        bossXPosition = enemyDir.x * _radius + _offset.x;
-                        
+                        Vector3 enemy = _enemies[i].transform.position;
+                        enemy.y = _player.position.y;
+                        enemy = _player.position - _enemies[i].transform.position;
                         //プレイヤーに対するボスの位置を取得
                         //各軸の絶対値を取得
-                        float absX = Mathf.Abs(enemyDir.x);
-                        float absz = Mathf.Abs(enemyDir.z);
+                        float absX = Mathf.Abs(enemy.x);
+                        float absz = Mathf.Abs(enemy.z);
                         
                         // 最大の軸を判定
                         if (absX >= absz)
@@ -161,6 +158,7 @@ public class RaderMap : MonoBehaviour
                             if (enemyDir.x >= 0)
                             {
                                 bossDirection = "Right";
+                                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
                             }
                             else
                             {
@@ -178,6 +176,14 @@ public class RaderMap : MonoBehaviour
                                 bossDirection = "Back";
                             }
                         }
+                        
+                        Debug.Log(bossDirection);
+                        enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
+                        enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                        bossXPosition = enemyDir.x * _radius + _offset.x;
+                        bossYPosition = enemyDir.z * _radius + _offset.y;
                         
                     } //ボスの位置を決める
                     else
@@ -209,71 +215,213 @@ public class RaderMap : MonoBehaviour
             float centerXPosition = float.MinValue;
             int leftCount = 1;
             int rightCount = 1;
-            
-            
-            
-            //真ん中を決める
-            for(int i = 0; i < totalFunnels; i++)
+
+
+            if (bossDirection == "Forward")
             {
-                AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
-                Vector3 enemyDir = sortedFunnels[i].transform.position;
-                // ボスから敵への方向を計算
-                enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
-
-                //y軸を決める
-                enemyDir.y = _hight + enemyDir.y * _hightLeverage;
-                float adjustment = 0f;
-                //x軸を決める
-                if (i == 0)
+                //真ん中を決める
+                for(int i = 0; i < totalFunnels; i++)
                 {
-                    //最後に配置した位置を設定
-                    rightLastXPosition = enemyDir.x;
-                    leftLastXPosition = enemyDir.x;
-                    //enemyDir.x += adjustment;
-                    enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
-                                                                               // プレイヤーの向きに合わせてベクトルを回転
-                    enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir;
+                    AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
+                    Vector3 enemyDir = sortedFunnels[i].transform.position;
+                    // ボスから敵への方向を計算
+                    enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
 
-                    //赤点の位置を決める
-                    agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _widthLeverage + _offset.x, enemyDir.y * _radius + _offset.y, _offset.z);
-                    centerXPosition = enemyDir.x * _radius * _widthLeverage + _offset.x;
-                }
-                else
-                {
-                    if(enemyDir.x >= 0)
+                    //y軸を決める
+                    enemyDir.y = _hight + enemyDir.y * _hightLeverage;
+                    float adjustment = 0f;
+                    //x軸を決める
+                    if (i == 0)
                     {
-                        if (Mathf.Abs(enemyDir.x - rightLastXPosition) <= _widthInterval)
-                        {
-                            //enemyDir.x = enemyDir.x + _widthInterval;
-                            adjustment = rightLastXPosition + _widthInterval - enemyDir.x;
-                        }
-                        //enemyDir.x = rightLastXPosition + _widthInterval;
-                        //rightLastXPosition += _widthInterval;// 最後の位置を更新
+                        //最後に配置した位置を設定
+                        rightLastXPosition = enemyDir.x;
+                        leftLastXPosition = enemyDir.x;
+
                         //赤点の位置を決める
-                        agent.RectTransform.anchoredPosition3D = new Vector3(centerXPosition - _widthInterval * leftCount, enemyDir.y * _radius + _offset.y, _offset.z);
-                        leftCount++;
+                        agent.RectTransform.anchoredPosition3D = new Vector3(bossXPosition, bossYPosition + _hight, _offset.z);
                     }
                     else
                     {
-                        if (Mathf.Abs(enemyDir.x - leftLastXPosition) <= _widthInterval)
+                        if (enemyDir.x >= 0)
                         {
-                            //enemyDir.x = leftLastXPosition - _widthInterval; // 左側の間隔を確保
-                            adjustment = rightLastXPosition - _widthInterval - enemyDir.x;
+                            //enemyDir.x = rightLastXPosition + _widthInterval;
+                            //rightLastXPosition += _widthInterval;// 最後の位置を更新
+                            //赤点の位置を決める
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossXPosition - _widthInterval * leftCount, bossYPosition + _hight,
+                                _offset.z);
+                            leftCount++;
                         }
-                        //enemyDir.x = leftLastXPosition - _widthInterval; // 最後の位置を更新
-                        //leftLastXPosition -= _widthInterval;
-                        agent.RectTransform.anchoredPosition3D = new Vector3(centerXPosition + _widthInterval * rightCount, enemyDir.y * _radius + _offset.y, _offset.z);
-                        rightCount++;
+                        else
+                        {
+                            //enemyDir.x = leftLastXPosition - _widthInterval; // 最後の位置を更新
+                            //leftLastXPosition -= _widthInterval;
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossXPosition + _widthInterval * rightCount, bossYPosition + _hight,
+                                _offset.z);
+                            rightCount++;
+                        }
                     }
                 }
-                //enemyDir.x += adjustment;
+            }
+            else if (bossDirection == "Back")
+            {
+                //真ん中を決める
+                for (int i = 0; i < totalFunnels; i++)
+                {
+                    AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
+                    Vector3 enemyDir = sortedFunnels[i].transform.position;
+                    // ボスから敵への方向を計算
+                    enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
+
+                    //y軸を決める
+                    enemyDir.y = _hight - enemyDir.y * _hightLeverage;
+                    float adjustment = 0f;
+                    //x軸を決める
+                    if (i == 0)
+                    {
+                        //最後に配置した位置を設定
+                        rightLastXPosition = enemyDir.x;
+                        leftLastXPosition = enemyDir.x;
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(bossXPosition, bossYPosition - _hight, _offset.z);
+                    }
+                    else
+                    {
+                        if (enemyDir.x >= 0)
+                        {
+                            //enemyDir.x = rightLastXPosition + _widthInterval;
+                            //rightLastXPosition += _widthInterval;// 最後の位置を更新
+                            //赤点の位置を決める
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossXPosition + _widthInterval * leftCount, bossYPosition - _hight,
+                                _offset.z);
+                            leftCount++;
+                        }
+                        else
+                        {
+                            //enemyDir.x = leftLastXPosition - _widthInterval; // 最後の位置を更新
+                            //leftLastXPosition -= _widthInterval;
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                centerXPosition - _widthInterval * rightCount, bossYPosition - _hight,
+                                _offset.z);
+                            rightCount++;
+                        }
+                    }
+                }
+            }
+            else if (bossDirection == "Right")
+            {
+                //真ん中を決める
+                for (int i = 0; i < totalFunnels; i++)
+                {
+                    AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
+                    Vector3 enemyDir = sortedFunnels[i].transform.position;
+                    // ボスから敵への方向を計算
+                    enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
+
+                    //y軸を決める
+                    enemyDir.y = _hight + enemyDir.y * _hightLeverage;
+                    float adjustment = 0f;
+                    //x軸を決める
+                    if (i == 0)
+                    {
+                        //最後に配置した位置を設定
+                        rightLastXPosition = enemyDir.x;
+                        leftLastXPosition = enemyDir.x;
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(bossYPosition + _hight,  bossXPosition, _offset.z);
+                    }
+                    else
+                    {
+                        if (enemyDir.x >= 0)
+                        {
+                            //enemyDir.x = rightLastXPosition + _widthInterval;
+                            //rightLastXPosition += _widthInterval;// 最後の位置を更新
+                            //赤点の位置を決める
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossYPosition + _hight, bossXPosition - _widthInterval * leftCount,
+                                _offset.z);
+                            leftCount++;
+                        }
+                        else
+                        {
+                            if (Mathf.Abs(enemyDir.x - leftLastXPosition) <= _widthInterval)
+                            {
+                                //enemyDir.x = leftLastXPosition - _widthInterval; // 左側の間隔を確保
+                                adjustment = rightLastXPosition - _widthInterval - enemyDir.x;
+                            }
+
+                            //enemyDir.x = leftLastXPosition - _widthInterval; // 最後の位置を更新
+                            //leftLastXPosition -= _widthInterval;
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossYPosition + _hight, bossXPosition + _widthInterval * rightCount,
+                                _offset.z);
+                            rightCount++;
+                        }
+                    }
+                }
+                
+            }
+            else
+            {
+                //真ん中を決める
+                for (int i = 0; i < totalFunnels; i++)
+                {
+                    AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
+                    Vector3 enemyDir = sortedFunnels[i].transform.position;
+                    // ボスから敵への方向を計算
+                    enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
+
+                    //y軸を決める
+                    enemyDir.y = _hight + enemyDir.y * _hightLeverage;
+                    float adjustment = 0f;
+                    //x軸を決める
+                    if (i == 0)
+                    {
+                        //最後に配置した位置を設定
+                        rightLastXPosition = enemyDir.x;
+                        leftLastXPosition = enemyDir.x;
+                        //赤点の位置を決める
+                        agent.RectTransform.anchoredPosition3D = new Vector3(bossYPosition - _hight,  bossXPosition, _offset.z);
+                    }
+                    else
+                    {
+                        if (enemyDir.x >= 0)
+                        {
+                            //enemyDir.x = rightLastXPosition + _widthInterval;
+                            //rightLastXPosition += _widthInterval;// 最後の位置を更新
+                            //赤点の位置を決める
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossYPosition - _hight, bossXPosition + _widthInterval * leftCount,
+                                _offset.z);
+                            leftCount++;
+                        }
+                        else
+                        {
+                            if (Mathf.Abs(enemyDir.x - leftLastXPosition) <= _widthInterval)
+                            {
+                                //enemyDir.x = leftLastXPosition - _widthInterval; // 左側の間隔を確保
+                                adjustment = rightLastXPosition - _widthInterval - enemyDir.x;
+                            }
+
+                            //enemyDir.x = leftLastXPosition - _widthInterval; // 最後の位置を更新
+                            //leftLastXPosition -= _widthInterval;
+                            agent.RectTransform.anchoredPosition3D = new Vector3(
+                                bossYPosition - _hight, bossXPosition - _widthInterval * rightCount,
+                                _offset.z);
+                            rightCount++;
+                        }
+                    }
+                }
+            }
+            //enemyDir.x += adjustment;
                 //enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
                 //// プレイヤーの向きに合わせてベクトルを回転
                 //enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir;
 
                 ////赤点の位置を決める
                 //agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _widthLeverage + _offset.x, enemyDir.y * _radius + _offset.y, _offset.z);
-            }
         }
     }
 
