@@ -10,7 +10,7 @@ namespace Enemy
         public enum Type
         {
             None,
-            PlayerDetect,     // プレイヤーを発見状態にさせる。
+            Spawn,     // プレイヤーを発見状態にさせる。
             Pause,            // ポーズ。
             Resume,           // ポーズ解除。
             Attack,           // 攻撃させる。
