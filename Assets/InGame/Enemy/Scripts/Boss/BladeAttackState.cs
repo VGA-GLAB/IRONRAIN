@@ -270,10 +270,38 @@ namespace Enemy.Boss
 
         protected override BattleActionStep Stay()
         {
+            LookAtPlayer();
+
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _timer -= dt;
             if (_timer <= 0) return Next[0];
             else return this;
+        }
+
+        private void LookAtPlayer()
+        {
+            BlackBoard bb = Ref.BlackBoard;
+            float dt = bb.PausableDeltaTime;
+
+            bb.PlayerLookElapsed += dt;
+
+            // ボスの前方向に射撃するファンネルを機能させるために一定間隔。
+            float duration = Ref.BossParams.LookDuration;
+            if (bb.PlayerLookElapsed > duration)
+            {
+                bb.PlayerLookElapsed = 0;
+
+                Vector3 pd = bb.PlayerDirection;
+                pd.y = 0;
+                bb.LookDirection = pd;
+            }
+
+            const float LookSpeed = 5.0f; // 適当。
+            Vector3 a = Ref.Body.Forward;
+            Vector3 b = bb.LookDirection;
+            Vector3 look = Vector3.Lerp(a, b, dt * LookSpeed);
+
+            Ref.Body.LookForward(look);
         }
     }
 
