@@ -116,11 +116,11 @@ namespace IronRain.Player
 
         public void MulchShot()
         {
-            Transform boss = GameObject.Find("Enemy_Boss").transform;
-            for (int i = 0; i < 10; i++) 
+            var enemys = _playerEnvroment.RaderMap.MultiLockEnemys; 
+            for (int i = 0; i < enemys.Count; i++) 
             {
                 HomingMissile m = GameObject.Instantiate(_homingMissilePrefab, _homingMissilePos.position, Quaternion.identity).GetComponent<HomingMissile>();
-                Transform[] funnels = boss.GetComponentsInChildren<Transform>();
+                Transform[] funnels = enemys[i].GetComponentsInChildren<Transform>();
                 Transform target = funnels[Random.Range(0, funnels.Length)];
                 float x = Random.value;
                 float y = Random.value;
