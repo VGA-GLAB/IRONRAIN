@@ -32,14 +32,14 @@ namespace IronRain.Player
 
         private void Start()
         {
-            if (_lockOnEnemy.GetComponent<Enemy.EnemyController>().TryFindShootingTarget(out Transform shootingTarget))
+            if (_lockOnEnemy && _lockOnEnemy.GetComponent<Enemy.EnemyController>().TryFindShootingTarget(out Transform shootingTarget))
             {
                 _shootingTarget = shootingTarget;
             }
 
             if (!_shootingTarget) 
             {
-                Debug.LogError($"{_lockOnEnemy.name}のshootingTargetがNullです");
+                //Debug.LogError($"shootingTargetがNullです");
             }
         }
         private void Update()
