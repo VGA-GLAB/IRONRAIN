@@ -28,13 +28,16 @@ public class RaderMap : MonoBehaviour
     [SerializeField] private float _scaleFactor = 1.5f;
     [Header("ロックオン可能距離")]
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
-    [Header("ボス戦")]
+
+    [Header("ボス戦")] [Header("ボス戦でのUiの位置")] [SerializeField]
+    private Vector3 _bossPosition;
     [Header("ボス戦フラグ")]
     [SerializeField, Tooltip("ボス戦フラグ")] public bool IsBossScene = false;
     [Header("ボス戦でのレーダーの半径")]
     [SerializeField] private float _bossRadius = 0.001f;
     [Header("ボス戦でのレーダーの端までの長さ")]
     [SerializeField] private float _bossRaderLength = 120f;
+    
     [Header("ボス戦でレーダー横の倍率")]
     [SerializeField] private float _widthLeverage = 1f;
     [Header("ボス戦でのファンネルの縦方向の位置補正")]
@@ -116,6 +119,11 @@ public class RaderMap : MonoBehaviour
             List<GameObject> fannels = new List<GameObject>();
             //ボスのx軸
             float bossXPosition = 0f;
+            
+            //ここから
+            //軸の判定
+            string bossDirection;
+            
             //ボス戦用のUi処理
             for (int i = 0; i < _enemies.Count; i++)
             {
@@ -141,6 +149,36 @@ public class RaderMap : MonoBehaviour
                         //赤点の位置を決める
                         agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
                         bossXPosition = enemyDir.x * _radius + _offset.x;
+                        
+                        //プレイヤーに対するボスの位置を取得
+                        //各軸の絶対値を取得
+                        float absX = Mathf.Abs(enemyDir.x);
+                        float absz = Mathf.Abs(enemyDir.z);
+                        
+                        // 最大の軸を判定
+                        if (absX >= absz)
+                        {
+                            if (enemyDir.x >= 0)
+                            {
+                                bossDirection = "Right";
+                            }
+                            else
+                            {
+                                bossDirection = "Left";
+                            }
+                        }
+                        else
+                        {
+                            if (enemyDir.z >= 0)
+                            {
+                                bossDirection = "Forward";
+                            }
+                            else
+                            {
+                                bossDirection = "Back";
+                            }
+                        }
+                        
                     } //ボスの位置を決める
                     else
                     {
@@ -171,6 +209,9 @@ public class RaderMap : MonoBehaviour
             float centerXPosition = float.MinValue;
             int leftCount = 1;
             int rightCount = 1;
+            
+            
+            
             //真ん中を決める
             for(int i = 0; i < totalFunnels; i++)
             {
@@ -492,6 +533,7 @@ public class RaderMap : MonoBehaviour
         IsBossScene = true;
         _radius = _bossRadius;
         _raderLength = _bossRaderLength;
+        _center.rectTransform.localPosition = new Vector3(_bossPosition.x, _bossPosition.y, _bossPosition.z);
     }
     public async UniTask WaitTouchPanelAsync(CancellationToken ct)
     {
