@@ -1,4 +1,5 @@
 ﻿using Enemy.Extensions;
+using Enemy.Funnel;
 using UnityEngine;
 
 namespace Enemy.DebugUse
@@ -17,6 +18,8 @@ namespace Enemy.DebugUse
         [SerializeField] private int _range = 10;
         [Header("カメラ制御を行う")]
         [SerializeField] private Transform _camera;
+
+        [SerializeField] private HomingMissile _missile;
 
         private Transform _transform;
 
@@ -58,6 +61,8 @@ namespace Enemy.DebugUse
             if (Input.GetKeyDown(KeyCode.Space)) Attack(Const.PlayerRifleWeaponName);
             // 近接攻撃
             if (Input.GetKeyDown(KeyCode.Return)) Attack(Const.PlayerMeleeWeaponName);
+
+            if (Input.GetKeyDown(KeyCode.LeftControl)) Missile();
         }
 
         // レイキャストで攻撃
@@ -85,6 +90,17 @@ namespace Enemy.DebugUse
             Vector3 p = t.position + t.forward * _forwardOffset;
             Vector3 q = p + t.forward * _range;
             return (p, q);
+        }
+
+        // ミサイル
+        private void Missile()
+        {
+            FunnelController[] funnel = FindObjectsOfType<FunnelController>();
+            foreach (FunnelController f in funnel)
+            {
+                HomingMissile m = Instantiate(_missile, transform.position, Quaternion.identity);
+                m.Fire(f.transform, Vector3.up);
+            }
         }
 
         // カメラをプレイヤーの正面を捉えるように制御する

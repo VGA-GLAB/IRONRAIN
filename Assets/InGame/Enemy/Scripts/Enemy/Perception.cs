@@ -108,7 +108,7 @@ namespace Enemy
             {
                 EnemyOrder.Type t = order.OrderType;
 
-                if (t == EnemyOrder.Type.PlayerDetect) { PlayerDetect(); SpawnPoint(order.Point); }
+                if (t == EnemyOrder.Type.Spawn) { PlayerDetect(); }
                 else if (t == EnemyOrder.Type.Attack) { AttackTrigger(); }
                 else if (t == EnemyOrder.Type.Pause) { Pause(true); }
                 else if (t == EnemyOrder.Type.Resume) { Pause(false); }
@@ -122,7 +122,6 @@ namespace Enemy
             }
 
             void PlayerDetect() { bb.IsPlayerDetect = true; }
-            void SpawnPoint(Vector3? p) { bb.SpawnPoint = p; }
             void AttackTrigger() { bb.OrderedAttack.Order(); }
             void Pause(bool b) { bb.IsPause = b; }
             void Die() { _hitPoint.Damage(int.MaxValue / 2, ""); }
