@@ -29,7 +29,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            _enemyManager.DetectPlayer(_targetSeq);
+            _enemyManager.Spawn(_targetSeq);
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
         }
@@ -38,7 +38,7 @@ namespace IronRain.SequenceSystem
         {
             if (_isSkipSpawn)
             {
-                _enemyManager.DetectPlayer(_targetSeq);
+                _enemyManager.Spawn(_targetSeq);
             }
         }
     }
