@@ -5,16 +5,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using UniRx;
+using System;
 
 namespace IronRain.Player
 {
     [RequireComponent(typeof(BulletPool))]
-    public abstract class PlayerWeaponBase : MonoBehaviour
+    public abstract class PlayerWeaponBase : MonoBehaviour, IDisposable
     {
         public PlayerWeaponParams WeaponParam => _params;
         public int CurrentBullets => _currentBullets;
         public GameObject WeaponObject => _weaponObject;
-        public ReadOnlyReactiveProperty<bool> IsReload => _isReload;
+        public IReactiveProperty<bool> IsReload => _isReload;
 
         [SerializeField] protected GameObject _weaponObject;
         [SerializeField] protected PlayerWeaponParams _params;
@@ -33,7 +34,7 @@ namespace IronRain.Player
         [Tooltip("射撃中かどうか")]
         private bool _isFire;
         [Tooltip("リロード中かどうか")]
-        private ReactiveProperty<bool> _isReload;
+        private ReactiveProperty<bool> _isReload = new();
         private PlayerEnvroment _playerEnvroment;
         protected EffectOwnerTime _effectOwnerTime = new();
 
@@ -128,6 +129,11 @@ namespace IronRain.Player
             await UniTask.WaitForSeconds(_params.ReloadTime,false,PlayerLoopTiming.Update, this.GetCancellationTokenOnDestroy());
             _currentBullets = _params.MagazineSize;
             _isReload.Value = false;
+        }
+
+        public virtual void Dispose()
+        {
+            _isReload.Dispose();
         }
 
         public class EffectOwnerTime : IOwnerTime
