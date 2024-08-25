@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Enemy.Boss
 {
     /// <summary>
-    /// 戦闘中、ファンネルに攻撃を命じるステート。
+    /// 戦闘中、点と点の間を移動するステート。
     /// </summary>
-    public class FunnelAttackState : BattleState
+    public class MoveWaypointState : BattleState
     {
-        public FunnelAttackState(RequiredRef requiredRef) : base(requiredRef)
+        public MoveWaypointState(RequiredRef requiredRef) : base(requiredRef)
         {
 
         }

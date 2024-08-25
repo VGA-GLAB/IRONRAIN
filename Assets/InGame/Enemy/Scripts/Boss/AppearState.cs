@@ -16,6 +16,10 @@
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Appear;
+
+            // 登場後、戦闘開始と同時にレーダーマップに表示。
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyGenerate();
         }
 
         protected override void Exit()

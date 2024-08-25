@@ -12,7 +12,7 @@ namespace Enemy.Boss
         Delete,
         BladeAttack,
         LauncherFire,
-        FunnelAttack,
+        MoveWaypoint,
         FunnelExpand,
     }
 
@@ -43,7 +43,7 @@ namespace Enemy.Boss
             _states.Add(StateKey.QteEvent, new QteEventState(requiredRef));
             _states.Add(StateKey.Hide, new HideState(requiredRef));
             _states.Add(StateKey.FunnelExpand, new FunnelExpandState(requiredRef));
-            _states.Add(StateKey.FunnelAttack, new FunnelAttackState(requiredRef));
+            _states.Add(StateKey.MoveWaypoint, new MoveWaypointState(requiredRef));
 
             // 初期状態
             _currentState = _states[StateKey.Hide];
