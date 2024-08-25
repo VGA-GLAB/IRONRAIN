@@ -83,9 +83,12 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
-        //パネルに触れた時の音
-        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
-
+        if (!_isMouseFlag)
+        {
+            //パネルに触れた時の音
+            CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+        }
+        
         FingertipCursor(_fingertip, _cursor);
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
