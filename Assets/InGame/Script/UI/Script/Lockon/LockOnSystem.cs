@@ -207,18 +207,16 @@ public class LockOnSystem : MonoBehaviour
         }
         
         await UniTask.Yield();
-
-        if (_temp.Count < 1)
-        {
-            RaderMap radermap = FindObjectOfType<RaderMap>();
-            StartCoroutine(LockonCortinue(radermap.Enemies.Count));
-            return radermap.Enemies;
-        }
-        
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
-        LockOnEnemies(_temp, _lockOn);
-
         LineRendererReset();
+        LockOnEnemies(_temp, _lockOn);
+        RaderMap radermap = FindObjectOfType<RaderMap>();
+        return radermap.Enemies;
+
+        //StartCoroutine(LockonCortinue(radermap.Enemies.Count));
+        
+
+        
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
         // if (_temp.Count < _minMultiLockCount)
@@ -232,9 +230,9 @@ public class LockOnSystem : MonoBehaviour
         //     return await MultiLockOnAsync(token);
         // }
 
-       
-        
-        return _lockOn;
+
+
+        //return _lockOn;
     }
 
     private IEnumerator LockonCortinue(int count)
