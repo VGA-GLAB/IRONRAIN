@@ -7,6 +7,9 @@ namespace Enemy
     /// </summary>
     public class ApproachState : PlayableState
     {
+        private Vector3 _spawnPoint;
+        private float _lerp;
+
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Always()
@@ -18,8 +21,8 @@ namespace Enemy
         {
             Ref.BlackBoard.CurrentState = StateKey.Approach;
 
-            Vector3 initVelo = 
-            Ref.BlackBoard.Velocity = 
+            //Vector3 initVelo = 
+            //Ref.BlackBoard.Velocity = 
 
             // レーダーマップに表示させる。
             AgentScript agent = Ref.AgentScript;
