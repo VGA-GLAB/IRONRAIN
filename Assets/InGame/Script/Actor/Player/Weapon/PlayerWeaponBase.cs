@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
+using UniRx;
 
 namespace IronRain.Player
 {
@@ -13,7 +14,7 @@ namespace IronRain.Player
         public PlayerWeaponParams WeaponParam => _params;
         public int CurrentBullets => _currentBullets;
         public GameObject WeaponObject => _weaponObject;
-        public bool IsReload => _isReload;
+        public ReadOnlyReactiveProperty<bool> IsReload => _isReload;
 
         [SerializeField] protected GameObject _weaponObject;
         [SerializeField] protected PlayerWeaponParams _params;
@@ -32,7 +33,7 @@ namespace IronRain.Player
         [Tooltip("射撃中かどうか")]
         private bool _isFire;
         [Tooltip("リロード中かどうか")]
-        private bool _isReload;
+        private ReactiveProperty<bool> _isReload;
         private PlayerEnvroment _playerEnvroment;
         protected EffectOwnerTime _effectOwnerTime = new();
 
@@ -67,7 +68,7 @@ namespace IronRain.Player
         /// </summary>
         public virtual void ShotTrigger()
         {
-            if (_isFire && 0 < _currentBullets && !_isReload)
+            if (_isFire && 0 < _currentBullets && !_isReload.Value)
             {
                 //後でオブジェクトプールに
                 var bulletCon = _bulletPool.GetBullet(_params.WeaponType);
@@ -84,7 +85,7 @@ namespace IronRain.Player
                 _currentBullets--;
             }
 
-            if (_currentBullets == 0 && !_isReload)
+            if (_currentBullets == 0 && !_isReload.Value)
             {
                 Reload().Forget();
             }
@@ -122,11 +123,11 @@ namespace IronRain.Player
         /// </summary>
         protected virtual async UniTask Reload()
         {
-            _isReload = true;
+            _isReload.Value = true;
             //アニメーション挟む
             await UniTask.WaitForSeconds(_params.ReloadTime,false,PlayerLoopTiming.Update, this.GetCancellationTokenOnDestroy());
             _currentBullets = _params.MagazineSize;
-            _isReload = false;
+            _isReload.Value = false;
         }
 
         public class EffectOwnerTime : IOwnerTime
