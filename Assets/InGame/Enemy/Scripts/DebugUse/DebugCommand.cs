@@ -63,7 +63,7 @@ namespace Enemy.DebugUse
             {
                 if (EventRunButton(i, $"シーケンス {_sequenceID[i]} の敵を生成"))
                 {
-                    _enemyManager.DetectPlayer(_sequenceID[i]);
+                    _enemyManager.Spawn(_sequenceID[i]);
                 }
             }
 
@@ -71,7 +71,7 @@ namespace Enemy.DebugUse
             float offset = _buttonWidth;
             if (EventRunButton(0, "味方機体のイベント再生", offset))
             {
-                _enemyManager.DetectPlayer(3);
+                _enemyManager.Spawn(3);
                 _enemyManager.PlayNpcEvent(3);
             }
 

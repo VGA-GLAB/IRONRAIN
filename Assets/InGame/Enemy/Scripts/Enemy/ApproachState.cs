@@ -7,24 +7,19 @@ namespace Enemy
     /// </summary>
     public class ApproachState : PlayableState
     {
-        // 生成位置からスロットまでLerpで動かす。
-        private Vector3 _spawnPoint;
-        private float _lerp;
-
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
+
+        protected override void Always()
+        {
+
+        }
 
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Approach;
 
-            // 生成位置へワープする。
-            Vector3? spawnPoint = Ref.BlackBoard.SpawnPoint;
-            if(spawnPoint != null)
-            {
-                Ref.Body.Warp((Vector3)spawnPoint);
-            }
-
-            _spawnPoint = Ref.Body.Position;
+            Vector3 initVelo = 
+            Ref.BlackBoard.Velocity = 
 
             // レーダーマップに表示させる。
             AgentScript agent = Ref.AgentScript;

@@ -26,9 +26,6 @@ namespace Enemy
         public Area PlayerArea { get; set; }
         public Area Slot { get; set; }
 
-        // 生成後、画面に表示させる際の位置。
-        public Vector3? SpawnPoint { get; set; }
-
         // 現在実行中のステート。ステート側が書き込む。
         public StateKey CurrentState { get; set; }
 
@@ -40,6 +37,8 @@ namespace Enemy
         public Vector3 PlayerDirection { get; set; }
         // プレイヤーとの距離
         public float PlayerDistance { get; set; }
+        // 現在の移動速度。複数のステート間で使用する。
+        public Vector3 Velocity { get; set; }
 
         // 残り戦闘時間
         public float LifeTime { get; set; }
