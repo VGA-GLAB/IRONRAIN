@@ -11,29 +11,6 @@ namespace Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
-        //public enum Sequence
-        //{
-        //    None,           
-        //    FirstAnaunnce, // 追跡:最初に敵が1体だけ出てくる。
-        //    Avoidance,     // 追跡:敵が先に攻撃してくる。
-        //    Attack,        // 追跡:プレイヤーが1機倒す。
-        //    TouchPanel,    // 追跡:敵を複数対出す。
-        //    Lever,         // 追跡:レバー操作。(敵は関係なし？)
-        //    QTETutorial,   // 追跡:盾持ちが出現、QTEする。
-        //    MultiBattle,   // 追跡:乱戦中に味方機が登場。
-        //    Purge,         // 追跡:装備パージ。(敵は関係なし？)
-        //    Fall,          // ボス:時期が落下。
-        //    BossStart,     // ボス:ボス戦開始。
-        //    FirstFunnel,   // ボス:ファンネル展開
-        //    ToggleButton,  // ボス:多重ロックオン(敵は関係なし？)
-        //    SecondFunnel,  // ボス:ファンネル復活
-        //    BossAgain,     // ボス:通常戦闘
-        //    BreakLeftArm,  // ボス:プレイヤー左腕破壊。
-        //    FirstBossQTE,  // ボス:QTE1回目
-        //    SecondQTE,     // ボス:QTE2回目
-        //    BossEnd,       // ボス:ボス戦終了演出。
-        //}
-
         // 登録されたボス。
         private BossController _boss;
         // 登録された敵。
@@ -136,51 +113,13 @@ namespace Enemy
             }
         }
 
-        // こっちはシーン上に置いた位置からそのまま出現するため
-        // 後々にSpawnメソッドを呼ぶようにSequence側を書き換える必要あり。
         /// <summary>
         /// 引数で指定したシーケンスに登場する敵全員に対して
         /// 画面上に出現、プレイヤーに接近するように命令する。
         /// </summary>
-        public void DetectPlayer(int id)
+        public void Spawn(int id)
         {
-            OrderToEnemies(id, EnemyOrder.Type.PlayerDetect);
-        }
-
-        /// <summary>
-        /// 引数で指定したシーケンスに登場する敵全員に対して
-        /// 画面上に出現、プレイヤーに接近するように命令する。
-        /// </summary>
-        /// <param name="point">出現位置</param>
-        public void Spawn(Vector3 point, int id)
-        {
-            // 命令をプレイヤー検出に書き換え。
-            _order.OrderType = EnemyOrder.Type.PlayerDetect;
-
-            // シーケンスの敵全体の中心を求める。
-            Vector3 center = Vector3.zero;
-            int length = 0;
-            foreach (EnemyController e in _enemies)
-            {
-                if (e.Params.SequenceID == id)
-                {
-                    center += e.transform.position;
-                    length++;
-                }
-            }
-            center /= length;
-
-            // 中心点を引数の位置としてそこからのベクトルを足す。
-            foreach (EnemyController e in _enemies)
-            {
-                if (e.Params.SequenceID == id)
-                {
-                    Vector3 dist = center - e.transform.position;
-                    _order.Point = point + dist;
-                    
-                    e.Order(_order);
-                }
-            }
+            OrderToEnemies(id, EnemyOrder.Type.Spawn);
         }
 
         /// <summary>
