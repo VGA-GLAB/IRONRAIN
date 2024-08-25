@@ -108,7 +108,7 @@ namespace IronRain.Player
                 || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonAttack)
                 || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
                 || !_isShot
-                || !CurrentWeapon.IsReload) return;
+                || CurrentWeapon.IsReload) return;
 
             OnShot?.Invoke();
             _playerWeaponList[_currentWeaponIndex].ShotTrigger();
