@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Cysharp.Threading.Tasks;
 using Oculus.Interaction;
 using System.Collections.Generic;
@@ -207,26 +208,44 @@ public class LockOnSystem : MonoBehaviour
         
         await UniTask.Yield();
 
+        if (_temp.Count < 1)
+        {
+            RaderMap radermap = FindObjectOfType<RaderMap>();
+            StartCoroutine(LockonCortinue(radermap.Enemies.Count));
+            return radermap.Enemies;
+        }
+        
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         LockOnEnemies(_temp, _lockOn);
 
         LineRendererReset();
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
-        if (_temp.Count < _minMultiLockCount)
-        {
-            foreach(Transform t in _temp)
-            {
-                //TargetのロックオンUiをオンにする
-                var enemyUi = t.GetComponent<EnemyUi>();
-                enemyUi.LockOnUi.SetActive(false);
-            }
-            return await MultiLockOnAsync(token);
-        }
+        // if (_temp.Count < _minMultiLockCount)
+        // {
+        //     foreach(Transform t in _temp)
+        //     {
+        //         //TargetのロックオンUiをオンにする
+        //         var enemyUi = t.GetComponent<EnemyUi>();
+        //         enemyUi.LockOnUi.SetActive(false);
+        //     }
+        //     return await MultiLockOnAsync(token);
+        // }
 
+       
+        
         return _lockOn;
     }
 
+    private IEnumerator LockonCortinue(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+        }
+        
+    }
     /// <summary>
     /// LineRendereをリセットする
     /// </summary>
