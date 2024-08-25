@@ -28,16 +28,17 @@ namespace IronRain.Player
             _damege = damege;
             _shotDir = shotDir;
             _weaponName = weaponName;
-        }
 
-        private void Start()
-        {
-            if (_lockOnEnemy && _lockOnEnemy.GetComponent<Enemy.EnemyController>().TryFindShootingTarget(out Transform shootingTarget))
+            if (_lockOnEnemy && _lockOnEnemy.GetComponent<Enemy.Character>().TryFindShootingTarget(out Transform shootingTarget))
             {
                 _shootingTarget = shootingTarget;
             }
 
-            if (!_shootingTarget) 
+        }
+
+        private void Start()
+        {
+            if (!_shootingTarget)
             {
                 //Debug.LogError($"shootingTargetがNullです");
             }
@@ -73,23 +74,23 @@ namespace IronRain.Player
 
         public void SetVisible(bool isVisible)
         {
-            if(_weaponName != PlayerWeaponType.RocketLauncher.ToString())
-            if (isVisible)
-            {
-                for (int i = 0; i < _particleArray.Length; i++)
+            if (_weaponName != PlayerWeaponType.RocketLauncher.ToString())
+                if (isVisible)
                 {
-                    _particleArray[i].Play();
+                    for (int i = 0; i < _particleArray.Length; i++)
+                    {
+                        _particleArray[i].Play();
+                    }
+                    StartCoroutine(BulletRelese());
                 }
-                StartCoroutine(BulletRelese());
-            }
-            else
-            {
-                for (int i = 0; i < _particleArray.Length; i++)
+                else
                 {
-                    _particleArray[i].Stop();
+                    for (int i = 0; i < _particleArray.Length; i++)
+                    {
+                        _particleArray[i].Stop();
+                    }
+                    StopAllCoroutines();
                 }
-                StopAllCoroutines();
-            }
 
             _sphereCollider.enabled = isVisible;
         }
