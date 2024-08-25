@@ -11,6 +11,8 @@ namespace Enemy
         // レーン移動するための値。
         private float _delay;
         private float _save;
+        // ホバリングさせるための値。
+        private float _hovering;
 
         public BattleState(RequiredRef requiredRef) : base(requiredRef)
         {
@@ -19,6 +21,7 @@ namespace Enemy
         protected sealed override void Enter() 
         {
             ResetMoveParams();
+            MoveToSlot();
             OnEnter();
         }
         protected sealed override void Exit()
@@ -31,6 +34,7 @@ namespace Enemy
             PlayDamageSE();
             if (ExitIfDeadOrTimeOver()) return;
             MoveToSlot();
+            Hovering();
 
             StayIfBattle();
         }
@@ -44,10 +48,8 @@ namespace Enemy
         /// </summary>
         protected abstract void StayIfBattle();
 
-        /// <summary>
-        /// スロットの位置に座標を変更。
-        /// </summary>
-        protected void MoveToSlot()
+        // スロットの位置に座標を変更。
+        private void MoveToSlot()
         {
             Vector3 before = Ref.Body.Position;
 
@@ -58,6 +60,15 @@ namespace Enemy
 
             // 移動前後の位置を比較して左右どちらに移動したかを判定する。
             if (IsMoving()) MoveAnimation(after - before);
+        }
+
+        // ホバリングで上下に動かす。
+        private void Hovering()
+        {
+            float h = Mathf.Sin(_hovering);
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _hovering += dt;
+            Ref.Body.OffsetWarp(Vector3.up * h);
         }
 
         // プレイヤーがレーンを移動したら多少遅れて敵も同じように移動する。

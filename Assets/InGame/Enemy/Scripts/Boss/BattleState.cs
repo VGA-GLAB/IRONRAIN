@@ -16,9 +16,6 @@ namespace Enemy.Boss
             Ref = requiredRef;
         }
 
-        // 一定間隔でプレイヤーを向かせる。
-        private float _playerLookElapsed;
-
         protected RequiredRef Ref { get; private set; }
 
         protected override void Enter() { }

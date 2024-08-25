@@ -7,6 +7,8 @@ namespace Enemy
     /// </summary>
     public class ApproachState : PlayableState
     {
+        // 生成位置からスロットまでLerpで動かす。
+        private Vector3 _spawnPoint;
         private float _lerp;
 
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
@@ -21,6 +23,8 @@ namespace Enemy
             {
                 Ref.Body.Warp((Vector3)spawnPoint);
             }
+
+            _spawnPoint = Ref.Body.Position;
 
             // レーダーマップに表示させる。
             AgentScript agent = Ref.AgentScript;
@@ -38,6 +42,8 @@ namespace Enemy
 
             // 接近完了フラグ。
             Ref.BlackBoard.IsApproachCompleted = true;
+
+            MoveToSlot();
         }
 
         protected override void Stay()
@@ -58,7 +64,7 @@ namespace Enemy
         // Lerpで移動。
         private void MoveToSlot()
         {
-            Vector3 bp = Ref.Body.Position;
+            Vector3 bp = _spawnPoint;
             Vector3 sp = Ref.BlackBoard.Slot.Point;
             Vector3 l = Vector3.Lerp(bp, sp, _lerp);
             Ref.Body.Warp(l);
