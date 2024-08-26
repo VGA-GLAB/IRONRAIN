@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: BossQTE1InputDataNonText
   m_EditorClassIdentifier: 
   _sequences:
-  - rid: 7776351555819667456
+  - rid: 4919532094182391842
   - rid: 4919532094182391843
   references:
     version: 2
     RefIds:
+    - rid: 4919532094182391842
+      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _clearText: 1
+        _text: "\u5DE6\u30EC\u30D0\u30FC\u3092\u524D\u306B\u62BC\u3057\u51FA\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+        _oneCharDuration: 0.05
+        _delaySec: 0
     - rid: 4919532094182391843
       type: {class: PlayerQTE1Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _qteType: 2
-    - rid: 7776351555819667456
-      type: {class: PlayerQTE1Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _qteType: 1
