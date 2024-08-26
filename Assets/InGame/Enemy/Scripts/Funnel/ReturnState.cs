@@ -22,6 +22,9 @@ namespace Enemy.Funnel
         {
             Ref.BlackBoard.CurrentState = StateKey.Return;
 
+            AgentScript agent = Ref.AgentScript;
+            if (agent != null) agent.EnemyDestory();
+
             _start = Ref.Transform.position;
             _lerp = 0;
         }
