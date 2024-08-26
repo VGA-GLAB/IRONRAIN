@@ -128,7 +128,7 @@ public class RaderMap : MonoBehaviour
                 enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
 
                 //赤点の位置を決める
-                agent.RectTransform.anchoredPosition = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
             }
         }
         // else
@@ -700,6 +700,7 @@ public class RaderMap : MonoBehaviour
         _radius = _bossRadius;
         _raderLength = _bossRaderLength;
         _center.rectTransform.localPosition = new Vector3(_bossPosition.x, _bossPosition.y, _bossPosition.z);
+        _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
     }
     public async UniTask WaitTouchPanelAsync(CancellationToken ct)
     {
