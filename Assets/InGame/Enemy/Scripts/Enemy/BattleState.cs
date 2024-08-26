@@ -10,7 +10,8 @@ namespace Enemy
     {
         // レーン移動するための値。
         private float _delay;
-        private float _save;
+        // プレイヤーの移動量を測るため、スロットのx座標。
+        private float _savedSlotX;
         // ホバリングさせるための値。
         private float _hovering;
 
@@ -20,22 +21,24 @@ namespace Enemy
 
         protected sealed override void Enter() 
         {
-            ResetMoveParams();
-            MoveToSlot();
             OnEnter();
+
+            // プレイヤーの移動に遅れて左右移動させるため、初期値を設定。
+            _delay = Ref.EnemyParams.LaneChangeDelay;
+            _savedSlotX = Ref.BlackBoard.Slot.Point.x;
+
+            Always();
         }
         protected sealed override void Exit()
         {
-            MoveToSlot();
+            Always();
             OnExit();
         }      
         protected sealed override void Stay() 
         {
-            PlayDamageSE();
             if (ExitIfDeadOrTimeOver()) return;
-            MoveToSlot();
-            Hovering();
 
+            Always();
             StayIfBattle();
         }
 
@@ -48,85 +51,53 @@ namespace Enemy
         /// </summary>
         protected abstract void StayIfBattle();
 
-        // スロットの位置に座標を変更。
-        private void MoveToSlot()
+        private void Always()
         {
-            Vector3 before = Ref.Body.Position;
+            PlayDamageSE();
 
-            LookAtPlayer();
-            Move();
-            
-            Vector3 after = Ref.Body.Position;
-
-            // 移動前後の位置を比較して左右どちらに移動したかを判定する。
-            if (IsMoving()) MoveAnimation(after - before);
-        }
-
-        // ホバリングで上下に動かす。
-        private void Hovering()
-        {
+            // ホバリングで上下に動かす。
             float h = Mathf.Sin(_hovering);
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _hovering += dt;
             Ref.Body.OffsetWarp(Vector3.up * h);
-        }
 
-        // プレイヤーがレーンを移動したら多少遅れて敵も同じように移動する。
-        private void Move()
-        {
             // ディレイの値は -n ~ 0 の範囲をとる。
             // Lerpの t の値が0以下の場合は、返る値が a と等しいので、ディレイが0以下の間は移動を行わない。
             float bodyX = Ref.Body.Position.x;
             float slotX = Ref.BlackBoard.Slot.Point.x;
-            float lerped = Mathf.Lerp(bodyX, slotX, Time.deltaTime + _delay);
+            float lerped = Mathf.Lerp(bodyX, slotX, Time.deltaTime - _delay);
 
             // レーンの幅以上の横移動をしたかつ、ディレイが0になり、敵もレーン移動し始めた場合。
             const float LaneWidth = 1.0f; // 手動。
-            if (Mathf.Abs(slotX - _save) > LaneWidth && _delay >= 0)
+            if (Mathf.Abs(slotX - _savedSlotX) > LaneWidth && _delay >= 0)
             {
-                ResetMoveParams();
+                _delay = Ref.EnemyParams.LaneChangeDelay;
+                _savedSlotX = Ref.BlackBoard.Slot.Point.x;
             }
 
             _delay += Time.deltaTime;
             _delay = Mathf.Min(0, _delay);
 
+            Vector3 before = Ref.Body.Position;
+
+            // 回転。
+            Vector3 fwd = Ref.Body.Forward;
+            Vector3 dir = Ref.BlackBoard.PlayerDirection;
+            fwd.y = 0;
+            dir.y = 0;
+            Vector3 look = Vector3.Lerp(fwd, dir, Time.deltaTime);
+            Ref.Body.LookForward(look);
+
+            // 移動。
             Vector3 sp = Ref.BlackBoard.Slot.Point;
             sp.x = lerped;
             Ref.Body.Warp(sp);
-        }
 
-        // レーン移動までのディレイの値で移動しているかを判定する。
-        private bool IsMoving()
-        {
-            return _delay >= 0;
-        }
+            Vector3 after = Ref.Body.Position;
 
-        // プレイヤーがレーン移動を開始する度にリセットする。
-        private void ResetMoveParams()
-        {
-            _delay = -Ref.EnemyParams.LaneChangeDelay;
-            _save = Ref.BlackBoard.Slot.Point.x;
-        }
-
-        // プレイヤー方向に向く。
-        private void LookAtPlayer()
-        {
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            dir.y = 0;
-            Ref.Body.LookForward(dir);
-        }
-
-        // スロットの位置へ向かうベクトルを返す。
-        private Vector3 MovementPerFrame()
-        {
-            Vector3 v = VectorExtensions.Homing(
-                Ref.BlackBoard.Area.Point,
-                Ref.BlackBoard.Slot.Point,
-                Ref.BlackBoard.SlotDirection,
-                0.5f // 適当。
-                );
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            return v * dt;
+            // ディレイ後、移動前後の位置を比較して左右どちらに移動したかを判定する。
+            bool isMoving = _delay >= 0;
+            if (isMoving) MoveAnimation(after - before);
         }
 
         /// <summary>
