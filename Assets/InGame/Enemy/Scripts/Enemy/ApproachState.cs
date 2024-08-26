@@ -21,6 +21,8 @@ namespace Enemy
         {
             Ref.BlackBoard.CurrentState = StateKey.Approach;
 
+            _spawnPoint = Ref.Body.Position;
+
             //Vector3 initVelo = 
             //Ref.BlackBoard.Velocity = 
 
