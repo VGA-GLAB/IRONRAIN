@@ -15,34 +15,32 @@ namespace Enemy.NPC
 
     public class StateMachine
     {
-        // アニメーションなど、EnemyControllerのイベント関数外での処理を扱う。
-        // そのため、結果を返して完了まで待ってもらう。
-        public enum Result { Running, Complete };
-
-        // ステートベースで制御する。
         private Dictionary<StateKey, State<StateKey>> _states;
         private State<StateKey> _currentState;
-
-        // 既に後始末処理を実行済みかを判定するフラグ。
-        private bool _isCleanup;
+        private bool _isDisposed;
 
         public StateMachine(RequiredRef requiredRef)
         {
             Ref = requiredRef;
+            Initialize();
+        }
 
+        public RequiredRef Ref { get; }
+
+        // 初期化処理。
+        private void Initialize()
+        {
             // ステートを作成し、辞書で管理。
-            _states = requiredRef.States;
-            _states.Add(StateKey.Hide, new HideState(requiredRef));
-            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
-            _states.Add(StateKey.Action, new ActionState(requiredRef));
-            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
-            _states.Add(StateKey.Delete, new DeleteState(requiredRef));
+            _states = Ref.States;
+            _states.Add(StateKey.Hide, new HideState(Ref));
+            _states.Add(StateKey.Approach, new ApproachState(Ref));
+            _states.Add(StateKey.Action, new ActionState(Ref));
+            _states.Add(StateKey.Escape, new EscapeState(Ref));
+            _states.Add(StateKey.Delete, new DeleteState(Ref));
 
             // 初期状態では画面に表示しない。
             _currentState = _states[StateKey.Hide];
         }
-
-        public RequiredRef Ref { get; }
 
         /// <summary>
         /// 更新。
@@ -64,14 +62,18 @@ namespace Enemy.NPC
         public void Dispose()
         {
             // 二度実行するのを防ぐ。
-            if (_isCleanup) return;
-            else _isCleanup = true;
+            if (_isDisposed) return;
+            else _isDisposed = true;
 
             // ステートマシンを破棄。
             foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }
+
+            // ステートを破棄した時点でAnimatorに関する操作もこれ以上しない。
+            // 警告対策のためAnimatorを無効化しておく。
+            Ref.Animator.enabled = false;
         }
     }
 }

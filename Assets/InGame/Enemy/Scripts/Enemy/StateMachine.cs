@@ -14,46 +14,50 @@ namespace Enemy
         Delete,
     }
 
+    /// <summary>
+    /// 退場して画面外に出た場合、これ以上の更新は必要なくなる。
+    /// そのタイミングをステートマシン側の実行結果として返す。
+    /// </summary>
+    public enum Result { Running, Complete };
+
     public class StateMachine
     {
-        // アニメーションなど、EnemyControllerのイベント関数外での処理を扱う。
-        // そのため、結果を返して完了まで待ってもらう。
-        public enum Result { Running, Complete };
-
-        // ステートベースで制御する。
         private Dictionary<StateKey, State<StateKey>> _states;
         private State<StateKey> _currentState;
-
-        // 既に後始末処理を実行済みかを判定するフラグ。
-        private bool _isCleanup;
+        private bool _isDisposed;
 
         public StateMachine(RequiredRef requiredRef)
         {
             Ref = requiredRef;
+            Initialize();
+        }
 
+        public RequiredRef Ref { get; }
+
+        // 初期化処理。
+        private void Initialize()
+        {
             // ステートを作成し、辞書で管理。
-            _states = requiredRef.States;
-            _states.Add(StateKey.Approach, new ApproachState(requiredRef));
-            _states.Add(StateKey.Broken, new BrokenState(requiredRef));
-            _states.Add(StateKey.Escape, new EscapeState(requiredRef));
-            _states.Add(StateKey.Hide, new HideState(requiredRef));
-            _states.Add(StateKey.Delete, new DeleteState(requiredRef));
-
+            _states = Ref.States;
+            _states.Add(StateKey.Approach, new ApproachState(Ref));
+            _states.Add(StateKey.Broken, new BrokenState(Ref));
+            _states.Add(StateKey.Escape, new EscapeState(Ref));
+            _states.Add(StateKey.Hide, new HideState(Ref));
+            _states.Add(StateKey.Delete, new DeleteState(Ref));
+            
             // 戦闘ステートは装備によって違う。
             {
-                EnemyType t = requiredRef.EnemyParams.Type;
+                EnemyType t = Ref.EnemyParams.Type;
                 BattleState b = null;
-                if (t == EnemyType.Assault) b = new BattleByAssaultState(requiredRef);
-                if (t == EnemyType.Launcher) b = new BattleByLauncherState(requiredRef);
-                if (t == EnemyType.Shield) b = new BattleByShieldState(requiredRef);
+                if (t == EnemyType.Assault) b = new BattleByAssaultState(Ref);
+                if (t == EnemyType.Launcher) b = new BattleByLauncherState(Ref);
+                if (t == EnemyType.Shield) b = new BattleByShieldState(Ref);
                 _states.Add(StateKey.Battle, b);
             }
 
             // 初期状態では画面に表示しない。
             _currentState = _states[StateKey.Hide];
         }
-
-        public RequiredRef Ref { get; }
 
         /// <summary>
         /// 更新。
@@ -82,11 +86,11 @@ namespace Enemy
         public void Dispose()
         {
             // 二度実行するのを防ぐ。
-            if (_isCleanup) return;
-            else _isCleanup = true;
+            if (_isDisposed) return;
+            else _isDisposed = true;
 
             // ステートマシンを破棄。
-            foreach(KeyValuePair<StateKey, State<StateKey>> s in _states)
+            foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
             {
                 s.Value.Dispose();
             }

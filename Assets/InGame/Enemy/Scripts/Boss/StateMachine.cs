@@ -18,34 +18,32 @@ namespace Enemy.Boss
 
     public class StateMachine
     {
-        // アニメーションなど、BossControllerのイベント関数外での処理を扱う。
-        // そのため、結果を返して完了まで待ってもらう。
-        public enum Result { Running, Complete };
-
-        private BlackBoard _blackBoard;
-
-        // ステートベースで制御する。
         private Dictionary<StateKey, State<StateKey>> _states;
         private State<StateKey> _currentState;
-
-        // 既に後始末処理を実行済みかを判定するフラグ。
-        private bool _isCleanup;
+        private bool _isDisposed;
 
         public StateMachine(RequiredRef requiredRef)
         {
-            _blackBoard = requiredRef.BlackBoard;
+            Ref = requiredRef;
+            Initialize();
+        }
 
-            _states = requiredRef.States;
-            _states.Add(StateKey.Appear, new AppearState(requiredRef));
-            _states.Add(StateKey.Idle, new IdleState(requiredRef));
-            _states.Add(StateKey.BladeAttack, new BladeAttackState(requiredRef));
-            _states.Add(StateKey.LauncherFire, new LauncherFireState(requiredRef));
-            _states.Add(StateKey.QteEvent, new QteEventState(requiredRef));
-            _states.Add(StateKey.Hide, new HideState(requiredRef));
-            _states.Add(StateKey.FunnelExpand, new FunnelExpandState(requiredRef));
-            _states.Add(StateKey.MoveWaypoint, new MoveWaypointState(requiredRef));
+        private RequiredRef Ref { get; }
 
-            // 初期状態
+        // 初期化処理。
+        private void Initialize()
+        {
+            _states = Ref.States;
+            _states.Add(StateKey.Appear, new AppearState(Ref));
+            _states.Add(StateKey.Idle, new IdleState(Ref));
+            _states.Add(StateKey.BladeAttack, new BladeAttackState(Ref));
+            _states.Add(StateKey.LauncherFire, new LauncherFireState(Ref));
+            _states.Add(StateKey.QteEvent, new QteEventState(Ref));
+            _states.Add(StateKey.Hide, new HideState(Ref));
+            _states.Add(StateKey.FunnelExpand, new FunnelExpandState(Ref));
+            _states.Add(StateKey.MoveWaypoint, new MoveWaypointState(Ref));
+
+            // 初期状態。
             _currentState = _states[StateKey.Hide];
         }
 
@@ -67,8 +65,8 @@ namespace Enemy.Boss
         public void Dispose()
         {
             // 二度実行するのを防ぐ。
-            if (_isCleanup) return;
-            else _isCleanup = true;
+            if (_isDisposed) return;
+            else _isDisposed = true;
 
             // ステートマシンを破棄。
             foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)

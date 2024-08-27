@@ -8,7 +8,8 @@ namespace Enemy.NPC
     public class RequiredRef
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
-            BuddyNpcParams npcParams, BlackBoard blackBoard, Renderer[] renderers, NpcEffects effects)
+            BuddyNpcParams npcParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, 
+            NpcEffects effects)
         {
             Transform = transform;
             Player = player;
@@ -16,6 +17,7 @@ namespace Enemy.NPC
             Rotate = rotate;
             NpcParams = npcParams;
             BlackBoard = blackBoard;
+            Animator = animator;
             Renderers = renderers;
             Effects = effects;
             HitBoxes = null;
@@ -31,6 +33,7 @@ namespace Enemy.NPC
         public Transform Rotate { get; }
         public BuddyNpcParams NpcParams { get; }
         public BlackBoard BlackBoard { get; }
+        public Animator Animator { get; }
         public Renderer[] Renderers { get; }
         public NpcEffects Effects { get; }
         public Collider[] HitBoxes { get; }
