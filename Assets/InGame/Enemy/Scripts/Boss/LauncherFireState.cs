@@ -31,7 +31,6 @@ namespace Enemy.Boss
 
         protected override void Exit()
         {
-            foreach (BattleActionStep s in _steps) s.Reset();
         }
 
         protected override void Stay()

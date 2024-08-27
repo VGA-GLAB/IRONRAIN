@@ -99,45 +99,5 @@ namespace Enemy
             bool isMoving = _delay >= 0;
             if (isMoving) MoveAnimation(after - before);
         }
-
-        /// <summary>
-        /// 通常は攻撃範囲にプレイヤーがいるかつ、次の攻撃タイミングが来ていた場合は攻撃。
-        /// 手動攻撃の場合は攻撃命令を受けていれば攻撃。
-        /// </summary>
-        protected bool IsAttack()
-        {
-            SpecialCondition condition = Ref.EnemyParams.SpecialCondition;
-            if (condition == SpecialCondition.ManualAttack)
-            {
-                Trigger attack = Ref.BlackBoard.OrderedAttack;
-                return attack.IsWaitingExecute();
-            }
-            else
-            {
-                Trigger attack = Ref.BlackBoard.Attack;
-                return attack.IsWaitingExecute() && CheckAttackRange();
-            }
-        }
-
-        // プレイヤーが攻撃範囲内にいるかチェック。
-        private bool CheckAttackRange()
-        {
-            foreach (Collider c in Ref.BlackBoard.FovStay)
-            {
-                if (c.CompareTag(Const.PlayerTag)) return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 攻撃のアニメーション再生処理を呼んだタイミングで同時に呼ぶ。
-        /// 黒板に攻撃したことを書き込む。
-        /// </summary>
-        protected void AttackTrigger()
-        {
-            Ref.BlackBoard.OrderedAttack.Execute();
-            Ref.BlackBoard.Attack.Execute();
-        }
     }
 }
