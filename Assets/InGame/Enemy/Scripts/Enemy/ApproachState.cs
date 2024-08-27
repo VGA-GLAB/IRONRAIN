@@ -12,17 +12,9 @@ namespace Enemy
 
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
 
-        protected override void Always()
-        {
-
-        }
-
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Approach;
-
-            //Vector3 initVelo = 
-            //Ref.BlackBoard.Velocity = 
 
             // レーダーマップに表示させる。
             AgentScript agent = Ref.AgentScript;
@@ -31,61 +23,63 @@ namespace Enemy
             // スラスター、トレイルの有効化。
             Ref.Effector.ThrusterEnable(true);
             Ref.Effector.TrailEnable(true);
+
+            // 隠れた状態から表示された瞬間の位置をLerpのaにする。
+            _spawnPoint = Ref.Body.Position;
+            _lerp = 0;
+
+            Always();
         }
 
         protected override void Exit()
         {
+            Always();
+
             // 接近アニメーション終了をトリガー。
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
 
             // 接近完了フラグ。
             Ref.BlackBoard.IsApproachCompleted = true;
-
-            MoveToSlot();
         }
 
         protected override void Stay()
         {
-            PlayDamageSE();
-
             if (ExitIfDeadOrTimeOver()) return;
 
-            Vector3 before = Ref.Body.Position;
-            MoveToSlot();
-            LookAtPlayer();
-            Vector3 after = Ref.Body.Position;
-            MoveAnimation(after - before);
+            Always();
 
-            if (IsMoveCompleted()) TryChangeState(StateKey.Battle);
+            // 補間値が1以上になった場合は移動完了とみなす。
+            bool isCompleted = _lerp >= 1.0f;
+            if (isCompleted) TryChangeState(StateKey.Battle);
         }
 
-        // Lerpで移動。
-        private void MoveToSlot()
+        // ダメージ音、移動、向く、移動アニメーション。
+        private void Always()
         {
-            Vector3 bp = _spawnPoint;
-            Vector3 sp = Ref.BlackBoard.Slot.Point;
-            Vector3 l = Vector3.Lerp(bp, sp, _lerp);
+            PlayDamageSE();
+
+            Vector3 before = Ref.Body.Position;
+
+            // 生成位置からスロットの位置をLerpで動かす。
+            Vector3 slotPoint = Ref.BlackBoard.Slot.Point;
+            Vector3 l = Vector3.Lerp(_spawnPoint, slotPoint, _lerp);
             Ref.Body.Warp(l);
 
+            Vector3 after = Ref.Body.Position;
+
+            // 移動の前後で位置を比較し、移動方向によってアニメーション。
+            MoveAnimation(after - before);
+
+            // Lerpの補間値を更新。
             float speed = Ref.EnemyParams.MoveSpeed.Chase;
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt * speed;
             _lerp = Mathf.Clamp01(_lerp);
-        }
 
-        // プレイヤーを向かせる。
-        private void LookAtPlayer()
-        {
+            // プレイヤーを向かせる。
             Vector3 dir = Ref.BlackBoard.PlayerDirection;
             dir.y = 0;
-
             Ref.Body.LookForward(dir);
-        }
-
-        // 移動完了。
-        private bool IsMoveCompleted()
-        {
-            return _lerp >= 1;
         }
     }
 }

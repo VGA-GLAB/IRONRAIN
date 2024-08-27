@@ -11,12 +11,12 @@ namespace Enemy.Boss
     public class FunnelExpandState : BattleState
     {
         // アニメーションの再生と同時に展開後、一定時間待つ。
-        private BattleActionStep[] _steps;
+        private BossActionStep[] _steps;
         private BattleActionStep _currentStep;
 
         public FunnelExpandState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BattleActionStep[2];
+            _steps = new BossActionStep[2];
             _steps[1] = new FunnelExpandEndStep(requiredRef, null);
             _steps[0] = new FunnelExpandStep(requiredRef, _steps[1]);
         }
@@ -48,13 +48,11 @@ namespace Enemy.Boss
     /// <summary>
     /// その場でファンネルを展開。
     /// </summary>
-    public class FunnelExpandStep : BattleActionStep
+    public class FunnelExpandStep : BossActionStep
     {
         private float _timer;
 
-        public FunnelExpandStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(FunnelExpandStep);
+        public FunnelExpandStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -82,11 +80,9 @@ namespace Enemy.Boss
     /// <summary>
     /// ファンネル展開終了。
     /// </summary>
-    public class FunnelExpandEndStep : BattleActionStep
+    public class FunnelExpandEndStep : BossActionStep
     {
-        public FunnelExpandEndStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(FunnelExpandEndStep);
+        public FunnelExpandEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

@@ -20,14 +20,14 @@ namespace Enemy.Boss
     public class BladeAttackState : BattleState
     {
         // チャージ->接近->下段斬りor溜め突き->自機とすれ違う
-        private BattleActionStep[] _steps;
+        private BossActionStep[] _steps;
         private BattleActionStep _currentStep;
 
         public BladeAttackState(RequiredRef requiredRef) : base(requiredRef)
         {
             PreAttackData preAttackData = new PreAttackData();
 
-            _steps = new BattleActionStep[7];
+            _steps = new BossActionStep[7];
             _steps[6] = new BladeAttackEndStep(requiredRef, null);
             _steps[5] = new BladeCooldownStep(requiredRef, _steps[6]);
             _steps[4] = new PassingStep(requiredRef, preAttackData, _steps[5]);
@@ -69,13 +69,11 @@ namespace Enemy.Boss
     /// <summary>
     /// ジェットパックが光ってチャージ。
     /// </summary>
-    public class ChargeJetPackStep : BattleActionStep
+    public class ChargeJetPackStep : BossActionStep
     {
         private float _timer;
 
-        public ChargeJetPackStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(ChargeJetPackStep);
+        public ChargeJetPackStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -100,20 +98,18 @@ namespace Enemy.Boss
     /// <summary>
     /// 自機に接近。
     /// </summary>
-    public class ApproachToPlayerStep : BattleActionStep
+    public class ApproachToPlayerStep : BossActionStep
     {
         // 書き込んで後続のステップに渡す。
         private PreAttackData _preAttackData;
         // 遷移の判定用の値は技ごとに違う。
         private Skill _selected;
 
-        public ApproachToPlayerStep(RequiredRef requiredRef, PreAttackData preAttackData, 
-            BattleActionStep gedanGidi, BattleActionStep chargeThrust) : base(requiredRef, gedanGidi, chargeThrust) 
+        public ApproachToPlayerStep(RequiredRef requiredRef, PreAttackData preAttackData,
+            BossActionStep gedanGidi, BossActionStep chargeThrust) : base(requiredRef, gedanGidi, chargeThrust) 
         {
             _preAttackData = preAttackData;
         }
-
-        public override string ID => nameof(ApproachToPlayerStep);
 
         protected override void Enter()
         {
@@ -158,11 +154,9 @@ namespace Enemy.Boss
     /// <summary>
     /// 下段斬り。
     /// </summary>
-    public class GedanGiriStep : BattleActionStep
+    public class GedanGiriStep : BossActionStep
     {
-        public GedanGiriStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(GedanGiriStep);
+        public GedanGiriStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -179,11 +173,9 @@ namespace Enemy.Boss
     /// <summary>
     /// 溜めからの突き。
     /// </summary>
-    public class ChargeThrustStep : BattleActionStep
+    public class ChargeThrustStep : BossActionStep
     {
-        public ChargeThrustStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(ChargeThrustStep);
+        public ChargeThrustStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -201,19 +193,17 @@ namespace Enemy.Boss
     /// <summary>
     /// 自機とすれ違う。
     /// </summary>
-    public class PassingStep : BattleActionStep
+    public class PassingStep : BossActionStep
     {
         private PreAttackData _preAttackData;
 
-        public PassingStep(RequiredRef requiredRef, PreAttackData preAttackData, BattleActionStep next) : base(requiredRef, next)
+        public PassingStep(RequiredRef requiredRef, PreAttackData preAttackData, BossActionStep next) : base(requiredRef, next)
         {
             _preAttackData = preAttackData;
 
             // すれ違い後にターンするので、とりあえずこのステップで音の再生をトリガーしておく。
             requiredRef.AnimationEvent.OnTurn += OnTurn;
         }
-
-        public override string ID => nameof(PassingStep);
 
         private void OnTurn()
         {
@@ -255,13 +245,11 @@ namespace Enemy.Boss
     /// <summary>
     /// アニメーションの終了を待って攻撃終了させる。
     /// </summary>
-    public class BladeCooldownStep : BattleActionStep
+    public class BladeCooldownStep : BossActionStep
     {
         private float _timer;
 
-        public BladeCooldownStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(LauncherCooldownStep);
+        public BladeCooldownStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -308,11 +296,9 @@ namespace Enemy.Boss
     /// <summary>
     /// 刀攻撃終了。
     /// </summary>
-    public class BladeAttackEndStep : BattleActionStep
+    public class BladeAttackEndStep : BossActionStep
     {
-        public BladeAttackEndStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(BladeAttackEndStep);
+        public BladeAttackEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

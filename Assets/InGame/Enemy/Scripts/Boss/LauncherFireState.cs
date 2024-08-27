@@ -10,12 +10,12 @@ namespace Enemy.Boss
     public class LauncherFireState : BattleState
     {
         // 構え->攻撃
-        private BattleActionStep[] _steps;
+        private BossActionStep[] _steps;
         private BattleActionStep _currentStep;
 
         public LauncherFireState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BattleActionStep[4];
+            _steps = new BossActionStep[4];
             _steps[3] = new LauncherFireEndStep(requiredRef, null);
             _steps[2] = new LauncherCooldownStep(requiredRef, _steps[3]);
             _steps[1] = new LauncherFireStep(requiredRef, _steps[2]);
@@ -56,11 +56,11 @@ namespace Enemy.Boss
     /// <summary>
     /// ロケットランチャー構え。
     /// </summary>
-    public class LauncherHoldStep : BattleActionStep
+    public class LauncherHoldStep : BossActionStep
     {
         private bool _isTransition;
 
-        public LauncherHoldStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next)
+        public LauncherHoldStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             // 構えのアニメーション再生をトリガーする。
             {
@@ -75,8 +75,6 @@ namespace Enemy.Boss
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
             }
         }
-
-        public override string ID => nameof(LauncherHoldStep);
 
         protected override void Enter()
         {
@@ -110,11 +108,9 @@ namespace Enemy.Boss
     /// <summary>
     /// ロケットランチャー発射 -> リロード -> 構え を繰り返す。
     /// </summary>
-    public class LauncherFireStep : BattleActionStep
+    public class LauncherFireStep : BossActionStep
     {
-        public LauncherFireStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(LauncherFireStep);
+        public LauncherFireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -151,13 +147,11 @@ namespace Enemy.Boss
     /// <summary>
     /// アニメーションの終了を待って攻撃終了させる。
     /// </summary>
-    public class LauncherCooldownStep : BattleActionStep
+    public class LauncherCooldownStep : BossActionStep
     {
         private float _timer;
 
-        public LauncherCooldownStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(LauncherCooldownStep);
+        public LauncherCooldownStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -176,11 +170,9 @@ namespace Enemy.Boss
     /// <summary>
     /// ロケットランチャーでの攻撃終了。
     /// </summary>
-    public class LauncherFireEndStep : BattleActionStep
+    public class LauncherFireEndStep : BossActionStep
     {
-        public LauncherFireEndStep(RequiredRef requiredRef, BattleActionStep next) : base(requiredRef, next) { }
-
-        public override string ID => nameof(LauncherFireEndStep);
+        public LauncherFireEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
