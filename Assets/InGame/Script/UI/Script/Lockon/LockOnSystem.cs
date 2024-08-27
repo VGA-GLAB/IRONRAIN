@@ -100,18 +100,28 @@ public class LockOnSystem : MonoBehaviour
             if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
         }
 
+        float minDistance = float.MaxValue;
+        EnemyUi minEnemyUi = null;
+
         foreach (Transform t in _targets)
         {
             // Targetに触れているかチェック
             if (!IsCollision(_cursor, t, _cursorRadius, _targetRadius)) continue;
             // 一応Targetのコンポーネントが付いているかチェック
             if (!t.TryGetComponent(out EnemyUi ui)) continue;
+            //カーソルに近い物を判定する
+            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+            if(dis <= minDistance)
+            {
+                minDistance = dis;
+                minEnemyUi = ui;
+            }
             
-            // ターゲット更新
-            ui.OnButton();
-            Debug.Log(ui.Enemy.name + "をロックオン");
-            break;
         }
+
+        // ターゲット更新
+        minEnemyUi.OnButton();
+        Debug.Log(minEnemyUi.Enemy.name + "をロックオン");
     }
 
     // なぞった結果、n体以上lock-onできなかった場合はやり直しの処理が無い。
@@ -200,6 +210,7 @@ public class LockOnSystem : MonoBehaviour
                             _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
                             //多重ロックオン発動時に流れる音
                             CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                            break;
                         }
                     }
                 }
@@ -207,32 +218,28 @@ public class LockOnSystem : MonoBehaviour
         }
         
         await UniTask.Yield();
+        
+        //RaderMap radermap = FindObjectOfType<RaderMap>();
+        //return radermap.Enemies;
+
+
+        // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
+        if (_temp.Count < _minMultiLockCount)
+        {
+            foreach (Transform t in _temp)
+            {
+                //TargetのロックオンUiをオンにする
+                var enemyUi = t.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(false);
+            }
+            return await MultiLockOnAsync(token);
+        }
+
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         LineRendererReset();
         LockOnEnemies(_temp, _lockOn);
-        RaderMap radermap = FindObjectOfType<RaderMap>();
-        return radermap.Enemies;
 
-        //StartCoroutine(LockonCortinue(radermap.Enemies.Count));
-        
-
-        
-
-        // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
-        // if (_temp.Count < _minMultiLockCount)
-        // {
-        //     foreach(Transform t in _temp)
-        //     {
-        //         //TargetのロックオンUiをオンにする
-        //         var enemyUi = t.GetComponent<EnemyUi>();
-        //         enemyUi.LockOnUi.SetActive(false);
-        //     }
-        //     return await MultiLockOnAsync(token);
-        // }
-
-
-
-        //return _lockOn;
+        return _lockOn;
     }
 
     private IEnumerator LockonCortinue(int count)
