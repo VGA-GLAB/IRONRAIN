@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace RaderMapExample
 {
+    public class Enemy
+    {
+        public GameObject EnemyObject;
+        public Transform EnemyTransform;
+        public AgentScript AgentScript;
+    }
+
     public class Rader : MonoBehaviour
     {
         [SerializeField] private float _radius = 9.0f;
@@ -12,7 +19,7 @@ namespace RaderMapExample
         private Transform _transform;
 
         // レーダーに捉えられる限界、適当。
-        public int Capacity => 10;
+        public int Capacity => 30;
 
         private void Start()
         {
@@ -51,6 +58,25 @@ namespace RaderMapExample
         }
 
         /// <summary>
+        ///　敵の情報を取ってくる
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Enemy> GetEnemy()
+        {
+            foreach(Collider c in  _result)
+            {
+                if (c == null) yield break;
+
+                if(c.TryGetComponent<AgentScript>(out var agent))
+                {
+                    var enemy = new Enemy();
+                    enemy.AgentScript = agent;
+                    enemy.EnemyTransform = agent.gameObject.transform;
+                }
+            }
+        }
+
+        /// <summary>
         /// 補足した対象ごとに、レーダーの中心位置からのベクトルを返す。
         /// </summary>
         public IEnumerable<Vector3> GetResultVec3()
@@ -64,7 +90,7 @@ namespace RaderMapExample
                 Vector3 b = GetCenter();
                 b.y = 0;
 
-                yield return a - b; 
+                yield return a - b;
             }
         }
 
