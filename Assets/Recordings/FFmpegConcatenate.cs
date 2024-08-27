@@ -2,10 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class FFmpegConcatenate : MonoBehaviour
 {
+#if UNITY_EDITOR
     // 動画ファイルのディレクトリを指定
     private string videoFilesDirectory = @"C:\Users\vantan\Desktop\IronRain\Assets\Recordings\Videos";
 
@@ -55,5 +57,5 @@ public class FFmpegConcatenate : MonoBehaviour
     {
         ConcatenateVideos();
     }
-}
 #endif
+}

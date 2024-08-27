@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace IronRain.Recording
 {
     public class DebugUI : MonoBehaviour
     {
-        [SerializeField]
-        private Recorder _recorder;
+        [FormerlySerializedAs("recorderController")] [FormerlySerializedAs("_recorder")] [SerializeField]
+        private CustomRecorderController customRecorderController;
 
         [SerializeField]
         private TMPro.TextMeshProUGUI _label;
@@ -16,10 +17,10 @@ namespace IronRain.Recording
 
         private void Update()
         {
-            _image.gameObject.SetActive(_recorder.IsRecording);
-            _label.gameObject.SetActive(_recorder.IsRecording);
+            _image.gameObject.SetActive(customRecorderController.IsRecording);
+            _label.gameObject.SetActive(customRecorderController.IsRecording);
 
-            if (_recorder.IsRecording)
+            if (customRecorderController.IsRecording)
             {
                 var y = Mathf.Sin(Time.time);
                 var x = Mathf.Cos(Time.time);

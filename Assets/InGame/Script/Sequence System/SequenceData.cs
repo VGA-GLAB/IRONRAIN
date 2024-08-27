@@ -3,6 +3,12 @@ using Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
 using IronRain.Player;
+using Recorder = UnityEngine.Profiling.Recorder;
+
+#if UNITY_EDITOR
+using IronRain.Recording;
+using UnityEditor.Recorder;
+#endif
 
 namespace IronRain.SequenceSystem
 {
@@ -43,5 +49,9 @@ namespace IronRain.SequenceSystem
         public PlayerAnimation PlayerAnimation => _playerAnimation;
         [SerializeField] private LaunchManager _launchManager;
         public LaunchManager LaunchManager => _launchManager;
+#if UNITY_EDITOR
+        [SerializeField] private CustomRecorderController _recorder;
+        public CustomRecorderController Recorder => _recorder;
+#endif
     }
 }
