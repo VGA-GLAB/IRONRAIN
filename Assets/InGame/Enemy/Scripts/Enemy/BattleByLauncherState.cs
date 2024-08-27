@@ -1,52 +1,25 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。
     /// </summary>
     public class BattleByLauncherState : BattleState
     {
-        private enum AnimationGroup
-        {
-            Other,  // 初期状態
-            Idle,   // Idle
-            Hold,   // HoldStart~HoldLoop
-            Fire,   // Fire
-            Reload, // Reload
-        }
-
-        private LauncherEquipment _equipment;
-
-        // 現在のアニメーションのステートによって処理を分岐するために使用する。
-        private AnimationGroup _currentAnimGroup;
+        private EnemyActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
         public BattleByLauncherState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _equipment = requiredRef.Equipment as LauncherEquipment;
-            _equipment.OnShootAction += OnShoot;
+            _steps = new EnemyActionStep[3];
+            _steps[2] = new LauncherEndStep(requiredRef);
+            _steps[1] = new LauncherFireStep(requiredRef, _steps[2]);
+            _steps[0] = new LauncherHoldStep(requiredRef, _steps[1]);
+            // 構えと攻撃を繰り返すので、コンストラクタではなく、メソッドから遷移先を追加。
+            _steps[2].AddNext(_steps[0]);
 
-            // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.Launcher.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
-            Register(BodyAnimationConst.Launcher.HoldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Hold);
-            Register(BodyAnimationConst.Launcher.Fire, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Fire);
-            Register(BodyAnimationConst.Launcher.Reload, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Reload);
-
-            // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
-            // このメソッドで登録していないアニメーションのステートに遷移した場合、
-            // _currentAnimGroupの値が元のままになるので注意。
-            void Register(string stateName, int layerIndex, AnimationGroup animGroup)
-            {
-                Ref.BodyAnimation.RegisterStateEnterCallback(
-                    nameof(BattleByLauncherState), 
-                    stateName, 
-                    layerIndex, 
-                    () => _currentAnimGroup = animGroup
-                    );
-            }
-        }
-
-        private void OnShoot()
-        {
-            AttackTrigger();
+            _currentStep = _steps[0];
         }
 
         protected override void OnEnter()
@@ -62,54 +35,117 @@
 
         protected override void StayIfBattle()
         {
-            // どのアニメーションが再生されているかによって処理を分ける。
-            if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
-            else if (_currentAnimGroup == AnimationGroup.Hold) StayHold();
-            else if (_currentAnimGroup == AnimationGroup.Fire) StayFire();
-            else if (_currentAnimGroup == AnimationGroup.Reload) StayReload();
-            else StayOther();
+            _currentStep = _currentStep.Update();
         }
 
         public override void Dispose()
         {
-            _equipment.OnShootAction -= OnShoot;
-
-            // コールバックの登録解除。
-            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByLauncherState));
+            foreach (EnemyActionStep s in _steps) s.Dispose();
         }
+    }
 
-        // アニメーションがアイドル状態
-        private void StayIdle()
+    /// <summary>
+    /// ロケットランチャー構え。
+    /// </summary>
+    public class LauncherHoldStep : EnemyAttackActionStep
+    {
+        public LauncherHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-        }
-
-        // アニメーションが武器構え状態
-        private void StayHold()
-        {
-            if (IsAttack())
+            // アイドルのアニメーション再生をトリガーする。
             {
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
-                AttackTrigger();
+                string state = BodyAnimationConst.Launcher.Idle;
+                int layer = BodyAnimationConst.Layer.BaseLayer;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
         }
 
-        // アニメーションが攻撃状態
-        private void StayFire()
+        protected override void Enter()
         {
-            //
         }
 
-        // アニメーションが武器リロード状態
-        private void StayReload()
+        private void OnIdleAnimationStateEnter()
         {
-            //
+            // ロケットランチャーを構える。
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
-        // アニメーションがそれ以外状態
-        private void StayOther()
+        protected override BattleActionStep Stay()
         {
-            //
+            if (IsAttack()) return Next[0];
+            else return this;
+        }
+
+        public override void Dispose()
+        {
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
+        }
+    }
+
+    /// <summary>
+    /// ロケットランチャー発射。
+    /// </summary>
+    public class LauncherFireStep : EnemyAttackActionStep
+    {
+        // アニメーションの再生をトリガーと同時に再生されるとは限らないので、一応フラグ。
+        private bool _isAnimationEnter;
+
+        public LauncherFireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        {
+            // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
+            {
+                string state = BodyAnimationConst.Launcher.Fire;
+                int layer = BodyAnimationConst.Layer.UpperBody;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
+            }
+        }
+
+        protected override void Enter()
+        {
+            _isAnimationEnter = false;
+
+            // ロケットランチャー発射。
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
+        }
+
+        private void OnFireAnimationStateEnter()
+        {
+            AttackTrigger();
+            _isAnimationEnter = true;
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            // 発射後ではなく、発射のアニメーションを再生した瞬間、次に遷移するので注意。
+            if (_isAnimationEnter) return Next[0];
+            else return this;
+        }
+
+        public override void Dispose()
+        {
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
+        }
+    }
+
+    /// <summary>
+    /// ロケットランチャー発射終了、構えに戻す。
+    /// </summary>
+    public class LauncherEndStep : EnemyAttackActionStep
+    {
+        public LauncherEndStep(RequiredRef _, params EnemyActionStep[] next) : base(_, next)
+        {
+        }
+
+        protected override void Enter()
+        {
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            return Next[0];
+        }
+
+        public override void Dispose()
+        {
         }
     }
 }
