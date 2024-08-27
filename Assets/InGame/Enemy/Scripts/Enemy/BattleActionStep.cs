@@ -1,4 +1,4 @@
-﻿namespace Enemy.Boss
+﻿namespace Enemy
 {
     /// <summary>
     /// 戦闘中の各行動を、更に動作単位で分けて管理する。
@@ -7,14 +7,12 @@
     {
         private bool _isEnter = true;
 
-        public BattleActionStep(RequiredRef requiredRef, params BattleActionStep[] next)
+        public BattleActionStep(params BattleActionStep[] next)
         {
-            Ref = requiredRef;
             Next = next;
         }
 
-        public abstract string ID { get; }
-        protected RequiredRef Ref { get; private set; }
+        public string ID => GetType().Name;
         protected BattleActionStep[] Next {  get; private set; }
 
         protected abstract void Enter();
