@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Sequence = DG.Tweening.Sequence;
 
 public class LaunchManager : MonoBehaviour
 {
@@ -52,6 +50,8 @@ public class LaunchManager : MonoBehaviour
     [Header("ミニマップ")]
     [SerializeField]private CanvasGroup _minimapUi;
 
+    [Header("ボタンアニメーションの終了後に消える間隔")]
+    [SerializeField] private float _buttonAnimationInterval = 0.1f;
     [Header("アニメーションを再生する間隔")] [SerializeField]
     private float _animationInterval = 0.1f;
     // Start is called before the first frame update
@@ -101,6 +101,13 @@ public class LaunchManager : MonoBehaviour
 
         _activeUiAnimation.loopPointReached += StartLaunchTimeLine;
         _mapUiAnimation.loopPointReached += ActiveLauch;
+
+        //ビデオを初期化する
+        _activeUiAnimation.targetTexture.Release();
+        _detailUiAnimation.targetTexture.Release();
+        _mapUiAnimation.targetTexture.Release();
+        _announceUiAnimation.targetTexture.Release();
+        _weaponUiAnimation.targetTexture.Release();
     }
 
     // Update is called once per frame
@@ -122,8 +129,9 @@ public class LaunchManager : MonoBehaviour
         Sequence startSequence = DOTween.Sequence();
         startSequence.Join(_activeUiBackGround.DOFade(1f, _startAnimationDuration)); // アルファ値1は255の意味
         startSequence.Join(_activeUiButton.DOFade(1f, _startAnimationDuration));
-        
-        await startSequence.Play().AsyncWaitForCompletion();
+
+        //await startSequence.Play().AsyncWaitForCompletion();
+        await startSequence.Play().ToUniTask(cancellationToken:token);
         startSequence.Kill();
         
         //テスト用
@@ -187,22 +195,30 @@ public class LaunchManager : MonoBehaviour
     private void StartLaunchTimeLine(VideoPlayer vp)
     {
         //Debug.Log("再生された");
-        _activeUiObject.gameObject.SetActive(false);
-        var buttonColor = _mapUiAnimation.gameObject.GetComponent<RawImage>().color;
-        buttonColor.a = 1;
-        _mapUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
-        _mapUiAnimation.Play();
+        _launchPlayableDirector.Play();
+        StartCoroutine(WaitActiveUi());
+        //var buttonColor = _mapUiAnimation.gameObject.GetComponent<RawImage>().color;
+        //buttonColor.a = 1;
+        //_mapUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
+        //_mapUiAnimation.Play();
     }
 
     private void ActiveLauch(VideoPlayer vp)
     {
-        _launchPlayableDirector.Play();
+        
+    }
+
+    private IEnumerator WaitActiveUi()
+    {
+        yield return new WaitForSeconds(_buttonAnimationInterval);
+        _activeUiObject.gameObject.SetActive(false);
     }
 
     public void CallStartLaunchUiAnimation()
     {
         StartCoroutine(StartLaunchUiAnimation());
     }
+
     private  IEnumerator StartLaunchUiAnimation()
     {
         _detailUiAnimation.loopPointReached += (vp) => FinishAnimation(vp, _detailUi, _detailUiAnimation);

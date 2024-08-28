@@ -14,6 +14,7 @@ public class LockOnSystem : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private GameObject _center;
     [Header("マルチロックの敵の最低数")]
     [SerializeField] private int _minMultiLockCount = 2;
     [Header("両手の人差し指")]
@@ -25,6 +26,8 @@ public class LockOnSystem : MonoBehaviour
     [Header("カーソルとTargetの当たり判定の設定")]
     [SerializeField] private float _cursorRadius = 0.015f;
     [SerializeField] private float _targetRadius = 0.03f;
+    [Header("中心から離れ過ぎている場合にLineRendereを消す距離")]
+    [SerializeField] private float _limitLineRendereDistance = 100;
 
     [Header("マウス用")] 
     [SerializeField] private bool _isMouseFlag;
@@ -33,9 +36,10 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
     [SerializeField, Tooltip("マウス時のあたり判定")] private float _mouseTargetRadius = 1.0f;
     private bool _isMouseMultiLock;
+    private bool _isMultiLock;
 
     private bool _isSelect;
-    
+    private bool _isFinsishMultiLock;
 
     private List<Transform> _targets = new List<Transform>();
     private List<GameObject> _lockOn = new List<GameObject>();
@@ -70,6 +74,24 @@ public class LockOnSystem : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if(_isFinsishMultiLock)
+        {
+            //ラインレンダラーを設定
+            _lineRenderer.positionCount = 0;
+            //ラインレンダラーの更新
+            if (_temp.Count >= 1 && LimitLineRendere() )
+            {
+                foreach (Transform transform in _temp)
+                {
+                    _lineRenderer.positionCount++;
+                    _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
+                }
+            }
+        }
+    }
+
     private async UniTaskVoid M()
     {
         Debug.Log("マルチロックオン開始");
@@ -84,6 +106,9 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
+        if (_isMultiLock)
+            return;
+
         if (!_isMouseFlag)
         {
             //パネルに触れた時の音
@@ -100,18 +125,32 @@ public class LockOnSystem : MonoBehaviour
             if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
         }
 
+        float minDistance = float.MaxValue;
+        EnemyUi minEnemyUi = null;
+
         foreach (Transform t in _targets)
         {
             // Targetに触れているかチェック
             if (!IsCollision(_cursor, t, _cursorRadius, _targetRadius)) continue;
             // 一応Targetのコンポーネントが付いているかチェック
             if (!t.TryGetComponent(out EnemyUi ui)) continue;
+            //カーソルに近い物を判定する
+            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+            if(dis <= minDistance)
+            {
+                minDistance = dis;
+                minEnemyUi = ui;
+            }
             
-            // ターゲット更新
-            ui.OnButton();
-            Debug.Log(ui.Enemy.name + "をロックオン");
-            break;
         }
+        
+        if(minEnemyUi != null)
+        {
+            // ターゲット更新
+            minEnemyUi.OnButton();
+            Debug.Log(minEnemyUi.Enemy.name + "をロックオン");
+        }
+       
     }
 
     // なぞった結果、n体以上lock-onできなかった場合はやり直しの処理が無い。
@@ -122,6 +161,8 @@ public class LockOnSystem : MonoBehaviour
     /// <returns>ロックオンした敵のオブジェクト一覧</returns>
     public async UniTask<List<GameObject>> MultiLockOnAsync(CancellationToken token)
     {
+        _isMultiLock = true;
+
         // パネルを指で突くまで待つ。
         if (_isMouseFlag)
         {
@@ -164,14 +205,26 @@ public class LockOnSystem : MonoBehaviour
                             var enemyUi = t.GetComponent<EnemyUi>();
                             enemyUi.LockOnUi.SetActive(true);
                             // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            _lineRenderer.positionCount++;
-                            _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                            //_lineRenderer.positionCount++;
+                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
                             //多重ロックオン発動時に流れる音
                             CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                         }
                     }
                 }
 
+                //ラインレンダラーを設定
+                _lineRenderer.positionCount = 0;
+                //ラインレンダラーの更新
+                if (_temp.Count >= 1 && LimitLineRendere())
+                {
+                    foreach (Transform transform in _temp)
+                    {
+                        _lineRenderer.positionCount++;
+                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
+                    }
+                }
+                
 
                 if (Input.GetMouseButtonUp(0) && _isMouseMultiLock)
                     _isMouseMultiLock = false;
@@ -196,43 +249,53 @@ public class LockOnSystem : MonoBehaviour
                             var enemyUi = t.GetComponent<EnemyUi>();
                             enemyUi.LockOnUi.SetActive(true);
                             // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            _lineRenderer.positionCount++;
-                            _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
+                            //_lineRenderer.positionCount++;
+                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
                             //多重ロックオン発動時に流れる音
                             CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                            break;
                         }
+                    }
+                }
+
+                //ラインレンダラーを設定
+                _lineRenderer.positionCount = 0;
+                //ラインレンダラーの更新
+                if (_temp.Count >= 1 && LimitLineRendere())
+                {
+                    foreach (Transform transform in _temp)
+                    {
+                        _lineRenderer.positionCount++;
+                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
                     }
                 }
             }
         }
         
         await UniTask.Yield();
-        // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
-        LineRendererReset();
-        LockOnEnemies(_temp, _lockOn);
-        RaderMap radermap = FindObjectOfType<RaderMap>();
-        return radermap.Enemies;
-
-        //StartCoroutine(LockonCortinue(radermap.Enemies.Count));
         
+        //RaderMap radermap = FindObjectOfType<RaderMap>();
+        //return radermap.Enemies;
 
-        
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
-        // if (_temp.Count < _minMultiLockCount)
-        // {
-        //     foreach(Transform t in _temp)
-        //     {
-        //         //TargetのロックオンUiをオンにする
-        //         var enemyUi = t.GetComponent<EnemyUi>();
-        //         enemyUi.LockOnUi.SetActive(false);
-        //     }
-        //     return await MultiLockOnAsync(token);
-        // }
+        if (_temp.Count < _minMultiLockCount)
+        {
+            foreach (Transform t in _temp)
+            {
+                //TargetのロックオンUiをオンにする
+                var enemyUi = t.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(false);
+            }
+            return await MultiLockOnAsync(token);
+        }
 
-
-
-        //return _lockOn;
+        // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
+        //LineRendererReset();
+        _isFinsishMultiLock = true;
+        LockOnEnemies(_temp, _lockOn);
+        _isMultiLock = false;
+        return _lockOn;
     }
 
     private IEnumerator LockonCortinue(int count)
@@ -247,9 +310,11 @@ public class LockOnSystem : MonoBehaviour
     /// <summary>
     /// LineRendereをリセットする
     /// </summary>
-    public void LineRendererReset()
+    public void FinishMultiLock()
     {
         _lineRenderer.positionCount = 0;
+        _isFinsishMultiLock = false;
+        _temp.Clear();
     }
 
     // 生成されたTargetの親を調べ、Targetのみをリストに詰める。
@@ -329,5 +394,22 @@ public class LockOnSystem : MonoBehaviour
                 lockOn.Add(ui.Enemy);
             }
         }
+    }
+
+    //マルチロック時のLineRendereの表示非表示の切り替え
+    private bool LimitLineRendere()
+    {
+        foreach(Transform t in _temp)
+        {
+            Vector3 uiDir = t.transform.position;
+            //敵の高さとプレイヤーの高さを合わせる
+            uiDir.z = _center.transform.position.y;
+            uiDir = t.transform.position - _center.transform.position;
+            float distance = uiDir.magnitude;
+            if (distance > _limitLineRendereDistance)
+                return false;
+        }
+
+        return true;
     }
 }
