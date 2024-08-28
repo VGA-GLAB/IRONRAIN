@@ -10,7 +10,7 @@ namespace Enemy.Boss
         // これだけボス戦開始までnullになっているため、コンストラクタ時点では参照が確保できない。
         private PlayerBossMoveModel _field;
 
-        public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
+        public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, Transform pointP,
             BossParams bossParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, BossEffects effects, 
             Collider[] hitBoxes, MeleeEquipment meleeEquip, RangeEquipment rangeEquip, List<FunnelController> funnels)
         {
@@ -18,6 +18,7 @@ namespace Enemy.Boss
             Player = player;
             Offset = offset;
             Rotate = rotate;
+            PointP = pointP;
             BossParams = bossParams;
             BlackBoard = blackBoard;
             Animator = animator;
@@ -40,6 +41,7 @@ namespace Enemy.Boss
         public Transform Player { get; }
         public Transform Offset { get; }
         public Transform Rotate { get; }
+        public Transform PointP { get; }
         public BossParams BossParams { get; }
         public BlackBoard BlackBoard { get; }
         public Animator Animator { get; }
