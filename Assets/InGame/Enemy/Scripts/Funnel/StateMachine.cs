@@ -50,7 +50,7 @@ namespace Enemy.Funnel
         {
             // アニメーション速度はステートに依存しない。
             // ポーズ時にアニメーションが止まる。
-            string param = BodyAnimationConst.Param.PlaySpeed;
+            string param = Const.Param.PlaySpeed;
             float speed = Ref.BlackBoard.PausableDeltaTime;
             Ref.Animator.SetFloat(param, speed);
 

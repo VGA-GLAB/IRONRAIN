@@ -69,15 +69,15 @@ namespace Enemy
             // 再生するアニメーション名が敵の種類によって違う。
             EnemyType type = Ref.EnemyParams.Type;
             string stateName = "";
-            if (type == EnemyType.Assault) stateName = BodyAnimationConst.Assault.Damage;
-            else if (type == EnemyType.Launcher) stateName = BodyAnimationConst.Launcher.Damage;
-            else if (type == EnemyType.Shield) stateName = BodyAnimationConst.Shield.Damage;
+            if (type == EnemyType.Assault) stateName = Const.Assault.Damage;
+            else if (type == EnemyType.Launcher) stateName = Const.Launcher.Damage;
+            else if (type == EnemyType.Shield) stateName = Const.Shield.Damage;
 
             // 設定ミスなどで対応しているアニメーションが無い場合。
             if (stateName == "") return;
 
             // 死亡アニメーションはその瞬間に強制的に遷移させるため、ステートを指定して再生。
-            int layer = BodyAnimationConst.Layer.BaseLayer;
+            int layer = Const.Layer.BaseLayer;
             Ref.BodyAnimation.Play(stateName, layer);
 
             AudioWrapper.PlaySE("SE_Kill");

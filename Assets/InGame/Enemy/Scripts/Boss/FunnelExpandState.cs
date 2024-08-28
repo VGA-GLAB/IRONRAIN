@@ -56,7 +56,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _timer = 2.0f; // アニメーションの再生時間に手動で合わせる。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.FunnelExpand);
+            Ref.BodyAnimation.SetTrigger(Const.Param.FunnelExpand);
             
             // ファンネル展開
             foreach (FunnelController f in Ref.Funnels) f.Expand();
