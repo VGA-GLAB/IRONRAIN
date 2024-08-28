@@ -201,7 +201,7 @@ namespace IronRain.Player
             }
             else if (_laneList.Count - 1 < nextLane)
             {
-                _currentLane = 0;
+                _currentLane.Value = 0;
             }
             else 
             {
