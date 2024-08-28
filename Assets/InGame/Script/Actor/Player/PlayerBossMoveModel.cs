@@ -26,7 +26,7 @@ namespace IronRain.Player
         private float _startTheta;
         private Transform _centerPoint;
         private List<Vector3> _laneList = new();
-        private ReactiveProperty<int> _currentLane;
+        private ReactiveProperty<int> _currentLane = new();
 
         public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
