@@ -14,6 +14,7 @@ public class LockOnSystem : MonoBehaviour
 {
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private GameObject _center;
     [Header("マルチロックの敵の最低数")]
     [SerializeField] private int _minMultiLockCount = 2;
     [Header("両手の人差し指")]
@@ -25,6 +26,8 @@ public class LockOnSystem : MonoBehaviour
     [Header("カーソルとTargetの当たり判定の設定")]
     [SerializeField] private float _cursorRadius = 0.015f;
     [SerializeField] private float _targetRadius = 0.03f;
+    [Header("中心から離れ過ぎている場合にLineRendereを消す距離")]
+    [SerializeField] private float _limitLineRendereDistance = 100;
 
     [Header("マウス用")] 
     [SerializeField] private bool _isMouseFlag;
@@ -78,7 +81,7 @@ public class LockOnSystem : MonoBehaviour
             //ラインレンダラーを設定
             _lineRenderer.positionCount = 0;
             //ラインレンダラーの更新
-            if (_temp.Count >= 1)
+            if (_temp.Count >= 1 && LimitLineRendere() )
             {
                 foreach (Transform transform in _temp)
                 {
@@ -213,7 +216,7 @@ public class LockOnSystem : MonoBehaviour
                 //ラインレンダラーを設定
                 _lineRenderer.positionCount = 0;
                 //ラインレンダラーの更新
-                if (_temp.Count >= 1)
+                if (_temp.Count >= 1 && LimitLineRendere())
                 {
                     foreach (Transform transform in _temp)
                     {
@@ -258,7 +261,7 @@ public class LockOnSystem : MonoBehaviour
                 //ラインレンダラーを設定
                 _lineRenderer.positionCount = 0;
                 //ラインレンダラーの更新
-                if (_temp.Count >= 1)
+                if (_temp.Count >= 1 && LimitLineRendere())
                 {
                     foreach (Transform transform in _temp)
                     {
@@ -391,5 +394,22 @@ public class LockOnSystem : MonoBehaviour
                 lockOn.Add(ui.Enemy);
             }
         }
+    }
+
+    //マルチロック時のLineRendereの表示非表示の切り替え
+    private bool LimitLineRendere()
+    {
+        foreach(Transform t in _temp)
+        {
+            Vector3 uiDir = t.transform.position;
+            //敵の高さとプレイヤーの高さを合わせる
+            uiDir.z = _center.transform.position.y;
+            uiDir = t.transform.position - _center.transform.position;
+            float distance = uiDir.magnitude;
+            if (distance > _limitLineRendereDistance)
+                return false;
+        }
+
+        return true;
     }
 }
