@@ -4,11 +4,15 @@ using System.Threading;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using UniRx;
 
 namespace IronRain.Player
 {
     public class PlayerBossMoveModel : IPlayerStateModel
     {
+        public List<Vector3> LaneList => _laneList;
+        public IReactiveProperty<int> CurrentRane => _currentLane;
+
         [SerializeField] LeverController _leftController;
         [SerializeField] LeverController _rightController;
         [SerializeField] Rigidbody _rb;
@@ -21,6 +25,8 @@ namespace IronRain.Player
         private Transform _transform;
         private float _startTheta;
         private Transform _centerPoint;
+        private List<Vector3> _laneList = new();
+        private ReactiveProperty<int> _currentLane;
 
         public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
@@ -30,6 +36,7 @@ namespace IronRain.Player
             _rightController.SetUp(env.PlayerSetting);
             _transform = _playerEnvroment.PlayerTransform;
             _centerPoint = _pointP;
+            CreateLane();
         }
 
         public void Start()
@@ -64,7 +71,7 @@ namespace IronRain.Player
 
         public void Dispose()
         {
-
+            _currentLane.Dispose();
         }
 
         public void ResetPos()
@@ -81,7 +88,9 @@ namespace IronRain.Player
                 if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
                 {
                     _playerEnvroment.AddState(PlayerStateType.Thruster);
-                    var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
+                    //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
+                    var nextPoint = NextLane(-1);
+
                     UniTask.Create(async () =>
                     {
                         await _playerEnvroment.PlayerTransform
@@ -100,7 +109,8 @@ namespace IronRain.Player
                 if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
                 {
                     _playerEnvroment.AddState(PlayerStateType.Thruster);
-                    var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum);
+                    //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum);
+                    var nextPoint = NextLane(1);
                     UniTask.Create(async () =>
                     {
                         await _playerEnvroment.PlayerTransform
@@ -122,7 +132,6 @@ namespace IronRain.Player
         {
             if (playerState.HasFlag(PlayerStateType.EnterBossQte)) 
             {
-                Debug.Log("の巣戦は言った");
                 _thrusterCancell.Cancel();
             } 
         }
@@ -149,6 +158,57 @@ namespace IronRain.Player
             var position = new Vector3(x + centerPosition.x, _playerEnvroment.PlayerTransform.localPosition.y, z + centerPosition.z);
             //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
             return position;
+        }
+
+        private Vector3 NextThrusterMovePoint(float moveDistance, Vector3 pos) 
+        {
+            pos.y = 0;
+            var centerPosition = Vector3.zero;
+            centerPosition.y = 0;
+            var r = Vector3.Distance(centerPosition, pos);
+            var theta = (moveDistance / r);
+            Debug.Log($"θ:{theta}r:{r}");
+
+            _totalThrusterMove += theta;
+            var cos = Mathf.Cos(_totalThrusterMove + _startTheta);
+            var x = cos * r;
+            var z = Mathf.Sin(_totalThrusterMove + _startTheta) * r;
+
+            var position = new Vector3(x + centerPosition.x, _playerEnvroment.PlayerTransform.localPosition.y, z + centerPosition.z);
+            //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
+            return position;
+        }
+
+
+        private void CreateLane()
+        {
+            int idx = Mathf.FloorToInt(360 / _params.ThrusterMoveNum);
+            var nextPos = _playerEnvroment.PlayerTransform.localPosition;
+
+            for (int i = 0; i < idx; i++) 
+            {
+                nextPos = NextThrusterMovePoint(_params.ThrusterMoveNum, nextPos);
+                _laneList.Add(nextPos);
+            }
+        }
+
+        private Vector3 NextLane(int isRight) 
+        {
+            var nextLane = _currentLane.Value + isRight;
+            if (nextLane < 0)
+            {
+                _currentLane.Value = _laneList.Count - 1;
+            }
+            else if (_laneList.Count - 1 < nextLane)
+            {
+                _currentLane.Value = 0;
+            }
+            else 
+            {
+                _currentLane.Value += isRight;
+            }
+
+            return _laneList[_currentLane.Value];
         }
 
         private void SumTheta()

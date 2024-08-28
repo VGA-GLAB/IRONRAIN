@@ -5,47 +5,16 @@
     /// </summary>
     public class BattleByAssaultState : BattleState
     {
-        private enum AnimationGroup
-        {
-            Other, // 初期状態
-            Idle,  // Idle
-            Hold,  // HoldStart~HoldLoop
-            Fire,  // FireLoop
-        }
-
-        private AssaultEquipment _equipment;
-
-        // 現在のアニメーションのステートによって処理を分岐するために使用する。
-        private AnimationGroup _currentAnimGroup;
+        private EnemyActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
         public BattleByAssaultState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _equipment = requiredRef.Equipment as AssaultEquipment;
-            _equipment.OnShootAction += OnShoot;
+            _steps = new EnemyActionStep[2];
+            _steps[1] = new AssaultFireStep(requiredRef, null);
+            _steps[0] = new AssaultHoldStep(requiredRef, _steps[1]);
 
-            // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.Assault.Idle, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Idle);
-            Register(BodyAnimationConst.Assault.HoldStart, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Hold);
-            Register(BodyAnimationConst.Assault.FireLoop, BodyAnimationConst.Layer.UpperBody, AnimationGroup.Fire);
-
-            // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
-            // このメソッドで登録していないアニメーションのステートに遷移した場合、
-            // _currentAnimGroupの値が元のままになるので注意。
-            void Register(string stateName, int layerIndex, AnimationGroup animGroup)
-            {
-                Ref.BodyAnimation.RegisterStateEnterCallback(
-                    nameof(BattleByAssaultState), 
-                    stateName, 
-                    layerIndex, 
-                    () => _currentAnimGroup = animGroup
-                    );
-            }
-        }
-
-        private void OnShoot()
-        {
-            // 弾を発射したタイミングで攻撃を実行したことを黒板に書き込む。
-            AttackTrigger();
+            _currentStep = _steps[0];
         }
 
         protected override void OnEnter()
@@ -61,52 +30,91 @@
 
         protected override void StayIfBattle()
         {
-            // どのアニメーションが再生されているかによって処理を分ける。
-            if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
-            else if (_currentAnimGroup == AnimationGroup.Hold) StayHold();
-            else if (_currentAnimGroup == AnimationGroup.Fire) StayFire();
-            else StayOther();
+            _currentStep = _currentStep.Update();
         }
 
         public override void Dispose()
         {
-            _equipment.OnShootAction -= OnShoot;
+            foreach (EnemyActionStep s in _steps) s.Dispose();
+        }
+    }
 
-            // コールバックの登録解除。
-            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByAssaultState));
+    /// <summary>
+    /// アサルトライフル構え。
+    /// </summary>
+    public class AssaultHoldStep : EnemyAttackActionStep
+    {
+        public AssaultHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        {
+            // アイドルのアニメーション再生をトリガーする。
+            {
+                string state = BodyAnimationConst.Assault.Idle;
+                int layer = BodyAnimationConst.Layer.BaseLayer;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
+            }
         }
 
-        // アニメーションがアイドル状態
-        private void StayIdle()
+        protected override void Enter()
         {
+        }
+
+        private void OnIdleAnimationStateEnter()
+        {
+            // ロケットランチャーを構える。
             Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
         }
 
-        // アニメーションが武器構え状態
-        private void StayHold()
+        protected override BattleActionStep Stay()
+        {
+            if (IsAttack()) return Next[0];
+            else return this;
+        }
+
+        public override void Dispose()
+        {
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
+        }
+    }
+
+    /// <summary>
+    /// アサルトライフル発射。
+    /// </summary>
+    public class AssaultFireStep : EnemyAttackActionStep
+    {
+        public AssaultFireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        {
+            // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
+            {
+                string state = BodyAnimationConst.Assault.FireLoop;
+                int layer = BodyAnimationConst.Layer.UpperBody;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
+            }
+        }
+
+        protected override void Enter()
+        {
+            // 1フレームズレるが、次のStayで攻撃のアニメーションが再生されるのでここでは何もしない。
+        }
+
+        private void OnFireAnimationStateEnter()
+        {
+            AttackTrigger();
+        }
+
+        protected override BattleActionStep Stay()
         {
             if (IsAttack())
             {
+                // 黒板への書き込みはアニメーションイベントで行うので、ここでは再生だけ。
                 Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
             }
+
+            return this;
         }
 
-        // アニメーションが攻撃状態
-        private void StayFire()
+        public override void Dispose()
         {
-            // チュートリアル用の敵の場合、攻撃状態になった瞬間に攻撃終了のフラグを立てる。
-            // Animatorのenemy_assult_fire_lpステートを繰り返す遷移にHasExitTimeのチェックが入っている前提。
-            if (Ref.EnemyParams.SpecialCondition == SpecialCondition.ManualAttack)
-            {
-                // この場合、1回攻撃のアニメーションが再生された後、アイドル状態に戻るはず。
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
-            }
-        }
-
-        // アニメーションがそれ以外状態
-        private void StayOther()
-        {
-            //
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
         }
     }
 }

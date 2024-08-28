@@ -16,32 +16,28 @@ namespace Enemy.Funnel
 
     public class StateMachine
     {
-        // アニメーションなど、EnemyControllerのイベント関数外での処理を扱う。
-        // そのため、結果を返して完了まで待ってもらう。
-        public enum Result { Running, Complete };
-
-        private BlackBoard _blackBoard;
-        private Animator _animator;
-
-        // ステートベースで制御する。
         private Dictionary<StateKey, State<StateKey>> _states;
         private State<StateKey> _currentState;
-
-        // 既に後始末処理を実行済みかを判定するフラグ。
-        private bool _isCleanup;
+        private bool _isDisposed;
 
         public StateMachine(RequiredRef requiredRef)
         {
-            _blackBoard = requiredRef.BlackBoard;
-            _animator = requiredRef.Animator;
+            Ref = requiredRef;
+            Initialize();
+        }
 
+        public RequiredRef Ref { get; }
+
+        // 初期化処理。
+        private void Initialize()
+        {
             // ステートを作成し、辞書で管理。
-            _states = requiredRef.States;
-            _states.Add(StateKey.Hide, new HideState(requiredRef));
-            _states.Add(StateKey.Expand, new ExpandState(requiredRef));
-            _states.Add(StateKey.Battle, new BattleState(requiredRef));
-            _states.Add(StateKey.Return, new ReturnState(requiredRef));
-            _states.Add(StateKey.Delete, new DeleteState(requiredRef));
+            _states = Ref.States;
+            _states.Add(StateKey.Hide, new HideState(Ref));
+            _states.Add(StateKey.Expand, new ExpandState(Ref));
+            _states.Add(StateKey.Battle, new BattleState(Ref));
+            _states.Add(StateKey.Return, new ReturnState(Ref));
+            _states.Add(StateKey.Delete, new DeleteState(Ref));
 
             // 初期状態では画面に表示しない。
             _currentState = _states[StateKey.Hide];
@@ -54,13 +50,16 @@ namespace Enemy.Funnel
         {
             // アニメーション速度はステートに依存しない。
             // ポーズ時にアニメーションが止まる。
-            _animator.SetFloat(BodyAnimationConst.Param.PlaySpeed, _blackBoard.PausableTimeScale);
+            string param = BodyAnimationConst.Param.PlaySpeed;
+            float speed = Ref.BlackBoard.PausableDeltaTime;
+            Ref.Animator.SetFloat(param, speed);
 
             // ステートマシンを更新。
             _currentState = _currentState.Update();
 
             // ステート内で後始末の準備完了フラグが立った場合は、これ以上更新しなくて良い。
-            if (_blackBoard.IsCleanupReady) return Result.Complete;
+            bool isComplete = Ref.BlackBoard.IsCleanupReady;
+            if (isComplete) return Result.Complete;
             else return Result.Running;
         }
 
@@ -71,8 +70,8 @@ namespace Enemy.Funnel
         public void Dispose()
         {
             // 二度実行するのを防ぐ。
-            if (_isCleanup) return;
-            else _isCleanup = true;
+            if (_isDisposed) return;
+            else _isDisposed = true;
 
             // ステートマシンを破棄。
             foreach (KeyValuePair<StateKey, State<StateKey>> s in _states)
@@ -82,7 +81,7 @@ namespace Enemy.Funnel
 
             // ステートを破棄した時点でAnimatorに関する操作もこれ以上しない。
             // 警告対策のためAnimatorを無効化しておく。
-            _animator.enabled = false;
+            Ref.Animator.enabled = false;
         }
     }
 }

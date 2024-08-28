@@ -5,36 +5,16 @@
     /// </summary>
     public class BattleByShieldState : BattleState
     {
-        private enum AnimationGroup
-        {
-            Other,  // 初期状態
-            Idle,   // Idle
-            Shield, // ShieldStart~ShieldLoop
-            Attack, // Attack
-        }
-
-        // 現在のアニメーションのステートによって処理を分岐するために使用する。
-        private AnimationGroup _currentAnimGroup;
+        // 構える。
+        private EnemyActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
         public BattleByShieldState(RequiredRef requiredRef) : base(requiredRef)
         {
-            // アニメーションのステートの遷移をトリガーする。
-            Register(BodyAnimationConst.Shield.Idle, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Idle);
-            Register(BodyAnimationConst.Shield.ShieldStart, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Shield);
-            Register(BodyAnimationConst.Shield.Attack, BodyAnimationConst.Layer.BaseLayer, AnimationGroup.Attack);
+            _steps = new EnemyActionStep[1];
+            _steps[0] = new ShieldHoldStep(requiredRef, null);
 
-            // stateNameのアニメーションのステートに遷移してきたタイミング(Enter)のみトリガーしている。
-            // このメソッドで登録していないアニメーションのステートに遷移した場合、
-            // _currentAnimGroupの値が元のままになるので注意。
-            void Register(string stateName, int layerIndex, AnimationGroup animGroup)
-            {
-                Ref.BodyAnimation.RegisterStateEnterCallback(
-                    nameof(BattleByShieldState), 
-                    stateName, 
-                    layerIndex, 
-                    () => _currentAnimGroup = animGroup
-                    );
-            }
+            _currentStep = _steps[0];
         }
 
         protected override void OnEnter()
@@ -50,46 +30,48 @@
 
         protected override void StayIfBattle()
         {
-            // どのアニメーションが再生されているかによって処理を分ける。
-            if (_currentAnimGroup == AnimationGroup.Idle) StayIdle();
-            else if (_currentAnimGroup == AnimationGroup.Shield) StayShield();
-            else if (_currentAnimGroup == AnimationGroup.Attack) StayAttack();
-            else StayOther();
+            _currentStep = _currentStep.Update();
         }
 
         public override void Dispose()
         {
-            // コールバックの登録解除。
-            Ref.BodyAnimation.ReleaseStateCallback(nameof(BattleByShieldState));
+            foreach (BattleActionStep s in _steps) s.Dispose();
         }
+    }
 
-        // アニメーションがアイドル状態
-        private void StayIdle()
+    /// <summary>
+    /// 盾を構える。
+    /// </summary>
+    public class ShieldHoldStep : EnemyActionStep
+    {
+        public ShieldHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-        }
-
-        // アニメーションが盾構え状態
-        private void StayShield()
-        {
-            // 攻撃可能な場合は武器構えのアニメーション再生。
-            if (IsAttack())
+            // アイドルのアニメーション再生をトリガーする。
             {
-                // 現在の仕様だと、特に攻撃しない。
-                //_animation.SetTrigger(BodyAnimation.ParamName.AttackTrigger);
+                string state = BodyAnimationConst.Shield.Idle;
+                int layer = BodyAnimationConst.Layer.BaseLayer;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
         }
 
-        // アニメーションが攻撃状態
-        private void StayAttack()
+        protected override void Enter()
         {
-            //
         }
 
-        // アニメーションがそれ以外状態
-        private void StayOther()
+        private void OnIdleAnimationStateEnter()
         {
-            //
+            // 盾を構える。
+            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            return this;
+        }
+
+        public override void Dispose()
+        {
+            Ref.BodyAnimation.ReleaseStateCallback(ID);
         }
     }
 }
