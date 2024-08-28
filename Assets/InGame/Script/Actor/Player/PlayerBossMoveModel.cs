@@ -12,6 +12,7 @@ namespace IronRain.Player
     {
         public List<Vector3> LaneList => _laneList;
         public IReactiveProperty<int> CurrentRane => _currentLane;
+        public Transform PointP => _pointP;
 
         [SerializeField] LeverController _leftController;
         [SerializeField] LeverController _rightController;
