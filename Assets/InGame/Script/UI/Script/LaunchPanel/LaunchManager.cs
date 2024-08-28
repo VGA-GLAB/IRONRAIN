@@ -316,5 +316,6 @@ public class LaunchManager : MonoBehaviour
         _detailUi.alpha = 1;
         _minimapUi.alpha = 1;
         _isTouch = true;
+        _pokeCollision.SetActive(true);
     }
 }
