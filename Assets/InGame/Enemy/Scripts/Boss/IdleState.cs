@@ -36,9 +36,10 @@ namespace Enemy.Boss
             if (isQteStarted) { TryChangeState(StateKey.QteEvent); return; }
 
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
-            bool isMeleeRange = Ref.BlackBoard.IsWithinMeleeRange;
-            bool isMelee = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
-            if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
+            // マルチロックのテストをさせてあげるためにウロチョロしないでほしいので用に一旦コメントアウト。
+            //bool isMeleeRange = Ref.BlackBoard.IsWithinMeleeRange;
+            //bool isMelee = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
+            //if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
 
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
             bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
