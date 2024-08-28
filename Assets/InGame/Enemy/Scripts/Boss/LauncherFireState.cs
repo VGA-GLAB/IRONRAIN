@@ -63,28 +63,28 @@ namespace Enemy.Boss
         {
             // 構えのアニメーション再生をトリガーする。
             {
-                string state = BodyAnimationConst.Boss.HoldStart;
-                int layer = BodyAnimationConst.Layer.UpperBody;
+                string state = Const.Boss.HoldStart;
+                int layer = Const.Layer.UpperBody;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
             }
             // Exitのコールバックが不安定なので、発射のEnterを検知して、次のステップに遷移させる用途。
             {
-                string state = BodyAnimationConst.Boss.FireLoop;
-                int layer = BodyAnimationConst.Layer.UpperBody;
+                string state = Const.Boss.FireLoop;
+                int layer = Const.Layer.UpperBody;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
             }
         }
 
         protected override void Enter()
         {
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
-            Ref.BodyAnimation.ResetTrigger(BodyAnimationConst.Param.BladeAttack);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
+            Ref.BodyAnimation.ResetTrigger(Const.Param.BladeAttack);
         }
 
         private void OnHoldAnimationStateEnter()
         {
             // 現状、特にプランナーから指示が無いので構え->発射を瞬時に行う。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
+            Ref.BodyAnimation.SetTrigger(Const.Param.Attack);
         }
 
         private void OnFireAnimationStateEnter()
@@ -132,7 +132,7 @@ namespace Enemy.Boss
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
                 // 手動で射撃終了をトリガーする必要がある。
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
+                Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
                 
                 return Next[0];
             }

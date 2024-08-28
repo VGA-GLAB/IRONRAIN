@@ -12,6 +12,7 @@ namespace Enemy
         Escape,
         Hide,
         Delete,
+        Ready,
     }
 
     /// <summary>
@@ -44,6 +45,7 @@ namespace Enemy
             _states.Add(StateKey.Escape, new EscapeState(Ref));
             _states.Add(StateKey.Hide, new HideState(Ref));
             _states.Add(StateKey.Delete, new DeleteState(Ref));
+            _states.Add(StateKey.Ready, new ReadyState(Ref));
             
             // 戦闘ステートは装備によって違う。
             {
@@ -66,7 +68,7 @@ namespace Enemy
         {
             // アニメーション速度はステートに依存しない。
             // ポーズ時にアニメーションが止まる。
-            string param = BodyAnimationConst.Param.PlaySpeed;
+            string param = Const.Param.PlaySpeed;
             float speed = Ref.BlackBoard.PausableTimeScale;
             Ref.Animator.SetFloat(param, speed);
             

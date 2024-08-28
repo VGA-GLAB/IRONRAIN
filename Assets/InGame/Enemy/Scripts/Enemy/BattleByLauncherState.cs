@@ -30,7 +30,7 @@ namespace Enemy
         protected override void OnExit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
         }
 
         protected override void StayIfBattle()
@@ -53,8 +53,8 @@ namespace Enemy
         {
             // アイドルのアニメーション再生をトリガーする。
             {
-                string state = BodyAnimationConst.Launcher.Idle;
-                int layer = BodyAnimationConst.Layer.BaseLayer;
+                string state = Const.Launcher.Idle;
+                int layer = Const.Layer.BaseLayer;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
         }
@@ -66,7 +66,7 @@ namespace Enemy
         private void OnIdleAnimationStateEnter()
         {
             // ロケットランチャーを構える。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()
@@ -93,8 +93,8 @@ namespace Enemy
         {
             // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
             {
-                string state = BodyAnimationConst.Launcher.Fire;
-                int layer = BodyAnimationConst.Layer.UpperBody;
+                string state = Const.Launcher.Fire;
+                int layer = Const.Layer.UpperBody;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
             }
         }
@@ -104,7 +104,7 @@ namespace Enemy
             _isAnimationEnter = false;
 
             // ロケットランチャー発射。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
+            Ref.BodyAnimation.SetTrigger(Const.Param.Attack);
         }
 
         private void OnFireAnimationStateEnter()

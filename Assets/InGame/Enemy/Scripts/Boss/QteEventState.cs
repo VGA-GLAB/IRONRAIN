@@ -61,8 +61,8 @@ namespace Enemy.Boss
         {
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
             // Attackの状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
-            string state = BodyAnimationConst.Boss.QteSwordSet;
-            int layer = BodyAnimationConst.Layer.BaseLayer;
+            string state = Const.Boss.QteSwordSet;
+            int layer = Const.Layer.BaseLayer;
             Ref.BodyAnimation.Play(state, layer);
         }
 
@@ -115,7 +115,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             // プレイヤーの入力があった場合は、刀を振り下ろす。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack01);
+            Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack01);
         }
 
         protected override BattleActionStep Stay()
@@ -145,7 +145,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             // 振り下ろした刀を構え直す。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClear01);
+            Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttackClear01);
         }
 
         protected override BattleActionStep Stay()
@@ -154,7 +154,7 @@ namespace Enemy.Boss
             if (isInputed)
             {
                 // 鍔迫り合い1回目、刀を振り下ろす。
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack02);
+                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
                 
                 return Next[0];
             }
@@ -237,8 +237,8 @@ namespace Enemy.Boss
         {
             // 振り下ろした刀を構え直す。
             // 1回目の鍔迫り合いのアニメーションを使いまわすのでトリガーではなくPlayで再生するしかない。
-            string state = BodyAnimationConst.Boss.QteSowrdRepel_1;
-            int layer = BodyAnimationConst.Layer.UpperBody;
+            string state = Const.Boss.QteSowrdRepel_1;
+            int layer = Const.Layer.UpperBody;
             Ref.BodyAnimation.Play(state, layer);
 
             Vector3 dir = Ref.BlackBoard.PlayerDirection;
@@ -268,8 +268,8 @@ namespace Enemy.Boss
             bool isInputed = Ref.BlackBoard.IsSecondCombatInputed;
             if (isInputed)
             {
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.QteBladeAttack02);
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.QteBladeAttackClear02);
+                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
+                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttackClear02);
                 
                 return Next[0];
             }
@@ -323,7 +323,7 @@ namespace Enemy.Boss
             bool isInputed = Ref.BlackBoard.IsPenetrateInputed;
             if (isInputed)
             {
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Finish);
+                Ref.BodyAnimation.SetTrigger(Const.Param.Finish);
                 Ref.Effector.PlayDestroyed();
 
                 AudioWrapper.PlaySE("SE_Kill");

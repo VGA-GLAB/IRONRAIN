@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Funnel;
+using IronRain.Player;
 
 namespace Enemy.Boss
 {
@@ -53,8 +54,7 @@ namespace Enemy.Boss
                 hitBoxes: _hitBoxes,
                 meleeEquip: GetComponent<MeleeEquipment>(),
                 rangeEquip: GetComponent<RangeEquipment>(),
-                funnels: new List<FunnelController>(),
-                pointP: FindAnyObjectByType<DebugPointP>()
+                funnels: new List<FunnelController>()
                 );
 
             _params = requiredRef.BossParams;

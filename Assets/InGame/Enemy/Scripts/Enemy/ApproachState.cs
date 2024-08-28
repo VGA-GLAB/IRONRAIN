@@ -3,11 +3,12 @@
 namespace Enemy
 {
     /// <summary>
-    /// 画面に表示され、スロット位置まで接近するステート。
+    /// 準備完了後、スロット位置まで接近するステート。
     /// </summary>
     public class ApproachState : PlayableState
     {
-        private Vector3 _spawnPoint;
+        private Vector3 _start;
+        private float _diff;
         private float _lerp;
 
         public ApproachState(RequiredRef requiredRef) : base(requiredRef) { }
@@ -24,8 +25,11 @@ namespace Enemy
             Ref.Effector.ThrusterEnable(true);
             Ref.Effector.TrailEnable(true);
 
-            // 隠れた状態から表示された瞬間の位置をLerpのaにする。
-            _spawnPoint = Ref.Body.Position;
+            // Lerpで等速運動。
+            Vector3 p = Ref.Body.Position;
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            _start = p - sp;
+            _diff = _start.magnitude;
             _lerp = 0;
 
             Always();
@@ -36,7 +40,7 @@ namespace Enemy
             Always();
 
             // 接近アニメーション終了をトリガー。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
+            Ref.BodyAnimation.SetTrigger(Const.Param.ApproachEnd);
 
             // 接近完了フラグ。
             Ref.BlackBoard.IsApproachCompleted = true;
@@ -61,19 +65,19 @@ namespace Enemy
             Vector3 before = Ref.Body.Position;
 
             // 生成位置からスロットの位置をLerpで動かす。
-            Vector3 slotPoint = Ref.BlackBoard.Slot.Point;
-            Vector3 l = Vector3.Lerp(_spawnPoint, slotPoint, _lerp);
-            Ref.Body.Warp(l);
-
+            Vector3 l = Vector3.Lerp(_start, Vector3.zero, _lerp);
+            Vector3 p = Ref.BlackBoard.Slot.Point + l;
+            Ref.Body.Warp(p);
+            
             Vector3 after = Ref.Body.Position;
 
             // 移動の前後で位置を比較し、移動方向によってアニメーション。
             MoveAnimation(after - before);
 
-            // Lerpの補間値を更新。
-            float speed = Ref.EnemyParams.MoveSpeed.Chase;
+            // Lerpの補間値を更新。距離が変わっても一定の速度で移動させる。
+            float speed = Ref.EnemyParams.MoveSpeed.Approach;
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * speed;
+            _lerp += speed / _diff * dt;
             _lerp = Mathf.Clamp01(_lerp);
 
             // プレイヤーを向かせる。

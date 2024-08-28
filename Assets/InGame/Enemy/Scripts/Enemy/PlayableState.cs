@@ -41,25 +41,12 @@ namespace Enemy
         /// </summary>
         protected void MoveAnimation(in Vector3 moveDir)
         {
-            // 多少の横移動で左右移動アニメーションが再生されないよう手動で設定。
-            const float epsilon = 0.05f;
+            // 移動量に対する倍率。
+            const float Mag = 2.0f; 
 
-            BodyAnimation anim = Ref.BodyAnimation;
-            if (Mathf.Abs(moveDir.x) < epsilon)
-            {
-                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
-                anim.SetBool(BodyAnimationConst.Param.IsRightMove, false);
-            }
-            else if (moveDir.x < 0)
-            {
-                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, false);
-                anim.SetBool(BodyAnimationConst.Param.IsRightMove, true);
-            }
-            else if (moveDir.x > 0)
-            {
-                anim.SetBool(BodyAnimationConst.Param.IsLeftMove, true);
-                anim.SetBool(BodyAnimationConst.Param.IsRightMove, false);
-            }
+            string param = Const.Param.SpeedX;
+            float value = Mathf.Clamp(moveDir.x * Mag, -1.0f, 1.0f);
+            Ref.BodyAnimation.SetFloat(param, value);
         }
 
         /// <summary>

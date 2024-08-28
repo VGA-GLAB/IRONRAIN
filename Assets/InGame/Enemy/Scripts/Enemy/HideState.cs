@@ -30,7 +30,7 @@
         {
             // プレイヤーを検知した場合は接近
             bool isDetect = Ref.BlackBoard.IsPlayerDetect;
-            if (isDetect) { TryChangeState(StateKey.Approach); return; }
+            if (isDetect) { TryChangeState(StateKey.Ready); return; }
 
             // 死亡した場合は削除
             bool isDead = !Ref.BlackBoard.IsAlive;
