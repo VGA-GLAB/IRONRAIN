@@ -22,6 +22,7 @@ namespace IronRain.Player
         [SerializeField] private Transform _defaultAimTarget;
         [SerializeField] private Transform _homingMissilePos;
         [SerializeField] private GameObject _homingMissilePrefab;
+        [SerializeField] private LockOnSystem _lockOnSystem;
 
         private bool _isWeaponChenge;
         private bool _isShot;
@@ -116,6 +117,7 @@ namespace IronRain.Player
 
         public void MulchShot()
         {
+            _lockOnSystem.FinishMultiLock();
             var enemys = _playerEnvroment.RaderMap.MultiLockEnemys; 
             for (int i = 0; i < enemys.Count; i++) 
             {

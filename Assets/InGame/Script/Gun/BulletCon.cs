@@ -68,6 +68,7 @@ namespace IronRain.Player
             if (!playerCon && damageble != null)
             {
                 damageble.Damage(_damege, _weaponName);
+                StopAllCoroutines();
                 OnRelease?.Invoke(this);
             }
         }

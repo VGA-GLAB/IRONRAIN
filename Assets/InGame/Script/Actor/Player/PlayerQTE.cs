@@ -34,7 +34,6 @@ namespace IronRain.Player
                 || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonTriggerQte)) return;
             var enemyTypeReader = other.GetComponentInParent<EnemyController>();
             if (enemyTypeReader == null) return;
-            Debug.Log(other.name);
             //盾持ちの敵が入ってきたら
             if (enemyTypeReader.Params.Type == EnemyType.Shield)
             {
