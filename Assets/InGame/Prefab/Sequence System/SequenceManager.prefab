@@ -96,7 +96,7 @@ MonoBehaviour:
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _groupName: TouchPanelSequence
-        _isSkip: 0
+        _isSkip: 1
         _sequences:
         - rid: 4919532094182391917
         - rid: 4919532094182391918
@@ -173,7 +173,7 @@ MonoBehaviour:
       type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _removeState: 168
+        _removeState: 232
     - rid: 4919532251061157901
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -492,6 +492,7 @@ MonoBehaviour:
         - rid: 7776351557909479471
         - rid: 7776351557909479472
         - rid: 7776351557909479473
+        - rid: 7776351557909479482
         - rid: 7776351557909479474
     - rid: 7776351557909479467
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
@@ -584,8 +585,21 @@ MonoBehaviour:
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _isSkipSpawn: 0
-        _totalSec: 1
+        _totalSec: 10
         _targetSeq: 9
+    - rid: 7776351557909479482
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 10
+        _isSkip: 0
+        _sequences:
+        - rid: 7776351557909479483
+    - rid: 7776351557909479483
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 10
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,6 +633,7 @@ MonoBehaviour:
     _announceUiController: {fileID: 0}
     _playerAnimation: {fileID: 0}
     _launchManager: {fileID: 0}
+    _recorder: {fileID: 0}
 --- !u!114 &52876117135305751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,5 +648,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
-  _isSkip: 0
-  _startSequence: 5
+  _isSkip: 1
+  _startSequence: 10

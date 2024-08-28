@@ -32,13 +32,13 @@ namespace IronRain.Player
         {
             if (QTEModel == null || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.Inoperable)
                 || _playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonTriggerQte)) return;
-            var enemyTypeReader = other.GetComponentsInParent<EnemyController>();
-            if (enemyTypeReader.Length == 0) return;
-            Debug.Log(other);
+            var enemyTypeReader = other.GetComponentInParent<EnemyController>();
+            if (enemyTypeReader == null) return;
+            Debug.Log(other.name);
             //盾持ちの敵が入ってきたら
-            if (enemyTypeReader[0].Params.Type == EnemyType.Shield)
+            if (enemyTypeReader.Params.Type == EnemyType.Shield)
             {
-                _guid = enemyTypeReader[0].BlackBoard.ID;
+                _guid = enemyTypeReader.BlackBoard.ID;
                 QTEModel.StartQTE(_guid, QteType.NormalQte).Forget();
             }
         }
