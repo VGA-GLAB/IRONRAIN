@@ -25,7 +25,7 @@
         protected override void OnExit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
         }
 
         protected override void StayIfBattle()
@@ -48,8 +48,8 @@
         {
             // アイドルのアニメーション再生をトリガーする。
             {
-                string state = BodyAnimationConst.Shield.Idle;
-                int layer = BodyAnimationConst.Layer.BaseLayer;
+                string state = Const.Shield.Idle;
+                int layer = Const.Layer.BaseLayer;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
         }
@@ -61,7 +61,7 @@
         private void OnIdleAnimationStateEnter()
         {
             // 盾を構える。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()

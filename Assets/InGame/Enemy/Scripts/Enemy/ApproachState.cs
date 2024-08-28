@@ -36,7 +36,7 @@ namespace Enemy
             Always();
 
             // 接近アニメーション終了をトリガー。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.ApproachEnd);
+            Ref.BodyAnimation.SetTrigger(Const.Param.ApproachEnd);
 
             // 接近完了フラグ。
             Ref.BlackBoard.IsApproachCompleted = true;

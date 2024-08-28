@@ -95,9 +95,7 @@ namespace Enemy
 
             Vector3 after = Ref.Body.Position;
 
-            // ディレイ後、移動前後の位置を比較して左右どちらに移動したかを判定する。
-            bool isMoving = _delay >= 0;
-            if (isMoving) MoveAnimation(after - before);
+            MoveAnimation(after - before);
         }
     }
 }

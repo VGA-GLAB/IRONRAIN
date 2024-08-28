@@ -25,7 +25,7 @@
         protected override void OnExit()
         {
             // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackEnd);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
         }
 
         protected override void StayIfBattle()
@@ -48,8 +48,8 @@
         {
             // アイドルのアニメーション再生をトリガーする。
             {
-                string state = BodyAnimationConst.Assault.Idle;
-                int layer = BodyAnimationConst.Layer.BaseLayer;
+                string state = Const.Assault.Idle;
+                int layer = Const.Layer.BaseLayer;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
         }
@@ -61,7 +61,7 @@
         private void OnIdleAnimationStateEnter()
         {
             // ロケットランチャーを構える。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()
@@ -85,8 +85,8 @@
         {
             // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
             {
-                string state = BodyAnimationConst.Assault.FireLoop;
-                int layer = BodyAnimationConst.Layer.UpperBody;
+                string state = Const.Assault.FireLoop;
+                int layer = Const.Layer.UpperBody;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnFireAnimationStateEnter);
             }
         }
@@ -106,7 +106,7 @@
             if (IsAttack())
             {
                 // 黒板への書き込みはアニメーションイベントで行うので、ここでは再生だけ。
-                Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.Attack);
+                Ref.BodyAnimation.SetTrigger(Const.Param.Attack);
             }
 
             return this;

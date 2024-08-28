@@ -189,5 +189,10 @@ namespace Enemy
         /// アニメーションのトリガーをリセットする。
         /// </summary>
         public void ResetTrigger(string name) => _animator.ResetTrigger(name);
+
+        /// <summary>
+        /// アニメーションのfloat型パラメータを取得する。
+        /// </summary>
+        public float GetFloat(string name) => _animator.GetFloat(name);
     }
 }
