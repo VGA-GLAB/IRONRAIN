@@ -4,12 +4,14 @@ using System.Threading;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using UniRx;
 
 namespace IronRain.Player
 {
     public class PlayerBossMoveModel : IPlayerStateModel
     {
         public List<Vector3> LaneList => _laneList;
+        public IReactiveProperty<int> CurrentRane => _currentLane;
 
         [SerializeField] LeverController _leftController;
         [SerializeField] LeverController _rightController;
@@ -24,7 +26,7 @@ namespace IronRain.Player
         private float _startTheta;
         private Transform _centerPoint;
         private List<Vector3> _laneList = new();
-        private int _currentLane;
+        private ReactiveProperty<int> _currentLane;
 
         public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
@@ -69,7 +71,7 @@ namespace IronRain.Player
 
         public void Dispose()
         {
-
+            _currentLane.Dispose();
         }
 
         public void ResetPos()
@@ -192,10 +194,10 @@ namespace IronRain.Player
 
         private Vector3 NextLane(int isRight) 
         {
-            var nextLane = _currentLane + isRight;
+            var nextLane = _currentLane.Value + isRight;
             if (nextLane < 0)
             {
-                _currentLane = _laneList.Count - 1;
+                _currentLane.Value = _laneList.Count - 1;
             }
             else if (_laneList.Count - 1 < nextLane)
             {
@@ -203,10 +205,10 @@ namespace IronRain.Player
             }
             else 
             {
-                _currentLane += isRight;
+                _currentLane.Value += isRight;
             }
 
-            return _laneList[_currentLane];
+            return _laneList[_currentLane.Value];
         }
 
         private void SumTheta()
