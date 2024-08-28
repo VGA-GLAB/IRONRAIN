@@ -159,8 +159,8 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.BladeAttack);
-            Ref.BodyAnimation.ResetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttack);
+            Ref.BodyAnimation.ResetTrigger(Const.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()
@@ -179,8 +179,8 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             // 現状、モーションが出来ていないので下斬りと同じ物を再生しておく。
-            Ref.BodyAnimation.SetTrigger(BodyAnimationConst.Param.BladeAttack);
-            Ref.BodyAnimation.ResetTrigger(BodyAnimationConst.Param.AttackSet);
+            Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttack);
+            Ref.BodyAnimation.ResetTrigger(Const.Param.AttackSet);
         }
 
         protected override BattleActionStep Stay()

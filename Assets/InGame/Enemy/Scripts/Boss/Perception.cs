@@ -60,11 +60,14 @@ namespace Enemy.Boss
                 bb.Area.Point = bb.Area.TouchPoint(bb.PlayerArea);
             }
 
-            // 自身から点Pへのベクトルを黒板に書き込む。
-            Vector3 ppv = Ref.PointP.transform.position - Ref.Transform.position;
-            float ppMag = ppv.magnitude;
-            bb.PointPDistance = ppMag;
-            bb.PointPDirection = ppMag > 1E-05F ? ppv / ppMag : Vector3.zero;
+            if (Ref.Field != null)
+            {
+                // 自身から点Pへのベクトルを黒板に書き込む。
+                //Vector3 ppv = Ref.PointP.transform.position - Ref.Transform.position;
+                //float ppMag = ppv.magnitude;
+                //bb.PointPDistance = ppMag;
+                //bb.PointPDirection = ppMag > 1E-05F ? ppv / ppMag : Vector3.zero;
+            }
 
             // 自身からプレイヤーへのベクトルを黒板に書き込む。
             Vector3 pv = Ref.Player.position - Ref.Transform.position;

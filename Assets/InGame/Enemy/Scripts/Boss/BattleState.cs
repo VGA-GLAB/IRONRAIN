@@ -53,7 +53,7 @@ namespace Enemy.Boss
         /// </summary>
         protected void MoveToPointP()
         {
-            Vector3 p;
+            Vector3 p = default;
 
             Vector3 dir = Ref.BlackBoard.PointPDirection;
             float spd = Ref.BossParams.MoveSpeed.Chase;
@@ -62,7 +62,7 @@ namespace Enemy.Boss
             float dist = Ref.BlackBoard.PointPDistance;
             if (mpf.magnitude >= dist)
             {
-                p = Ref.PointP.transform.position;
+                //p = Ref.PointP.transform.position;
             }
             else
             {
