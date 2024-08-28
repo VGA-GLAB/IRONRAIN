@@ -12,6 +12,7 @@ namespace Enemy
         Escape,
         Hide,
         Delete,
+        Ready,
     }
 
     /// <summary>
@@ -44,6 +45,7 @@ namespace Enemy
             _states.Add(StateKey.Escape, new EscapeState(Ref));
             _states.Add(StateKey.Hide, new HideState(Ref));
             _states.Add(StateKey.Delete, new DeleteState(Ref));
+            _states.Add(StateKey.Ready, new ReadyState(Ref));
             
             // 戦闘ステートは装備によって違う。
             {

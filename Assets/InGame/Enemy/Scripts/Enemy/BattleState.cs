@@ -95,7 +95,7 @@ namespace Enemy
 
             Vector3 after = Ref.Body.Position;
 
-            MoveAnimation(after - before);
+            //MoveAnimation(after - before); 挙動がキショいので一旦オフ
         }
     }
 }
