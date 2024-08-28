@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6129862123224382691}
   - component: {fileID: 6315224949624085020}
   - component: {fileID: -7013231406323741709}
+  - component: {fileID: 7048252170437662489}
   m_Layer: 5
   m_Name: Target
   m_TagString: Enemy
@@ -28,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 1994100688287155800}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.025000002, y: 0.025000002, z: 0.025000002}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5632492447353269903}
@@ -39,7 +40,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.05, y: 0.05}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6129862123224382691
 CanvasRenderer:
@@ -62,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -94,6 +95,18 @@ MonoBehaviour:
   Enemy: {fileID: 1994100688287155800}
   DefultUi: {fileID: 6733161606206381244}
   LockOnUi: {fileID: 7340337512070926133}
+--- !u!225 &7048252170437662489
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994100688287155800}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6733161606206381244
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +134,7 @@ RectTransform:
   m_GameObject: {fileID: 6733161606206381244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8381599589094237381}
@@ -197,7 +210,7 @@ RectTransform:
   m_GameObject: {fileID: 7340337512070926133}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8381599589094237381}
