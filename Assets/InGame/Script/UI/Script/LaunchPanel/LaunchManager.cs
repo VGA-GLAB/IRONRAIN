@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using Sequence = DG.Tweening.Sequence;
@@ -133,8 +129,9 @@ public class LaunchManager : MonoBehaviour
         Sequence startSequence = DOTween.Sequence();
         startSequence.Join(_activeUiBackGround.DOFade(1f, _startAnimationDuration)); // アルファ値1は255の意味
         startSequence.Join(_activeUiButton.DOFade(1f, _startAnimationDuration));
-        
-        await startSequence.Play().AsyncWaitForCompletion();
+
+        //await startSequence.Play().AsyncWaitForCompletion();
+        await startSequence.Play().ToUniTask(cancellationToken:token);
         startSequence.Kill();
         
         //テスト用
