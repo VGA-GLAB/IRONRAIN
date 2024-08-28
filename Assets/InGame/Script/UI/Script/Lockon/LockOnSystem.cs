@@ -342,9 +342,10 @@ public class LockOnSystem : MonoBehaviour
         // TargetオブジェクトはEnemyUiスクリプトを持っているのでそれで判定。
         foreach (Transform child in parent)
         {
-            if (child.TryGetComponent(out EnemyUi _))
+            if (child.TryGetComponent(out EnemyUi enemy))
             {
-                targets.Add(child);
+                enemy.LockOnUi.SetActive(false);
+                targets.Add(enemy.gameObject.transform);
             }
         }
     }
