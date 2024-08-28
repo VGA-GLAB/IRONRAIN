@@ -232,8 +232,6 @@ namespace IronRain.Player
                         if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE2;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
-                        _qteResultType = QTEResultType.Success;
-                        _qteType.Value = QTEState.QTENone;
                         break;
                     }
                 case QTEState.QTE3:
