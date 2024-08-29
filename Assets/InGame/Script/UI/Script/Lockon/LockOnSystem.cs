@@ -311,7 +311,7 @@ public class LockOnSystem : MonoBehaviour
         //LineRendererReset();
         _isFinsishMultiLock = true;
         LockOnEnemies(_temp, _lockOn);
-        _isMultiLock = false;
+        
         return _lockOn;
     }
 
@@ -329,6 +329,7 @@ public class LockOnSystem : MonoBehaviour
     /// </summary>
     public void FinishMultiLock()
     {
+        _isMultiLock = false;
         _lineRenderer.positionCount = 0;
         _isFinsishMultiLock = false;
         _temp.Clear();
