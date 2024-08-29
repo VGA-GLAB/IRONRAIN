@@ -193,24 +193,33 @@ public class LockOnSystem : MonoBehaviour
                 await UniTask.Yield();
                 // カーソルの位置を指先に合わせる。
                 FingertipCursor(_fingertip, _cursor);
-               
+                Transform minDisTarget = null;
+                float minDistance = float.MaxValue;
                 // カーソルと接触しているTargetを一時的に保持。
                 foreach (Transform t in _targets)
                 {
                     if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                     {
-                        if (_temp.Add(t))
+                        if(!_temp.Contains(t))
                         {
-                            //TargetのロックオンUiをオンにする
-                            var enemyUi = t.GetComponent<EnemyUi>();
-                            enemyUi.LockOnUi.SetActive(true);
-                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            //_lineRenderer.positionCount++;
-                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
-                            //多重ロックオン発動時に流れる音
-                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                            //カーソルに近い物を判定する
+                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                            if (dis <= minDistance)
+                            {
+                                minDistance = dis;
+                                minDisTarget = t;
+                            }
                         }
                     }
+                }
+
+                //ターゲットを追加する
+                if(minDisTarget != null)
+                {
+                    _temp.Add(minDisTarget);
+                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                    enemyUi.LockOnUi.SetActive(true);
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                 }
 
                 //ラインレンダラーを設定
@@ -237,25 +246,33 @@ public class LockOnSystem : MonoBehaviour
                 await UniTask.Yield();
                 // カーソルの位置を指先に合わせる。
                 FingertipCursor(_fingertip, _cursor);
-
+                Transform minDisTarget = null;
+                float minDistance = float.MaxValue;
                 // カーソルと接触しているTargetを一時的に保持。
                 foreach (Transform t in _targets)
                 {
                     if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                     {
-                        if (_temp.Add(t))
+                        if (!_temp.Contains(t))
                         {
-                            //TargetのロックオンUiをオンにする
-                            var enemyUi = t.GetComponent<EnemyUi>();
-                            enemyUi.LockOnUi.SetActive(true);
-                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            //_lineRenderer.positionCount++;
-                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
-                            //多重ロックオン発動時に流れる音
-                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
-                            break;
+                            //カーソルに近い物を判定する
+                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                            if (dis <= minDistance)
+                            {
+                                minDistance = dis;
+                                minDisTarget = t;
+                            }
                         }
                     }
+                }
+
+                //ターゲットを追加する
+                if (minDisTarget != null)
+                {
+                    _temp.Add(minDisTarget);
+                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                    enemyUi.LockOnUi.SetActive(true);
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                 }
 
                 //ラインレンダラーを設定
@@ -325,9 +342,10 @@ public class LockOnSystem : MonoBehaviour
         // TargetオブジェクトはEnemyUiスクリプトを持っているのでそれで判定。
         foreach (Transform child in parent)
         {
-            if (child.TryGetComponent(out EnemyUi _))
+            if (child.TryGetComponent(out EnemyUi enemy))
             {
-                targets.Add(child);
+                enemy.LockOnUi.SetActive(false);
+                targets.Add(enemy.gameObject.transform);
             }
         }
     }
