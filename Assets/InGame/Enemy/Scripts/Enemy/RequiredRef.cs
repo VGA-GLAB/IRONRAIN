@@ -7,7 +7,7 @@ namespace Enemy
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, 
             EnemyParams enemyParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, 
-            EnemyEffects effects, Collider[] hitBoxes, Equipment equipment)
+            EnemyEffects effects, Collider[] hitBoxes, Equipment equipment, Collider qteTrigger)
         {
             Transform = transform;
             Player = player;
@@ -20,6 +20,7 @@ namespace Enemy
             Effects = effects;
             HitBoxes = hitBoxes;
             Equipment = equipment;
+            QteTrigger = qteTrigger;
 
             States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
@@ -39,6 +40,7 @@ namespace Enemy
         public EnemyEffects Effects { get; }
         public Collider[] HitBoxes { get; }
         public Equipment Equipment { get; }
+        public Collider QteTrigger { get; }
 
         public Dictionary<StateKey, State<StateKey>> States { get; }
         public Body Body { get; }
