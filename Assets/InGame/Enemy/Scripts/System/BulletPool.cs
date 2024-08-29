@@ -14,6 +14,8 @@ namespace Enemy
         Launcher,
         Funnel,
         BossLauncher,
+        TutorialAssault,
+        TutorialLauncher,
         // ここに追加
     }
 
@@ -35,12 +37,11 @@ namespace Enemy
         {
             public GameObject Prefab;
             public BulletKey Key;
+            public int Capacity = 4;
         }
 
         [Header("弾の設定")]
         [SerializeField] private Config[] _configs;
-        [Tooltip("プーリングする数。攻撃速度に応じて増やす。")]
-        [SerializeField] private int _poolCapacity = 4;
 
         private Dictionary<BulletKey, ObjectPool> _pools;
 
@@ -58,7 +59,7 @@ namespace Enemy
             _pools = new Dictionary<BulletKey, ObjectPool>(_configs.Length);
             foreach (Config value in _configs)
             {
-                ObjectPool pool = new ObjectPool(value.Prefab, _poolCapacity, $"BulletPool_{value.Prefab.name}");
+                ObjectPool pool = new ObjectPool(value.Prefab, value.Capacity, $"BulletPool_{value.Prefab.name}");
                 _pools.Add(value.Key, pool);
             }
         }
