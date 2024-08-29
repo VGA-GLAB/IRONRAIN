@@ -34,6 +34,7 @@ namespace Enemy
         [Header("AimModeがTargetの場合")]
         [SerializeField] private Transform _target;
 
+        private BulletPool _pool;
         private Transform _player;
         private Transform _rotate;
         private AnimationEvent _animationEvent;
@@ -41,6 +42,7 @@ namespace Enemy
 
         private void Awake()
         {
+            _pool = BulletPool.Find();
             _player = FindPlayer();
             _rotate = FindRotate();
             // Animatorが1つだけの前提。
@@ -67,6 +69,16 @@ namespace Enemy
             _animationEvent.OnRangeFireStart -= Shoot;
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            if (_muzzle != null)
+            {
+                // 弾道。
+                Vector3 f = _muzzle.position + _muzzle.forward * 10.0f; // 適当な長さ
+                GizmosUtils.Line(_muzzle.position, f, ColorExtensions.ThinRed);
+            }
+        }
+
         // 弾を発射する。
         // アニメーションイベントに登録して呼んでもらう。
         private void Shoot()
@@ -76,10 +88,6 @@ namespace Enemy
             // 射撃モード
             switch (_aimMode)
             {
-                case AimMode.Player when _key == BulletKey.Assault:
-                    LerpFireToTarget(_player); break;
-                case AimMode.Player when _key == BulletKey.Launcher:
-                    LerpFireToTarget(_player); break;
                 case AimMode.Forward: 
                     Fire(_rotate.forward); break;
                 case AimMode.Player: 
@@ -101,10 +109,18 @@ namespace Enemy
             OnShootAction?.Invoke();
         }
 
+        /// <summary>
+        /// 派生クラスで射撃する際に追加で呼ぶ処理。
+        /// </summary>
+        protected virtual void OnShoot() { }
+
         // 弾をプールから取り出して任意の方向に発射。
         private void Fire(in Vector3 dir)
         {
-            BulletPool.Fire(_owner, _key, _muzzle.position, dir);
+            if (TryRentBullet(out Bullet bullet))
+            {
+                bullet.Shoot(dir, _owner);
+            }
         }
 
         // 任意の目標に向けて発射。
@@ -113,29 +129,21 @@ namespace Enemy
             // 射撃中に目標が死亡などでnullになった場合は正面に射撃しておく。
             if (target == null) { Fire(_muzzle.forward); return; }
 
-            Vector3 dir = (target.position - _muzzle.position).normalized;
-            Fire(dir);
-        }
-
-        // 任意の目標に向けて発射。
-        private void LerpFireToTarget(Transform target)
-        {
-            BulletPool.Fire(_owner, _key, _muzzle.position, target);
-        }
-
-        /// <summary>
-        /// 派生クラスで射撃する際に追加で呼ぶ処理。
-        /// </summary>
-        protected virtual void OnShoot() { }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (_muzzle != null)
+            if (TryRentBullet(out Bullet bullet))
             {
-                // 弾道。
-                Vector3 f = _muzzle.position + _muzzle.forward * 10.0f; // 適当な長さ
-                GizmosUtils.Line(_muzzle.position, f, ColorExtensions.ThinRed);
+                bullet.Shoot(target, _owner);
             }
+        }
+
+        // プールから弾を借り、マズルの位置に配置。
+        private bool TryRentBullet(out Bullet bullet)
+        {
+            if (_pool.TryRent(_key, out bullet))
+            {
+                bullet.transform.position = _muzzle.position;
+                return true;
+            }
+            else return false;
         }
     }
 }

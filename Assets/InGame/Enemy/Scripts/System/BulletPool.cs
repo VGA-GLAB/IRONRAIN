@@ -24,15 +24,6 @@ namespace Enemy
     /// </summary>
     public class BulletPool : MonoBehaviour
     {
-        private struct Message
-        {
-            public IOwnerTime OwnerTime;
-            public BulletKey Key;
-            public Vector3 Muzzle;
-            public Vector3 Forward;
-            public Transform Target;
-        }
-
         [System.Serializable]
         private class Config
         {
@@ -49,7 +40,6 @@ namespace Enemy
         private void Awake()
         {
             Pool();
-            ReceiveMessage();
         }
 
         // 弾ごとにプーリングする。
@@ -65,64 +55,34 @@ namespace Enemy
             }
         }
 
-        // 自身にメッセージングする。
-        private void ReceiveMessage()
+        /// <summary>
+        /// タグで取得して返す。
+        /// </summary>
+        public static BulletPool Find()
         {
-            MessageBroker.Default.Receive<Message>().Subscribe(OnMessageReceived).AddTo(this);
+            GameObject g = GameObject.FindGameObjectWithTag(Const.EnemySystemTag);
+            return g.GetComponent<BulletPool>();
         }
 
-        // プールから弾を取り出し、受信したメッセージ通りに飛ばす。
-        private void OnMessageReceived(Message msg)
+        /// <summary>
+        /// プールから弾を取り出す。
+        /// </summary>
+        public bool TryRent(BulletKey key, out Bullet bullet)
         {
-            if (!_pools.TryGetValue(msg.Key, out ObjectPool pool))
+            if (!_pools.TryGetValue(key, out ObjectPool pool))
             {
-                Debug.LogWarning($"弾が辞書に登録されていない: {msg.Key}");
-                return;
+                Debug.LogWarning($"弾が辞書に登録されていない: {key}");
             }
             if (!pool.TryRent(out GameObject item))
             {
-                Debug.LogWarning($"弾の在庫がプールに無い: {msg.Key}");
-                return;
+                Debug.LogWarning($"弾の在庫がプールに無い: {key}");
             }
-            if (!item.TryGetComponent(out Bullet bullet))
+            if (!item.TryGetComponent(out bullet))
             {
                 Debug.LogWarning($"弾のスクリプトがアタッチされていない: {bullet.name}");
-                return;
             }
 
-            // 弾の発射処理
-            item.transform.position = msg.Muzzle;
-
-            if (msg.Target != null) bullet.Shoot(msg.Target, msg.OwnerTime);
-            else bullet.Shoot(msg.Forward, msg.OwnerTime);
-        }
-
-        /// <summary>
-        /// プールから取り出した弾を真っ直ぐ飛ばす。
-        /// </summary>
-        public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Vector3 forward)
-        {
-            MessageBroker.Default.Publish(new Message 
-            {
-                OwnerTime = ownerTime,
-                Key = key, 
-                Muzzle = muzzle, 
-                Forward = forward,
-            });
-        }
-
-        /// <summary>
-        /// プールから取り出した弾を対象を指定して飛ばす。
-        /// </summary>
-        public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Transform target)
-        {
-            MessageBroker.Default.Publish(new Message
-            {
-                OwnerTime = ownerTime,
-                Key = key,
-                Muzzle = muzzle,
-                Target = target,
-            });
+            return bullet != null;
         }
     }
 }
