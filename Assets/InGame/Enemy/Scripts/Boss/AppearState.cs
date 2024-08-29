@@ -86,7 +86,8 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Position;
-            _end = Ref.Field.LaneList[0]; // プレイヤーの反対の位置がわからないので適当。
+            // プレイヤーの反対の位置がわからないので適当。
+            _end = Ref.PointP.position + Ref.Field.LaneList[0]; 
             _lerp = 0;
         }
 

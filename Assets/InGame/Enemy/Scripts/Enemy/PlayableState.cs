@@ -44,8 +44,16 @@ namespace Enemy
             // 移動量に対する倍率。
             const float Mag = 2.0f; 
 
-            string param = Const.Param.SpeedX;
             float value = Mathf.Clamp(moveDir.x * Mag, -1.0f, 1.0f);
+            MoveAnimation(value);
+        }
+
+        /// <summary>
+        /// 左右移動のアニメーションを制御。
+        /// </summary>
+        public void MoveAnimation(float value)
+        {
+            string param = Const.Param.SpeedX;
             Ref.BodyAnimation.SetFloat(param, value);
         }
 

@@ -19,7 +19,8 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] private Image _activeUiButton;
     [Header("ActiveUiのアニメーション秒数")]
     [SerializeField] private float _startAnimationDuration = 1f;
-
+    [Header("PokeCollision")]
+    [SerializeField] private GameObject _pokeCollision;
     [Header("アニメーション")] [SerializeField] private VideoPlayer _activeUiAnimation;
 
     [Header("起動シーケンスのタイムライン")] [SerializeField]
@@ -108,6 +109,8 @@ public class LaunchManager : MonoBehaviour
         _mapUiAnimation.targetTexture.Release();
         _announceUiAnimation.targetTexture.Release();
         _weaponUiAnimation.targetTexture.Release();
+
+        _pokeCollision.SetActive(false);
     }
 
     // Update is called once per frame
@@ -178,6 +181,9 @@ public class LaunchManager : MonoBehaviour
         if (_isTouch)
             return;
 
+        //パネルに触れた時の音
+        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+
         _isTouch = true;
         var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
         buttonColor.a = 1;
@@ -188,6 +194,7 @@ public class LaunchManager : MonoBehaviour
         _activeUiButton.gameObject.SetActive(false);
         
         await UniTask.Delay(TimeSpan.FromSeconds(_animationWait));
+        _pokeCollision.SetActive(true);
         _isActivate = true;
         //Debug.Log("終了");
     }
@@ -309,5 +316,6 @@ public class LaunchManager : MonoBehaviour
         _detailUi.alpha = 1;
         _minimapUi.alpha = 1;
         _isTouch = true;
+        _pokeCollision.SetActive(true);
     }
 }
