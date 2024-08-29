@@ -193,24 +193,34 @@ public class LockOnSystem : MonoBehaviour
                 await UniTask.Yield();
                 // カーソルの位置を指先に合わせる。
                 FingertipCursor(_fingertip, _cursor);
-               
+                Transform minDisTarget = null;
+                float minDistance = float.MaxValue;
                 // カーソルと接触しているTargetを一時的に保持。
                 foreach (Transform t in _targets)
                 {
                     if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                     {
-                        if (_temp.Add(t))
+                        if(!_temp.Contains(t))
                         {
-                            //TargetのロックオンUiをオンにする
-                            var enemyUi = t.GetComponent<EnemyUi>();
-                            enemyUi.LockOnUi.SetActive(true);
-                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            //_lineRenderer.positionCount++;
-                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
-                            //多重ロックオン発動時に流れる音
-                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                            //カーソルに近い物を判定する
+                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                            if (dis <= minDistance)
+                            {
+                                minDistance = dis;
+                                minDisTarget = t;
+                            }
                         }
                     }
+                }
+
+                //ターゲットを追加する
+                if(minDisTarget != null)
+                {
+                    _temp.Add(minDisTarget);
+                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                    enemyUi.LockOnUi.SetActive(true);
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                    Debug.Log("音を鳴らす");
                 }
 
                 //ラインレンダラーを設定
@@ -237,25 +247,33 @@ public class LockOnSystem : MonoBehaviour
                 await UniTask.Yield();
                 // カーソルの位置を指先に合わせる。
                 FingertipCursor(_fingertip, _cursor);
-
+                Transform minDisTarget = null;
+                float minDistance = float.MaxValue;
                 // カーソルと接触しているTargetを一時的に保持。
                 foreach (Transform t in _targets)
                 {
                     if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                     {
-                        if (_temp.Add(t))
+                        if (!_temp.Contains(t))
                         {
-                            //TargetのロックオンUiをオンにする
-                            var enemyUi = t.GetComponent<EnemyUi>();
-                            enemyUi.LockOnUi.SetActive(true);
-                            // 新しく追加した場合は、Target同士を結ぶ線を引く。
-                            //_lineRenderer.positionCount++;
-                            //_lineRenderer.SetPosition(_lineRenderer.positionCount - 1, t.position);
-                            //多重ロックオン発動時に流れる音
-                            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
-                            break;
+                            //カーソルに近い物を判定する
+                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                            if (dis <= minDistance)
+                            {
+                                minDistance = dis;
+                                minDisTarget = t;
+                            }
                         }
                     }
+                }
+
+                //ターゲットを追加する
+                if (minDisTarget != null)
+                {
+                    _temp.Add(minDisTarget);
+                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                    enemyUi.LockOnUi.SetActive(true);
+                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
                 }
 
                 //ラインレンダラーを設定
@@ -279,7 +297,7 @@ public class LockOnSystem : MonoBehaviour
 
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
-        if (_temp.Count < _minMultiLockCount)
+        if (_temp.Count < _minMultiLockCount && !token.IsCancellationRequested)
         {
             foreach (Transform t in _temp)
             {
@@ -287,14 +305,19 @@ public class LockOnSystem : MonoBehaviour
                 var enemyUi = t.GetComponent<EnemyUi>();
                 enemyUi.LockOnUi.SetActive(false);
             }
-            return await MultiLockOnAsync(token);
+
+            // ビジーウェイティングを避けるために、ここでディレイを導入することを検討
+            await UniTask.Delay(500, cancellationToken: token);
+
+            // 再度ロックオンのロジックを実行
+            await MultiLockOnAsync(token);
         }
 
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         //LineRendererReset();
         _isFinsishMultiLock = true;
         LockOnEnemies(_temp, _lockOn);
-        _isMultiLock = false;
+        
         return _lockOn;
     }
 
@@ -312,6 +335,7 @@ public class LockOnSystem : MonoBehaviour
     /// </summary>
     public void FinishMultiLock()
     {
+        _isMultiLock = false;
         _lineRenderer.positionCount = 0;
         _isFinsishMultiLock = false;
         _temp.Clear();
@@ -325,9 +349,10 @@ public class LockOnSystem : MonoBehaviour
         // TargetオブジェクトはEnemyUiスクリプトを持っているのでそれで判定。
         foreach (Transform child in parent)
         {
-            if (child.TryGetComponent(out EnemyUi _))
+            if (child.TryGetComponent(out EnemyUi enemy))
             {
-                targets.Add(child);
+                enemy.LockOnUi.SetActive(false);
+                targets.Add(enemy.gameObject.transform);
             }
         }
     }
