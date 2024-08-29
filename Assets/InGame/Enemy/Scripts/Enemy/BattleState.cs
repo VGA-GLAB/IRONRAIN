@@ -1,5 +1,4 @@
-﻿using Enemy.Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemy
 {
@@ -8,12 +7,15 @@ namespace Enemy
     /// </summary>
     public abstract class BattleState : PlayableState
     {
-        // レーン移動するための値。
-        private float _delay;
-        // プレイヤーの移動量を測るため、スロットのx座標。
-        private float _savedSlotX;
+        // 一定間隔でスロットの位置を検知し、Lerpで移動。
+        private float _lerp;
+        private float _startX;
+        private float _endX;
         // ホバリングさせるための値。
         private float _hovering;
+        // 左右移動のアニメーションのパラメータ。
+        private float _blend;
+        private int _sign;
 
         public BattleState(RequiredRef requiredRef) : base(requiredRef)
         {
@@ -21,12 +23,12 @@ namespace Enemy
 
         protected sealed override void Enter() 
         {
+            _lerp = 0;
+            _startX = Ref.Body.Position.x;
+            _endX = Ref.BlackBoard.Slot.Point.x;
+            _hovering = 0;
+
             OnEnter();
-
-            // プレイヤーの移動に遅れて左右移動させるため、初期値を設定。
-            _delay = Ref.EnemyParams.LaneChangeDelay;
-            _savedSlotX = Ref.BlackBoard.Slot.Point.x;
-
             Always();
         }
         protected sealed override void Exit()
@@ -61,41 +63,38 @@ namespace Enemy
             _hovering += dt;
             Ref.Body.OffsetWarp(Vector3.up * h);
 
-            // ディレイの値は -n ~ 0 の範囲をとる。
-            // Lerpの t の値が0以下の場合は、返る値が a と等しいので、ディレイが0以下の間は移動を行わない。
-            float bodyX = Ref.Body.Position.x;
-            float slotX = Ref.BlackBoard.Slot.Point.x;
-            float lerped = Mathf.Lerp(bodyX, slotX, Time.deltaTime - _delay);
-
-            // レーンの幅以上の横移動をしたかつ、ディレイが0になり、敵もレーン移動し始めた場合。
-            const float LaneWidth = 1.0f; // 手動。
-            if (Mathf.Abs(slotX - _savedSlotX) > LaneWidth && _delay >= 0)
+            const float Duration = 1.0f;
+            // 一定間隔で自身の位置とスロットの位置を比較して次の移動位置を決める。
+            _lerp += dt;
+            if (_lerp >= Duration)
             {
-                _delay = Ref.EnemyParams.LaneChangeDelay;
-                _savedSlotX = Ref.BlackBoard.Slot.Point.x;
+                Vector3 p = Ref.BlackBoard.Slot.Point;
+                p.x = _endX;
+                Ref.Body.Warp(p);
+
+                _lerp = 0;
+                _startX = Ref.Body.Position.x;
+                _endX = Ref.BlackBoard.Slot.Point.x;
+
+                // プレイヤーが移動していない場合はアニメーションさせない。
+                // 移動開始位置と終了位置を比較し、左右に移動する場合は-1もしくは1、移動しない場合は0。
+                _sign = System.Math.Sign(_startX - _endX);
+            }
+            else
+            {
+                // x軸の値をLerpで操作することで左右移動する。
+                Vector3 p = Ref.BlackBoard.Slot.Point;
+                p.x = Mathf.Lerp(_startX, _endX, _lerp);
+                Ref.Body.Warp(p);
             }
 
-            _delay += Time.deltaTime;
-            _delay = Mathf.Min(0, _delay);
-
-            Vector3 before = Ref.Body.Position;
-
-            // 回転。
-            Vector3 fwd = Ref.Body.Forward;
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            fwd.y = 0;
-            dir.y = 0;
-            Vector3 look = Vector3.Lerp(fwd, dir, Time.deltaTime);
-            Ref.Body.LookForward(look);
-
-            // 移動。
-            Vector3 sp = Ref.BlackBoard.Slot.Point;
-            sp.x = lerped;
-            Ref.Body.Warp(sp);
-
-            Vector3 after = Ref.Body.Position;
-
-            //MoveAnimation(after - before); 挙動がキショいので一旦オフ
+            // アイドルから左右移動のアニメーションに切り替わる速さ。
+            const float BlendSpeed = 5.0f;
+            // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+            // ブレンドツリーのパラメータをその値に徐々に変化させる。
+            _blend = Mathf.Clamp(_blend, -1, 1);
+            _blend = Mathf.MoveTowards(_blend, _sign, dt * BlendSpeed);
+            MoveAnimation(_blend);
         }
     }
 }
