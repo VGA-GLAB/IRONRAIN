@@ -220,6 +220,7 @@ public class LockOnSystem : MonoBehaviour
                     var enemyUi = minDisTarget.GetComponent<EnemyUi>();
                     enemyUi.LockOnUi.SetActive(true);
                     CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                    Debug.Log("音を鳴らす");
                 }
 
                 //ラインレンダラーを設定
@@ -296,7 +297,7 @@ public class LockOnSystem : MonoBehaviour
 
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
-        if (_temp.Count < _minMultiLockCount)
+        if (_temp.Count < _minMultiLockCount && !token.IsCancellationRequested)
         {
             foreach (Transform t in _temp)
             {
@@ -304,7 +305,12 @@ public class LockOnSystem : MonoBehaviour
                 var enemyUi = t.GetComponent<EnemyUi>();
                 enemyUi.LockOnUi.SetActive(false);
             }
-            return await MultiLockOnAsync(token);
+
+            // ビジーウェイティングを避けるために、ここでディレイを導入することを検討
+            await UniTask.Delay(500, cancellationToken: token);
+
+            // 再度ロックオンのロジックを実行
+            await MultiLockOnAsync(token);
         }
 
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
