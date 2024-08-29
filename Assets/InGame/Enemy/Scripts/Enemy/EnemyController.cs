@@ -56,7 +56,8 @@ namespace Enemy
                 renderers: _renderers,
                 effects: _effects,
                 hitBoxes: _hitBoxes,
-                equipment: GetComponent<Equipment>() // 雑魚敵は装備が1つ。
+                equipment: GetComponent<Equipment>(), // 雑魚敵は装備が1つ。
+                qteTrigger: FindQteTrigger()
                 );
 
             _params = requiredRef.EnemyParams;

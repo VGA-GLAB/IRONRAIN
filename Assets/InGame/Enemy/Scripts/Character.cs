@@ -31,7 +31,14 @@ namespace Enemy
         public Transform FindRotate() => transform.FindChildRecursive("Rotate");
         protected Transform FindPlayer() => GameObject.FindGameObjectWithTag(Const.PlayerTag).transform;
 
-        // 以下は任意、必ず存在するとは限らない。
+        // 現状盾持ちの敵のみ。
+        protected Collider FindQteTrigger()
+        {
+            Transform t = transform.FindChildRecursive("QteTrigger");
+            if (t != null) return t.GetComponent<Collider>();
+            else return null;
+        }
+
         public bool TryFindDamageHitBox(out Transform result) => TryFind(out result, "DamageHitBox");
         public bool TryFindShootingTarget(out Transform result) => TryFind(out result, "ShootingTarget");
         

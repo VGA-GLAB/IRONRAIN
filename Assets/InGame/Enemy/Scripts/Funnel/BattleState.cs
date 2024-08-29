@@ -64,7 +64,11 @@ namespace Enemy.Funnel
                 if (mode == FireMode.Player) bf = Ref.BlackBoard.PlayerDirection;
                 Vector3 forward = bf + new Vector3(rx, ry, rz);
 
-                BulletPool.Fire(owner, BulletKey.Funnel, muzzle, forward);
+                if (Ref.BulletPool.TryRent(BulletKey.Funnel, out Bullet bullet))
+                {
+                    bullet.transform.position = Ref.Muzzle.position;
+                    bullet.Shoot(forward, owner);
+                }
             }
 
             bool isDead = !Ref.BlackBoard.IsAlive;

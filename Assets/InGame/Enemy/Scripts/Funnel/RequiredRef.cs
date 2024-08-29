@@ -31,27 +31,29 @@ namespace Enemy.Funnel
             Boss = boss;
             BossRotate = boss.FindRotate();
             Muzzle = muzzle;
+            BulletPool = BulletPool.Find();
         }
 
-        public Transform Transform { get; private set; }
-        public Transform Player { get; private set; }
-        public Transform Offset { get; private set; }
-        public Transform Rotate { get; private set; }
-        public FunnelParams FunnelParams { get; private set; }
-        public BlackBoard BlackBoard { get; private set; }
-        public Animator Animator { get; private set; }
-        public Renderer[] Renderers { get; private set; }
-        public FunnelEffects Effects { get; private set; }
-        public Collider[] HitBoxes { get; private set; }
+        public Transform Transform { get; }
+        public Transform Player { get; }
+        public Transform Offset { get; }
+        public Transform Rotate { get; }
+        public FunnelParams FunnelParams { get; }
+        public BlackBoard BlackBoard { get; }
+        public Animator Animator { get; }
+        public Renderer[] Renderers { get; }
+        public FunnelEffects Effects { get; }
+        public Collider[] HitBoxes { get; }
 
-        public Dictionary<StateKey, State<StateKey>> States { get; private set; }
-        public Body Body { get; private set; }
-        public BodyAnimation BodyAnimation { get; private set; }
-        public AnimationEvent AnimationEvent { get; private set; }
-        public Effector Effector { get; private set; }
-        public AgentScript AgentScript { get; private set; }
-        public BossController Boss { get; set; }
-        public Transform BossRotate { get; set; }
-        public Transform Muzzle { get; private set; }
+        public Dictionary<StateKey, State<StateKey>> States { get; }
+        public Body Body { get; }
+        public BodyAnimation BodyAnimation { get; }
+        public AnimationEvent AnimationEvent { get; }
+        public Effector Effector { get; }
+        public AgentScript AgentScript { get; }
+        public BossController Boss { get; }
+        public Transform BossRotate { get; }
+        public Transform Muzzle { get; }
+        public BulletPool BulletPool { get; }
     }
 }

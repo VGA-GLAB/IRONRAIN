@@ -113,7 +113,7 @@ namespace Enemy
                 else if (t == EnemyOrder.Type.Pause) { Pause(true); }
                 else if (t == EnemyOrder.Type.Resume) { Pause(false); }
                 else if (t == EnemyOrder.Type.BossStart) { Die(); }
-                else if (t == EnemyOrder.Type.QteStartTargeted) { Qte(run: true, tgt: true); AttackTrigger(); }
+                else if (t == EnemyOrder.Type.QteStartTargeted) { Qte(run: true, tgt: true); AttackTrigger(); EquipmentEvent(); }
                 else if (t == EnemyOrder.Type.QteStartUntargeted) { Qte(run: true, tgt: false); }
                 else if (t == EnemyOrder.Type.QteSuccessTargeted) { Qte(run: false, tgt: false); Die(); }
                 else if (t == EnemyOrder.Type.QteSuccessUntargeted) { Qte(run: false, tgt: false); }
@@ -126,6 +126,10 @@ namespace Enemy
             void Pause(bool b) { bb.IsPause = b; }
             void Die() { _hitPoint.Damage(int.MaxValue / 2, ""); }
             void Qte(bool run, bool tgt) { bb.IsQteRunning = run; bb.IsQteTargeted = tgt; }
+            void EquipmentEvent() 
+            {
+                if (Ref.QteTrigger != null) Ref.QteTrigger.enabled = false;
+            }
         }
 
         /// <summary>

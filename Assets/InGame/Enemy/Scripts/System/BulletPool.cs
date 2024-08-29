@@ -14,6 +14,8 @@ namespace Enemy
         Launcher,
         Funnel,
         BossLauncher,
+        TutorialAssault,
+        TutorialLauncher,
         // ここに追加
     }
 
@@ -22,32 +24,22 @@ namespace Enemy
     /// </summary>
     public class BulletPool : MonoBehaviour
     {
-        private struct Message
-        {
-            public IOwnerTime OwnerTime;
-            public BulletKey Key;
-            public Vector3 Muzzle;
-            public Vector3 Forward;
-        }
-
         [System.Serializable]
         private class Config
         {
             public GameObject Prefab;
             public BulletKey Key;
+            public int Capacity = 4;
         }
 
         [Header("弾の設定")]
         [SerializeField] private Config[] _configs;
-        [Tooltip("プーリングする数。攻撃速度に応じて増やす。")]
-        [SerializeField] private int _poolCapacity = 4;
 
         private Dictionary<BulletKey, ObjectPool> _pools;
 
         private void Awake()
         {
             Pool();
-            ReceiveMessage();
         }
 
         // 弾ごとにプーリングする。
@@ -58,53 +50,39 @@ namespace Enemy
             _pools = new Dictionary<BulletKey, ObjectPool>(_configs.Length);
             foreach (Config value in _configs)
             {
-                ObjectPool pool = new ObjectPool(value.Prefab, _poolCapacity, $"BulletPool_{value.Prefab.name}");
+                ObjectPool pool = new ObjectPool(value.Prefab, value.Capacity, $"BulletPool_{value.Prefab.name}");
                 _pools.Add(value.Key, pool);
             }
         }
 
-        // 自身にメッセージングする。
-        private void ReceiveMessage()
+        /// <summary>
+        /// タグで取得して返す。
+        /// </summary>
+        public static BulletPool Find()
         {
-            MessageBroker.Default.Receive<Message>().Subscribe(OnMessageReceived).AddTo(this);
-        }
-
-        // プールから弾を取り出し、受信したメッセージ通りに飛ばす。
-        private void OnMessageReceived(Message msg)
-        {
-            if (!_pools.TryGetValue(msg.Key, out ObjectPool pool))
-            {
-                Debug.LogWarning($"弾が辞書に登録されていない: {msg.Key}");
-                return;
-            }
-            if (!pool.TryRent(out GameObject item))
-            {
-                Debug.LogWarning($"弾の在庫がプールに無い: {msg.Key}");
-                return;
-            }
-            if (!item.TryGetComponent(out Bullet bullet))
-            {
-                Debug.LogWarning($"弾のスクリプトがアタッチされていない: {bullet.name}");
-                return;
-            }
-
-            // 弾の発射処理
-            item.transform.position = msg.Muzzle;
-            bullet.Shoot(msg.Forward, msg.OwnerTime);
+            GameObject g = GameObject.FindGameObjectWithTag(Const.EnemySystemTag);
+            return g.GetComponent<BulletPool>();
         }
 
         /// <summary>
-        /// プールから取り出した弾を飛ばす。
+        /// プールから弾を取り出す。
         /// </summary>
-        public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Vector3 forward)
+        public bool TryRent(BulletKey key, out Bullet bullet)
         {
-            MessageBroker.Default.Publish(new Message 
+            if (!_pools.TryGetValue(key, out ObjectPool pool))
             {
-                OwnerTime = ownerTime,
-                Key = key, 
-                Muzzle = muzzle, 
-                Forward = forward
-            });
+                Debug.LogWarning($"弾が辞書に登録されていない: {key}");
+            }
+            if (!pool.TryRent(out GameObject item))
+            {
+                Debug.LogWarning($"弾の在庫がプールに無い: {key}");
+            }
+            if (!item.TryGetComponent(out bullet))
+            {
+                Debug.LogWarning($"弾のスクリプトがアタッチされていない: {bullet.name}");
+            }
+
+            return bullet != null;
         }
     }
 }

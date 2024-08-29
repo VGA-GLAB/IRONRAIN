@@ -63,7 +63,11 @@ namespace Enemy.Boss
         {
             get
             {
-                if (_field == null) { _field = Player.GetComponentInChildren<PlayerBossMove>().MoveModel; }
+                if (_field == null) 
+                {
+                    PlayerBossMove pbm = Player.GetComponentInChildren<PlayerBossMove>();
+                    if (pbm != null) _field = pbm.MoveModel;
+                }
                 return _field;
             }
         }
