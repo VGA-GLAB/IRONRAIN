@@ -8,7 +8,7 @@ namespace Enemy
     /// プールから取り出され発射される。
     /// 非アクティブなった際にプールに戻る。
     /// </summary>
-    public class Bullet : MonoBehaviour
+    public abstract class Bullet : MonoBehaviour
     {
         // ヒット後、プールに戻るまでのディレイ。
         const float ExplosionDelay = 1.0f;
@@ -25,7 +25,6 @@ namespace Enemy
 
         protected Transform _transform;
         private IOwnerTime _ownerTime;
-        private Vector3 _direction;
         private float _elapsed;
 
         private void Awake()
@@ -50,13 +49,32 @@ namespace Enemy
         }
 
         /// <summary>
-        /// 弾を撃ちだす。
-        /// 一定時間経過で非アクティブになる。
+        /// 飛ばす方向を指定して弾を撃つ。
         /// </summary>
-        public virtual void Shoot(Vector3 direction, IOwnerTime ownerTime)
+        public void Shoot(Vector3 direction, IOwnerTime ownerTime)
+        {
+            View(ownerTime);
+            OnShoot(direction);
+        }
+
+        /// <summary>
+        /// 対象を指定して弾を撃つ。
+        /// </summary>
+        public void Shoot(Transform target, IOwnerTime ownerTime)
+        {
+            View(ownerTime);
+            OnShoot(target);
+        }
+
+        // 発射時と飛翔中の処理は、継承先でオーバーライドする。
+        protected virtual void OnShoot(Vector3 direction) { }
+        protected virtual void OnShoot(Transform target) { }
+        protected virtual void StayShooting(float deltaTime) { }
+
+        // 画面に表示。
+        private void View(IOwnerTime ownerTime)
         {
             _renderer.enabled = true;
-            _direction = direction.normalized;
             _ownerTime = ownerTime;
             _elapsed = 0;
 
@@ -75,12 +93,6 @@ namespace Enemy
 
             // 経過時間を生存時間に上書きすることで、次のUpdateのタイミングで爆発に条件分岐する。
             _elapsed = _lifeTime;
-        }
-
-        // 発射後、飛翔中
-        protected virtual void StayShooting(float deltaTime)
-        {
-            _transform.position += _direction * deltaTime * _speed;
         }
 
         // 弾がヒットした瞬間にオブジェクトを無効化すると、子になっているエフェクトが消えるので、

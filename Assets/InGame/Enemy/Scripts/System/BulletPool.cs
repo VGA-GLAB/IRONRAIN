@@ -30,6 +30,7 @@ namespace Enemy
             public BulletKey Key;
             public Vector3 Muzzle;
             public Vector3 Forward;
+            public Transform Target;
         }
 
         [System.Serializable]
@@ -91,11 +92,13 @@ namespace Enemy
 
             // 弾の発射処理
             item.transform.position = msg.Muzzle;
-            bullet.Shoot(msg.Forward, msg.OwnerTime);
+
+            if (msg.Target != null) bullet.Shoot(msg.Target, msg.OwnerTime);
+            else bullet.Shoot(msg.Forward, msg.OwnerTime);
         }
 
         /// <summary>
-        /// プールから取り出した弾を飛ばす。
+        /// プールから取り出した弾を真っ直ぐ飛ばす。
         /// </summary>
         public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Vector3 forward)
         {
@@ -104,7 +107,21 @@ namespace Enemy
                 OwnerTime = ownerTime,
                 Key = key, 
                 Muzzle = muzzle, 
-                Forward = forward
+                Forward = forward,
+            });
+        }
+
+        /// <summary>
+        /// プールから取り出した弾を対象を指定して飛ばす。
+        /// </summary>
+        public static void Fire(IOwnerTime ownerTime, BulletKey key, Vector3 muzzle, Transform target)
+        {
+            MessageBroker.Default.Publish(new Message
+            {
+                OwnerTime = ownerTime,
+                Key = key,
+                Muzzle = muzzle,
+                Target = target,
             });
         }
     }

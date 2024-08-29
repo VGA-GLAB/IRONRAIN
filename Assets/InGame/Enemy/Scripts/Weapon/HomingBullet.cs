@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Enemy
 {
@@ -15,14 +14,19 @@ namespace Enemy
         private Vector3 _velocity;
         bool _isHoming;
 
-        public override void Shoot(Vector3 direction, IOwnerTime ownerTime)
+        protected override void OnShoot(Vector3 direction)
         {
-            base.Shoot(direction, ownerTime);
-
             _player = FindPlayer();
             _initial = direction;
             _velocity = direction;
             _isHoming = true;
+        }
+
+        // 現状使っていないが、一応オーバーライドしておく。
+        protected override void OnShoot(Transform target)
+        {
+            Vector3 dir = target.position - _transform.position;
+            OnShoot(dir);
         }
 
         private static Transform FindPlayer()

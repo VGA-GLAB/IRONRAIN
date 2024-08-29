@@ -76,9 +76,16 @@ namespace Enemy
             // 射撃モード
             switch (_aimMode)
             {
-                case AimMode.Forward: Fire(_rotate.forward); break;
-                case AimMode.Player: FireToTarget(_player); break;
-                case AimMode.Target: FireToTarget(_target); break;
+                case AimMode.Player when _key == BulletKey.Assault:
+                    LerpFireToTarget(_player); break;
+                case AimMode.Player when _key == BulletKey.Launcher:
+                    LerpFireToTarget(_player); break;
+                case AimMode.Forward: 
+                    Fire(_rotate.forward); break;
+                case AimMode.Player: 
+                    FireToTarget(_player); break;
+                case AimMode.Target: 
+                    FireToTarget(_target); break;
             }
 
             // タイミングを更新。
@@ -108,6 +115,12 @@ namespace Enemy
 
             Vector3 dir = (target.position - _muzzle.position).normalized;
             Fire(dir);
+        }
+
+        // 任意の目標に向けて発射。
+        private void LerpFireToTarget(Transform target)
+        {
+            BulletPool.Fire(_owner, _key, _muzzle.position, target);
         }
 
         /// <summary>
