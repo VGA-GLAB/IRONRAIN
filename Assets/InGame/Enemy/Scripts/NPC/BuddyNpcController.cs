@@ -60,7 +60,8 @@ namespace Enemy.NPC
             _perception.InitializeOnStart();
         }
 
-        private void Update()
+        // Updateだとプレイヤーとの更新間隔がズレて移動がガクガクするので、NPCだけFixedUpdateで更新。
+        private void FixedUpdate()
         {
             _perception.Update();
 

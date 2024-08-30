@@ -48,7 +48,7 @@ namespace Enemy.NPC
             }
             else
             {
-                bb.TargetDirection = Ref.Rotate.forward;
+                bb.TargetDirection = Vector3.forward;
                 bb.TargetSqrDistance = 0;
             }
 

@@ -28,9 +28,19 @@ namespace Enemy.NPC
             float DefeatDist = Ref.NpcParams.DefeatSqrDistance;
             if (dist < DefeatDist) { TryChangeState(StateKey.Action); return; }
 
+            // プレイヤーより前に出た状態になるまで直進させる。
+            // そうしないとプレイヤーを真後ろから通り抜けて敵に向かってしまう。
+            const float Offset = 5.0f;
+            float z = Ref.Body.Position.z;
+            float pz = Ref.Player.position.z;
+            bool isOver = z > pz + Offset;
+
+            Vector3 dir;
+            if (isOver) dir = Ref.BlackBoard.TargetDirection;
+            else dir = Ref.Body.Forward;
+
             float spd = Ref.NpcParams.MoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            Vector3 dir = Ref.BlackBoard.TargetDirection;
             Vector3 velo = dir * dt * spd;
             Ref.Body.Move(velo);
         }
