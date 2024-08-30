@@ -35,6 +35,7 @@ namespace Enemy
         {
             Always();
             OnExit();
+            WritePlayerRelativePosition();
         }      
         protected sealed override void Stay() 
         {
