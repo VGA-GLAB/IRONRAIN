@@ -32,7 +32,7 @@ namespace Enemy.NPC
         // 時間切れフラグ。
         public bool IsLifeTimeOver => LifeTime <= 0;
 
-        // スローやポーズ処理を反映したDeltaTime。
-        public float PausableDeltaTime => Time.deltaTime * ProvidePlayerInformation.TimeScale;
+        // スローやポーズ処理を反映したFixedDeltaTime。
+        public float PausableDeltaTime => Time.fixedDeltaTime * ProvidePlayerInformation.TimeScale;
     }
 }
