@@ -69,20 +69,25 @@ namespace Enemy
         /// </summary>
         public bool TryRent(BulletKey key, out Bullet bullet)
         {
+            bullet = null;
+
             if (!_pools.TryGetValue(key, out ObjectPool pool))
             {
                 Debug.LogWarning($"弾が辞書に登録されていない: {key}");
+                return false;
             }
             if (!pool.TryRent(out GameObject item))
             {
                 Debug.LogWarning($"弾の在庫がプールに無い: {key}");
+                return false;
             }
             if (!item.TryGetComponent(out bullet))
             {
                 Debug.LogWarning($"弾のスクリプトがアタッチされていない: {bullet.name}");
+                return false;
             }
 
-            return bullet != null;
+            return true;
         }
     }
 }
