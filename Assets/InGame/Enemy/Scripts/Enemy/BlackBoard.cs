@@ -37,8 +37,9 @@ namespace Enemy
         public Vector3 PlayerDirection { get; set; }
         // プレイヤーとの距離
         public float PlayerDistance { get; set; }
-        // 現在の移動速度。複数のステート間で使用する。
-        public Vector3 Velocity { get; set; }
+
+        // プレイヤーとの相対位置。ステート間でのやり取り用。
+        public Vector3 PlayerRelativePosition { get; set; }
 
         // 残り戦闘時間
         public float LifeTime { get; set; }
