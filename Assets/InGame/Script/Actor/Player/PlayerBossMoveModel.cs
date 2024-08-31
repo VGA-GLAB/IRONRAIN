@@ -38,8 +38,9 @@ namespace IronRain.Player
             _rightController.SetUp(env.PlayerSetting);
             _transform = _playerEnvroment.PlayerTransform;
             _centerPoint = _pointP;
-            SumTheta();
+            //SumTheta();
             CreateLane();
+            //LanePosIns();
         }
 
         public void Start()
@@ -180,12 +181,12 @@ namespace IronRain.Player
 
             _totalThrusterMove += moveDistance;
             Debug.Log($"θ:{theta}r:{r}total{_totalThrusterMove}start{_startTheta}");
-            var cos = Mathf.Cos((_totalThrusterMove + _startTheta) * Mathf.Deg2Rad);
+            var cos = Mathf.Cos((_totalThrusterMove + 270) * Mathf.Deg2Rad);
             var x = cos * r;
-            var z = Mathf.Sin((_totalThrusterMove + _startTheta) * Mathf.Deg2Rad) * r;
+            var z = Mathf.Sin((_totalThrusterMove + 270) * Mathf.Deg2Rad) * r;
 
             var position = new Vector3(x + centerPosition.x, _playerEnvroment.PlayerTransform.localPosition.y, z + centerPosition.z);
-            Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
+            //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
             return position;
         }
 
@@ -195,7 +196,9 @@ namespace IronRain.Player
             int idx = Mathf.FloorToInt(360 / _params.ThrusterMoveNum);
             var nextPos = _playerEnvroment.PlayerTransform.localPosition;
 
-            for (int i = 0; i < idx; i++) 
+            nextPos = NextThrusterMovePoint(0, nextPos);
+            _laneList.Add(nextPos);
+            for (int i = 1; i < idx; i++) 
             {
                 nextPos = NextThrusterMovePoint(_params.ThrusterMoveNum, nextPos);
                 _laneList.Add(nextPos);
@@ -230,7 +233,8 @@ namespace IronRain.Player
 
             var r = Vector3.Distance(centerPosition, playerPos);
             var aDir = (playerPos - centerPosition).normalized;
-            var bDir = (new Vector3(r, 0, centerPosition.z) - centerPosition).normalized;
+            var bDir = (new Vector3(centerPosition.x, 0, r) - centerPosition).normalized;
+            Debug.Log($"aDir:{aDir}bDir:{bDir}");
             _startTheta = Vector3.Angle(aDir, bDir);
         }
     }
