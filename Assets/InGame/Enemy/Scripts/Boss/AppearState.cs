@@ -8,6 +8,7 @@ namespace Enemy.Boss
     /// </summary>
     public class AppearState : State<StateKey>
     {
+        // 移動完了後、プレイヤーの方を向く。
         private BossActionStep[] _steps;
         private BattleActionStep _currentStep;
 
@@ -24,7 +25,7 @@ namespace Enemy.Boss
             _currentStep = _steps[0];
         }
 
-        private RequiredRef Ref { get; set; }
+        private RequiredRef Ref { get; }
 
         protected override void Enter()
         {
@@ -39,7 +40,6 @@ namespace Enemy.Boss
         {
             _currentStep = _currentStep.Update();
 
-            // 移動完了後、プレイヤーの方を向いた場合、戦闘状態へ遷移。
             if (_currentStep.ID == nameof(ApproachEndStep)) TryChangeState(StateKey.Idle);
         }
 
@@ -85,9 +85,12 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
+            // CurrentRane.Valueの仕様で初期値が0、移動後に始めて値が代入されるため、ここは手動で合わせる。
+            const int LaneIndex = 10;
+            Ref.BlackBoard.CurrentLaneIndex = LaneIndex;
+
             _start = Ref.Body.Position;
-            // プレイヤーの反対の位置がわからないので適当。
-            _end = Ref.PointP.position + Ref.Field.LaneList[0]; 
+            _end = Ref.PointP.position + Ref.Field.LaneList[LaneIndex];
             _lerp = 0;
         }
 
@@ -128,8 +131,8 @@ namespace Enemy.Boss
 
         protected override BattleActionStep Stay()
         {
-            // 移動速度
-            const float Speed = 1.0f;
+            // 振り向き速度
+            const float Speed = 2.0f;
 
             Vector3 dir = Vector3.Lerp(_start, _end, _lerp);
             Ref.Body.LookForward(dir);

@@ -41,6 +41,9 @@ namespace Enemy.Boss
         // 現在の体力
         public int Hp { get; set; }
 
+        // 現在のレーン番号。AppearとLaneChangeStateが管理する。
+        public int CurrentLaneIndex { get; set; }
+
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }
         // このフレームで自身にダメージを与えた武器。

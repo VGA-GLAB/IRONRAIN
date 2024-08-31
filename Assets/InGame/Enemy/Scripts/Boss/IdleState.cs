@@ -24,12 +24,12 @@ namespace Enemy.Boss
         {
             PlayDamageSE();
             FunnelLaserSight();
-            MoveToPointP();
             LookAtPlayer();
 
             // ファンネル展開。
-            bool isFunnelExpand = Ref.BlackBoard.FunnelExpand.IsWaitingExecute();
-            if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
+            // 移動のテストするので一旦米ッとアウト。
+            //bool isFunnelExpand = Ref.BlackBoard.FunnelExpand.IsWaitingExecute();
+            //if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
 
             // QTEイベントが始まった場合は遷移。
             bool isQteStarted = Ref.BlackBoard.IsQteStarted;
@@ -42,8 +42,11 @@ namespace Enemy.Boss
             //if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
 
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
-            if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
+            // レーン移動をテストするために一旦コメントアウト
+            //bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
+            //if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
+
+            TryChangeState(StateKey.LaneChange);
         }
     }
 }
