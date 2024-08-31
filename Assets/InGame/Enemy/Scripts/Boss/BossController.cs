@@ -46,7 +46,7 @@ namespace Enemy.Boss
                 player: FindPlayer(),
                 offset: FindOffset(),
                 rotate: FindRotate(),
-                pointP: FindAnyObjectByType<DebugPointP>().transform,
+                pointP: FindAnyObjectByType<PointP>().transform,
                 bossParams: GetComponent<BossParams>(),
                 blackBoard: new BlackBoard(gameObject.name),
                 animator: GetComponentInChildren<Animator>(),
