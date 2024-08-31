@@ -18,6 +18,7 @@ namespace IronRain.Player
         [SerializeField] LeverController _rightController;
         [SerializeField] Rigidbody _rb;
         [SerializeField] private Transform _pointP;
+        [SerializeField] private GameObject _cubeObj;
 
         private float _totalThrusterMove;
         private CancellationTokenSource _thrusterCancell;
@@ -37,6 +38,7 @@ namespace IronRain.Player
             _rightController.SetUp(env.PlayerSetting);
             _transform = _playerEnvroment.PlayerTransform;
             _centerPoint = _pointP;
+            SumTheta();
             CreateLane();
         }
 
@@ -45,7 +47,6 @@ namespace IronRain.Player
             _thrusterCancell = new CancellationTokenSource();
             _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
             _playerEnvroment.OnStateChange += ThrusterCancell;
-            SumTheta();
         }
         public void FixedUpdate()
         {
@@ -58,6 +59,14 @@ namespace IronRain.Player
             {
                 _playerEnvroment.PlayerTransform.parent = null;
                 _rb.velocity = Vector2.zero;
+            }
+        }
+
+        public void LanePosIns() 
+        {
+            for (int i = 0; i < _laneList.Count; i++) 
+            {
+                GameObject.Instantiate(_cubeObj, _laneList[i] + _centerPoint.position, Quaternion.identity);
             }
         }
 
@@ -168,15 +177,15 @@ namespace IronRain.Player
             centerPosition.y = 0;
             var r = Vector3.Distance(centerPosition, pos);
             var theta = (moveDistance / r);
-            Debug.Log($"θ:{theta}r:{r}");
 
-            _totalThrusterMove += theta;
-            var cos = Mathf.Cos(_totalThrusterMove + _startTheta);
+            _totalThrusterMove += moveDistance;
+            Debug.Log($"θ:{theta}r:{r}total{_totalThrusterMove}start{_startTheta}");
+            var cos = Mathf.Cos((_totalThrusterMove + _startTheta) * Mathf.Deg2Rad);
             var x = cos * r;
-            var z = Mathf.Sin(_totalThrusterMove + _startTheta) * r;
+            var z = Mathf.Sin((_totalThrusterMove + _startTheta) * Mathf.Deg2Rad) * r;
 
             var position = new Vector3(x + centerPosition.x, _playerEnvroment.PlayerTransform.localPosition.y, z + centerPosition.z);
-            //Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
+            Debug.Log($"移動しましたX:{position.x}:Z{position.z}r:{r}");
             return position;
         }
 
@@ -222,7 +231,7 @@ namespace IronRain.Player
             var r = Vector3.Distance(centerPosition, playerPos);
             var aDir = (playerPos - centerPosition).normalized;
             var bDir = (new Vector3(r, 0, centerPosition.z) - centerPosition).normalized;
-            _startTheta = Vector3.Angle(aDir, bDir) * Mathf.Deg2Rad;
+            _startTheta = Vector3.Angle(aDir, bDir);
         }
     }
 }
