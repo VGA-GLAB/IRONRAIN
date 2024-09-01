@@ -104,37 +104,47 @@ namespace Enemy.Boss
     }
 
     /// <summary>
-    /// ロケットランチャー発射 -> リロード -> 構え を繰り返す。
+    /// ロケットランチャー発射をn回繰り返す。
     /// </summary>
     public class LauncherFireStep : BossActionStep
     {
-        public LauncherFireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        private int _count;
+
+        public LauncherFireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
+        {
+            // リロードのアニメーション再生をトリガーする。
+            string state = Const.Boss.Reload;
+            int layer = Const.Layer.UpperBody;
+            Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnReloadAnimationStateEnter);
+        }
+
+        private void OnReloadAnimationStateEnter()
+        {
+            _count--;
+            _count = Mathf.Max(0, _count);
+        }
 
         protected override void Enter()
         {
             // 構えのステップで発射のアニメーション開始を検知しているので
             // このメソッドが呼ばれている時点で既に発射のアニメーションが再生開始している。
+            // 発射->このステップに遷移 は瞬時に行われるが、リロードの再生までは1秒程度余裕がある。
+            // そのため、ここで発射カウントをリセットしても正常に動く。
+            int max = Ref.BossParams.RangeAttackConfig.MaxContinuous;
+            int min = Ref.BossParams.RangeAttackConfig.MinContinuous;
+            _count = Random.Range(min, max + 1);
         }
 
         protected override BattleActionStep Stay()
         {
-            BlackBoard bb = Ref.BlackBoard;
-
-            // 近接攻撃の条件を満たした。
-            bool isMelee = bb.IsWithinMeleeRange && bb.MeleeAttack.IsWaitingExecute();
-            // QTE開始
-            bool isQte = bb.IsQteStarted;
-            // ファンネル展開
-            bool isFunnel = bb.FunnelExpand.IsWaitingExecute();
-
-            bool input = Input.GetKeyDown(KeyCode.Space);
-
-            if(isMelee || isQte || isFunnel)
+            if (_count <= 0)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
                 // 手動で射撃終了をトリガーする必要がある。
+                // リロードのアニメーション再生開始のコールバックで発射カウントを減らしているので
+                // 次のステップに遷移するタイミングはリロードのアニメーション再生開始とほぼ同じ。
                 Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
-                
+
                 return Next[0];
             }
             else
@@ -155,7 +165,7 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
-            _timer = 6.0f; // アニメーションに合う用に手動で設定。
+            _timer = 3.0f; // アニメーションに合う用に手動で設定。
         }
 
         protected override BattleActionStep Stay()

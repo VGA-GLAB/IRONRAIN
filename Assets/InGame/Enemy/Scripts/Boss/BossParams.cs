@@ -77,6 +77,12 @@ namespace Enemy.Boss
         [Tooltip("攻撃アニメーションの再生間隔。")]
         [Range(0.01f, 10.0f)]
         [SerializeField] private float _rate = 0.01f;
+        [Tooltip("連続で攻撃する最大回数")]
+        [Min(1)]
+        [SerializeField] private int _maxContinuous = 3;
+        [Tooltip("連続で攻撃する最小回数")]
+        [Min(1)]
+        [SerializeField] private int _minContinuous = 1;
 
         [Space(10)]
 
@@ -87,6 +93,8 @@ namespace Enemy.Boss
         public float Rate => _rate;
         public bool UseInputBuffer => _useInputBuffer;
         public TextAsset InputBufferAsset => _inputBufferAsset;
+        public int MaxContinuous => _maxContinuous;
+        public int MinContinuous => _minContinuous;
     }
 
     // QTE
@@ -125,9 +133,6 @@ namespace Enemy.Boss
         [Header("移動速度の設定")]
         [SerializeField] private MoveSpeedSettings _moveSpeed;
 
-        [Header("プレイヤーを向く間隔")]
-        [SerializeField] private float _lookDuration = 2.0f;
-
         [Header("近距離攻撃の設定")]
         [SerializeField] private MeleeAttackSettings _meleeAttack;
 
@@ -138,7 +143,6 @@ namespace Enemy.Boss
         [SerializeField] private QteSettings _qte;
 
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
-        public float LookDuration => _lookDuration;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
         public QteSettings Qte => _qte;

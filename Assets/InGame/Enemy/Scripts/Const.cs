@@ -94,6 +94,7 @@
             public const string HoldStart = "enemy_rocket_hold_st"; // 銃構え
             public const string HoldLoop = "enemy_rocket_hold_lp";  // 銃構え
             public const string FireLoop = "enemy_rocket_fire";     // 銃攻撃
+            public const string Reload = "enemy_rocket_reload";     // 銃リロード
             public const string BladeStart = "enemy_shield_st";        // 刀構え
             public const string BladeLoop = "enemy_shield_lp";         // 刀構え
             public const string BladeAttack = "enemy_shield_attack00"; // 刀攻撃
