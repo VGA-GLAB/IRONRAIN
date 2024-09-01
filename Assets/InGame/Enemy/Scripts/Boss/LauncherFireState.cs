@@ -127,6 +127,8 @@ namespace Enemy.Boss
             // ファンネル展開
             bool isFunnel = bb.FunnelExpand.IsWaitingExecute();
 
+            bool input = Input.GetKeyDown(KeyCode.Space);
+
             if(isMelee || isQte || isFunnel)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
@@ -153,7 +155,7 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
-            _timer = 2.0f; // アニメーションに合う用に手動で設定。
+            _timer = 6.0f; // アニメーションに合う用に手動で設定。
         }
 
         protected override BattleActionStep Stay()
