@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Enemy.Boss
 {
@@ -12,7 +13,7 @@ namespace Enemy.Boss
         Delete,
         BladeAttack,
         LauncherFire,
-        MoveWaypoint,
+        LaneChange,
         FunnelExpand,
     }
 
@@ -41,7 +42,7 @@ namespace Enemy.Boss
             _states.Add(StateKey.QteEvent, new QteEventState(Ref));
             _states.Add(StateKey.Hide, new HideState(Ref));
             _states.Add(StateKey.FunnelExpand, new FunnelExpandState(Ref));
-            _states.Add(StateKey.MoveWaypoint, new MoveWaypointState(Ref));
+            _states.Add(StateKey.LaneChange, new LaneChangeState(Ref));
 
             // 初期状態。
             _currentState = _states[StateKey.Hide];
@@ -54,7 +55,7 @@ namespace Enemy.Boss
         {
             // ステートマシンを更新。
             _currentState = _currentState.Update();
-            
+
             return Result.Running; // <- 必要に応じて修正する。
         }
 

@@ -41,15 +41,16 @@ namespace Enemy.Boss
         // 現在の体力
         public int Hp { get; set; }
 
+        // 現在のレーン番号。AppearとLaneChangeStateが管理する。
+        public int CurrentLaneIndex { get; set; }
+
+        // オフセットを上下移動させる値。
+        public float Hovering { get; set; }
+
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }
         // このフレームで自身にダメージを与えた武器。
         public string DamageSource { get; set; }
-
-        // 一定間隔でプレイヤーを向くための経過時間。BattleStateが管理する。
-        public float PlayerLookElapsed { get; set; }
-        // 戦闘中、向く方向。一定間隔で更新される。BattleStateが管理する。
-        public Vector3 LookDirection { get; set; }
 
         // ファンネルを展開。
         public Trigger FunnelExpand { get; set; }
