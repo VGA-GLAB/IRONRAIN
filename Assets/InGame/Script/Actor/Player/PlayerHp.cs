@@ -35,7 +35,8 @@ namespace IronRain.Player
             if (_shakeTween == null) 
             {
                 _shakeTween = _mainCamera.DOShakePosition(_time, _strength)
-                    .OnComplete(() => { _shakeTween = null; });
+                    .OnComplete(() => { _shakeTween = null; })
+                    .SetLink(gameObject);
             }
 
             if (weapon == PlayerWeaponType.AssaultRifle.ToString())
