@@ -102,12 +102,13 @@ namespace Enemy.Boss
             Vector3 p = Vector3.Lerp(_start, _end, _lerp);
             Ref.Body.Warp(p);
 
+            if (_lerp >= 1.0f) return Next[0];
+
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt * Speed;
             _lerp = Mathf.Clamp01(_lerp);
 
-            if (_lerp >= 1.0f) return Next[0];
-            else return this;
+           return this;
         }
     }
 

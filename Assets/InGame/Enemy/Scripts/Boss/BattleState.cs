@@ -49,32 +49,14 @@ namespace Enemy.Boss
         }
 
         /// <summary>
-        /// プレイヤーを向く。
+        /// オフセットの位置を上下させ、その場でホバリングさせる。
         /// </summary>
-        protected void LookAtPlayer()
+        protected void Hovering()
         {
-            //BlackBoard bb = Ref.BlackBoard;
-            //float dt = bb.PausableDeltaTime;
-
-            //bb.PlayerLookElapsed += dt;
-
-            //// ボスの前方向に射撃するファンネルを機能させるために一定間隔。
-            //float duration = Ref.BossParams.LookDuration;
-            //if (bb.PlayerLookElapsed > duration)
-            //{
-            //    bb.PlayerLookElapsed = 0;
-
-            //    Vector3 pd = bb.PlayerDirection;
-            //    pd.y = 0;
-            //    bb.LookDirection = pd;
-            //}
-
-            //const float LookSpeed = 5.0f; // 適当。
-            //Vector3 a = Ref.Body.Forward;
-            //Vector3 b = bb.LookDirection;
-            //Vector3 look = Vector3.Lerp(a, b, dt * LookSpeed);
-
-            //Ref.Body.LookForward(look);
+            float h = Mathf.Sin(Ref.BlackBoard.Hovering);
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Ref.BlackBoard.Hovering += dt;
+            Ref.Body.OffsetWarp(Vector3.up * h);
         }
     }
 }

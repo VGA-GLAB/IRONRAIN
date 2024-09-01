@@ -20,13 +20,11 @@ namespace Enemy.Boss
         {
         }
 
-        private float _t;
-
         protected override void Stay()
         {
             PlayDamageSE();
             FunnelLaserSight();
-            LookAtPlayer();
+            Hovering();
 
             // ファンネル展開。
             // 移動のテストするので一旦米ッとアウト。
@@ -44,16 +42,10 @@ namespace Enemy.Boss
             //if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
 
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
-            // レーン移動をテストするために一旦コメントアウト
             //bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
             //if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
 
-            if (_t > 2.0f)
-            {
-                _t = 0;
-                TryChangeState(StateKey.LaneChange);
-            }
-            else _t += Time.deltaTime;
+            //TryChangeState(StateKey.LaneChange);
         }
     }
 }

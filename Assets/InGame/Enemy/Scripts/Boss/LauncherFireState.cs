@@ -37,7 +37,7 @@ namespace Enemy.Boss
         {
             PlayDamageSE();
             FunnelLaserSight();
-            LookAtPlayer();
+            Hovering();
 
             _currentStep = _currentStep.Update();
 
