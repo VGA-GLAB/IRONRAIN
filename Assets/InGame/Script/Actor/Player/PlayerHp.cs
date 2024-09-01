@@ -19,6 +19,7 @@ namespace IronRain.Player
         private int _hp;
         private int _maxHp;
         private PlayerEnvroment _playerEnvroment;
+        private Tween _shakeTween;
 
         public void Setup(PlayerEnvroment playerEnvroment)
         {
@@ -30,7 +31,13 @@ namespace IronRain.Player
         public void Damage(int value, string weapon = "")
         {
             _hp = Mathf.Max(_hp - value, 0);
-            //_mainCamera.DOShakePosition(_time, _strength);
+
+            if (_shakeTween == null) 
+            {
+                _shakeTween = _mainCamera.DOShakePosition(_time, _strength)
+                    .OnComplete(() => { _shakeTween = null; })
+                    .SetLink(gameObject);
+            }
 
             if (weapon == PlayerWeaponType.AssaultRifle.ToString())
             {
