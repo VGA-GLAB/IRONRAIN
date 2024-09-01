@@ -49,55 +49,32 @@ namespace Enemy.Boss
         }
 
         /// <summary>
-        /// 点Pに向けて移動。
-        /// </summary>
-        protected void MoveToPointP()
-        {
-            Vector3 dir = Ref.BlackBoard.PointPDirection;
-            float spd = Ref.BossParams.MoveSpeed.Chase;
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            Vector3 mpf = dir * spd * dt;
-            float dist = Ref.BlackBoard.PointPDistance;
-            Vector3 p;
-            if (mpf.magnitude >= dist)
-            {
-                p = Ref.PointP.position;
-            }
-            else
-            {
-                p = Ref.BlackBoard.Area.Point + mpf;
-            }
-
-            Ref.Body.Warp(p);
-        }
-
-        /// <summary>
         /// プレイヤーを向く。
         /// </summary>
         protected void LookAtPlayer()
         {
-            BlackBoard bb = Ref.BlackBoard;
-            float dt = bb.PausableDeltaTime;
+            //BlackBoard bb = Ref.BlackBoard;
+            //float dt = bb.PausableDeltaTime;
 
-            bb.PlayerLookElapsed += dt;
+            //bb.PlayerLookElapsed += dt;
 
-            // ボスの前方向に射撃するファンネルを機能させるために一定間隔。
-            float duration = Ref.BossParams.LookDuration;
-            if (bb.PlayerLookElapsed > duration)
-            {
-                bb.PlayerLookElapsed = 0;
+            //// ボスの前方向に射撃するファンネルを機能させるために一定間隔。
+            //float duration = Ref.BossParams.LookDuration;
+            //if (bb.PlayerLookElapsed > duration)
+            //{
+            //    bb.PlayerLookElapsed = 0;
 
-                Vector3 pd = bb.PlayerDirection;
-                pd.y = 0;
-                bb.LookDirection = pd;
-            }
+            //    Vector3 pd = bb.PlayerDirection;
+            //    pd.y = 0;
+            //    bb.LookDirection = pd;
+            //}
 
-            const float LookSpeed = 5.0f; // 適当。
-            Vector3 a = Ref.Body.Forward;
-            Vector3 b = bb.LookDirection;
-            Vector3 look = Vector3.Lerp(a, b, dt * LookSpeed);
+            //const float LookSpeed = 5.0f; // 適当。
+            //Vector3 a = Ref.Body.Forward;
+            //Vector3 b = bb.LookDirection;
+            //Vector3 look = Vector3.Lerp(a, b, dt * LookSpeed);
 
-            Ref.Body.LookForward(look);
+            //Ref.Body.LookForward(look);
         }
     }
 }

@@ -10,21 +10,29 @@ namespace Enemy.Boss
     public class LaneChangeState : BattleState
     {
         // プレイヤーの正面の位置に来るよう、n回レーン変更を行う。
-        private BossActionStep[] _steps;
-        private BattleActionStep _currentStep;
+        private BossActionStep[] _laneChangeSteps;
+        private BattleActionStep _currentLaneChangeStep;
+        // 並行してプレイヤーの方向を向く回転を行う。
+        private BossActionStep[] _lookSteps;
+        private BattleActionStep _currentLookStep;
 
         public LaneChangeState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BossActionStep[2];
-            _steps[1] = new LaneChangeEndStep(requiredRef, null);
-            _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
+            _laneChangeSteps = new BossActionStep[2];
+            _laneChangeSteps[1] = new LaneChangeEndStep(requiredRef, null);
+            _laneChangeSteps[0] = new LaneChangeStep(requiredRef, _laneChangeSteps[1]);
+
+            _lookSteps = new BossActionStep[2];
+            _lookSteps[1] = new LaneChangeEndStep(requiredRef, null);
+            _lookSteps[0] = new LaneChangeLookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LaneChange;
 
-            _currentStep = _steps[0];
+            _currentLaneChangeStep = _laneChangeSteps[0];
+            _currentLookStep = _lookSteps[0];
         }
 
         protected override void Exit()
@@ -33,9 +41,12 @@ namespace Enemy.Boss
 
         protected override void Stay()
         {
-            _currentStep = _currentStep.Update();
+            _currentLaneChangeStep = _currentLaneChangeStep.Update();
+            _currentLookStep = _currentLookStep.Update();
 
-            if (_currentStep.ID == nameof(LaneChangeEndStep)) TryChangeState(StateKey.Idle);
+            bool isLaneChangeEnd = _currentLaneChangeStep.ID == nameof(LaneChangeEndStep);
+            bool isLookEnd = _currentLookStep.ID == nameof(LaneChangeEndStep);
+            if (isLaneChangeEnd && isLookEnd) TryChangeState(StateKey.Idle);
         }
 
         #region ボスのレーン表示のテスト用。
@@ -76,9 +87,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             // プレイヤーの反対側のレーン。
-            int pl = Ref.Field.CurrentRane.Value;
-            int count = Ref.Field.LaneList.Count;
-            int target = (pl + (count / 2)) % count;
+            int target = GetOtherSideLane();
 
             // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
             int current = Ref.BlackBoard.CurrentLaneIndex;
@@ -110,20 +119,31 @@ namespace Enemy.Boss
                 if (_rest == 0) return Next[0];
                 else NextLane();
             }
-            else
-            {
-                Vector3 p = Vector3.Lerp(_start, _end, _lerp);
-                Ref.Body.Warp(p);
 
-                // レーン間の移動速度。
-                const float Speed = 3.0f;
+            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(p);
 
-                float dt = Ref.BlackBoard.PausableDeltaTime;
-                _lerp += dt * Speed;
-                _lerp = Mathf.Clamp01(_lerp);
-            }
+            // レーン間の移動速度。
+            const float Speed = 6.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * Speed;
+            _lerp = Mathf.Clamp01(_lerp);
 
             return this;
+        }
+
+        // プレイヤーの反対側のレーンの番号を取得。
+        private int GetOtherSideLane()
+        {
+            int pi = Ref.Field.CurrentRane.Value;
+            int length = Ref.Field.LaneList.Count;
+            return GetOtherSideLane(pi, length);
+        }
+
+        public static int GetOtherSideLane(int playerLaneIndex, int length)
+        {
+            return (playerLaneIndex + (length / 2)) % length;
         }
 
         // 円状に敷き詰められたレーンの2点間を移動する場合の移動回数を求める。
@@ -132,6 +152,11 @@ namespace Enemy.Boss
         private int GetRest(int a, int b)
         {
             int length = Ref.Field.LaneList.Count;
+            return GetRest(a, b, length);
+        }
+
+        public static int GetRest(int a, int b, int length)
+        {
             return (a - b + length) % length;
         }
 
@@ -148,6 +173,55 @@ namespace Enemy.Boss
             _start = Ref.Body.Position;
             _end = Ref.PointP.position + Ref.Field.LaneList[_nextIndex];
             _lerp = 0;
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーに向けて回転。
+    /// </summary>
+    public class LaneChangeLookAtPlayerStep : BossActionStep
+    {
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+        private int _diff;
+
+        public LaneChangeLookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Forward;
+            // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
+            // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
+            int pi = Ref.Field.CurrentRane.Value;
+            Vector3 pl = Ref.Field.LaneList[pi];
+            pl.y = 0;
+            _end = pl;
+            _lerp = 0;
+
+            // プレイヤーの反対側のレーンに移動するため、向く方向も合わせる。
+            int length = Ref.Field.LaneList.Count;
+            int target = LaneChangeStep.GetOtherSideLane(pi, length);
+            // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
+            int current = Ref.BlackBoard.CurrentLaneIndex;
+            int clockwiseLength = LaneChangeStep.GetRest(target, current, length);
+            int counterclockwiseLength = LaneChangeStep.GetRest(current, target, length);
+            _diff = Mathf.Min(clockwiseLength, counterclockwiseLength);
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            // 振り向き速度。
+            const float Speed = 1.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * (Speed / _diff);
+
+            if (_lerp > 1.0f) return Next[0];
+            else return this;
         }
     }
 

@@ -20,6 +20,8 @@ namespace Enemy.Boss
         {
         }
 
+        private float _t;
+
         protected override void Stay()
         {
             PlayDamageSE();
@@ -46,7 +48,12 @@ namespace Enemy.Boss
             //bool isRange = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
             //if (isRange) { TryChangeState(StateKey.LauncherFire); return; }
 
-            TryChangeState(StateKey.LaneChange);
+            if (_t > 2.0f)
+            {
+                _t = 0;
+                TryChangeState(StateKey.LaneChange);
+            }
+            else _t += Time.deltaTime;
         }
     }
 }
