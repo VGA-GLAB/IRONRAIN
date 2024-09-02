@@ -28,18 +28,15 @@ namespace Enemy.Boss
 
             // ファンネル展開。
             // 移動のテストするので一旦米ッとアウト。
-            bool isFunnelExpand = Ref.BlackBoard.FunnelExpand.IsWaitingExecute();
-            if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
+            //bool isFunnelExpand = Ref.BlackBoard.FunnelExpand.IsWaitingExecute();
+            //if (isFunnelExpand) { TryChangeState(StateKey.FunnelExpand); return; }
 
             // QTEイベントが始まった場合は遷移。
             bool isQteStarted = Ref.BlackBoard.IsQteStarted;
             if (isQteStarted) { TryChangeState(StateKey.QteEvent); return; }
 
             // 近接攻撃の範囲内かつ、タイミングが来ていた場合は攻撃。
-            // マルチロックのテストをさせてあげるためにウロチョロしないでほしいので用に一旦コメントアウト。
-            //bool isMeleeRange = Ref.BlackBoard.IsWithinMeleeRange;
-            //bool isMelee = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
-            //if (isMeleeRange && isMelee) { TryChangeState(StateKey.BladeAttack); return; }
+            if (IsMeleeAttackSelected()) { TryChangeState(StateKey.BladeAttack); return; }
 
             // または、遠距離攻撃タイミングが来ていた場合は攻撃。
             if (IsRangeAttackSelected()) { TryChangeState(StateKey.LauncherFire); return; }
@@ -47,14 +44,31 @@ namespace Enemy.Boss
             TryChangeState(StateKey.LaneChange);
         }
 
+        // 近接攻撃を選択する。
+        private bool IsMeleeAttackSelected()
+        {
+            bool isTiming = Ref.BlackBoard.MeleeAttack.IsWaitingExecute();
+            if (!isTiming) return false;
+
+            // 攻撃を行える範囲。
+            const int Range = 1;
+            return IsInRange(Range);
+        }
+
         // 遠距離攻撃を選択する。
         private bool IsRangeAttackSelected()
         {
-            // 攻撃タイミングが来ているか？
             bool isTiming = Ref.BlackBoard.RangeAttack.IsWaitingExecute();
-
             if (!isTiming) return false;
 
+            // 攻撃を行える範囲。
+            const int Range = 1;
+            return IsInRange(Range);
+        }
+
+        // プレイヤーの正面のレーンを基準として、レーンの左右のズレで判定。
+        private bool IsInRange(int range)
+        {
             // プレイヤーの反対側のレーン。
             int pi = Ref.Field.CurrentRane.Value;
             int length = Ref.Field.LaneList.Count;
@@ -64,10 +78,9 @@ namespace Enemy.Boss
             int clockwiseLength = LaneChangeStep.GetRest(target, current, length);
             int counterclockwiseLength = LaneChangeStep.GetRest(current, target, length);
             // プレイヤーが攻撃範囲のレーン内にいるか？
-            const int Range = 1;
-            bool isInRange = Mathf.Min(clockwiseLength, counterclockwiseLength) <= Range;
+            bool result = Mathf.Min(clockwiseLength, counterclockwiseLength) <= range;
 
-            return isInRange;
+            return result;
         }
     }
 }

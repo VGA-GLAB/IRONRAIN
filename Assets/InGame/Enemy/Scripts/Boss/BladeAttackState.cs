@@ -5,13 +5,11 @@ using UnityEngine;
 namespace Enemy.Boss
 {
     /// <summary>
-    /// 攻撃前と後で同じ位置関係に戻す必要があるため、ステップ間で攻撃前のデータを共有する必要がある。
+    /// 左右どちらの向きで戻るかをステップ間で共有する。
     /// </summary>
-    public class PreAttackData
+    public class ReturnRoute
     {
-        public Vector3 PlayerPosition { get; set; }
-        public Vector3 Direction { get; set; }
-        public float SqrDistance { get; set; }
+        public bool IsRight { get; set; }
     }
 
     /// <summary>
@@ -25,15 +23,14 @@ namespace Enemy.Boss
 
         public BladeAttackState(RequiredRef requiredRef) : base(requiredRef)
         {
-            PreAttackData preAttackData = new PreAttackData();
+            ReturnRoute route = new ReturnRoute();
 
-            _steps = new BossActionStep[7];
-            _steps[6] = new BladeAttackEndStep(requiredRef, null);
-            _steps[5] = new BladeCooldownStep(requiredRef, _steps[6]);
-            _steps[4] = new PassingStep(requiredRef, preAttackData, _steps[5]);
-            _steps[3] = new GedanGiriStep(requiredRef, _steps[4]);
-            _steps[2] = new ChargeThrustStep(requiredRef, _steps[4]);
-            _steps[1] = new ApproachToPlayerStep(requiredRef, preAttackData, _steps[2], _steps[3]);
+            _steps = new BossActionStep[6];
+            _steps[5] = new BladeAttackEndStep(requiredRef, null);
+            _steps[4] = new LookMyLaneForwardStep(requiredRef, _steps[5]);
+            _steps[3] = new ReturnMyLaneStep(requiredRef, route, _steps[4]);
+            _steps[2] = new LookLeftOrRightStep(requiredRef, route, _steps[3]);
+            _steps[1] = new ChargeToPlayerStep(requiredRef, _steps[2]);
             _steps[0] = new ChargeJetPackStep(requiredRef, _steps[1]);
         }
 
@@ -55,7 +52,6 @@ namespace Enemy.Boss
 
             _currentStep = _currentStep.Update();
 
-            // 終了ステップまで到達したらアイドル状態に戻る。
             if (_currentStep.ID == nameof(BladeAttackEndStep)) TryChangeState(StateKey.Idle);
         }
 
@@ -70,136 +66,53 @@ namespace Enemy.Boss
     /// </summary>
     public class ChargeJetPackStep : BossActionStep
     {
-        private float _timer;
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
 
         public ChargeJetPackStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
-            _timer = 1.0f; // 現状、チャージ演出がないので適当
+            _start = Ref.Body.Forward;
+            _end = Ref.BlackBoard.PlayerDirection;
+            _lerp = 0;
         }
 
         protected override BattleActionStep Stay()
         {
-            // プレイヤーの方を向く。
-            Vector3 f = Ref.BlackBoard.PlayerDirection;
-            f.y = 0;
-            Ref.Body.LookForward(f);
+            // プレイヤーを向く速度。
+            const float Speed = 6.0f;
 
-            // 時間が来たら遷移。
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            if (_lerp >= 1.0f) return Next[0];
+
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _timer -= dt;
-            if (_timer > 0) return this;
-            else return Next[0];
+            _lerp += dt * Speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            return this;
         }
     }
 
     /// <summary>
-    /// 自機に接近。
+    /// プレイヤーに突進しつつ攻撃。
     /// </summary>
-    public class ApproachToPlayerStep : BossActionStep
+    public class ChargeToPlayerStep : BossActionStep
     {
-        // 書き込んで後続のステップに渡す。
-        private PreAttackData _preAttackData;
-        // 遷移の判定用の値は技ごとに違う。
-        private Skill _selected;
+        // プレイヤーとすれ違った後、ブレーキをかけ始めるタイミングを手動で指定。
+        const float BrakeStartTiming = 1.5f;
+        // AnimatinoClip全体の長さのうち、突進後の振り向きが終了する秒数を手動で指定。
+        // 近接攻撃のアニメーション、最後に振り向いて棒立ちしているので、その部分をカットする意図。
+        const float TurnEndTiming = 4.0f;
 
-        public ApproachToPlayerStep(RequiredRef requiredRef, PreAttackData preAttackData,
-            BossActionStep gedanGidi, BossActionStep chargeThrust) : base(requiredRef, gedanGidi, chargeThrust) 
+        private Vector3 _velocity;
+        private float _timer;
+
+        public ChargeToPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
-            _preAttackData = preAttackData;
-        }
-
-        protected override void Enter()
-        {
-            // 攻撃後、同じ位置関係に戻っている必要があるため、現在の位置関係を保存しておく。
-            BlackBoard bb = Ref.BlackBoard;
-            _preAttackData.Direction = bb.PlayerDirection;
-            _preAttackData.SqrDistance = bb.PlayerSqrDistance;
-            _preAttackData.PlayerPosition = bb.PlayerArea.Point;
-
-            // 技ごとに接近距離を設定しているので、このタイミングでどの技を使うか決める。
-            MeleeAttackSettings melee = Ref.BossParams.MeleeAttackConfig;
-            if (Random.value < 0.5f) _selected = melee.GedanGiri;
-            else _selected = melee.ChargeThrust;
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            // Enterのタイミングのプレイヤーの位置、技の間合いまで近づく。
-            Vector3 area = Ref.BlackBoard.Area.Point;
-            Vector3 player = _preAttackData.PlayerPosition;
-            float sqrDist = (area - player).sqrMagnitude;
-            if (sqrDist > _selected.SprDistance)
-            {
-                Vector3 dir = _preAttackData.Direction;
-                float spd = Ref.BossParams.MeleeAttackConfig.ChargeSpeed;
-                float dt = Ref.BlackBoard.PausableDeltaTime;
-                Vector3 velo = dir * spd * dt;
-                Ref.Body.Move(velo);
-
-                return this;
-            }
-            else
-            {
-                // Enterのタイミングで決定した技に遷移。
-                bool isGedanGiri = _selected.ID == nameof(GedanGiri);
-                if (isGedanGiri) return Next[0];
-                else return Next[1];
-            }
-        }
-    }
-
-    /// <summary>
-    /// 下段斬り。
-    /// </summary>
-    public class GedanGiriStep : BossActionStep
-    {
-        public GedanGiriStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
-
-        protected override void Enter()
-        {
-            Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttack);
-            Ref.BodyAnimation.ResetTrigger(Const.Param.AttackSet);
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            return Next[0];
-        }
-    }
-
-    /// <summary>
-    /// 溜めからの突き。
-    /// </summary>
-    public class ChargeThrustStep : BossActionStep
-    {
-        public ChargeThrustStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
-
-        protected override void Enter()
-        {
-            // 現状、モーションが出来ていないので下斬りと同じ物を再生しておく。
-            Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttack);
-            Ref.BodyAnimation.ResetTrigger(Const.Param.AttackSet);
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            return Next[0];
-        }
-    }
-
-    /// <summary>
-    /// 自機とすれ違う。
-    /// </summary>
-    public class PassingStep : BossActionStep
-    {
-        private PreAttackData _preAttackData;
-
-        public PassingStep(RequiredRef requiredRef, PreAttackData preAttackData, BossActionStep next) : base(requiredRef, next)
-        {
-            _preAttackData = preAttackData;
-
             // すれ違い後にターンするので、とりあえずこのステップで音の再生をトリガーしておく。
             requiredRef.AnimationEvent.OnTurn += OnTurn;
         }
@@ -211,28 +124,59 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
+            Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttack);
+            Ref.BodyAnimation.ResetTrigger(Const.Param.AttackSet);
+
+            // 初速。
+            const float InitialSpeed = 15.0f;
+
+            _velocity = Ref.Body.Forward * InitialSpeed;
+            _timer = 0;
         }
 
         protected override BattleActionStep Stay()
         {
-            // プレイヤーの座標まで直線移動、そのままの向きで一定距離離れる。
-            Vector3 area = Ref.BlackBoard.Area.Point;
-            Vector3 player = _preAttackData.PlayerPosition;
-            float sqrDist = (area - player).sqrMagnitude;
-            if (sqrDist < _preAttackData.SqrDistance)
-            {
-                Vector3 dir = _preAttackData.Direction;
-                float spd = Ref.BossParams.MeleeAttackConfig.ChargeSpeed;
-                float dt = Ref.BlackBoard.PausableDeltaTime;
-                Vector3 velo = dir * spd * dt;
-                Ref.Body.Move(velo);
+            Vector3 acc;
 
-                return this;
+            // プレイヤーとすれ違い、振り向きが終わって、ブレーキで完全に停止している状態。
+            if (_timer >= TurnEndTiming)
+            {
+                Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttackEnd);
+                return Next[0];
+            }
+            else if (_timer >= BrakeStartTiming)
+            {
+                // ある程度速度が落ちたらピタっと止める。
+                const float StopThreshold = 1.0f;
+
+                if (_velocity.sqrMagnitude < StopThreshold)
+                {
+                    acc = Vector3.zero;
+                    _velocity = Vector3.zero;
+                }
+                else
+                {
+                    // ブレーキの強さ。
+                    const float Brake = 80.0f;
+
+                    acc = -Ref.Body.Forward * Brake;
+                }
+
             }
             else
             {
-                return Next[0];
+                // 加速度。
+                const float Speed = 25.0f;
+
+                acc = Ref.Body.Forward * Speed;
             }
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _timer += dt;
+            _velocity += acc * dt;
+            Ref.Body.Move(_velocity * dt);
+
+            return this;
         }
 
         public override void Dispose()
@@ -242,30 +186,155 @@ namespace Enemy.Boss
     }
 
     /// <summary>
-    /// アニメーションの終了を待って攻撃終了させる。
+    /// 元いたレーンに戻るため、振り向いた状態から左右どちらかを向く。
     /// </summary>
-    public class BladeCooldownStep : BossActionStep
+    public class LookLeftOrRightStep : BossActionStep
     {
-        private float _timer;
+        private ReturnRoute _route;
 
-        public BladeCooldownStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
+        public LookLeftOrRightStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next) 
+            : base(requiredRef, next) 
+        {
+            _route = route;
+        }
 
         protected override void Enter()
         {
-            _timer = 4.5f; // アニメーションに合う用に手動で設定。
+            _start = Ref.Body.Forward;
+
+            // 左右どちらに移動するかはとりあえずランダム。
+            if (Random.value < 0.5f)
+            {
+                _end = Ref.Body.Right;
+                _route.IsRight = true;
+            }
+            else
+            {
+                _end = -Ref.Body.Right;
+                _route.IsRight = false;
+            }
+
+            _lerp = 0;
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            if (_lerp >= 1.0f) return Next[0];
+
+            // 振り向き速度。
+            const float Speed = 3.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * Speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// 半円を描く軌道で攻撃前にいたレーンに戻る。
+    /// </summary>
+    public class ReturnMyLaneStep : BossActionStep
+    {
+        // 左右どちらの方向に戻るか読み取る。
+        private ReturnRoute _route;
+
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+        private Vector3 _forward;
+        private Vector3 _side;
+        private Vector3 _center;
+        private float _radius;
+
+        public ReturnMyLaneStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next)
+            : base(requiredRef, next) 
+        {
+            _route = route;
+        }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Position;
+            int li = Ref.BlackBoard.CurrentLaneIndex;
+            _end = Ref.PointP.position + Ref.Field.LaneList[li];
+            _lerp = 0;
+
+            // 現在地とレーンの位置を結ぶ直線を直径とする円。
+            _center = (_start + _end) / 2;
+            _radius = (_start - _end).magnitude / 2;
+
+            Vector3 dir = _start - _end;
+            _forward = dir.normalized;
+            Vector3 route = _route.IsRight ? Vector3.up : Vector3.down;
+            _side = Vector3.Cross(dir, route).normalized;
         }
 
         protected override BattleActionStep Stay()
         {
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _timer -= dt;
-            if (_timer <= 0) return Next[0];
-            else return this;
+            _lerp += dt;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            if (_lerp >= 1.0f) return Next[0];
+
+            float theta = Mathf.Lerp(0, Mathf.PI, _lerp);
+            float cos = Mathf.Cos(theta);
+            float sin = Mathf.Sin(theta);
+            Vector3 forward = _forward * cos * _radius;
+            Vector3 side = _side * sin * _radius;
+            Vector3 before = Ref.Body.Position;
+            Ref.Body.Warp(_center + forward + side);
+            Vector3 after = Ref.Body.Position;
+            Ref.Body.LookForward(after - before);
+
+            return this;
         }
     }
 
     /// <summary>
-    /// 刀攻撃終了。
+    /// 自身のレーンの正面を向く。
+    /// </summary>
+    public class LookMyLaneForwardStep : BossActionStep
+    {
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
+        public LookMyLaneForwardStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Forward;
+            int li = Ref.BlackBoard.CurrentLaneIndex;
+            _end = -Ref.Field.LaneList[li];
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            if (_lerp >= 1.0f) return Next[0];
+
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// 近接攻撃終了。
     /// </summary>
     public class BladeAttackEndStep : BossActionStep
     {

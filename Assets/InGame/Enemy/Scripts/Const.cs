@@ -121,6 +121,7 @@
             public const string Attack = "AttackTrigger";
             public const string AttackEnd = "AttackEndTrigger";
             public const string BladeAttack = "BladeAttackTrigger00";
+            public const string BladeAttackEnd = "BladeAttackEndTrigger00";
             public const string GetDamage = "GetDamageTrigger";
             public const string FunnelFire = "FunnelFireTrigger";
             public const string FunnelExpand = "FunnelInjectionTrigger";
