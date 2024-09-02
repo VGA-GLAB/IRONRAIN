@@ -72,7 +72,13 @@ namespace Enemy.Funnel
                 EnemyOrder.Type t = order.OrderType;
 
                 if (t == EnemyOrder.Type.FunnelExpand) ExpandOrder();
+                else if (t == EnemyOrder.Type.FunnelFireEnable) FireEnable();
+                else if (t == EnemyOrder.Type.FunnelFireDisable) FireDisable();
             }
+
+            // 展開以外の命令一覧。
+            void FireEnable() => Ref.BlackBoard.IsFireEnabled = true;
+            void FireDisable() => Ref.BlackBoard.IsFireEnabled = false;
         }
 
         // ボス本体の周囲に展開させるための命令を黒板に書き込む。

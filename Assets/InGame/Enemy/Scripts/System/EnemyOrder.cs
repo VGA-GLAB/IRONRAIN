@@ -10,14 +10,17 @@ namespace Enemy
         public enum Type
         {
             None,
-            Spawn,     // プレイヤーを発見状態にさせる。
+            Spawn,            // プレイヤーを発見状態にさせる。
             Pause,            // ポーズ。
             Resume,           // ポーズ解除。
             Attack,           // 攻撃させる。
             QteTriggerEnter,  // QTEの判定に触れた(盾持ちの敵が自身に命令)。
             BossStart,        // ボス戦開始。
-            FunnelExpand,     // ファンネル展開。
-            FunnelLaserSight, // ファンネルのレーザーサイト表示。
+            FunnelExpand,      // ファンネル展開。
+            ResumeBossAction,  // ファンネル展開のイベント終了後、ボスの行動を再開。
+            FunnelFireEnable,  // ファンネルが攻撃するようになる。
+            FunnelFireDisable, // ファンネルが攻撃しなくなる。
+            FunnelLaserSight,  // ファンネルのレーザーサイト表示。
             MoveToPlayerFront,     // プレイヤーの正面に移動。
             BreakLeftArm,          // プレイヤーの左腕破壊。
             QteCombatReady,        // 左腕破壊->鍔迫り合い。

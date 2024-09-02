@@ -47,6 +47,8 @@ namespace Enemy.Funnel
 
         // プレイヤーを検知しているかのフラグ。
         public bool IsPlayerDetect { get; set; }
+        // 攻撃が許可されているかどうかのフラグ。
+        public bool IsFireEnabled { get; set; }
         // 生存中かのフラグ。
         public bool IsAlive => Hp > 0;
         // 退場が完了し、後処理を呼んで消しても良い状態のフラグ。Action層が書き込む。

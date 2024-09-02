@@ -73,6 +73,15 @@ namespace Enemy.Funnel
         public void Expand() => _perception.Order(EnemyOrder.Type.FunnelExpand);
 
         /// <summary>
+        /// ファンネルが攻撃する/しないように切り替える。
+        /// </summary>
+        public void FireEnable(bool value)
+        {
+            if (value) _perception.Order(EnemyOrder.Type.FunnelFireEnable);
+            else _perception.Order(EnemyOrder.Type.FunnelFireDisable);
+        }
+
+        /// <summary>
         /// 攻撃を受けた。
         /// </summary>
         public void Damage(int value, string _) => _perception.Damage(value, _);

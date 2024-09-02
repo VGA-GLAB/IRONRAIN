@@ -12,6 +12,7 @@ namespace Enemy.Boss
             ID = System.Guid.NewGuid();
             Name = name;
             FunnelExpand = new Trigger();
+            ResumeBossAction = new Trigger();
             RangeAttack = new Trigger();
             MeleeAttack = new Trigger();
         }
@@ -54,6 +55,8 @@ namespace Enemy.Boss
 
         // ファンネルを展開。
         public Trigger FunnelExpand { get; set; }
+        // ファンネル展開時、プレイヤーの入力があるまで動きを止める。
+        public Trigger ResumeBossAction { get; set; }
         // 遠距離攻撃。
         public Trigger RangeAttack { get; set; }
         // 近接攻撃。

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Funnel;
-using IronRain.Player;
 
 namespace Enemy.Boss
 {
