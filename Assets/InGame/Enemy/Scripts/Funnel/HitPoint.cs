@@ -14,8 +14,7 @@ namespace Enemy.Funnel
         {
             Ref = requiredRef;
 
-            // 体力の初期値
-            Ref.BlackBoard.Hp = Ref.FunnelParams.MaxHp;
+            ResetToMax();
         }
 
         private RequiredRef Ref { get; set; }
@@ -37,6 +36,14 @@ namespace Enemy.Funnel
 
             _damage = 0;
             _damageSource = "";
+        }
+
+        /// <summary>
+        /// 次のUpdateを待たずに体力を最大値に戻す。
+        /// </summary>
+        public void ResetToMax()
+        {
+            Ref.BlackBoard.Hp = Ref.FunnelParams.MaxHp;
         }
 
         /// <summary>

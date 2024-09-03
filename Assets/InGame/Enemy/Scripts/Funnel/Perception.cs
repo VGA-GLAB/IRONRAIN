@@ -84,10 +84,13 @@ namespace Enemy.Funnel
         // ボス本体の周囲に展開させるための命令を黒板に書き込む。
         private void ExpandOrder()
         {
-            BlackBoard bb = Ref.BlackBoard;
+            // 展開する度に体力を最大値に戻す。
+            _hitPoint.ResetToMax();
 
-            if (bb.Expand.IsWaitingExecute()) return;
-            else bb.Expand.Order();
+            Trigger expand = Ref.BlackBoard.Expand;
+
+            if (expand.IsWaitingExecute()) return;
+            else expand.Order();
 
             float x = Ref.FunnelParams.Expand.Side;
             float y = Ref.FunnelParams.Expand.Height;
