@@ -32,7 +32,8 @@ namespace Enemy
             else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
             else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
 
-            if (seName != "") AudioWrapper.PlaySE(seName);
+            Vector3 p = Ref.Body.Position;
+            if (seName != "") AudioWrapper.PlaySE(p, seName);
         }
 
         /// <summary>

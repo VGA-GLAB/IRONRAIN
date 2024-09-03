@@ -430,7 +430,8 @@ namespace Enemy.Boss
             Ref.BodyAnimation.Play(state, layer);
             Ref.Effector.PlayDestroyed();
 
-            AudioWrapper.PlaySE("SE_Kill");
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_Kill");
         }
 
         protected override BattleActionStep Stay()

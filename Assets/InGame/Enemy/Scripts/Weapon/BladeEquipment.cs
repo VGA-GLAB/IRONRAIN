@@ -1,10 +1,13 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     public class BladeEquipment : MeleeEquipment
     {
         protected override void OnCollision()
         {
-            AudioWrapper.PlaySE("SE_Sword");
+            Vector3 p = transform.position;
+            AudioWrapper.PlaySE(p, "SE_Sword");
         }
     }
 }

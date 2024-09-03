@@ -28,7 +28,8 @@ namespace Enemy.Funnel
             Ref.Effector.TrailEnable(true);
 
             // ファンネルが飛んでいる音(ループしなくて良い？)
-            AudioWrapper.PlaySE("SE_Funnel_Fly");
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_Funnel_Fly");
 
             // ボスの位置に座標を変更し、そこから展開する。
             Vector3 boss = Ref.Boss.transform.position;
