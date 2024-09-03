@@ -97,31 +97,86 @@ namespace Enemy.Boss
         public int MinContinuous => _minContinuous;
     }
 
-    // QTE
+    // QTE、左腕破壊
     [System.Serializable]
-    public class QteSettings
+    public class BreakLeftArmSettings
     {
-        [Tooltip("プレイヤーの正面に移動する際の速さ")]
-        [Range(10.0f, 30.0f)]
-        [SerializeField] private float _toPlayerFrontMoveSpeed = 10.0f;
+        [Tooltip("この位置まで近づいた後、左腕を破壊する演出を再生する。")]
+        [Min(1.0f)]
+        [SerializeField] private float _distance = 10.0f;
 
-        [Tooltip("プレイヤーと殴り合う距離。この距離まで近づいた後に各QTEを行う。")]
-        [Range(1.0f, 10.0f)]
-        [SerializeField] private float _socialDistance = 20.0f;
+        [Tooltip("プレイヤーの正面のレーンに移動後、この速さで左腕破壊アニメーション再生位置まで近づく。")]
+        [Min(1.0f)]
+        [SerializeField] private float _moveSpeed = 6.0f;
 
-        [Tooltip("鍔迫り合いで吹き飛ばされる力")]
-        [Range(1.0f, 30.0f)]
-        [SerializeField] private float _knockBackPower = 15.0f;
-
-        [Tooltip("鍔迫り合いで吹き飛ばされた後、再び突っ込んでくる速さ")]
-        [Range(1.0f, 30.0f)]
-        [SerializeField] private float _chargeSpeed = 15.0f;
-
-        public float ToPlayerFrontMoveSpeed => _toPlayerFrontMoveSpeed;
-        public float SocialSqrDistance => _socialDistance * _socialDistance;
-        public float KnockBackPower => _knockBackPower;
-        public float ChargeSpeed => _chargeSpeed;
+        public float Distance => _distance;
+        public float MoveSpeed => _moveSpeed;
     }
+
+    // QTE、鍔迫り合い1回目
+    [System.Serializable]
+    public class FirstQteSettings
+    {
+        [Tooltip("鍔迫り合いで吹き飛ばされる際の威力")]
+        [Min(1.0f)]
+        [SerializeField] private float _knockBack = 15.0f;
+
+        public float KnockBack => _knockBack;
+    }
+
+    // QTE、鍔迫り合い2回目
+    [System.Serializable]
+    public class SecondQteSettings
+    {
+        [Tooltip("この位置まで近づいた後、鍔迫り合いのアニメーションを再生する。")]
+        [Min(1.0f)]
+        [SerializeField] private float _distance = 10.0f;
+
+        [Tooltip("1回目のノックバック後、この速さで鍔迫り合いのアニメーション再生位置まで近づく。")]
+        [Min(1.0f)]
+        [SerializeField] private float _moveSpeed = 6.0f;
+
+        [Tooltip("鍔迫り合いで吹き飛ばされる際の威力")]
+        [Min(1.0f)]
+        [SerializeField] private float _knockBack = 15.0f;
+
+        public float Distance => _distance;
+        public float MoveSpeed => _moveSpeed;
+        public float KnockBack => _knockBack;
+    }
+
+    // QTE、貫かれて死ぬ
+    [System.Serializable]
+    public class FinalQteSettings
+    {
+        //
+    }
+
+    //// QTE
+    //[System.Serializable]
+    //public class QteSettings
+    //{
+    //    [Tooltip("プレイヤーの正面に移動する際の速さ")]
+    //    [Range(10.0f, 30.0f)]
+    //    [SerializeField] private float _toPlayerFrontMoveSpeed = 10.0f;
+
+    //    [Tooltip("プレイヤーと殴り合う距離。この距離まで近づいた後に各QTEを行う。")]
+    //    [Range(1.0f, 10.0f)]
+    //    [SerializeField] private float _socialDistance = 20.0f;
+
+    //    [Tooltip("鍔迫り合いで吹き飛ばされる力")]
+    //    [Range(1.0f, 30.0f)]
+    //    [SerializeField] private float _knockBackPower = 15.0f;
+
+    //    [Tooltip("鍔迫り合いで吹き飛ばされた後、再び突っ込んでくる速さ")]
+    //    [Range(1.0f, 30.0f)]
+    //    [SerializeField] private float _chargeSpeed = 15.0f;
+
+    //    public float ToPlayerFrontMoveSpeed => _toPlayerFrontMoveSpeed;
+    //    public float SocialSqrDistance => _socialDistance * _socialDistance;
+    //    public float KnockBackPower => _knockBackPower;
+    //    public float ChargeSpeed => _chargeSpeed;
+    //}
 
     /// <summary>
     /// ボスキャラクターのパラメータ
@@ -139,13 +194,25 @@ namespace Enemy.Boss
         [Header("遠距離攻撃の設定")]
         [SerializeField] private RangeAttackSettings _rangeAttack;
 
-        [Header("QTEの設定")]
-        [SerializeField] private QteSettings _qte;
+        [Header("QTE、左腕破壊演出の設定")]
+        [SerializeField] private BreakLeftArmSettings _breakLeftArm;
+
+        [Header("QTE、鍔迫り合い1回目の設定")]
+        [SerializeField] private FirstQteSettings _firstQte;
+
+        [Header("QTE、鍔迫り合い2回目の設定")]
+        [SerializeField] private SecondQteSettings _secondQte;
+
+        [Header("QTE、撃破される演出の設定")]
+        [SerializeField] private FinalQteSettings _finalQte;
 
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
-        public QteSettings Qte => _qte;
+        public BreakLeftArmSettings BreakLeftArm => _breakLeftArm;
+        public FirstQteSettings FirstQte => _firstQte;
+        public SecondQteSettings SecondQte => _secondQte;
+        public FinalQteSettings FinalQte => _finalQte;
 
         // 雑魚と共通化させるために一応パラメータを設定しておく。
         public int MaxHp => int.MaxValue / 2;

@@ -104,9 +104,10 @@
             public const string Damage = "enemy_break00";
             public const string QteSwordSet = "boss_sword_set";            // 左手破壊、刀構え
             public const string QteSwordAttack_1 = "boss_sword_attack_01"; // 左手破壊、刀振り下ろす
-            public const string QteSowrdRepel_1 = "boss_sword_repel_01";   // 1回目QTE、刀構え直し
-            public const string QteSwordAttack_2 = "boss_sword_attack_02"; // 1回目QTE、刀振り下ろす
-            public const string QteSowrdRepel_2 = "boss_sword_repel_02";   // 2回目QTE、刀構え直し
+            public const string QteSowrdRepel_1 = "boss_sword_repel_01";   // 左手破壊、刀で左手を吹き飛ばす？
+            public const string QteSwordHold_2 = "boss_sword_hold_02";     // 鍔迫り合い、刀構え？
+            public const string QteSwordAttack_2 = "boss_sword_attack_02"; // 鍔迫り合い、刀振り下ろす
+            public const string QteSowrdRepel_2 = "boss_sword_repel_02";   // 鍔迫り合い、弾かれる
             public const string BossFinish = "boss_finish";
         }
 

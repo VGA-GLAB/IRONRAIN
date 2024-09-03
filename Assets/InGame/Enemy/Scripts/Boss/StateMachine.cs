@@ -10,7 +10,7 @@ namespace Enemy.Boss
         Idle,
         Hide,
         QteEvent,
-        Delete,
+        Defeated,
         BladeAttack,
         LauncherFire,
         LaneChange,
@@ -43,6 +43,7 @@ namespace Enemy.Boss
             _states.Add(StateKey.Hide, new HideState(Ref));
             _states.Add(StateKey.FunnelExpand, new FunnelExpandState(Ref));
             _states.Add(StateKey.LaneChange, new LaneChangeState(Ref));
+            _states.Add(StateKey.Defeated, new DefeatedState(Ref));
 
             // 初期状態。
             _currentState = _states[StateKey.Hide];

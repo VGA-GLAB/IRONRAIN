@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Enemy.Extensions;
+﻿using Enemy.Funnel;
+using UnityEngine;
 
 namespace Enemy.Boss
 {
@@ -8,22 +8,32 @@ namespace Enemy.Boss
     /// </summary>
     public class QteEventState : State<StateKey>
     {
-        private BossActionStep[] _steps;
-        private BattleActionStep _currentStep;
+        private BossActionStep[] _qteSteps;
+        private BattleActionStep _currentQteStep;
+        // プレイヤーの正面のレーンに移動と並列して向かしておく。
+        private BossActionStep[] _lookSteps;
+        private BattleActionStep _currentLookStep;
 
         public QteEventState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             Ref = requiredRef;
 
-            _steps = new BossActionStep[8];
-            _steps[7] = new CompleteStep(requiredRef, null);
-            _steps[6] = new PenetrateStep(requiredRef, _steps[7]);
-            _steps[5] = new knockBackStep(requiredRef, _steps[6]);
-            _steps[4] = new SecondCombatStep(requiredRef, _steps[5]);
-            _steps[3] = new knockBackStep(requiredRef, _steps[4]);
-            _steps[2] = new FirstCombatStep(requiredRef, _steps[3]);
-            _steps[1] = new BreakLeftArmStep(requiredRef, _steps[2]);
-            _steps[0] = new MoveToPlayerFrontStep(requiredRef, _steps[1]);
+            _qteSteps = new BossActionStep[11];
+            _qteSteps[10] = new CompleteStep(requiredRef, null);
+            _qteSteps[9] = new PenetrateStep(requiredRef, _qteSteps[10]);
+            _qteSteps[8] = new FinalChargeStep(requiredRef, _qteSteps[9]);
+            _qteSteps[7] = new SecondKnockBackStep(requiredRef, _qteSteps[8]);
+            _qteSteps[6] = new SecondCombatStep(requiredRef, _qteSteps[7]);
+            _qteSteps[5] = new SecondChargeStep(requiredRef, _qteSteps[6]);
+            _qteSteps[4] = new FirstKnockBackStep(requiredRef, _qteSteps[5]);
+            _qteSteps[3] = new FirstCombatStep(requiredRef, _qteSteps[4]);
+            _qteSteps[2] = new BreakLeftArmStep(requiredRef, _qteSteps[3]);
+            _qteSteps[1] = new FirstChargeStep(requiredRef, _qteSteps[2]);
+            _qteSteps[0] = new LaneChangeStep(requiredRef, _qteSteps[1]);
+
+            _lookSteps = new BossActionStep[2];
+            _lookSteps[1] = new CompleteStep(requiredRef, null);
+            _lookSteps[0] = new LaneChangeLookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
         private RequiredRef Ref { get; set; }
@@ -32,35 +42,55 @@ namespace Enemy.Boss
         {
             Ref.BlackBoard.CurrentState = StateKey.QteEvent;
 
-            _currentStep = _steps[0];
+            _currentQteStep = _qteSteps[0];
+            _currentLookStep = _lookSteps[0];
+
+            // QTEが始まったらファンネルに攻撃をやめさせる。
+            foreach (FunnelController f in Ref.Funnels) f.FireEnable(false);
         }
 
         protected override void Exit()
         {
+            Debug.Log("一連のQTEイベントが終了");
         }
 
         protected override void Stay()
         {
-            _currentStep = _currentStep.Update();
+            _currentQteStep = _currentQteStep.Update();
+            _currentLookStep = _currentLookStep.Update();
+
+            bool isQteEnd = _currentQteStep.ID == nameof(CompleteStep);
+            bool isLookEnd = _currentLookStep.ID == nameof(CompleteStep);
+            if (isQteEnd && isLookEnd) TryChangeState(StateKey.Defeated);
         }
 
         public override void Dispose()
         {
-            foreach (BossActionStep s in _steps) s.Dispose();
+            foreach (BossActionStep s in _qteSteps) s.Dispose();
         }
     }
 
     /// <summary>
-    /// 刀を振り上げた状態でプレイヤーの正面に移動
+    /// 刀を振り上げた状態でプレイヤーの正面に突撃。
     /// </summary>
-    public class MoveToPlayerFrontStep : BossActionStep
+    public class FirstChargeStep : BossActionStep
     {
-        public MoveToPlayerFrontStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
+        public FirstChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
+            _start = Ref.Body.Position;
+            int li = Ref.BlackBoard.CurrentLaneIndex;
+            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            float dist = Ref.BossParams.BreakLeftArm.Distance;
+            _end = Ref.PointP.position + dir * dist;
+
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
-            // Attackの状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
+            // それ以外の状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
             string state = Const.Boss.QteSwordSet;
             int layer = Const.Layer.BaseLayer;
             Ref.BodyAnimation.Play(state, layer);
@@ -68,40 +98,30 @@ namespace Enemy.Boss
 
         protected override BattleActionStep Stay()
         {
-            Vector3 v = VectorExtensions.Homing(
-                Ref.BlackBoard.Area.Point,
-                Ref.BlackBoard.PlayerArea.Point,
-                Ref.BlackBoard.PlayerDirection,
-                0.5f // 適当。
-                );
-            float spd = Ref.BossParams.Qte.ToPlayerFrontMoveSpeed;
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            Vector3 velo = v * spd * dt;
-
-            // 一定の距離以下になったらフラグを立てる。
-            // 単純に直線距離で判定しているのでプレイヤーの後方から近づいても条件を満たしてしまう。
-            float sqrDist = Ref.BlackBoard.PlayerSqrDistance;
-            float qteSqrDist = Ref.BossParams.Qte.SocialSqrDistance;
-            if (sqrDist < qteSqrDist)
+            if (_lerp >= 1)
             {
+                // シーケンス側に位置に着いたことを知らせるためのフラグを立てる。
                 Ref.BlackBoard.IsStandingOnQtePosition = true;
             }
-            else
-            {
-                Vector3 area = Ref.BlackBoard.Area.Point;
-                Ref.Body.Warp(area + velo);
-            }
 
-            // 回転
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            dir.y = 0;
-            Ref.Body.LookForward(dir);
-
-            // 左腕破壊の位置にいるフラグが立っているかつ、左腕破壊の命令がされている場合。
+            // 位置に着いた後、シーケンス側からの呼び出しで次のステップに遷移。
             bool isQtePosition = Ref.BlackBoard.IsStandingOnQtePosition;
-            bool isOrdered = Ref.BlackBoard.IsBreakLeftArm;
-            if (isQtePosition && isOrdered) return Next[0];
-            else return this;
+            bool isOrderd = Ref.BlackBoard.IsBreakLeftArm;
+            if (isQtePosition && isOrderd) return Next[0];
+
+            Vector3 before = Ref.Body.Position;
+            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(p);
+            Vector3 after = Ref.Body.Position;
+            Vector3 look = before - after;
+            if (look != Vector3.zero) Ref.Body.LookForward(before - after);
+
+            float speed = Ref.BossParams.BreakLeftArm.MoveSpeed;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            return this;
         }
     }
 
@@ -132,6 +152,11 @@ namespace Enemy.Boss
     /// </summary>
     public class FirstCombatStep : BossActionStep
     {
+        // このステップを実行中かのフラグ。
+        private bool _isRunning;
+        // 次のステップに遷移指せるかのフラグ。
+        private bool _isTransition;
+
         public FirstCombatStep(RequiredRef requiredRef, BossActionStep next) : base (requiredRef, next)
         {
             Ref.AnimationEvent.OnWeaponCrash += OnWeaponCrash;
@@ -139,29 +164,36 @@ namespace Enemy.Boss
 
         private void OnWeaponCrash()
         {
+            // このステップを実行していない時は弾く。
+            if (!_isRunning) return;
+
             Ref.Effector.PlayWeaponCrash();
+
+            // 武器同士がぶつかったタイミングで次のステップに遷移させる。
+            _isTransition = true;
         }
 
         protected override void Enter()
         {
             // 振り下ろした刀を構え直す。
             Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttackClear01);
+
+            _isRunning = true;
         }
 
         protected override BattleActionStep Stay()
         {
+            // プレイヤー側の入力があった場合、鍔迫り合い1回目、刀を振り下ろす。
             bool isInputed = Ref.BlackBoard.IsFirstCombatInputed;
-            if (isInputed)
+            if (isInputed) Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
+
+            if (_isTransition)
             {
-                // 鍔迫り合い1回目、刀を振り下ろす。
-                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
-                
+                _isRunning = false;
+                _isTransition = false;
                 return Next[0];
             }
-            else
-            {
-                return this;
-            }
+            else return this;
         }
 
         public override void Dispose()
@@ -171,57 +203,95 @@ namespace Enemy.Boss
     }
 
     /// <summary>
-    /// 刀を振り下ろす -> 弾かれて吹き飛ばされる までがセット。
-    /// ディレイを入れて弾かれるタイミングで移動させる。
+    /// 1回目の鍔迫り合い、刀が弾かれたタイミングでノックバックする。
     /// </summary>
-    public class knockBackStep : BossActionStep
+    public class FirstKnockBackStep : BossActionStep
     {
-        private Vector3 _force;
-        private float _timer;
+        private Vector3 _velocity;
 
-        public knockBackStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public FirstKnockBackStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
             Vector3 back = -Ref.Body.Forward;
-            float power = Ref.BossParams.Qte.KnockBackPower;
-            _force = back * power;
-
-            // 振り下ろすアニメーションの長さぶんだけディレイ。
-            const float SwingDownDelay = 0.5f;
-            _timer = SwingDownDelay;
+            float power = Ref.BossParams.FirstQte.KnockBack;
+            _velocity = back * power;
         }
 
         protected override BattleActionStep Stay()
         {
             // 刀を振り下ろしている最中は吹き飛ばない。
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _timer -= dt;
-            if (_timer > 0) return this;
-            else
-            {
-                Vector3 v = _force * dt;
-                Ref.Body.Move(v);
-            }
+            Vector3 v = _velocity * dt;
+            Ref.Body.Move(v);
 
+            // 摩擦力で止める。
             const float Friction = 0.98f;
-            _force *= Friction;
+            _velocity *= Friction;
 
-            // ある程度吹き飛ばされて、吹き飛ばし力が弱ったら鍔迫り合い2回目に遷移。
+            // ある程度吹き飛ばされて、速度がほぼ0になったら鍔迫り合い2回目に遷移。
             const float StopThreshold = 1.0f;
-            bool isOver = _force.sqrMagnitude < StopThreshold;
-            if (isOver) return Next[0];
+            if (_velocity.sqrMagnitude < StopThreshold) return Next[0];
             else return this;
         }
     }
 
     /// <summary>
-    /// 鍔迫り合い2回目、吹き飛ばされた状態から遷移してくる。
-    /// 刀を構え直して突撃、プレイヤーの入力で振り下ろす。
+    /// ノックバックされた状態から再度プレイヤーの正面に突撃。
+    /// </summary>
+    public class SecondChargeStep : BossActionStep
+    {
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
+        public SecondChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Position;
+            int li = Ref.BlackBoard.CurrentLaneIndex;
+            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            float dist = Ref.BossParams.SecondQte.Distance;
+            _end = Ref.PointP.position + dir * dist;
+
+            // 2回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
+            string state = Const.Boss.QteSwordHold_2;
+            int layer = Const.Layer.BaseLayer;
+            Ref.BodyAnimation.Play(state, layer);
+
+            // トリガーをリセットしないと 構え->攻撃 が再生されてしまう。
+            string trigger = Const.Param.QteBladeAttack02;
+            Ref.BodyAnimation.ResetTrigger(trigger);
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(p);
+
+            // 移動完了した後、プレイヤーからの入力があったら次のステップに遷移。
+            bool isInputed = Ref.BlackBoard.IsSecondCombatInputed;
+            if (_lerp >= 1.0f && isInputed) return Next[0];
+
+            float speed = Ref.BossParams.SecondQte.MoveSpeed;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// 鍔迫り合い2回目、刀を振り下ろす。
     /// </summary>
     public class SecondCombatStep : BossActionStep
     {
-        private Vector3 _force;
+        // このステップを実行中かのフラグ。
+        private bool _isRunning;
+        // 次のステップに遷移指せるかのフラグ。
+        private bool _isTransition;
 
         public SecondCombatStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
@@ -230,53 +300,32 @@ namespace Enemy.Boss
 
         private void OnWeaponCrash()
         {
+            // このステップを実行していない時は弾く。
+            if (!_isRunning) return;
+
             Ref.Effector.PlayWeaponCrash();
+
+            // 武器同士がぶつかったタイミングで次のステップに遷移させる。
+            _isTransition = true;
         }
 
         protected override void Enter()
         {
-            // 振り下ろした刀を構え直す。
-            // 1回目の鍔迫り合いのアニメーションを使いまわすのでトリガーではなくPlayで再生するしかない。
-            string state = Const.Boss.QteSowrdRepel_1;
-            int layer = Const.Layer.UpperBody;
-            Ref.BodyAnimation.Play(state, layer);
+            // 刀を振り下ろす。
+            Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
 
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            float spd = Ref.BossParams.Qte.ChargeSpeed;
-            _force = dir * spd;
+            _isRunning = true;
         }
 
         protected override BattleActionStep Stay()
         {
-            // プレイヤーとの距離を詰める。
-            float sqrDist = Ref.BlackBoard.PlayerSqrDistance;
-            float sqrQteDist = Ref.BossParams.Qte.SocialSqrDistance;
-            if (sqrDist > sqrQteDist)
+            if (_isTransition)
             {
-                float dt = Ref.BlackBoard.PausableDeltaTime;
-                Vector3 v = _force * dt;
-                Ref.Body.Move(v);
-
-                // 距離を詰め切らないうちに突撃力が尽きないよう、最低値が必要。
-                const float Friction = 0.98f;
-                const float Min = 2.0f;
-                if (_force.sqrMagnitude > Min) _force *= Friction;
-            }
-
-            // 鍔迫り合い2回目、刀を振り下ろす。
-            // 現状、距離を詰め終わったかの判定をしていないのでシーケンス側で配慮が必要。
-            bool isInputed = Ref.BlackBoard.IsSecondCombatInputed;
-            if (isInputed)
-            {
-                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack02);
-                Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttackClear02);
-                
+                _isRunning = false;
+                _isTransition = false;
                 return Next[0];
             }
-            else
-            {
-                return this;
-            }
+            else return this;
         }
 
         public override void Dispose()
@@ -286,54 +335,107 @@ namespace Enemy.Boss
     }
 
     /// <summary>
-    /// パイルバンカーで貫かれる。
+    /// 2回目の鍔迫り合い、刀が弾かれたタイミングでノックバックする。
     /// </summary>
-    public class PenetrateStep : BossActionStep
+    public class SecondKnockBackStep : BossActionStep
     {
-        private Vector3 _force;
+        private Vector3 _velocity;
 
-        public PenetrateStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public SecondKnockBackStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
-            Vector3 dir = Ref.BlackBoard.PlayerDirection;
-            float spd = Ref.BossParams.Qte.ChargeSpeed;
-            _force = dir * spd;
+            Vector3 back = -Ref.Body.Forward;
+            float power = Ref.BossParams.SecondQte.KnockBack;
+            _velocity = back * power;
         }
 
         protected override BattleActionStep Stay()
         {
-            // プレイヤーとの距離を詰める。
-            float sqrDist = Ref.BlackBoard.PlayerSqrDistance;
-            float sqrQteDist = Ref.BossParams.Qte.SocialSqrDistance;
-            if (sqrDist > sqrQteDist)
-            {
-                float dt = Ref.BlackBoard.PausableDeltaTime;
-                Vector3 v = _force * dt;
-                Ref.Body.Move(v);
+            // 刀を振り下ろしている最中は吹き飛ばない。
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 v = _velocity * dt;
+            Ref.Body.Move(v);
 
-                // 距離を詰め切らないうちに突撃力が尽きないよう、最低値が必要。
-                const float Friction = 0.98f;
-                const float Min = 2.0f;
-                if (_force.sqrMagnitude > Min) _force *= Friction;
-            }
+            // 摩擦力で止める。
+            const float Friction = 0.98f;
+            _velocity *= Friction;
 
-            // QTE2回目、プレイヤーに殴られて死亡。
-            // 現状、距離を詰め終わったかの判定をしていないのでシーケンス側で配慮が必要。
+            // ある程度吹き飛ばされて、速度がほぼ0になったら鍔迫り合い2回目に遷移。
+            const float StopThreshold = 1.0f;
+            if (_velocity.sqrMagnitude < StopThreshold) return Next[0];
+            else return this;
+        }
+    }
+
+    /// <summary>
+    /// ノックバックされた状態から再々度プレイヤーの正面に突撃。
+    /// </summary>
+    public class FinalChargeStep : BossActionStep
+    {
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+
+        public FinalChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Position;
+            int li = Ref.BlackBoard.CurrentLaneIndex;
+            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            float dist = Ref.BossParams.SecondQte.Distance;
+            _end = Ref.PointP.position + dir * dist;
+
+            // 3回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
+            string state = Const.Boss.QteSwordHold_2;
+            int layer = Const.Layer.BaseLayer;
+            Ref.BodyAnimation.Play(state, layer);
+
+            // トリガーをリセットしないと 構え->攻撃 が再生されてしまう。
+            string trigger = Const.Param.QteBladeAttack02;
+            Ref.BodyAnimation.ResetTrigger(trigger);
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(p);
+
+            // 移動完了した後、プレイヤーからの入力があったら次のステップに遷移。
             bool isInputed = Ref.BlackBoard.IsPenetrateInputed;
-            if (isInputed)
-            {
-                Ref.BodyAnimation.SetTrigger(Const.Param.Finish);
-                Ref.Effector.PlayDestroyed();
+            if (_lerp >= 1.0f && isInputed) return Next[0];
 
-                AudioWrapper.PlaySE("SE_Kill");
+            float speed = Ref.BossParams.SecondQte.MoveSpeed;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * speed;
+            _lerp = Mathf.Clamp01(_lerp);
 
-                return Next[0];
-            }
-            else
-            {
-                return this;
-            }
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// パイルバンカーで貫かれる。
+    /// </summary>
+    public class PenetrateStep : BossActionStep
+    {
+        public PenetrateStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            // 遷移先に指定されていないのでステートを指定して再生する。
+            string state = Const.Boss.BossFinish;
+            int layer = Const.Layer.BaseLayer;
+            Ref.BodyAnimation.Play(state, layer);
+            Ref.Effector.PlayDestroyed();
+
+            AudioWrapper.PlaySE("SE_Kill");
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            return this;
         }
     }
 
@@ -346,8 +448,6 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
-            AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyDestory();
         }
 
         protected override BattleActionStep Stay()
