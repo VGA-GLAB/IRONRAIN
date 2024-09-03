@@ -85,15 +85,23 @@ namespace Enemy.DebugUse
             {
                 _enemyManager.FunnelExpand();
             }
-            else if (EventRunButton(2, "2回目のファンネル展開", offset))
+            else if (EventRunButton(2, "1回目のボスの行動を再開", offset))
+            {
+                _enemyManager.ResumeBossAction();
+            }
+            else if (EventRunButton(3, "2回目のファンネル展開", offset))
             {
                 _enemyManager.FunnelExpand();
             }
-            else if (EventRunButton(3, "ファンネルのレーザーサイト表示", offset))
+            else if (EventRunButton(4, "2回目のボスの行動を再開", offset))
+            {
+                _enemyManager.ResumeBossAction();
+            }
+            else if (EventRunButton(5, "ファンネルのレーザーサイト表示", offset))
             {
                 _enemyManager.FunnelLaserSight();
             }
-            else if (EventRunButton(4, "ファンネルを全て破壊", offset))
+            else if (EventRunButton(6, "ファンネルを全て破壊", offset))
             {
                 FunnelController[] f = FindObjectsByType<FunnelController>(FindObjectsSortMode.None);
                 foreach (FunnelController g in f) g.Damage(int.MaxValue / 2, "DebugCommand");

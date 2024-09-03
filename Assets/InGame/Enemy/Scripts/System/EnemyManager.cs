@@ -154,6 +154,11 @@ namespace Enemy
         public void FunnelExpand() => OrderToBoss(EnemyOrder.Type.FunnelExpand);
 
         /// <summary>
+        /// ファンネル展開のイベント終了時に、ボスの行動を再開する。
+        /// </summary>
+        public void ResumeBossAction() => OrderToBoss(EnemyOrder.Type.ResumeBossAction);
+
+        /// <summary>
         /// ボス戦でファンネルのレーザーサイト表示。
         /// </summary>
         public void FunnelLaserSight() => OrderToBoss(EnemyOrder.Type.FunnelLaserSight);

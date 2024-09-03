@@ -49,7 +49,7 @@ namespace Enemy.Funnel
                 Ref.Body.LookForward(f);
             }
 
-            if (Ref.BlackBoard.Attack.IsWaitingExecute())
+            if (Ref.BlackBoard.Attack.IsWaitingExecute() && Ref.BlackBoard.IsFireEnabled)
             {
                 Ref.BlackBoard.Attack.Execute();
 
