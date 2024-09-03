@@ -80,7 +80,7 @@ namespace IronRain.Player
                     _params.WeaponName);
 
                 CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
-
+                OnShot();
                 _isFire = false;
                 _currentTime = 0;
                 _currentBullets--;
