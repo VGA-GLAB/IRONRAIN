@@ -6,6 +6,9 @@ namespace Enemy.Funnel
 {
     public class BattleState : State<StateKey>
     {
+        // オフセットをホバリングさせる。
+        private float _hovering;
+
         public BattleState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             Ref = requiredRef;
@@ -16,6 +19,9 @@ namespace Enemy.Funnel
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Battle;
+
+            // ホバリングが揃っていると不自然なのでランダム性を持たせる。
+            _hovering = Random.Range(-1.0f, 1.0f);
         }
 
         protected override void Exit()
@@ -23,6 +29,18 @@ namespace Enemy.Funnel
         }
 
         protected override void Stay()
+        {
+            TraceMove();
+            Look();
+            Fire();
+            Hovering();
+
+            bool isDead = !Ref.BlackBoard.IsAlive;
+            if (isDead) { TryChangeState(StateKey.Return); return; }
+        }
+
+        // ボスを追従するように移動。
+        private void TraceMove()
         {
             Vector3 offset = (Vector3)Ref.BlackBoard.ExpandOffset;
             Vector3 dx = Ref.Body.Right * offset.x;
@@ -36,43 +54,69 @@ namespace Enemy.Funnel
             Vector3 velo = dir.normalized * dt * spd;
             if (velo.sqrMagnitude <= dir.sqrMagnitude) Ref.Body.Move(velo);
             else Ref.Body.Warp(p);
+        }
 
+        // プレイヤーの方向、もしくはボスと同じ方向を向く。
+        private void Look()
+        {
             FireMode mode = Ref.FunnelParams.FireMode;
+            Vector3 look;
             if (mode == FireMode.Player)
             {
-                Vector3 f = Ref.BlackBoard.PlayerDirection;
-                Ref.Body.LookForward(f);
+                look = Ref.BlackBoard.PlayerDirection;
             }
             else
             {
-                Vector3 f = Ref.BossRotate.forward;
-                Ref.Body.LookForward(f);
+                look = Ref.BossRotate.forward;
             }
 
-            if (Ref.BlackBoard.Attack.IsWaitingExecute() && Ref.BlackBoard.IsFireEnabled)
+            Ref.Body.LookForward(look);
+        }
+
+        // 射撃。
+        private void Fire()
+        {
+            bool isDisabled = !Ref.BlackBoard.IsFireEnabled;
+            if (isDisabled) return;
+
+            Trigger attack = Ref.BlackBoard.Attack;
+            if (!attack.IsWaitingExecute()) return;
+            
+            attack.Execute();
+
+            IOwnerTime owner = Ref.Boss.BlackBoard;
+
+            float ac = Ref.FunnelParams.Accuracy;
+            float rx = Random.value * ac;
+            float ry = Random.value * ac;
+            float rz = Random.value * ac;
+            FireMode mode = Ref.FunnelParams.FireMode;
+            Vector3 bf;
+            if (mode == FireMode.Player)
             {
-                Ref.BlackBoard.Attack.Execute();
-
-                IOwnerTime owner = Ref.Boss.BlackBoard;
-                Vector3 muzzle = Ref.Muzzle.position;
-
-                float ac = Ref.FunnelParams.Accuracy;
-                float rx = Random.value * ac;
-                float ry = Random.value * ac;
-                float rz = Random.value * ac;
-                Vector3 bf = Ref.BossRotate.forward;
-                if (mode == FireMode.Player) bf = Ref.BlackBoard.PlayerDirection;
-                Vector3 forward = bf + new Vector3(rx, ry, rz);
-
-                if (Ref.BulletPool.TryRent(BulletKey.Funnel, out Bullet bullet))
-                {
-                    bullet.transform.position = Ref.Muzzle.position;
-                    bullet.Shoot(forward, owner);
-                }
+                bf = Ref.BlackBoard.PlayerDirection;
+            }
+            else
+            {
+                bf = Ref.BossRotate.forward;
             }
 
-            bool isDead = !Ref.BlackBoard.IsAlive;
-            if (isDead) { TryChangeState(StateKey.Return); return; }
+            Vector3 forward = bf + new Vector3(rx, ry, rz);
+
+            if (Ref.BulletPool.TryRent(BulletKey.Funnel, out Bullet bullet))
+            {
+                bullet.transform.position = Ref.Muzzle.position;
+                bullet.Shoot(forward, owner);
+            }
+        }
+
+        // オフセットを上下させてホバリング。
+        private void Hovering()
+        {
+            float h = Mathf.Sin(_hovering);
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _hovering += dt;
+            Ref.Body.OffsetWarp(Vector3.up * h);
         }
     }
 }
