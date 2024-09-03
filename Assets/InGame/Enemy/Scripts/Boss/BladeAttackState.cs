@@ -119,7 +119,8 @@ namespace Enemy.Boss
 
         private void OnTurn()
         {
-            AudioWrapper.PlaySE("SE_Turn_01");
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_Turn_01");
         }
 
         protected override void Enter()

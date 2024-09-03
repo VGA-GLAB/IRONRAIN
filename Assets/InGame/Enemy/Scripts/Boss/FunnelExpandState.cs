@@ -71,7 +71,9 @@ namespace Enemy.Boss
             
             // ファンネル展開
             foreach (FunnelController f in Ref.Funnels) f.Expand();
-            AudioWrapper.PlaySE("SE_Funnel");
+
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_Funnel");
         }
 
         protected override BattleActionStep Stay()

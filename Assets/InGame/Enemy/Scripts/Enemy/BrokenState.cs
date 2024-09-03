@@ -80,7 +80,8 @@ namespace Enemy
             int layer = Const.Layer.BaseLayer;
             Ref.BodyAnimation.Play(stateName, layer);
 
-            AudioWrapper.PlaySE("SE_Kill");
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_Kill");
 
             Ref.Effector.PlayDestroyedEffect();
             Ref.Effector.ThrusterEnable(false);

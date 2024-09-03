@@ -1,11 +1,13 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     public class AssaultEquipment : RangeEquipment
     {
         protected override void OnShoot()
         {
-            // 発射音
-            AudioWrapper.PlaySE("SE_AssaultRifle");
+            Vector3 p = transform.position;
+            AudioWrapper.PlaySE(p, "SE_AssaultRifle");
         }
     }
 }
