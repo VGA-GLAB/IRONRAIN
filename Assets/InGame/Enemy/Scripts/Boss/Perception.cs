@@ -96,7 +96,7 @@ namespace Enemy.Boss
         {
             BlackBoard bb = Ref.BlackBoard;
 
-            bool isDelete = bb.CurrentState == StateKey.Delete;
+            bool isDelete = bb.CurrentState == StateKey.Defeated;
             if (isDelete) return;
 
             foreach (EnemyOrder order in _overwriteOrder.ForEach())
