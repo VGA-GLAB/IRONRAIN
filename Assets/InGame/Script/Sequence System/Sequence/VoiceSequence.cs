@@ -33,7 +33,7 @@ namespace IronRain.SequenceSystem
         {
             PlayVoice(ct).Forget(exceptionHandler);
             // Voiceの立ち絵を切り替える
-            _announceUiController.ChangeAnnounceUi(_announceUiType);
+            _announceUiController.ChangeAnnounceUi(_announceUiType, ct).Forget();
             
             // シーケンスの全体の時間を待つ
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);

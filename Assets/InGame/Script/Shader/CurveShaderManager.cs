@@ -10,6 +10,22 @@ namespace IronRain.ShaderSystem
     {
         [SerializeField] private CurveType _curveType = CurveType._CURVE_TYPE_NONE;
         [SerializeField, Range(0F, 1F)] private float _factor = 1F;
+
+        public float CurveFactor
+        {
+            get => _factor;
+            set
+            {
+                _factor = value;
+
+                // マテリアルの値を更新する
+                foreach (var mat in _materials)
+                {
+                    mat.SetFloat(_curveFactorPropertyID, _factor);
+                }
+            }
+        }
+        
         [SerializeField] private float _offset = 0F;
         [SerializeField] private float _strength = 0.1F;
         [SerializeField] private float _heightOffset = 0.0F;
@@ -67,7 +83,8 @@ namespace IronRain.ShaderSystem
 
             _lastType = _curveType;
         }
-
+        
+        /// <summary>マテリアルの値を更新する</summary>
         private void UpdateMaterial(Material material)
         {
             material.SetFloat(_curveFactorPropertyID, _factor);
