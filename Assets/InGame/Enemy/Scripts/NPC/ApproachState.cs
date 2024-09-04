@@ -16,6 +16,8 @@ namespace Enemy.NPC
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Approach;
+
+            Ref.Callback.InvokeAppearAction();
         }
 
         protected override void Exit()
