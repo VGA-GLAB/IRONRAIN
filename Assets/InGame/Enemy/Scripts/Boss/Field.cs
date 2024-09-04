@@ -49,7 +49,8 @@ namespace Enemy.Boss
         /// </summary>
         public Vector3 GetLanePointWithOffset(int index)
         {
-            return PointP() + GetLane(index);
+            Vector3 offset = Ref.BossParams.Position.HeightOffset;
+            return PointP() + GetLane(index) + offset;
         }
 
         /// <summary>

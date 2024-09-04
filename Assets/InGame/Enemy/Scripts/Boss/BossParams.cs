@@ -2,6 +2,16 @@
 
 namespace Enemy.Boss
 {
+    // 戦闘位置
+    [System.Serializable]
+    public class PositionSettings
+    {
+        [Tooltip("戦闘中、プレイヤーのアイレベルからの高さのオフセット")]
+        [SerializeField] private float _heightOffset = -5.0f;
+
+        public Vector3 HeightOffset => Vector3.up * _heightOffset;
+    }
+
     // 移動速度
     [System.Serializable]
     public class MoveSpeedSettings
@@ -11,35 +21,6 @@ namespace Enemy.Boss
         [SerializeField] private float _chase = 50.0f;
 
         public float Chase => _chase;
-    }
-
-    // 技ごとの設定の基底クラス
-    public class Skill
-    {
-        [Min(0)]
-        [SerializeField] private int _damage = 1;
-
-        [Tooltip("チャージ後、この距離までプレイヤーとの間合いを詰めてから攻撃する。")]
-        [Range(1.0f, 5.0f)]
-        [SerializeField] private float _distance = 4.0f;
-
-        public int Damage => _damage;
-        public float SprDistance => _distance * _distance;
-        public virtual string ID => nameof(Skill);
-    }
-
-    // 下段斬り
-    [System.Serializable]
-    public class GedanGiri : Skill
-    {
-        public override string ID => nameof(GedanGiri);
-    }
-
-    // 溜め突き
-    [System.Serializable]
-    public class ChargeThrust : Skill
-    {
-        public override string ID => nameof(ChargeThrust);
     }
 
     // 近接攻撃
@@ -58,16 +39,9 @@ namespace Enemy.Boss
         [Min(1.0f)]
         [SerializeField] private float _chargeSpeed = 50.0f;
 
-        [Header("下段斬り")]
-        [SerializeField] private GedanGiri _gedanGiri;
-        [Header("溜め突き")]
-        [SerializeField] private ChargeThrust _chargeThrust;
-
         public float Rate => _rate;
         public float TriggerRange => _triggerRange;
         public float ChargeSpeed => _chargeSpeed;
-        public GedanGiri GedanGiri => _gedanGiri;
-        public ChargeThrust ChargeThrust => _chargeThrust;
     }
 
     // 遠距離攻撃
@@ -152,32 +126,6 @@ namespace Enemy.Boss
         //
     }
 
-    //// QTE
-    //[System.Serializable]
-    //public class QteSettings
-    //{
-    //    [Tooltip("プレイヤーの正面に移動する際の速さ")]
-    //    [Range(10.0f, 30.0f)]
-    //    [SerializeField] private float _toPlayerFrontMoveSpeed = 10.0f;
-
-    //    [Tooltip("プレイヤーと殴り合う距離。この距離まで近づいた後に各QTEを行う。")]
-    //    [Range(1.0f, 10.0f)]
-    //    [SerializeField] private float _socialDistance = 20.0f;
-
-    //    [Tooltip("鍔迫り合いで吹き飛ばされる力")]
-    //    [Range(1.0f, 30.0f)]
-    //    [SerializeField] private float _knockBackPower = 15.0f;
-
-    //    [Tooltip("鍔迫り合いで吹き飛ばされた後、再び突っ込んでくる速さ")]
-    //    [Range(1.0f, 30.0f)]
-    //    [SerializeField] private float _chargeSpeed = 15.0f;
-
-    //    public float ToPlayerFrontMoveSpeed => _toPlayerFrontMoveSpeed;
-    //    public float SocialSqrDistance => _socialDistance * _socialDistance;
-    //    public float KnockBackPower => _knockBackPower;
-    //    public float ChargeSpeed => _chargeSpeed;
-    //}
-
     /// <summary>
     /// ボスキャラクターのパラメータ
     /// プランナーが弄る。
@@ -185,6 +133,9 @@ namespace Enemy.Boss
     [System.Serializable]
     public class BossParams : MonoBehaviour, IReadonlyBossParams
     {
+        [Header("戦闘位置の設定")]
+        [SerializeField] private PositionSettings _position;
+
         [Header("移動速度の設定")]
         [SerializeField] private MoveSpeedSettings _moveSpeed;
 
@@ -206,6 +157,7 @@ namespace Enemy.Boss
         [Header("QTE、撃破される演出の設定")]
         [SerializeField] private FinalQteSettings _finalQte;
 
+        public PositionSettings Position => _position;
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public MeleeAttackSettings MeleeAttackConfig => _meleeAttack;
         public RangeAttackSettings RangeAttackConfig => _rangeAttack;
