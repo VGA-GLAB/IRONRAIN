@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using UnityEngine;
 using UniRx;
+using DG.Tweening;
 
 namespace IronRain.Player
 {
@@ -15,6 +16,7 @@ namespace IronRain.Player
         private ReactiveProperty<QTEState> _qteType = new();
         private QTEResultType _qteResultType;
         private Guid _enemyId;
+        private Transform _qteStartPos;
 
         public void Dispose()
         {
@@ -177,9 +179,16 @@ namespace IronRain.Player
         {
             switch (qteProgressType)
             {
+                case QTEState.QtePreparation: 
+                    {
+                        if(_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                        await _playerEnvroment.PlayerTransform.DOLocalMove(_qteStartPos.position, 2f)
+                            .ToUniTask(TweenCancelBehaviour.Kill, token);
+                        break;
+                    }
                 case QTEState.QTE1:
                     {
-                        if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                        if (_qteType.Value != QTEState.QtePreparation) Debug.LogError("意図しないQteの呼び出しがされています");
                         _playerEnvroment.AddState(PlayerStateType.EnterBossQte);
                         _qteType.Value = QTEState.QTE1;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);

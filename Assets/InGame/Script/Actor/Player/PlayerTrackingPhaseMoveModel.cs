@@ -40,7 +40,7 @@ namespace IronRain.Player
             _leftController.SetUp(_playerEnvroment.PlayerSetting);
             _rightController.SetUp(_playerEnvroment.PlayerSetting);
             _transform = _playerEnvroment.PlayerTransform;
-            CriAudioManager.Instance.SE.Play("SE", "SE_Thruster");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Thruster");
 
             //_playerEnvroment.PlayerTransform.LookAt(_centerPoint);
         }
@@ -102,7 +102,7 @@ namespace IronRain.Player
                 {
                     _savePos = _transform.position;
                 }
-                CriAudioManager.Instance.SE.Play("SE", "SE_Evasion");
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Evasion");
             }
             //右スラスター
             else if (_rightController.ControllerDir.x == 1)
@@ -112,7 +112,7 @@ namespace IronRain.Player
                 ThrusterNextPointMove(nextPoint).Forget();
                 _currentLane++;
                 if (_currentLane - 1 == _params.RestrictionLane) _savePos = _transform.position;
-                CriAudioManager.Instance.SE.Play("SE", "SE_Evasion");
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Evasion");
             }
         }
 

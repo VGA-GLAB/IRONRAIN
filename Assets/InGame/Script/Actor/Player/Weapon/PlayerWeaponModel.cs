@@ -95,7 +95,7 @@ namespace IronRain.Player
             }
             _playerEnvroment.RemoveState(PlayerStateType.SwitchingArms);
             _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(true);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Change");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Change");
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace IronRain.Player
             var enemys = _playerEnvroment.RaderMap.MultiLockEnemys; 
             for (int i = 0; i < enemys.Count; i++) 
             {
-                CriAudioManager.Instance.SE.Play("SE", "SE_Missile_Fire");
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Missile_Fire");
                 HomingMissile m = GameObject.Instantiate(_homingMissilePrefab, _homingMissilePos.position, Quaternion.identity).GetComponent<HomingMissile>();
                 float x = Random.value;
                 float y = Random.value;

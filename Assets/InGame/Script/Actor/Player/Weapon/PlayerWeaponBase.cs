@@ -79,7 +79,7 @@ namespace IronRain.Player
                     _playerEnvroment.PlayerTransform.forward,
                     _params.WeaponType);
 
-                CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", _shotSeCueName);
                 OnShot();
                 _isFire = false;
                 _currentTime = 0;

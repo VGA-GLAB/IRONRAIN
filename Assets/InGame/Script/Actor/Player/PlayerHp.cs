@@ -41,11 +41,11 @@ namespace IronRain.Player
 
             if (weapon == PlayerWeaponType.AssaultRifle.ToString())
             {
-                CriAudioManager.Instance.SE.Play("SE", "SE_Damage_02");
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Damage_02");
             }
             else if (weapon == PlayerWeaponType.RocketLauncher.ToString()) 
             {
-                CriAudioManager.Instance.SE.Play("SE", "SE_Damage_01");
+                CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Damage_01");
             }
 
             WindowCrack();

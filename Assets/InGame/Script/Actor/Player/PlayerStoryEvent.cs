@@ -28,15 +28,15 @@ namespace IronRain.Player
             await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, token);
             await tutorialTextBoxController.DoTextChangeAsync("[F3]を押してください。", 0.05f, token);
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle3), PlayerLoopTiming.Update, token);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Purge");
             await tutorialTextBoxController.DoTextChangeAsync("[F4]を押してください。", 0.05f, token);
             await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.Toggle4), PlayerLoopTiming.Update, token);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Purge");
             //右レバーボタン1を押したまま右レバーを押す
             await tutorialTextBoxController.DoTextChangeAsync("[s]と[z]を同時に押してください！", 0.05f, token);
             await UniTask.WaitUntil(() => InputProvider.Instance.ThreeLeverDir.y == -1 && InputProvider.Instance.FourLeverDir.y == -1, PlayerLoopTiming.Update, token);
             // UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Purge");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Purge");
             await tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, token);
             Debug.Log("パージ成功");
             //await _playerAnimation.JetpackPurgeAnim();
@@ -53,12 +53,12 @@ namespace IronRain.Player
                 _bossBattleStartPos.position.y, 
                 _playerEnvroment.PlayerTransform.position.z + 20);
 
-            CriAudioManager.Instance.SE.Play("SE", "SE_Fall");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Fall");
             _playerEnvroment.AddState(PlayerStateType.Inoperable);
             _playerEnvroment.PlayerTransform.SetParent(_bossBattleStartPos.transform);
             var endPos = new Vector3(0, 0, -20);
             await _playerEnvroment.PlayerTransform.DOLocalMove(endPos, _purgeDuration).SetLink(this.gameObject);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Landing");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Landing");
             //await _playerEnvroment.PlayerAnimation.FallAnim();
         }
 

@@ -1,5 +1,6 @@
-public enum QTEState
+﻿public enum QTEState
 {
+    QtePreparation,
     QTENone,
     QTE1,
     QTE2,
