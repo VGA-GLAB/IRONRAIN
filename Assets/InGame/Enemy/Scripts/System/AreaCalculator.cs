@@ -26,13 +26,13 @@ namespace Enemy
         [SerializeField] private float _radius = 1.0f;
         [SerializeField] private float _playerRadius = 1.0f;
         [SerializeField] private float _bossRadius = 1.5f;
-        [SerializeField] private float _upperOffset;
+        [SerializeField] private float _heightOffset;
 
         private static float Space => Instance._space;
         private static float Radius => Instance._radius;
         private static float PlayerRadius => Instance._playerRadius;
         private static float BossRadius => Instance._bossRadius;
-        private static float UpperOffset => Instance._upperOffset;
+        private static float HeightOffset => Instance._heightOffset;
 
         private void Awake()
         {
@@ -61,7 +61,7 @@ namespace Enemy
             // 前方向のオフセットを加算
             p += player.forward * forwardOffset;
             // 上下方向のオフセットを加算
-            p += Vector3.up * UpperOffset;
+            p += Vector3.up * HeightOffset;
             // 偶数個の場合
             if (length % 2 == 0) p += player.right * Space / 2;
 

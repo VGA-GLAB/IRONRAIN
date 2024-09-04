@@ -86,18 +86,7 @@ namespace Enemy.Boss
         // プレイヤーの正面のレーンを基準として、レーンの左右のズレで判定。
         private bool IsInRange(int range)
         {
-            // プレイヤーの反対側のレーン。
-            int pi = Ref.Field.CurrentRane.Value;
-            int length = Ref.Field.LaneList.Count;
-            int target = LaneChangeStep.GetOtherSideLane(pi, length);
-            // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
-            int current = Ref.BlackBoard.CurrentLaneIndex;
-            int clockwiseLength = LaneChangeStep.GetRest(target, current, length);
-            int counterclockwiseLength = LaneChangeStep.GetRest(current, target, length);
-            // プレイヤーが攻撃範囲のレーン内にいるか？
-            bool result = Mathf.Min(clockwiseLength, counterclockwiseLength) <= range;
-
-            return result;
+            return Ref.Field.GetMinMoveCount() <= range;
         }
 
         // 遠距離攻撃と近接攻撃どちらも可能な場合、確率で近接攻撃を選ぶ。

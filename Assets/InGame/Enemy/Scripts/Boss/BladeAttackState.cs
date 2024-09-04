@@ -265,8 +265,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Position;
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            _end = Ref.PointP.position + Ref.Field.LaneList[li];
+            _end = Ref.Field.GetCurrentLanePointWithOffset();
             _lerp = 0;
 
             // 現在地とレーンの位置を結ぶ直線を直径とする円。
@@ -315,8 +314,7 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Forward;
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            _end = -Ref.Field.LaneList[li];
+            _end = -Ref.Field.GetCurrentLane();
         }
 
         protected override BattleActionStep Stay()

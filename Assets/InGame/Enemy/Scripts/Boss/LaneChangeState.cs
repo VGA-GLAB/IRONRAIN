@@ -56,9 +56,9 @@ namespace Enemy.Boss
             if (_flag) return;
             else _flag = true;
 
-            for (int i = 0; i < Ref.Field.LaneList.Count; i++)
+            for (int i = 0; i < Ref.Field.Length; i++)
             {
-                Vector3 p = Ref.PointP.position + Ref.Field.LaneList[i];
+                Vector3 p = Ref.Field.GetLanePointWithOffset(i);
                 GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 g.transform.position = p;
                 g.name = "レーン" + i;
@@ -86,24 +86,20 @@ namespace Enemy.Boss
 
         protected override void Enter()
         {
-            // プレイヤーの反対側のレーン。
-            int target = GetOtherSideLane();
-
             // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
-            int current = Ref.BlackBoard.CurrentLaneIndex;
-            int clockwiseLength = GetRest(target, current);
-            int counterclockwiseLength = GetRest(current, target);
-            if (clockwiseLength <= counterclockwiseLength)
+            int clockwise = Ref.Field.GetClockwiseMoveCount();
+            int counterclockwise = Ref.Field.GetCounterClockwiseMoveCount();
+            if (clockwise <= counterclockwise)
             {
                 // 時計回り
-                _rest = clockwiseLength;
-                _sign = 1;
+                _rest = clockwise;
+                _sign = -1;
             }
             else
             {
                 // 反時計回り
-                _rest = counterclockwiseLength;
-                _sign = -1;
+                _rest = counterclockwise;
+                _sign = 1;
             }
 
             // 既にプレイヤーの反対レーンにいる場合は移動しない。
@@ -133,45 +129,16 @@ namespace Enemy.Boss
             return this;
         }
 
-        // プレイヤーの反対側のレーンの番号を取得。
-        private int GetOtherSideLane()
-        {
-            int pi = Ref.Field.CurrentRane.Value;
-            int length = Ref.Field.LaneList.Count;
-            return GetOtherSideLane(pi, length);
-        }
-
-        public static int GetOtherSideLane(int playerLaneIndex, int length)
-        {
-            return (playerLaneIndex + (length / 2)) % length;
-        }
-
-        // 円状に敷き詰められたレーンの2点間を移動する場合の移動回数を求める。
-        // 1,2,3...17,0のように、末尾から先頭に移動する際に、変化量が変わるのを考慮して計算する。
-        // aとbを入れ替えると時計回り/反時計回りの移動回数が求まる。
-        private int GetRest(int a, int b)
-        {
-            int length = Ref.Field.LaneList.Count;
-            return GetRest(a, b, length);
-        }
-
-        public static int GetRest(int a, int b, int length)
-        {
-            return (a - b + length) % length;
-        }
-
         // 移動先のレーンを更新。
         private void NextLane()
         {
             _rest--;
 
-            // 2点を指定して移動回数を求める計算と同じ。
-            // なぜか現在の地点から移動方向を指定しても隣のレーンが求まる。
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            _nextIndex = GetRest(li, -_sign);
+            if (_sign == -1) _nextIndex = Ref.Field.GetLeftLaneIndex();
+            else if (_sign == 1) _nextIndex = Ref.Field.GetRightLaneIndex();
 
             _start = Ref.Body.Position;
-            _end = Ref.PointP.position + Ref.Field.LaneList[_nextIndex];
+            _end = Ref.Field.GetLanePointWithOffset(_nextIndex);
             _lerp = 0;
         }
     }
@@ -193,20 +160,12 @@ namespace Enemy.Boss
             _start = Ref.Body.Forward;
             // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
             // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
-            int pi = Ref.Field.CurrentRane.Value;
-            Vector3 pl = Ref.Field.LaneList[pi];
+            Vector3 pl = Ref.Field.GetPlayerLane();
             pl.y = 0;
             _end = pl;
             _lerp = 0;
 
-            // プレイヤーの反対側のレーンに移動するため、向く方向も合わせる。
-            int length = Ref.Field.LaneList.Count;
-            int target = LaneChangeStep.GetOtherSideLane(pi, length);
-            // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
-            int current = Ref.BlackBoard.CurrentLaneIndex;
-            int clockwiseLength = LaneChangeStep.GetRest(target, current, length);
-            int counterclockwiseLength = LaneChangeStep.GetRest(current, target, length);
-            _diff = Mathf.Min(clockwiseLength, counterclockwiseLength);
+            _diff = Ref.Field.GetMinMoveCount();
         }
 
         protected override BattleActionStep Stay()

@@ -7,9 +7,6 @@ namespace Enemy.Boss
 {
     public class RequiredRef
     {
-        // これだけボス戦開始までnullになっているため、コンストラクタ時点では参照が確保できない。
-        private PlayerBossMoveModel _field;
-
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, Transform pointP,
             BossParams bossParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, BossEffects effects, 
             Collider[] hitBoxes, MeleeEquipment meleeEquip, RangeEquipment rangeEquip, List<FunnelController> funnels)
@@ -18,7 +15,6 @@ namespace Enemy.Boss
             Player = player;
             Offset = offset;
             Rotate = rotate;
-            PointP = pointP;
             BossParams = bossParams;
             BlackBoard = blackBoard;
             Animator = animator;
@@ -35,13 +31,13 @@ namespace Enemy.Boss
             AnimationEvent = Animator.GetComponent<AnimationEvent>();
             Effector = new Effector(this);
             AgentScript = transform.GetComponent<AgentScript>();
+            Field = new Field(this, pointP);
         }
 
         public Transform Transform { get; }
         public Transform Player { get; }
         public Transform Offset { get; }
         public Transform Rotate { get; }
-        public Transform PointP { get; }
         public BossParams BossParams { get; }
         public BlackBoard BlackBoard { get; }
         public Animator Animator { get; }
@@ -58,18 +54,6 @@ namespace Enemy.Boss
         public AnimationEvent AnimationEvent { get; }
         public Effector Effector { get; }
         public AgentScript AgentScript { get; }
-
-        public PlayerBossMoveModel Field
-        {
-            get
-            {
-                if (_field == null) 
-                {
-                    PlayerBossMove pbm = Player.GetComponentInChildren<PlayerBossMove>();
-                    if (pbm != null) _field = pbm.MoveModel;
-                }
-                return _field;
-            }
-        }
+        public Field Field { get; }
     }
 }
