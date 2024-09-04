@@ -122,6 +122,7 @@ namespace IronRain.Player
             var enemys = _playerEnvroment.RaderMap.MultiLockEnemys; 
             for (int i = 0; i < enemys.Count; i++) 
             {
+                CriAudioManager.Instance.SE.Play("SE", "SE_Missile_Fire");
                 HomingMissile m = GameObject.Instantiate(_homingMissilePrefab, _homingMissilePos.position, Quaternion.identity).GetComponent<HomingMissile>();
                 float x = Random.value;
                 float y = Random.value;
