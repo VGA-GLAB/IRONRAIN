@@ -107,6 +107,7 @@ namespace IronRain.Player
                         await _playerEnvroment.PlayerTransform
                         .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
                         .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                        .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
                         .ToUniTask(cancellationToken: _thrusterCancell.Token);
                         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                         _playerEnvroment.RemoveState(PlayerStateType.Thruster);
@@ -127,6 +128,7 @@ namespace IronRain.Player
                         await _playerEnvroment.PlayerTransform
                         .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
                         .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                        .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
                         .ToUniTask(cancellationToken: _thrusterCancell.Token);
                         _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
                         _playerEnvroment.RemoveState(PlayerStateType.Thruster);
@@ -139,7 +141,7 @@ namespace IronRain.Player
             }
         }
 
-        private void  ThrusterCancell(PlayerStateType playerState) 
+        public void  ThrusterCancell(PlayerStateType playerState) 
         {
             if (playerState.HasFlag(PlayerStateType.EnterBossQte)) 
             {
