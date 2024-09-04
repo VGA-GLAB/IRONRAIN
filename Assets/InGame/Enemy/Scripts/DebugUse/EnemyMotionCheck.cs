@@ -9,6 +9,7 @@ namespace Enemy.DebugUse
         public class PlayButton
         {
             public string ClipName;
+            public float UpperBodyWeight;
             public Button Button;
         }
 
@@ -20,7 +21,8 @@ namespace Enemy.DebugUse
             public GameObject Object;
             public GameObject MyMotionSelect;
             public string DefaultAnimName = "Idle";
-            public Slider MoveParamSlider;
+            public Slider MoveParamSliderLR;
+            public Slider MoveParamSliderFB;
             public PlayButton[] PlayButton;
 
             public Animator Animator
@@ -34,7 +36,10 @@ namespace Enemy.DebugUse
                 {
                     // 適当な変数に代入せずiを引数にすると挙動がおかしくなる。
                     int x = i;
-                    PlayButton[i].Button.onClick.AddListener(() => Play(PlayButton[x].ClipName));
+                    PlayButton[i].Button.onClick.AddListener(() => 
+                    {
+                        Play(PlayButton[x].ClipName, PlayButton[x].UpperBodyWeight);
+                    });
                 }
             }
 
@@ -48,22 +53,36 @@ namespace Enemy.DebugUse
                 Button.GetComponent<Image>().color = c;
             }
 
-            public void Play(string animName)
+            public void Play(string animName, float upperBodyWeight)
             {
-                if (Animator != null) Animator.Play(animName);
+                if (Animator != null)
+                {
+                    Animator.SetLayerWeight(Const.Layer.UpperBody, upperBodyWeight);
+                    Animator.Play(animName);
+                }
             }
 
             public void PlayDefault()
             {
-                Play(DefaultAnimName);
+                Play(DefaultAnimName, 0);
             }
 
             public void ApplyMoveParam()
             {
-                if (Animator != null && MoveParamSlider != null)
+                if (MoveParamSliderLR != null)
                 {
-                    Animator.SetFloat("SpeedY", MoveParamSlider.value);
+                    ApplyMoveParam("SpeedX", MoveParamSliderLR.value);
                 }
+
+                if (MoveParamSliderFB != null)
+                {
+                    ApplyMoveParam("SpeedZ", MoveParamSliderFB.value);
+                }
+            }
+
+            private void ApplyMoveParam(string param, float value)
+            {
+                if (Animator != null) Animator.SetFloat(param, value);
             }
         }
 
