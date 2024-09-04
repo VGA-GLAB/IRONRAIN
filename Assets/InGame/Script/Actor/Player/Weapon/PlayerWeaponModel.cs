@@ -69,6 +69,7 @@ namespace IronRain.Player
         /// </summary>
         private async UniTaskVoid WeaponChenge()
         {
+            _playerEnvroment.AddState(PlayerStateType.SwitchingArms);
             _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(false);
 
             if (_playerWeaponList[_currentWeaponIndex].WeaponParam.WeaponType
@@ -92,7 +93,7 @@ namespace IronRain.Player
             {
                 _currentWeaponIndex = 0;
             }
-
+            _playerEnvroment.RemoveState(PlayerStateType.SwitchingArms);
             _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(true);
             CriAudioManager.Instance.SE.Play("SE", "SE_Change");
         }

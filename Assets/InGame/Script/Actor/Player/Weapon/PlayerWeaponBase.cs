@@ -77,7 +77,7 @@ namespace IronRain.Player
                     _playerEnvroment.RaderMap.GetRockEnemy,
                     _params.ShotDamage,
                     _playerEnvroment.PlayerTransform.forward,
-                    _params.WeaponName);
+                    _params.WeaponType);
 
                 CriAudioManager.Instance.SE.Play("SE", _shotSeCueName);
                 OnShot();
