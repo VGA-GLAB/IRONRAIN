@@ -13,13 +13,19 @@ namespace IronRain.Player
         private ObjectPool<BulletCon> _assaultRiflePool;
         private ObjectPool<BulletCon> _rocketPool;
 
-        private Transform _bulletPoolParent;
+        private Transform _assaultPoolParent;
+        private Transform _rocketPoolParent;
 
         private void Start()
         {
             var obj = new GameObject();
-            obj.name = "BulletPool";
-            _bulletPoolParent = Instantiate(obj).transform;
+            obj.name = "AssaultPoolParent";
+            _assaultPoolParent = Instantiate(obj).transform;
+
+            var obj2 = new GameObject();
+            obj.name = "RocketPoolParent";
+            _rocketPoolParent = Instantiate(obj).transform;
+
             _assaultRiflePool = new ObjectPool<BulletCon>(
                 createFunc: () => InsObj(PlayerWeaponType.AssaultRifle),
                 actionOnGet: x => OnGetObj(x,PlayerWeaponType.AssaultRifle),
@@ -50,10 +56,17 @@ namespace IronRain.Player
             }
         }
 
-        public void ReleaseBullet(BulletCon bulletCon)
+        public void ReleaseBullet(BulletCon bulletCon, PlayerWeaponType playerWeaponType)
         {
             bulletCon.SetVisible(false);
-            _assaultRiflePool.Release(bulletCon);
+            if (playerWeaponType == PlayerWeaponType.AssaultRifle)
+            {
+                _assaultRiflePool.Release(bulletCon);
+            }
+            else if (playerWeaponType == PlayerWeaponType.RocketLauncher) 
+            {
+                _rocketPool.Release(bulletCon);
+            }
         }
 
         private BulletCon InsObj(PlayerWeaponType playerWeaponType)
@@ -61,11 +74,11 @@ namespace IronRain.Player
             BulletCon bulletCon = null;
             if (playerWeaponType == PlayerWeaponType.AssaultRifle)
             {
-                bulletCon = Instantiate(_assaultPrefab, _bulletPoolParent).GetComponent<BulletCon>();
+                bulletCon = Instantiate(_assaultPrefab, _assaultPoolParent).GetComponent<BulletCon>();
             }
             else if (playerWeaponType == PlayerWeaponType.RocketLauncher)
             {
-                bulletCon = Instantiate(_rocketPrefab, _bulletPoolParent).GetComponent<BulletCon>();
+                bulletCon = Instantiate(_rocketPrefab, _rocketPoolParent).GetComponent<BulletCon>();
             }
             else 
             {
