@@ -7,7 +7,7 @@ namespace IronRain.Player
 {
     public class BulletCon : MonoBehaviour
     {
-        public event Action<BulletCon> OnRelease;
+        public event Action<BulletCon, PlayerWeaponType> OnRelease;
 
         [SerializeField] private float _speed;
         [SerializeField] private Rigidbody _rb;
@@ -20,14 +20,14 @@ namespace IronRain.Player
         private Vector3 _shotDir;
         private Transform _shootingTarget;
         private int _damege;
-        private string _weaponName;
+        private PlayerWeaponType _weaponType;
 
-        public void SetUp(GameObject enemy, int damege, Vector3 shotDir, string weaponName)
+        public void SetUp(GameObject enemy, int damege, Vector3 shotDir, PlayerWeaponType weaponType)
         {
             _lockOnEnemy = enemy;
             _damege = damege;
             _shotDir = shotDir;
-            _weaponName = weaponName;
+            _weaponType = weaponType;
 
             if (_lockOnEnemy && _lockOnEnemy.GetComponent<Enemy.Character>().TryFindShootingTarget(out Transform shootingTarget))
             {
@@ -67,15 +67,15 @@ namespace IronRain.Player
             var playerCon = other.GetComponentInParent<PlayerController>();
             if (!playerCon && damageble != null)
             {
-                damageble.Damage(_damege, _weaponName);
+                damageble.Damage(_damege, _weaponType.ToString());
                 StopAllCoroutines();
-                OnRelease?.Invoke(this);
+                OnRelease?.Invoke(this, _weaponType);
             }
         }
 
         public void SetVisible(bool isVisible)
         {
-            if (_weaponName != PlayerWeaponType.RocketLauncher.ToString())
+            if (_weaponType != PlayerWeaponType.RocketLauncher)
                 if (isVisible)
                 {
                     for (int i = 0; i < _particleArray.Length; i++)
@@ -99,7 +99,7 @@ namespace IronRain.Player
         private IEnumerator BulletRelese()
         {
             yield return new WaitForSeconds(2);
-            OnRelease?.Invoke(this);
+            OnRelease?.Invoke(this, _weaponType);
         }
     }
 }
