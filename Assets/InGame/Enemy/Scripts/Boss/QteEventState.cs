@@ -84,10 +84,9 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Position;
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            Vector3 dir = Ref.Field.GetCurrentLane().normalized;
             float dist = Ref.BossParams.BreakLeftArm.Distance;
-            _end = Ref.PointP.position + dir * dist;
+            _end = Ref.Field.PointP() + dir * dist;
 
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
             // それ以外の状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
@@ -250,10 +249,9 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Position;
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            Vector3 dir = Ref.Field.GetCurrentLane().normalized;
             float dist = Ref.BossParams.SecondQte.Distance;
-            _end = Ref.PointP.position + dir * dist;
+            _end = Ref.Field.PointP() + dir * dist;
 
             // 2回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
             string state = Const.Boss.QteSwordHold_2;
@@ -382,10 +380,9 @@ namespace Enemy.Boss
         protected override void Enter()
         {
             _start = Ref.Body.Position;
-            int li = Ref.BlackBoard.CurrentLaneIndex;
-            Vector3 dir = Ref.Field.LaneList[li].normalized;
+            Vector3 dir = Ref.Field.GetCurrentLane().normalized;
             float dist = Ref.BossParams.SecondQte.Distance;
-            _end = Ref.PointP.position + dir * dist;
+            _end = Ref.Field.PointP() + dir * dist;
 
             // 3回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
             string state = Const.Boss.QteSwordHold_2;

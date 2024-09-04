@@ -67,7 +67,7 @@ namespace Enemy.Boss
 
         protected override BattleActionStep Stay()
         {
-            if (Ref.Field != null) return Next[0];
+            if (Ref.Field.IsEnabled()) return Next[0];
             else return this;
         }
     }
@@ -90,7 +90,7 @@ namespace Enemy.Boss
             Ref.BlackBoard.CurrentLaneIndex = LaneIndex;
 
             _start = Ref.Body.Position;
-            _end = Ref.PointP.position + Ref.Field.LaneList[LaneIndex];
+            _end = Ref.Field.GetLanePointWithOffset(LaneIndex);
             _lerp = 0;
         }
 
