@@ -1,5 +1,4 @@
-﻿using Enemy.Boss;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace Enemy.NPC
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
             BuddyNpcParams npcParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, 
-            NpcEffects effects)
+            NpcEffects effects, Callback callback)
         {
             Transform = transform;
             Player = player;
@@ -21,6 +20,7 @@ namespace Enemy.NPC
             Renderers = renderers;
             Effects = effects;
             HitBoxes = null;
+            Callback = callback;
 
             States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
@@ -37,6 +37,7 @@ namespace Enemy.NPC
         public Renderer[] Renderers { get; }
         public NpcEffects Effects { get; }
         public Collider[] HitBoxes { get; }
+        public Callback Callback { get; }
 
         public Dictionary<StateKey, State<StateKey>> States { get; }
         public Body Body { get; }

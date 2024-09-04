@@ -17,6 +17,8 @@ namespace Enemy.NPC
         {
             Ref.BlackBoard.CurrentState = StateKey.Action;
 
+            Ref.Callback.InvokeAttackAction();
+
             EnemyController target = Ref.NpcParams.Target;
             if (target != null) target.Damage(int.MaxValue / 2, "NPC");
         }

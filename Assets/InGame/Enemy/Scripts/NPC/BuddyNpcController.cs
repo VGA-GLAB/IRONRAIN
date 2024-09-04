@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Enemy.NPC
 {
@@ -15,6 +16,7 @@ namespace Enemy.NPC
         private BuddyNpcParams _params;
         private Perception _perception;
         private StateMachine _stateMachine;
+        private Callback _callback;
 
         // 非表示にする非同期処理を実行中フラグ。
         // 二重に処理を呼ばないために必要。
@@ -32,6 +34,11 @@ namespace Enemy.NPC
             }
         }
 
+        /// <summary>
+        /// コールバックの登録/解除を行う。
+        /// </summary>
+        public Callback Callback => _callback ??= new Callback();
+
         private void Awake()
         {
             // 必要な参照をまとめる。
@@ -44,7 +51,8 @@ namespace Enemy.NPC
                 blackBoard: new BlackBoard(gameObject.name),
                 animator: GetComponentInChildren<Animator>(),
                 renderers: _renderers,
-                effects: _effects
+                effects: _effects,
+                callback: Callback
                 );
 
             _params = requiredRef.NpcParams;
