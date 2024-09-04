@@ -61,9 +61,9 @@ MonoBehaviour:
   - rid: 4919532251061157901
   - rid: 4919532251061157903
   - rid: 4919532251061157905
-  - rid: 4919532251061157908
+  - rid: 3800739115249434631
   - rid: 4919532251061157911
-  - rid: 4919532251061157921
+  - rid: 3800739115249434635
   - rid: 4919532251061157924
   - rid: 4919532251061157926
   - rid: 4919532251061157927
@@ -92,6 +92,49 @@ MonoBehaviour:
       type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _targetSeq: 0
+    - rid: 3800739115249434631
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: FirstFunnelSequence
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739115249434632
+        - rid: 3800739115249434633
+        - rid: 3800739115249434634
+    - rid: 3800739115249434632
+      type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739115249434633
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739115249434634
+      type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+    - rid: 3800739115249434635
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: SecondFunnelSequence
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739115249434636
+        - rid: 3800739115249434637
+        - rid: 3800739115249434638
+        - rid: 3800739115249434639
+    - rid: 3800739115249434636
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+    - rid: 3800739115249434637
+      type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739115249434638
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739115249434639
+      type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
     - rid: 4919532251061157901
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -124,20 +167,6 @@ MonoBehaviour:
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 3
-    - rid: 4919532251061157908
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: FirstFunnelSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 4919532251061157909
-        - rid: 4919532251061157910
-    - rid: 4919532251061157909
-      type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 4919532251061157910
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
     - rid: 4919532251061157911
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -198,20 +227,6 @@ MonoBehaviour:
         _removeState: 32
     - rid: 4919532251061157920
       type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 4919532251061157921
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: SecondFunnelSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 4919532251061157922
-        - rid: 4919532251061157923
-    - rid: 4919532251061157922
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 3
-    - rid: 4919532251061157923
-      type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 4919532251061157924
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -740,6 +755,7 @@ MonoBehaviour:
     _playerAnimation: {fileID: 0}
     _launchManager: {fileID: 0}
     _recorder: {fileID: 0}
+    _curveManager: {fileID: 0}
 --- !u!114 &52876117135305751
 MonoBehaviour:
   m_ObjectHideFlags: 0

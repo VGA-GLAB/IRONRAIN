@@ -3,6 +3,7 @@ using Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
 using IronRain.Player;
+using IronRain.ShaderSystem;
 using Recorder = UnityEngine.Profiling.Recorder;
 
 #if UNITY_EDITOR
@@ -53,5 +54,7 @@ namespace IronRain.SequenceSystem
         [SerializeField] private CustomRecorderController _recorder;
         public CustomRecorderController Recorder => _recorder;
 #endif
+        [SerializeField] private CurveShaderManager _curveManager;
+        public CurveShaderManager CurveManager => _curveManager;
     }
 }
