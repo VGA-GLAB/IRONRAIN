@@ -158,7 +158,7 @@ namespace IronRain.Player
                 {
                     if (_controllerDir.z != 1)
                     {
-                        CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                        CriAudioManager.Instance.SE.Play3D(transform.position, "SE", "SE_Lever");
                     }
                     _controllerDir.z = 1;
                 }
@@ -166,7 +166,7 @@ namespace IronRain.Player
                 {
                     if (_controllerDir.z != -1)
                     {
-                        CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                        CriAudioManager.Instance.SE.Play3D(transform.position, "SE", "SE_Lever");
                     }
                     _controllerDir.z = -1;
                 }
@@ -179,7 +179,7 @@ namespace IronRain.Player
                 {
                     if (_controllerDir.x != 1)
                     {
-                        CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                        CriAudioManager.Instance.SE.Play3D(transform.position, "SE", "SE_Lever");
                     }
                     _controllerDir.x = 1;
                 }
@@ -187,7 +187,7 @@ namespace IronRain.Player
                 {
                     if (_controllerDir.x != -1)
                     {
-                        CriAudioManager.Instance.SE.Play("SE", "SE_Lever");
+                        CriAudioManager.Instance.SE.Play3D(transform.position, "SE", "SE_Lever");
                     }
                     _controllerDir.x = -1;
                 }
