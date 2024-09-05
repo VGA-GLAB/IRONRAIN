@@ -29,11 +29,11 @@ namespace Enemy.Boss
             _qteSteps[3] = new FirstCombatStep(requiredRef, _qteSteps[4]);
             _qteSteps[2] = new BreakLeftArmStep(requiredRef, _qteSteps[3]);
             _qteSteps[1] = new FirstChargeStep(requiredRef, _qteSteps[2]);
-            _qteSteps[0] = new LaneChangeStep(requiredRef, _qteSteps[1]);
+            _qteSteps[0] = new LaneChangeToPlayerFrontStep(requiredRef, _qteSteps[1]);
 
             _lookSteps = new BossActionStep[2];
             _lookSteps[1] = new CompleteStep(requiredRef, null);
-            _lookSteps[0] = new LaneChangeLookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _lookSteps[0] = new ParallelLookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
         private RequiredRef Ref { get; set; }
@@ -67,6 +67,130 @@ namespace Enemy.Boss
         public override void Dispose()
         {
             foreach (BossActionStep s in _qteSteps) s.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーの正面レーンに移動。
+    /// </summary>
+    public class LaneChangeToPlayerFrontStep : BossActionStep
+    {
+        // Lerpで移動。
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+        // このステップ内で複数回移動させる。
+        private int _rest;
+        private int _sign;
+        // 移動開始のタイミングで代入、移動完了後にこの値を黒板に書き込む。
+        private int _nextIndex;
+
+        public LaneChangeToPlayerFrontStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
+            int clockwise = Ref.Field.GetClockwiseMoveCount();
+            int counterclockwise = Ref.Field.GetCounterClockwiseMoveCount();
+            if (clockwise <= counterclockwise)
+            {
+                // 時計回り
+                _rest = clockwise;
+                _sign = -1;
+            }
+            else
+            {
+                // 反時計回り
+                _rest = counterclockwise;
+                _sign = 1;
+            }
+
+            // 既にプレイヤーの反対レーンにいる場合は移動しない。
+            if (_rest > 0) NextLane();
+            else
+            {
+                _start = Ref.Body.Position;
+                _end = _start;
+                _lerp = 0;
+                _nextIndex = Ref.BlackBoard.CurrentLaneIndex;
+            }
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            if (_lerp >= 1)
+            {
+                Ref.BlackBoard.CurrentLaneIndex = _nextIndex;
+
+                if (_rest == 0) return Next[0];
+                else NextLane();
+            }
+
+            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.Warp(p);
+
+            // レーン間の移動速度。
+            const float Speed = 6.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * Speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
+            return this;
+        }
+
+        // 移動先のレーンを更新。
+        private void NextLane()
+        {
+            _rest--;
+
+            if (_sign == -1) _nextIndex = Ref.Field.GetLeftLaneIndex();
+            else if (_sign == 1) _nextIndex = Ref.Field.GetRightLaneIndex();
+
+            _start = Ref.Body.Position;
+            _end = Ref.Field.GetLanePointWithOffset(_nextIndex);
+            _lerp = 0;
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーに向けて回転。レーン移動と並行して行う。
+    /// </summary>
+    public class ParallelLookAtPlayerStep : BossActionStep
+    {
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
+        private int _diff;
+
+        public ParallelLookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+
+        protected override void Enter()
+        {
+            _start = Ref.Body.Forward;
+            // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
+            // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
+            Vector3 pl = Ref.Field.GetPlayerLane();
+            pl.y = 0;
+            _end = pl;
+            _lerp = 0;
+
+            _diff = Ref.Field.GetMinMoveCount();
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            // 振り向き速度。
+            const float Speed = 100.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * (Speed / _diff);
+
+            if (_lerp > 1.0f) return Next[0];
+            else return this;
         }
     }
 
@@ -113,7 +237,7 @@ namespace Enemy.Boss
             Ref.Body.Warp(p);
             Vector3 after = Ref.Body.Position;
             Vector3 look = before - after;
-            if (look != Vector3.zero) Ref.Body.LookForward(before - after);
+            //if (look != Vector3.zero) Ref.Body.LookForward(before - after);
 
             float speed = Ref.BossParams.BreakLeftArm.MoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;

@@ -106,6 +106,8 @@ namespace Enemy.Boss
             if (_rest > 0) NextLane();
             else
             {
+                _start = Ref.Body.Position;
+                _end = _start;
                 _lerp = 0;
                 _nextIndex = Ref.BlackBoard.CurrentLaneIndex;
             }

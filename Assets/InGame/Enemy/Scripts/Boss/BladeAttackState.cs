@@ -315,6 +315,7 @@ namespace Enemy.Boss
         {
             _start = Ref.Body.Forward;
             _end = -Ref.Field.GetCurrentLane();
+            _lerp = 0;
         }
 
         protected override BattleActionStep Stay()
