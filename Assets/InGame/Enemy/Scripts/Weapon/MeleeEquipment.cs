@@ -4,6 +4,9 @@ using UnityEngine;
 using Enemy.Boss;
 using System.Buffers;
 using System;
+using UniRx;
+using UniRx.Triggers;
+using Cysharp.Threading.Tasks;
 
 namespace Enemy
 {
@@ -13,23 +16,27 @@ namespace Enemy
     /// </summary>
     public class MeleeEquipment : Equipment
     {
-        [Header("攻撃エフェクト(任意)")]
+        [SerializeField] private SphereCollider _hitBox;
         [SerializeField] private Effect _attackEffect;
-        [Header("範囲の設定")]
-        [SerializeField] private float _forwardOffset;
-        [SerializeField] private float _heightOffset;
-        [Min(1.0f)]
-        [SerializeField] private float _radius = 3.0f;
 
         private Transform _rotate;
         private AnimationEvent _animationEvent;
         private IOwnerTime _owner;
 
+        private float Radius
+        {
+            get
+            {
+                if (_hitBox != null) return _hitBox.radius;
+                else return 0;
+            }
+        }
+
         private void Awake()
         {
             _rotate = FindRotate();
-            // Animatorが1つだけの前提。
             _animationEvent = GetComponentInChildren<AnimationEvent>();
+            _hitBox.OnTriggerEnterAsObservable().Subscribe(OnDamageCollisionHit).AddTo(this);
         }
 
         private void Start()
@@ -41,18 +48,51 @@ namespace Enemy
 
         private void OnEnable()
         {
-            _animationEvent.OnMeleeAttackStart += Collision;
+            _animationEvent.OnMeleeAttackStart += EnableHitBox;
+            _animationEvent.OnMeleeAttackEnd += DisableHitBox;
         }
 
         private void OnDisable()
         {
-            _animationEvent.OnMeleeAttackStart -= Collision;
+            _animationEvent.OnMeleeAttackStart -= EnableHitBox;
+            _animationEvent.OnMeleeAttackEnd -= DisableHitBox;
         }
 
         private void OnDrawGizmosSelected()
         {
             // 攻撃範囲。
-            GizmosUtils.WireCircle(Origin(), _radius, ColorExtensions.ThinRed);
+            GizmosUtils.WireCircle(Origin(), Radius, ColorExtensions.ThinRed);
+        }
+
+        // 判定の有効化
+        private void EnableHitBox()
+        {
+            EnableHitBox(true);
+            OnCollision();
+
+            // 最後に攻撃したタイミングを更新。
+            LastAttackTiming = Time.time;
+        }
+
+        // 判定の無効化
+        private void DisableHitBox()
+        {
+            EnableHitBox(false);
+        }
+
+        // 判定の有効/無効を切り替え。
+        private void EnableHitBox(bool value)
+        {
+            if (_hitBox != null) _hitBox.enabled = value;
+        }
+
+        // トリガーに接触した際の処理。
+        private void OnDamageCollisionHit(Collider other)
+        {
+            // コライダーと同じオブジェクトにコンポーネントが付いている前提。
+            if (other.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
+            // 判定の瞬間の演出
+            if (_attackEffect != null) _attackEffect.Play(_owner);
         }
 
         /// <summary>
@@ -60,7 +100,7 @@ namespace Enemy
         /// </summary>
         public bool IsWithinRange(in Vector3 point)
         {
-            return (Origin() - point).sqrMagnitude <= _radius * _radius;
+            return (Origin() - point).sqrMagnitude <= Radius * Radius;
         }
 
         /// <summary>
@@ -68,56 +108,13 @@ namespace Enemy
         /// </summary>
         protected virtual void OnCollision() { }
 
-        // 当たり判定を出してダメージを与える。
-        private void Collision()
-        {
-            Damage();
-            AttackEffect();
-            OnCollision();
-
-            // タイミングを更新。
-            LastAttackTiming = Time.time;
-        }
-
-        // 球状の当たり判定に引っかかった対象にダメージを与える。
-        private void Damage()
-        {
-            const int HitCapacity = 6;
-
-            Collider[] results = ArrayPool<Collider>.Shared.Rent(HitCapacity);
-            
-            if (Physics.OverlapSphereNonAlloc(Origin(), _radius, results) > 0)
-            {
-                // レイにヒットしたオブジェクトに対して処理を実行
-                foreach (Collider col in results)
-                {
-                    if (col == null) break;
-
-                    // コライダーと同じオブジェクトにコンポーネントが付いている前提。
-                    if (col.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
-                }
-            }
-            
-            Array.Clear(results, 0, results.Length);
-            ArrayPool<Collider>.Shared.Return(results);
-        }
-
-        // 判定の瞬間の演出
-        private void AttackEffect()
-        {
-            if (_attackEffect != null) _attackEffect.Play(_owner);
-        }
-
         // 攻撃の基準となる座標を返す。
         private Vector3 Origin()
         {
             if (_rotate == null) return transform.position;
 
-            // Y軸以外で回転しても正常な値を返す
-            Vector3 f = _rotate.forward * _forwardOffset;
-            Vector3 h = _rotate.up * _heightOffset;
-
-            return transform.position + f + h;
+            if (_hitBox != null) return _hitBox.transform.position;
+            else return transform.position;
         }
     }
 }
