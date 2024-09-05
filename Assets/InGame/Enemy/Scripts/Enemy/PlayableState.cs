@@ -29,7 +29,7 @@ namespace Enemy
             string source = Ref.BlackBoard.DamageSource;
             string seName = "";
             if (source == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
-            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
+            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Damage_01";
             else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
 
             Vector3 p = Ref.Body.Position;
