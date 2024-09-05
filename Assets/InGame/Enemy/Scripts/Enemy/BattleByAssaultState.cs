@@ -1,4 +1,6 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。
@@ -24,8 +26,9 @@
 
         protected override void OnExit()
         {
-            // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
+            // 死亡と撤退どちらの場合でも、武器を下ろす。
             Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
+            Ref.BodyAnimation.SetUpperBodyWeight(0);
         }
 
         protected override void StayIfBattle()
@@ -44,6 +47,9 @@
     /// </summary>
     public class AssaultHoldStep : EnemyAttackActionStep
     {
+        // UpperBodyのWeight。
+        private float _weight;
+
         public AssaultHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // アイドルのアニメーション再生をトリガーする。
@@ -52,6 +58,10 @@
                 int layer = Const.Layer.BaseLayer;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
+
+            // このステップは繰り返されるのでEnterではなく、コンストラクタで初期化。
+            // 最初の1回目の構えの時にのみ、Weightを変更する。
+            _weight = 0;
         }
 
         protected override void Enter()
@@ -66,7 +76,13 @@
 
         protected override BattleActionStep Stay()
         {
-            if (IsAttack()) return Next[0];
+            // UpperBodyのWeightを0から1にしてから次のステップに遷移。
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _weight += dt;
+            _weight = Mathf.Clamp01(_weight);
+            Ref.BodyAnimation.SetUpperBodyWeight(_weight);
+
+            if (_weight >= 1.0f && IsAttack()) return Next[0];
             else return this;
         }
 

@@ -194,5 +194,13 @@ namespace Enemy
         /// アニメーションのfloat型パラメータを取得する。
         /// </summary>
         public float GetFloat(string name) => _animator.GetFloat(name);
+
+        /// <summary>
+        /// UpperBodyのWeightをセットする。
+        /// </summary>
+        public void SetUpperBodyWeight(float value)
+        {
+            _animator.SetLayerWeight(Const.Layer.UpperBody, value);
+        }
     }
 }
