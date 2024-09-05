@@ -10,23 +10,31 @@ namespace Enemy.Boss
     public class LauncherFireState : BattleState
     {
         // 構え->攻撃
-        private BossActionStep[] _steps;
-        private BattleActionStep _currentStep;
+        private BossActionStep[] _fireSteps;
+        private BattleActionStep _currentFireStep;
+        // アニメーションのWeightを調整。
+        private BossActionStep[] _weightSteps;
+        private BattleActionStep _currentWeightStep;
 
         public LauncherFireState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BossActionStep[4];
-            _steps[3] = new LauncherFireEndStep(requiredRef, null);
-            _steps[2] = new LauncherCooldownStep(requiredRef, _steps[3]);
-            _steps[1] = new LauncherFireStep(requiredRef, _steps[2]);
-            _steps[0] = new LauncherHoldStep(requiredRef, _steps[1]);
+            _fireSteps = new BossActionStep[4];
+            _fireSteps[3] = new LauncherFireEndStep(requiredRef, null);
+            _fireSteps[2] = new LauncherCooldownStep(requiredRef, _fireSteps[3]);
+            _fireSteps[1] = new LauncherFireStep(requiredRef, _fireSteps[2]);
+            _fireSteps[0] = new LauncherHoldStep(requiredRef, _fireSteps[1]);
+
+            _weightSteps = new BossActionStep[2];
+            _weightSteps[1] = new LauncherFireEndStep(requiredRef, null);
+            _weightSteps[0] = new FireAnimationWeightControlStep(requiredRef, _weightSteps[1]);
         }
 
         protected override void Enter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LauncherFire;
 
-            _currentStep = _steps[0];
+            _currentFireStep = _fireSteps[0];
+            _currentWeightStep = _weightSteps[0];
         }
 
         protected override void Exit()
@@ -39,15 +47,19 @@ namespace Enemy.Boss
             FunnelLaserSight();
             Hovering();
 
-            _currentStep = _currentStep.Update();
+            _currentFireStep = _currentFireStep.Update();
+            _currentWeightStep = _currentWeightStep.Update();
 
             // 終了ステップまで到達したらアイドル状態に戻る。
-            if (_currentStep.ID == nameof(LauncherFireEndStep)) TryChangeState(StateKey.Idle);
+            bool isFireEnd = _currentFireStep.ID == nameof(LauncherFireEndStep);
+            bool isWeightControlEnd = _currentWeightStep.ID == nameof(LauncherFireEndStep);
+            if (isFireEnd && isWeightControlEnd) TryChangeState(StateKey.Idle);
         }
 
         public override void Dispose()
         {
-            foreach (BattleActionStep s in _steps) s.Dispose();
+            foreach (BattleActionStep s in _fireSteps) s.Dispose();
+            foreach (BattleActionStep s in _weightSteps) s.Dispose();
         }
     }
 
@@ -109,6 +121,10 @@ namespace Enemy.Boss
     public class LauncherFireStep : BossActionStep
     {
         private int _count;
+        // 撃つ度に振り向く。
+        private Vector3 _start;
+        private Vector3 _end;
+        private float _lerp;
 
         public LauncherFireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
@@ -122,6 +138,8 @@ namespace Enemy.Boss
         {
             _count--;
             _count = Mathf.Max(0, _count);
+
+            ResetLookDirection();
         }
 
         protected override void Enter()
@@ -133,10 +151,22 @@ namespace Enemy.Boss
             int max = Ref.BossParams.RangeAttackConfig.MaxContinuous;
             int min = Ref.BossParams.RangeAttackConfig.MinContinuous;
             _count = Random.Range(min, max + 1);
+
+            ResetLookDirection();
         }
 
         protected override BattleActionStep Stay()
         {
+            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
+            Ref.Body.LookForward(look);
+
+            // 振り向き速度
+            const float Speed = 2.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _lerp += dt * Speed;
+            _lerp = Mathf.Clamp01(_lerp);
+
             if (_count <= 0)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
@@ -151,6 +181,16 @@ namespace Enemy.Boss
             {
                 return this;
             }
+        }
+
+        // 1発撃つ度にプレイヤーの方を向く。
+        private void ResetLookDirection()
+        {
+            _start = Ref.Body.Forward;
+            Vector3 pd = Ref.BlackBoard.PlayerDirection;
+            pd.y = 0;
+            _end = pd;
+            _lerp = 0;
         }
     }
 
@@ -173,6 +213,66 @@ namespace Enemy.Boss
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _timer -= dt;
             if (_timer <= 0) return Next[0];
+            else return this;
+        }
+    }
+
+    /// <summary>
+    /// アニメーションに応じたWeightの調整。
+    /// </summary>
+    public class FireAnimationWeightControlStep : BossActionStep
+    {
+        private float _weight;
+        private int _sign;
+        // Weightの値だけで遷移の判定をすると挙動が怪しいので、一度構えた状態になったフラグ。
+        private bool _isHoldExecuted;
+
+        public FireAnimationWeightControlStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
+        {
+            // 構えのアニメーション再生をトリガーする。
+            {
+                string state = Const.Boss.HoldStart;
+                int layer = Const.Layer.UpperBody;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
+            }
+            // アイドルのアニメーション再生をトリガーする。
+            {
+                string state = Const.Boss.Idle;
+                int layer = Const.Layer.UpperBody;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
+            }
+        }
+
+        private void OnHoldAnimationStateEnter()
+        {
+            // 構えたタイミングでWeightを徐々に上げていく。
+            _sign = 1;
+            _isHoldExecuted = true;
+        }
+
+        private void OnIdleAnimationStateEnter()
+        {
+            // アイドルに戻ったタイミングで徐々にWeightを下げていく。
+            _sign = -1;
+        }
+
+        protected override void Enter()
+        {
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            // 変化速度。
+            const float Speed = 2.0f;
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _weight += dt * _sign * Speed;
+            _weight = Mathf.Clamp01(_weight);
+
+            Ref.BodyAnimation.SetUpperBodyWeight(_weight);
+
+            // 1度構えた状態になってアイドルに戻ったかつ、重みが0になった場合。
+            if (_isHoldExecuted && _weight <= 0) return Next[0];
             else return this;
         }
     }
