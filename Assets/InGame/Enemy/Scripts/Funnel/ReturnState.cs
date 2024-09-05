@@ -31,6 +31,8 @@ namespace Enemy.Funnel
 
         protected override void Exit()
         {
+            int index = Ref.BlackBoard.FlySeIndex;
+            AudioWrapper.StopSE(index);
         }
 
         protected override void Stay()

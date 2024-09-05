@@ -30,6 +30,7 @@ namespace Enemy.Funnel
 
         protected override void Stay()
         {
+            PlayDamageSE();
             TraceMove();
             Look();
             Fire();
@@ -37,6 +38,20 @@ namespace Enemy.Funnel
 
             bool isDead = !Ref.BlackBoard.IsAlive;
             if (isDead) { TryChangeState(StateKey.Return); return; }
+        }
+
+        // ダメージ音を再生
+        protected void PlayDamageSE()
+        {
+            string source = Ref.BlackBoard.DamageSource;
+            string seName = "";
+            if (source == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
+            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Damage_01";
+            else if (source == Const.PlayerMissileWeaponName) seName = "SE_Missile_Hit";
+            else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
+
+            Vector3 p = Ref.Body.Position;
+            if (seName != "") AudioWrapper.PlaySE(p, seName);
         }
 
         // ボスを追従するように移動。

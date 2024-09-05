@@ -5,19 +5,19 @@ namespace Enemy
     public static class AudioWrapper
     {
         /// <summary>
-        /// SEを再生
+        /// SEを再生(3D)
         /// </summary>
-        public static void PlaySE(string cueName)
+        public static int PlaySE(Vector3 position, string cueName)
         {
-            CriAudioManager.Instance.SE.Play("SE", cueName);
+            return CriAudioManager.Instance.SE.Play3D(position, "SE", cueName);
         }
 
         /// <summary>
-        /// SEを再生(3D)
+        /// SEを停止
         /// </summary>
-        public static void PlaySE(Vector3 position, string cueName)
+        public static void StopSE(int index)
         {
-            CriAudioManager.Instance.SE.Play3D(position, "SE", cueName);
+            CriAudioManager.Instance.SE.Stop(index);
         }
     }
 }

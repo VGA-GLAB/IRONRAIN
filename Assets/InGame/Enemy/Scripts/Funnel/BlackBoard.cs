@@ -24,6 +24,9 @@ namespace Enemy.Funnel
         // 展開する際のオフセット。
         public Vector3? ExpandOffset { get; set; }
 
+        // 飛んでいるSEを停止するための音の番号
+        public int FlySeIndex { get; set; }
+
         // ボスの方向
         public Vector3 BossDirection { get; set; }
         // ボスの距離の二乗
