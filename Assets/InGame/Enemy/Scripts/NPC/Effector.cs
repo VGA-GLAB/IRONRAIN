@@ -10,10 +10,10 @@ namespace Enemy.NPC
     [System.Serializable]
     public class NpcEffects
     {
-        [SerializeField] private Effect _thruster;
+        [SerializeField] private Effect[] _thruster;
         [SerializeField] private Effect _trail;
 
-        public Effect Thruster => _thruster;
+        public Effect[] Thruster => _thruster;
         public Effect Trail => _trail;
     }
 
@@ -38,8 +38,11 @@ namespace Enemy.NPC
         {
             if (_effects.Thruster == null) return;
 
-            if (value) _effects.Thruster.Play(_ownerTime);
-            else _effects.Thruster.Stop();
+            foreach (Effect e in _effects.Thruster)
+            {
+                if (value) e.Play(_ownerTime);
+                else e.Stop();
+            }
         }
 
         /// <summary>
