@@ -104,6 +104,11 @@ namespace Enemy.Boss
 
             // 既にプレイヤーの反対レーンにいる場合は移動しない。
             if (_rest > 0) NextLane();
+            else
+            {
+                _lerp = 0;
+                _nextIndex = Ref.BlackBoard.CurrentLaneIndex;
+            }
         }
 
         protected override BattleActionStep Stay()
@@ -174,7 +179,7 @@ namespace Enemy.Boss
             Ref.Body.LookForward(look);
 
             // 振り向き速度。
-            const float Speed = 1.0f;
+            const float Speed = 100.0f;
 
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt * (Speed / _diff);
