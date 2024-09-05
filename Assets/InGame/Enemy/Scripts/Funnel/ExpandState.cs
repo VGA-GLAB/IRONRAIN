@@ -29,7 +29,8 @@ namespace Enemy.Funnel
 
             // ファンネルが飛んでいる音(ループしなくて良い？)
             Vector3 p = Ref.Body.Position;
-            AudioWrapper.PlaySE(p, "SE_Funnel_Fly");
+            int index = AudioWrapper.PlaySE(p, "SE_Funnel_Fly");
+            Ref.BlackBoard.FlySeIndex = index;
 
             // ボスの位置に座標を変更し、そこから展開する。
             Vector3 boss = Ref.Boss.transform.position;
