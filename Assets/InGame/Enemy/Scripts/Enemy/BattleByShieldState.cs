@@ -1,4 +1,6 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     /// <summary>
     /// 移動しつつ攻撃するステート。
@@ -24,8 +26,9 @@
 
         protected override void OnExit()
         {
-            // 死亡と撤退どちらの場合でも、武器を下ろすアニメーションをトリガー。
+            // 死亡と撤退どちらの場合でも、武器を下ろす。
             Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
+            Ref.BodyAnimation.SetUpperBodyWeight(0);
         }
 
         protected override void StayIfBattle()
@@ -52,6 +55,13 @@
                 int layer = Const.Layer.BaseLayer;
                 Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnIdleAnimationStateEnter);
             }
+
+            // 構えのアニメーション再生をトリガーする。
+            {
+                string state = Const.Shield.ShieldLoop;
+                int layer = Const.Layer.BaseLayer;
+                Ref.BodyAnimation.RegisterStateEnterCallback(ID, state, layer, OnHoldAnimationStateEnter);
+            }
         }
 
         protected override void Enter()
@@ -62,6 +72,12 @@
         {
             // 盾を構える。
             Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
+        }
+
+        private void OnHoldAnimationStateEnter()
+        {
+            // 攻撃する処理は特にないので、盾構え後そのまま攻撃のアニメーション再生するだけ。
+            Ref.BodyAnimation.SetTrigger(Const.Param.Attack);
         }
 
         protected override BattleActionStep Stay()
