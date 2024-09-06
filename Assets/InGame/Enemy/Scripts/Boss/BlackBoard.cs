@@ -45,8 +45,10 @@ namespace Enemy.Boss
         // 現在のレーン番号。AppearとLaneChangeStateが管理する。
         public int CurrentLaneIndex { get; set; }
 
-        // オフセットを上下移動させる値。
+        // オフセットを上下移動させる値。BattleStateが管理する。
         public float Hovering { get; set; }
+        // 徐々にプレイヤーの方に向けるための前向き。BattleStateが管理する。
+        public Vector3 TurnForward { get; set; }
 
         // このフレームに受けたダメージ量。
         public int Damage { get; set; }

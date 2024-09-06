@@ -124,6 +124,10 @@ namespace Enemy.Boss.FunnelExpand
             if (resume.IsWaitingExecute())
             {
                 resume.Execute();
+
+                // 行動再開と同時にファンネルが攻撃してくる。
+                foreach (FunnelController f in Ref.Funnels) f.FireEnable(true);
+
                 return Next[0];
             }
             else return this;
