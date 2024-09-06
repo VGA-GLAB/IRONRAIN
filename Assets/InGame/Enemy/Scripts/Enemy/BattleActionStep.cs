@@ -8,6 +8,7 @@ namespace Enemy
     /// </summary>
     public abstract class BattleActionStep
     {
+        private string _id = string.Empty;
         private bool _isEnter = true;
 
         public BattleActionStep(params BattleActionStep[] next)
@@ -17,7 +18,15 @@ namespace Enemy
             else Next = next.ToList();
         }
 
-        public string ID => GetType().Name;
+        public string ID
+        {
+            get
+            {
+                if (_id == string.Empty) _id = GetType().Name;
+                return _id;
+            }
+        }
+        
         protected List<BattleActionStep> Next { get; }
 
         protected abstract void Enter();
