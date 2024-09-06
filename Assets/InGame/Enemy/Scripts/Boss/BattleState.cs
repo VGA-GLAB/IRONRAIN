@@ -7,7 +7,6 @@ namespace Enemy.Boss
 {
     /// <summary>
     /// 戦闘中の各行動をステートで管理するための基底クラス。
-    /// Stayで呼ぶ前提のメソッドのみを持ち、呼び出し自体は行わない。
     /// </summary>
     public class BattleState : State<StateKey>
     {
@@ -18,29 +17,41 @@ namespace Enemy.Boss
 
         protected RequiredRef Ref { get; private set; }
 
-        protected override void Enter() { }
-        protected override void Exit() { }
-        protected override void Stay() { }
-
-        /// <summary>
-        /// ダメージを受けた場合に音を再生。
-        /// </summary>
-        protected void PlayDamageSE()
+        protected sealed override void Enter()
         {
-            string source = Ref.BlackBoard.DamageSource;
-            string seName = "";
-            if (source == Const.PlayerRifleWeaponName) seName = "SE_Damage_02";
-            else if (source == Const.PlayerLauncherWeaponName) seName = "SE_Missile_Hit";
-            else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
-
-            Vector3 p = Ref.Body.Position;
-            if (seName != "") AudioWrapper.PlaySE(p, seName);
+            PlayDamageSE();
+            FunnelLaserSight();
+            OnEnter();
         }
 
-        /// <summary>
-        /// ファンネルのレーザーサイトを表示
-        /// </summary>
-        protected void FunnelLaserSight()
+        protected sealed override void Exit()
+        {
+            PlayDamageSE();
+            FunnelLaserSight();
+            OnExit();
+        }
+
+        protected sealed override void Stay()
+        {
+            PlayDamageSE();
+            FunnelLaserSight();
+            OnStay();
+        }
+
+        protected virtual void OnEnter() { }
+        protected virtual void OnExit() { }
+        protected virtual void OnStay() { }
+
+        // ダメージを受けた場合に音を再生。
+        private void PlayDamageSE()
+        {
+            string source = Ref.BlackBoard.DamageSource;
+            Vector3 p = Ref.Body.Position;
+            DamageSE.Play(p, source);
+        }
+
+        // ファンネルのレーザーサイトを表示
+        private void FunnelLaserSight()
         {
             bool isView = Ref.BlackBoard.IsFunnelLaserSight;
             if (isView)

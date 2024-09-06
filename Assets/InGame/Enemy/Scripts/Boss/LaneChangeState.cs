@@ -28,7 +28,7 @@ namespace Enemy.Boss
             _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LaneChange;
 
@@ -36,11 +36,11 @@ namespace Enemy.Boss
             _currentLookStep = _lookSteps[0];
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
             _currentLaneChangeStep = _currentLaneChangeStep.Update();
             _currentLookStep = _currentLookStep.Update();

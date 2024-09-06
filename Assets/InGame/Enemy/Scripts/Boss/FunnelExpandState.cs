@@ -31,7 +31,7 @@ namespace Enemy.Boss
             _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.FunnelExpand;
 
@@ -39,17 +39,14 @@ namespace Enemy.Boss
             _currentLookStep = _lookSteps[0];
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
             // 展開後、プレイヤーの入力があり、敵が動き出すタイミングで実行を黒板に書き込む。
             Ref.BlackBoard.FunnelExpand.Execute();
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
-            PlayDamageSE();
-            FunnelLaserSight();
-
             _currentExpandStep = _currentExpandStep.Update();
             _currentLookStep = _currentLookStep.Update();
 

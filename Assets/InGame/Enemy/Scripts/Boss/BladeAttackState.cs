@@ -35,22 +35,19 @@ namespace Enemy.Boss
             _steps[0] = new ChargeJetPackStep(requiredRef, _steps[1]);
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.BladeAttack;
             
             _currentStep = _steps[0];
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
-            PlayDamageSE();
-            FunnelLaserSight();
-
             _currentStep = _currentStep.Update();
 
             if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);

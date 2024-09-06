@@ -30,7 +30,7 @@ namespace Enemy.Boss
             _weightSteps[0] = new WeightControlStep(requiredRef, _weightSteps[1]);
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LauncherFire;
 
@@ -38,14 +38,12 @@ namespace Enemy.Boss
             _currentWeightStep = _weightSteps[0];
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
-            PlayDamageSE();
-            FunnelLaserSight();
             Hovering();
 
             _currentFireStep = _currentFireStep.Update();
