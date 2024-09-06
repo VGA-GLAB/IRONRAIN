@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Boss.LaneChange;
 
 namespace Enemy.Boss
 {
@@ -19,15 +20,15 @@ namespace Enemy.Boss
         public LaneChangeState(RequiredRef requiredRef) : base(requiredRef)
         {
             _laneChangeSteps = new BossActionStep[2];
-            _laneChangeSteps[1] = new LaneChangeEndStep(requiredRef, null);
+            _laneChangeSteps[1] = new EndStep(requiredRef, null);
             _laneChangeSteps[0] = new LaneChangeStep(requiredRef, _laneChangeSteps[1]);
 
             _lookSteps = new BossActionStep[2];
-            _lookSteps[1] = new LaneChangeEndStep(requiredRef, null);
-            _lookSteps[0] = new LaneChangeLookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _lookSteps[1] = new EndStep(requiredRef, null);
+            _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LaneChange;
 
@@ -35,17 +36,17 @@ namespace Enemy.Boss
             _currentLookStep = _lookSteps[0];
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
             _currentLaneChangeStep = _currentLaneChangeStep.Update();
             _currentLookStep = _currentLookStep.Update();
 
-            bool isLaneChangeEnd = _currentLaneChangeStep.ID == nameof(LaneChangeEndStep);
-            bool isLookEnd = _currentLookStep.ID == nameof(LaneChangeEndStep);
+            bool isLaneChangeEnd = _currentLaneChangeStep.ID == nameof(EndStep);
+            bool isLookEnd = _currentLookStep.ID == nameof(EndStep);
             if (isLaneChangeEnd && isLookEnd) TryChangeState(StateKey.Idle);
         }
 
@@ -66,7 +67,10 @@ namespace Enemy.Boss
         }
         #endregion
     }
+}
 
+namespace Enemy.Boss.LaneChange
+{
     /// <summary>
     /// レーンを移動。
     /// </summary>
@@ -153,14 +157,14 @@ namespace Enemy.Boss
     /// <summary>
     /// プレイヤーに向けて回転。
     /// </summary>
-    public class LaneChangeLookAtPlayerStep : BossActionStep
+    public class LookAtPlayerStep : BossActionStep
     {
         private Vector3 _start;
         private Vector3 _end;
         private float _lerp;
         private int _diff;
 
-        public LaneChangeLookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -194,9 +198,9 @@ namespace Enemy.Boss
     /// <summary>
     /// レーン移動終了。
     /// </summary>
-    public class LaneChangeEndStep : BossActionStep
+    public class EndStep : BossActionStep
     {
-        public LaneChangeEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public EndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

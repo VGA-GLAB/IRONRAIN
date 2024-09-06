@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enemy.Boss.Appear;
 
 namespace Enemy.Boss
 {
@@ -17,7 +18,7 @@ namespace Enemy.Boss
             Ref = requiredRef;
 
             _steps = new BossActionStep[4];
-            _steps[3] = new ApproachEndStep(requiredRef, null);
+            _steps[3] = new EndStep(requiredRef, null);
             _steps[2] = new LookAtPlayerStep(requiredRef, _steps[3]);
             _steps[1] = new MoveToInitialLaneStep(requiredRef, _steps[2]);
             _steps[0] = new WaitPlayerReadyStep(requiredRef, _steps[1]);
@@ -40,14 +41,17 @@ namespace Enemy.Boss
         {
             _currentStep = _currentStep.Update();
 
-            if (_currentStep.ID == nameof(ApproachEndStep)) TryChangeState(StateKey.Idle);
+            if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);
         }
 
         public override void Dispose()
         {
         }
     }
+}
 
+namespace Enemy.Boss.Appear
+{
     /// <summary>
     /// プレイヤーの準備が完了し、フィールドの参照が確保できるまで待つ。
     /// </summary>
@@ -108,7 +112,7 @@ namespace Enemy.Boss
             _lerp += dt * Speed;
             _lerp = Mathf.Clamp01(_lerp);
 
-           return this;
+            return this;
         }
     }
 
@@ -150,9 +154,9 @@ namespace Enemy.Boss
     /// <summary>
     /// 登場演出終了。
     /// </summary>
-    public class ApproachEndStep : BossActionStep
+    public class EndStep : BossActionStep
     {
-        public ApproachEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public EndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enemy.Broken;
 
 namespace Enemy
 {
@@ -15,8 +16,8 @@ namespace Enemy
             Ref = requiredRef;
 
             _steps = new EnemyActionStep[2];
-            _steps[1] = new BrokenEndStep(Ref, null);
-            _steps[0] = new BrokenEffectStep(Ref, _steps[1]);
+            _steps[1] = new EndStep(Ref, null);
+            _steps[0] = new EffectStep(Ref, _steps[1]);
 
             _currentStep = _steps[0];
         }
@@ -45,17 +46,20 @@ namespace Enemy
         {
             _currentStep = _currentStep.Update();
 
-            if (_currentStep.ID == nameof(BrokenEndStep))
+            if (_currentStep.ID == nameof(EndStep))
             {
                 TryChangeState(StateKey.Delete);
             }
         }
     }
+}
 
+namespace Enemy.Broken
+{
     /// <summary>
     /// 破壊された際の演出を再生。
     /// </summary>
-    public class BrokenEffectStep : EnemyActionStep
+    public class EffectStep : EnemyActionStep
     {
         // Lerpでプレイヤーの後方まで徐々に移動させる。
         private float _start;
@@ -65,7 +69,7 @@ namespace Enemy
         // 重力に従って落下させる。
         private float _gravity;
 
-        public BrokenEffectStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next) { }
+        public EffectStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -135,16 +139,16 @@ namespace Enemy
             const float Speed = 10.0f;
 
             // Lerpの補間値を更新。距離が変わっても一定の速度で移動させる。
-            _lerp += Speed / _diff * dt;          
+            _lerp += Speed / _diff * dt;
         }
     }
 
     /// <summary>
     /// 破壊演出終了、画面から消しても良い。
     /// </summary>
-    public class BrokenEndStep : EnemyActionStep
+    public class EndStep : EnemyActionStep
     {
-        public BrokenEndStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public EndStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
         }
     }

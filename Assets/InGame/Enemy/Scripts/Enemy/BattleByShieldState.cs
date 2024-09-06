@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enemy.Shield;
 
 namespace Enemy
 {
@@ -14,7 +15,7 @@ namespace Enemy
         public BattleByShieldState(RequiredRef requiredRef) : base(requiredRef)
         {
             _steps = new EnemyActionStep[1];
-            _steps[0] = new ShieldHoldStep(requiredRef, null);
+            _steps[0] = new HoldStep(requiredRef, null);
 
             _currentStep = _steps[0];
         }
@@ -40,14 +41,17 @@ namespace Enemy
         {
             foreach (BattleActionStep s in _steps) s.Dispose();
         }
-    }
+    }    
+}
 
+namespace Enemy.Shield
+{
     /// <summary>
     /// 盾を構える。
     /// </summary>
-    public class ShieldHoldStep : EnemyActionStep
+    public class HoldStep : EnemyActionStep
     {
-        public ShieldHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public HoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // アイドルのアニメーション再生をトリガーする。
             {

@@ -11,19 +11,17 @@ namespace Enemy.Boss
     {
         public IdleState(RequiredRef requiredRef) : base(requiredRef) { }
 
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.Idle;
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
-            PlayDamageSE();
-            FunnelLaserSight();
             Hovering();
 
             if (IsFunnelExpand()) { FunnelExpand(); return; }
