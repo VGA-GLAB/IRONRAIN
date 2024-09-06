@@ -490,7 +490,7 @@ public class RaderMap : MonoBehaviour
         _isStartTouchPanel = true;
         await UniTask.WaitUntil(() => _isTouch, cancellationToken: ct);
 
-        Debug.Log("通った");
+        //Debug.Log("通った");
     }
 }
 

@@ -94,11 +94,11 @@ public class LockOnSystem : MonoBehaviour
 
     private async UniTaskVoid M()
     {
-        Debug.Log("マルチロックオン開始");
+        //Debug.Log("マルチロックオン開始");
         var r = await MultiLockOnAsync(this.GetCancellationTokenOnDestroy());
         foreach (var v in r)
         {
-            Debug.Log(v.name + "をマルチロックオンした");
+            //Debug.Log(v.name + "をマルチロックオンした");
         }
     }
 
@@ -148,7 +148,7 @@ public class LockOnSystem : MonoBehaviour
         {
             // ターゲット更新
             minEnemyUi.OnButton();
-            Debug.Log(minEnemyUi.Enemy.name + "をロックオン");
+            //Debug.Log(minEnemyUi.Enemy.name + "をロックオン");
         }
        
     }
@@ -220,7 +220,7 @@ public class LockOnSystem : MonoBehaviour
                     var enemyUi = minDisTarget.GetComponent<EnemyUi>();
                     enemyUi.LockOnUi.SetActive(true);
                     CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
-                    Debug.Log("音を鳴らす");
+                    //Debug.Log("音を鳴らす");
                 }
 
                 //ラインレンダラーを設定
@@ -374,10 +374,10 @@ public class LockOnSystem : MonoBehaviour
             var direction = (worldMousePos - rayStartPosition).normalized;
             //Hitしたオブジェクト格納用
             RaycastHit hit;
-            Debug.DrawRay(rayStartPosition, direction, Color.red);
+            //Debug.DrawRay(rayStartPosition, direction, Color.red);
             if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
             {
-                Debug.Log("あたった");
+                //Debug.Log("あたった");
                 fingerPostion = hit.point;
             }
         }
