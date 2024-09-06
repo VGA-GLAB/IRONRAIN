@@ -235,12 +235,8 @@ namespace Enemy.Boss.Qte
             bool isOrderd = Ref.BlackBoard.IsBreakLeftArm;
             if (isQtePosition && isOrderd) return Next[0];
 
-            Vector3 before = Ref.Body.Position;
             Vector3 p = Vector3.Lerp(_start, _end, _lerp);
             Ref.Body.Warp(p);
-            Vector3 after = Ref.Body.Position;
-            Vector3 look = before - after;
-            //if (look != Vector3.zero) Ref.Body.LookForward(before - after);
 
             float speed = Ref.BossParams.BreakLeftArm.MoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;
