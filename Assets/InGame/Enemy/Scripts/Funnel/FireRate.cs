@@ -29,6 +29,14 @@ namespace Enemy.Funnel
             // 現在の時間からn秒後を最初の攻撃タイミングとして設定。
             _index = 0;
             _nextTime = Time.time + _timing[_index];
+
+            // 1発目をランダムなタイミングで発射する。
+            bool isRandomFirstShot = Ref.FunnelParams.RandomFirstShot;
+            if (isRandomFirstShot)
+            {
+                float h = _timing[0] / 2;
+                _nextTime += Random.Range(-h, h);
+            }
         }
 
         // 設定したパラメータを基に、一定間隔の攻撃タイミングを作成。
