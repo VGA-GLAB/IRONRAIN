@@ -125,18 +125,24 @@ namespace Enemy.Broken
             Vector3 p = Ref.Body.Position;
             p.z = pz + l;
 
-            // 重力の強さ。
-            const float Gravity = 0.98f * 30.0f;
-
-            // 重力に従って落下させる。
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _gravity += dt * Gravity;
-            p.y -= _gravity * dt;
+
+            // ある程度アニメーションを再生させたら、重力に従って落下させる。
+            const float DamageMotionEnd = 0.5f;
+
+            if (_lerp > DamageMotionEnd)
+            {
+                // 重力の強さ。
+                const float Gravity = 0.98f * 30.0f;
+
+                _gravity += dt * Gravity;
+                p.y -= _gravity * dt;
+            }
 
             Ref.Body.Warp(p);
 
             // 後方への移動速度。
-            const float Speed = 10.0f;
+            const float Speed = 5.0f;
 
             // Lerpの補間値を更新。距離が変わっても一定の速度で移動させる。
             _lerp += Speed / _diff * dt;
