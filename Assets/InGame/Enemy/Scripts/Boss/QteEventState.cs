@@ -1,5 +1,6 @@
 ﻿using Enemy.Funnel;
 using UnityEngine;
+using Enemy.Boss.Qte;
 
 namespace Enemy.Boss
 {
@@ -29,11 +30,11 @@ namespace Enemy.Boss
             _qteSteps[3] = new FirstCombatStep(requiredRef, _qteSteps[4]);
             _qteSteps[2] = new BreakLeftArmStep(requiredRef, _qteSteps[3]);
             _qteSteps[1] = new FirstChargeStep(requiredRef, _qteSteps[2]);
-            _qteSteps[0] = new LaneChangeToPlayerFrontStep(requiredRef, _qteSteps[1]);
+            _qteSteps[0] = new LaneChangeStep(requiredRef, _qteSteps[1]);
 
             _lookSteps = new BossActionStep[2];
             _lookSteps[1] = new CompleteStep(requiredRef, null);
-            _lookSteps[0] = new ParallelLookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
         }
 
         private RequiredRef Ref { get; set; }
@@ -51,7 +52,6 @@ namespace Enemy.Boss
 
         protected override void Exit()
         {
-            Debug.Log("一連のQTEイベントが終了");
         }
 
         protected override void Stay()
@@ -69,11 +69,14 @@ namespace Enemy.Boss
             foreach (BossActionStep s in _qteSteps) s.Dispose();
         }
     }
+}
 
+namespace Enemy.Boss.Qte
+{
     /// <summary>
     /// プレイヤーの正面レーンに移動。
     /// </summary>
-    public class LaneChangeToPlayerFrontStep : BossActionStep
+    public class LaneChangeStep : BossActionStep
     {
         // Lerpで移動。
         private Vector3 _start;
@@ -85,7 +88,7 @@ namespace Enemy.Boss
         // 移動開始のタイミングで代入、移動完了後にこの値を黒板に書き込む。
         private int _nextIndex;
 
-        public LaneChangeToPlayerFrontStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public LaneChangeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -156,14 +159,14 @@ namespace Enemy.Boss
     /// <summary>
     /// プレイヤーに向けて回転。レーン移動と並行して行う。
     /// </summary>
-    public class ParallelLookAtPlayerStep : BossActionStep
+    public class LookAtPlayerStep : BossActionStep
     {
         private Vector3 _start;
         private Vector3 _end;
         private float _lerp;
         private int _diff;
 
-        public ParallelLookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -280,7 +283,7 @@ namespace Enemy.Boss
         // 次のステップに遷移指せるかのフラグ。
         private bool _isTransition;
 
-        public FirstCombatStep(RequiredRef requiredRef, BossActionStep next) : base (requiredRef, next)
+        public FirstCombatStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             Ref.AnimationEvent.OnWeaponCrash += OnWeaponCrash;
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Boss.Launcher;
 
 namespace Enemy.Boss
 {
@@ -19,14 +20,14 @@ namespace Enemy.Boss
         public LauncherFireState(RequiredRef requiredRef) : base(requiredRef)
         {
             _fireSteps = new BossActionStep[4];
-            _fireSteps[3] = new LauncherFireEndStep(requiredRef, null);
-            _fireSteps[2] = new LauncherCooldownStep(requiredRef, _fireSteps[3]);
-            _fireSteps[1] = new LauncherFireStep(requiredRef, _fireSteps[2]);
-            _fireSteps[0] = new LauncherHoldStep(requiredRef, _fireSteps[1]);
+            _fireSteps[3] = new EndStep(requiredRef, null);
+            _fireSteps[2] = new CooldownStep(requiredRef, _fireSteps[3]);
+            _fireSteps[1] = new FireStep(requiredRef, _fireSteps[2]);
+            _fireSteps[0] = new HoldStep(requiredRef, _fireSteps[1]);
 
             _weightSteps = new BossActionStep[2];
-            _weightSteps[1] = new LauncherFireEndStep(requiredRef, null);
-            _weightSteps[0] = new FireAnimationWeightControlStep(requiredRef, _weightSteps[1]);
+            _weightSteps[1] = new EndStep(requiredRef, null);
+            _weightSteps[0] = new WeightControlStep(requiredRef, _weightSteps[1]);
         }
 
         protected override void Enter()
@@ -51,8 +52,8 @@ namespace Enemy.Boss
             _currentWeightStep = _currentWeightStep.Update();
 
             // 終了ステップまで到達したらアイドル状態に戻る。
-            bool isFireEnd = _currentFireStep.ID == nameof(LauncherFireEndStep);
-            bool isWeightControlEnd = _currentWeightStep.ID == nameof(LauncherFireEndStep);
+            bool isFireEnd = _currentFireStep.ID == nameof(EndStep);
+            bool isWeightControlEnd = _currentWeightStep.ID == nameof(EndStep);
             if (isFireEnd && isWeightControlEnd) TryChangeState(StateKey.Idle);
         }
 
@@ -62,15 +63,18 @@ namespace Enemy.Boss
             foreach (BattleActionStep s in _weightSteps) s.Dispose();
         }
     }
+}
 
+namespace Enemy.Boss.Launcher
+{
     /// <summary>
     /// ロケットランチャー構え。
     /// </summary>
-    public class LauncherHoldStep : BossActionStep
+    public class HoldStep : BossActionStep
     {
         private bool _isTransition;
 
-        public LauncherHoldStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
+        public HoldStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             // 構えのアニメーション再生をトリガーする。
             {
@@ -118,7 +122,7 @@ namespace Enemy.Boss
     /// <summary>
     /// ロケットランチャー発射をn回繰り返す。
     /// </summary>
-    public class LauncherFireStep : BossActionStep
+    public class FireStep : BossActionStep
     {
         private int _count;
         // 撃つ度に振り向く。
@@ -126,7 +130,7 @@ namespace Enemy.Boss
         private Vector3 _end;
         private float _lerp;
 
-        public LauncherFireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
+        public FireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             // リロードのアニメーション再生をトリガーする。
             string state = Const.Boss.Reload;
@@ -197,11 +201,11 @@ namespace Enemy.Boss
     /// <summary>
     /// アニメーションの終了を待って攻撃終了させる。
     /// </summary>
-    public class LauncherCooldownStep : BossActionStep
+    public class CooldownStep : BossActionStep
     {
         private float _timer;
 
-        public LauncherCooldownStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public CooldownStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
@@ -220,14 +224,14 @@ namespace Enemy.Boss
     /// <summary>
     /// アニメーションに応じたWeightの調整。
     /// </summary>
-    public class FireAnimationWeightControlStep : BossActionStep
+    public class WeightControlStep : BossActionStep
     {
         private float _weight;
         private int _sign;
         // Weightの値だけで遷移の判定をすると挙動が怪しいので、一度構えた状態になったフラグ。
         private bool _isHoldExecuted;
 
-        public FireAnimationWeightControlStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
+        public WeightControlStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             // 構えのアニメーション再生をトリガーする。
             {
@@ -280,9 +284,9 @@ namespace Enemy.Boss
     /// <summary>
     /// ロケットランチャーでの攻撃終了。
     /// </summary>
-    public class LauncherFireEndStep : BossActionStep
+    public class EndStep : BossActionStep
     {
-        public LauncherFireEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public EndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enemy.Launcher;
 
 namespace Enemy
 {
@@ -13,9 +14,9 @@ namespace Enemy
         public BattleByLauncherState(RequiredRef requiredRef) : base(requiredRef)
         {
             _steps = new EnemyActionStep[3];
-            _steps[2] = new LauncherEndStep(requiredRef);
-            _steps[1] = new LauncherFireStep(requiredRef, _steps[2]);
-            _steps[0] = new LauncherHoldStep(requiredRef, _steps[1]);
+            _steps[2] = new EndStep(requiredRef);
+            _steps[1] = new FireStep(requiredRef, _steps[2]);
+            _steps[0] = new HoldStep(requiredRef, _steps[1]);
             // 構えと攻撃を繰り返すので、コンストラクタではなく、メソッドから遷移先を追加。
             _steps[2].AddNext(_steps[0]);
 
@@ -44,16 +45,19 @@ namespace Enemy
             foreach (EnemyActionStep s in _steps) s.Dispose();
         }
     }
+}
 
+namespace Enemy.Launcher
+{
     /// <summary>
     /// ロケットランチャー構え。
     /// </summary>
-    public class LauncherHoldStep : EnemyAttackActionStep
+    public class HoldStep : EnemyAttackActionStep
     {
         // UpperBodyのWeight。
         private float _weight;
 
-        public LauncherHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public HoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // アイドルのアニメーション再生をトリガーする。
             {
@@ -98,12 +102,12 @@ namespace Enemy
     /// <summary>
     /// ロケットランチャー発射。
     /// </summary>
-    public class LauncherFireStep : EnemyAttackActionStep
+    public class FireStep : EnemyAttackActionStep
     {
         // アニメーションの再生をトリガーと同時に再生されるとは限らないので、一応フラグ。
         private bool _isAnimationEnter;
 
-        public LauncherFireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public FireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
             {
@@ -143,9 +147,9 @@ namespace Enemy
     /// <summary>
     /// ロケットランチャー発射終了、構えに戻す。
     /// </summary>
-    public class LauncherEndStep : EnemyAttackActionStep
+    public class EndStep : EnemyAttackActionStep
     {
-        public LauncherEndStep(RequiredRef _, params EnemyActionStep[] next) : base(_, next)
+        public EndStep(RequiredRef _, params EnemyActionStep[] next) : base(_, next)
         {
         }
 

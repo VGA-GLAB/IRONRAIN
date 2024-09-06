@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enemy.Boss.BladeAttack;
 
 namespace Enemy.Boss
 {
@@ -26,7 +27,7 @@ namespace Enemy.Boss
             ReturnRoute route = new ReturnRoute();
 
             _steps = new BossActionStep[6];
-            _steps[5] = new BladeAttackEndStep(requiredRef, null);
+            _steps[5] = new EndStep(requiredRef, null);
             _steps[4] = new LookMyLaneForwardStep(requiredRef, _steps[5]);
             _steps[3] = new ReturnMyLaneStep(requiredRef, route, _steps[4]);
             _steps[2] = new LookLeftOrRightStep(requiredRef, route, _steps[3]);
@@ -52,7 +53,7 @@ namespace Enemy.Boss
 
             _currentStep = _currentStep.Update();
 
-            if (_currentStep.ID == nameof(BladeAttackEndStep)) TryChangeState(StateKey.Idle);
+            if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);
         }
 
         public override void Dispose()
@@ -60,7 +61,10 @@ namespace Enemy.Boss
             foreach (BattleActionStep s in _steps) s.Dispose();
         }
     }
+}
 
+namespace Enemy.Boss.BladeAttack
+{
     /// <summary>
     /// ジェットパックが光ってチャージ。
     /// </summary>
@@ -197,8 +201,8 @@ namespace Enemy.Boss
         private Vector3 _end;
         private float _lerp;
 
-        public LookLeftOrRightStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next) 
-            : base(requiredRef, next) 
+        public LookLeftOrRightStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next)
+            : base(requiredRef, next)
         {
             _route = route;
         }
@@ -257,7 +261,7 @@ namespace Enemy.Boss
         private float _radius;
 
         public ReturnMyLaneStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next)
-            : base(requiredRef, next) 
+            : base(requiredRef, next)
         {
             _route = route;
         }
@@ -336,9 +340,9 @@ namespace Enemy.Boss
     /// <summary>
     /// 近接攻撃終了。
     /// </summary>
-    public class BladeAttackEndStep : BossActionStep
+    public class EndStep : BossActionStep
     {
-        public BladeAttackEndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public EndStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {

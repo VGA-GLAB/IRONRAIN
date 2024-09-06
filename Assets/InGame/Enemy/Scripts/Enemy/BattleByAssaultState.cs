@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Enemy.Assault;
 
 namespace Enemy
 {
@@ -13,8 +14,8 @@ namespace Enemy
         public BattleByAssaultState(RequiredRef requiredRef) : base(requiredRef)
         {
             _steps = new EnemyActionStep[2];
-            _steps[1] = new AssaultFireStep(requiredRef, null);
-            _steps[0] = new AssaultHoldStep(requiredRef, _steps[1]);
+            _steps[1] = new FireStep(requiredRef, null);
+            _steps[0] = new HoldStep(requiredRef, _steps[1]);
 
             _currentStep = _steps[0];
         }
@@ -41,16 +42,19 @@ namespace Enemy
             foreach (EnemyActionStep s in _steps) s.Dispose();
         }
     }
+}
 
+namespace Enemy.Assault
+{
     /// <summary>
     /// アサルトライフル構え。
     /// </summary>
-    public class AssaultHoldStep : EnemyAttackActionStep
+    public class HoldStep : EnemyAttackActionStep
     {
         // UpperBodyのWeight。
         private float _weight;
 
-        public AssaultHoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public HoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // アイドルのアニメーション再生をトリガーする。
             {
@@ -95,9 +99,9 @@ namespace Enemy
     /// <summary>
     /// アサルトライフル発射。
     /// </summary>
-    public class AssaultFireStep : EnemyAttackActionStep
+    public class FireStep : EnemyAttackActionStep
     {
-        public AssaultFireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
+        public FireStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // 発射のアニメーション再生をトリガーし、攻撃したことを黒板に書き込む。
             {
