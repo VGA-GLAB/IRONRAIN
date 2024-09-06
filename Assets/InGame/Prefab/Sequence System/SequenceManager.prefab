@@ -57,7 +57,7 @@ MonoBehaviour:
   - rid: 1578471541103656976
   - rid: 4919532367010594846
   - rid: 4919532367010594857
-  - rid: 7776351557909479466
+  - rid: 3800739166916706314
   - rid: 4919532251061157901
   - rid: 4919532251061157903
   - rid: 4919532251061157905
@@ -135,6 +135,265 @@ MonoBehaviour:
       type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 5
+    - rid: 3800739166916706314
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706315
+        - rid: 3800739166916706316
+        - rid: 3800739166916706317
+        - rid: 3800739166916706318
+        - rid: 3800739166916706319
+        - rid: 3800739166916706320
+        - rid: 3800739166916706321
+        - rid: 3800739166916706322
+        - rid: 3800739166916706323
+        - rid: 3800739166916706324
+    - rid: 3800739166916706315
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 3
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706325
+        - rid: 3800739166916706326
+        - rid: 3800739166916706327
+    - rid: 3800739166916706316
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 4
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706328
+        - rid: 3800739166916706329
+        - rid: 3800739166916706330
+    - rid: 3800739166916706317
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 5
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706331
+        - rid: 3800739166916706332
+        - rid: 3800739166916706333
+    - rid: 3800739166916706318
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 6
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706334
+        - rid: 3800739166916706335
+        - rid: 3800739166916706336
+    - rid: 3800739166916706319
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 7
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706337
+        - rid: 3800739166916706338
+        - rid: 3800739166916706339
+    - rid: 3800739166916706320
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 8
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706340
+        - rid: 3800739166916706341
+        - rid: 3800739166916706342
+    - rid: 3800739166916706321
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 9
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706343
+        - rid: 3800739166916706344
+        - rid: 3800739166916706345
+    - rid: 3800739166916706322
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: 10
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706346
+        - rid: 3800739166916706347
+    - rid: 3800739166916706323
+      type: {class: WaitGoalPointSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739166916706324
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: DefeatEnemy
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739166916706348
+        - rid: 3800739166916706349
+        - rid: 3800739166916706350
+        - rid: 3800739166916706351
+        - rid: 3800739166916706352
+        - rid: 3800739166916706353
+        - rid: 3800739166916706354
+        - rid: 3800739166916706355
+    - rid: 3800739166916706325
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 3
+    - rid: 3800739166916706326
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 3
+    - rid: 3800739166916706327
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739166916706328
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 4
+    - rid: 3800739166916706329
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 4
+    - rid: 3800739166916706330
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739166916706331
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 5
+    - rid: 3800739166916706332
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 5
+    - rid: 3800739166916706333
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+    - rid: 3800739166916706334
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 6
+    - rid: 3800739166916706335
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 6
+    - rid: 3800739166916706336
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+    - rid: 3800739166916706337
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 7
+    - rid: 3800739166916706338
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 7
+    - rid: 3800739166916706339
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739166916706340
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 8
+    - rid: 3800739166916706341
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 8
+    - rid: 3800739166916706342
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+    - rid: 3800739166916706343
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 9
+    - rid: 3800739166916706344
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 9
+    - rid: 3800739166916706345
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+    - rid: 3800739166916706346
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 10
+    - rid: 3800739166916706347
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 10
+    - rid: 3800739166916706348
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 3
+    - rid: 3800739166916706349
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 4
+    - rid: 3800739166916706350
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 5
+    - rid: 3800739166916706351
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 6
+    - rid: 3800739166916706352
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 7
+    - rid: 3800739166916706353
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 8
+    - rid: 3800739166916706354
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 9
+    - rid: 3800739166916706355
+      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 10
     - rid: 4919532251061157901
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -402,74 +661,6 @@ MonoBehaviour:
       data:
         _totalSec: 0
         _removeState: 232
-    - rid: 4919532367010594863
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 3
-    - rid: 4919532367010594864
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 5
-    - rid: 4919532367010594865
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 4
-    - rid: 4919532367010594866
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 5
-    - rid: 4919532367010594867
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 5
-    - rid: 4919532367010594868
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-    - rid: 4919532367010594869
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 6
-    - rid: 4919532367010594870
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-    - rid: 4919532367010594871
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 7
-    - rid: 4919532367010594872
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 5
-    - rid: 4919532367010594873
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 8
-    - rid: 4919532367010594874
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-    - rid: 4919532367010594875
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 9
-    - rid: 4919532367010594876
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-    - rid: 4919532367010594877
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 10
     - rid: 7776351557909479438
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -585,142 +776,6 @@ MonoBehaviour:
       data:
         _totalSec: 0
         _addState: 168
-    - rid: 7776351557909479466
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479467
-        - rid: 7776351557909479468
-        - rid: 7776351557909479469
-        - rid: 7776351557909479470
-        - rid: 7776351557909479471
-        - rid: 7776351557909479472
-        - rid: 7776351557909479473
-        - rid: 7776351557909479482
-        - rid: 7776351557909479474
-    - rid: 7776351557909479467
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 3
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479475
-        - rid: 4919532367010594863
-        - rid: 4919532367010594864
-    - rid: 7776351557909479468
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 4
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479476
-        - rid: 4919532367010594865
-        - rid: 4919532367010594866
-    - rid: 7776351557909479469
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 5
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479477
-        - rid: 4919532367010594867
-        - rid: 4919532367010594868
-    - rid: 7776351557909479470
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 6
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479478
-        - rid: 4919532367010594869
-        - rid: 4919532367010594870
-    - rid: 7776351557909479471
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 7
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479479
-        - rid: 4919532367010594871
-        - rid: 4919532367010594872
-    - rid: 7776351557909479472
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 8
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479480
-        - rid: 4919532367010594873
-        - rid: 4919532367010594874
-    - rid: 7776351557909479473
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 9
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479481
-        - rid: 4919532367010594875
-        - rid: 4919532367010594876
-    - rid: 7776351557909479474
-      type: {class: WaitGoalPointSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 7776351557909479475
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 3
-    - rid: 7776351557909479476
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 4
-    - rid: 7776351557909479477
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 5
-    - rid: 7776351557909479478
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 6
-    - rid: 7776351557909479479
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 7
-    - rid: 7776351557909479480
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 8
-    - rid: 7776351557909479481
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 9
-    - rid: 7776351557909479482
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: 10
-        _isSkip: 0
-        _sequences:
-        - rid: 7776351557909479483
-        - rid: 4919532367010594877
-    - rid: 7776351557909479483
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 10
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
