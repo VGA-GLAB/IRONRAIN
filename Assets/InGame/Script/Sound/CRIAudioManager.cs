@@ -214,12 +214,14 @@ public class CriAudioManager
                 return;
             }
 
-            await Task.Delay((int)_cueData[index].CueInfo.length, _cueData[index].CancellationTokenSource.Token);
-
+            while (_cueData[index].Playback.GetStatus() == CriAtomExPlayback.Status.Playing)
+            {
+                await Task.Delay((int)_cueData[index].CueInfo.length, _cueData[index].CancellationTokenSource.Token);
+            }
+            
             if (_cueData.TryRemove(index, out CriPlayerData outData))
             {
                 _removedCueDataIndex.Add(index);
-                outData.Source?.Dispose();
             }
         }
     }
