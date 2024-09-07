@@ -21,6 +21,8 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] private float _startAnimationDuration = 1f;
     [Header("PokeCollision")]
     [SerializeField] private GameObject _pokeCollision;
+    [Header("WeaponCollider")]
+    [SerializeField] private GameObject _weaponCollider;
     [Header("アニメーション")] [SerializeField] private VideoPlayer _activeUiAnimation;
 
     [Header("起動シーケンスのタイムライン")] [SerializeField]
@@ -111,6 +113,7 @@ public class LaunchManager : MonoBehaviour
         _weaponUiAnimation.targetTexture.Release();
 
         _pokeCollision.SetActive(false);
+        _weaponCollider.SetActive(false);
     }
 
     // Update is called once per frame
@@ -195,6 +198,7 @@ public class LaunchManager : MonoBehaviour
         
         await UniTask.Delay(TimeSpan.FromSeconds(_animationWait));
         _pokeCollision.SetActive(true);
+        _weaponCollider.SetActive(true);
         _isActivate = true;
         //Debug.Log("終了");
     }
@@ -317,5 +321,6 @@ public class LaunchManager : MonoBehaviour
         _minimapUi.alpha = 1;
         _isTouch = true;
         _pokeCollision.SetActive(true);
+        _weaponCollider.SetActive(true);
     }
 }
