@@ -79,7 +79,7 @@ public class LockOnSystem : MonoBehaviour
         if(_isFinsishMultiLock)
         {
             //ラインレンダラーを設定
-            _lineRenderer.positionCount = 0;
+            //_lineRenderer.positionCount = 0;
             //ラインレンダラーの更新
             if (_temp.Count >= 1 && LimitLineRendere() )
             {
@@ -224,7 +224,7 @@ public class LockOnSystem : MonoBehaviour
                 }
 
                 //ラインレンダラーを設定
-                _lineRenderer.positionCount = 0;
+                //_lineRenderer.positionCount = 0;
                 //ラインレンダラーの更新
                 if (_temp.Count >= 1 && LimitLineRendere())
                 {
@@ -277,7 +277,7 @@ public class LockOnSystem : MonoBehaviour
                 }
 
                 //ラインレンダラーを設定
-                _lineRenderer.positionCount = 0;
+                //_lineRenderer.positionCount = 0;
                 //ラインレンダラーの更新
                 if (_temp.Count >= 1 && LimitLineRendere())
                 {
