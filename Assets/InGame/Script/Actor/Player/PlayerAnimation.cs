@@ -55,7 +55,7 @@ namespace IronRain.Player
         //
         public async UniTask QteGuard() 
         {
-            _anim.SetTrigger("PlayerGuardTrigger");
+            _anim.SetTrigger("PileGuardTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
             PlayerLoopTiming.Update, _token);
         }
