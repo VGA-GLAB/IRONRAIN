@@ -67,7 +67,7 @@ namespace IronRain.Player
         /// <summary>
         /// 武器切り替え
         /// </summary>
-        private async UniTaskVoid WeaponChenge()
+        public async UniTaskVoid WeaponChenge()
         {
             _playerEnvroment.AddState(PlayerStateType.SwitchingArms);
             _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(false);
