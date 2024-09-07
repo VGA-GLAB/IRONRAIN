@@ -27,6 +27,10 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Tooltip("半径")] private float _radius = 6f;
     [Header("縮尺")]
     [SerializeField] private float _scaleFactor = 1.5f;
+    [Header("X座標の倍率")]
+    [SerializeField] private float _horizontalMagnification = 1f;
+    [Header("Y座標の倍率")]
+    [SerializeField] private float _verticalMagnification = 1f;
     [Header("ロックオン可能距離")]
     [SerializeField, Tooltip("ロックオン可能距離")] private float _rockonDis = 100f;
 
@@ -117,7 +121,7 @@ public class RaderMap : MonoBehaviour
                 //enemyDir.x = Mathf.Clamp(enemyDir.x * _scaleFactor, -_raderLength, _raderLength); // ベクトルの長さを制限
                 //enemyDir.z = Mathf.Clamp(enemyDir.z * _scaleFactor, -_raderLength, _raderLength);
                 //赤点の位置を決める
-                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _horizontalMagnification + _offset.x, enemyDir.z * _radius * _verticalMagnification + _offset.y, _offset.z);
             }
         }
         else
