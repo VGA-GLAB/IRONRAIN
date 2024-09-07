@@ -24,6 +24,7 @@ namespace Enemy.NPC
 
             States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
+            BodyAnimation = new BodyAnimation(this);
             Effector = new Effector(this);
         }
 
@@ -41,6 +42,7 @@ namespace Enemy.NPC
 
         public Dictionary<StateKey, State<StateKey>> States { get; }
         public Body Body { get; }
+        public BodyAnimation BodyAnimation { get; }
         public Effector Effector { get; }
     }
 }

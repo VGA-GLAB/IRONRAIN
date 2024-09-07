@@ -73,6 +73,7 @@ namespace Enemy.Funnel
         public ExpandSettings Expand => _expand;
         public int MaxHp => _maxHp;
         public float FireRate => _fireRate;
+        public bool RandomFirstShot => _randomFirstShot;
         public float Accuracy => _accuracy;
         public MoveSpeedSettings MoveSpeed => _moveSpeed;
         public Armor Armor { get => Armor.None; }

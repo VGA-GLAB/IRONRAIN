@@ -182,7 +182,7 @@ namespace IronRain.Player
             var theta = (moveDistance / r);
 
             _totalThrusterMove += moveDistance;
-            Debug.Log($"θ:{theta}r:{r}total{_totalThrusterMove}start{_startTheta}");
+            //Debug.Log($"θ:{theta}r:{r}total{_totalThrusterMove}start{_startTheta}");
             var cos = Mathf.Cos((_totalThrusterMove + 270) * Mathf.Deg2Rad);
             var x = cos * r;
             var z = Mathf.Sin((_totalThrusterMove + 270) * Mathf.Deg2Rad) * r;
