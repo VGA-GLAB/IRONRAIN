@@ -131,16 +131,17 @@ public class RaderMap : MonoBehaviour
                 for (int i = 0; i < Enemies.Count; i++)
                 {
                     AgentScript agent = Enemies[i].GetComponent<AgentScript>();
+
                     Vector3 enemyDir = Enemies[i].transform.position;
                     //敵の高さとプレイヤーの高さを合わせる
                     enemyDir.y = _player.position.y;
+                    //敵とプレイヤーのベクトルを取ってくる
                     enemyDir = Enemies[i].transform.position - _player.position;
 
                     enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
-                    enemyDir = Vector3.ClampMagnitude(enemyDir, _raderLength); // ベクトルの長さを制限
-
+                    enemyDir *= _scaleFactor;
                     //赤点の位置を決める
-                    agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius + _offset.x, enemyDir.z * _radius + _offset.y, _offset.z);
+                    agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _horizontalMagnification + _offset.x, enemyDir.z * _radius * _verticalMagnification + _offset.y, _offset.z);
                 }
             }
             else
