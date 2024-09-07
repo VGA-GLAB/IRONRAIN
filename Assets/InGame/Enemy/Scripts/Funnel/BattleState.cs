@@ -26,6 +26,8 @@ namespace Enemy.Funnel
 
         protected override void Exit()
         {
+            // 再度展開された後、再びボスから射撃許可を出すため。
+            Ref.BlackBoard.IsFireEnabled = false;
         }
 
         protected override void Stay()

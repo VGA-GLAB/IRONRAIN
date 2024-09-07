@@ -36,14 +36,18 @@ namespace Enemy.Boss
 
             _currentFireStep = _fireSteps[0];
             _currentWeightStep = _weightSteps[0];
+
+            TurnToPlayer(isReset: true);
         }
 
         protected override void OnExit()
         {
+            TurnToPlayer();
         }
 
         protected override void OnStay()
         {
+            TurnToPlayer();
             Hovering();
 
             _currentFireStep = _currentFireStep.Update();
@@ -123,10 +127,6 @@ namespace Enemy.Boss.Launcher
     public class FireStep : BossActionStep
     {
         private int _count;
-        // 撃つ度に振り向く。
-        private Vector3 _start;
-        private Vector3 _end;
-        private float _lerp;
 
         public FireStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
@@ -140,8 +140,6 @@ namespace Enemy.Boss.Launcher
         {
             _count--;
             _count = Mathf.Max(0, _count);
-
-            ResetLookDirection();
         }
 
         protected override void Enter()
@@ -153,22 +151,10 @@ namespace Enemy.Boss.Launcher
             int max = Ref.BossParams.RangeAttackConfig.MaxContinuous;
             int min = Ref.BossParams.RangeAttackConfig.MinContinuous;
             _count = Random.Range(min, max + 1);
-
-            ResetLookDirection();
         }
 
         protected override BattleActionStep Stay()
         {
-            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
-            Ref.Body.LookForward(look);
-
-            // 振り向き速度
-            const float Speed = 2.0f;
-
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * Speed;
-            _lerp = Mathf.Clamp01(_lerp);
-
             if (_count <= 0)
             {
                 // 射撃のアニメーションが繰り返されるようになっているため、
@@ -183,16 +169,6 @@ namespace Enemy.Boss.Launcher
             {
                 return this;
             }
-        }
-
-        // 1発撃つ度にプレイヤーの方を向く。
-        private void ResetLookDirection()
-        {
-            _start = Ref.Body.Forward;
-            Vector3 pd = Ref.BlackBoard.PlayerDirection;
-            pd.y = 0;
-            _end = pd;
-            _lerp = 0;
         }
     }
 

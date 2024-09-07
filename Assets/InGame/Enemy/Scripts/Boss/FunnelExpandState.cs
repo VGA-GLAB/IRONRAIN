@@ -12,31 +12,24 @@ namespace Enemy.Boss
     public class FunnelExpandState : BattleState
     {
         // プレイヤーの正面のレーンに移動し展開、展開後はプレイヤーの入力があるまで待機。
-        private BossActionStep[] _expandSteps;
-        private BattleActionStep _currentExpandStep;
-        // 並行してプレイヤーの方向を向く回転を行う。
-        private BossActionStep[] _lookSteps;
-        private BattleActionStep _currentLookStep;
+        private BossActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
         public FunnelExpandState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _expandSteps = new BossActionStep[4];
-            _expandSteps[3] = new EndStep(requiredRef, null);
-            _expandSteps[2] = new WaitPlayerInputStep(requiredRef, _expandSteps[3]);
-            _expandSteps[1] = new ExpandStep(requiredRef, _expandSteps[2]);
-            _expandSteps[0] = new LaneChangeStep(requiredRef, _expandSteps[1]);
-
-            _lookSteps = new BossActionStep[2];
-            _lookSteps[1] = new EndStep(requiredRef, null);
-            _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _steps = new BossActionStep[5];
+            _steps[4] = new EndStep(requiredRef, null);
+            _steps[3] = new WaitPlayerInputStep(requiredRef, _steps[4]);
+            _steps[2] = new ExpandStep(requiredRef, _steps[3]);
+            _steps[1] = new WaitAnimationStep(requiredRef, _steps[2]);
+            _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
         }
 
         protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.FunnelExpand;
 
-            _currentExpandStep = _expandSteps[0];
-            _currentLookStep = _lookSteps[0];
+            _currentStep = _steps[0];
         }
 
         protected override void OnExit()
@@ -47,12 +40,9 @@ namespace Enemy.Boss
 
         protected override void OnStay()
         {
-            _currentExpandStep = _currentExpandStep.Update();
-            _currentLookStep = _currentLookStep.Update();
+            _currentStep = _currentStep.Update();
 
-            bool isExpandEnd = _currentExpandStep.ID == nameof(EndStep);
-            bool isLookEnd = _currentLookStep.ID == nameof(EndStep);
-            if (isExpandEnd && isLookEnd) TryChangeState(StateKey.Idle);
+            if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);
         }
     }
 }
@@ -73,9 +63,9 @@ namespace Enemy.Boss.FunnelExpand
     /// <summary>
     /// レーン移動と並行してプレイヤーを向く。
     /// </summary>
-    public class LookAtPlayerStep : LaneChange.LookAtPlayerStep
+    public class WaitAnimationStep : LaneChange.WaitAnimationStep
     {
-        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
+        public WaitAnimationStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
             // 現状、LaneChangeStateのものと全く同じ。
         }
@@ -124,6 +114,10 @@ namespace Enemy.Boss.FunnelExpand
             if (resume.IsWaitingExecute())
             {
                 resume.Execute();
+
+                // 行動再開と同時にファンネルが攻撃してくる。
+                foreach (FunnelController f in Ref.Funnels) f.FireEnable(true);
+
                 return Next[0];
             }
             else return this;
