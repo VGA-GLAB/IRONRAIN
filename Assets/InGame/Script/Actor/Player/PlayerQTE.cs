@@ -35,7 +35,7 @@ namespace IronRain.Player
             var enemyTypeReader = other.GetComponentInParent<EnemyController>();
             if (enemyTypeReader == null) return;
             //盾持ちの敵が入ってきたら
-            if (enemyTypeReader.Params.Type == EnemyType.Shield)
+            if (enemyTypeReader.Params.Type == EnemyType.Shield && other.tag == "QteTrigger")
             {
                 _guid = enemyTypeReader.BlackBoard.ID;
                 QTEModel.StartQTE(_guid, QteType.NormalQte).Forget();

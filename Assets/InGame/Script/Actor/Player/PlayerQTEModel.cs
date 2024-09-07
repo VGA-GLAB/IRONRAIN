@@ -99,22 +99,35 @@ namespace IronRain.Player
 
                 ProvidePlayerInformation.TimeScale = 0.2f;
                 ProvidePlayerInformation.StartQte.OnNext(_enemyId);
+                var tutorialTextBoxController = _playerEnvroment.TutorialTextBoxCon;
 
                 _qteType.Value = QTEState.QTE1;
+                await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
+                await tutorialTextBoxController.DoTextChangeAsync("左レバーを引いてください。", 0.05f, startToken);
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, startToken);
+                tutorialTextBoxController.ClearText();
+                tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
                 await _playerEnvroment.PlayerAnimation.QteAttack();
 
                 await _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f);
+                await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
+                await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE2;
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
+                tutorialTextBoxController.ClearText();
+                tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
                 await _playerEnvroment.PlayerAnimation.NextAnim();
 
                 await _playerEnvroment.PlayerAnimation.AnimationEndStop(0.98f);
+                await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
+                await tutorialTextBoxController.DoTextChangeAsync("左レバーの[R2]を押してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE3;
                 await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, startToken);
                 _qteType.Value = QTEState.QTENone;
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
+                tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
+                tutorialTextBoxController.ClearText();
 
                 await _playerEnvroment.PlayerAnimation.PileFire();
                 await _playerEnvroment.PlayerAnimation.PileFinish();
@@ -123,6 +136,8 @@ namespace IronRain.Player
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
                 _playerEnvroment.RemoveState(PlayerStateType.QTE);
+                await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.05f, startToken);
+                tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
 
                 _qteResultType = QTEResultType.Success;
                 return _qteResultType;
@@ -179,16 +194,16 @@ namespace IronRain.Player
         {
             switch (qteProgressType)
             {
-                case QTEState.QtePreparation: 
-                    {
-                        if(_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
-                        await _playerEnvroment.PlayerTransform.DOLocalMove(_qteStartPos.position, 2f)
-                            .ToUniTask(TweenCancelBehaviour.Kill, token);
-                        break;
-                    }
+                //case QTEState.QtePreparation: 
+                //    {
+                //        if(_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
+                //        await _playerEnvroment.PlayerTransform.DOLocalMove(_qteStartPos.position, 2f)
+                //            .ToUniTask(TweenCancelBehaviour.Kill, token);
+                //        break;
+                //    }
                 case QTEState.QTE1:
                     {
-                        if (_qteType.Value != QTEState.QtePreparation) Debug.LogError("意図しないQteの呼び出しがされています");
+                        //if (_qteType.Value != QTEState.QtePreparation) Debug.LogError("意図しないQteの呼び出しがされています");
                         _playerEnvroment.AddState(PlayerStateType.EnterBossQte);
                         _qteType.Value = QTEState.QTE1;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
