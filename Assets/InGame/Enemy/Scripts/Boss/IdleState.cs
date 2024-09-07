@@ -24,21 +24,21 @@ namespace Enemy.Boss
         {
             Hovering();
 
-            //if (IsFunnelExpand()) { FunnelExpand(); return; }
+            if (IsFunnelExpand()) { FunnelExpand(); return; }
 
-            //if (IsQteStarted()) { QTE(); return; }
+            if (IsQteStarted()) { QTE(); return; }
 
-            //bool isMelee = IsMeleeAttackSelected();
-            //bool isRange = IsRangeAttackSelected();
-            //if (isMelee && isRange)
-            //{
-            //    if (IsMeleeAttackRandomSelected()) MeleeAttack();
-            //    else RangeFire();
-            //}
-            //else if (isMelee) MeleeAttack();
-            //else if (isRange) RangeFire();
-            //else LaneChange();
-            LaneChange();
+            bool isMelee = IsMeleeAttackSelected();
+            bool isRange = IsRangeAttackSelected();
+            if (isMelee && isRange)
+            {
+                if (IsMeleeAttackRandomSelected()) MeleeAttack();
+                else RangeFire();
+            }
+            else if (isMelee) MeleeAttack();
+            else if (isRange) RangeFire();
+            else LaneChange();
+
             // 行動一覧。
             void MeleeAttack() => TryChangeState(StateKey.BladeAttack);
             void RangeFire() => TryChangeState(StateKey.LauncherFire);

@@ -195,47 +195,6 @@ namespace Enemy.Boss.LaneChange
     }
 
     /// <summary>
-    /// プレイヤーに向けて回転。
-    /// </summary>
-    public class LookAtPlayerStep : BossActionStep
-    {
-        private Vector3 _start;
-        private Vector3 _end;
-        private float _lerp;
-        private int _diff;
-
-        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
-
-        protected override void Enter()
-        {
-            _start = Ref.Body.Forward;
-            // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
-            // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
-            Vector3 pl = Ref.Field.GetPlayerLane();
-            pl.y = 0;
-            _end = pl;
-            _lerp = 0;
-
-            _diff = Ref.Field.GetMinMoveCount();
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
-            Ref.Body.LookForward(look);
-
-            // 振り向き速度。
-            const float Speed = 100.0f;
-
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * (Speed / _diff);
-
-            if (_lerp > 1.0f) return Next[0];
-            else return this;
-        }
-    }
-
-    /// <summary>
     /// レーン移動終了。
     /// </summary>
     public class EndStep : BossActionStep
