@@ -10,13 +10,14 @@ namespace IronRain.Player
     public class PlayerQTEModel : IPlayerStateModel
     {
         public IReactiveProperty<QTEState> QTEType => _qteType;
+        
+        [SerializeField] private Transform _qteStartPos;
 
         private PlayerEnvroment _playerEnvroment;
         private PlayerSetting.PlayerParams _playerParams;
         private ReactiveProperty<QTEState> _qteType = new();
         private QTEResultType _qteResultType;
         private Guid _enemyId;
-        private Transform _qteStartPos;
 
         public void Dispose()
         {
