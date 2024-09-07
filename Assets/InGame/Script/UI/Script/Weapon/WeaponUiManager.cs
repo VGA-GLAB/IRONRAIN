@@ -125,88 +125,47 @@ public class WeaponUiManager : MonoBehaviour
         {
             _rocketLauncherUiGameObject.transform.SetAsLastSibling();
         }
-        
+
         if (_weaponController != null)
         {
-            _weaponController.WeaponModel.OnShot += WeaponShot;
+            //_weaponController.WeaponModel.OnShot += WeaponShot;
             _weaponController.WeaponModel.OnWeaponChange += ChangeWeapon;
         }
     }
 
+    private void Update()
+    {
+        WeaponShot();
+    }
     /// <summary>
     /// 弾を打つときに呼ぶ処理
     /// </summary>
     public void WeaponShot()
     {
-        if (WeaponUiState == WeaponUiState.Assault)
+        //_assultCurrentCount--;
+        //テキストを更新
+        _assultBulletCurrentText.text = _assultBase.CurrentBullets.ToString();
+        //ゲージを更新
+        _assultBulletWeaponGauge.fillAmount = (float)_assultBase.CurrentBullets / _assultBulletMaxCount;
+        _assultBulletCircleGauge.fillAmount = (float)_assultBase.CurrentBullets / _assultBulletMaxCount;
+        
+        //_rocketLauncherCurrentCount--;
+        //テキストを更新
+        _rocketLauncherBulletCurrentText.text = _rocketBase.CurrentBullets.ToString();
+        //ゲージを更新
+        _rocketLauncherBulletWeaponGauge.fillAmount =
+            (float)_rocketBase.CurrentBullets / _rocketLauncherBulletMaxCount;
+        _rocketLauncherBulletCircleGauge.fillAmount =
+            (float)_rocketBase.CurrentBullets / _rocketLauncherBulletMaxCount;
+
+        if(_assultBase.IsReload.Value)
         {
-            if (IsAssultReload)
-                return;
-
-            _assultCurrentCount--;
-            //テキストを更新
-            _assultBulletCurrentText.text = _assultCurrentCount.ToString();
-            //ゲージを更新
-            _assultBulletWeaponGauge.fillAmount = _assultCurrentCount / _assultBulletMaxCount;
-            _assultBulletCircleGauge.fillAmount = _assultCurrentCount / _assultBulletMaxCount;
-
-            if (_assultCurrentCount <= 0)
-            {
-                IsAssultReload = true;
-                // DoTweenを使ってゲージのfillAmountをアニメーション
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(_assultBulletWeaponGauge.DOFillAmount(1, _assultReloadTime).SetEase(Ease.Linear))
-                    .SetLink(this.gameObject);
-                sequence.Join(_assultBulletCircleGauge.DOFillAmount(1, _assultReloadTime).SetEase(Ease.Linear)
-                    .OnUpdate(() => UpdatePercentageText(WeaponUiState.Assault)).OnComplete(() =>
-                    {
-                        IsAssultReload = false;
-                        _assultCurrentCount = _assultBulletMaxCount;
-                    }).SetLink(this.gameObject)
-                );
-
-                sequence.SetAutoKill(true);
-
-                // シーケンスを開始
-                sequence.Play();
-            }
+            ReloadAssault();
         }
-        else
+
+        if(_rocketBase.IsReload.Value)
         {
-            if (IsRocketLauncherReload)
-                return;
-
-            _rocketLauncherCurrentCount--;
-            //テキストを更新
-            _rocketLauncherBulletCurrentText.text = _rocketLauncherCurrentCount.ToString();
-            //ゲージを更新
-            _rocketLauncherBulletWeaponGauge.fillAmount =
-                _rocketLauncherCurrentCount / _rocketLauncherBulletMaxCount;
-            _rocketLauncherBulletCircleGauge.fillAmount =
-                _rocketLauncherCurrentCount / _rocketLauncherBulletMaxCount;
-
-            if (_rocketLauncherCurrentCount <= 0)
-            {
-                IsRocketLauncherReload = true;
-                // DoTweenを使ってゲージのfillAmountをアニメーション
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(_rocketLauncherBulletWeaponGauge.DOFillAmount(1, _assultReloadTime)
-                        .SetEase(Ease.Linear))
-                    .SetLink(this.gameObject);
-                sequence.Join(_rocketLauncherBulletCircleGauge.DOFillAmount(1, _assultReloadTime)
-                    .SetEase(Ease.Linear)
-                    .OnUpdate(() => UpdatePercentageText(WeaponUiState.RocketLauncher)).OnComplete(() =>
-                    {
-                        IsRocketLauncherReload = false;
-                        _rocketLauncherCurrentCount = _rocketLauncherBulletMaxCount;
-                    }).SetLink(this.gameObject)
-                );
-
-                sequence.SetAutoKill(true);
-
-                // シーケンスを開始
-                sequence.Play();
-            }
+            ReloadRocketLauncher();
         }
     }
 
@@ -227,6 +186,67 @@ public class WeaponUiManager : MonoBehaviour
         }
     }
 
+    public void ReloadAssault()
+    {
+        if (IsAssultReload)
+            return;
+
+        IsAssultReload = true;
+        // DoTweenを使ってゲージのfillAmountをアニメーション
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_assultBulletWeaponGauge.DOFillAmount(1, _assultReloadTime).SetEase(Ease.Linear))
+            .SetLink(this.gameObject);
+        sequence.Join(_assultBulletCircleGauge.DOFillAmount(1, _assultReloadTime).SetEase(Ease.Linear)
+            .OnUpdate(() => UpdatePercentageText(WeaponUiState.Assault)).OnComplete(() =>
+            {
+                IsAssultReload = false;
+                _assultCurrentCount = _assultBulletMaxCount;
+            }).SetLink(this.gameObject)
+        );
+
+        sequence.SetAutoKill(true);
+
+        // シーケンスを開始
+        sequence.Play();
+    }
+
+    public void ReloadRocketLauncher()
+    {
+        if (IsRocketLauncherReload)
+            return;
+
+        IsRocketLauncherReload = true;
+        // DoTweenを使ってゲージのfillAmountをアニメーション
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_rocketLauncherBulletWeaponGauge.DOFillAmount(1, _assultReloadTime)
+                .SetEase(Ease.Linear))
+            .SetLink(this.gameObject);
+        sequence.Join(_rocketLauncherBulletCircleGauge.DOFillAmount(1, _assultReloadTime)
+            .SetEase(Ease.Linear)
+            .OnUpdate(() => UpdatePercentageText(WeaponUiState.RocketLauncher)).OnComplete(() =>
+            {
+                IsRocketLauncherReload = false;
+                _rocketLauncherCurrentCount = _rocketLauncherBulletMaxCount;
+            }).SetLink(this.gameObject)
+        );
+
+        sequence.SetAutoKill(true);
+
+        // シーケンスを開始
+        sequence.Play();
+    }
+    public void ReloadWeapon()
+    {
+        if (WeaponUiState == WeaponUiState.Assault)
+        {
+            
+        }
+        else
+        {
+            
+        }
+
+    }
     /// <summary>
     /// ％テキストを更新する処理
     /// </summary>
