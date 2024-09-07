@@ -120,10 +120,10 @@ public class LockOnSystem : MonoBehaviour
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
         AllTargets(_targets, _parent);
 
-        foreach (Transform t in _targets)
-        {
-            if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
-        }
+        //foreach (Transform t in _targets)
+        //{
+        //    if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
+        //}
 
         float minDistance = float.MaxValue;
         EnemyUi minEnemyUi = null;

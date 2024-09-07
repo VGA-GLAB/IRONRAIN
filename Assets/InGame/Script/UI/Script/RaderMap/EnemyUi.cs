@@ -10,8 +10,8 @@ public class EnemyUi : MonoBehaviour
     public GameObject Enemy;
     /// <summary>表示するレーダーマップ </summary>
     [NonSerialized] public RaderMap RaderMap;
-    [Header("ロックオンされていない時のUi")]
-    public GameObject DefultUi;
+    //[Header("ロックオンされていない時のUi")]
+    //public GameObject DefultUi;
     [Header("ロックオンされている時のUi")]
     public GameObject LockOnUi;
     
@@ -21,7 +21,7 @@ public class EnemyUi : MonoBehaviour
         //レーダーテストを検索する
         RaderMap = GameObject.FindObjectOfType<RaderMap>();
         //デフォルトUiを非表示にする
-        DefultUi.SetActive(true);
+        //DefultUi.SetActive(true);
         //ロックオンUiを非表示にする
         LockOnUi.SetActive(false);
     }
