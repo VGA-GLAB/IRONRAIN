@@ -90,7 +90,7 @@ namespace Enemy.Boss.Appear
         protected override void Enter()
         {
             // CurrentRane.Valueの仕様で初期値が0、移動後に始めて値が代入されるため、ここは手動で合わせる。
-            const int LaneIndex = 10;
+            const int LaneIndex = 9;
             Ref.BlackBoard.CurrentLaneIndex = LaneIndex;
 
             _start = Ref.Body.Position;

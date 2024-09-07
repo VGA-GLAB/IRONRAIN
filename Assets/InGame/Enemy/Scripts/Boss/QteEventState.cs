@@ -7,66 +7,56 @@ namespace Enemy.Boss
     /// <summary>
     /// 左腕破壊~2回目のQTEまでの一連のイベントのステート。
     /// </summary>
-    public class QteEventState : State<StateKey>
+    public class QteEventState : BattleState
     {
-        private BossActionStep[] _qteSteps;
-        private BattleActionStep _currentQteStep;
-        // プレイヤーの正面のレーンに移動と並列して向かしておく。
-        private BossActionStep[] _lookSteps;
-        private BattleActionStep _currentLookStep;
+        private BossActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
-        public QteEventState(RequiredRef requiredRef) : base(requiredRef.States)
+        public QteEventState(RequiredRef requiredRef) : base(requiredRef)
         {
-            Ref = requiredRef;
-
-            _qteSteps = new BossActionStep[11];
-            _qteSteps[10] = new CompleteStep(requiredRef, null);
-            _qteSteps[9] = new PenetrateStep(requiredRef, _qteSteps[10]);
-            _qteSteps[8] = new FinalChargeStep(requiredRef, _qteSteps[9]);
-            _qteSteps[7] = new SecondKnockBackStep(requiredRef, _qteSteps[8]);
-            _qteSteps[6] = new SecondCombatStep(requiredRef, _qteSteps[7]);
-            _qteSteps[5] = new SecondChargeStep(requiredRef, _qteSteps[6]);
-            _qteSteps[4] = new FirstKnockBackStep(requiredRef, _qteSteps[5]);
-            _qteSteps[3] = new FirstCombatStep(requiredRef, _qteSteps[4]);
-            _qteSteps[2] = new BreakLeftArmStep(requiredRef, _qteSteps[3]);
-            _qteSteps[1] = new FirstChargeStep(requiredRef, _qteSteps[2]);
-            _qteSteps[0] = new LaneChangeStep(requiredRef, _qteSteps[1]);
-
-            _lookSteps = new BossActionStep[2];
-            _lookSteps[1] = new CompleteStep(requiredRef, null);
-            _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _steps = new BossActionStep[12];
+            _steps[11] = new CompleteStep(requiredRef, null);
+            _steps[10] = new PenetrateStep(requiredRef, _steps[11]);
+            _steps[9] = new FinalChargeStep(requiredRef, _steps[10]);
+            _steps[8] = new SecondKnockBackStep(requiredRef, _steps[9]);
+            _steps[7] = new SecondCombatStep(requiredRef, _steps[8]);
+            _steps[6] = new SecondChargeStep(requiredRef, _steps[7]);
+            _steps[5] = new FirstKnockBackStep(requiredRef, _steps[6]);
+            _steps[4] = new FirstCombatStep(requiredRef, _steps[5]);
+            _steps[3] = new BreakLeftArmStep(requiredRef, _steps[4]);
+            _steps[2] = new FirstChargeStep(requiredRef, _steps[3]);
+            _steps[1] = new WaitAnimationStep(requiredRef, _steps[2]);
+            _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
         }
 
-        private RequiredRef Ref { get; set; }
-
-        protected override void Enter()
+        protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.QteEvent;
 
-            _currentQteStep = _qteSteps[0];
-            _currentLookStep = _lookSteps[0];
+            _currentStep = _steps[0];
+
+            TurnToPlayer(isReset: true);
 
             // QTEが始まったらファンネルに攻撃をやめさせる。
             foreach (FunnelController f in Ref.Funnels) f.FireEnable(false);
         }
 
-        protected override void Exit()
+        protected override void OnExit()
         {
         }
 
-        protected override void Stay()
+        protected override void OnStay()
         {
-            _currentQteStep = _currentQteStep.Update();
-            _currentLookStep = _currentLookStep.Update();
+            TurnToPlayer();
 
-            bool isQteEnd = _currentQteStep.ID == nameof(CompleteStep);
-            bool isLookEnd = _currentLookStep.ID == nameof(CompleteStep);
-            if (isQteEnd && isLookEnd) TryChangeState(StateKey.Defeated);
+            _currentStep = _currentStep.Update();
+
+            if (_currentStep.ID == nameof(CompleteStep)) TryChangeState(StateKey.Defeated);
         }
 
         public override void Dispose()
         {
-            foreach (BossActionStep s in _qteSteps) s.Dispose();
+            foreach (BossActionStep s in _steps) s.Dispose();
         }
     }
 }
@@ -76,124 +66,22 @@ namespace Enemy.Boss.Qte
     /// <summary>
     /// プレイヤーの正面レーンに移動。
     /// </summary>
-    public class LaneChangeStep : BossActionStep
+    public class LaneChangeStep : LaneChange.LaneChangeStep
     {
-        // Lerpで移動。
-        private Vector3 _start;
-        private Vector3 _end;
-        private float _lerp;
-        // このステップ内で複数回移動させる。
-        private int _rest;
-        private int _sign;
-        // 移動開始のタイミングで代入、移動完了後にこの値を黒板に書き込む。
-        private int _nextIndex;
-
-        public LaneChangeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
-
-        protected override void Enter()
+        public LaneChangeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
         {
-            // 現在のレーンから時計回りと反時計回りで移動する場合の移動回数が少ない方を選択。
-            int clockwise = Ref.Field.GetClockwiseMoveCount();
-            int counterclockwise = Ref.Field.GetCounterClockwiseMoveCount();
-            if (clockwise <= counterclockwise)
-            {
-                // 時計回り
-                _rest = clockwise;
-                _sign = -1;
-            }
-            else
-            {
-                // 反時計回り
-                _rest = counterclockwise;
-                _sign = 1;
-            }
-
-            // 既にプレイヤーの反対レーンにいる場合は移動しない。
-            if (_rest > 0) NextLane();
-            else
-            {
-                _start = Ref.Body.Position;
-                _end = _start;
-                _lerp = 0;
-                _nextIndex = Ref.BlackBoard.CurrentLaneIndex;
-            }
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            if (_lerp >= 1)
-            {
-                Ref.BlackBoard.CurrentLaneIndex = _nextIndex;
-
-                if (_rest == 0) return Next[0];
-                else NextLane();
-            }
-
-            Vector3 p = Vector3.Lerp(_start, _end, _lerp);
-            Ref.Body.Warp(p);
-
-            // レーン間の移動速度。
-            const float Speed = 6.0f;
-
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * Speed;
-            _lerp = Mathf.Clamp01(_lerp);
-
-            return this;
-        }
-
-        // 移動先のレーンを更新。
-        private void NextLane()
-        {
-            _rest--;
-
-            if (_sign == -1) _nextIndex = Ref.Field.GetLeftLaneIndex();
-            else if (_sign == 1) _nextIndex = Ref.Field.GetRightLaneIndex();
-
-            _start = Ref.Body.Position;
-            _end = Ref.Field.GetLanePointWithOffset(_nextIndex);
-            _lerp = 0;
+            // レーンチェンジのものと全く同じ。
         }
     }
 
     /// <summary>
-    /// プレイヤーに向けて回転。レーン移動と並行して行う。
+    /// 左右移動のアニメーションを待つ。
     /// </summary>
-    public class LookAtPlayerStep : BossActionStep
+    public class WaitAnimationStep : LaneChange.WaitAnimationStep
     {
-        private Vector3 _start;
-        private Vector3 _end;
-        private float _lerp;
-        private int _diff;
-
-        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
-
-        protected override void Enter()
+        public WaitAnimationStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
-            _start = Ref.Body.Forward;
-            // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
-            // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
-            Vector3 pl = Ref.Field.GetPlayerLane();
-            pl.y = 0;
-            _end = pl;
-            _lerp = 0;
-
-            _diff = Ref.Field.GetMinMoveCount();
-        }
-
-        protected override BattleActionStep Stay()
-        {
-            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
-            Ref.Body.LookForward(look);
-
-            // 振り向き速度。
-            const float Speed = 100.0f;
-
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * (Speed / _diff);
-
-            if (_lerp > 1.0f) return Next[0];
-            else return this;
+            // レーンチェンジのものと全く同じ。
         }
     }
 

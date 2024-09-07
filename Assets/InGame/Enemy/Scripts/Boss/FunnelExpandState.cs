@@ -30,17 +30,26 @@ namespace Enemy.Boss
             Ref.BlackBoard.CurrentState = StateKey.FunnelExpand;
 
             _currentStep = _steps[0];
+
+            TurnToPlayer(isReset: true);
         }
 
         protected override void OnExit()
         {
+            TurnToPlayer();
+
             // 展開後、プレイヤーの入力があり、敵が動き出すタイミングで実行を黒板に書き込む。
             Ref.BlackBoard.FunnelExpand.Execute();
         }
 
         protected override void OnStay()
         {
+            TurnToPlayer();
+
             _currentStep = _currentStep.Update();
+
+            // プレイヤーの入力を待つ間、動きが無いのでホバリングさせておく。
+            if (_currentStep.ID == nameof(WaitPlayerInputStep)) Hovering();
 
             if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);
         }
@@ -104,7 +113,6 @@ namespace Enemy.Boss.FunnelExpand
 
         protected override void Enter()
         {
-
         }
 
         protected override BattleActionStep Stay()
