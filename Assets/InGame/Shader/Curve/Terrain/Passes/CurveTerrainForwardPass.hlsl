@@ -15,7 +15,7 @@ Varyings CurveTerrainForwardVertex(Attributes input)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
     output.UV01 = TRANSFORM_TEX(input.UV0, _MainTex);
-    OUTPUT_LIGHTMAP_UV(input.UV1, unity_LightmapST, output.staticLightmapUV);
+    OUTPUT_LIGHTMAP_UV(input.UV1, unity_LightmapST, output.staticLightMapUV);
     const VertexPositionInputs vertexInput = GetVertexPositionInputs(input.PositionOS.xyz);
 
     VertexPositionInputs curvedVertexInput;
