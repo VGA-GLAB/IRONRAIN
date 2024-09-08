@@ -32,6 +32,8 @@ namespace IronRain.Player
             public float MaxReturnLaneStrength => _maxReturnLaneStrength;
             public float QteTimeLimit => _qteTimeLimit;
             public int Hp => _hp;
+            public float ThrusterCt => _thrusterCt;
+            public float ChangeWeaponCt => _changeWeaponCt;
 
             [Header("PlayerのHp")]
             [SerializeField] private int _hp;
@@ -52,10 +54,16 @@ namespace IronRain.Player
             [SerializeField] private float _returnLaneStrength;
             [Header("レーンに戻そうとする力の強さの最大値")]
             [SerializeField] private float _maxReturnLaneStrength;
+            [Header("スラスタークールタイム")]
+            [SerializeField] private float _thrusterCt;
 
             [Header("===QTEの設定===")]
             [Header("QTEの時間制限")]
-            [SerializeField] float _qteTimeLimit;
+            [SerializeField] private float _qteTimeLimit;
+
+            [Header("===武器の設定===")]
+            [Header("武器変更のクールタイム")]
+            [SerializeField] private float _changeWeaponCt;
         }
 
     }

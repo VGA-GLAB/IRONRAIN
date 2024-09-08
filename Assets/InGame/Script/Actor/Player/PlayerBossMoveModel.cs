@@ -29,6 +29,7 @@ namespace IronRain.Player
         private Transform _centerPoint;
         private List<Vector3> _laneList = new();
         private ReactiveProperty<int> _currentLane = new();
+        private bool _isCanThruster;
 
         public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
@@ -63,9 +64,9 @@ namespace IronRain.Player
             }
         }
 
-        public void LanePosIns() 
+        public void LanePosIns()
         {
-            for (int i = 0; i < _laneList.Count; i++) 
+            for (int i = 0; i < _laneList.Count; i++)
             {
                 GameObject.Instantiate(_cubeObj, _laneList[i] + _centerPoint.position, Quaternion.identity);
             }
@@ -92,61 +93,53 @@ namespace IronRain.Player
 
         private void Move()
         {
+            if (_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster)) return;
+
             //左スラスター
             if (_rightController.ControllerDir.x == -1)
             {
-                //スラスター中ではなかった場合
-                if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
-                {
-                    _playerEnvroment.AddState(PlayerStateType.Thruster);
-                    //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
-                    var nextPoint = NextLane(-1);
+                _playerEnvroment.AddState(PlayerStateType.Thruster);
+                //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum * -1);
+                var nextPoint = NextLane(-1);
 
-                    UniTask.Create(async () =>
-                    {
-                        await _playerEnvroment.PlayerTransform
-                        .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
-                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
-                        .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
-                        .ToUniTask(cancellationToken: _thrusterCancell.Token);
-                        _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
-                        _playerEnvroment.RemoveState(PlayerStateType.Thruster);
-                    });
-                }
+                UniTask.Create(async () =>
+                {
+                    await _playerEnvroment.PlayerTransform
+                    .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
+                    .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                    .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                    .ToUniTask(cancellationToken: _thrusterCancell.Token);
+                    _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+                    await UniTask.WaitForSeconds(_params.ThrusterCt);
+                    _playerEnvroment.RemoveState(PlayerStateType.Thruster);
+                });
             }
             //右スラスター
             else if (_rightController.ControllerDir.x == 1)
             {
-                //スラスター中ではなかった場合
-                if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.Thruster))
+                _playerEnvroment.AddState(PlayerStateType.Thruster);
+                //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum);
+                var nextPoint = NextLane(1);
+                UniTask.Create(async () =>
                 {
-                    _playerEnvroment.AddState(PlayerStateType.Thruster);
-                    //var nextPoint = NextThrusterMovePoint(_params.ThrusterMoveNum);
-                    var nextPoint = NextLane(1);
-                    UniTask.Create(async () =>
-                    {
-                        await _playerEnvroment.PlayerTransform
-                        .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
-                        .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
-                        .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
-                        .ToUniTask(cancellationToken: _thrusterCancell.Token);
-                        _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
-                        _playerEnvroment.RemoveState(PlayerStateType.Thruster);
-                    });
-                }
-            }
-            //２ギア
-            else
-            {
+                    await _playerEnvroment.PlayerTransform
+                    .DOLocalMove(nextPoint, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
+                    .OnComplete(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                    .OnKill(() => _playerEnvroment.PlayerTransform.localPosition = nextPoint)
+                    .ToUniTask(cancellationToken: _thrusterCancell.Token);
+                    _playerEnvroment.PlayerTransform.LookAt(_centerPoint);
+                    await UniTask.WaitForSeconds(_params.ThrusterCt);
+                    _playerEnvroment.RemoveState(PlayerStateType.Thruster);
+                });
             }
         }
 
-        public void  ThrusterCancell(PlayerStateType playerState) 
+        public void ThrusterCancell(PlayerStateType playerState)
         {
-            if (playerState.HasFlag(PlayerStateType.EnterBossQte)) 
+            if (playerState.HasFlag(PlayerStateType.EnterBossQte))
             {
                 _thrusterCancell.Cancel();
-            } 
+            }
         }
 
 
@@ -173,7 +166,7 @@ namespace IronRain.Player
             return position;
         }
 
-        private Vector3 NextThrusterMovePoint(float moveDistance, Vector3 pos) 
+        private Vector3 NextThrusterMovePoint(float moveDistance, Vector3 pos)
         {
             pos.y = 0;
             var centerPosition = Vector3.zero;
@@ -200,14 +193,14 @@ namespace IronRain.Player
 
             nextPos = NextThrusterMovePoint(0, nextPos);
             _laneList.Add(nextPos);
-            for (int i = 1; i < idx; i++) 
+            for (int i = 1; i < idx; i++)
             {
                 nextPos = NextThrusterMovePoint(_params.ThrusterMoveNum, nextPos);
                 _laneList.Add(nextPos);
             }
         }
 
-        private Vector3 NextLane(int isRight) 
+        private Vector3 NextLane(int isRight)
         {
             var nextLane = _currentLane.Value + isRight;
             if (nextLane < 0)
@@ -218,7 +211,7 @@ namespace IronRain.Player
             {
                 _currentLane.Value = 0;
             }
-            else 
+            else
             {
                 _currentLane.Value += isRight;
             }
