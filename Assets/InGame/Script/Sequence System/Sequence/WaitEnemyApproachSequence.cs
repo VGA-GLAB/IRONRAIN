@@ -23,13 +23,20 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            if (_targetEnemies.Count <= 0) return;
-
+            if (_targetEnemies is null || _targetEnemies.Count == 0) 
+            {
+                await UniTask.CompletedTask;
+                return;
+            }
             var enemyApproachAsync = new UniTask[_targetEnemies.Count];
 
             for (int i = 0; i < _targetEnemies.Count; i++)
             {
-                enemyApproachAsync[i] = UniTask.WaitUntil(() => _targetEnemies[i].BlackBoard.IsApproachCompleted, cancellationToken: ct);
+                var target = _targetEnemies[i];
+                enemyApproachAsync[i] = UniTask.WaitUntil(
+                    () => target.BlackBoard.IsApproachCompleted,
+                    cancellationToken: ct
+                    );
             }
 
             await UniTask.WhenAll(enemyApproachAsync);
