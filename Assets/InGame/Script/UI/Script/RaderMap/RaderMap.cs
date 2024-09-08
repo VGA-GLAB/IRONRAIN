@@ -43,8 +43,10 @@ public class RaderMap : MonoBehaviour
     [Header("ボス戦でのレーダーの端までの長さ")]
     [SerializeField] private float _bossRaderLength = 120f;
 
-    //[Header("ボス戦でレーダー横の倍率")]
-    //[SerializeField] private float _widthLeverage = 1f;
+    [Header("ボス戦でレーダー横の倍率")]
+    [SerializeField] private float _bossHorizontalMagnification = 100f;
+    [Header("ボス戦でレーダー横の倍率")]
+    [SerializeField] private float _bossVerticalMagnification = 10f;
     [Header("ボス戦でのファンネルの縦方向の位置補正")]
     [SerializeField] private float _hightLeverage = 1f;
     [Header("ボス戦でのファンネルの横間隔の最低値")]
@@ -141,7 +143,7 @@ public class RaderMap : MonoBehaviour
                     enemyDir = Quaternion.Inverse(_player.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
                     enemyDir *= _scaleFactor;
                     //赤点の位置を決める
-                    agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _horizontalMagnification + _offset.x, enemyDir.z * _radius * _verticalMagnification + _offset.y, _offset.z);
+                    agent.RectTransform.anchoredPosition3D = new Vector3(enemyDir.x * _radius * _bossHorizontalMagnification + _offset.x, enemyDir.z * _radius * _bossVerticalMagnification + _offset.y, _offset.z);
                 }
             }
             else
