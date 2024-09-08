@@ -10,7 +10,8 @@ public class WeaponUiTouch : MonoBehaviour
 
     private void Start()
     {
-        _weaponController = FindObjectOfType<PlayerWeaponController>();
+        if( _weaponController == null)
+            _weaponController = FindObjectOfType<PlayerWeaponController>();
     }
 
     private void OnTriggerEnter(Collider other)

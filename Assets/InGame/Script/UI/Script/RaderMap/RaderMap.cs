@@ -45,7 +45,7 @@ public class RaderMap : MonoBehaviour
 
     [Header("ボス戦でレーダー横の倍率")]
     [SerializeField] private float _bossHorizontalMagnification = 100f;
-    [Header("ボス戦でレーダー横の倍率")]
+    [Header("ボス戦でレーダー縦の倍率")]
     [SerializeField] private float _bossVerticalMagnification = 10f;
     [Header("ボス戦でのファンネルの縦方向の位置補正")]
     [SerializeField] private float _hightLeverage = 1f;
