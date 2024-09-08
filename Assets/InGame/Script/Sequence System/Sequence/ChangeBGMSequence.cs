@@ -21,6 +21,7 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            await UniTask.Yield();
             PlayBGM();
 
             await UniTask.WaitForSeconds(_totalSec, cancellationToken: ct);
