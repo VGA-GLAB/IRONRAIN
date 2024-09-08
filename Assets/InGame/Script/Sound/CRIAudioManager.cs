@@ -28,6 +28,7 @@ public class CriAudioManager
     {
         _masterVolume = new Volume();
         _bgm = new (_masterVolume);
+        _bgmAmbient = new(_masterVolume);
         _se = new (_masterVolume);
         _voice = new (_masterVolume);
     }
@@ -37,6 +38,9 @@ public class CriAudioManager
 
     /// <summary>BGMを流すチャンネル</summary>
     private CriSingleChannel _bgm = default;
+
+    /// <summary>BGMAmbientを流すチャンネル</summary>
+    private CriSingleChannel _bgmAmbient = default;
 
     /// <summary>SEを流すチャンネル</summary>
     private CriMultiChannel _se = default;
@@ -49,6 +53,9 @@ public class CriAudioManager
 
     /// <summary>BGMのチャンネル</summary>
     public ICustomChannel BGM => _bgm;
+
+    /// <summary>AmbientBGMを流すチャンネル</summary>
+    public ICustomChannel AmbientBGM => _bgmAmbient;
 
     /// <summary>SEのチャンネル</summary>
     public ICustomChannel SE => _se;
