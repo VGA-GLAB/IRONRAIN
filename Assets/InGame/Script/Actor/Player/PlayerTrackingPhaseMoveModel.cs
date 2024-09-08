@@ -167,7 +167,6 @@ namespace IronRain.Player
             await _playerEnvroment.PlayerTransform
             .DOMoveX(nextPoint.x, _params.ThrusterMoveTime * ProvidePlayerInformation.TimeScale)
             .ToUniTask(cancellationToken: _rootDestroyToken);
-            _playerEnvroment.RemoveState(PlayerStateType.Thruster);
 
             //Playerを指定のレーンに戻しを始めるかどうか
             if (_currentLane > _params.RestrictionLane || _currentLane < _params.RestrictionLane * -1 && !_isRetunRale)
@@ -180,6 +179,9 @@ namespace IronRain.Player
             {
                 _isForcingMove = true;
             }
+
+            await UniTask.WaitForSeconds(_playerEnvroment.PlayerSetting.PlayerParamsData.ThrusterCt);
+            _playerEnvroment.RemoveState(PlayerStateType.Thruster);
         }
     }
 }
