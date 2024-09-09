@@ -121,7 +121,12 @@ namespace Enemy.Boss.Qte
             // 位置に着いた後、シーケンス側からの呼び出しで次のステップに遷移。
             bool isQtePosition = Ref.BlackBoard.IsStandingOnQtePosition;
             bool isOrderd = Ref.BlackBoard.IsBreakLeftArm;
-            if (isQtePosition && isOrderd) return Next[0];
+            if (isQtePosition && isOrderd)
+            {
+                // 見てくれの邪魔なので切断と同時にロケットランチャーを消す。
+                Ref.RangeEquip.RendererDisable();
+                return Next[0];
+            }
 
             Vector3 p = Vector3.Lerp(_start, _end, _lerp);
             Ref.Body.Warp(p);

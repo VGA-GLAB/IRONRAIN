@@ -44,6 +44,8 @@ namespace Enemy
             // 雑魚敵とボスの両用。
             if (TryGetComponent(out EnemyController e)) _owner = e.BlackBoard;
             else if (TryGetComponent(out BossController b)) _owner = b.BlackBoard;
+
+            DisableHitBox();
         }
 
         private void OnEnable()
