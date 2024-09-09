@@ -183,37 +183,47 @@ public class LockOnSystem : MonoBehaviour
     {
         if (_isMouseFlag)
         {
-            // カーソルの位置を指先に合わせる。
-            FingertipCursor(_fingertip, _cursor);
-            Transform minDisTarget = null;
-            float minDistance = float.MaxValue;
-            // カーソルと接触しているTargetを一時的に保持。
-            foreach (Transform t in _targets)
+            if (Input.GetKeyDown(KeyCode.M) && _isMouseMultiLock)
             {
-                if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+                _isMouseMultiLock = false;
+                foreach (Transform transform in _targets)
                 {
-                    if (!_temp.Contains(t))
-                    {
-                        //カーソルに近い物を判定する
-                        float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
-                        if (dis <= minDistance)
-                        {
-                            minDistance = dis;
-                            minDisTarget = t;
-                        }
-                    }
+                    _temp.Add(transform);
+                    var enemyUi = transform.GetComponent<EnemyUi>();
+                    enemyUi.LockOnUi.SetActive(true);
                 }
             }
+            //// カーソルの位置を指先に合わせる。
+            //FingertipCursor(_fingertip, _cursor);
+            //Transform minDisTarget = null;
+            //float minDistance = float.MaxValue;
+            //// カーソルと接触しているTargetを一時的に保持。
+            //foreach (Transform t in _targets)
+            //{
+            //    if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+            //    {
+            //        if (!_temp.Contains(t))
+            //        {
+            //            //カーソルに近い物を判定する
+            //            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+            //            if (dis <= minDistance)
+            //            {
+            //                minDistance = dis;
+            //                minDisTarget = t;
+            //            }
+            //        }
+            //    }
+            //}
 
-            //ターゲットを追加する
-            if (minDisTarget != null)
-            {
-                _temp.Add(minDisTarget);
-                var enemyUi = minDisTarget.GetComponent<EnemyUi>();
-                enemyUi.LockOnUi.SetActive(true);
-                CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position,"SE", "SE_Lockon");
-                //Debug.Log("音を鳴らす");
-            }
+            ////ターゲットを追加する
+            //if (minDisTarget != null)
+            //{
+            //    _temp.Add(minDisTarget);
+            //    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+            //    enemyUi.LockOnUi.SetActive(true);
+            //    CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position,"SE", "SE_Lockon");
+            //    //Debug.Log("音を鳴らす");
+            //}
         }
         else
         {
