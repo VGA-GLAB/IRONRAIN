@@ -1588,6 +1588,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _position: {x: 0, y: 0, z: 0}
   _size: {x: 0.1, y: 0.05, z: 0.01}
+--- !u!1 &4320567628620657014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8642673218059786789}
+  m_Layer: 6
+  m_Name: CenterPanelSoundPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8642673218059786789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320567628620657014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.359, y: -0.637, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2277125167260543875}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4493207353538807467
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,6 +4288,7 @@ Transform:
   - {fileID: 744669972962186307}
   - {fileID: 8240519782864153050}
   - {fileID: 4547978582040552657}
+  - {fileID: 8642673218059786789}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4546,6 +4578,10 @@ PrefabInstance:
       propertyPath: _mapUiAnimation
       value: 
       objectReference: {fileID: 132925114017858007}
+    - target: {fileID: 4693792104267390097, guid: 4ed2cca37375536469cdffd975bba6e8, type: 3}
+      propertyPath: _soundTransform
+      value: 
+      objectReference: {fileID: 8642673218059786789}
     - target: {fileID: 4693792104267390097, guid: 4ed2cca37375536469cdffd975bba6e8, type: 3}
       propertyPath: _weaponCollider
       value: 
@@ -5770,6 +5806,10 @@ PrefabInstance:
       propertyPath: _bossPosition.z
       value: -2.14
       objectReference: {fileID: 0}
+    - target: {fileID: 823892156672578796, guid: 09f2be756af7a6f4bbcb0024991e59be, type: 3}
+      propertyPath: _soundTransform
+      value: 
+      objectReference: {fileID: 8642673218059786789}
     - target: {fileID: 910878492349827053, guid: 09f2be756af7a6f4bbcb0024991e59be, type: 3}
       propertyPath: m_Maskable
       value: 0
@@ -6034,6 +6074,10 @@ PrefabInstance:
       propertyPath: _lineRenderer
       value: 
       objectReference: {fileID: 2153775905518170131}
+    - target: {fileID: 9125558011877229230, guid: 09f2be756af7a6f4bbcb0024991e59be, type: 3}
+      propertyPath: _soundTransform
+      value: 
+      objectReference: {fileID: 8642673218059786789}
     - target: {fileID: 9125558011877229230, guid: 09f2be756af7a6f4bbcb0024991e59be, type: 3}
       propertyPath: _minMultiLockCount
       value: 1
