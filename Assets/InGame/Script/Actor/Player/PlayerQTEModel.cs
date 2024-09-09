@@ -18,6 +18,7 @@ namespace IronRain.Player
         private ReactiveProperty<QTEState> _qteType = new();
         private QTEResultType _qteResultType;
         private Guid _enemyId;
+        private PlayerSetting.PlayerParams _params;
 
         public void Dispose()
         {
@@ -33,6 +34,7 @@ namespace IronRain.Player
         {
             _playerEnvroment = env;
             _playerParams = _playerEnvroment.PlayerSetting.PlayerParamsData;
+            _params = _playerEnvroment.PlayerSetting.PlayerParamsData;
         }
 
         public void Start()
@@ -115,6 +117,12 @@ namespace IronRain.Player
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE2;
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
+
+                //Qte2の際に移動する
+                await _playerEnvroment.PlayerTransform
+                    .DOMoveZ(_playerEnvroment.PlayerTransform.position.z + _params.QteGoDistance, _params.QteGoDistanceTime)
+                    .ToUniTask(cancellationToken: startToken);
+
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
                 tutorialTextBoxController.ClearText();
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
@@ -129,9 +137,6 @@ namespace IronRain.Player
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
                 tutorialTextBoxController.ClearText();
-
-                await _playerEnvroment.PlayerAnimation.PileFire();
-                await _playerEnvroment.PlayerAnimation.PileFinish();
                 await _playerEnvroment.PlayerAnimation.NextAnim();
 
                 ProvidePlayerInformation.TimeScale = 1f;
