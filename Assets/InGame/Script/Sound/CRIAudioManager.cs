@@ -30,6 +30,7 @@ public class CriAudioManager
         _bgm = new (_masterVolume);
         _bgmAmbient = new(_masterVolume);
         _se = new (_masterVolume);
+        _cockpitSE = new(_masterVolume);
         _voice = new (_masterVolume);
     }
 
@@ -44,6 +45,9 @@ public class CriAudioManager
 
     /// <summary>SEを流すチャンネル</summary>
     private CriMultiChannel _se = default;
+    
+    /// <summary>コックピットのSEを流すチャンネル</summary>
+    private CriMultiChannel _cockpitSE = default;
 
     /// <summary>Voiceを流すチャンネル</summary>
     private CriVoiceChannel _voice = default;
@@ -59,6 +63,9 @@ public class CriAudioManager
 
     /// <summary>SEのチャンネル</summary>
     public ICustomChannel SE => _se;
+    
+    /// <summary>コックピットのSEのチャンネル</summary>
+    public ICustomChannel CockpitSE => _cockpitSE;
     
     /// <summary>Voiceのチャンネル</summary>
     public ICustomChannel Voice => _voice;
