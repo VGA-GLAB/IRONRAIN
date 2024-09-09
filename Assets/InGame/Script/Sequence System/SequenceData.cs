@@ -58,5 +58,10 @@ namespace IronRain.SequenceSystem
 #endif
         [SerializeField] private CurveShaderManager _curveManager;
         public CurveShaderManager CurveManager => _curveManager;
+
+        [SerializeField] private Light[] _alertLights;
+        public Light[] AlertLights => _alertLights;
+        [SerializeField] private Transform _voiceTransform;
+        public Transform VoiceTransform => _voiceTransform;
     }
 }
