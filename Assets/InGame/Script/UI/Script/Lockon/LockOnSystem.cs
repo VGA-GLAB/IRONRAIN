@@ -16,6 +16,8 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField] private InteractableUnityEventWrapper _event;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private GameObject _center;
+    [Header("音を出す場所")]
+    [SerializeField] private Transform _soundTransform;
     [Header("マルチロックの敵の最低数")]
     [SerializeField] private int _minMultiLockCount = 2;
     [Header("両手の人差し指")]
@@ -67,12 +69,30 @@ public class LockOnSystem : MonoBehaviour
     private void Update()
     {
        //マウス用のタッチ処理
-        if (Input.GetMouseButtonDown(0) && !_isMouseMultiLock && _isMouseFlag)
+        if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock && _isMouseFlag)
         {
-            Touch();
+            var raderMap = GameObject.FindObjectOfType<RaderMap>();
+            var nowLockEnemy = raderMap.GetRockEnemy;
+            GameObject lockOnEnemy = null;
+            foreach(GameObject enemy in raderMap.Enemies)
+            {
+                if(nowLockEnemy != enemy)
+                {
+                    lockOnEnemy = enemy;
+                    break;
+                }
+            }
+            if(lockOnEnemy != null)
+            {
+                raderMap.PanelRock(lockOnEnemy);
+            }  
         }
 
         //マルチロック時の処理
+        //if(_isMultiLock)
+        //{
+        //    MultiLockOnAction();
+        //}
     }
 
     private void LateUpdate()
@@ -108,7 +128,7 @@ public class LockOnSystem : MonoBehaviour
         if (!_isMouseFlag)
         {
             //パネルに触れた時の音
-            CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
         }
         
         FingertipCursor(_fingertip, _cursor);
@@ -191,7 +211,7 @@ public class LockOnSystem : MonoBehaviour
                 _temp.Add(minDisTarget);
                 var enemyUi = minDisTarget.GetComponent<EnemyUi>();
                 enemyUi.LockOnUi.SetActive(true);
-                CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position,"SE", "SE_Lockon");
                 //Debug.Log("音を鳴らす");
             }
         }
@@ -225,7 +245,7 @@ public class LockOnSystem : MonoBehaviour
                 _temp.Add(minDisTarget);
                 var enemyUi = minDisTarget.GetComponent<EnemyUi>();
                 enemyUi.LockOnUi.SetActive(true);
-                CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
             }
         }
 
@@ -247,7 +267,8 @@ public class LockOnSystem : MonoBehaviour
     public List<GameObject> FinishMultiLockOnAction()
     {
         LockOnEnemies(_temp, _lockOn);
-        
+        _isFinsishMultiLock = true;
+        _isMultiLock = false;
         return _lockOn;
     }
 
@@ -330,7 +351,7 @@ public class LockOnSystem : MonoBehaviour
                     _temp.Add(minDisTarget);
                     var enemyUi = minDisTarget.GetComponent<EnemyUi>();
                     enemyUi.LockOnUi.SetActive(true);
-                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                    CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
                 }
 
                 //ラインレンダラーを設定
@@ -491,7 +512,7 @@ public class LockOnSystem : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             yield return new WaitForSeconds(0.1f);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
         }
 
     }
