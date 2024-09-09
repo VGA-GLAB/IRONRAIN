@@ -13,6 +13,13 @@
         // 視界で認識する事が出来るオブジェクトのタグ一覧
         public static readonly string[] ViewTags = { "Player" };
 
+        // 敵の武器を指定する際の名前。
+        public const string RifleWeaponName = "AssaultRifle";
+        public const string LauncherWeaponName = "RocketLauncher";
+        public const string ShieldWeaponName = "Shield";
+        public const string FunnelWeaponName = "Funnel";
+        public const string BladeWeaponName = "Blade";
+
         // プレイヤーの武器を指定する際の名前
         public const string PlayerMeleeWeaponName = "Melee";
         public const string PlayerRifleWeaponName = "AssaultRifle";

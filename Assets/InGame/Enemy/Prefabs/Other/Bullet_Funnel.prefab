@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6136933900169549154}
   - component: {fileID: 6136933900169549165}
-  - component: {fileID: 2884019045067138295}
+  - component: {fileID: 5032634864163248764}
   m_Layer: 0
-  m_Name: Temp_Bullet_TutorialAssault
+  m_Name: Bullet_Funnel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +56,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.17
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2884019045067138295
+--- !u!114 &5032634864163248764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,11 +68,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 249d680d76e4e364092c0b02601066a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _forward: {fileID: 6136933901992103234}
   _trigger: {fileID: 6136933900169549165}
-  _renderer: {fileID: 6136933901992103232}
+  _renderers: []
   _trailEffect: {fileID: 0}
   _explosionEffect: {fileID: 3402327874637964128}
-  _lifeTime: 6
+  _lifeTime: 2
   _speed: 33
   _damage: 0
 --- !u!1 &6136933901992103238
@@ -136,7 +137,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 377a24320b3adeb438edc10508f4ced8, type: 2}
+  - {fileID: 2100000, guid: 363e3fcf63bbf884e8888937c717456d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
