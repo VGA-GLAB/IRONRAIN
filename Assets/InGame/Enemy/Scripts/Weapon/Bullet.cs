@@ -13,8 +13,9 @@ namespace Enemy
         // ヒット後、プールに戻るまでのディレイ。
         const float ExplosionDelay = 1.0f;
 
+        [SerializeField] private Transform _forward;
         [SerializeField] private Collider _trigger;
-        [SerializeField] private Renderer _renderer;
+        [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Effect _trailEffect;
         [SerializeField] private Effect _explosionEffect;
 
@@ -26,6 +27,8 @@ namespace Enemy
         protected Transform _transform;
         private IOwnerTime _ownerTime;
         private float _elapsed;
+        // 1フレーム前の位置と比較して前向きを修正する。
+        private Vector3 _prev;
 
         private void Awake()
         {
@@ -40,6 +43,11 @@ namespace Enemy
         
         private void Update()
         {
+            // 前向きを修正。
+            Vector3 current = _transform.position;
+            _forward.forward = _prev - current;
+            _prev = current;
+
             float deltaTime = _ownerTime != null ? _ownerTime.PausableDeltaTime : Time.deltaTime;
             _elapsed += deltaTime;
 
@@ -74,7 +82,7 @@ namespace Enemy
         // 画面に表示。
         private void View(IOwnerTime ownerTime)
         {
-            _renderer.enabled = true;
+            RendererEnable(true);
             _ownerTime = ownerTime;
             _elapsed = 0;
 
@@ -99,7 +107,7 @@ namespace Enemy
         // Rendererを無効化してディレイ後にオブジェクトを無効化する必要がある。
         private void StayExplosion()
         {
-            _renderer.enabled = false;
+            RendererEnable(false);
             TrailEffect(false);
             ExplosionEffect(true);
         }
@@ -110,6 +118,12 @@ namespace Enemy
             _ownerTime = null;
             gameObject.SetActive(false);
             ExplosionEffect(false);
+        }
+
+        // 表示/非表示切り替え
+        private void RendererEnable(bool value)
+        {
+            foreach (Renderer r in _renderers) r.enabled = value;
         }
 
         // トレイルエフェクト
