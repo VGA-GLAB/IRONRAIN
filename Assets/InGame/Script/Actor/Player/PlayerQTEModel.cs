@@ -137,6 +137,9 @@ namespace IronRain.Player
                 _playerEnvroment.PlayerAnimation.AnimationSpeedReset();
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
                 tutorialTextBoxController.ClearText();
+
+                await _playerEnvroment.PlayerAnimation.PileFire();
+                await _playerEnvroment.PlayerAnimation.PileFinish();
                 await _playerEnvroment.PlayerAnimation.NextAnim();
 
                 ProvidePlayerInformation.TimeScale = 1f;
