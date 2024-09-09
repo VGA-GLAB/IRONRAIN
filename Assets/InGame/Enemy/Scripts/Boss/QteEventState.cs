@@ -140,16 +140,32 @@ namespace Enemy.Boss.Qte
     /// </summary>
     public class BreakLeftArmStep : BossActionStep
     {
+        // アニメーションの再生時間を手動で指定。
+        private const float AnimationEnd = 2.15f;
+
+        // アニメーションイベントの再生を待つため、一定時間の経過が必要。
+        private float _elapsed;
+
         public BreakLeftArmStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
             // プレイヤーの入力があった場合は、刀を振り下ろす。
             Ref.BodyAnimation.SetTrigger(Const.Param.QteBladeAttack01);
+
+            _elapsed = 0;
         }
 
         protected override BattleActionStep Stay()
         {
+            // アニメーションイベントの再生が終わるまでは遷移させない。
+            if (_elapsed < AnimationEnd)
+            {
+                float dt = Ref.BlackBoard.PausableDeltaTime;
+                _elapsed += dt;
+                return this;
+            }
+
             // 左腕破壊 -> 鍔迫り合い1回目 に遷移する命令がされた場合。
             bool isReady = Ref.BlackBoard.IsQteCombatReady;
             if (isReady) return Next[0];
