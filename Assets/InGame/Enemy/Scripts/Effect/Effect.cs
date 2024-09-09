@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using System.Threading;
 using UnityEngine;
 
@@ -60,15 +61,24 @@ namespace Enemy
         /// 演出を再生する。
         /// ポーズやスロー演出に対応していないので注意。
         /// </summary>
-        public async UniTaskVoid PlayAsync(CancellationToken token)
+        public void Play()
+        {
+            StartCoroutine(PlayAsync());
+        }
+
+        /// <summary>
+        /// 演出を再生する。
+        /// ポーズやスロー演出に対応していないので注意。
+        /// </summary>
+        public IEnumerator PlayAsync()
         {
             IsPlaying = true;
-            await OnPlayAsync(token);
+            yield return OnPlayAsync();
             IsPlaying = false;
         }
 
         protected abstract void OnPlay(IOwnerTime ownerTime);
         protected abstract void OnStop();
-        protected virtual async UniTask OnPlayAsync(CancellationToken token) { await UniTask.Yield(token); }
+        protected virtual IEnumerator OnPlayAsync() { yield return null; }
     }
 }

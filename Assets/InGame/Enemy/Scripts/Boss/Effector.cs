@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Enemy.Boss
 {
@@ -65,7 +67,10 @@ namespace Enemy.Boss
         /// </summary>
         public void PlayWeaponCrash()
         {
-            if (_effects.WeaponCrash != null) _effects.WeaponCrash.Play(_ownerTime);
+            if (_effects.WeaponCrash != null)
+            {
+                _effects.WeaponCrash.Play();
+            }
         }
     }
 }

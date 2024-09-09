@@ -1,6 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 
 namespace Enemy
@@ -33,13 +32,13 @@ namespace Enemy
             foreach (ParticleSystem p in _all) p.Stop();
         }
 
-        protected override async UniTask OnPlayAsync(CancellationToken token)
+        protected override IEnumerator OnPlayAsync()
         {
             // 一番再生時間が長いパーティクルに合わせる。
             float max = _all.Max(p => p.main.startLifetime.constantMax);
 
             OnPlay(null);
-            await UniTask.WaitForSeconds(max, cancellationToken: token);
+            yield return new WaitForSeconds(max);
             OnStop();
         }
     }
