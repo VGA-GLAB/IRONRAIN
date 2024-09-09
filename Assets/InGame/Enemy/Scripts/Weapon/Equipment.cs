@@ -1,4 +1,6 @@
-﻿namespace Enemy
+﻿using UnityEngine;
+
+namespace Enemy
 {
     /// <summary>
     /// 敵の武器の基底クラス
@@ -10,5 +12,16 @@
         /// アニメーションイベントの呼び出しを装備者側が知ることが出来る。
         /// </summary>
         public float LastAttackTiming { get; protected set; }
+
+        /// <summary>
+        /// 描画のみを切る。
+        /// </summary>
+        public void RendererDisable()
+        {
+            foreach (Renderer r in _renderers)
+            {
+                r.enabled = false;
+            }
+        }
     }
 }
