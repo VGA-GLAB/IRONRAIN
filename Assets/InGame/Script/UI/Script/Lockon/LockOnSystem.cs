@@ -8,6 +8,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using IronRain.SequenceSystem;
 
 // 両手の人差し指でパネルを突く前提。
 public class LockOnSystem : MonoBehaviour
@@ -65,21 +66,19 @@ public class LockOnSystem : MonoBehaviour
 
     private void Update()
     {
-        if (!_isMouseFlag)
-            return;
-
-        if (Input.GetMouseButtonDown(0) && !_isMouseMultiLock)
+       //マウス用のタッチ処理
+        if (Input.GetMouseButtonDown(0) && !_isMouseMultiLock && _isMouseFlag)
         {
             Touch();
         }
+
+        //マルチロック時の処理
     }
 
     private void LateUpdate()
     {
         if(_isFinsishMultiLock)
         {
-            //ラインレンダラーを設定
-            //_lineRenderer.positionCount = 0;
             //ラインレンダラーの更新
             if (_temp.Count >= 1 && LimitLineRendere() )
             {
@@ -106,9 +105,6 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
-        if (_isMultiLock)
-            return;
-
         if (!_isMouseFlag)
         {
             //パネルに触れた時の音
@@ -119,11 +115,6 @@ public class LockOnSystem : MonoBehaviour
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
         AllTargets(_targets, _parent);
-
-        //foreach (Transform t in _targets)
-        //{
-        //    if (t.TryGetComponent(out EnemyUi u)) Debug.Log(u.Enemy.name + "が候補");
-        //}
 
         float minDistance = float.MaxValue;
         EnemyUi minEnemyUi = null;
@@ -153,6 +144,113 @@ public class LockOnSystem : MonoBehaviour
        
     }
 
+    public void StartMultiLockOnAction()
+    {
+        _isMultiLock = true;
+        // Targetの数は実行中に増減するのでマルチロックする直前にリスト化する。
+        AllTargets(_targets, _parent);
+
+        // パネルをなぞっている間に接触したTargetを一時的に保持しておくコレクション。
+        _temp.Clear();
+
+        // 線をリセット。
+        _lineRenderer.positionCount = 0;
+    }
+    /// <summary>
+    /// マルチロック時にターゲットを増やす処理
+    /// </summary>
+    public void MultiLockOnAction()
+    {
+        if (_isMouseFlag)
+        {
+            // カーソルの位置を指先に合わせる。
+            FingertipCursor(_fingertip, _cursor);
+            Transform minDisTarget = null;
+            float minDistance = float.MaxValue;
+            // カーソルと接触しているTargetを一時的に保持。
+            foreach (Transform t in _targets)
+            {
+                if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+                {
+                    if (!_temp.Contains(t))
+                    {
+                        //カーソルに近い物を判定する
+                        float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                        if (dis <= minDistance)
+                        {
+                            minDistance = dis;
+                            minDisTarget = t;
+                        }
+                    }
+                }
+            }
+
+            //ターゲットを追加する
+            if (minDisTarget != null)
+            {
+                _temp.Add(minDisTarget);
+                var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(true);
+                CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+                //Debug.Log("音を鳴らす");
+            }
+        }
+        else
+        {
+            // カーソルの位置を指先に合わせる。
+            FingertipCursor(_fingertip, _cursor);
+            Transform minDisTarget = null;
+            float minDistance = float.MaxValue;
+            // カーソルと接触しているTargetを一時的に保持。
+            foreach (Transform t in _targets)
+            {
+                if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
+                {
+                    if (!_temp.Contains(t))
+                    {
+                        //カーソルに近い物を判定する
+                        float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                        if (dis <= minDistance)
+                        {
+                            minDistance = dis;
+                            minDisTarget = t;
+                        }
+                    }
+                }
+            }
+
+            //ターゲットを追加する
+            if (minDisTarget != null)
+            {
+                _temp.Add(minDisTarget);
+                var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(true);
+                CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+            }
+        }
+
+        //ラインレンダラーの更新
+        if (_temp.Count >= 1 && LimitLineRendere())
+        {
+            foreach (Transform transform in _temp)
+            {
+                _lineRenderer.positionCount++;
+                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
+            }
+        }
+    }
+
+    /// <summary>
+    /// マルチロックオンが終わった時に呼ばれる処理
+    /// </summary>
+    /// <returns></returns>
+    public List<GameObject> FinishMultiLockOnAction()
+    {
+        LockOnEnemies(_temp, _lockOn);
+        
+        return _lockOn;
+    }
+
     // なぞった結果、n体以上lock-onできなかった場合はやり直しの処理が無い。
     /// <summary>
     /// マルチロックが終わるまで待つ。
@@ -164,11 +262,7 @@ public class LockOnSystem : MonoBehaviour
         _isMultiLock = true;
 
         // パネルを指で突くまで待つ。
-        if (_isMouseFlag)
-        {
-            await UniTask.WaitUntil(() => Input.GetMouseButtonDown(0), cancellationToken: token);
-        }
-        else
+        if (!_isMouseFlag)
         {
             await UniTask.WaitUntil(() => _isSelect, cancellationToken: token);
         }
@@ -191,53 +285,16 @@ public class LockOnSystem : MonoBehaviour
             while (_isMouseMultiLock)
             {
                 await UniTask.Yield();
-                // カーソルの位置を指先に合わせる。
-                FingertipCursor(_fingertip, _cursor);
-                Transform minDisTarget = null;
-                float minDistance = float.MaxValue;
-                // カーソルと接触しているTargetを一時的に保持。
-                foreach (Transform t in _targets)
+                if (Input.GetKeyDown(KeyCode.M) && _isMouseMultiLock)
                 {
-                    if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
-                    {
-                        if(!_temp.Contains(t))
-                        {
-                            //カーソルに近い物を判定する
-                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
-                            if (dis <= minDistance)
-                            {
-                                minDistance = dis;
-                                minDisTarget = t;
-                            }
-                        }
-                    }
-                }
-
-                //ターゲットを追加する
-                if(minDisTarget != null)
-                {
-                    _temp.Add(minDisTarget);
-                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
-                    enemyUi.LockOnUi.SetActive(true);
-                    CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
-                    //Debug.Log("音を鳴らす");
-                }
-
-                //ラインレンダラーを設定
-                //_lineRenderer.positionCount = 0;
-                //ラインレンダラーの更新
-                if (_temp.Count >= 1 && LimitLineRendere())
-                {
-                    foreach (Transform transform in _temp)
-                    {
-                        _lineRenderer.positionCount++;
-                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
-                    }
-                }
-                
-
-                if (Input.GetMouseButtonUp(0) && _isMouseMultiLock)
                     _isMouseMultiLock = false;
+                    foreach(Transform transform in _targets)
+                    {
+                        _temp.Add(transform);
+                        var enemyUi = transform.GetComponent<EnemyUi>();
+                        enemyUi.LockOnUi.SetActive(true);
+                    }
+                }     
             }
         }
         else
@@ -321,15 +378,6 @@ public class LockOnSystem : MonoBehaviour
         return _lockOn;
     }
 
-    private IEnumerator LockonCortinue(int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            yield return new WaitForSeconds(0.1f);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
-        }
-        
-    }
     /// <summary>
     /// LineRendereをリセットする
     /// </summary>
@@ -436,5 +484,15 @@ public class LockOnSystem : MonoBehaviour
         }
 
         return true;
+    }
+
+    private IEnumerator LockonCortinue(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            CriAudioManager.Instance.SE.Play("SE", "SE_Lockon");
+        }
+
     }
 }
