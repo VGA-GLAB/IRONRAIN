@@ -1276,7 +1276,7 @@ Transform:
   - {fileID: 361603740086301049}
   - {fileID: 2544779743545739061}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5874233444628220281
 MonoBehaviour:
@@ -1310,15 +1310,18 @@ MonoBehaviour:
   _raderLength: 120
   _radius: 0.001
   _scaleFactor: 0.002
+  _horizontalMagnification: 2.5
+  _verticalMagnification: 1.5
   _rockonDis: 100000
   _bossPosition: {x: 0.0009, y: -0.008, z: -0.019}
   IsBossScene: 0
   _bossRadius: 0.0008
   _bossRaderLength: 120
-  _widthLeverage: 1
+  _bossHorizontalMagnification: 100
+  _bossVerticalMagnification: 10
   _hightLeverage: 1
-  _hight: 50
   _widthInterval: 0.025
+  _isForwardBoss: 0
   _origin: {fileID: 0}
   _sightAngle: 120
 --- !u!114 &9125558011877229230
@@ -1335,6 +1338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _event: {fileID: 7528040351478560402}
   _lineRenderer: {fileID: 0}
+  _center: {fileID: 0}
   _minMultiLockCount: 2
   _fingertip:
   - {fileID: 0}
@@ -1343,6 +1347,7 @@ MonoBehaviour:
   _parent: {fileID: 2544779743545739061}
   _cursorRadius: 0.0025
   _targetRadius: 0.025
+  _limitLineRendereDistance: 100
   _isMouseFlag: 1
   _layerMask:
     serializedVersion: 2

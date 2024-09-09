@@ -11,43 +11,38 @@ namespace Enemy.Boss
     public class LaneChangeState : BattleState
     {
         // プレイヤーの正面の位置に来るよう、n回レーン変更を行う。
-        private BossActionStep[] _laneChangeSteps;
-        private BattleActionStep _currentLaneChangeStep;
-        // 並行してプレイヤーの方向を向く回転を行う。
-        private BossActionStep[] _lookSteps;
-        private BattleActionStep _currentLookStep;
+        private BossActionStep[] _steps;
+        private BattleActionStep _currentStep;
 
         public LaneChangeState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _laneChangeSteps = new BossActionStep[2];
-            _laneChangeSteps[1] = new EndStep(requiredRef, null);
-            _laneChangeSteps[0] = new LaneChangeStep(requiredRef, _laneChangeSteps[1]);
-
-            _lookSteps = new BossActionStep[2];
-            _lookSteps[1] = new EndStep(requiredRef, null);
-            _lookSteps[0] = new LookAtPlayerStep(requiredRef, _lookSteps[1]);
+            _steps = new BossActionStep[3];
+            _steps[2] = new EndStep(requiredRef, null);
+            _steps[1] = new WaitAnimationStep(requiredRef, _steps[2]);
+            _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
         }
 
         protected override void OnEnter()
         {
             Ref.BlackBoard.CurrentState = StateKey.LaneChange;
 
-            _currentLaneChangeStep = _laneChangeSteps[0];
-            _currentLookStep = _lookSteps[0];
+            _currentStep = _steps[0];
+
+            TurnToPlayer(isReset: true);
         }
 
         protected override void OnExit()
         {
+            TurnToPlayer();
         }
 
         protected override void OnStay()
         {
-            _currentLaneChangeStep = _currentLaneChangeStep.Update();
-            _currentLookStep = _currentLookStep.Update();
+            TurnToPlayer();
 
-            bool isLaneChangeEnd = _currentLaneChangeStep.ID == nameof(EndStep);
-            bool isLookEnd = _currentLookStep.ID == nameof(EndStep);
-            if (isLaneChangeEnd && isLookEnd) TryChangeState(StateKey.Idle);
+            _currentStep = _currentStep.Update();
+
+            if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);
         }
 
         #region ボスのレーン表示のテスト用。
@@ -85,6 +80,8 @@ namespace Enemy.Boss.LaneChange
         private int _sign;
         // 移動開始のタイミングで代入、移動完了後にこの値を黒板に書き込む。
         private int _nextIndex;
+        // 左右移動のアニメーションのブレンド値。
+        private float _blend;
 
         public LaneChangeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
@@ -106,15 +103,18 @@ namespace Enemy.Boss.LaneChange
                 _sign = 1;
             }
 
-            // 既にプレイヤーの反対レーンにいる場合は移動しない。
             if (_rest > 0) NextLane();
             else
             {
+                // 既にプレイヤーの反対レーンにいる場合は移動しない。
                 _start = Ref.Body.Position;
                 _end = _start;
                 _lerp = 0;
+                _sign = 0;
                 _nextIndex = Ref.BlackBoard.CurrentLaneIndex;
             }
+
+            _blend = 0;
         }
 
         protected override BattleActionStep Stay()
@@ -131,11 +131,21 @@ namespace Enemy.Boss.LaneChange
             Ref.Body.Warp(p);
 
             // レーン間の移動速度。
-            const float Speed = 6.0f;
+            const float MoveSpeed = 6.0f;
 
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * Speed;
+            _lerp += dt * MoveSpeed;
             _lerp = Mathf.Clamp01(_lerp);
+
+            // アイドルから左右移動のアニメーションに切り替わる速さ。
+            const float BlendSpeed = 3.0f;
+
+            // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+            // ブレンドツリーのパラメータをその値に徐々に変化させる。
+            _blend = Mathf.Clamp(_blend, -1, 1);
+            _blend = Mathf.MoveTowards(_blend, -_sign, dt * BlendSpeed);
+            string param = Const.Param.SpeedX;
+            Ref.BodyAnimation.SetFloat(param, _blend);
 
             return this;
         }
@@ -155,42 +165,31 @@ namespace Enemy.Boss.LaneChange
     }
 
     /// <summary>
-    /// プレイヤーに向けて回転。
+    /// 左右移動のアニメーションが終わるのを待つ。
     /// </summary>
-    public class LookAtPlayerStep : BossActionStep
+    public class WaitAnimationStep : BossActionStep
     {
-        private Vector3 _start;
-        private Vector3 _end;
-        private float _lerp;
-        private int _diff;
+        private float _blend;
 
-        public LookAtPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public WaitAnimationStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
-            _start = Ref.Body.Forward;
-            // ボス戦のフィールドの中心からプレイヤーのレーンへのベクトル。
-            // レーン移動終了時にはこの正面のレーンに移動する予定なので、この方向を向く。
-            Vector3 pl = Ref.Field.GetPlayerLane();
-            pl.y = 0;
-            _end = pl;
-            _lerp = 0;
-
-            _diff = Ref.Field.GetMinMoveCount();
+            string param = Const.Param.SpeedX;
+            _blend = Ref.BodyAnimation.GetFloat(param);
         }
 
         protected override BattleActionStep Stay()
         {
-            Vector3 look = Vector3.Lerp(_start, _end, _lerp);
-            Ref.Body.LookForward(look);
-
-            // 振り向き速度。
-            const float Speed = 100.0f;
+            // アイドルから左右移動のアニメーションに切り替わる速さ。
+            const float BlendSpeed = 1.0f;
 
             float dt = Ref.BlackBoard.PausableDeltaTime;
-            _lerp += dt * (Speed / _diff);
+            _blend = Mathf.MoveTowards(_blend, 0, dt * BlendSpeed);
+            string param = Const.Param.SpeedX;
+            Ref.BodyAnimation.SetFloat(param, _blend);
 
-            if (_lerp > 1.0f) return Next[0];
+            if (Mathf.Approximately(_blend, 0)) return Next[0];
             else return this;
         }
     }

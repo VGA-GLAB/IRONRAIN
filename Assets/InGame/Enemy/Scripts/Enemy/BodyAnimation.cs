@@ -58,6 +58,12 @@ namespace Enemy
             StateMachineTriggerCallback(_animator.gameObject);
         }
 
+        public BodyAnimation(NPC.RequiredRef requiredRef)
+        {
+            _animator = requiredRef.Animator;
+            StateMachineTriggerCallback(_animator.gameObject);
+        }
+
         // コールバックを登録しているステートをトリガー出来るように設定する。
         private void StateMachineTriggerCallback(GameObject owner)
         {

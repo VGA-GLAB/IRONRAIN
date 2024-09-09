@@ -70,5 +70,30 @@ namespace Enemy.Boss
             Ref.BlackBoard.Hovering += dt;
             Ref.Body.OffsetWarp(Vector3.up * h);
         }
+
+        /// <summary>
+        /// プレイヤーの方に向ける。
+        /// </summary>
+        protected void TurnToPlayer(bool isReset = false)
+        {
+            // ステートの切り替わりなどで呼び出しの間隔が開いた場合は、基準を現在の前向きにリセット。
+            if (isReset)
+            {
+                Ref.BlackBoard.TurnForward = Ref.Body.Forward;
+            }
+
+            Vector3 look = Ref.BlackBoard.TurnForward;
+            Ref.Body.LookForward(look);
+
+            // 振り向き速度
+            const float Speed = 10.0f;
+        
+            // 照準をしながらプレイヤーを向く。
+            Vector3 pd = Ref.BlackBoard.PlayerDirection;
+            pd.y = 0;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            look += pd * dt * Speed;
+            Ref.BlackBoard.TurnForward = look.normalized;
+        }
     }
 }

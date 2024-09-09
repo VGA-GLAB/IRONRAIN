@@ -50,6 +50,13 @@ public class BGM : SingletonMonoBehaviour<BGM>
     /// <param name="id">BGMの列挙型のインデックス</param>
     public void PlayBGM(int id)
     {
-        CriAudioManager.Instance.BGM.Play("BGM", ((BGMID)id).ToString(), _volume);
+        if (id % 2 == 0)
+        {
+            CriAudioManager.Instance.AmbientBGM.Play("BGM", ((BGMID)id).ToString(), _volume);
+        }
+        else
+        {
+            CriAudioManager.Instance.BGM.Play("BGM", ((BGMID)id).ToString(), _volume);
+        }
     }
 }

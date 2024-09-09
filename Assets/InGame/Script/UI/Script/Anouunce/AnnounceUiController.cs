@@ -1,11 +1,8 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.VisualScripting.Antlr3.Runtime;
 
 
 public enum AnnounceUiType
@@ -61,6 +58,7 @@ public class AnnounceUiController : MonoBehaviour
         _characterObject.color = color;
         _preAnnounceUiType = AnnounceUiType.NoSingal;
     }
+
     
     /// <summary>
     /// アナウンスパネルを切り替える
@@ -69,7 +67,7 @@ public class AnnounceUiController : MonoBehaviour
     public async UniTask ChangeAnnounceUi(AnnounceUiType announceUiType, CancellationToken cancellationToken = default)
     {
         //前兆音を鳴らす
-        CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
+        //CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
         if(_preAnnounceUiType == AnnounceUiType.NoSingal && (announceUiType == AnnounceUiType.Operator || announceUiType == AnnounceUiType.Ryan))
         {
             Color color = _characterObject.color;
@@ -102,7 +100,6 @@ public class AnnounceUiController : MonoBehaviour
                 _characterObject.sprite = _ryanUiCharacterSprite;
                 break;
         }
-
         _preAnnounceUiType = announceUiType;
     }
 
@@ -124,19 +121,21 @@ public class AnnounceUiController : MonoBehaviour
     }
     //////テスト用/////
 
-
+    [ContextMenu("Ryan")]
     public void TestRyan()
     {
-        ChangeAnnounceUi(AnnounceUiType.Ryan);
+        ChangeAnnounceUi(AnnounceUiType.Ryan).Forget();
     }
 
+    [ContextMenu("NoImage")]
     public void TestNoImage()
     {
-        ChangeAnnounceUi(AnnounceUiType.NoSingal);
+        ChangeAnnounceUi(AnnounceUiType.NoSingal).Forget();
     }
 
+    [ContextMenu("Operator")]
     public void TestOperator()
     {
-        ChangeAnnounceUi(AnnounceUiType.Operator);
+        ChangeAnnounceUi(AnnounceUiType.Operator).Forget();
     }
 }
