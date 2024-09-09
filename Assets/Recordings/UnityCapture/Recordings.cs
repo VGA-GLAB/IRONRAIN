@@ -1,84 +1,60 @@
-﻿using System.Diagnostics;
-using System.Threading;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
-/// パワーシェルでコマンドを実行する機能
+///     パワーシェルでコマンドを実行する機能
 /// </summary>
 public class Recordings : MonoBehaviour
 {
-    const string StartRecordBat = @"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStart.bat""";
-    const string StopRecordBat = @"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStop.bat""";
+	private const string StartRecordBat =
+		@"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStart.bat""";
 
-    private Thread _startProcess = null;
-    Process[] processes;
+	private const string StopRecordBat =
+		@"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStop.bat""";
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            if (_startProcess != null && _startProcess.IsAlive)
-            {
-                UnityEngine.Debug.Log("Already running...");
-                return;
-            }
+	[SerializeField] private int _videoTime = 20;
+	[SerializeField] private UnityCaptures _unityCaptures;
 
-            processes = Process.GetProcesses();
-            foreach (Process process in processes)
-            {
-                if (process.ProcessName == "obs64")
-                {
-                    return;
-                }
-            }
+	/// <summary>
+	///     Batファイルを実行
+	/// </summary>
+	/// <param name="batFile">BatファイルのURL</param>
+	/// <param name="isHide">パワーシェルを出すかどうか</param>
+	public void PowerShellCommand(string batFile, bool isHide = true)
+	{
+		Process process = new();
+		ProcessStartInfo startInfo = new();
 
-            _startProcess = new Thread(StartRecord);
-            _startProcess.Start();
-            UnityEngine.Debug.Log("CaptureStart");
-        }
+		if (isHide)
+		{
+			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+		}
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Thread thread = new Thread(StopRecord);
-            thread.Start();
-            UnityEngine.Debug.Log("CaptureStop");
-        }
-    }
+		startInfo.FileName = batFile;
+		startInfo.UseShellExecute = false;
+		startInfo.RedirectStandardError = true;
+		startInfo.CreateNoWindow = true;
+		process.StartInfo = startInfo;
+		process.Start();
+		process.WaitForExit();
+	}
 
-    /// <summary>
-    /// AWSのS3に動画をアップロード機能
-    /// </summary>
-    /// <param name="action">終了時に実行したい処理があれば</param>
-    /// <param name="isHide">パワーシェルを出すかどうか</param>
-    public void PowerShellCommand(string batFile, bool isHide = true)
-    {
-        System.Diagnostics.Process process = new System.Diagnostics.Process();
-        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+	///<summary>録画開始</summary>
+	public async void StartRecord()
+	{
+		_unityCaptures.ChangeIsCapture(true);
+		PowerShellCommand(StartRecordBat);
+		await Task.Delay(_videoTime * 1000);
+		StopRecord();
+		_unityCaptures.ChangeIsCapture(false);
+	}
 
-        if (isHide) startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-        startInfo.FileName = batFile;
-        startInfo.UseShellExecute = false;
-        startInfo.RedirectStandardError = true;
-        startInfo.CreateNoWindow = true;
-        process.StartInfo = startInfo;
-        process.Start();
-        process.WaitForExit();
-
-        UnityEngine.Debug.Log(process.StandardError.ReadLine());
-    }
-
-    ///<summary>録画開始</summary>
-    public void StartRecord()
-    {
-       // float timer = ;
-        PowerShellCommand(StartRecordBat);
-    }
-
-    ///<summary>録画停止</summary>
-    public void StopRecord()
-    {
-        PowerShellCommand(StopRecordBat);
-
-    }
+	///<summary>録画停止</summary>
+	public void StopRecord()
+	{
+		PowerShellCommand(StopRecordBat);
+	}
 }
