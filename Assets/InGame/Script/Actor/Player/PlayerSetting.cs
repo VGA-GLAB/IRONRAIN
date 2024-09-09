@@ -34,6 +34,8 @@ namespace IronRain.Player
             public int Hp => _hp;
             public float ThrusterCt => _thrusterCt;
             public float ChangeWeaponCt => _changeWeaponCt;
+            public float QteGoDistance => _qteGoDistance;
+            public float QteGoDistanceTime => _qteGoDistanceTime;
 
             [Header("PlayerのHp")]
             [SerializeField] private int _hp;
@@ -60,6 +62,10 @@ namespace IronRain.Player
             [Header("===QTEの設定===")]
             [Header("QTEの時間制限")]
             [SerializeField] private float _qteTimeLimit;
+            [Header("シールドの敵に対して進む距離")]
+            [SerializeField] private float _qteGoDistance;
+            [Header("シールドの敵に対して進む距離にかける時間")]
+            [SerializeField] private float _qteGoDistanceTime;
 
             [Header("===武器の設定===")]
             [Header("武器変更のクールタイム")]
