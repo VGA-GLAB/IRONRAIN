@@ -10,6 +10,9 @@ namespace Enemy
     /// </summary>
     public abstract class Bullet : MonoBehaviour
     {
+        // ダメージの種類
+        private enum DamageType { Assault, Launcher, Funnel }
+
         // ヒット後、プールに戻るまでのディレイ。
         const float ExplosionDelay = 1.0f;
 
@@ -18,6 +21,7 @@ namespace Enemy
         [SerializeField] private Renderer[] _renderers;
         [SerializeField] private Effect _trailEffect;
         [SerializeField] private Effect _explosionEffect;
+        [SerializeField] private DamageType _damageType;
 
         [Header("パラメータ設定")]
         [SerializeField] protected float _lifeTime = 1.0f;
@@ -95,7 +99,12 @@ namespace Enemy
             // 敵とNPCはコライダーとスクリプトが同じオブジェクトに無いので弾かれる。
             if (collider.TryGetComponent(out IDamageable damageable))
             {
-                damageable.Damage(_damage);
+                string weapon = string.Empty;
+                if (_damageType == DamageType.Assault) weapon = Const.RifleWeaponName;
+                else if (_damageType == DamageType.Launcher) weapon = Const.LauncherWeaponName;
+                else if (_damageType == DamageType.Funnel) weapon = Const.FunnelWeaponName;
+
+                damageable.Damage(_damage, weapon);
             }
             else return;
 
