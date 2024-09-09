@@ -52,7 +52,5 @@ public class CaptureTexture : MonoBehaviour
 
         // Update the capture texture
         UnityCaptures.ECaptureSendResult result = captureInterface.SendTexture(activeTex);
-        if (result != UnityCaptures.ECaptureSendResult.SUCCESS)
-            Debug.Log("SendTexture failed: " + result);
     }
 }

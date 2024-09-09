@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Funnel;
-using IronRain.Player;
 
 namespace Enemy.Boss
 {
@@ -32,9 +31,6 @@ namespace Enemy.Boss
             Effector = new Effector(this);
             AgentScript = transform.GetComponent<AgentScript>();
             Field = new Field(this, pointP);
-
-            // ↓これをCallbackくらすで囲って外出し。
-            AnimationEvent.OnBreakLeftArm += () => Debug.Log("左腕破壊コールバック呼び出し");
         }
 
         public Transform Transform { get; }

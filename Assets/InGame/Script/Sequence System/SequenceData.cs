@@ -51,10 +51,17 @@ namespace IronRain.SequenceSystem
         [SerializeField] private LaunchManager _launchManager;
         public LaunchManager LaunchManager => _launchManager;
 #if UNITY_EDITOR
-        [SerializeField] private CustomRecorderController _recorder;
-        public CustomRecorderController Recorder => _recorder;
+        [SerializeField] private Recordings _recorder;
+        public Recordings Recorder => _recorder;
+        [SerializeField] private FFmpegConcatenate _concatenate;
+        public FFmpegConcatenate Concatenate => _concatenate;
 #endif
         [SerializeField] private CurveShaderManager _curveManager;
         public CurveShaderManager CurveManager => _curveManager;
+
+        [SerializeField] private Light[] _alertLights;
+        public Light[] AlertLights => _alertLights;
+        [SerializeField] private Transform _voiceTransform;
+        public Transform VoiceTransform => _voiceTransform;
     }
 }
