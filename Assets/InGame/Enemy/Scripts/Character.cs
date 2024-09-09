@@ -48,5 +48,7 @@ namespace Enemy
             result = transform.FindChildRecursive(name);
             return result != null;
         }
+
+        public AnimationEvent GetAnimationEvent() => GetComponentInChildren<AnimationEvent>();
     }
 }
