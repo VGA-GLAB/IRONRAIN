@@ -43,18 +43,16 @@ public class Recordings : MonoBehaviour
 	}
 
 	///<summary>録画開始</summary>
-	public async void StartRecord()
+	public void StartRecord()
 	{
 		_unityCaptures.ChangeIsCapture(true);
 		PowerShellCommand(StartRecordBat);
-		await Task.Delay(_videoTime * 1000);
-		StopRecord();
-		_unityCaptures.ChangeIsCapture(false);
 	}
 
 	///<summary>録画停止</summary>
 	public void StopRecord()
 	{
 		PowerShellCommand(StopRecordBat);
+		_unityCaptures.ChangeIsCapture(false);
 	}
 }
