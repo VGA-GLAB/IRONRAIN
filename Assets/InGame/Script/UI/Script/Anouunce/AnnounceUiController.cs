@@ -14,6 +14,8 @@ public enum AnnounceUiType
 
 public class AnnounceUiController : MonoBehaviour
 {
+    [Header("音を鳴らす位置")]
+    [SerializeField] private Transform _soundTransform;
     [Header("バックグラウンドオブジェクト")] 
     [SerializeField] private Image _backGroundObject;
     [Header("フレームオブジェクト")] 
@@ -76,7 +78,7 @@ public class AnnounceUiController : MonoBehaviour
             _backGroundObject.sprite = _connectingBackGroundSprite;
             _frameObject.sprite = _connectingFrameSprite;
             await AnimationConnecting(cancellationToken);
-            CriAudioManager.Instance.SE.Play("SE", "SE_Panel");
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel");
         }
         
         switch(announceUiType)
