@@ -41,6 +41,10 @@ namespace Enemy
         /// </summary>
         public event UnityAction OnTurn;
         /// <summary>
+        /// ボス戦、左腕破壊で振り下ろした刀がプレイヤーの左腕に直撃するタイミング。
+        /// </summary>
+        public event UnityAction OnBreakLeftArm;
+        /// <summary>
         /// ボス戦のQTEで、プレイヤーの武器とボスの武器がぶつかった際のエフェクトを出すタイミング。
         /// </summary>
         public event UnityAction OnWeaponCrash;
@@ -53,6 +57,7 @@ namespace Enemy
         public void MeleeAttackEnd() => OnMeleeAttackEnd?.Invoke();
         // 以下はボス専用。
         public void Turn() => OnTurn?.Invoke();
+        public void BreakLeftArm() => OnBreakLeftArm?.Invoke();
         public void WeaponCrash() => OnWeaponCrash?.Invoke();
     }
 }
