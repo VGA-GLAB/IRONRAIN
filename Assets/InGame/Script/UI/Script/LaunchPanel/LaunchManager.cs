@@ -14,6 +14,8 @@ public class LaunchManager : MonoBehaviour
     [Header("テストフラグ")]
     [SerializeField]
     private bool _isTest;
+    [Header("音を鳴らす位置")]
+    [SerializeField] private Transform _soundTransform;
     [Header("ActiveUi")] [SerializeField] private GameObject _activeUiObject;
     [SerializeField] private Image _activeUiBackGround;
     [SerializeField] private Image _activeUiButton;
@@ -185,7 +187,7 @@ public class LaunchManager : MonoBehaviour
             return;
 
         //パネルに触れた時の音
-        CriAudioManager.Instance.SE.Play("SE", "SE_Panel_Tap");
+        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
 
         _isTouch = true;
         var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;

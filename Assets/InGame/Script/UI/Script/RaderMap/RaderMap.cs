@@ -17,6 +17,8 @@ public class RaderMap : MonoBehaviour
     /// 敵UIのリスト(GameObject:実際の敵、Image:Ui)
     /// </summary>
     public Dictionary<GameObject, Image> EnemyMaps = new Dictionary<GameObject, Image>();
+    [Header("音を鳴らす位置")]
+    [SerializeField] private Transform _soundTransform;
     [Header("プレイヤーの位置")]
     [SerializeField, Tooltip("プレイヤーの位置")] private Transform _player;
     [Header("レーダーの中心のオブジェクト")]
@@ -375,7 +377,7 @@ public class RaderMap : MonoBehaviour
         {
             _nowRockEnemy = nearEnemy.obj;
             //ターゲットが切り替わる音を出す
-            CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");
         }
         _enemyDistance = nearEnemyDis;
     }
@@ -416,7 +418,7 @@ public class RaderMap : MonoBehaviour
             _enemyDistance = Vector3.Distance(enemyAgent.gameObject.transform.position, _player.transform.position);
             
             //ターゲットが切り替わる音を出す
-            CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");
             if(_isStartTouchPanel)
                 _isTouch = true;
         }
