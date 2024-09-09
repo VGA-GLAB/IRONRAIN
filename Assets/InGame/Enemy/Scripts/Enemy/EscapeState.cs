@@ -12,7 +12,7 @@ namespace Enemy
             Ref = requiredRef;
         }
 
-        private RequiredRef Ref { get; set; }
+        private RequiredRef Ref { get; }
 
         protected override void Enter()
         {
@@ -21,6 +21,11 @@ namespace Enemy
             // レーダーマップから消す。
             AgentScript agent = Ref.AgentScript;
             if (agent != null) agent.EnemyDestory();
+
+            // プレイヤーとの相対位置に移動させる。
+            Vector3 rp = Ref.BlackBoard.PlayerRelativePosition;
+            Vector3 pp = Ref.Player.position;
+            Ref.Body.Warp(pp + rp);
         }
 
         protected override void Exit()
@@ -32,6 +37,13 @@ namespace Enemy
 
         protected override void Stay()
         {
+            // プレイヤーとの相対位置に移動させる。
+            Vector3 rp = Ref.BlackBoard.PlayerRelativePosition;
+            Vector3 pp = Ref.Player.position;
+            Vector3 p = rp + pp;
+            p.y = Ref.Body.Position.y;
+            Ref.Body.Warp(p);
+
             // 上方向に移動。
             float spd = Ref.EnemyParams.MoveSpeed.Exit;
             float dt = Ref.BlackBoard.PausableDeltaTime;
