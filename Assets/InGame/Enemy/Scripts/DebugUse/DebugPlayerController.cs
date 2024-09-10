@@ -1,5 +1,4 @@
-﻿using Enemy.Extensions;
-using Enemy.Funnel;
+﻿using Enemy.Funnel;
 using UnityEngine;
 
 namespace Enemy.DebugUse
@@ -121,7 +120,7 @@ namespace Enemy.DebugUse
         private void DrawAttackRange()
         {
             (Vector3, Vector3) p = AttackRange();
-            GizmosUtils.Line(p.Item1, p.Item2, ColorExtensions.ThinRed);
+            GizmosUtils.Line(p.Item1, p.Item2, Color.red);
         }
 
         public void Damage(int value, string weapon = "")

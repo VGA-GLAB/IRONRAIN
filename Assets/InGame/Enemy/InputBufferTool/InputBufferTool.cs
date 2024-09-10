@@ -1,5 +1,4 @@
 ﻿using Enemy.DebugUse;
-using Enemy.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -93,7 +92,7 @@ namespace Enemy.Tool
             // 黒背景
             GizmosUtils.Plane(Vector3.zero, 1920.0f, 1080.0f, Color.black);
             // 時間を表す線(白)
-            GizmosUtils.Line(new Vector2(_drawOffset, 0), new Vector2(1920.0f, 0), ColorExtensions.ThinWhite);
+            GizmosUtils.Line(new Vector2(_drawOffset, 0), new Vector2(1920.0f, 0), Color.white);
             // 開始位置(緑)
             GizmosUtils.Line(new Vector2(_drawOffset, -len), new Vector2(_drawOffset, len), Color.green);
             // 攻撃タイミング(赤)
