@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,10 +23,12 @@ namespace IronRain.SequenceSystem
         [SerializeField] private float _delaySec = 0.0F;
         
         private AnnounceUiController _announceUiController;
+        private Transform _voiseTransform;
         
         public void SetData(SequenceData data)
         {
             _announceUiController = data.AnnounceUiController;
+            _voiseTransform = data.VoiceTransform;
         }
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
@@ -45,7 +47,7 @@ namespace IronRain.SequenceSystem
         {
             await UniTask.WaitForSeconds(_delaySec, cancellationToken: ct);
 
-            CriAudioManager.Instance.Voice.Play(_cueSheetName, _cueName);
+            CriAudioManager.Instance.Voice.Play3D(_voiseTransform.position, _cueSheetName, _cueName);
         }
 
         public void Skip()
