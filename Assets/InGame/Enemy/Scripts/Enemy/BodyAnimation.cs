@@ -40,25 +40,7 @@ namespace Enemy
         // 身体側のステート毎に登録解除出来る。
         private Dictionary<string, List<UnityAction>> _callbacks;
 
-        public BodyAnimation(RequiredRef requiredRef)
-        {
-            _animator = requiredRef.Animator;
-            StateMachineTriggerCallback(_animator.gameObject);
-        }
-
-        public BodyAnimation(Boss.RequiredRef requiredRef)
-        {
-            _animator = requiredRef.Animator;
-            StateMachineTriggerCallback(_animator.gameObject);
-        }
-
-        public BodyAnimation(Funnel.RequiredRef requiredRef)
-        {
-            _animator = requiredRef.Animator;
-            StateMachineTriggerCallback(_animator.gameObject);
-        }
-
-        public BodyAnimation(NPC.RequiredRef requiredRef)
+        public BodyAnimation(CharacterRequiredRef requiredRef)
         {
             _animator = requiredRef.Animator;
             StateMachineTriggerCallback(_animator.gameObject);

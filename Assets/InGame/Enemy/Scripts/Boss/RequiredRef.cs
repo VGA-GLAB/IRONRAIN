@@ -4,22 +4,16 @@ using Enemy.Funnel;
 
 namespace Enemy.Boss
 {
-    public class RequiredRef
+    public class RequiredRef : CharacterRequiredRef
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, Transform pointP,
-            BossParams bossParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, BossEffects effects, 
+            BossParams bossParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, BossEffects effects,
             Collider[] hitBoxes, MeleeEquipment meleeEquip, RangeEquipment rangeEquip, List<FunnelController> funnels)
+            : base(transform, player, offset, rotate, animator, renderers, hitBoxes)
         {
-            Transform = transform;
-            Player = player;
-            Offset = offset;
-            Rotate = rotate;
             BossParams = bossParams;
             BlackBoard = blackBoard;
-            Animator = animator;
-            Renderers = renderers;
             Effects = effects;
-            HitBoxes = hitBoxes;
             MeleeEquip = meleeEquip;
             RangeEquip = rangeEquip;
             Funnels = funnels;
@@ -33,16 +27,9 @@ namespace Enemy.Boss
             Field = new Field(this, pointP);
         }
 
-        public Transform Transform { get; }
-        public Transform Player { get; }
-        public Transform Offset { get; }
-        public Transform Rotate { get; }
         public BossParams BossParams { get; }
         public BlackBoard BlackBoard { get; }
-        public Animator Animator { get; }
-        public Renderer[] Renderers { get; }
         public BossEffects Effects { get; }
-        public Collider[] HitBoxes { get; }
         public MeleeEquipment MeleeEquip { get; }
         public RangeEquipment RangeEquip { get; }
         public List<FunnelController> Funnels { get; }
