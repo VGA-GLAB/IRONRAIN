@@ -135,6 +135,9 @@ public class CriAudioManager
         /// <summary>CancellationTokenSource</summary>
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
+        /// <summary>3DSource</summary>
+        protected List<CriAtomEx3dSource> _3dSources = new();
+        
         protected AbstractCriChannel(in Volume masterVolume)
         {
             _masterVolume = masterVolume;
@@ -149,7 +152,12 @@ public class CriAudioManager
             _volume.OnVolumeChanged -= UpdateVolume;
             _masterVolume.OnVolumeChanged -= UpdateMasterVolume;
             _player.Dispose();
-        
+
+            foreach (var source in _3dSources)
+            {
+                source.Dispose();
+            }
+            
             foreach (var VARIABLE in _cueData)
             {
                 VARIABLE.Value.CancellationTokenSource.Cancel();
@@ -206,7 +214,7 @@ public class CriAudioManager
                     _cueData.TryAdd(tempIndex, playerData);
                 }
 
-                PlaybackDestroyWaitForPlayEnd(tempIndex, playerData.CancellationTokenSource.Token);
+                PlaybackDestroyWaitForPlayEnd(tempIndex, playerData.CancellationTokenSource.Token).Forget();
                 return tempIndex;
             }
             else
@@ -214,13 +222,13 @@ public class CriAudioManager
                 _currentMaxCount++;
                 _cueData.TryAdd(_currentMaxCount, playerData);
 
-                PlaybackDestroyWaitForPlayEnd(_currentMaxCount, playerData.CancellationTokenSource.Token);
+                PlaybackDestroyWaitForPlayEnd(_currentMaxCount, playerData.CancellationTokenSource.Token).Forget();
                 return _currentMaxCount;
             }
 
         }
 
-        protected async void PlaybackDestroyWaitForPlayEnd(int index, CancellationToken cancellationToken)
+        protected async UniTaskVoid PlaybackDestroyWaitForPlayEnd(int index, CancellationToken cancellationToken)
         {
             // ループしていたら抜ける
             if (_cueData[index].IsLoop)
@@ -230,10 +238,10 @@ public class CriAudioManager
 
             while (_cueData[index].Playback.GetStatus() == CriAtomExPlayback.Status.Playing)
             {
-                await Task.Delay((int)_cueData[index].CueInfo.length, _cueData[index].CancellationTokenSource.Token);
+                await UniTask.WaitForSeconds(_cueData[index].CueInfo.length / 1000F, cancellationToken: _cueData[index].CancellationTokenSource.Token);
             }
             
-            if (_cueData.TryRemove(index, out CriPlayerData outData))
+            if (_cueData.TryRemove(index, out CriPlayerData outData) && !outData.IsLoop)
             {
                 _removedCueDataIndex.Add(index);
             }
@@ -501,6 +509,8 @@ public class CriAudioManager
             _player.Set3dListener(_listener);
             _player.Set3dSource(temp3dData);
             tempPlayerData.Source = temp3dData;
+            _3dSources.Add(temp3dData);
+            
             _player.SetCue(tempAcb, cueName);
             _player.SetVolume(_volume * _masterVolume * volume);
             _player.SetStartTime(0L);
@@ -559,7 +569,7 @@ public class CriAudioManager
             {
                 _removedCueDataIndex.Add(index);
                 outData.Playback.Stop(false);
-                outData.Source?.Dispose();
+                //outData.Source?.Dispose();
                 outData.CancellationTokenSource?.Cancel();
             }
             
@@ -598,7 +608,7 @@ public class CriAudioManager
                 if (_cueData.Remove(VARIABLE, out CriPlayerData outData))
                 {
                     _removedCueDataIndex.Add(VARIABLE);
-                    outData.Source?.Dispose();
+                    //outData.Source?.Dispose();
                 }   
             }
         }
