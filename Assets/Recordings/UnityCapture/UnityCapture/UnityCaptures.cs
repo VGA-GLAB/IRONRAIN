@@ -132,7 +132,7 @@ public class UnityCaptures : MonoBehaviour
 	{
 		if (!_isCapture) return;
 		if (_cameraRender.Length <= (int)_selectRenderer) return;
-
+		
 		CaptureInterface.SendTexture(_cameraRender[(int)_selectRenderer], Timeout, DoubleBuffering, ResizeMode,
 			MirrorMode);
 	}
