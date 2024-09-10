@@ -17,6 +17,7 @@ MonoBehaviour:
   - rid: 4919532094182391809
   - rid: 4919532094182391810
   - rid: 4919532094182391811
+  - rid: 3800739258553597952
   - rid: 4919532094182391812
   - rid: 4919532094182391813
   - rid: 8390642844453568512
@@ -37,6 +38,13 @@ MonoBehaviour:
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 200
+    - rid: 3800739258553597952
+      type: {class: AlertSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _blinkSpanSec: 2
+        _blinkCount: 3
+        _blinkColor: {r: 1, g: 0, b: 0, a: 1}
+        _maxIntensity: 5
     - rid: 4919532094182391808
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
