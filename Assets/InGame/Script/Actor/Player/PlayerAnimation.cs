@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using Enemy;
 
 namespace IronRain.Player
 {
@@ -12,6 +13,8 @@ namespace IronRain.Player
         [SerializeField] private Animator _pileAnim;
         [SerializeField] private GameObject _fallObj;
         [SerializeField] private Transform _fallInsPos;
+        [SerializeField] private List<GameObject> _rightArm = new();
+        [SerializeField] private ParticleEffect _particleEffect;
         private CancellationToken _token;
 
         private bool _isCustomSpeed = false;
@@ -121,7 +124,11 @@ namespace IronRain.Player
 
         public async UniTask LeftArmDestroy() 
         {
-
+            for (int i = 0; i < _rightArm.Count; i++) 
+            {
+                _rightArm[i].SetActive(false);
+            }
+            _particleEffect.Play();
             await UniTask.CompletedTask;
         }
     }
