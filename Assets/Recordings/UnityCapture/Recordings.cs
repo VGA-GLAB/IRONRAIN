@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -10,14 +11,13 @@ using Debug = UnityEngine.Debug;
 public class Recordings : MonoBehaviour
 {
 	private const string StartRecordBat =
-		@"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStart.bat""";
+		@""".\Assets\Recordings\UnityCapture\RecordStart.bat""";
 
 	private const string StopRecordBat =
-		@"""C:\Users\vantan\Desktop\IronRain\Assets\Recordings\UnityCapture\RecordStop.bat""";
+		@""".\Assets\Recordings\UnityCapture\RecordStop.bat""";
 
-	[SerializeField] private int _videoTime = 20;
 	[SerializeField] private UnityCaptures _unityCaptures;
-
+	private Thread _thread;
 	/// <summary>
 	///     Batファイルを実行
 	/// </summary>
@@ -46,13 +46,17 @@ public class Recordings : MonoBehaviour
 	public void StartRecord()
 	{
 		_unityCaptures.ChangeIsCapture(true);
-		PowerShellCommand(StartRecordBat);
+		_thread = new Thread(()=>PowerShellCommand(StartRecordBat));
+		_thread.Start();
+		Debug.Log("録画開始");
 	}
 
 	///<summary>録画停止</summary>
 	public void StopRecord()
 	{
-		PowerShellCommand(StopRecordBat);
+		_thread = new Thread(()=>PowerShellCommand(StopRecordBat));
+		_thread.Start();
 		_unityCaptures.ChangeIsCapture(false);
+		Debug.Log("録画停止");
 	}
 }
