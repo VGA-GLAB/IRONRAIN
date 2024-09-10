@@ -5,8 +5,8 @@
         public override void OnShot()
         {
             base.OnShot();
-            _muzzleFlashEffect.Play(_effectOwnerTime);
-            _smokeEffect.Play(_effectOwnerTime);
+            _muzzleFlashEffect.Play();
+            _smokeEffect.Play();
         }
     }
 }
