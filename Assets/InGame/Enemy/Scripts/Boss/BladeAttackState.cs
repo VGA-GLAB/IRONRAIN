@@ -78,6 +78,10 @@ namespace Enemy.Boss.BladeAttack
             _start = Ref.Body.Forward;
             _end = Ref.BlackBoard.PlayerDirection;
             _lerp = 0;
+
+            // 刀を展開。
+            BladeEquipment blade = Ref.MeleeEquip as BladeEquipment;
+            blade.Open();
         }
 
         protected override BattleActionStep Stay()
@@ -317,6 +321,10 @@ namespace Enemy.Boss.BladeAttack
             _start = Ref.Body.Forward;
             _end = -Ref.Field.GetCurrentLane();
             _lerp = 0;
+
+            // 刀をしまう。
+            BladeEquipment blade = Ref.MeleeEquip as BladeEquipment;
+            blade.Close();
         }
 
         protected override BattleActionStep Stay()
