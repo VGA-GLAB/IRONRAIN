@@ -94,7 +94,17 @@ namespace Enemy.Boss.Qte
         private Vector3 _end;
         private float _lerp;
 
-        public FirstChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public FirstChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
+        {
+            // アニメーションに合わせて刀を展開。
+            Ref.AnimationEvent.OnQteBladeOpen += OnQteBladeOpen;
+        }
+
+        private void OnQteBladeOpen()
+        {
+            BladeEquipment blade = Ref.MeleeEquip as BladeEquipment;
+            blade.Open();
+        }
 
         protected override void Enter()
         {

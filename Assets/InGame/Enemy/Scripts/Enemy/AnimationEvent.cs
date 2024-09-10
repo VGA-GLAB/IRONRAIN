@@ -48,6 +48,10 @@ namespace Enemy
         /// ボス戦のQTEで、プレイヤーの武器とボスの武器がぶつかった際のエフェクトを出すタイミング。
         /// </summary>
         public event UnityAction OnWeaponCrash;
+        /// <summary>
+        /// ボス戦のQTE、刀を展開するタイミング。
+        /// </summary>
+        public event UnityAction OnQteBladeOpen;
 
         // アニメーションイベントに登録するメソッド群。
         // ○○○.fbxのインスペクター、AnimationタブのEvents項目に、メソッド名を記述する。
@@ -59,5 +63,6 @@ namespace Enemy
         public void Turn() => OnTurn?.Invoke();
         public void BreakLeftArm() => OnBreakLeftArm?.Invoke();
         public void WeaponCrash() => OnWeaponCrash?.Invoke();
+        public void QteBladeOpen()=> OnQteBladeOpen?.Invoke();
     }
 }

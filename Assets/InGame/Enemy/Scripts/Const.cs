@@ -136,6 +136,8 @@
             public const string QteBladeAttack02 = "QteBladeAttackTrigger02";
             public const string QteBladeAttackClear02 = "QteBladeAttackClearTrigger02";
             public const string Finish = "FinishTrigger";
+            public const string Open = "OpenTrigger";   // 刀
+            public const string Close = "CloseTrigger"; // 刀
         }
 
         // AnimatorControllerのレイヤー
