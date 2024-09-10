@@ -13,34 +13,7 @@ namespace Enemy
         private Renderer[] _renderers;
         private Collider[] _hitBoxes;
 
-        public Body(RequiredRef requiredRef)
-        {
-            _transform = requiredRef.Transform;
-            _offset = requiredRef.Offset;
-            _rotate = requiredRef.Rotate;
-            _renderers = requiredRef.Renderers;
-            _hitBoxes = requiredRef.HitBoxes;
-        }
-
-        public Body(Boss.RequiredRef requiredRef)
-        {
-            _transform = requiredRef.Transform;
-            _offset = requiredRef.Offset;
-            _rotate = requiredRef.Rotate;
-            _renderers = requiredRef.Renderers;
-            _hitBoxes = requiredRef.HitBoxes;
-        }
-
-        public Body(Funnel.RequiredRef requiredRef)
-        {
-            _transform = requiredRef.Transform;
-            _offset = requiredRef.Offset;
-            _rotate = requiredRef.Rotate;
-            _renderers = requiredRef.Renderers;
-            _hitBoxes = requiredRef.HitBoxes;
-        }
-
-        public Body(NPC.RequiredRef requiredRef)
+        public Body(CharacterRequiredRef requiredRef)
         {
             _transform = requiredRef.Transform;
             _offset = requiredRef.Offset;

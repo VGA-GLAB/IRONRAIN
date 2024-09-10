@@ -3,22 +3,16 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class RequiredRef
+    public class RequiredRef : CharacterRequiredRef
     {
-        public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, 
-            EnemyParams enemyParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, 
+        public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
+            EnemyParams enemyParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers,
             EnemyEffects effects, Collider[] hitBoxes, Equipment equipment, Collider qteTrigger)
+            : base(transform, player, offset, rotate, animator, renderers, hitBoxes)
         {
-            Transform = transform;
-            Player = player;
-            Offset = offset;
-            Rotate = rotate;
             EnemyParams = enemyParams;
             BlackBoard = blackBoard;
-            Animator = animator;
-            Renderers = renderers;
             Effects = effects;
-            HitBoxes = hitBoxes;
             Equipment = equipment;
             QteTrigger = qteTrigger;
 
@@ -29,16 +23,9 @@ namespace Enemy
             AgentScript = transform.GetComponent<AgentScript>();
         }
 
-        public Transform Transform { get; }
-        public Transform Player { get; }
-        public Transform Offset { get; }   
-        public Transform Rotate { get; }
         public EnemyParams EnemyParams { get; }
         public BlackBoard BlackBoard { get; }
-        public Animator Animator { get; }
-        public Renderer[] Renderers { get; }
         public EnemyEffects Effects { get; }
-        public Collider[] HitBoxes { get; }
         public Equipment Equipment { get; }
         public Collider QteTrigger { get; }
 

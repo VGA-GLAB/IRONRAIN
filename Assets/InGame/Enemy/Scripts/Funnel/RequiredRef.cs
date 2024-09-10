@@ -5,22 +5,16 @@ using Enemy.Boss;
 
 namespace Enemy.Funnel
 {
-    public class RequiredRef
+    public class RequiredRef : CharacterRequiredRef
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate, FunnelParams funnelParams,
             BlackBoard blackBoard, Animator animator, Renderer[] renderers, FunnelEffects effects, Collider[] hitBoxes,
             BossController boss, Transform muzzle)
+            : base(transform, player, offset, rotate, animator, renderers, hitBoxes)
         {
-            Transform = transform;
-            Player = player;
-            Offset = offset;
-            Rotate = rotate;
             FunnelParams = funnelParams;
             BlackBoard = blackBoard;
-            Animator = animator;
-            Renderers = renderers;
             Effects = effects;
-            HitBoxes = hitBoxes;
 
             States = new Dictionary<StateKey, State<StateKey>>();
             Body = new Body(this);
@@ -34,16 +28,9 @@ namespace Enemy.Funnel
             BulletPool = BulletPool.Find();
         }
 
-        public Transform Transform { get; }
-        public Transform Player { get; }
-        public Transform Offset { get; }
-        public Transform Rotate { get; }
         public FunnelParams FunnelParams { get; }
         public BlackBoard BlackBoard { get; }
-        public Animator Animator { get; }
-        public Renderer[] Renderers { get; }
         public FunnelEffects Effects { get; }
-        public Collider[] HitBoxes { get; }
 
         public Dictionary<StateKey, State<StateKey>> States { get; }
         public Body Body { get; }

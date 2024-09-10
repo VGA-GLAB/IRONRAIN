@@ -4,22 +4,16 @@ using UnityEngine;
 
 namespace Enemy.NPC
 {
-    public class RequiredRef
+    public class RequiredRef : CharacterRequiredRef
     {
         public RequiredRef(Transform transform, Transform player, Transform offset, Transform rotate,
             BuddyNpcParams npcParams, BlackBoard blackBoard, Animator animator, Renderer[] renderers, 
             NpcEffects effects, Callback callback)
+            : base(transform, player, offset, rotate, animator, renderers, null)
         {
-            Transform = transform;
-            Player = player;
-            Offset = offset;
-            Rotate = rotate;
             NpcParams = npcParams;
             BlackBoard = blackBoard;
-            Animator = animator;
-            Renderers = renderers;
             Effects = effects;
-            HitBoxes = null;
             Callback = callback;
 
             States = new Dictionary<StateKey, State<StateKey>>();
@@ -28,16 +22,9 @@ namespace Enemy.NPC
             Effector = new Effector(this);
         }
 
-        public Transform Transform { get; }
-        public Transform Player { get; }
-        public Transform Offset { get; }
-        public Transform Rotate { get; }
         public BuddyNpcParams NpcParams { get; }
         public BlackBoard BlackBoard { get; }
-        public Animator Animator { get; }
-        public Renderer[] Renderers { get; }
         public NpcEffects Effects { get; }
-        public Collider[] HitBoxes { get; }
         public Callback Callback { get; }
 
         public Dictionary<StateKey, State<StateKey>> States { get; }
