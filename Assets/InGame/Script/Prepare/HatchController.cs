@@ -14,7 +14,7 @@ public sealed class HatchController : MonoBehaviour
 
     public UniTask OpenDoorAsync(OpenDoorData data, CancellationToken cancellationToken)
     {
-        _smoke.Play();
+        if (_smoke) _smoke.Play();
 
         _underDoor.Play();
         _overDoor.Play();
@@ -24,7 +24,7 @@ public sealed class HatchController : MonoBehaviour
 
     public void Open()
     {
-        _smoke.Play();
+        if (_smoke) _smoke.Play();
         _underDoor.Play();
         _overDoor.Play();
     }
