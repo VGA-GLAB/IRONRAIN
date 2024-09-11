@@ -67,8 +67,18 @@ namespace Enemy.DebugUse
                 }
             }
 
-            // 道中のイベント
+            // シーン上の敵を撃破。
             float offset = _buttonWidth;
+            for (int i = 0; i < _sequenceID.Count; i++)
+            {
+                if (EventRunButton(i, $"シーケンス {_sequenceID[i]} の敵を撃破", offset))
+                {
+                    _enemyManager.DefeatThemAll(_sequenceID[i]);
+                }
+            }
+
+            // 道中のイベント
+            offset = _buttonWidth * 2;
             if (EventRunButton(0, "味方機体のイベント再生", offset))
             {
                 _enemyManager.Spawn(3);
@@ -76,7 +86,7 @@ namespace Enemy.DebugUse
             }
 
             // ボス戦関係のコマンド
-            offset = _buttonWidth * 2;
+            offset = _buttonWidth * 3;
             if (EventRunButton(0, "ボス戦開始", offset))
             {
                 _enemyManager.BossStart();
@@ -108,7 +118,7 @@ namespace Enemy.DebugUse
             }
 
             // ボス戦QTEのコマンド
-            offset = _buttonWidth * 3;
+            offset = _buttonWidth * 4;
             if (EventRunButton(0, "プレイヤーの正面まで移動", offset))
             {
                 _enemyManager.MoveBossToPlayerFrontAsync(this.GetCancellationTokenOnDestroy()).Forget();

@@ -1,5 +1,4 @@
 ﻿using Enemy.DebugUse;
-using Enemy.Extensions;
 using UnityEngine;
 using Enemy.Boss;
 using UniRx;
@@ -61,7 +60,7 @@ namespace Enemy
         private void OnDrawGizmosSelected()
         {
             // 攻撃範囲。
-            GizmosUtils.WireCircle(Origin(), Radius, ColorExtensions.ThinRed);
+            GizmosUtils.WireCircle(Origin(), Radius, Color.red);
         }
 
         // 判定の有効化

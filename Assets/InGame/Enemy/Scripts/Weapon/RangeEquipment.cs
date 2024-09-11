@@ -1,5 +1,4 @@
 ﻿using Enemy.DebugUse;
-using Enemy.Extensions;
 using UnityEngine;
 using Enemy.Boss;
 using UnityEngine.Events;
@@ -75,7 +74,7 @@ namespace Enemy
             {
                 // 弾道。
                 Vector3 f = _muzzle.position + _muzzle.forward * 10.0f; // 適当な長さ
-                GizmosUtils.Line(_muzzle.position, f, ColorExtensions.ThinRed);
+                GizmosUtils.Line(_muzzle.position, f, Color.red);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using Enemy.DebugUse;
-using Enemy.Extensions;
 using UnityEngine;
 
 namespace Enemy.NPC
@@ -37,13 +36,13 @@ namespace Enemy.NPC
             {
                 Vector3 p = transform.position;
                 Vector3 tp = _target.transform.position;
-                GizmosUtils.Line(p, tp, ColorExtensions.ThinWhite);
+                GizmosUtils.Line(p, tp, Color.white);
             }
             
             // 撃破距離を描画
             {
                 Vector3 p = transform.position;
-                GizmosUtils.WireCircle(p, DefeatDistance, ColorExtensions.ThinRed);
+                GizmosUtils.WireCircle(p, DefeatDistance, Color.red);
             }
         }
     }

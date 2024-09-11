@@ -1,5 +1,4 @@
 ﻿using Enemy.DebugUse;
-using Enemy.Extensions;
 using UnityEngine;
 
 namespace Enemy
@@ -46,7 +45,7 @@ namespace Enemy
         public void Draw()
         {
             float radius = Ref.EnemyParams.FovRadius;
-            GizmosUtils.WireCircle(Origin(), radius, ColorExtensions.ThinGreen);
+            GizmosUtils.WireCircle(Origin(), radius, Color.green);
         }
 
         // 視界の原点。

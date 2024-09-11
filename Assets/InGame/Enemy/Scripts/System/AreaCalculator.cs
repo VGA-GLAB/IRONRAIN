@@ -1,5 +1,4 @@
-﻿using Enemy.Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemy
 {
@@ -51,7 +50,7 @@ namespace Enemy
         /// </summary>
         public static Vector3 SlotPoint(Transform player, SlotPlace place, float forwardOffset)
         {
-            int length = EnumExtensions.Length<SlotPlace>();
+            int length = Utility.Length<SlotPlace>();
 
             // プレイヤーの位置
             Vector3 p = player.position;
