@@ -16,12 +16,18 @@ namespace IronRain.Player
         [SerializeField] private List<GameObject> _rightArm = new();
         [SerializeField] private ParticleEffect _particleEffect;
         private CancellationToken _token;
+        private PlayerEnvroment _playerEnvroment;
 
         private bool _isCustomSpeed = false;
 
         private void Awake()
         {
             _token = this.GetCancellationTokenOnDestroy();
+        }
+
+        public void SetUp(PlayerEnvroment playerEnvroment) 
+        {
+            _playerEnvroment = playerEnvroment;
         }
 
         private void Update()
@@ -53,6 +59,9 @@ namespace IronRain.Player
             _anim.SetTrigger("PileAttackTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8,
             PlayerLoopTiming.Update, _token);
+
+            _isCustomSpeed = true;
+            _anim.speed = 0;
         }
 
         //
@@ -108,6 +117,18 @@ namespace IronRain.Player
      PlayerLoopTiming.Update, _token);
         }
 
+        public async UniTask NextStopAnim(float normalizedTime) 
+        {
+            AnimationSpeedReset();
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.1,
+            PlayerLoopTiming.Update, _token);
+
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= normalizedTime,
+            PlayerLoopTiming.Update, _token);
+            _isCustomSpeed = true;
+            _anim.speed = 0;
+        }
+
         public async UniTask PlayerAssaultDusarm()
         {
             _anim.SetTrigger("AssaultDisarmTrigger");
@@ -129,6 +150,7 @@ namespace IronRain.Player
                 _rightArm[i].SetActive(false);
             }
             _particleEffect.Play();
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_BlokenArm");
             await UniTask.CompletedTask;
         }
     }
