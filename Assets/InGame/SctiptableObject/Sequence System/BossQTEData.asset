@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BossQTEData
   m_EditorClassIdentifier: 
   _sequences:
+  - rid: 3800739276693176372
   - rid: 4919532094182391808
   - rid: 4919532094182391809
   - rid: 4919532094182391810
@@ -45,6 +46,13 @@ MonoBehaviour:
         _blinkCount: 3
         _blinkColor: {r: 1, g: 0, b: 0, a: 1}
         _maxIntensity: 5
+    - rid: 3800739276693176372
+      type: {class: SetAisacSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _aisacBeforeValue: 0
+        _aisacAfterValue: 1
+        _aisacIdName: AisacControl_01
+        _animDuration: 1
     - rid: 4919532094182391808
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
