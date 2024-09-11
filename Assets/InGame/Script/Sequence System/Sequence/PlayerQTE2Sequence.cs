@@ -32,11 +32,17 @@ namespace IronRain.SequenceSystem
             var qteModel = _playerController.SeachState<PlayerQTE>().QTEModel;
 
             // PlayerQTEを呼び出している
-            using (var qteCt = new CancellationTokenSource())
+            var qteCts = new CancellationTokenSource();
+            
+            // CancellationTokenSourceをSequence全体のCTSにひもづける
+            ct.Register(() =>
             {
-                qteModel.QTEFailureJudgment(qteCt, ct).Forget(exceptionHandler);
-                await qteModel.BossQte2Callseparately(_qteType, qteCt.Token);
-            }
+                qteCts?.Cancel();
+                qteCts?.Dispose();
+            }).AddTo(qteCts.Token);
+            
+            qteModel.QTEFailureJudgment(qteCts, ct).Forget(exceptionHandler);
+            await qteModel.BossQte2Callseparately(_qteType, qteCts.Token);
         }
 
         public void Skip()

@@ -308,6 +308,10 @@ public class CriAudioManager
         /// <param name="listener">リスナー</param>
         /// <param name="index">リスナーを変更したい音声のPlay時の戻り値</param>
         public void SetListener(CriAtomListener listener, int index);
+
+        /// <summary>AISACの値を設定する</summary>
+        /// <param name="value"></param>
+        public void SetAisac(string controlName, float value);
     }
 
     /// <summary>BGMなどに使用する、一つの音のみを出力するチャンネル</summary>
@@ -462,6 +466,12 @@ public class CriAudioManager
 
             _player.Set3dListener(listener.nativeListener);
             _player.Update(_cueData[index].Playback);
+        }
+
+        public void SetAisac(string controlName, float value)
+        {
+            _player.SetAisacControl(controlName, value);
+            _player.UpdateAll();
         }
     }
 
@@ -627,6 +637,12 @@ public class CriAudioManager
             _listener = listener.nativeListener;
             _player.Set3dListener(_listener);
             _player.Update(_cueData[index].Playback);
+        }
+        
+        public void SetAisac(string controlName, float value)
+        {
+            _player.SetAisacControl(controlName, value);
+            _player.UpdateAll();
         }
     }
 
@@ -794,6 +810,12 @@ public class CriAudioManager
         {
             // Trueを返すまで待つ
             yield return new WaitUntil(customStruct.CheckPlayingEnd);
+        }
+        
+        public void SetAisac(string controlName, float value)
+        {
+            _player.SetAisacControl(controlName, value);
+            _player.UpdateAll();
         }
     }
 
