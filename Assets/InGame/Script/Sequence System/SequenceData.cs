@@ -63,5 +63,7 @@ namespace IronRain.SequenceSystem
         public Light[] AlertLights => _alertLights;
         [SerializeField] private Transform _voiceTransform;
         public Transform VoiceTransform => _voiceTransform;
+        [SerializeField] private Camera _mainCamera;
+        public Camera MainCamera => _mainCamera;
     }
 }
