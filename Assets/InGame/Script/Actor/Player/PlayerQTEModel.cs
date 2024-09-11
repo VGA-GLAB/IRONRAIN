@@ -140,10 +140,10 @@ namespace IronRain.Player
 
                 await _playerEnvroment.PlayerAnimation.PileFire();
                 await _playerEnvroment.PlayerAnimation.PileFinish();
-                await _playerEnvroment.PlayerAnimation.NextAnim();
 
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
+                Debug.Log("成功");
                 _playerEnvroment.RemoveState(PlayerStateType.QTE);
                 await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.05f, startToken);
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
