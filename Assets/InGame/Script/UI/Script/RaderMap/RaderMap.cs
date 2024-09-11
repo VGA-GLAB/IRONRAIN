@@ -9,7 +9,11 @@ using UnityEngine.UI;
 
 public class RaderMap : MonoBehaviour
 {
-    /// <summary>
+    [Header("MiniMapのCanvasGroup")]
+    [SerializeField] private CanvasGroup _miniMapCanvasGroup;
+    [Header("PurgeUiのCanvasGroup")]
+    [SerializeField] private CanvasGroup _purgeUiCanvasGroup;
+    /// <summary0>
     /// 敵のリスト
     /// </summary>
     [FormerlySerializedAs("_enemies")] public List<GameObject> Enemies = new List<GameObject>();
@@ -101,6 +105,7 @@ public class RaderMap : MonoBehaviour
     void Start()
     {
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
+        _purgeUiCanvasGroup.alpha = 0;
         //_mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
         //_pokeInteractionBase = FindObjectOfType<UiPokeInteraction>();
     }
@@ -501,6 +506,31 @@ public class RaderMap : MonoBehaviour
 
         //Debug.Log("通った");
     }
+
+    /// <summary>
+    /// パージシーケンスが始まる時に呼ぶ処理
+    /// </summary>
+    public void StartPurgeSequence()
+    {
+        //パネルタッチ音を鳴らす
+        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        //ミニマップを非表示にする
+        _miniMapCanvasGroup.alpha = 0;
+        //パージUiを表示する
+        _purgeUiCanvasGroup.alpha = 1;
+    }
+
+
+    public void EndPurgeSequence()
+    {
+        //パネルタッチ音を鳴らす
+        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        //パージUiを非表示する
+        _purgeUiCanvasGroup.alpha = 0;
+        //ミニマップを非表示にする
+        _miniMapCanvasGroup.alpha = 1;
+    }
+
 }
 
 
