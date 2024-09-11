@@ -111,7 +111,8 @@ namespace Enemy.Boss.Qte
             _start = Ref.Body.Position;
             Vector3 dir = Ref.Field.GetCurrentLane().normalized;
             float dist = Ref.BossParams.BreakLeftArm.Distance;
-            _end = Ref.Field.PointP() + dir * dist;
+            Vector3 offset = Ref.BossParams.BreakLeftArm.Offset;
+            _end = Ref.Player.position + dir * dist + offset;
 
             // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
             // それ以外の状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
@@ -293,7 +294,8 @@ namespace Enemy.Boss.Qte
             _start = Ref.Body.Position;
             Vector3 dir = Ref.Field.GetCurrentLane().normalized;
             float dist = Ref.BossParams.SecondQte.Distance;
-            _end = Ref.Field.PointP() + dir * dist;
+            Vector3 offset = Ref.BossParams.SecondQte.Offset;
+            _end = Ref.Player.position + dir * dist + offset;
 
             // 2回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
             string state = Const.Boss.QteSwordHold_2;
@@ -423,8 +425,9 @@ namespace Enemy.Boss.Qte
         {
             _start = Ref.Body.Position;
             Vector3 dir = Ref.Field.GetCurrentLane().normalized;
-            float dist = Ref.BossParams.SecondQte.Distance;
-            _end = Ref.Field.PointP() + dir * dist;
+            float dist = Ref.BossParams.FinalQte.Distance;
+            Vector3 offset = Ref.BossParams.FinalQte.Offset;
+            _end = Ref.Player.position + dir * dist + offset;
 
             // 3回目の再生はトリガーで遷移出来ないので、ステートを指定して再生。
             string state = Const.Boss.QteSwordHold_2;
@@ -445,7 +448,7 @@ namespace Enemy.Boss.Qte
             bool isInputed = Ref.BlackBoard.IsPenetrateInputed;
             if (_lerp >= 1.0f && isInputed) return Next[0];
 
-            float speed = Ref.BossParams.SecondQte.MoveSpeed;
+            float speed = Ref.BossParams.FinalQte.MoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt * speed;
             _lerp = Mathf.Clamp01(_lerp);
