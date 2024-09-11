@@ -36,7 +36,6 @@ namespace IronRain.Player
         [Tooltip("リロード中かどうか")]
         private ReactiveProperty<bool> _isReload = new();
         private PlayerEnvroment _playerEnvroment;
-        protected EffectOwnerTime _effectOwnerTime = new();
 
         public virtual void SetUp(PlayerEnvroment playerEnvroment)
         {
@@ -135,11 +134,5 @@ namespace IronRain.Player
         {
             _isReload.Dispose();
         }
-
-        public class EffectOwnerTime : IOwnerTime
-        {
-            public float PausableDeltaTime => ProvidePlayerInformation.TimeScale;
-        }
-
     }
 }

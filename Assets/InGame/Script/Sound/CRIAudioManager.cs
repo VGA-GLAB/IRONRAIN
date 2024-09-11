@@ -50,7 +50,7 @@ public class CriAudioManager
     private CriMultiChannel _cockpitSE = default;
 
     /// <summary>Voiceを流すチャンネル</summary>
-    private CriVoiceChannel _voice = default;
+    private CriSingleChannel _voice = default;
 
     /// <summary>マスターボリューム</summary>
     public IVolume MasterVolume => _masterVolume;
@@ -382,6 +382,8 @@ public class CriAudioManager
             _player.Set3dListener(_listener);
             _player.Set3dSource(temp3dData);
             tempPlayerData.Source = temp3dData;
+            _3dSources.Add(temp3dData);
+
             _player.SetCue(tempAcb, cueName);
             _player.SetVolume(_volume * _masterVolume * volume);
             _player.SetStartTime(0L);
