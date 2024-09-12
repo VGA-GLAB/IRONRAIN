@@ -83,8 +83,12 @@ namespace Enemy.Boss
         [Min(1.0f)]
         [SerializeField] private float _moveSpeed = 6.0f;
 
+        [Tooltip("左腕破壊アニメーション再生位置のオフセット")]
+        [SerializeField] private Vector3 _offset;
+
         public float Distance => _distance;
         public float MoveSpeed => _moveSpeed;
+        public Vector3 Offset => _offset;
     }
 
     // QTE、鍔迫り合い1回目
@@ -114,16 +118,33 @@ namespace Enemy.Boss
         [Min(1.0f)]
         [SerializeField] private float _knockBack = 15.0f;
 
+        [Tooltip("鍔迫り合いアニメーション再生位置のオフセット")]
+        [SerializeField] private Vector3 _offset;
+
         public float Distance => _distance;
         public float MoveSpeed => _moveSpeed;
         public float KnockBack => _knockBack;
+        public Vector3 Offset => _offset;
     }
 
     // QTE、貫かれて死ぬ
     [System.Serializable]
     public class FinalQteSettings
     {
-        //
+        [Tooltip("この位置まで近づいた後、死ぬアニメーションを再生する。")]
+        [Min(1.0f)]
+        [SerializeField] private float _distance = 10.0f;
+
+        [Tooltip("2回目のノックバック後、この速さで死ぬアニメーション再生位置まで近づく。")]
+        [Min(1.0f)]
+        [SerializeField] private float _moveSpeed = 6.0f;
+
+        [Tooltip("死ぬアニメーション再生位置のオフセット")]
+        [SerializeField] private Vector3 _offset;
+
+        public float Distance => _distance;
+        public float MoveSpeed => _moveSpeed;
+        public Vector3 Offset => _offset;
     }
 
     /// <summary>
