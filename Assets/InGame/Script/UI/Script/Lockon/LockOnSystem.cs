@@ -124,7 +124,12 @@ public class LockOnSystem : MonoBehaviour
             //パネルに触れた時の音
             CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
         }
-        
+
+        //マルチロック時は処理を行わない
+        if (_isMultiLock)
+            return;
+
+
         FingertipCursor(_fingertip, _cursor);
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
