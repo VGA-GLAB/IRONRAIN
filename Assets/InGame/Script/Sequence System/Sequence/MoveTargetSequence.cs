@@ -46,11 +46,13 @@ namespace IronRain.SequenceSystem
             if (_target == MoveTarget.SecondDoor)
             {
                 await _data.PlayerTransform.DOMove(_data.SecondHatchTarget.position, _moveSec)
+                    .SetEase(Ease.OutQuint)
                     .ToUniTask(cancellationToken: ct);
             }
             else
             {
                 await _data.PlayerTransform.DOMove(_data.HangerOutsideTarget.position, _moveSec)
+                    .SetEase(Ease.OutQuint)
                     .ToUniTask(cancellationToken: ct);
             }
         }
