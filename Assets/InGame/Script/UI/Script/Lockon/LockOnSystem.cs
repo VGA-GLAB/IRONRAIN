@@ -91,10 +91,12 @@ public class LockOnSystem : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(_isFinsishMultiLock)
+        if(_isMultiLock )
         {
+            //ラインレンダラーを設定
+            _lineRenderer.positionCount = 0;
             //ラインレンダラーの更新
-            if (_temp.Count >= 1 && LimitLineRendere() )
+            if (_temp.Count >= 1 && LimitLineRendere())
             {
                 foreach (Transform transform in _temp)
                 {
@@ -124,7 +126,12 @@ public class LockOnSystem : MonoBehaviour
             //パネルに触れた時の音
             CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
         }
-        
+
+        //マルチロック時は処理を行わない
+        if (_isMultiLock)
+            return;
+
+
         FingertipCursor(_fingertip, _cursor);
         
         // Targetの数は実行中に増減するのでロックオンする直前にリスト化する。
@@ -244,17 +251,17 @@ public class LockOnSystem : MonoBehaviour
                     CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
                 }
 
-                //ラインレンダラーを設定
+                ////ラインレンダラーを設定
                 //_lineRenderer.positionCount = 0;
-                //ラインレンダラーの更新
-                if (_temp.Count >= 1 && LimitLineRendere())
-                {
-                    foreach (Transform transform in _temp)
-                    {
-                        _lineRenderer.positionCount++;
-                        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
-                    }
-                }
+                ////ラインレンダラーの更新
+                //if (_temp.Count >= 1)
+                //{
+                //    foreach (Transform transform in _temp)
+                //    {
+                //        _lineRenderer.positionCount++;
+                //        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
+                //    }
+                //}
             }
         }
         
