@@ -17,6 +17,7 @@ namespace Enemy
         private float _blend;
         private int _sign;
 
+
         public BattleState(RequiredRef requiredRef) : base(requiredRef)
         {
         }
@@ -89,13 +90,26 @@ namespace Enemy
                 Ref.Body.Warp(p);
             }
 
-            // アイドルから左右移動のアニメーションに切り替わる速さ。
-            const float BlendSpeed = 5.0f;
-            // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
-            // ブレンドツリーのパラメータをその値に徐々に変化させる。
-            _blend = Mathf.Clamp(_blend, -1, 1);
-            _blend = Mathf.MoveTowards(_blend, _sign, dt * BlendSpeed);
-            MoveAnimation(_blend);
+            {
+                // アイドルから左右移動のアニメーションに切り替わる速さ。
+                const float Speed = 5.0f;
+                // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+                // ブレンドツリーのパラメータをその値に徐々に変化させる。
+                _blend = Mathf.Clamp(_blend, -1, 1);
+                _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
+                LeftRightMoveAnimation(_blend);
+            }
+
+            {
+                // 良い感じになる前後移動のアニメーションのブレンド値。
+                const float BlendTarget = 0.3f;
+                const float Speed = 5.0f;
+                // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
+                string param = Const.Param.SpeedZ;
+                float current = Ref.BodyAnimation.GetFloat(param);
+                current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
+                ForwardBackMoveAnimation(current);
+            }
         }
     }
 }

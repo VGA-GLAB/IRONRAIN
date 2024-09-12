@@ -117,6 +117,7 @@
         public static class Param
         {
             public const string PlaySpeed = "PlaySpeed";
+            public const string SpeedZ = "SpeedZ";
             public const string SpeedY = "SpeedY";
             public const string SpeedX = "SpeedX";
             public const string ApproachEnd = "FinishFirstMoveTrigger";

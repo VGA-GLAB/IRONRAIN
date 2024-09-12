@@ -74,7 +74,7 @@ namespace Enemy
             Vector3 after = Ref.Body.Position;
 
             // 移動の前後で位置を比較し、移動方向によってアニメーション。
-            MoveAnimation(after - before);
+            LeftRightMoveAnimation(after - before);
 
             // Lerpの補間値を更新。距離が変わっても一定の速度で移動させる。
             float speed = Ref.EnemyParams.MoveSpeed.Approach;

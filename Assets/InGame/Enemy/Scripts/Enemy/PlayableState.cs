@@ -35,21 +35,30 @@ namespace Enemy
         /// 移動した方向ベクトルで下半身のアニメーションを制御。
         /// z軸を前方向として、ベクトルのx成分の正負で左右どちらに移動したかを判定する。
         /// </summary>
-        protected void MoveAnimation(in Vector3 moveDir)
+        protected void LeftRightMoveAnimation(in Vector3 moveDir)
         {
             // 移動量に対する倍率。
             const float Mag = 2.0f; 
 
             float value = Mathf.Clamp(moveDir.x * Mag, -1.0f, 1.0f);
-            MoveAnimation(value);
+            LeftRightMoveAnimation(value);
         }
 
         /// <summary>
         /// 左右移動のアニメーションを制御。
         /// </summary>
-        public void MoveAnimation(float value)
+        public void LeftRightMoveAnimation(float value)
         {
             string param = Const.Param.SpeedX;
+            Ref.BodyAnimation.SetFloat(param, value);
+        }
+
+        /// <summary>
+        /// 前後移動のアニメーションを制御。
+        /// </summary>
+        public void ForwardBackMoveAnimation(float value)
+        {
+            string param = Const.Param.SpeedZ;
             Ref.BodyAnimation.SetFloat(param, value);
         }
 
