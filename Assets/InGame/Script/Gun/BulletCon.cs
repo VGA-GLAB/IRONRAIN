@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Enemy;
 
 namespace IronRain.Player
 {
     public class BulletCon : MonoBehaviour
     {
-        public event Action<BulletCon, PlayerWeaponType> OnRelease;
+        public event Action<BulletCon, PoolObjType> OnBulletRelease;
+        public PlayerWeaponType WeaponType => _weaponType;
 
         [SerializeField] private float _speed;
+        [SerializeField] private float _bossBattleSpeed;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private ParticleSystem[] _particleArray;
         [SerializeField] private SphereCollider _sphereCollider;
@@ -21,13 +24,17 @@ namespace IronRain.Player
         private Transform _shootingTarget;
         private int _damege;
         private PlayerWeaponType _weaponType;
+        private ObjectPool _pool;
+        private bool _isBossBattle;
 
-        public void SetUp(GameObject enemy, int damege, Vector3 shotDir, PlayerWeaponType weaponType)
+        public void SetUp(GameObject enemy, int damege, Vector3 shotDir, PlayerWeaponType weaponType, ObjectPool pool, bool isBossBattle)
         {
+            _pool = pool;
             _lockOnEnemy = enemy;
             _damege = damege;
             _shotDir = shotDir;
             _weaponType = weaponType;
+            _isBossBattle = isBossBattle;
 
             if (_lockOnEnemy && _lockOnEnemy.GetComponent<Enemy.Character>().TryFindShootingTarget(out Transform shootingTarget))
             {
@@ -45,31 +52,36 @@ namespace IronRain.Player
         }
         private void Update()
         {
+            Debug.Log(_shootingTarget);
             ///一旦完全追従に
             if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf)
             {
+                Debug.Log("きた");
                 transform.LookAt(_shootingTarget.position + _offset);
-                _rb.velocity = transform.forward * _speed * ProvidePlayerInformation.TimeScale;
+                _rb.velocity = transform.forward * GetSpeed() * ProvidePlayerInformation.TimeScale;
             }
             else if (_shootingTarget && _lockOnEnemy && !_lockOnEnemy.activeSelf)
             {
-                _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
+                _rb.velocity = _shotDir * GetSpeed() * ProvidePlayerInformation.TimeScale;
             }
             else
             {
-                _rb.velocity = _shotDir * _speed * ProvidePlayerInformation.TimeScale;
+                _rb.velocity = _shotDir * GetSpeed() * ProvidePlayerInformation.TimeScale;
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private async void OnTriggerEnter(Collider other)
         {
             var damageble = other.GetComponentInParent<IDamageable>();
             var playerCon = other.GetComponentInParent<PlayerController>();
             if (!playerCon && damageble != null)
             {
                 damageble.Damage(_damege, _weaponType.ToString());
+                var effect = _pool.GetEffect(PoolObjType.AssaultRifleImpactEffect);
+                effect.gameObject.transform.position = other.ClosestPoint(this.transform.position);
+                effect.SetUp(_pool);
                 StopAllCoroutines();
-                OnRelease?.Invoke(this, _weaponType);
+                _pool.ReleaseBullet(this);
             }
         }
 
@@ -96,10 +108,25 @@ namespace IronRain.Player
             _sphereCollider.enabled = isVisible;
         }
 
+        private float GetSpeed() 
+        {
+            if (_isBossBattle)
+            {
+                return _bossBattleSpeed;
+            }
+            else 
+            {
+                return _speed;
+            }
+        }
+
         private IEnumerator BulletRelese()
         {
             yield return new WaitForSeconds(2);
-            OnRelease?.Invoke(this, _weaponType);
+            if (enabled) 
+            {
+                _pool.ReleaseBullet(this);
+            }
         }
     }
 }
