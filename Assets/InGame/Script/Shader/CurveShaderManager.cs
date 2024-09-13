@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace IronRain.ShaderSystem
 {
+    [ExecuteAlways]
     public class CurveShaderManager : MonoBehaviour
     {
         [SerializeField] private CurveType _curveType = CurveType._CURVE_TYPE_NONE;
@@ -50,7 +51,7 @@ namespace IronRain.ShaderSystem
             _CURVE_TYPE_WORLD_FORWARD
         }
 
-        private void Awake()
+        private void Start()
         {
             UpdateMaterialList();
             UpdateShaderParams();
@@ -67,7 +68,7 @@ namespace IronRain.ShaderSystem
             {
                 foreach (var renderer in rock.GetComponentsInChildren<Renderer>(true))
                 {
-                    _materials.Add(renderer.material);
+                    _materials.Add(renderer.sharedMaterial);
                 }
             }
         }
@@ -91,13 +92,11 @@ namespace IronRain.ShaderSystem
             material.SetFloat(_curveOffsetPropertyID, _offset);
             material.SetFloat(_curveStrengthPropertyID, _strength);
             material.SetFloat(_curveHeightOffsetPropertyID, _heightOffset);
-            
-            material.EnableKeyword(CurveType._CURVE_TYPE_WORLD_FORWARD.ToString());
-        }
-        
-        private void OnValidate()
-        {
-            UpdateShaderParams();
+
+            if (!material.IsKeywordEnabled(CurveType._CURVE_TYPE_WORLD_FORWARD.ToString()))
+            {
+                material.EnableKeyword(CurveType._CURVE_TYPE_WORLD_FORWARD.ToString());
+            }
         }
     }
 }
