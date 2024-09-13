@@ -49,7 +49,10 @@ namespace Enemy
         {
             // 前向きを修正。
             Vector3 current = _transform.position;
-            _forward.forward = _prev - current;
+
+            Vector3 dir = _prev - current;
+            if (dir != Vector3.zero) _forward.forward = dir;
+
             _prev = current;
 
             float deltaTime = _ownerTime != null ? _ownerTime.PausableDeltaTime : Time.deltaTime;
