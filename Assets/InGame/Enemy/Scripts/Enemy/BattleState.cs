@@ -40,9 +40,10 @@ namespace Enemy
         }      
         protected sealed override void Stay() 
         {
+            Always();
+
             if (ExitIfDeadOrTimeOver()) return;
 
-            Always();
             StayIfBattle();
         }
 
@@ -97,7 +98,8 @@ namespace Enemy
                 // ブレンドツリーのパラメータをその値に徐々に変化させる。
                 _blend = Mathf.Clamp(_blend, -1, 1);
                 _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
-                LeftRightMoveAnimation(_blend);
+                //LeftRightMoveAnimation(_blend);
+                LeftRightMoveAnimation(0);
             }
 
             {

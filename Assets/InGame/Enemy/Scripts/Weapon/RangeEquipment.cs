@@ -18,11 +18,6 @@ namespace Enemy
             Target,  // 任意のターゲットに向ける。
         }
 
-        /// <summary>
-        /// 弾を発射するタイミングのコールバック。
-        /// </summary>
-        public event UnityAction OnShootAction;
-
         [Header("エフェクトの設定")]
         [SerializeField] private Effect[] _muzzleEffects;
         [Header("射撃方法")]
@@ -105,7 +100,6 @@ namespace Enemy
             }
 
             OnShoot();
-            OnShootAction?.Invoke();
         }
 
         /// <summary>

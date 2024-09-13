@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Enemy.Broken;
 
 namespace Enemy
 {
@@ -8,18 +7,20 @@ namespace Enemy
     /// </summary>
     public class BrokenState : State<StateKey>
     {
-        private EnemyActionStep[] _steps;
-        private BattleActionStep _currentStep;
+        // 0より大きい値を設定すると、後方への移動が完了後、落下し続ける。
+        const float Delay = 1.0f;
+
+        // Lerpでプレイヤーの後方まで徐々に移動させる。
+        private float _start;
+        private float _end;
+        private float _diff;
+        private float _lerp;
+        // 重力に従って落下させる。
+        private float _gravity;
 
         public BrokenState(RequiredRef requiredRef) : base(requiredRef.States)
         {
             Ref = requiredRef;
-
-            _steps = new EnemyActionStep[2];
-            _steps[1] = new EndStep(Ref, null);
-            _steps[0] = new EffectStep(Ref, _steps[1]);
-
-            _currentStep = _steps[0];
         }
 
         private RequiredRef Ref { get; }
@@ -32,47 +33,6 @@ namespace Enemy
             AgentScript agent = Ref.AgentScript;
             if (agent != null) agent.EnemyDestory();
 
-            // プレイヤーとの相対位置に移動させる。
-            Vector3 rp = Ref.BlackBoard.PlayerRelativePosition;
-            Vector3 pp = Ref.Player.position;
-            Ref.Body.Warp(pp + rp);
-        }
-
-        protected override void Exit()
-        {
-        }
-
-        protected override void Stay()
-        {
-            _currentStep = _currentStep.Update();
-
-            if (_currentStep.ID == nameof(EndStep))
-            {
-                TryChangeState(StateKey.Delete);
-            }
-        }
-    }
-}
-
-namespace Enemy.Broken
-{
-    /// <summary>
-    /// 破壊された際の演出を再生。
-    /// </summary>
-    public class EffectStep : EnemyActionStep
-    {
-        // Lerpでプレイヤーの後方まで徐々に移動させる。
-        private float _start;
-        private float _end;
-        private float _diff;
-        private float _lerp;
-        // 重力に従って落下させる。
-        private float _gravity;
-
-        public EffectStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next) { }
-
-        protected override void Enter()
-        {
             // 再生するアニメーション名が敵の種類によって違う。
             EnemyType type = Ref.EnemyParams.Type;
             string stateName = "";
@@ -95,9 +55,7 @@ namespace Enemy.Broken
             // LerpでZ軸方向に移動させる距離。
             const float KnockBack = 10.0f;
 
-            float z = Ref.Body.Position.z;
-            float pz = Ref.Player.position.z;
-            _start = z - pz;
+            _start = 0;
             _end = _start + KnockBack;
             _diff = Mathf.Abs(_start - _end);
             _lerp = 0;
@@ -106,25 +64,21 @@ namespace Enemy.Broken
             Always();
         }
 
-        protected override BattleActionStep Stay()
+        protected override void Exit()
+        {
+        }
+
+        protected override void Stay()
         {
             Always();
 
-            // 0より大きい値を設定すると、後方への移動が完了後、落下し続ける。
-            const float Delay = 1.0f;
-
-            if (_lerp >= 1 + Delay) return Next[0];
-            else return this;
+            if (_lerp >= 1 + Delay) TryChangeState(StateKey.Delete);
         }
 
         private void Always()
         {
             // 生成位置からスロットの位置をLerpで動かす。
             float l = Mathf.Lerp(_start, _end, _lerp);
-            float pz = Ref.Player.position.z;
-            Vector3 p = Ref.Body.Position;
-            p.z = pz + l;
-
             float dt = Ref.BlackBoard.PausableDeltaTime;
 
             // ある程度アニメーションを再生させたら、重力に従って落下させる。
@@ -136,26 +90,23 @@ namespace Enemy.Broken
                 const float Gravity = 0.98f * 30.0f;
 
                 _gravity += dt * Gravity;
+                Vector3 p = Ref.Body.Position;
                 p.y -= _gravity * dt;
+                Ref.Body.Warp(p);
             }
-
-            Ref.Body.Warp(p);
 
             // 後方への移動速度。
             const float Speed = 5.0f;
 
             // Lerpの補間値を更新。距離が変わっても一定の速度で移動させる。
             _lerp += Speed / _diff * dt;
-        }
-    }
 
-    /// <summary>
-    /// 破壊演出終了、画面から消しても良い。
-    /// </summary>
-    public class EndStep : EnemyActionStep
-    {
-        public EndStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
-        {
+            // プレイヤーとの相対位置に移動させる。
+            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            sp.x = Ref.Body.Position.x;
+            sp.y = Ref.Body.Position.y;
+            sp.z += l;
+            Ref.Body.Warp(sp);
         }
     }
 }
