@@ -86,6 +86,15 @@ namespace IronRain.Player
                 PlayerLoopTiming.Update, _token);
         }
 
+        public async UniTask EndPileFire() 
+        {
+            _pileAnim.SetTrigger("EndFireTrigger");
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+                PlayerLoopTiming.Update, _token);
+            _pileAnim.speed = 0;
+
+        }
+
         public async UniTask PileFinish()
         {
             _pileAnim.SetTrigger("FinishTrigger");

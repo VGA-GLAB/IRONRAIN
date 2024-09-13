@@ -144,7 +144,6 @@ namespace IronRain.Player
 
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
-                Debug.Log("成功");
                 _playerEnvroment.RemoveState(PlayerStateType.QTE);
                 await tutorialTextBoxController.DoTextChangeAsync("成功です", 0.05f, startToken);
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
@@ -312,6 +311,7 @@ namespace IronRain.Player
                         if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE1;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
+                        _playerEnvroment.PlayerAnimation.QteAttack().Forget();
                         break;
                     }
                 case QTEState.QTE2:
@@ -319,6 +319,7 @@ namespace IronRain.Player
                         if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE2;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
+                        _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f).Forget();
                         break;
                     }
                 case QTEState.QTE3:
@@ -328,6 +329,7 @@ namespace IronRain.Player
                         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, token);
                         _qteResultType = QTEResultType.Success;
                         _qteType.Value = QTEState.QTENone;
+                        await _playerEnvroment.PlayerAnimation.EndPileFire();
                         break;
                     }
                 default:
