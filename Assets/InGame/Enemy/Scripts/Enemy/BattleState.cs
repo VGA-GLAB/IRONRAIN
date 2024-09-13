@@ -35,7 +35,7 @@ namespace Enemy
         {
             Always();
             OnExit();
-            WritePlayerRelativePosition();
+            WriteBrokenPosition();
         }      
         protected sealed override void Stay() 
         {
@@ -59,6 +59,35 @@ namespace Enemy
         {
             PlayDamageSE();
 
+            if (Ref.EnemyParams.Type != EnemyType.Shield) Move();
+
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+
+            {
+                // アイドルから左右移動のアニメーションに切り替わる速さ。
+                const float Speed = 5.0f;
+                // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+                // ブレンドツリーのパラメータをその値に徐々に変化させる。
+                _blend = Mathf.Clamp(_blend, -1, 1);
+                _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
+                LeftRightMoveAnimation(_blend);
+            }
+
+            {
+                // 良い感じになる前後移動のアニメーションのブレンド値。
+                const float BlendTarget = 0.3f;
+                const float Speed = 5.0f;
+                // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
+                string param = Const.Param.SpeedZ;
+                float current = Ref.BodyAnimation.GetFloat(param);
+                current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
+                ForwardBackMoveAnimation(current);
+            }
+        }
+
+        // スロットの位置を基準に移動。
+        private void Move()
+        {
             // ホバリングで上下に動かす。
             float h = Mathf.Sin(_hovering);
             float dt = Ref.BlackBoard.PausableDeltaTime;
@@ -86,27 +115,6 @@ namespace Enemy
                 Vector3 p = Ref.BlackBoard.Slot.Point;
                 p.x = Mathf.Lerp(_startX, _endX, _lerp);
                 Ref.Body.Warp(p);
-            }
-
-            {
-                // アイドルから左右移動のアニメーションに切り替わる速さ。
-                const float Speed = 5.0f;
-                // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
-                // ブレンドツリーのパラメータをその値に徐々に変化させる。
-                _blend = Mathf.Clamp(_blend, -1, 1);
-                _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
-                LeftRightMoveAnimation(_blend);
-            }
-
-            {
-                // 良い感じになる前後移動のアニメーションのブレンド値。
-                const float BlendTarget = 0.3f;
-                const float Speed = 5.0f;
-                // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
-                string param = Const.Param.SpeedZ;
-                float current = Ref.BodyAnimation.GetFloat(param);
-                current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
-                ForwardBackMoveAnimation(current);
             }
         }
 

@@ -38,8 +38,8 @@ namespace Enemy
         // プレイヤーとの距離
         public float PlayerDistance { get; set; }
 
-        // プレイヤーとの相対位置。ステート間でのやり取り用。
-        public Vector3 PlayerRelativePosition { get; set; }
+        // 撃破された位置。盾持ちのQTEがプレイヤーに合わせて移動しないために使用。
+        public Vector3 BrokenPosition { get; set; }
 
         // 残り戦闘時間
         public float LifeTime { get; set; }

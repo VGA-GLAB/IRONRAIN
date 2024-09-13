@@ -102,7 +102,16 @@ namespace Enemy
             _lerp += Speed / _diff * dt;
 
             // プレイヤーとの相対位置に移動させる。
-            Vector3 sp = Ref.BlackBoard.Slot.Point;
+            Vector3 sp;
+            if (Ref.EnemyParams.Type == EnemyType.Shield)
+            {
+                sp = Ref.BlackBoard.BrokenPosition;
+            }
+            else
+            {
+                sp = Ref.BlackBoard.Slot.Point;
+            }
+
             sp.x = Ref.Body.Position.x;
             sp.y = Ref.Body.Position.y;
             sp.z += l;
