@@ -65,5 +65,7 @@ namespace IronRain.SequenceSystem
         public Transform VoiceTransform => _voiceTransform;
         [SerializeField] private Camera _mainCamera;
         public Camera MainCamera => _mainCamera;
+        [SerializeField] private ToggleButton[] _toggleButtons;
+        public ToggleButton[] ToggleButtons => _toggleButtons;
     }
 }
