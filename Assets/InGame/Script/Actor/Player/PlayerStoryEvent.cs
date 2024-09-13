@@ -57,7 +57,9 @@ namespace IronRain.Player
             _playerEnvroment.AddState(PlayerStateType.Inoperable);
             _playerEnvroment.PlayerTransform.SetParent(_bossBattleStartPos.transform);
             var endPos = new Vector3(0, 0, -20);
-            await _playerEnvroment.PlayerTransform.DOLocalMove(endPos, _purgeDuration).SetLink(this.gameObject);
+            await _playerEnvroment.PlayerTransform.DOLocalMove(endPos, _purgeDuration)
+                .SetEase(Ease.OutQuint)
+                .SetLink(this.gameObject);
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Landing");
             //await _playerEnvroment.PlayerAnimation.FallAnim();
         }
