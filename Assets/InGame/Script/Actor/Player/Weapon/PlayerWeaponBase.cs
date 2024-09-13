@@ -9,7 +9,7 @@ using System;
 
 namespace IronRain.Player
 {
-    [RequireComponent(typeof(BulletPool))]
+    [RequireComponent(typeof(ObjectPool))]
     public abstract class PlayerWeaponBase : MonoBehaviour, IDisposable
     {
         public PlayerWeaponParams WeaponParam => _params;
@@ -20,7 +20,7 @@ namespace IronRain.Player
         [SerializeField] protected GameObject _weaponObject;
         [SerializeField] protected PlayerWeaponParams _params;
         [SerializeField] protected string _shotSeCueName;
-        [SerializeField] protected BulletPool _bulletPool;
+        [SerializeField] protected ObjectPool _bulletPool;
         [SerializeField] protected Transform _effectPos;
         [SerializeField] protected ParticleEffect _muzzleFlashEffect;
         [SerializeField] protected ParticleEffect _smokeEffect;
@@ -70,13 +70,16 @@ namespace IronRain.Player
         {
             if (_isFire && 0 < _currentBullets && !_isReload.Value)
             {
-                //後でオブジェクトプールに
+
+                var storyEvent = _playerEnvroment.SeachState<PlayerStoryEvent>();
                 var bulletCon = _bulletPool.GetBullet(_params.WeaponType);
                 bulletCon.SetUp(
                     _playerEnvroment.RaderMap.GetRockEnemy,
                     _params.ShotDamage,
                     _playerEnvroment.PlayerTransform.forward,
-                    _params.WeaponType);
+                    _params.WeaponType,
+                    _bulletPool,
+                    storyEvent.IsBossBattle);
 
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", _shotSeCueName);
                 OnShot();
