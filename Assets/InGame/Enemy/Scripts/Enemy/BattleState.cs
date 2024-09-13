@@ -11,6 +11,8 @@ namespace Enemy
         private float _lerp;
         private float _startX;
         private float _endX;
+        // 全員同じ移動間隔だとおかしいので、ランダム性を持たせる。
+        private float _randomDelay;
         // ホバリングさせるための値。
         private float _hovering;
         // 左右移動のアニメーションのパラメータ。
@@ -23,9 +25,7 @@ namespace Enemy
 
         protected sealed override void Enter() 
         {
-            _lerp = 0;
-            _startX = Ref.Body.Position.x;
-            _endX = Ref.BlackBoard.Slot.Point.x;
+            UpdateDestination();
             _hovering = 0;
 
             OnEnter();
@@ -39,9 +39,10 @@ namespace Enemy
         }      
         protected sealed override void Stay() 
         {
+            Always();
+
             if (ExitIfDeadOrTimeOver()) return;
 
-            Always();
             StayIfBattle();
         }
 
@@ -67,15 +68,13 @@ namespace Enemy
             const float Duration = 1.0f;
             // 一定間隔で自身の位置とスロットの位置を比較して次の移動位置を決める。
             _lerp += dt;
-            if (_lerp >= Duration)
+            if (_lerp >= Duration + _randomDelay)
             {
                 Vector3 p = Ref.BlackBoard.Slot.Point;
                 p.x = _endX;
                 Ref.Body.Warp(p);
 
-                _lerp = 0;
-                _startX = Ref.Body.Position.x;
-                _endX = Ref.BlackBoard.Slot.Point.x;
+                UpdateDestination();
 
                 // プレイヤーが移動していない場合はアニメーションさせない。
                 // 移動開始位置と終了位置を比較し、左右に移動する場合は-1もしくは1、移動しない場合は0。
@@ -89,13 +88,38 @@ namespace Enemy
                 Ref.Body.Warp(p);
             }
 
-            // アイドルから左右移動のアニメーションに切り替わる速さ。
-            const float BlendSpeed = 5.0f;
-            // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
-            // ブレンドツリーのパラメータをその値に徐々に変化させる。
-            _blend = Mathf.Clamp(_blend, -1, 1);
-            _blend = Mathf.MoveTowards(_blend, _sign, dt * BlendSpeed);
-            MoveAnimation(_blend);
+            {
+                // アイドルから左右移動のアニメーションに切り替わる速さ。
+                const float Speed = 5.0f;
+                // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+                // ブレンドツリーのパラメータをその値に徐々に変化させる。
+                _blend = Mathf.Clamp(_blend, -1, 1);
+                _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
+                LeftRightMoveAnimation(_blend);
+            }
+
+            {
+                // 良い感じになる前後移動のアニメーションのブレンド値。
+                const float BlendTarget = 0.3f;
+                const float Speed = 5.0f;
+                // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
+                string param = Const.Param.SpeedZ;
+                float current = Ref.BodyAnimation.GetFloat(param);
+                current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
+                ForwardBackMoveAnimation(current);
+            }
+        }
+
+        // 移動先の更新。
+        private void UpdateDestination()
+        {
+            _lerp = 0;
+            _startX = Ref.Body.Position.x;
+            _endX = Ref.BlackBoard.Slot.Point.x;
+
+            // ランダム力を強くすると、敵の動き始めが遅くなるので控えめに。
+            const float RandomPower = 0.5f;
+            _randomDelay = Random.value * RandomPower;
         }
     }
 }

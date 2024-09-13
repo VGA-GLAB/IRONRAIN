@@ -74,7 +74,7 @@ namespace Enemy.Assault
 
         private void OnIdleAnimationStateEnter()
         {
-            // ロケットランチャーを構える。
+            // アサルトライフルを構える。
             Ref.BodyAnimation.SetTrigger(Const.Param.AttackSet);
         }
 

@@ -81,8 +81,8 @@ namespace Enemy.DebugUse
             offset = _buttonWidth * 2;
             if (EventRunButton(0, "味方機体のイベント再生", offset))
             {
-                _enemyManager.Spawn(3);
-                _enemyManager.PlayNpcEvent(3);
+                _enemyManager.Spawn(9);
+                _enemyManager.PlayNpcEvent(9);
             }
 
             // ボス戦関係のコマンド
