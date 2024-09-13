@@ -9,11 +9,15 @@ namespace IronRain.Player
 {
     public class PlayerStoryEvent : PlayerComponentBase
     {
+        public bool IsBossBattle => _isBossBattle;
+
         [SerializeField] private Transform _bossBattleStartPos;
         [SerializeField] private Transform _centerPoint;
         [SerializeField] private List<LeverController> _leverCon;
         [Header("パージして着地するまでの時間")]
         [SerializeField] private float _purgeDuration;
+
+        private bool _isBossBattle;
 
         /// <summary>
         /// ジェットパックをパージ
@@ -86,6 +90,7 @@ namespace IronRain.Player
             _playerEnvroment.SeachState<PlayerTrackingPhaseMove>().enabled = false;
             _playerEnvroment.SeachState<PlayerBossMove>().enabled = true;
             _playerEnvroment.ClearState();
+            _isBossBattle = true;
         }
 
         /// <summary>
