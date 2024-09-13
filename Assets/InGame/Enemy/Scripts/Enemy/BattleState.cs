@@ -19,83 +19,42 @@ namespace Enemy
         private float _blend;
         private int _sign;
 
-        public BattleState(RequiredRef requiredRef) : base(requiredRef)
-        {
-        }
+        public BattleState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected sealed override void Enter() 
         {
-            UpdateDestination();
+            Ref.BlackBoard.CurrentState = StateKey.Battle;
             _hovering = 0;
 
+            UpdateDestination();
             OnEnter();
-            Always();
         }
+
         protected sealed override void Exit()
         {
-            Always();
+            // 死亡と撤退どちらの場合でも、武器を下ろす。
+            Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
+            Ref.BodyAnimation.SetUpperBodyWeight(0);
+
             OnExit();
             WriteBrokenPosition();
-        }      
+        }
+        
         protected sealed override void Stay() 
         {
-            Always();
-
-            if (ExitIfDeadOrTimeOver()) return;
-
-            StayIfBattle();
+            OnStay();
         }
 
         protected abstract void OnEnter();
         protected abstract void OnExit();
-
-        /// <summary>
-        /// ダメージ音、死亡または時間切れで遷移、アニメーション付きの移動。
-        /// これらが処理された後、装備している武器毎に動きが違う。
-        /// </summary>
-        protected abstract void StayIfBattle();
-
-        private void Always()
-        {
-            PlayDamageSE();
-
-            if (Ref.EnemyParams.Type != EnemyType.Shield) Move();
-
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-
-            {
-                // アイドルから左右移動のアニメーションに切り替わる速さ。
-                const float Speed = 5.0f;
-                // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
-                // ブレンドツリーのパラメータをその値に徐々に変化させる。
-                _blend = Mathf.Clamp(_blend, -1, 1);
-                _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
-                LeftRightMoveAnimation(_blend);
-            }
-
-            {
-                // 良い感じになる前後移動のアニメーションのブレンド値。
-                const float BlendTarget = 0.3f;
-                const float Speed = 5.0f;
-                // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
-                string param = Const.Param.SpeedZ;
-                float current = Ref.BodyAnimation.GetFloat(param);
-                current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
-                ForwardBackMoveAnimation(current);
-            }
-        }
+        protected abstract void OnStay();
 
         // スロットの位置を基準に移動。
-        private void Move()
+        protected void Move()
         {
-            // ホバリングで上下に動かす。
-            float h = Mathf.Sin(_hovering);
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            _hovering += dt;
-            Ref.Body.OffsetWarp(Vector3.up * h);
-
             const float Duration = 1.0f;
             // 一定間隔で自身の位置とスロットの位置を比較して次の移動位置を決める。
+            float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt;
             if (_lerp >= Duration + _randomDelay)
             {
@@ -116,6 +75,42 @@ namespace Enemy
                 p.x = Mathf.Lerp(_startX, _endX, _lerp);
                 Ref.Body.Warp(p);
             }
+        }
+
+        // 左右移動のアニメーション。
+        protected void LeftRightMoveAnimation()
+        {
+            // アイドルから左右移動のアニメーションに切り替わる速さ。
+            const float Speed = 5.0f;
+            // _signには移動しない場合は0、左右に移動する場合は-1もしくは1が代入されている。
+            // ブレンドツリーのパラメータをその値に徐々に変化させる。
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _blend = Mathf.Clamp(_blend, -1, 1);
+            _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
+            LeftRightMoveAnimation(_blend);
+        }
+
+        // 前後移動のアニメーション。
+        protected void ForwardBackMoveAnimation()
+        {
+            // 良い感じになる前後移動のアニメーションのブレンド値。
+            const float BlendTarget = 0.3f;
+            const float Speed = 5.0f;
+            // 前後移動のアニメーションが銃口の上下の向きと連動しているので、プレイヤーを向くよう修正。
+            string param = Const.Param.SpeedZ;
+            float current = Ref.BodyAnimation.GetFloat(param);
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            current = Mathf.MoveTowards(current, BlendTarget, dt * Speed);
+            ForwardBackMoveAnimation(current);
+        }
+
+        // ホバリングで上下に動かす。
+        protected void Hovering()
+        {
+            float h = Mathf.Sin(_hovering);
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            _hovering += dt;
+            Ref.Body.OffsetWarp(Vector3.up * h);
         }
 
         // 移動先の更新。

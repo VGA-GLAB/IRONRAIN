@@ -22,24 +22,34 @@ namespace Enemy
 
         protected override void OnEnter()
         {
-            Ref.BlackBoard.CurrentState = StateKey.Battle;
+            Always();
         }
 
         protected override void OnExit()
         {
-            // 死亡と撤退どちらの場合でも、武器を下ろす。
-            Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
-            Ref.BodyAnimation.SetUpperBodyWeight(0);
+            Always();
         }
 
-        protected override void StayIfBattle()
+        protected override void OnStay()
         {
+            Always();
+
+            if (ExitIfDeadOrTimeOver()) return;
+
             _currentStep = _currentStep.Update();
         }
 
         public override void Dispose()
         {
-            foreach (BattleActionStep s in _steps) s.Dispose();
+            foreach (EnemyActionStep s in _steps) s.Dispose();
+        }
+
+        private void Always()
+        {
+            PlayDamageSE();
+            Hovering();
+            LeftRightMoveAnimation();
+            ForwardBackMoveAnimation();
         }
     }    
 }
