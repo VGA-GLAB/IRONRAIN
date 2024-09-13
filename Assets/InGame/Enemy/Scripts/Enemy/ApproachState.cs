@@ -45,7 +45,7 @@ namespace Enemy
             // 接近完了フラグ。
             Ref.BlackBoard.IsApproachCompleted = true;
 
-            WritePlayerRelativePosition();
+            WriteBrokenPosition();
         }
 
         protected override void Stay()

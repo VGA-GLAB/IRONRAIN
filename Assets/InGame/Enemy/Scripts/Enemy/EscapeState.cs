@@ -22,10 +22,7 @@ namespace Enemy
             AgentScript agent = Ref.AgentScript;
             if (agent != null) agent.EnemyDestory();
 
-            // プレイヤーとの相対位置に移動させる。
-            Vector3 rp = Ref.BlackBoard.PlayerRelativePosition;
-            Vector3 pp = Ref.Player.position;
-            Ref.Body.Warp(pp + rp);
+            Always();
         }
 
         protected override void Exit()
@@ -37,18 +34,7 @@ namespace Enemy
 
         protected override void Stay()
         {
-            // プレイヤーとの相対位置に移動させる。
-            Vector3 rp = Ref.BlackBoard.PlayerRelativePosition;
-            Vector3 pp = Ref.Player.position;
-            Vector3 p = rp + pp;
-            p.y = Ref.Body.Position.y;
-            Ref.Body.Warp(p);
-
-            // 上方向に移動。
-            float spd = Ref.EnemyParams.MoveSpeed.Exit;
-            float dt = Ref.BlackBoard.PausableDeltaTime;
-            Vector3 up = Vector3.up * spd * dt;
-            Ref.Body.Move(up);
+            Always();
 
             // プレイヤーが見えない距離を適当に設定。
             const float OffScreenDist = 100.0f;
@@ -59,6 +45,28 @@ namespace Enemy
             {
                 TryChangeState(StateKey.Delete);
             }
+        }
+
+        private void Always()
+        {
+            Vector3 bp;
+            if (Ref.EnemyParams.Type == EnemyType.Shield)
+            {
+                bp = Ref.BlackBoard.BrokenPosition;
+            }
+            else
+            {
+                bp = Ref.BlackBoard.Slot.Point;
+            }
+
+            bp.y = Ref.Body.Position.y;
+            Ref.Body.Warp(bp);
+
+            // 上方向に移動。
+            float spd = Ref.EnemyParams.MoveSpeed.Exit;
+            float dt = Ref.BlackBoard.PausableDeltaTime;
+            Vector3 up = Vector3.up * spd * dt;
+            Ref.Body.Move(up);
         }
     }
 }

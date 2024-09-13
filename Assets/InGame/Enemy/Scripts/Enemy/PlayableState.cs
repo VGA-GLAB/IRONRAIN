@@ -74,14 +74,11 @@ namespace Enemy
         }
 
         /// <summary>
-        /// 黒板にプレイヤーとの相対位置を書き込む。
-        /// 撃破されたステートのEnterで相対位置に移動させるために必要。
+        /// 黒板に撃破された座標を書き込む。
         /// </summary>
-        protected void WritePlayerRelativePosition()
+        protected void WriteBrokenPosition()
         {
-            Vector3 p = Ref.Body.Position;
-            Vector3 pp = Ref.Player.position;
-            Ref.BlackBoard.PlayerRelativePosition = p - pp;
+            Ref.BlackBoard.BrokenPosition = Ref.Body.Position;
         }
     }
 }
