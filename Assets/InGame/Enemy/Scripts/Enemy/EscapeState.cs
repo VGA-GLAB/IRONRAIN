@@ -5,14 +5,9 @@ namespace Enemy
     /// <summary>
     /// 画面外に逃げ出すステート
     /// </summary>
-    public class EscapeState : State<StateKey>
+    public class EscapeState : ExitState
     {
-        public EscapeState(RequiredRef requiredRef) : base(requiredRef.States)
-        {
-            Ref = requiredRef;
-        }
-
-        private RequiredRef Ref { get; }
+        public EscapeState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Enter()
         {
@@ -41,24 +36,12 @@ namespace Enemy
 
             // 画面外に出た場合は削除状態に遷移。
             float dist = Ref.BlackBoard.PlayerDistance;
-            if (dist > OffScreenDist)
-            {
-                TryChangeState(StateKey.Delete);
-            }
+            if (dist > OffScreenDist) TryChangeState(StateKey.Delete);
         }
 
         private void Always()
         {
-            Vector3 bp;
-            if (Ref.EnemyParams.Type == EnemyType.Shield)
-            {
-                bp = Ref.BlackBoard.BrokenPosition;
-            }
-            else
-            {
-                bp = Ref.BlackBoard.Slot.Point;
-            }
-
+            Vector3 bp = GetBasePosition();
             bp.y = Ref.Body.Position.y;
             Ref.Body.Warp(bp);
 

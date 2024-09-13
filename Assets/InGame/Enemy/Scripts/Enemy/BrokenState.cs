@@ -5,7 +5,7 @@ namespace Enemy
     /// <summary>
     /// 撃破されたステート。
     /// </summary>
-    public class BrokenState : State<StateKey>
+    public class BrokenState : ExitState
     {
         // 0より大きい値を設定すると、後方への移動が完了後、落下し続ける。
         const float Delay = 1.0f;
@@ -18,12 +18,7 @@ namespace Enemy
         // 重力に従って落下させる。
         private float _gravity;
 
-        public BrokenState(RequiredRef requiredRef) : base(requiredRef.States)
-        {
-            Ref = requiredRef;
-        }
-
-        private RequiredRef Ref { get; }
+        public BrokenState(RequiredRef requiredRef) : base(requiredRef) { }
 
         protected override void Enter()
         {
@@ -102,15 +97,7 @@ namespace Enemy
             _lerp += Speed / _diff * dt;
 
             // プレイヤーとの相対位置に移動させる。
-            Vector3 sp;
-            if (Ref.EnemyParams.Type == EnemyType.Shield)
-            {
-                sp = Ref.BlackBoard.BrokenPosition;
-            }
-            else
-            {
-                sp = Ref.BlackBoard.Slot.Point;
-            }
+            Vector3 sp = GetBasePosition();
 
             sp.x = Ref.Body.Position.x;
             sp.y = Ref.Body.Position.y;
