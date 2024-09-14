@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 8475833024467601167}
   - component: {fileID: 177396255241639967}
   - component: {fileID: 4527381537691551663}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: PurgeImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -783,7 +783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 528c312c07885074ea195a1c52bcad82, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -813,7 +813,7 @@ GameObject:
   - component: {fileID: 1909441180740215853}
   - component: {fileID: 243661443982095808}
   - component: {fileID: 3571265485924569497}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2343,7 +2343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5460977028265093403}
   - component: {fileID: 6960664115159599091}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Purge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2358,7 +2358,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4889547884816191132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.488, y: -0.531, z: 0.013}
+  m_LocalPosition: {x: 0.488, y: -0.759, z: -0.236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2374,7 +2374,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4889547884816191132}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -4503,7 +4503,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4912648950512598194}
-  - {fileID: 5460977028265093403}
   - {fileID: 5798901518471214892}
   - {fileID: 4095068475015111187}
   - {fileID: 3602653087801748815}
@@ -4512,6 +4511,7 @@ Transform:
   - {fileID: 6855208104792170684}
   - {fileID: 744669972962186307}
   - {fileID: 8240519782864153050}
+  - {fileID: 5460977028265093403}
   - {fileID: 4547978582040552657}
   - {fileID: 8642673218059786789}
   m_Father: {fileID: 0}
@@ -4783,6 +4783,10 @@ PrefabInstance:
       propertyPath: _launcherUi
       value: 
       objectReference: {fileID: 2149676825148993830}
+    - target: {fileID: 4693792104267390097, guid: 4ed2cca37375536469cdffd975bba6e8, type: 3}
+      propertyPath: _centerCircle
+      value: 
+      objectReference: {fileID: 2158229891703341463}
     - target: {fileID: 4693792104267390097, guid: 4ed2cca37375536469cdffd975bba6e8, type: 3}
       propertyPath: _animationWait
       value: 30

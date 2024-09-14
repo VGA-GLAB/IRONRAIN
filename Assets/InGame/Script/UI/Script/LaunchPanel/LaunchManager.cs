@@ -14,6 +14,8 @@ public class LaunchManager : MonoBehaviour
     [Header("テストフラグ")]
     [SerializeField]
     private bool _isTest;
+    [Header("CenterCircle")]
+    [SerializeField] private GameObject _centerCircle;
     [Header("音を鳴らす位置")]
     [SerializeField] private Transform _soundTransform;
     [Header("ActiveUi")] [SerializeField] private GameObject _activeUiObject;
@@ -315,6 +317,7 @@ public class LaunchManager : MonoBehaviour
     public void SkipLaunchAnimation()
     {
         _activeUiObject.gameObject.SetActive(false);
+        _centerCircle.SetActive(false);
         _launcherUi.alpha = 1;
         _assultUi.alpha = 1;
         _rocketLauncherUi.alpha = 1;
