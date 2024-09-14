@@ -39,6 +39,7 @@ Shader "Custom/2DHologram"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float4 color : COLOR;
 
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -46,6 +47,7 @@ Shader "Custom/2DHologram"
             struct Varyings
             {
                 float2 uv : TEXCOORD0;
+                float4 color : TECOORD1;
                 float4 vertex : SV_POSITION;
 
                 UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -84,6 +86,7 @@ Shader "Custom/2DHologram"
                 
                 output.vertex = TransformObjectToHClip(input.vertex.xyz);
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
+                output.color = input.color;
                 return output;
             }
 
@@ -94,7 +97,7 @@ Shader "Custom/2DHologram"
                 
                 // sample the texture
                 float2 glitchUV = Glitch(input.uv, _FrameRate, _Frequency, _GlitchStrength);
-                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, glitchUV);
+                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, glitchUV) * input.color;
 
                 float noise = sin(input.uv.yy * _NoiseScale + _Time.y * _NoiseScrollSpeed);
                 noise = (noise + 1) / 2;
