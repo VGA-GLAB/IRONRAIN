@@ -22,12 +22,16 @@ namespace Enemy.Funnel
 
             // ホバリングが揃っていると不自然なのでランダム性を持たせる。
             _hovering = Random.Range(-1.0f, 1.0f);
+
+            PlayDamageSE();
         }
 
         protected override void Exit()
         {
             // 再度展開された後、再びボスから射撃許可を出すため。
             Ref.BlackBoard.IsFireEnabled = false;
+
+            PlayDamageSE();
         }
 
         protected override void Stay()

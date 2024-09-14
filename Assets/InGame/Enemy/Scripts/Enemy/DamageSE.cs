@@ -16,6 +16,9 @@ public static class DamageSE
         else if (source == Const.PlayerMeleeWeaponName) seName = "SE_PileBunker_Hit";
         else if (source == Const.PlayerMissileWeaponName) seName = "SE_Missile_Hit";
 
-        if (seName != string.Empty) AudioWrapper.PlaySE(position, seName);
+        if (seName != string.Empty)
+        {
+            AudioWrapper.PlaySE(position, seName);
+        }
     }
 }
