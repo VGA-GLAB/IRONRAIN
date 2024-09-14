@@ -122,6 +122,8 @@ namespace Enemy.Funnel
             {
                 bullet.transform.position = Ref.Muzzle.position;
                 bullet.Shoot(forward, owner);
+
+                AudioWrapper.PlaySE(Ref.Body.Position, "SE_Funnel_Fire");
             }
         }
 
