@@ -68,6 +68,8 @@ MonoBehaviour:
   - rid: 8390642849261813913
   - rid: 8390642849261813929
   - rid: 3800739259115372552
+  - rid: 8390642934176809060
+  - rid: 8390642934176809083
   - rid: 3800739259115372555
   - rid: 3800739259115372556
   references:
@@ -263,7 +265,7 @@ MonoBehaviour:
       type: {class: MoveTargetSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 1
-        _moveSec: 3
+        _moveSec: 8
         _target: 1
     - rid: 3800739328952893447
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
@@ -892,11 +894,6 @@ MonoBehaviour:
         - rid: 8390642849261813883
         - rid: 8390642849261813884
         - rid: 8390642849261813885
-        - rid: 8390642849261813886
-        - rid: 8390642849261813887
-        - rid: 8390642849261813890
-        - rid: 8390642849261813891
-        - rid: 8390642849261813892
     - rid: 8390642849261813848
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1111,33 +1108,6 @@ MonoBehaviour:
       data:
         _totalSec: 0
         _targetSeq: 10
-    - rid: 8390642849261813886
-      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 12
-    - rid: 8390642849261813887
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0.5
-        _announceUiType: 2
-        _cueSheetName: VOICE
-        _cueName: VOICE_Ryan_Attack
-        _delaySec: 0
-    - rid: 8390642849261813890
-      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 13
-    - rid: 8390642849261813891
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0.5
-    - rid: 8390642849261813892
-      type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 11
     - rid: 8390642849261813893
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1253,7 +1223,7 @@ MonoBehaviour:
     - rid: 8390642849261813912
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 2
+        _totalSec: 10
     - rid: 8390642849261813913
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1377,7 +1347,7 @@ MonoBehaviour:
     - rid: 8390642849261813930
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 3
+        _totalSec: 6
     - rid: 8390642849261813931
       type: {class: FunnelExpandSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 8390642849261813932
@@ -1388,6 +1358,115 @@ MonoBehaviour:
       type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 5
+    - rid: 8390642934176809060
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: BossQTE
+        _isSkip: 0
+        _sequences:
+        - rid: 8390642934176809066
+        - rid: 8390642934176809067
+        - rid: 8390642934176809068
+        - rid: 8390642934176809080
+        - rid: 8390642934176809071
+        - rid: 8390642934176809072
+        - rid: 8390642934176809069
+        - rid: 8390642934176809070
+        - rid: 8390642934176809073
+        - rid: 8390642934176809074
+        - rid: 8390642934176809075
+        - rid: 8390642934176809076
+        - rid: 8390642934176809077
+        - rid: 8390642934176809081
+        - rid: 8390642934176809082
+    - rid: 8390642934176809066
+      type: {class: SetAisacSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _aisacBeforeValue: 0
+        _aisacAfterValue: 1
+        _aisacIdName: AisacControl_01
+        _animDuration: 1
+    - rid: 8390642934176809067
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 424
+    - rid: 8390642934176809068
+      type: {class: QTEBossAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteBossAnimType: 0
+    - rid: 8390642934176809069
+      type: {class: QTEPlayerAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _animationType: 0
+        _isAwait: 0
+    - rid: 8390642934176809070
+      type: {class: AlertSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _blinkSpanSec: 2
+        _blinkCount: 3
+        _blinkColor: {r: 1, g: 0, b: 0, a: 1}
+        _maxIntensity: 5
+    - rid: 8390642934176809071
+      type: {class: QTEBossAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteBossAnimType: 1
+    - rid: 8390642934176809072
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 6.5
+    - rid: 8390642934176809073
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_12
+        _delaySec: 0
+    - rid: 8390642934176809074
+      type: {class: QTEBossAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteBossAnimType: 2
+    - rid: 8390642934176809075
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_13
+        _delaySec: 0
+    - rid: 8390642934176809076
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_14
+        _delaySec: 0
+    - rid: 8390642934176809077
+      type: {class: PlayerQTE1Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteType: 2
+    - rid: 8390642934176809080
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+    - rid: 8390642934176809081
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_15
+        _delaySec: 0
+    - rid: 8390642934176809082
+      type: {class: PlayerQTE2Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteType: 0
+    - rid: 8390642934176809083
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 99999
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,4 +1530,4 @@ MonoBehaviour:
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
   _isSkip: 1
-  _startSequence: 8
+  _startSequence: 10
