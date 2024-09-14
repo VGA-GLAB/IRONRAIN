@@ -2,6 +2,7 @@ Shader "Custom/2DHologram"
 {
     Properties
     {
+        [PerRen]
         _MainTex ("Texture", 2D) = "white" {}
         
         [Header(Glitch)]
@@ -24,6 +25,8 @@ Shader "Custom/2DHologram"
 
         Pass
         {
+
+            Blend SrcAlpha OneMinusSrcAlpha
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -73,6 +76,7 @@ Shader "Custom/2DHologram"
             float _NoiseScale;
             float _NoiseScrollSpeed;
             float _NoiseDistance;
+            half4 _TextureSampleAdd;
             
             CBUFFER_END
 
@@ -97,7 +101,7 @@ Shader "Custom/2DHologram"
                 
                 // sample the texture
                 float2 glitchUV = Glitch(input.uv, _FrameRate, _Frequency, _GlitchStrength);
-                half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, glitchUV) * input.color;
+                half4 col = (SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, glitchUV) + _TextureSampleAdd) * input.color;
 
                 float noise = sin(input.uv.yy * _NoiseScale + _Time.y * _NoiseScrollSpeed);
                 noise = (noise + 1) / 2;
@@ -108,6 +112,8 @@ Shader "Custom/2DHologram"
                 
                 col.rgb *= saturate(1 - noise);
                 col.rgb += _NoiseColor * noise;
+
+                col.rgb *= col.a;
 
                 return col;
             }
