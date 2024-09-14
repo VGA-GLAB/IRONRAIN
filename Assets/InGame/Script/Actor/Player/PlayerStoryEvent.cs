@@ -42,7 +42,6 @@ namespace IronRain.Player
             // UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourLever), PlayerLoopTiming.Update, token);
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Purge");
             await tutorialTextBoxController.DoCloseTextBoxAsync(0.5f, token);
-            Debug.Log("パージ成功");
             //await _playerAnimation.JetpackPurgeAnim();
         }
 
