@@ -280,6 +280,41 @@ MonoBehaviour:
         _endValue: 0
     - rid: 3800739328952893449
       type: {class: WaitStartFallSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739328952893453
+      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _openSec: 1
+        _delaySec: 0
+    - rid: 3800739328952893454
+      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 4
+        _clearText: 1
+        _text: "\u30ED\u30DC\u30D7\u30ED\u6700\u5F37\u30ED\u30DC\u30D7\u30ED\u6700\u5F37\u30ED\u30DC\u30D7\u30ED\u6700\u5F37"
+        _oneCharDuration: 0.05
+        _delaySec: 0
+    - rid: 3800739328952893455
+      type: {class: CloseTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 1
+        _closeDuration: 1
+    - rid: 3800739328952893462
+      type: {class: ChangeToggleEmissionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetToggle: 1
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 315.173, g: 0, b: 315.173, a: 1}
+        _duration: 1
+    - rid: 3800739328952893463
+      type: {class: ChangeToggleEmissionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetToggle: 3
+        _beforeColor: {r: 0, g: 1, b: 0.12585473, a: 1}
+        _afterColor: {r: 16, g: 0.5959356, b: 0, a: 1}
+        _duration: 1
     - rid: 8390642798642855957
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -348,6 +383,11 @@ MonoBehaviour:
         _sequences:
         - rid: 8390642849261813763
         - rid: 8390642849261813764
+        - rid: 3800739328952893453
+        - rid: 3800739328952893454
+        - rid: 3800739328952893455
+        - rid: 3800739328952893462
+        - rid: 3800739328952893463
         - rid: 8390642849261813765
         - rid: 8390642849261813766
         - rid: 8390642849261813767
@@ -696,7 +736,7 @@ MonoBehaviour:
     - rid: 8390642849261813830
       type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 9
+        _totalSec: 10.5
         _announceUiType: 1
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Tutorial_12
@@ -854,8 +894,6 @@ MonoBehaviour:
         - rid: 8390642849261813885
         - rid: 8390642849261813886
         - rid: 8390642849261813887
-        - rid: 8390642849261813888
-        - rid: 8390642849261813889
         - rid: 8390642849261813890
         - rid: 8390642849261813891
         - rid: 8390642849261813892
@@ -1086,14 +1124,6 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Ryan_Attack
         _delaySec: 0
-    - rid: 8390642849261813888
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 1
-    - rid: 8390642849261813889
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0.5
     - rid: 8390642849261813890
       type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1107,7 +1137,7 @@ MonoBehaviour:
       type: {class: EnemyManagerDefeatThemAllSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _targetSeq: 14
+        _targetSeq: 11
     - rid: 8390642849261813893
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1394,9 +1424,18 @@ MonoBehaviour:
     _recorder: {fileID: 0}
     _concatenate: {fileID: 0}
     _curveManager: {fileID: 0}
-    _alertLights: []
+    _alertLights:
+    - {fileID: 0}
+    - {fileID: 0}
     _voiceTransform: {fileID: 0}
     _mainCamera: {fileID: 0}
+    _toggleButtons:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
 --- !u!114 &52876117135305751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,4 +1451,4 @@ MonoBehaviour:
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
   _isSkip: 1
-  _startSequence: 0
+  _startSequence: 8
