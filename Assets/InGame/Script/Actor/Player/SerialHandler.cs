@@ -21,6 +21,7 @@ public class SerialHandler
 
     private float _timeoutTimer;
     private bool _isRead = false;
+    private bool _isOpen = true;
 
 
     public SerialHandler() 
@@ -38,7 +39,6 @@ public class SerialHandler
         _portName = portName;
         Open();
         Update().Forget();
-        Debug.Log("Start");
     }
 
     private async UniTask Update()
@@ -69,14 +69,23 @@ public class SerialHandler
 
     private void Open()
     {
-        _serialPort = new SerialPort(_portName, _baudRate, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
+        if (!_isOpen) return;
 
-        _serialPort.Open();
+        try
+        {
+            _serialPort = new SerialPort(_portName, _baudRate, System.IO.Ports.Parity.None, 8, System.IO.Ports.StopBits.One);
 
-        _isRunning = true;
+            _serialPort.Open();
 
-        _thread = new Thread(Read);
-        _thread.Start();
+            _isRunning = true;
+
+            _thread = new Thread(Read);
+            _thread.Start();
+        }
+        catch 
+        {
+            _isOpen = false;
+        }
     }
 
     private void Close()
