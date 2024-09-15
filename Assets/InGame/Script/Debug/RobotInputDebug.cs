@@ -9,6 +9,8 @@ public class RobotInputDebug : MonoBehaviour
     [SerializeField] private GameObject _ui;
     [SerializeField] private Text _rightInput;
     [SerializeField] private Text _leftInput;
+    [SerializeField] private Text _threeInput;
+    [SerializeField] private Text _fourInput;
     [SerializeField] private Text _moveState;
     [SerializeField] private Text _currentWeapon;
     [SerializeField] private Text _currentBullet;
@@ -50,6 +52,8 @@ public class RobotInputDebug : MonoBehaviour
 
         _leftInput.text = $"X:{InputProvider.Instance.LeftLeverDir.x}Z:{InputProvider.Instance.LeftLeverDir.z}";
         _rightInput.text = $"X:{InputProvider.Instance.RightLeverDir.x}Z:{InputProvider.Instance.RightLeverDir.z}";
+        _threeInput.text = $"{InputProvider.Instance.ThreeLeverDir.y}";
+        _fourInput.text = $"{InputProvider.Instance.FourLeverDir.y}";
         _maxBullet.text = _weaponCon.WeaponModel.CurrentWeapon.WeaponParam.MagazineSize.ToString();
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
