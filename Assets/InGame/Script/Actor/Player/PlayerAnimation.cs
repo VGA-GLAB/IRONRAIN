@@ -67,6 +67,7 @@ namespace IronRain.Player
         //
         public async UniTask QteGuard() 
         {
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Damage_05");
             _anim.SetTrigger("PileGuardTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
             PlayerLoopTiming.Update, _token);

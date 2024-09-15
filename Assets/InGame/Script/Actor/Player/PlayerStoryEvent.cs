@@ -50,12 +50,6 @@ namespace IronRain.Player
         /// </summary>
         public async UniTask StartFall()
         {
-            //ボス戦の中心点をPlayerの真下に移動させる
-            _bossBattleStartPos.transform.position = new Vector3
-                (_playerEnvroment.PlayerTransform.position.x,
-                _bossBattleStartPos.position.y, 
-                _playerEnvroment.PlayerTransform.position.z + 20);
-
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Fall");
             _playerEnvroment.AddState(PlayerStateType.Inoperable);
             _playerEnvroment.PlayerTransform.SetParent(_bossBattleStartPos.transform);

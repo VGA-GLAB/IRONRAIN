@@ -18,6 +18,9 @@ namespace IronRain.SequenceSystem
         /// <summary>何秒後に流すか</summary>
         [Header("何秒後に流すのか"), SerializeField] private float _delaySec = 0F;
 
+        [Header("Stopをかける際は、0以上のIDを指定してください"), SerializeField]
+        private int _id = -1;
+        
         public void SetParams(float totalSec, string cueSheetName, string cueName, float delaySec)
         {
             _totalSec = totalSec;
@@ -26,7 +29,12 @@ namespace IronRain.SequenceSystem
             _delaySec = delaySec;
         }
 
-        public void SetData(SequenceData data) { }
+        private SequenceData.SoundSequenceManager _soundSequenceManager;
+
+        public void SetData(SequenceData data)
+        {
+            _soundSequenceManager = data.SoundManager;
+        }
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
@@ -41,16 +49,34 @@ namespace IronRain.SequenceSystem
             // 再生前の遅延
             await UniTask.WaitForSeconds(_delaySec, cancellationToken: ct);
 
+            var index = 0;
+            
             if (_cueSheetName == "BGM")
             {
-                CriAudioManager.Instance.BGM.Play(_cueSheetName, _cueName);
+                index = CriAudioManager.Instance.BGM.Play(_cueSheetName, _cueName);
             }
             else
             {
-                CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
+                index = CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
             }
+            
+            if (_id > -1) _soundSequenceManager.RegisterIndex(_id, index);
         }
 
-        public void Skip() { }
+        public void Skip()
+        {
+            var index = 0;
+            
+            if (_cueSheetName == "BGM")
+            {
+                index = CriAudioManager.Instance.BGM.Play(_cueSheetName, _cueName);
+            }
+            else
+            {
+                index = CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
+            }
+            
+            if (_id > -1) _soundSequenceManager.RegisterIndex(_id, index);
+        }
     }
 }

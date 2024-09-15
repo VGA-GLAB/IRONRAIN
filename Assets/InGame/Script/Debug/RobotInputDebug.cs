@@ -52,8 +52,16 @@ public class RobotInputDebug : MonoBehaviour
 
         _leftInput.text = $"X:{InputProvider.Instance.LeftLeverDir.x}Z:{InputProvider.Instance.LeftLeverDir.z}";
         _rightInput.text = $"X:{InputProvider.Instance.RightLeverDir.x}Z:{InputProvider.Instance.RightLeverDir.z}";
-        _threeInput.text = $"{InputProvider.Instance.ThreeLeverDir.y}";
-        _fourInput.text = $"{InputProvider.Instance.FourLeverDir.y}";
+
+        if (_threeInput) 
+        {
+            _threeInput.text = $"{InputProvider.Instance.ThreeLeverDir.y}";
+        }
+        if (_fourInput) 
+        {
+            _fourInput.text = $"{InputProvider.Instance.FourLeverDir.y}";
+        }
+        
         _maxBullet.text = _weaponCon.WeaponModel.CurrentWeapon.WeaponParam.MagazineSize.ToString();
         _currentBullet.text = _weaponCon.WeaponModel.CurrentWeapon.CurrentBullets.ToString();
         _currentWeapon.text = _weaponCon.WeaponModel.CurrentWeapon.ToString().Replace("PlayerWeapon (", "");
