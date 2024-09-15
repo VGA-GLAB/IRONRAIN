@@ -81,38 +81,51 @@ namespace IronRain.Player
                 StopAllCoroutines();
                 _pool.ReleaseBullet(this);
             }
+            else if (!playerCon)
+            {
+                _pool.ReleaseBullet(this);
+            }
         }
 
         public void SetVisible(bool isVisible)
         {
-            if (_weaponType != PlayerWeaponType.RocketLauncher)
-                if (isVisible)
+            if (isVisible)
+            {
+                for (int i = 0; i < _particleArray.Length; i++)
                 {
-                    for (int i = 0; i < _particleArray.Length; i++)
-                    {
-                        _particleArray[i].Play();
-                    }
-                    StartCoroutine(BulletRelese());
+                    _particleArray[i].Play();
                 }
-                else
+                StartCoroutine(BulletRelese());
+            }
+            else
+            {
+                for (int i = 0; i < _particleArray.Length; i++)
                 {
-                    for (int i = 0; i < _particleArray.Length; i++)
-                    {
-                        _particleArray[i].Stop();
-                    }
-                    StopAllCoroutines();
+                    _particleArray[i].Stop();
                 }
+                StopAllCoroutines();
+            }
+
+            if (!isVisible)
+            {
+                StopAllCoroutines();
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                gameObject.SetActive(true);
+            }
 
             _sphereCollider.enabled = isVisible;
         }
 
-        private float GetSpeed() 
+        private float GetSpeed()
         {
             if (_isBossBattle)
             {
                 return _bossBattleSpeed;
             }
-            else 
+            else
             {
                 return _speed;
             }
@@ -121,7 +134,7 @@ namespace IronRain.Player
         private IEnumerator BulletRelese()
         {
             yield return new WaitForSeconds(2);
-            if (enabled) 
+            if (enabled)
             {
                 _pool.ReleaseBullet(this);
             }
