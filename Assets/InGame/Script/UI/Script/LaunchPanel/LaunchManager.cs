@@ -189,7 +189,8 @@ public class LaunchManager : MonoBehaviour
             return;
 
         //パネルに触れた時の音
-        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        //CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_RobotStartUp");
 
         _isTouch = true;
         var buttonColor = _activeUiAnimation.gameObject.GetComponent<RawImage>().color;
