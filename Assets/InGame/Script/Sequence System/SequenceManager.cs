@@ -10,6 +10,7 @@ namespace IronRain.SequenceSystem
 
         public ISequence[] GetSequences()
         {
+            _sequenceData.SoundManager = new();
             var sequences = _loader.GetSequences();
             
             for (int i = 0; i < sequences.Length; i++)

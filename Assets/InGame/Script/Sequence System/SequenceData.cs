@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Enemy;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -65,7 +66,44 @@ namespace IronRain.SequenceSystem
         public Transform VoiceTransform => _voiceTransform;
         [SerializeField] private Camera _mainCamera;
         public Camera MainCamera => _mainCamera;
-        [SerializeField] private ToggleButton[] _toggleButtons;
-        public ToggleButton[] ToggleButtons => _toggleButtons;
+        [SerializeField] private CockpitEmissionController _cockpitEmissionController;
+        public CockpitEmissionController CockpitEmissionController => _cockpitEmissionController;
+
+        public SoundSequenceManager SoundManager { get; set;}
+        
+        public class SoundSequenceManager
+        {
+            private Dictionary<int, int> _indexList = new();
+
+            public void RegisterIndex(int id, int index)
+            {
+                if (id < 0)
+                {
+                    Debug.LogError("そのID無効です " + id);
+                    return;
+                }
+                if (_indexList.ContainsKey(id))
+                {
+                    Debug.LogError("そのIDは重複しています");
+                    return;
+                }
+                
+                _indexList.Add(id, index);
+            }
+
+            public int UnregisterIndex(int id)
+            {
+                if (!_indexList.ContainsKey(id))
+                {
+                    Debug.LogError("そのIDは存在していません");
+                    return　-1;
+                }
+                
+                var index = _indexList[id];
+                _indexList.Remove(id);
+
+                return index;
+            }
+        }
     }
 }
