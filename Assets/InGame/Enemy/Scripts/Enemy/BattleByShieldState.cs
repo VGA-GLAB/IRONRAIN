@@ -28,6 +28,8 @@ namespace Enemy
         protected override void OnExit()
         {
             Always();
+
+            AudioWrapper.PlaySE("SE_PileBunker_Hit");
         }
 
         protected override void OnStay()

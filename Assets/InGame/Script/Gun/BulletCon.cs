@@ -52,11 +52,9 @@ namespace IronRain.Player
         }
         private void Update()
         {
-            Debug.Log(_shootingTarget);
             ///一旦完全追従に
             if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf)
             {
-                Debug.Log("きた");
                 transform.LookAt(_shootingTarget.position + _offset);
                 _rb.velocity = transform.forward * GetSpeed() * ProvidePlayerInformation.TimeScale;
             }

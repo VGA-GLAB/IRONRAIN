@@ -20,14 +20,21 @@ public class InputProvider
     /// <summary>左レバーに加わっている入力の方向</summary>
     public Vector3 LeftLeverInputDir { get; private set; }
     /// <summary>右レバーが動かせるか</summary>
-    public bool IsRightLeverMove { get; private set; }    
+    public bool IsRightLeverMove { get; private set; }
     /// <summary>左レバーが動かせるか</summary>
     public bool IsLeftLeverMove { get; private set; }
     /// <summary三番目のレバーの向き</summary>
     public Vector2 ThreeLeverDir { get; private set; }
     /// <summary>四番目のレバー向き</summary>
     public Vector2 FourLeverDir { get; private set; }
-    public static InputProvider Instance => _instance;
+    public static InputProvider Instance
+    {
+        get
+        {
+            CreateInstance();
+            return _instance;
+        }
+    }
 
     [Tooltip("InputSystemで生成したクラス")]
     private XRIDefaultInputActions _inputMap;
@@ -46,15 +53,25 @@ public class InputProvider
     private float _throttle;
 
     private bool _isInstanced = false;
-    private static InputProvider _instance = new InputProvider();
+    private static InputProvider _instance;
+    private SerialHandler _threeLeverSerialHandler = new();
+    private SerialHandler _fourLeverSerialHandler = new();
 
     public InputProvider()
     {
         Initialize();
     }
 
-    ~InputProvider() 
+    ~InputProvider()
     {
+    }
+
+    private static void CreateInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new InputProvider();
+        }
     }
 
     #region 初期化処理
@@ -98,6 +115,44 @@ public class InputProvider
         _inputMap.Toggle.Toggle6.performed += context => ExecuteInput(InputType.Toggle6, InputMode.Enter);
         _inputMap.Toggle.Toggle6.canceled += context => ExecuteInput(InputType.Toggle6, InputMode.Exit);
 
+        _threeLeverSerialHandler.Start("COM7");
+        _fourLeverSerialHandler.Start("COM8");
+
+        _threeLeverSerialHandler.OnDataReceived += (string message) =>
+        {
+            Debug.Log($"3:{message}");
+            var replacemessage = message;
+            if ("0" == replacemessage[0].ToString())
+            {
+                ThreeLeverDir = new Vector2(0, -1);
+            }
+            else if ("1" == replacemessage[0].ToString())
+            {
+                ThreeLeverDir = new Vector2(0, 0);
+            }
+            else if ("2" == replacemessage[0].ToString())
+            {
+                ThreeLeverDir = new Vector2(0, 1);
+            }
+        };
+
+        _fourLeverSerialHandler.OnDataReceived += (string message) =>
+        {
+            Debug.Log($"4:{message}");
+            if ("0" == message[0].ToString())
+            {
+                FourLeverDir = new Vector2(0, -1);
+            }
+            else if ("1" == message[0].ToString())
+            {
+                FourLeverDir = new Vector2(0, 0);
+            }
+            else if ("2" == message[0].ToString())
+            {
+                FourLeverDir = new Vector2(0, 1);
+            }
+        };
+
         _isInstanced = true;
     }
 
@@ -113,7 +168,7 @@ public class InputProvider
         _inputMap.Lever.ForceButtonRz.performed += context =>
         {
             var a = context.ReadValue<float>();
-            if (a == 1) 
+            if (a == 1)
             {
                 ExecuteInput(InputType.FourButton, InputMode.Enter);
             }
@@ -139,12 +194,12 @@ public class InputProvider
         _inputMap.XRILeftHandLocomotion.Move.canceled += context => RightLeverInputDir = Vector2.zero;
     }
 
-    private void KeyBordInit() 
+    private void KeyBordInit()
     {
         _inputMap.Lever.WASD.performed += context => RightLeverInputDir = context.ReadValue<Vector2>();
-        _inputMap.Lever.WASD.canceled += context => RightLeverInputDir = Vector2.zero;     
+        _inputMap.Lever.WASD.canceled += context => RightLeverInputDir = Vector2.zero;
         _inputMap.Lever.LeftLever.performed += context => LeftLeverInputDir = context.ReadValue<Vector2>();
-        _inputMap.Lever.LeftLever.canceled += context => LeftLeverInputDir = Vector2.zero;  
+        _inputMap.Lever.LeftLever.canceled += context => LeftLeverInputDir = Vector2.zero;
         _inputMap.Lever.LeverThree.performed += context => ThreeLeverDir = context.ReadValue<Vector2>();
         _inputMap.Lever.LeverThree.canceled += context => ThreeLeverDir = Vector2.zero;
         _inputMap.Lever.LeverFour.performed += context => FourLeverDir = context.ReadValue<Vector2>();
@@ -234,7 +289,7 @@ public class InputProvider
     /// <summary>
     /// 特定の入力を呼び出す
     /// </summary>
-    public void CallEnterInput(InputType inputType) 
+    public void CallEnterInput(InputType inputType)
     {
         ExecuteInput(inputType, InputMode.Enter);
     }
@@ -313,7 +368,7 @@ public class InputProvider
         /// <summary>武器切り替え</summary>
         WeaponChenge,
         /// <summary>右レバーが動いているか</summary>
-        RightLeverMove,     
+        RightLeverMove,
         /// <summary>左レバーが動いているか</summary>
         LeftLeverMove,
         /// <summary>ボタンその1</summary>
@@ -335,13 +390,13 @@ public class InputProvider
         /// <summary>toggleボタンその１</summary>
         Toggle1,
         /// <summary>toggleボタンその2</summary>
-        Toggle2,        
+        Toggle2,
         /// <summary>toggleボタンその3</summary>
-        Toggle3,        
+        Toggle3,
         /// <summary>toggleボタンその4</summary>
-        Toggle4,        
+        Toggle4,
         /// <summary>toggleボタンその5</summary>
-        Toggle5,        
+        Toggle5,
         /// <summary>toggleボタンその6</summary>
         Toggle6,
         /// <summary>Enterキー</summary>
