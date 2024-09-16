@@ -77,11 +77,11 @@ namespace IronRain.Player
             if (_playerWeaponList[_currentWeaponIndex].WeaponParam.WeaponType
                 == PlayerWeaponType.AssaultRifle)
             {
-                await _playerEnvroment.PlayerAnimation.PlayerAssaultDusarm();
+                await _playerEnvroment.PlayerAnimation.PlayerAssaultDusarm(_rootCancellOnDestroy);
             }
             else
             {
-                await _playerEnvroment.PlayerAnimation.PlayerRocketDisarm();
+                await _playerEnvroment.PlayerAnimation.PlayerRocketDisarm(_rootCancellOnDestroy);
             }
 
             OnWeaponChange?.Invoke();
