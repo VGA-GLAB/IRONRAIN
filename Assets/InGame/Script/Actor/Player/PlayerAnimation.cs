@@ -70,8 +70,9 @@ namespace IronRain.Player
         {
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Damage_05");
             _anim.SetTrigger("PileGuardTrigger");
-            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95,
             PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
+            _isCustomSpeed = true;
             _anim.speed = 0;
         }
 
