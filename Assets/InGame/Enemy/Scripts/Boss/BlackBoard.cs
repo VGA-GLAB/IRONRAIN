@@ -15,6 +15,7 @@ namespace Enemy.Boss
             ResumeBossAction = new Trigger();
             RangeAttack = new Trigger();
             MeleeAttack = new Trigger();
+            PauseOnPlayerForward = new Trigger();
         }
 
         // 外部から個体毎の判定をするための値。
@@ -63,6 +64,8 @@ namespace Enemy.Boss
         public Trigger RangeAttack { get; set; }
         // 近接攻撃。
         public Trigger MeleeAttack { get; set; }
+        // マルチロックオンするために、プレイヤーの正面に移動。
+        public Trigger PauseOnPlayerForward { get; set; }
 
         // ボス戦開始フラグ。
         public bool IsBossStarted { get; set; }

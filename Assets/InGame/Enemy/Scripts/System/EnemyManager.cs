@@ -154,7 +154,12 @@ namespace Enemy
         public void FunnelExpand() => OrderToBoss(EnemyOrder.Type.FunnelExpand);
 
         /// <summary>
-        /// ファンネル展開のイベント終了時に、ボスの行動を再開する。
+        /// プレイヤーの正面まで移動して待機させる。
+        /// </summary>
+        public void PauseOnPlayerForward() => OrderToBoss(EnemyOrder.Type.PauseOnPlayerForward);
+
+        /// <summary>
+        /// PauseOnPlayerForwardメソッドでプレイヤーの正面で待機している状態から、ボスの行動を再開する。
         /// </summary>
         public void ResumeBossAction() => OrderToBoss(EnemyOrder.Type.ResumeBossAction);
 
