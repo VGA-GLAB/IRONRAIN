@@ -179,6 +179,8 @@ namespace IronRain.Player
             FryLeverWeaponChangeButton,
             /// <summary>外側の２つのレバー</summary>
             OutSideLever,
+            /// <summary>攻撃ボタン</summary>
+            FireTrigger
         }
     }
 }
