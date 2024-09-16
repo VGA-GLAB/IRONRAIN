@@ -4,22 +4,31 @@ using Cysharp.Threading.Tasks;
 
 namespace IronRain.SequenceSystem
 {
-    public class WaitPanelTouchSequence : ISequence
+    public class WaitPanelTouchSequence : AbstractWaitSequence
     {
         private RaderMap _raderMap;
         
-        public void SetData(SequenceData data)
+        public override void SetData(SequenceData data)
         {
+            base.SetData(data);
             _raderMap = data.RaderMap;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // Loop処理
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
+
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
+            
             await _raderMap.WaitTouchPanelAsync(ct);
+            
+            loopCts.Cancel();
         }
 
 
-        public void Skip()
+        public override void Skip()
         {
         }
     }
