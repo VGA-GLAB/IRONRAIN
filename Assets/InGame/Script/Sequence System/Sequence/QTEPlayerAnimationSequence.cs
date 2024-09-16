@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -40,18 +40,18 @@ namespace IronRain.SequenceSystem
             {
                 case AnimationType.BreakLeftArm:
                 {
-                    animUniTask = _playerAnimation.LeftArmDestroy();
+                    animUniTask = _playerAnimation.LeftArmDestroy(ct);
                     CriAudioManager.Instance.SE.Play("SE", "SE_Alert");
                     break;
                 }
                 case AnimationType.Guard:
                 {
-                    animUniTask = _playerAnimation.QteGuard();
+                    animUniTask = _playerAnimation.QteGuard(ct);
                     break;
                 }
                 case AnimationType.Finish:
                 {
-                    animUniTask = _playerAnimation.QteFinish();
+                    animUniTask = _playerAnimation.QteFinish(ct);
                     break;
                 }
             }
