@@ -70,7 +70,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _forward: {fileID: 8948015177317790697}
   _trigger: {fileID: 6136933900169549165}
-  _renderers: []
+  _renderers:
+  - {fileID: 8948015177337212679}
+  - {fileID: 8948015177337212673}
   _trailEffect: {fileID: 0}
   _explosionEffect: {fileID: 3402327874637964128}
   _damageType: 2
@@ -336,5 +338,15 @@ PrefabInstance:
 --- !u!4 &8948015177317790697 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: 6ff1350c2a91520479532984ca642474, type: 3}
+  m_PrefabInstance: {fileID: 8948015177317656929}
+  m_PrefabAsset: {fileID: 0}
+--- !u!199 &8948015177337212673 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 19900000, guid: 6ff1350c2a91520479532984ca642474, type: 3}
+  m_PrefabInstance: {fileID: 8948015177317656929}
+  m_PrefabAsset: {fileID: 0}
+--- !u!199 &8948015177337212679 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 19900006, guid: 6ff1350c2a91520479532984ca642474, type: 3}
   m_PrefabInstance: {fileID: 8948015177317656929}
   m_PrefabAsset: {fileID: 0}
