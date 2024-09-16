@@ -42,6 +42,11 @@ namespace Enemy
             Vector3 p = Ref.Body.Position;
             AudioWrapper.PlaySE(p, "SE_Kill");
 
+            int thruster = Ref.BlackBoard.ThrusterSE;
+            int jet = Ref.BlackBoard.JetSE;
+            AudioWrapper.StopSE(thruster);
+            AudioWrapper.StopSE(jet);
+
             Ref.Effector.PlayDestroyedEffect();
             Ref.Effector.ThrusterEnable(false);
             Ref.Effector.TrailEnable(false);

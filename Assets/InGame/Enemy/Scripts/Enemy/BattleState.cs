@@ -27,6 +27,7 @@ namespace Enemy
             _hovering = 0;
 
             UpdateDestination();
+            UpdateSePosition();
             OnEnter();
         }
 
@@ -36,12 +37,14 @@ namespace Enemy
             Ref.BodyAnimation.SetTrigger(Const.Param.AttackEnd);
             Ref.BodyAnimation.SetUpperBodyWeight(0);
 
+            UpdateSePosition();
             OnExit();
             WriteBrokenPosition();
         }
         
         protected sealed override void Stay() 
         {
+            UpdateSePosition();
             OnStay();
         }
 

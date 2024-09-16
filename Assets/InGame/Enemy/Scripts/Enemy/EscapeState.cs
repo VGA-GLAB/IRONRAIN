@@ -25,6 +25,11 @@ namespace Enemy
             // エフェクトを消す。
             Ref.Effector.ThrusterEnable(false);
             Ref.Effector.TrailEnable(false);
+
+            int thruster = Ref.BlackBoard.ThrusterSE;
+            int jet = Ref.BlackBoard.JetSE;
+            AudioWrapper.StopSE(thruster);
+            AudioWrapper.StopSE(jet);
         }
 
         protected override void Stay()
@@ -50,6 +55,13 @@ namespace Enemy
             float dt = Ref.BlackBoard.PausableDeltaTime;
             Vector3 up = Vector3.up * spd * dt;
             Ref.Body.Move(up);
+
+            // PlayableStateクラスのものと全く同じ処理、重複。
+            Vector3 p = Ref.Body.Position;
+            int thruster = Ref.BlackBoard.ThrusterSE;
+            int jet = Ref.BlackBoard.JetSE;
+            AudioWrapper.UpdateSePosition(p, thruster);
+            AudioWrapper.UpdateSePosition(p, jet);
         }
     }
 }
