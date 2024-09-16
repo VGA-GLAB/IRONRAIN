@@ -15,8 +15,8 @@ namespace IronRain.SequenceSystem
         [Header("光らせる前の色"), SerializeField]
         private Color _beforeColor = Color.black;
         [Header("光らせた後の色"), SerializeField]
-        private Color _afterColor = Color.magenta;
-        [Header("点滅させる時間")]
+        private Color _afterColor = Color.white;
+        [Header("点滅させる時間"), SerializeField]
         private float _duration = 1F;
         
         private CockpitEmissionController _cockpitEmissionController;
