@@ -1,6 +1,7 @@
 ﻿using Enemy.Funnel;
 using UnityEngine;
 using Enemy.Boss.Qte;
+using Unity.VisualScripting;
 
 namespace Enemy.Boss
 {
@@ -14,17 +15,18 @@ namespace Enemy.Boss
 
         public QteEventState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BossActionStep[12];
-            _steps[11] = new CompleteStep(requiredRef, null);
-            _steps[10] = new PenetrateStep(requiredRef, _steps[11]);
-            _steps[9] = new FinalChargeStep(requiredRef, _steps[10]);
-            _steps[8] = new SecondKnockBackStep(requiredRef, _steps[9]);
-            _steps[7] = new SecondCombatStep(requiredRef, _steps[8]);
-            _steps[6] = new SecondChargeStep(requiredRef, _steps[7]);
-            _steps[5] = new FirstKnockBackStep(requiredRef, _steps[6]);
-            _steps[4] = new FirstCombatStep(requiredRef, _steps[5]);
-            _steps[3] = new BreakLeftArmStep(requiredRef, _steps[4]);
-            _steps[2] = new FirstChargeStep(requiredRef, _steps[3]);
+            _steps = new BossActionStep[13];
+            _steps[12] = new CompleteStep(requiredRef, null);
+            _steps[11] = new PenetrateStep(requiredRef, _steps[12]);
+            _steps[10] = new FinalChargeStep(requiredRef, _steps[11]);
+            _steps[9] = new SecondKnockBackStep(requiredRef, _steps[10]);
+            _steps[8] = new SecondCombatStep(requiredRef, _steps[9]);
+            _steps[7] = new SecondChargeStep(requiredRef, _steps[8]);
+            _steps[6] = new FirstKnockBackStep(requiredRef, _steps[7]);
+            _steps[5] = new FirstCombatStep(requiredRef, _steps[6]);
+            _steps[4] = new BreakLeftArmStep(requiredRef, _steps[5]);
+            _steps[3] = new FirstChargeStep(requiredRef, _steps[4]);
+            _steps[2] = new BladeOpenStep(requiredRef, _steps[3]);
             _steps[1] = new WaitAnimationStep(requiredRef, _steps[2]);
             _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
         }
@@ -86,6 +88,57 @@ namespace Enemy.Boss.Qte
     }
 
     /// <summary>
+    /// 刀を展開。
+    /// </summary>
+    public class BladeOpenStep : BossActionStep
+    {
+        private float _elapsed;
+        private bool _isOpen;
+
+        public BladeOpenStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
+        {
+            // アニメーションに合わせて刀を展開。
+            Ref.AnimationEvent.OnQteBladeOpen += OnQteBladeOpen;
+        }
+
+        private void OnQteBladeOpen()
+        {
+            BladeEquipment blade = Ref.MeleeEquip as BladeEquipment;
+            blade.Open();
+
+            _isOpen = true;
+        }
+
+        protected override void Enter()
+        {
+            // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
+            // それ以外の状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
+            string state = Const.Boss.QteSwordSet;
+            int layer = Const.Layer.BaseLayer;
+            Ref.BodyAnimation.Play(state, layer);
+
+            _elapsed = 0;
+            _isOpen = false;
+        }
+
+        protected override BattleActionStep Stay()
+        {
+            // アニメーション終了を正確に待つため、刀展開後にカウント開始。
+            if (_isOpen)
+            {
+                float dt = Ref.BlackBoard.PausableDeltaTime;
+                _elapsed += dt;
+            }
+
+            // 良い感じに見せるため、刀が展開されたタイミングからディレイを付ける。
+            const float Delay = 1.0f;
+
+            if (_elapsed > Delay) return Next[0];
+            else return this;
+        }
+    }
+
+    /// <summary>
     /// 刀を振り上げた状態でプレイヤーの正面に突撃。
     /// </summary>
     public class FirstChargeStep : BossActionStep
@@ -96,14 +149,6 @@ namespace Enemy.Boss.Qte
 
         public FirstChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
         {
-            // アニメーションに合わせて刀を展開。
-            Ref.AnimationEvent.OnQteBladeOpen += OnQteBladeOpen;
-        }
-
-        private void OnQteBladeOpen()
-        {
-            BladeEquipment blade = Ref.MeleeEquip as BladeEquipment;
-            blade.Open();
         }
 
         protected override void Enter()
@@ -113,12 +158,6 @@ namespace Enemy.Boss.Qte
             float dist = Ref.BossParams.BreakLeftArm.Distance;
             Vector3 offset = Ref.BossParams.BreakLeftArm.Offset;
             _end = Ref.Player.position + dir * dist + offset;
-
-            // 刀を構えるアニメーションはMoveからトリガーで遷移するよう設定されているが、
-            // それ以外の状態の時にQTEイベント開始を呼ばれる可能性があるので、ステートを指定で再生。
-            string state = Const.Boss.QteSwordSet;
-            int layer = Const.Layer.BaseLayer;
-            Ref.BodyAnimation.Play(state, layer);
         }
 
         protected override BattleActionStep Stay()
