@@ -30,7 +30,7 @@ namespace IronRain.SequenceSystem
         {
             var index = 0;
             // Cancelされたらループを抜ける
-            while (!ct.IsCancellationRequested || _waitSequences.Length <= 0)
+            while (!ct.IsCancellationRequested && _waitSequences.Length > 0)
             {
                 await _waitSequences[index].PlayAsync(ct, exceptionHandler);
                 index++;
