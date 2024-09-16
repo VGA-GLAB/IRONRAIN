@@ -32,6 +32,12 @@ namespace Enemy
             _diff = _start.magnitude;
             _lerp = 0;
 
+            // SEの再生。
+            int thrusterSe = AudioWrapper.PlaySE(p, "SE_Thruster");
+            int jetSe = AudioWrapper.PlaySE(p, "SE_Jet");
+            Ref.BlackBoard.ThrusterSE = thrusterSe;
+            Ref.BlackBoard.JetSE = jetSe;
+
             Always();
         }
 
@@ -86,6 +92,9 @@ namespace Enemy
             Vector3 dir = Ref.BlackBoard.PlayerDirection;
             dir.y = 0;
             Ref.Body.LookForward(dir);
+
+            // SEの位置更新
+            UpdateSePosition();
         }
     }
 }

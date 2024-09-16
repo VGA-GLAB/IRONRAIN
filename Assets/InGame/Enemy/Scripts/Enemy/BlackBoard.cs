@@ -75,5 +75,9 @@ namespace Enemy
         public float PausableDeltaTime => Time.deltaTime * PausableTimeScale;
         // スローやポーズ処理を行う用途のTimeScale。
         public float PausableTimeScale => ProvidePlayerInformation.TimeScale * (IsPause ? 0 : 1);
+
+        // SE
+        public int ThrusterSE { get; set; }
+        public int JetSE { get; set; }
     }
 }

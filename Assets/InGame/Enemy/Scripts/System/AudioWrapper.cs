@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static CriWare.CriProfiler;
 
 namespace Enemy
 {
@@ -18,6 +19,14 @@ namespace Enemy
         public static int PlaySE(Vector3 position, string cueName)
         {
             return CriAudioManager.Instance.SE.Play3D(position, "SE", cueName);
+        }
+
+        /// <summary>
+        /// SEを流す位置を更新
+        /// </summary>
+        public static void UpdateSePosition(Vector3 position, int index)
+        {
+            CriAudioManager.Instance.SE.Update3DPos(position, index);
         }
 
         /// <summary>

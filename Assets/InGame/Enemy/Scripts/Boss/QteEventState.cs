@@ -472,6 +472,11 @@ namespace Enemy.Boss.Qte
             Ref.BodyAnimation.Play(state, layer);
             Ref.Effector.PlayDestroyed();
 
+            int thruster = Ref.BlackBoard.ThrusterSE;
+            int jet = Ref.BlackBoard.JetSE;
+            AudioWrapper.StopSE(thruster);
+            AudioWrapper.StopSE(jet);
+
             Vector3 p = Ref.Body.Position;
             AudioWrapper.PlaySE(p, "SE_Kill");
         }
