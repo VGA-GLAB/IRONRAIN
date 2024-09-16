@@ -10,7 +10,8 @@ namespace IronRain.SequenceSystem
         private enum LeverType
         {
             MoveInput,
-            SortieInput
+            SortieInput,
+            PurgeInput
         }
 
         [OpenScriptButton(typeof(WaitLeverInputSequence))]
@@ -41,6 +42,14 @@ namespace IronRain.SequenceSystem
                         UniTask.WaitUntil(() => InputProvider.Instance.ThreeLeverDir.y > 0, cancellationToken: ct),
                         UniTask.WaitUntil(() => InputProvider.Instance.FourLeverDir.y > 0, cancellationToken: ct)
                     );
+                    break;
+                }
+                case LeverType.PurgeInput:
+                {
+                    await UniTask.WhenAll(
+                    UniTask.WaitUntil(() => InputProvider.Instance.ThreeLeverDir.y < 0, cancellationToken: ct),
+                    UniTask.WaitUntil(() => InputProvider.Instance.FourLeverDir.y < 0, cancellationToken: ct)
+                        );
                     break;
                 }
                 default:
