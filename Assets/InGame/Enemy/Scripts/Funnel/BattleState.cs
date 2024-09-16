@@ -51,7 +51,7 @@ namespace Enemy.Funnel
         {
             string source = Ref.BlackBoard.DamageSource;
             Vector3 p = Ref.Body.Position;
-            DamageSE.Play(p, source);
+            DamageSE.PlayEnemy(p, source);
         }
 
         // ボスを追従するように移動。

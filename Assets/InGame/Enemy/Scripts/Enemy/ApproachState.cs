@@ -33,8 +33,8 @@ namespace Enemy
             _lerp = 0;
 
             // SEの再生。
-            int thrusterSe = AudioWrapper.PlaySE(p, "SE_Thruster");
-            int jetSe = AudioWrapper.PlaySE(p, "SE_Jet");
+            int thrusterSe = AudioWrapper.PlaySE(p, "SE_Enemy_Thruster");
+            int jetSe = AudioWrapper.PlaySE(p, "SE_Enemy_Jet");
             Ref.BlackBoard.ThrusterSE = thrusterSe;
             Ref.BlackBoard.JetSE = jetSe;
 
