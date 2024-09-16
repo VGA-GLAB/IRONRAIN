@@ -172,7 +172,7 @@ namespace IronRain.Player
             /// <summary>レバー</summary>
             LeftLever,
             /// <summary>レバー背面ボタン</summary>
-            LeverBackButton,
+            LeftLeverBackButton,
             /// <summary>右のフライトレバー</summary>
             RightFryLever,
             /// <summary>フライトレバーの武器切り替えボタン(親指で押すボタン)</summary>
