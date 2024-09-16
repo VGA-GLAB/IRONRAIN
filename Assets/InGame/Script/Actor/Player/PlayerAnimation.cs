@@ -93,7 +93,7 @@ namespace IronRain.Player
         public async UniTask EndPileFire(CancellationToken token) 
         {
             _pileAnim.SetTrigger("EndFireTrigger");
-            await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
+            await UniTask.WaitUntil(() => _pileAnim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
                 PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
             _pileAnim.speed = 0;
 

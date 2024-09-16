@@ -161,8 +161,10 @@ MonoBehaviour:
         - rid: 3800739276693176331
         - rid: 3800739276693176332
         - rid: 6819318827970461718
+        - rid: 6819318827970461829
         - rid: 3800739276693176333
         - rid: 3800739276693176334
+        - rid: 6819318827970461830
         - rid: 6819318827970461769
         - rid: 3800739276693176335
         - rid: 3800739276693176336
@@ -239,9 +241,12 @@ MonoBehaviour:
         _isSkip: 0
         _sequences:
         - rid: 3800739276693176355
+        - rid: 6819318827970461824
+        - rid: 6819318827970461825
         - rid: 3800739276693176356
-        - rid: 6819318827970461705
         - rid: 3800739276693176357
+        - rid: 6819318827970461826
+        - rid: 6819318827970461705
         - rid: 3800739353252593670
         - rid: 3800739276693176358
         - rid: 6819318821456707584
@@ -808,14 +813,6 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Tutorial_07
         _delaySec: 5
-    - rid: 6819318827970461781
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_04
-        _delaySec: 5
     - rid: 6819318827970461783
       type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -855,11 +852,18 @@ MonoBehaviour:
         _sequences:
         - rid: 6819318827970461790
         - rid: 6819318827970461794
+        - rid: 6819318827970461854
+        - rid: 6819318827970461855
         - rid: 6819318827970461793
+        - rid: 6819318827970461856
         - rid: 6819318827970461798
         - rid: 6819318827970461797
+        - rid: 6819318827970461857
+        - rid: 6819318827970461858
+        - rid: 6819318827970461859
         - rid: 6819318827970461801
         - rid: 6819318827970461800
+        - rid: 6819318827970461860
         - rid: 6819318827970461812
         - rid: 6819318827970461805
         - rid: 6819318827970461815
@@ -990,6 +994,146 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Boss_10
         _delaySec: 10
+    - rid: 6819318827970461824
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 10
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 6819318827970461825
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 1
+    - rid: 6819318827970461826
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461829
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 3
+    - rid: 6819318827970461830
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461831
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 3
+    - rid: 6819318827970461834
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461835
+      type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 6819318827970461837
+        _toggleButton1: 4
+        _toggleButton2: 4
+    - rid: 6819318827970461837
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 0
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_04
+        _delaySec: 7
+    - rid: 6819318827970461838
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 6819318827970461839
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 6819318827970461840
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 8
+    - rid: 6819318827970461841
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461842
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 6819318827970461843
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 6819318827970461844
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 8
+    - rid: 6819318827970461845
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461846
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 9
+    - rid: 6819318827970461847
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 2
+    - rid: 6819318827970461848
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461849
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 9
+    - rid: 6819318827970461850
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 6819318827970461851
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 6819318827970461853
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 6819318827970461854
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 6819318827970461855
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 6819318827970461856
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 6819318827970461857
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 8
+    - rid: 6819318827970461858
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+    - rid: 6819318827970461859
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 7
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 6819318827970461860
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 0
     - rid: 8390642849261813762
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1170,7 +1314,10 @@ MonoBehaviour:
         - rid: 8390642849261813804
         - rid: 6819318827970461719
         - rid: 8390642849261813805
+        - rid: 6819318827970461831
         - rid: 8390642849261813806
+        - rid: 6819318827970461835
+        - rid: 6819318827970461834
         - rid: 8390642849261813807
         - rid: 8390642849261813808
         - rid: 6819318827970461720
@@ -1203,8 +1350,7 @@ MonoBehaviour:
     - rid: 8390642849261813808
       type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _waitSequences:
-        - rid: 6819318827970461781
+        _waitSequences: []
         _targetSeq: 0
     - rid: 8390642849261813809
       type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
@@ -1326,14 +1472,18 @@ MonoBehaviour:
         - rid: 8390642849261813830
         - rid: 8390642849261813831
         - rid: 6819318827970461730
+        - rid: 6819318827970461838
         - rid: 6819318827970461721
+        - rid: 6819318827970461839
         - rid: 8390642849261813832
         - rid: 6819318827970461726
         - rid: 6819318827970461732
         - rid: 6819318827970461734
         - rid: 8390642849261813833
+        - rid: 6819318827970461840
         - rid: 6819318827970461728
         - rid: 6819318827970461736
+        - rid: 6819318827970461841
         - rid: 8390642849261813834
         - rid: 8390642849261813835
         - rid: 8390642849261813836
@@ -1468,13 +1618,17 @@ MonoBehaviour:
         - rid: 68936413895196676
         - rid: 68936413895196677
         - rid: 6819318827970461744
+        - rid: 6819318827970461842
         - rid: 6819318827970461739
         - rid: 68936413895196678
+        - rid: 6819318827970461843
         - rid: 6819318827970461745
         - rid: 6819318827970461751
         - rid: 6819318827970461750
         - rid: 68936413895196679
+        - rid: 6819318827970461844
         - rid: 6819318827970461748
+        - rid: 6819318827970461845
         - rid: 68936413895196680
         - rid: 6819318827970461752
         - rid: 68936413895196681
@@ -1704,12 +1858,15 @@ MonoBehaviour:
         - rid: 6819318827970461755
         - rid: 6819318827970461756
         - rid: 8390642849261813895
+        - rid: 6819318827970461846
         - rid: 6819318827970461770
         - rid: 6819318827970461772
         - rid: 6819318827970461753
         - rid: 6819318827970461774
+        - rid: 6819318827970461847
         - rid: 6819318827970461771
         - rid: 6819318827970461754
+        - rid: 6819318827970461848
     - rid: 8390642849261813894
       type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1827,10 +1984,12 @@ MonoBehaviour:
         - rid: 8390642849261813914
         - rid: 6819318827970461757
         - rid: 6819318827970461758
+        - rid: 6819318827970461849
         - rid: 8390642849261813915
         - rid: 8390642849261813916
         - rid: 6819318827970461761
         - rid: 6819318827970461762
+        - rid: 6819318827970461850
         - rid: 8390642849261813917
         - rid: 8390642849261813918
         - rid: 8390642849261813919
@@ -1982,10 +2141,12 @@ MonoBehaviour:
         - rid: 8390642934176809073
         - rid: 8390642934176809074
         - rid: 8390642934176809075
+        - rid: 6819318827970461851
         - rid: 6819318827970461783
         - rid: 8390642934176809076
         - rid: 8390642934176809077
         - rid: 6819318821456707640
+        - rid: 6819318827970461853
         - rid: 6819318827970461786
         - rid: 6819318821456707635
         - rid: 6819318821456707642

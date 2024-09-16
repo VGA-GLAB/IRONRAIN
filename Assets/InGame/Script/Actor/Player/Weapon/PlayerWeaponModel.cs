@@ -84,9 +84,6 @@ namespace IronRain.Player
                 await _playerEnvroment.PlayerAnimation.PlayerRocketDisarm(_rootCancellOnDestroy);
             }
 
-            OnWeaponChange?.Invoke();
-
-
             if (_currentWeaponIndex + 1 < _playerWeaponList.Count)
             {
                 _currentWeaponIndex++;
@@ -95,6 +92,8 @@ namespace IronRain.Player
             {
                 _currentWeaponIndex = 0;
             }
+
+            OnWeaponChange?.Invoke();
             _playerWeaponList[_currentWeaponIndex].WeaponObject.SetActive(true);
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Change");
             await UniTask.WaitForSeconds(_playerEnvroment.PlayerSetting.PlayerParamsData.ChangeWeaponCt);
