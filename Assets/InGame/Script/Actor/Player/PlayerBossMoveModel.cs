@@ -59,7 +59,6 @@ namespace IronRain.Player
             }
             else
             {
-                _playerEnvroment.PlayerTransform.parent = null;
                 _rb.velocity = Vector2.zero;
             }
         }

@@ -14,7 +14,7 @@ namespace IronRain.Player
         [SerializeField] private List<EmissionDataClass> _emissionDataList = new();
         private int _emissionId = Shader.PropertyToID("_EmissionColor");
 
-        private SortedDictionary<EmissionTargetType, Tuple<List<EmissionDataClass>, Tween>> _emissionDic = new();
+        private SortedDictionary<EmissionTargetType, MaterialData> _emissionDic = new();
         
         private void Start()
         {
@@ -26,11 +26,11 @@ namespace IronRain.Player
 
                 if (!_emissionDic.ContainsKey(target.TargetType))
                 {
-                    _emissionDic.Add(target.TargetType, new(new List<EmissionDataClass>(){target}, null));
+                    _emissionDic.Add(target.TargetType, new MaterialData(target.Material));
                 }
                 else
                 {
-                    _emissionDic[target.TargetType].Item1.Add(target);
+                    _emissionDic[target.TargetType].Materials.Add(target.Material);
                 }
             }
         }
@@ -44,53 +44,52 @@ namespace IronRain.Player
         {
             var target = _emissionDic[emissionTargetType];
 
-            foreach (var data in target.Item1)
+            foreach (var data in target.Materials)
             {
-                data.Material.SetColor(_emissionId, color);
+                data.SetColor(_emissionId, color);
             }
-
-            // for (int i = 0; i < _emissionDic[emissionTargetType].Item1.Count; i++) 
-            // {
-            //     if (_emissionDataList[i].TargetType == emissionTargetType) 
-            //     {
-            //         _emissionDataList[i].Material.SetColor(_emissionId, color);
-            //     }
-            // }
         }
 
-        private void SetEmission(EmissionDataClass data, Color color) => data.Material.SetColor(_emissionId, color);
+        private void SetEmission(Material mat, Color color)
+        {
+            mat.SetColor(_emissionId, color);
+        }
 
         public void StartBlink(EmissionTargetType target, Color beforeColor, Color afterColor, float duration)
         {
-            if (TryGetEmissionData(target, out Tuple<List<EmissionDataClass>, Tween> data) && data.Item2 is null)
+            if (TryGetEmissionData(target, out MaterialData data) && data.AnimTween is null)
             {
-                var tween = DOTween.To(() => beforeColor, x =>
+                data.AnimTween = DOTween.To(() => beforeColor, x =>
                     {
-                        foreach (var emissionData in data.Item1)
+                        foreach (var mat in data.Materials)
                         {
-                            SetEmission(emissionData, x);
+                            SetEmission(mat, x);
                         }
                     }, afterColor, duration)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetLink(this.gameObject)
-                    .OnKill(() => data = new(data.Item1, null));
+                    .OnKill(() =>
+                    {
+                        data.AnimTween = null;
+                        SetEmission(target, beforeColor);
+                    });
             }
         }
 
         public void StopBlink(EmissionTargetType target)
         {
-            if (TryGetEmissionData(target, out Tuple<List<EmissionDataClass>, Tween> data) && data.Item2 is not null)
+            if (TryGetEmissionData(target, out MaterialData data) && data.AnimTween is not null)
             {
-                data.Item2.Kill();
-                data = new(data.Item1, null);
+                data.AnimTween.Kill();
+                data.AnimTween = null;
             }
         }
 
-        private bool TryGetEmissionData(EmissionTargetType target, out Tuple<List<EmissionDataClass>, Tween> data)
+        private bool TryGetEmissionData(EmissionTargetType target, out MaterialData data)
         {
             var isGet = _emissionDic.ContainsKey(target);
 
-            data = isGet ? _emissionDic[target] : new(null, null);
+            data = isGet ? _emissionDic[target] : null;
 
             return isGet;
         }
@@ -109,6 +108,27 @@ namespace IronRain.Player
                 {
                     _emissionDataList[i].Material.SetColor(_emissionId, new Color(1, 1, 1, 1));
                 }
+            }
+        }
+
+        private class MaterialData
+        {
+            public List<Material> Materials { get; set; }
+            public Tween AnimTween { get; set; } = null;
+
+            public MaterialData(params Material[] materials)
+            {
+                Materials = new(materials.Length);
+
+                foreach (var mat in materials)
+                {
+                    Materials.Add(mat);
+                }
+            }
+
+            public MaterialData()
+            {
+                Materials = new();
             }
         }
 
@@ -152,13 +172,15 @@ namespace IronRain.Player
             /// <summary>レバー</summary>
             LeftLever,
             /// <summary>レバー背面ボタン</summary>
-            LeverBackButton,
+            LeftLeverBackButton,
             /// <summary>右のフライトレバー</summary>
             RightFryLever,
             /// <summary>フライトレバーの武器切り替えボタン(親指で押すボタン)</summary>
             FryLeverWeaponChangeButton,
             /// <summary>外側の２つのレバー</summary>
             OutSideLever,
+            /// <summary>攻撃ボタン</summary>
+            FireTrigger
         }
     }
 }
