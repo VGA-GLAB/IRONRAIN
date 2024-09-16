@@ -6,7 +6,7 @@ using UnityEngine;
 namespace IronRain.SequenceSystem
 {
     [Serializable]
-    public sealed class WaitToggleSequence : ISequence
+    public sealed class WaitToggleSequence : AbstractWaitSequence
     {
         [OpenScriptButton(typeof(WaitToggleSequence))]
         [Description("指定した二つの入力があるまで、つぎのシーケンスへの遷移を待つシーケンス")]
@@ -21,16 +21,23 @@ namespace IronRain.SequenceSystem
         
         public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // ループ中のCancellationToken
+            using var waitingCts = new CancellationTokenSource();
+            
+            this.PlayWaitingSequenceAsync(waitingCts.Token, exceptionHandler).Forget();
+            
             // 二つの入力を待つ
             await UniTask.WhenAll(
                 UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(_toggleButton1), cancellationToken: ct),
                 UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(_toggleButton2), cancellationToken: ct)
             );
+            
+            waitingCts.Cancel();
         }
 
-        public void Skip()
+        public override void Skip()
         {
         }
     }
