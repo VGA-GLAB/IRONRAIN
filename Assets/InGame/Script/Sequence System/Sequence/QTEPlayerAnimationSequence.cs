@@ -41,7 +41,6 @@ namespace IronRain.SequenceSystem
                 case AnimationType.BreakLeftArm:
                 {
                     animUniTask = _playerAnimation.LeftArmDestroy(ct);
-                    CriAudioManager.Instance.SE.Play("SE", "SE_Alert");
                     break;
                 }
                 case AnimationType.Guard:
