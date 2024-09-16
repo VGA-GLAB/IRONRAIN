@@ -38,79 +38,80 @@ namespace IronRain.Player
             }
         }
 
-        public async UniTask JetpackPurgeAnim()
+        public async UniTask JetpackPurgeAnim(CancellationToken token)
         {
+        
             _anim.Play("Purge");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask FallAnim()
+        public async UniTask FallAnim(CancellationToken token)
         {
             var obj = Instantiate(_fallObj, _fallInsPos);
             Animator anim = obj.GetComponent<Animator>();
             await UniTask.WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
             obj.SetActive(false);
         }
 
-        public async UniTask QteAttack()
+        public async UniTask QteAttack(CancellationToken token)
         {
             _anim.SetTrigger("PileAttackTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
 
             _isCustomSpeed = true;
             _anim.speed = 0;
         }
 
         //
-        public async UniTask QteGuard() 
+        public async UniTask QteGuard(CancellationToken token) 
         {
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Damage_05");
             _anim.SetTrigger("PileGuardTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask QteFinish()
+        public async UniTask QteFinish(CancellationToken token)
         {
             _anim.SetTrigger("PileFinishTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask PileFire() 
+        public async UniTask PileFire(CancellationToken token) 
         {
             _pileAnim.SetTrigger("FireTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-                PlayerLoopTiming.Update, _token);
+                PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask EndPileFire() 
+        public async UniTask EndPileFire(CancellationToken token) 
         {
             _pileAnim.SetTrigger("EndFireTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-                PlayerLoopTiming.Update, _token);
+                PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
             _pileAnim.speed = 0;
 
         }
 
-        public async UniTask PileFinish()
+        public async UniTask PileFinish(CancellationToken token)
         {
             _pileAnim.SetTrigger("FinishTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95,
-                PlayerLoopTiming.Update, _token);
+                PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
         /// <summary>
         /// アニメーションを指定した時間で止める
         /// </summary>
         /// <returns></returns>
-        public async UniTask AnimationEndStop(float normalizedTime)
+        public async UniTask AnimationEndStop(float normalizedTime, CancellationToken token)
         {
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= normalizedTime,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
             _isCustomSpeed = true;
             _anim.speed = 0;
         }
@@ -121,39 +122,39 @@ namespace IronRain.Player
             _anim.speed = ProvidePlayerInformation.TimeScale;
         }
 
-        public async UniTask NextAnim() 
+        public async UniTask NextAnim(CancellationToken token) 
         {
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.1,
-     PlayerLoopTiming.Update, _token);
+     PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask NextStopAnim(float normalizedTime) 
+        public async UniTask NextStopAnim(float normalizedTime, CancellationToken token) 
         {
             AnimationSpeedReset();
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.1,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
 
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= normalizedTime,
-            PlayerLoopTiming.Update, _token);
+            PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
             _isCustomSpeed = true;
             _anim.speed = 0;
         }
 
-        public async UniTask PlayerAssaultDusarm()
+        public async UniTask PlayerAssaultDusarm(CancellationToken token)
         {
             _anim.SetTrigger("AssaultDisarmTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-                PlayerLoopTiming.Update, _token);
+                PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask PlayerRocketDisarm()
+        public async UniTask PlayerRocketDisarm(CancellationToken token)
         {
             _anim.SetTrigger("RocketDisarmTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
-                PlayerLoopTiming.Update, _token);
+                PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
         }
 
-        public async UniTask LeftArmDestroy() 
+        public async UniTask LeftArmDestroy(CancellationToken token) 
         {
             for (int i = 0; i < _rightArm.Count; i++) 
             {

@@ -379,6 +379,10 @@ public class InputProvider
         ThreeButton,
         /// <summary>ボタンその4</summary>
         FourButton,
+        /// <summary>フライレバー</summary>
+        FryLever,
+        /// <summary>スロットルレバー</summary>
+        ThrottleLever,
         /// <summary>レバーその3</summary>
         ThreeLever,
         /// <summary>レバーその4</summary>

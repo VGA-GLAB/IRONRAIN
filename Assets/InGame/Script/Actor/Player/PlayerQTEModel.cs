@@ -112,7 +112,7 @@ namespace IronRain.Player
                 tutorialTextBoxController.ClearText();
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
 
-                _playerEnvroment.PlayerAnimation.QteAttack().Forget();
+                _playerEnvroment.PlayerAnimation.QteAttack(startToken).Forget();
 
                 await tutorialTextBoxController.DoOpenTextBoxAsync(0.05f, startToken);
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
@@ -120,7 +120,7 @@ namespace IronRain.Player
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
 
                 //次のアニメーションを再生して待機
-                _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f).Forget();
+                _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f, startToken).Forget();
 
                 tutorialTextBoxController.ClearText();
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
@@ -140,8 +140,8 @@ namespace IronRain.Player
                 tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, startToken).Forget();
                 tutorialTextBoxController.ClearText();
 
-                await _playerEnvroment.PlayerAnimation.PileFire();
-                await _playerEnvroment.PlayerAnimation.PileFinish();
+                await _playerEnvroment.PlayerAnimation.PileFire(startToken);
+                await _playerEnvroment.PlayerAnimation.PileFinish(startToken);
 
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
@@ -172,7 +172,7 @@ namespace IronRain.Player
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
                         tutorialTextBoxController.ClearText();
                         tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, token).Forget();
-                        await _playerEnvroment.PlayerAnimation.QteAttack();
+                        await _playerEnvroment.PlayerAnimation.QteAttack(token);
                         break;
                     }
                 case QTEState.QTE2:
@@ -184,7 +184,7 @@ namespace IronRain.Player
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
 
                         //次のアニメーションを再生して待機
-                        _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f).Forget();
+                        _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f, token).Forget();
 
                         tutorialTextBoxController.ClearText();
                         tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, token).Forget();
@@ -207,8 +207,8 @@ namespace IronRain.Player
                         tutorialTextBoxController.DoCloseTextBoxAsync(0.05f, token).Forget();
                         tutorialTextBoxController.ClearText();
 
-                        await _playerEnvroment.PlayerAnimation.PileFire();
-                        await _playerEnvroment.PlayerAnimation.PileFinish();
+                        await _playerEnvroment.PlayerAnimation.PileFire(token);
+                        await _playerEnvroment.PlayerAnimation.PileFinish(token);
 
                         ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
                         _playerEnvroment.RemoveState(PlayerStateType.QTE);
@@ -247,14 +247,14 @@ namespace IronRain.Player
                 await tutorialTextBoxController.DoOpenTextBoxAsync(0.5f, startToken);
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを引いてください。", 0.05f, startToken);
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, startToken);
-                await _playerEnvroment.PlayerAnimation.QteGuard();
+                await _playerEnvroment.PlayerAnimation.QteGuard(startToken);
                 tutorialTextBoxController.ClearText();
 
                 await tutorialTextBoxController.DoTextChangeAsync("左レバーを前に押し出してください。", 0.05f, startToken);
                 _qteType.Value = QTEState.QTE2;
                 await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, startToken);
                 tutorialTextBoxController.ClearText();
-                await _playerEnvroment.PlayerAnimation.QteGuard();
+                await _playerEnvroment.PlayerAnimation.QteGuard(startToken);
 
                 ProvidePlayerInformation.TimeScale = 1f;
                 ProvidePlayerInformation.EndQte.OnNext(new QteResultData(QTEResultType.Success, _enemyId));
@@ -312,7 +312,7 @@ namespace IronRain.Player
                         if (_qteType.Value != QTEState.QTENone) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE1;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == -1, PlayerLoopTiming.Update, token);
-                        _playerEnvroment.PlayerAnimation.QteAttack().Forget();
+                        _playerEnvroment.PlayerAnimation.QteAttack(token).Forget();
                         break;
                     }
                 case QTEState.QTE2:
@@ -320,7 +320,7 @@ namespace IronRain.Player
                         if (_qteType.Value != QTEState.QTE1) Debug.LogError("意図しないQteの呼び出しがされています");
                         _qteType.Value = QTEState.QTE2;
                         await UniTask.WaitUntil(() => InputProvider.Instance.LeftLeverDir.z == 1, PlayerLoopTiming.Update, token);
-                        _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f).Forget();
+                        _playerEnvroment.PlayerAnimation.NextStopAnim(0.9f, token).Forget();
                         break;
                     }
                 case QTEState.QTE3:
@@ -330,7 +330,7 @@ namespace IronRain.Player
                         await UniTask.WaitUntil(() => InputProvider.Instance.GetStayInput(InputProvider.InputType.FourButton), PlayerLoopTiming.Update, token);
                         _qteResultType = QTEResultType.Success;
                         _qteType.Value = QTEState.QTENone;
-                        await _playerEnvroment.PlayerAnimation.EndPileFire();
+                        await _playerEnvroment.PlayerAnimation.EndPileFire(token);
                         break;
                     }
                 default:
