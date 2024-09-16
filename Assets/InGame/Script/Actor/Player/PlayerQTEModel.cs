@@ -87,6 +87,11 @@ namespace IronRain.Player
             return qteResult;
         }
 
+        public void SetEnemyId(Guid enemyId) 
+        {
+            _enemyId = enemyId;
+        }
+
         /// <summary>
         /// QTEの流れ
         /// </summary>
