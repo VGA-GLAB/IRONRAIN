@@ -91,6 +91,7 @@ namespace IronRain.Player
         {
             if (isVisible)
             {
+                gameObject.SetActive(true);
                 for (int i = 0; i < _particleArray.Length; i++)
                 {
                     _particleArray[i].Play();
@@ -104,16 +105,7 @@ namespace IronRain.Player
                     _particleArray[i].Stop();
                 }
                 StopAllCoroutines();
-            }
-
-            if (!isVisible)
-            {
-                StopAllCoroutines();
                 gameObject.SetActive(false);
-            }
-            else
-            {
-                gameObject.SetActive(true);
             }
 
             _sphereCollider.enabled = isVisible;
