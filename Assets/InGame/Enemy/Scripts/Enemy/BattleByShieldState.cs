@@ -63,6 +63,8 @@ namespace Enemy.Shield
     /// </summary>
     public class HoldStep : EnemyActionStep
     {
+        private Vector3 _velocity;
+
         public HoldStep(RequiredRef requiredRef, params EnemyActionStep[] next) : base(requiredRef, next)
         {
             // アイドルのアニメーション再生をトリガーする。
@@ -98,6 +100,15 @@ namespace Enemy.Shield
 
         protected override BattleActionStep Stay()
         {
+            // 到達までのおおよその時間
+            const float SmoothTime = 0.5f;
+
+            Vector3 p = Ref.Body.Position;
+            Vector3 bp = Ref.BlackBoard.Slot.Point;
+            bp.z = p.z;
+            Vector3 warp = Vector3.SmoothDamp(p, bp, ref _velocity, SmoothTime);
+            Ref.Body.Warp(warp);
+
             return this;
         }
 
