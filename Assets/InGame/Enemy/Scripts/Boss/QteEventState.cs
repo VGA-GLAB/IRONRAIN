@@ -304,7 +304,7 @@ namespace Enemy.Boss.Qte
             // 刀を振り下ろしている最中は吹き飛ばない。
             float dt = Ref.BlackBoard.PausableDeltaTime;
             Vector3 v = _velocity * dt;
-            Ref.Body.Move(v);
+            //Ref.Body.Move(v); <-ノックバックが仕様でないなったので一旦コメントアウト。
 
             // 摩擦力で止める。
             const float Friction = 0.98f;
@@ -436,7 +436,7 @@ namespace Enemy.Boss.Qte
             // 刀を振り下ろしている最中は吹き飛ばない。
             float dt = Ref.BlackBoard.PausableDeltaTime;
             Vector3 v = _velocity * dt;
-            Ref.Body.Move(v);
+            // Ref.Body.Move(v); <-ノックバックが仕様でないなったので一旦コメントアウト。
 
             // 摩擦力で止める。
             const float Friction = 0.98f;
