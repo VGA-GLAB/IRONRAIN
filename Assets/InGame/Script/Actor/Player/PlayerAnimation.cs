@@ -72,6 +72,7 @@ namespace IronRain.Player
             _anim.SetTrigger("PileGuardTrigger");
             await UniTask.WaitUntil(() => _anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98,
             PlayerLoopTiming.Update, CancellationTokenSource.CreateLinkedTokenSource(_token, token).Token);
+            _anim.speed = 0;
         }
 
         public async UniTask QteFinish(CancellationToken token)
