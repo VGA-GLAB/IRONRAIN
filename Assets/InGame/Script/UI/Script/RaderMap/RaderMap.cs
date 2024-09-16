@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -7,8 +8,33 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+public enum IndicationUiType
+{
+    None,
+    PushOutsideLever,
+    PullOutsideLever,
+    ControllerTrigger,
+    ControllerWeaponChange,
+    ContorllerMove,
+    PushThrottle,
+    PullThrottle,
+    ThrottleTrigger,
+    Toggle
+}
 public class RaderMap : MonoBehaviour
 {
+    [Header("IndicationUi")]
+    [SerializeField] private GameObject _indicationUi;
+    [Header("LeverUi")]
+    [SerializeField] private Image _leverUi;
+    [Header("ContrllerUi")]
+    [SerializeField] private Image _contrllerUi;
+    [Header("ThrottleUi")]
+    [SerializeField] private Image _throttleUi;
+    [Header("IndicationScriptableObject")]
+    [SerializeField] private IndicationUiScriptableObject _indicationUiScriptableObject;
+    private Coroutine _blinkCoroutine;
+
     [Header("MiniMapのCanvasGroup")]
     [SerializeField] private CanvasGroup _miniMapCanvasGroup;
     [Header("PurgeUiのCanvasGroup")]
@@ -99,11 +125,13 @@ public class RaderMap : MonoBehaviour
     /// タッチパネルシーケンスに入った時に呼ぶ処理
     /// </summary>
     private bool _isStartTouchPanel = false;
-    
 
+    
     // Start is called before the first frame update
     void Start()
     {
+        CanvasGroup canvasGrop = _indicationUi.GetComponent<CanvasGroup>();
+        canvasGrop.alpha = 0;
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
         _purgeUiCanvasGroup.alpha = 0;
         //_mouseMultilockSystem = GameObject.FindObjectOfType<MouseMultilockSystem>();
@@ -112,6 +140,10 @@ public class RaderMap : MonoBehaviour
 
     void Update()
     {
+        //テスト用
+        if (Input.GetKeyDown(KeyCode.C))
+            IconTest();
+
         if(!IsBossScene)
         {
             for (int i = 0; i < Enemies.Count; i++)
@@ -531,6 +563,109 @@ public class RaderMap : MonoBehaviour
         _miniMapCanvasGroup.alpha = 1;
     }
 
+    /// <summary>
+    /// チュートリアルアイコンの変更
+    /// </summary>
+    /// <param name="type">変えたいアイコン</param>
+    public void ChangeIndicationUi(IndicationUiType type)
+    {
+        CanvasGroup canvasGrop = _indicationUi.GetComponent<CanvasGroup>();
+        switch (type)
+        {
+            case IndicationUiType.None:
+                canvasGrop.alpha = 0;
+                break;
+            case IndicationUiType.PushOutsideLever:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(true);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(false);
+                _leverUi.sprite = _indicationUiScriptableObject.PushOutsideLever;
+                break;
+            case IndicationUiType.PullOutsideLever:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(true);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(false);
+                _leverUi.sprite = _indicationUiScriptableObject.PullOutsideLever;
+                break;
+            case IndicationUiType.ControllerTrigger:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(true);
+                _throttleUi.gameObject.SetActive(false);
+                _contrllerUi.sprite = _indicationUiScriptableObject.ControllerTrigger;
+                break;
+            case IndicationUiType.ControllerWeaponChange:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(true);
+                _throttleUi.gameObject.SetActive(false);
+                _contrllerUi.sprite = _indicationUiScriptableObject.ControllerWeaponChange;
+                break;
+            case IndicationUiType.ContorllerMove:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(true);
+                _throttleUi.gameObject.SetActive(false);
+                _contrllerUi.sprite = _indicationUiScriptableObject.ContorllerMove;
+                break;
+            case IndicationUiType.PushThrottle:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(true);
+                _throttleUi.sprite = _indicationUiScriptableObject.PushThrottle;
+                break;
+            case IndicationUiType.PullThrottle:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(true);
+                _throttleUi.sprite = _indicationUiScriptableObject.PullThrottle;
+                break;
+            case IndicationUiType.ThrottleTrigger:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(false);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(true);
+                _throttleUi.sprite = _indicationUiScriptableObject.ThrottleTrigger;
+                break;
+            case IndicationUiType.Toggle:
+                canvasGrop.alpha = 1;
+                _leverUi.gameObject.SetActive(true);
+                _contrllerUi.gameObject.SetActive(false);
+                _throttleUi.gameObject.SetActive(false);
+                _leverUi.sprite = _indicationUiScriptableObject.Toggle;
+                break;
+        }
+
+    }
+
+    private void StartBlinking()
+    {
+        if(_blinkCoroutine == null)
+        {
+
+        }
+    }
+
+    private void StopBlinking()
+    {
+        if(_blinkCoroutine != null)
+        {
+            StopCoroutine(_blinkCoroutine);
+            _blinkCoroutine = null;
+        }
+    }
+
+    int _iconTest = 0;
+    public void IconTest()
+    {
+        int i = _iconTest % 10;
+        ChangeIndicationUi((IndicationUiType)Enum.ToObject(typeof(IndicationUiType), i));
+        _iconTest++;
+    }
 }
 
 
