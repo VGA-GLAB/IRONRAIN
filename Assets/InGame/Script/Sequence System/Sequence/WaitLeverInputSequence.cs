@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
-    public sealed class WaitLeverInputSequence : ISequence
+    public sealed class WaitLeverInputSequence : AbstractWaitSequence
     {
         private enum LeverType
         {
@@ -17,11 +17,14 @@ namespace IronRain.SequenceSystem
         [Description("レバーの入力を待つSequence。\nWaitLeverTypeをMoveInputにすると移動入力を、\nSortieInputにすると出撃入力を待つ")]
         [SerializeField, Header("どの状況のレバー入力を待つのか")]
         private LeverType _waitLeverType;
-        
-        public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
+            
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
+            
             switch (_waitLeverType)
             {
                 case LeverType.MoveInput:
@@ -46,8 +49,10 @@ namespace IronRain.SequenceSystem
                     break;
                 }
             }
+            
+            loopCts.Cancel();
         }
 
-        public void Skip() { }
+        public override void Skip() { }
     }
 }

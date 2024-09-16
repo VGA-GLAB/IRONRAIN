@@ -7,7 +7,7 @@ using UnityEngine;
 namespace IronRain.SequenceSystem
 {
     /// <summary>新しく作り替えたもの,FirstとQTEを一つにまとめました。</summary>
-    public sealed class PlayerQTE2Sequence : ISequence
+    public sealed class PlayerQTE2Sequence : AbstractWaitSequence
     {
         [OpenScriptButton(typeof(PlayerQTE2Sequence))]
         [Description("PlayerのBossQTE1の入力を待つSequence")]
@@ -16,19 +16,30 @@ namespace IronRain.SequenceSystem
 
         private PlayerController _playerController;
 
-        public void SetData(SequenceData data)
+        public override void SetData(SequenceData data)
         {
+            base.SetData(data);
             _playerController = data.PlayerController;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // Wait時のLoop処理
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(loopCts.Token, ct);
+            
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
+            
             await PlayQTEAsync(ct, exceptionHandler);
+            
+            loopCts.Cancel();
         }
 
         /// <summary>PlayerのQTEをよびだす</summary>
         private async UniTask PlayQTEAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // ループ処理
+            
             var qteModel = _playerController.SeachState<PlayerQTE>().QTEModel;
 
             // PlayerQTEを呼び出している
@@ -45,7 +56,7 @@ namespace IronRain.SequenceSystem
             await qteModel.BossQte2Callseparately(_qteType, qteCts.Token);
         }
 
-        public void Skip()
+        public override void Skip()
         {
         }
     }

@@ -18,15 +18,14 @@ namespace IronRain.SequenceSystem
             _toggleButton1 = toggleButton1;
             _toggleButton2 = toggleButton2;
         }
-        
-        public void SetData(SequenceData data) { }
 
         public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             // ループ中のCancellationToken
             using var waitingCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, waitingCts.Token);
             
-            this.PlayWaitingSequenceAsync(waitingCts.Token, exceptionHandler).Forget();
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
             
             // 二つの入力を待つ
             await UniTask.WhenAll(

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace IronRain.SequenceSystem
 {
     [Serializable]
-    public sealed class WaitLongPressSequence : ISequence
+    public sealed class WaitLongPressSequence : AbstractWaitSequence
     {
         [OpenScriptButton(typeof(WaitLongPressSequence))]
         [Description("長押し入力をまつSequence")]
@@ -15,10 +15,8 @@ namespace IronRain.SequenceSystem
         private InputProvider.InputType _inputType;
         [SerializeField, Header("何秒長押しするのか")]
         private float _pressSec;
-        
-        public void SetData(SequenceData data) { }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             await WaitLongPressAsync(ct, exceptionHandler);
         }
@@ -26,6 +24,12 @@ namespace IronRain.SequenceSystem
         private async UniTask WaitLongPressAsync(CancellationToken ct, Action<Exception> exceptionHandler)
         {
             bool completed = false;
+
+            // ループ処理
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
+            
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
             
             while (true)
             {
@@ -50,8 +54,10 @@ namespace IronRain.SequenceSystem
 
                 if (completed) break;
             }
+            
+            loopCts.Cancel();
         }
 
-        public void Skip() { }
+        public override void Skip() { }
     }
 }

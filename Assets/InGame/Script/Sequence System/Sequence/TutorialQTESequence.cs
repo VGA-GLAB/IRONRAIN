@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
-    public class TutorialQTESequence : ISequence
+    public class TutorialQTESequence : AbstractWaitSequence
     {
         [OpenScriptButton(typeof(TutorialQTESequence)),
         Description("TutorialのQTEを待つためのSequence"),
@@ -19,16 +19,25 @@ namespace IronRain.SequenceSystem
         
         private PlayerQTEModel _playerQteModel;
         
-        public void SetData(SequenceData data)
+        public override void SetData(SequenceData data)
         {
+            base.SetData(data);
             _playerQteModel = data.PlayerController.SeachState<PlayerQTE>().QTEModel;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // ループ処理のためのCancellationTokenを用意する
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
+
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
+            
             await _playerQteModel.TutorialQteCallseparately(_qteType, ct);
+
+            loopCts.Cancel();
         }
 
-        public void Skip() { }
+        public override void Skip() { }
     }
 }
