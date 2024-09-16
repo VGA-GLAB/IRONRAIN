@@ -55,6 +55,8 @@ namespace IronRain.SequenceSystem
                 }
             }
             
+            _playerAnimation.AnimationSpeedReset();
+            
             // 待機するかどうか
             if (_isAwait)
             {
