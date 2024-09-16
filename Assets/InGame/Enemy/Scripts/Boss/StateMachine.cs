@@ -15,6 +15,7 @@ namespace Enemy.Boss
         LauncherFire,
         LaneChange,
         FunnelExpand,
+        PauseOnPlayerForward
     }
 
     public class StateMachine
@@ -43,6 +44,7 @@ namespace Enemy.Boss
             _states.Add(StateKey.Hide, new HideState(Ref));
             _states.Add(StateKey.FunnelExpand, new FunnelExpandState(Ref));
             _states.Add(StateKey.LaneChange, new LaneChangeState(Ref));
+            _states.Add(StateKey.PauseOnPlayerForward, new PauseOnPlayerForwardState(Ref));
             _states.Add(StateKey.Defeated, new DefeatedState(Ref));
 
             // 初期状態。

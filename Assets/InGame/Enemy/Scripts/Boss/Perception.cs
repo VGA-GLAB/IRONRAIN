@@ -105,6 +105,7 @@ namespace Enemy.Boss
 
                 if (t == EnemyOrder.Type.BossStart) { BossStart(); }
                 else if (t == EnemyOrder.Type.FunnelExpand) { FunnelExpand(); }
+                else if (t == EnemyOrder.Type.PauseOnPlayerForward) { PauseOnPlayerForward(); }
                 else if (t == EnemyOrder.Type.ResumeBossAction) { ResumeBossAction(); }
                 else if (t == EnemyOrder.Type.FunnelLaserSight) { FunnelLaserSight(); }
                 else if (t == EnemyOrder.Type.MoveToPlayerFront) { QteStart(); }
@@ -118,6 +119,7 @@ namespace Enemy.Boss
             // 黒板に書き込む命令一覧。
             void BossStart() { bb.IsBossStarted = true; }
             void FunnelExpand() { bb.FunnelExpand.Order(); }
+            void PauseOnPlayerForward() { bb.PauseOnPlayerForward.Order(); }
             void ResumeBossAction() { bb.ResumeBossAction.Order(); }
             void FunnelLaserSight() { bb.IsFunnelLaserSight = true; }
             void QteStart() { bb.IsQteStarted = true; }

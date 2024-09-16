@@ -28,6 +28,8 @@ namespace Enemy.Boss
 
             if (IsQteStarted()) { QTE(); return; }
 
+            if (IsPauseOnPlayerForward()) { PauseOnPlayerForward(); return; }
+
             bool isMelee = IsMeleeAttackSelected();
             bool isRange = IsRangeAttackSelected();
             if (isMelee && isRange)
@@ -44,6 +46,7 @@ namespace Enemy.Boss
             void RangeFire() => TryChangeState(StateKey.LauncherFire);
             void LaneChange() => TryChangeState(StateKey.LaneChange);
             void QTE() => TryChangeState(StateKey.QteEvent);
+            void PauseOnPlayerForward() => TryChangeState(StateKey.PauseOnPlayerForward);
             void FunnelExpand() => TryChangeState(StateKey.FunnelExpand);
         }
 
@@ -57,6 +60,12 @@ namespace Enemy.Boss
         private bool IsQteStarted()
         {
             return Ref.BlackBoard.IsQteStarted;
+        }
+
+        // マルチロックオンするため、プレイヤーの正面に移動。
+        private bool IsPauseOnPlayerForward()
+        {
+            return Ref.BlackBoard.PauseOnPlayerForward.IsWaitingExecute();
         }
 
         // 近接攻撃を選択する。

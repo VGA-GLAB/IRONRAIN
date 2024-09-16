@@ -1,44 +1,42 @@
-﻿using System.Collections;
+﻿using Enemy.Boss.PauseOnPlayerForward;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Enemy.Funnel;
-using Enemy.Boss.FunnelExpand;
 
 namespace Enemy.Boss
 {
     /// <summary>
-    /// 戦闘中、ファンネルを展開するステート。
+    /// ファンネルのマルチロックオン時にプレイヤーの正面に移動させ、待機。
     /// </summary>
-    public class FunnelExpandState : BattleState
+    public class PauseOnPlayerForwardState : BattleState
     {
-        // プレイヤーの正面のレーンに移動し展開。
+        // プレイヤーの正面のレーンに移動し入力があるまで待機。
         private BossActionStep[] _steps;
         private BattleActionStep _currentStep;
 
-        public FunnelExpandState(RequiredRef requiredRef) : base(requiredRef)
+        public PauseOnPlayerForwardState(RequiredRef requiredRef) : base(requiredRef)
         {
             _steps = new BossActionStep[4];
             _steps[3] = new EndStep(requiredRef, null);
-            _steps[2] = new ExpandStep(requiredRef, _steps[3]);
+            _steps[2] = new WaitPlayerInputStep(requiredRef, _steps[3]);
             _steps[1] = new WaitAnimationStep(requiredRef, _steps[2]);
             _steps[0] = new LaneChangeStep(requiredRef, _steps[1]);
         }
 
         protected override void OnEnter()
         {
-            Ref.BlackBoard.CurrentState = StateKey.FunnelExpand;
+            Ref.BlackBoard.CurrentState = StateKey.PauseOnPlayerForward;
 
             _currentStep = _steps[0];
 
             TurnToPlayer(isReset: true);
+
+            Ref.BlackBoard.PauseOnPlayerForward.Execute();
         }
 
         protected override void OnExit()
         {
             TurnToPlayer();
-
-            // 展開後、プレイヤーの入力があり、敵が動き出すタイミングで実行を黒板に書き込む。
-            Ref.BlackBoard.FunnelExpand.Execute();
         }
 
         protected override void OnStay()
@@ -52,60 +50,57 @@ namespace Enemy.Boss
     }
 }
 
-namespace Enemy.Boss.FunnelExpand
+namespace Enemy.Boss.PauseOnPlayerForward
 {
     /// <summary>
-    /// レーン移動。
+    /// プレイヤーの正面レーンに移動。
     /// </summary>
     public class LaneChangeStep : LaneChange.LaneChangeStep
     {
         public LaneChangeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
-            // 現状、LaneChangeStateのものと全く同じ。
+            // レーンチェンジのものと全く同じ。
         }
     }
 
     /// <summary>
-    /// レーン移動と並行してプレイヤーを向く。
+    /// 左右移動のアニメーションを待つ。
     /// </summary>
     public class WaitAnimationStep : LaneChange.WaitAnimationStep
     {
         public WaitAnimationStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
-            // 現状、LaneChangeStateのものと全く同じ。
+            // レーンチェンジのものと全く同じ。
         }
     }
 
     /// <summary>
-    /// その場でファンネルを展開。
+    /// 行動再開まで何もしない。
     /// </summary>
-    public class ExpandStep : BossActionStep
+    public class WaitPlayerInputStep : BossActionStep
     {
-        public ExpandStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
+        public WaitPlayerInputStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) { }
 
         protected override void Enter()
         {
-            Ref.BodyAnimation.SetTrigger(Const.Param.FunnelExpand);
-
-            // ファンネル展開
-            foreach (FunnelController f in Ref.Funnels)
-            {
-                f.Expand();
-                f.FireEnable(true);
-            }
-
-            Vector3 p = Ref.Body.Position;
-            AudioWrapper.PlaySE(p, "SE_Funnel");
         }
 
         protected override BattleActionStep Stay()
         {
-            return Next[0];
+            Trigger resume = Ref.BlackBoard.ResumeBossAction;
+
+            if (resume.IsWaitingExecute())
+            {
+                resume.Execute();
+
+                return Next[0];
+            }
+            else return this;
         }
     }
 
     /// <summary>
-    /// ファンネル展開終了。
+    /// ポーズ終了。
     /// </summary>
     public class EndStep : BossActionStep
     {
