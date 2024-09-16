@@ -35,6 +35,7 @@ namespace IronRain.Player
             _playerEnvroment = env;
             _playerParams = _playerEnvroment.PlayerSetting.PlayerParamsData;
             _params = _playerEnvroment.PlayerSetting.PlayerParamsData;
+            _qteType.Value = QTEState.QTENone;
         }
 
         public void Start()
@@ -59,7 +60,7 @@ namespace IronRain.Player
             var endCts = new CancellationTokenSource();
             var endToken = endCts.Token;
 
-            QTEFailureJudgment(startCts, endToken).Forget();
+            //QTEFailureJudgment(startCts, endToken).Forget();
 
             try
             {
