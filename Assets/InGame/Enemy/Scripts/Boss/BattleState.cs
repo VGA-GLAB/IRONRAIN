@@ -35,6 +35,7 @@ namespace Enemy.Boss
         {
             PlayDamageSE();
             FunnelLaserSight();
+            UpdateSePosition();
             OnStay();
         }
 
@@ -58,6 +59,16 @@ namespace Enemy.Boss
             {
                 foreach (FunnelController f in Ref.Funnels) f.LaserSight(true);
             }
+        }
+
+        // スラスターとジェットパックのSEの位置を更新
+        private void UpdateSePosition()
+        {
+            Vector3 p = Ref.Body.Position;
+            int thruster = Ref.BlackBoard.ThrusterSE;
+            int jet = Ref.BlackBoard.JetSE;
+            AudioWrapper.UpdateSePosition(p, thruster);
+            AudioWrapper.UpdateSePosition(p, jet);
         }
 
         /// <summary>

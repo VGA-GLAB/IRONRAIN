@@ -91,5 +91,9 @@ namespace Enemy.Boss
 
         // 現状ボス戦ではポーズ処理が無いが一応。
         public float PausableDeltaTime => Time.deltaTime;
+
+        // SE
+        public int ThrusterSE { get; set; }
+        public int JetSE { get; set; }
     }
 }
