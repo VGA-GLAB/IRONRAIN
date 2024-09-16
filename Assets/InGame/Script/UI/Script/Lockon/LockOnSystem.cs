@@ -208,6 +208,7 @@ public class LockOnSystem : MonoBehaviour
                     _isMouseMultiLock = false;
                     foreach(Transform transform in _targets)
                     {
+                        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
                         _temp.Add(transform);
                         var enemyUi = transform.GetComponent<EnemyUi>();
                         enemyUi.LockOnUi.SetActive(true);
