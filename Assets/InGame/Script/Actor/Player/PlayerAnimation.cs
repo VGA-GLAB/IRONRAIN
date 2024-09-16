@@ -164,6 +164,7 @@ namespace IronRain.Player
             }
             _particleEffect.Play();
             CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_BlokenArm");
+            CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Explosion");
             await UniTask.CompletedTask;
         }
     }
