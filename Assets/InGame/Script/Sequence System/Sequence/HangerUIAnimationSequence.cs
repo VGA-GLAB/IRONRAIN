@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
-    public class HangerUIAnimationSequence : ISequence
+    public class HangerUIAnimationSequence : AbstractWaitSequence
     {
         private enum AnimType
         {
@@ -23,13 +23,19 @@ namespace IronRain.SequenceSystem
         
         private LaunchManager _launchManager;
         
-        public void SetData(SequenceData data)
+        public override void SetData(SequenceData data)
         {
+            base.SetData(data);
             _launchManager = data.LaunchManager;
         }
 
-        public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
+        public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            using var loopCts = new CancellationTokenSource();
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
+
+            this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
+            
             switch (_animType)
             {
                 case AnimType.StartActive:
@@ -54,9 +60,11 @@ namespace IronRain.SequenceSystem
                     break;
                 }
             }
+            
+            loopCts.Cancel();
         }
 
-        public void Skip()
+        public override void Skip()
         {
             switch (_animType)
             {
