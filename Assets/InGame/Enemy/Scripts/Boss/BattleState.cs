@@ -48,7 +48,7 @@ namespace Enemy.Boss
         {
             string source = Ref.BlackBoard.DamageSource;
             Vector3 p = Ref.Body.Position;
-            DamageSE.Play(p, source);
+            DamageSE.PlayBoss(p, source);
         }
 
         // ファンネルのレーザーサイトを表示

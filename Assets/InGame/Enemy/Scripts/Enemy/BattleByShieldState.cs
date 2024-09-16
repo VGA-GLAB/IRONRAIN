@@ -29,7 +29,8 @@ namespace Enemy
         {
             Always();
 
-            AudioWrapper.PlaySE("SE_PileBunker_Hit");
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.PlaySE(p, "SE_PileBunker_Hit");
         }
 
         protected override void OnStay()

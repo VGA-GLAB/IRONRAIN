@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using static CriWare.CriProfiler;
 
 namespace Enemy
 {
