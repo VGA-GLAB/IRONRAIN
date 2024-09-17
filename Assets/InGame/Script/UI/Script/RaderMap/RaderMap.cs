@@ -44,6 +44,8 @@ public class RaderMap : MonoBehaviour
     [SerializeField] private float _indicationUiMinAlpha = 0.2f;
     [Header("大きくなるまでの時間")]
     [SerializeField] private float _scaleInterval = 0.5f;
+    [Header("消えるまでの時間")]
+    [SerializeField] private float _bunshInterval = 0.5f;
 
     [Header("MiniMapのCanvasGroup")]
     [SerializeField] private CanvasGroup _miniMapCanvasGroup;
@@ -151,10 +153,13 @@ public class RaderMap : MonoBehaviour
     void Update()
     {
         //テスト用
-        if (Input.GetKeyDown(KeyCode.C))
-            IconTest();
+        //if (Input.GetKeyDown(KeyCode.C))
+        //    IconTest();
 
-        if(!IsBossScene)
+        //if (Input.GetKeyDown(KeyCode.B))
+        //    IconDeleteTest();
+
+        if (!IsBossScene)
         {
             for (int i = 0; i < Enemies.Count; i++)
             {
@@ -573,6 +578,7 @@ public class RaderMap : MonoBehaviour
         _miniMapCanvasGroup.alpha = 1;
     }
 
+    Tweener tweener;
     /// <summary>
     /// チュートリアルアイコンの変更
     /// </summary>
@@ -584,7 +590,9 @@ public class RaderMap : MonoBehaviour
         switch (type)
         {
             case IndicationUiType.None:
-                canvasGrop.alpha = 0;
+                tweener.Kill();
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.zero, _bunshInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                   .OnComplete(() => canvasGrop.alpha = 0);    // スケールダウン完了後にアルファ値を0にする
                 break;
             case IndicationUiType.PushOutsideLever:
                 canvasGrop.alpha = 1;
@@ -594,7 +602,7 @@ public class RaderMap : MonoBehaviour
                 _leverUi.sprite = _indicationUiScriptableObject.PushOutsideLever;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_leverUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.PullOutsideLever:
@@ -605,7 +613,7 @@ public class RaderMap : MonoBehaviour
                 _leverUi.sprite = _indicationUiScriptableObject.PullOutsideLever;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_leverUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.ControllerTrigger:
@@ -616,7 +624,7 @@ public class RaderMap : MonoBehaviour
                 _contrllerUi.sprite = _indicationUiScriptableObject.ControllerTrigger;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_contrllerUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.ControllerWeaponChange:
@@ -627,7 +635,7 @@ public class RaderMap : MonoBehaviour
                 _contrllerUi.sprite = _indicationUiScriptableObject.ControllerWeaponChange;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_contrllerUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.ContorllerMove:
@@ -638,7 +646,7 @@ public class RaderMap : MonoBehaviour
                 _contrllerUi.sprite = _indicationUiScriptableObject.ContorllerMove;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_contrllerUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.PushThrottle:
@@ -649,7 +657,7 @@ public class RaderMap : MonoBehaviour
                 _throttleUi.sprite = _indicationUiScriptableObject.PushThrottle;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_throttleUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.PullThrottle:
@@ -660,7 +668,7 @@ public class RaderMap : MonoBehaviour
                 _throttleUi.sprite = _indicationUiScriptableObject.PullThrottle;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_throttleUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.ThrottleTrigger:
@@ -671,7 +679,7 @@ public class RaderMap : MonoBehaviour
                 _throttleUi.sprite = _indicationUiScriptableObject.ThrottleTrigger;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_throttleUi));    // スケールアップ完了後に点滅開始
                 break;
             case IndicationUiType.Toggle:
@@ -682,7 +690,7 @@ public class RaderMap : MonoBehaviour
                 _leverUi.sprite = _indicationUiScriptableObject.Toggle;
                 // スケールを0から1にアニメーションさせ、完了したら点滅を開始
                 _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
+                tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval).SetAutoKill(true) // 0.5秒でスケール1にする
                     .OnComplete(() => StartBlinking(_leverUi));    // スケールアップ完了後に点滅開始
                 break;
         }
@@ -741,6 +749,11 @@ public class RaderMap : MonoBehaviour
         int i = _iconTest % 10;
         ChangeIndicationUi((IndicationUiType)Enum.ToObject(typeof(IndicationUiType), i));
         _iconTest++;
+    }
+
+    public void IconDeleteTest()
+    {
+        ChangeIndicationUi((IndicationUiType)Enum.ToObject(typeof(IndicationUiType), 0));
     }
 }
 
