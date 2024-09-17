@@ -58,79 +58,22 @@ MonoBehaviour:
   - rid: 8390642849261813803
   - rid: 8390642849261813810
   - rid: 8390642849261813825
-  - rid: 8390642849261813826
+  - rid: 3800739415883513883
   - rid: 8390642849261813837
   - rid: 8390642849261813893
   - rid: 3800739328952893447
   - rid: 8390642849261813899
   - rid: 8390642849261813900
   - rid: 8390642849261813906
-  - rid: 8390642849261813913
+  - rid: 3800739415883513937
   - rid: 8390642849261813929
   - rid: 3800739259115372552
   - rid: 8390642934176809060
-  - rid: 6819318827970461788
+  - rid: 3800739415883513963
   - rid: 8390642934176809083
   references:
     version: 2
     RefIds:
-    - rid: 68936413895196674
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 2
-        _targetSeq: 7
-    - rid: 68936413895196675
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2.5
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_11
-        _delaySec: 0
-    - rid: 68936413895196676
-      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _addState: 168
-    - rid: 68936413895196677
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_13
-        _delaySec: 0
-    - rid: 68936413895196678
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_14
-        _delaySec: 0
-    - rid: 68936413895196679
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 0
-    - rid: 68936413895196680
-      type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences: []
-        _targetSeq: 7
-    - rid: 68936413895196681
-      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _removeState: 168
-    - rid: 68936413895196682
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 5
     - rid: 3800739259115372552
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -434,6 +377,623 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Sortie_01
         _delaySec: 0
+    - rid: 3800739415883513883
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: QTETutorialSequence
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739415883513884
+        - rid: 3800739415883513885
+        - rid: 3800739415883513886
+        - rid: 3800739415883513887
+        - rid: 3800739415883513888
+        - rid: 3800739415883513889
+        - rid: 3800739415883513890
+        - rid: 3800739415883513891
+        - rid: 3800739415883513892
+        - rid: 3800739415883513893
+        - rid: 3800739415883513894
+        - rid: 3800739415883513895
+        - rid: 3800739415883513896
+        - rid: 3800739415883513897
+        - rid: 3800739415883513898
+        - rid: 3800739415883513899
+        - rid: 3800739415883513900
+        - rid: 3800739415883513901
+        - rid: 3800739415883513902
+        - rid: 3800739415883513903
+        - rid: 3800739415883513904
+        - rid: 3800739415883513905
+        - rid: 3800739415883513906
+    - rid: 3800739415883513884
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 112
+    - rid: 3800739415883513885
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 0
+        _targetSeq: 2
+    - rid: 3800739415883513886
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2.5
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_11
+        _delaySec: 0
+    - rid: 3800739415883513887
+      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _targetSeq: 2
+    - rid: 3800739415883513888
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10.5
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_12
+        _delaySec: 2
+    - rid: 3800739415883513889
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_13
+        _delaySec: 0
+    - rid: 3800739415883513890
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513891
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 3800739415883513892
+      type: {class: QTESetEnemyIDSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _sequenceId: 2
+    - rid: 3800739415883513893
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513907
+        _qteType: 2
+    - rid: 3800739415883513894
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 3800739415883513895
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_14
+        _delaySec: 0
+    - rid: 3800739415883513896
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513908
+        _qteType: 3
+    - rid: 3800739415883513897
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+    - rid: 3800739415883513898
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 7
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513899
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_15_1
+        _delaySec: 0
+    - rid: 3800739415883513900
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 8
+    - rid: 3800739415883513901
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513909
+        _qteType: 4
+    - rid: 3800739415883513902
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 7
+    - rid: 3800739415883513903
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 3800739415883513904
+      type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences: []
+        _targetSeq: 2
+    - rid: 3800739415883513905
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Common_06
+        _delaySec: 0
+    - rid: 3800739415883513906
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 248
+    - rid: 3800739415883513907
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_13
+        _delaySec: 7
+    - rid: 3800739415883513908
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_14
+        _delaySec: 7
+    - rid: 3800739415883513909
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 0
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_15_1
+        _delaySec: 7
+    - rid: 3800739415883513910
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 64
+    - rid: 3800739415883513911
+      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _isSkipSpawn: 0
+        _totalSec: 2
+        _targetSeq: 7
+    - rid: 3800739415883513912
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_11
+        _delaySec: 0
+    - rid: 3800739415883513913
+      type: {class: WaitPlayerQTEReadySequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739415883513916
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_13
+        _delaySec: 0
+    - rid: 3800739415883513917
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513918
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 3800739415883513919
+      type: {class: QTESetEnemyIDSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _sequenceId: 7
+    - rid: 3800739415883513920
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513921
+        _qteType: 2
+    - rid: 3800739415883513921
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_13
+        _delaySec: 7
+    - rid: 3800739415883513922
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_14
+        _delaySec: 0
+    - rid: 3800739415883513923
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 6
+    - rid: 3800739415883513924
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513925
+        _qteType: 3
+    - rid: 3800739415883513925
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_14
+        _delaySec: 7
+    - rid: 3800739415883513926
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+    - rid: 3800739415883513927
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 7
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513928
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_15_1
+        _delaySec: 0
+    - rid: 3800739415883513929
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 8
+    - rid: 3800739415883513930
+      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513931
+        _qteType: 4
+    - rid: 3800739415883513931
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 12
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Tutorial_15_1
+        _delaySec: 7
+    - rid: 3800739415883513932
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 3800739415883513933
+      type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences: []
+        _targetSeq: 7
+    - rid: 3800739415883513934
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 7
+    - rid: 3800739415883513935
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 242
+    - rid: 3800739415883513936
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+    - rid: 3800739415883513937
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: ToggleButtonSequence
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739415883513938
+        - rid: 3800739415883513939
+        - rid: 3800739415883513940
+        - rid: 3800739415883513941
+        - rid: 3800739415883513942
+        - rid: 3800739415883513943
+        - rid: 3800739415883513944
+        - rid: 3800739415883513945
+        - rid: 3800739415883513946
+        - rid: 3800739415883513947
+        - rid: 3800739415883513948
+        - rid: 3800739415883513949
+        - rid: 3800739415883513950
+        - rid: 3800739415883513951
+        - rid: 3800739415883513952
+        - rid: 3800739415883513953
+        - rid: 3800739415883513952
+        - rid: 3800739415883513954
+        - rid: 3800739415883513955
+        - rid: 3800739415883513956
+        - rid: 3800739415883513957
+        - rid: 3800739415883513958
+        - rid: 3800739415883513959
+    - rid: 3800739415883513938
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 40
+    - rid: 3800739415883513939
+      type: {class: EnemyManagerPauseOnPlayerForwardSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739415883513940
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_07
+        _delaySec: 0
+    - rid: 3800739415883513941
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 4
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513942
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 5
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513943
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 9
+    - rid: 3800739415883513944
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_08
+        _delaySec: 0
+    - rid: 3800739415883513945
+      type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513960
+        _toggleButton1: 18
+        _toggleButton2: 19
+    - rid: 3800739415883513946
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 4
+    - rid: 3800739415883513947
+      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 5
+    - rid: 3800739415883513948
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 3800739415883513949
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_09
+        _delaySec: 0
+    - rid: 3800739415883513950
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 512
+    - rid: 3800739415883513951
+      type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _cueSheetName: SE
+        _cueName: SE_Toggle
+        _delaySec: 0
+        _id: -1
+    - rid: 3800739415883513952
+      type: {class: WaitMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513961
+    - rid: 3800739415883513953
+      type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _cueSheetName: SE
+        _cueName: SE_Panel
+        _delaySec: 0
+        _id: -1
+    - rid: 3800739415883513954
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 5
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_10
+        _delaySec: 0
+    - rid: 3800739415883513955
+      type: {class: WaitLongPressSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513962
+        _inputType: 4
+        _pressSec: 1
+    - rid: 3800739415883513956
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Common_05
+        _delaySec: 2
+    - rid: 3800739415883513957
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 40
+    - rid: 3800739415883513958
+      type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+    - rid: 3800739415883513959
+      type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+    - rid: 3800739415883513960
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 10
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_08
+        _delaySec: 5
+    - rid: 3800739415883513961
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 15
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_09
+        _delaySec: 9
+    - rid: 3800739415883513962
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 15
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_10
+        _delaySec: 10
+    - rid: 3800739415883513963
+      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _groupName: BossQTE2
+        _isSkip: 0
+        _sequences:
+        - rid: 3800739415883513964
+        - rid: 3800739415883513965
+        - rid: 3800739415883513966
+        - rid: 3800739415883513967
+        - rid: 3800739415883513968
+        - rid: 3800739415883513969
+        - rid: 3800739415883513970
+        - rid: 3800739415883513971
+        - rid: 3800739415883513972
+        - rid: 3800739415883513973
+        - rid: 3800739415883513974
+        - rid: 3800739415883513975
+    - rid: 3800739415883513964
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 3800739415883513965
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 3
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_16
+        _delaySec: 0
+    - rid: 3800739415883513966
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_17
+        _delaySec: 0
+    - rid: 3800739415883513967
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 7
+    - rid: 3800739415883513968
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
+    - rid: 3800739415883513969
+      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _target: 6
+        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
+        _afterColor: {r: 1, g: 1, b: 1, a: 1}
+        _duration: 1
+    - rid: 3800739415883513970
+      type: {class: PlayerQTE2Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences:
+        - rid: 3800739415883513976
+        _qteType: 2
+    - rid: 3800739415883513971
+      type: {class: QTEBossAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _qteBossAnimType: 5
+    - rid: 3800739415883513972
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 16
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_19_20_21
+        _delaySec: 0
+    - rid: 3800739415883513973
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
+    - rid: 3800739415883513974
+      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _openSec: 2
+        _delaySec: 0
+    - rid: 3800739415883513975
+      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 9999999
+        _clearText: 1
+        _text: "\u304A\u75B2\u308C\u69D8\u3067\u3057\u305F\uFF01\n\u30D8\u30C3\u30C9\u30BB\u30C3\u30C8\u30FBVR\u3092\u53D6\u308A\u5916\u3057\u3066\u304F\u3060\u3055\u3044"
+        _oneCharDuration: 0.05
+        _delaySec: 0
+    - rid: 3800739415883513976
+      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 13
+        _announceUiType: 1
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Boss_17
+        _delaySec: 8
+    - rid: 3800739415883513985
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 242
+    - rid: 3800739415883513986
+      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 2
     - rid: 6819318821456707584
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -458,11 +1018,6 @@ MonoBehaviour:
       type: {class: SoundStopSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _id: 2
-    - rid: 6819318821456707595
-      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _addState: 40
     - rid: 6819318821456707596
       type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -481,8 +1036,6 @@ MonoBehaviour:
         _shakeDuration: 1
         _shakeStrength: 0.2
         _isWaitShake: 0
-    - rid: 6819318821456707614
-      type: {class: EnemyManagerPauseOnPlayerForwardSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 6819318821456707635
       type: {class: PlayerQTE1Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -568,134 +1121,6 @@ MonoBehaviour:
       type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _target: 11
-    - rid: 6819318827970461721
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461722
-        _qteType: 2
-    - rid: 6819318827970461722
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_13
-        _delaySec: 7
-    - rid: 6819318827970461726
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461727
-        _qteType: 3
-    - rid: 6819318827970461727
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_14
-        _delaySec: 7
-    - rid: 6819318827970461728
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461729
-        _qteType: 4
-    - rid: 6819318827970461729
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 0
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 7
-    - rid: 6819318827970461730
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461732
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-    - rid: 6819318827970461734
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 7
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461736
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 7
-    - rid: 6819318827970461739
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461741
-        _qteType: 2
-    - rid: 6819318827970461741
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_13
-        _delaySec: 7
-    - rid: 6819318827970461744
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461745
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461746
-        _qteType: 3
-    - rid: 6819318827970461746
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_14
-        _delaySec: 7
-    - rid: 6819318827970461748
-      type: {class: TutorialQTESequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461749
-        _qteType: 4
-    - rid: 6819318827970461749
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 12
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 7
-    - rid: 6819318827970461750
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 7
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461751
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-    - rid: 6819318827970461752
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 7
     - rid: 6819318827970461753
       type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -718,36 +1143,6 @@ MonoBehaviour:
         _beforeColor: {r: 0, g: 0, b: 0, a: 1}
         _afterColor: {r: 1, g: 1, b: 1, a: 1}
         _duration: 1
-    - rid: 6819318827970461757
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 4
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461758
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 5
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461760
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_08
-        _delaySec: 5
-    - rid: 6819318827970461761
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 4
-    - rid: 6819318827970461762
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 5
     - rid: 6819318827970461769
       type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -836,162 +1231,6 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Boss_15
         _delaySec: 8
-    - rid: 6819318827970461788
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: BossQTE2
-        _isSkip: 0
-        _sequences:
-        - rid: 6819318831150268419
-        - rid: 6819318827970461790
-        - rid: 6819318827970461794
-        - rid: 6819318827970461854
-        - rid: 6819318831150268416
-        - rid: 6819318827970461855
-        - rid: 6819318827970461793
-        - rid: 6819318827970461856
-        - rid: 6819318827970461798
-        - rid: 6819318827970461797
-        - rid: 6819318827970461857
-        - rid: 6819318827970461858
-        - rid: 6819318827970461859
-        - rid: 6819318827970461801
-        - rid: 6819318827970461800
-        - rid: 6819318827970461860
-        - rid: 6819318827970461812
-        - rid: 6819318831150268418
-        - rid: 6819318831150268443
-        - rid: 6819318827970461805
-        - rid: 6819318827970461815
-        - rid: 6819318831150268440
-        - rid: 6819318831150268441
-        - rid: 6819318827970461813
-        - rid: 6819318827970461814
-    - rid: 6819318827970461790
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 3
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_16
-        _delaySec: 0
-    - rid: 6819318827970461793
-      type: {class: PlayerQTE2Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461795
-        _qteType: 2
-    - rid: 6819318827970461794
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_17
-        _delaySec: 0
-    - rid: 6819318827970461795
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 13
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_17
-        _delaySec: 8
-    - rid: 6819318827970461797
-      type: {class: PlayerQTE2Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461799
-        _qteType: 3
-    - rid: 6819318827970461798
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_18
-        _delaySec: 0
-    - rid: 6819318827970461799
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 13.5
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_18
-        _delaySec: 8.5
-    - rid: 6819318827970461800
-      type: {class: PlayerQTE2Sequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461804
-        _qteType: 4
-    - rid: 6819318827970461801
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 0
-    - rid: 6819318827970461804
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 14
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 9
-    - rid: 6819318827970461805
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 16
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_19_20_21
-        _delaySec: 0
-    - rid: 6819318827970461812
-      type: {class: QTEBossAnimationSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _qteBossAnimType: 5
-    - rid: 6819318827970461813
-      type: {class: OpenTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _openSec: 2
-        _delaySec: 0
-    - rid: 6819318827970461814
-      type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 9999999
-        _clearText: 1
-        _text: "\u304A\u75B2\u308C\u69D8\u3067\u3057\u305F\uFF01\n\u30D8\u30C3\u30C9\u30BB\u30C3\u30C8\u30FBVR\u3092\u53D6\u308A\u5916\u3057\u3066\u304F\u3060\u3055\u3044"
-        _oneCharDuration: 0.05
-        _delaySec: 0
-    - rid: 6819318827970461815
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-    - rid: 6819318827970461817
-      type: {class: WaitMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461818
-    - rid: 6819318827970461818
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 15
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_09
-        _delaySec: 9
-    - rid: 6819318827970461820
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 15
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_10
-        _delaySec: 10
     - rid: 6819318827970461824
       type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1038,38 +1277,6 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Tutorial_04
         _delaySec: 7
-    - rid: 6819318827970461838
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 7
-    - rid: 6819318827970461839
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 6
-    - rid: 6819318827970461840
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 8
-    - rid: 6819318827970461841
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
-    - rid: 6819318827970461842
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 7
-    - rid: 6819318827970461843
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 6
-    - rid: 6819318827970461844
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 8
-    - rid: 6819318827970461845
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
     - rid: 6819318827970461846
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1082,14 +1289,6 @@ MonoBehaviour:
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _actionType: 0
-    - rid: 6819318827970461849
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 9
-    - rid: 6819318827970461850
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
     - rid: 6819318827970461851
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1098,74 +1297,11 @@ MonoBehaviour:
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _actionType: 6
-    - rid: 6819318827970461854
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 7
-    - rid: 6819318827970461855
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461856
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 6
-    - rid: 6819318827970461857
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 8
-    - rid: 6819318827970461858
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 6
-    - rid: 6819318827970461859
-      type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 7
-        _beforeColor: {r: 0, g: 0, b: 0, a: 1}
-        _afterColor: {r: 1, g: 1, b: 1, a: 1}
-        _duration: 1
-    - rid: 6819318827970461860
-      type: {class: StopBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _target: 0
-    - rid: 6819318831150268416
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
-    - rid: 6819318831150268418
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
-    - rid: 6819318831150268419
-      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _actionType: 0
     - rid: 6819318831150268437
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
         _addState: 128
-    - rid: 6819318831150268440
-      type: {class: CloseMonitorSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _monitorCloseSec: 1
-    - rid: 6819318831150268441
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-    - rid: 6819318831150268443
-      type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-    - rid: 6819318843392917504
-      type: {class: QTESetEnemyIDSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 6819318843392917505
-      type: {class: QTESetEnemyIDSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
     - rid: 6819318843392917509
       type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1528,103 +1664,6 @@ MonoBehaviour:
       type: {class: StartRecorderSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _recordSeconds: 20
-    - rid: 8390642849261813826
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: QTETutorialSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 8390642849261813827
-        - rid: 8390642849261813828
-        - rid: 8390642849261813829
-        - rid: 8390642849261813830
-        - rid: 8390642849261813831
-        - rid: 6819318827970461730
-        - rid: 6819318827970461838
-        - rid: 6819318843392917504
-        - rid: 6819318827970461721
-        - rid: 6819318827970461839
-        - rid: 8390642849261813832
-        - rid: 6819318827970461726
-        - rid: 6819318827970461732
-        - rid: 6819318827970461734
-        - rid: 8390642849261813833
-        - rid: 6819318827970461840
-        - rid: 6819318827970461728
-        - rid: 6819318827970461736
-        - rid: 6819318827970461841
-        - rid: 8390642849261813834
-        - rid: 8390642849261813835
-        - rid: 8390642849261813836
-    - rid: 8390642849261813827
-      type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _isSkipSpawn: 0
-        _totalSec: 0
-        _targetSeq: 2
-    - rid: 8390642849261813828
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2.5
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_11
-        _delaySec: 0
-    - rid: 8390642849261813829
-      type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _targetSeq: 2
-    - rid: 8390642849261813830
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 10.5
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_12
-        _delaySec: 2
-    - rid: 8390642849261813831
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_13
-        _delaySec: 0
-    - rid: 8390642849261813832
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_14
-        _delaySec: 0
-    - rid: 8390642849261813833
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Tutorial_15_1
-        _delaySec: 0
-    - rid: 8390642849261813834
-      type: {class: WaitAllDefeatedSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences: []
-        _targetSeq: 2
-    - rid: 8390642849261813835
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Common_06
-        _delaySec: 0
-    - rid: 8390642849261813836
-      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _removeState: 232
     - rid: 8390642849261813837
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1687,27 +1726,30 @@ MonoBehaviour:
         _groupName: 7
         _isSkip: 0
         _sequences:
-        - rid: 68936413895196674
-        - rid: 68936413895196675
-        - rid: 68936413895196676
-        - rid: 68936413895196677
-        - rid: 6819318827970461744
-        - rid: 6819318827970461842
-        - rid: 6819318843392917505
-        - rid: 6819318827970461739
-        - rid: 68936413895196678
-        - rid: 6819318827970461843
-        - rid: 6819318827970461745
-        - rid: 6819318827970461751
-        - rid: 6819318827970461750
-        - rid: 68936413895196679
-        - rid: 6819318827970461844
-        - rid: 6819318827970461748
-        - rid: 6819318827970461845
-        - rid: 68936413895196680
-        - rid: 6819318827970461752
-        - rid: 68936413895196681
-        - rid: 68936413895196682
+        - rid: 3800739415883513910
+        - rid: 3800739415883513911
+        - rid: 3800739415883513912
+        - rid: 3800739415883513913
+        - rid: 3800739415883513985
+        - rid: 3800739415883513986
+        - rid: 3800739415883513916
+        - rid: 3800739415883513917
+        - rid: 3800739415883513918
+        - rid: 3800739415883513919
+        - rid: 3800739415883513920
+        - rid: 3800739415883513922
+        - rid: 3800739415883513923
+        - rid: 3800739415883513924
+        - rid: 3800739415883513926
+        - rid: 3800739415883513927
+        - rid: 3800739415883513928
+        - rid: 3800739415883513929
+        - rid: 3800739415883513930
+        - rid: 3800739415883513932
+        - rid: 3800739415883513933
+        - rid: 3800739415883513934
+        - rid: 3800739415883513935
+        - rid: 3800739415883513936
     - rid: 8390642849261813843
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -2048,129 +2090,6 @@ MonoBehaviour:
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 10
-    - rid: 8390642849261813913
-      type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _groupName: ToggleButtonSequence
-        _isSkip: 0
-        _sequences:
-        - rid: 6819318821456707595
-        - rid: 6819318821456707614
-        - rid: 8390642849261813914
-        - rid: 6819318827970461757
-        - rid: 6819318827970461758
-        - rid: 6819318827970461849
-        - rid: 8390642849261813915
-        - rid: 8390642849261813916
-        - rid: 6819318827970461761
-        - rid: 6819318827970461762
-        - rid: 6819318827970461850
-        - rid: 8390642849261813917
-        - rid: 8390642849261813918
-        - rid: 8390642849261813919
-        - rid: 8390642849261813920
-        - rid: 8390642849261813921
-        - rid: 6819318827970461817
-        - rid: 8390642849261813923
-        - rid: 8390642849261813924
-        - rid: 8390642849261813925
-        - rid: 8390642849261813926
-        - rid: 8390642849261813927
-        - rid: 8390642849261813928
-    - rid: 8390642849261813914
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 3
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_07
-        _delaySec: 0
-    - rid: 8390642849261813915
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_08
-        _delaySec: 0
-    - rid: 8390642849261813916
-      type: {class: WaitToggleSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461760
-        _toggleButton1: 18
-        _toggleButton2: 19
-    - rid: 8390642849261813917
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_09
-        _delaySec: 0
-    - rid: 8390642849261813918
-      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _addState: 512
-    - rid: 8390642849261813919
-      type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _cueSheetName: SE
-        _cueName: SE_Toggle
-        _delaySec: 0
-        _id: -1
-    - rid: 8390642849261813920
-      type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _cueSheetName: SE
-        _cueName: SE_Panel
-        _delaySec: 0
-        _id: -1
-    - rid: 8390642849261813921
-      type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _cueSheetName: SE
-        _cueName: SE_Panel
-        _delaySec: 0
-        _id: -1
-    - rid: 8390642849261813923
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 5
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Boss_10
-        _delaySec: 0
-    - rid: 8390642849261813924
-      type: {class: WaitLongPressSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _waitSequences:
-        - rid: 6819318827970461820
-        _inputType: 4
-        _pressSec: 1
-    - rid: 8390642849261813925
-      type: {class: VoiceSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 2
-        _announceUiType: 1
-        _cueSheetName: VOICE
-        _cueName: VOICE_Operator_Common_05
-        _delaySec: 2
-    - rid: 8390642849261813926
-      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
-        _removeState: 40
-    - rid: 8390642849261813927
-      type: {class: AttackMultiLockSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-    - rid: 8390642849261813928
-      type: {class: EnemyManagerResumeBossActionSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
-      data:
-        _totalSec: 0
     - rid: 8390642849261813929
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
