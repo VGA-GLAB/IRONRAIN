@@ -101,8 +101,10 @@ Shader "Custom/2DHologramOverlap"
                 noise *= _NoiseStrength;
                 
                 half4 col = 0;
-                col.a = saturate(1 - noise);
-                col.rgb = _NoiseColor;
+                col.rgb *= saturate(1 - noise);
+                col.rgb += _NoiseColor * noise;
+
+                col.a = noise;
 
                 col.rgb *= col.a;
 
