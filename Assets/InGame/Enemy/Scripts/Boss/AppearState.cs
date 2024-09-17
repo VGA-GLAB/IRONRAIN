@@ -34,9 +34,7 @@ namespace Enemy.Boss
 
             // SEの再生。
             Vector3 p = Ref.Body.Position;
-            int thrusterSe = AudioWrapper.PlaySE(p, "SE_Boss_Thruster");
             int jetSe = AudioWrapper.PlaySE(p, "SE_Boss_Jet");
-            Ref.BlackBoard.ThrusterSE = thrusterSe;
             Ref.BlackBoard.JetSE = jetSe;
         }
 
@@ -49,9 +47,7 @@ namespace Enemy.Boss
             _currentStep = _currentStep.Update();
 
             Vector3 p = Ref.Body.Position;
-            int thruster = Ref.BlackBoard.ThrusterSE;
             int jet = Ref.BlackBoard.JetSE;
-            AudioWrapper.UpdateSePosition(p, thruster);
             AudioWrapper.UpdateSePosition(p, jet);
 
             if (_currentStep.ID == nameof(EndStep)) TryChangeState(StateKey.Idle);

@@ -65,9 +65,7 @@ namespace Enemy.Boss
         private void UpdateSePosition()
         {
             Vector3 p = Ref.Body.Position;
-            int thruster = Ref.BlackBoard.ThrusterSE;
             int jet = Ref.BlackBoard.JetSE;
-            AudioWrapper.UpdateSePosition(p, thruster);
             AudioWrapper.UpdateSePosition(p, jet);
         }
 
