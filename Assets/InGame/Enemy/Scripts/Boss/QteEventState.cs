@@ -146,6 +146,8 @@ namespace Enemy.Boss.Qte
         private Vector3 _start;
         private Vector3 _end;
         private float _lerp;
+        private int _thrusterSE;
+        private bool _isThrusterSeStopped;
 
         public FirstChargeStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next) 
         {
@@ -158,6 +160,10 @@ namespace Enemy.Boss.Qte
             float dist = Ref.BossParams.BreakLeftArm.Distance;
             Vector3 offset = Ref.BossParams.BreakLeftArm.Offset;
             _end = Ref.Player.position + dir * dist + offset;
+
+            Vector3 p = Ref.Body.Position;
+            _thrusterSE = AudioWrapper.PlaySE(p, "SE_Boss_Thruster");
+            _isThrusterSeStopped = false;
         }
 
         protected override BattleActionStep Stay()
@@ -166,6 +172,12 @@ namespace Enemy.Boss.Qte
             {
                 // シーケンス側に位置に着いたことを知らせるためのフラグを立てる。
                 Ref.BlackBoard.IsStandingOnQtePosition = true;
+
+                if (!_isThrusterSeStopped)
+                {
+                    _isThrusterSeStopped = true;
+                    AudioWrapper.StopSE(_thrusterSE);
+                }
             }
 
             // 位置に着いた後、シーケンス側からの呼び出しで次のステップに遷移。
@@ -180,6 +192,11 @@ namespace Enemy.Boss.Qte
 
             Vector3 p = Vector3.Lerp(_start, _end, _lerp);
             Ref.Body.Warp(p);
+
+            if (!_isThrusterSeStopped)
+            {
+                AudioWrapper.UpdateSePosition(p, _thrusterSE);
+            }
 
             float speed = Ref.BossParams.BreakLeftArm.MoveSpeed;
             float dt = Ref.BlackBoard.PausableDeltaTime;
@@ -511,9 +528,7 @@ namespace Enemy.Boss.Qte
             Ref.BodyAnimation.Play(state, layer);
             Ref.Effector.PlayDestroyed();
 
-            int thruster = Ref.BlackBoard.ThrusterSE;
             int jet = Ref.BlackBoard.JetSE;
-            AudioWrapper.StopSE(thruster);
             AudioWrapper.StopSE(jet);
 
             Vector3 p = Ref.Body.Position;

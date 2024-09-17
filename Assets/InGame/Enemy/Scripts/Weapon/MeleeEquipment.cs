@@ -15,6 +15,7 @@ namespace Enemy
     {
         [SerializeField] private SphereCollider _hitBox;
         [SerializeField] private Effect _attackEffect;
+        [SerializeField] private int _damage = 1;
 
         private Transform _rotate;
         private AnimationEvent _animationEvent;
@@ -89,7 +90,7 @@ namespace Enemy
         private void OnDamageCollisionHit(Collider other)
         {
             // コライダーと同じオブジェクトにコンポーネントが付いている前提。
-            if (other.TryGetComponent(out IDamageable dmg)) dmg.Damage(1);
+            if (other.TryGetComponent(out IDamageable dmg)) dmg.Damage(_damage);
             // 判定の瞬間の演出
             if (_attackEffect != null) _attackEffect.Play(_owner);
         }

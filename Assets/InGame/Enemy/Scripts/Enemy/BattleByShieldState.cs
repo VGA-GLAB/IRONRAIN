@@ -50,7 +50,7 @@ namespace Enemy
         private void Always()
         {
             PlayDamageSE();
-            Hovering();
+            //Hovering();
             LeftRightMoveAnimation();
             ForwardBackMoveAnimation();
         }

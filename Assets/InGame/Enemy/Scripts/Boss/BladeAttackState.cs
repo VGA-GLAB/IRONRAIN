@@ -115,6 +115,7 @@ namespace Enemy.Boss.BladeAttack
 
         private Vector3 _velocity;
         private float _timer;
+        private int _thrusterSE;
 
         public ChargeToPlayerStep(RequiredRef requiredRef, BossActionStep next) : base(requiredRef, next)
         {
@@ -138,15 +139,23 @@ namespace Enemy.Boss.BladeAttack
 
             _velocity = Ref.Body.Forward * InitialSpeed;
             _timer = 0;
+
+            Vector3 p = Ref.Body.Position;
+            _thrusterSE = AudioWrapper.PlaySE(p, "SE_Boss_Thruster");
         }
 
         protected override BattleActionStep Stay()
         {
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.UpdateSePosition(p, _thrusterSE);
+
             Vector3 acc;
 
             // プレイヤーとすれ違い、振り向きが終わって、ブレーキで完全に停止している状態。
             if (_timer >= TurnEndTiming)
             {
+                AudioWrapper.StopSE(_thrusterSE);
+
                 Ref.BodyAnimation.SetTrigger(Const.Param.BladeAttackEnd);
                 return Next[0];
             }
@@ -259,6 +268,7 @@ namespace Enemy.Boss.BladeAttack
         private Vector3 _side;
         private Vector3 _center;
         private float _radius;
+        private int _thrusterSE;
 
         public ReturnMyLaneStep(RequiredRef requiredRef, ReturnRoute route, BossActionStep next)
             : base(requiredRef, next)
@@ -280,15 +290,25 @@ namespace Enemy.Boss.BladeAttack
             _forward = dir.normalized;
             Vector3 route = _route.IsRight ? Vector3.up : Vector3.down;
             _side = Vector3.Cross(dir, route).normalized;
+
+            Vector3 p = Ref.Body.Position;
+            _thrusterSE = AudioWrapper.PlaySE(p, "SE_Boss_Thruster");
         }
 
         protected override BattleActionStep Stay()
         {
+            Vector3 p = Ref.Body.Position;
+            AudioWrapper.UpdateSePosition(p, _thrusterSE);
+
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _lerp += dt;
             _lerp = Mathf.Clamp01(_lerp);
 
-            if (_lerp >= 1.0f) return Next[0];
+            if (_lerp >= 1.0f)
+            {
+                AudioWrapper.StopSE(_thrusterSE);
+                return Next[0];
+            }
 
             float theta = Mathf.Lerp(0, Mathf.PI, _lerp);
             float cos = Mathf.Cos(theta);
