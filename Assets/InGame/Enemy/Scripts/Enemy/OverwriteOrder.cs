@@ -73,7 +73,7 @@ namespace Enemy
             if (_pool.TryPop(out order)) return true;
             else
             {
-                Debug.LogWarning($"敵の命令がキャパオーバー: {_name}");
+                //Debug.LogWarning($"敵の命令がキャパオーバー: {_name}");
                 return false;
             }
         }
