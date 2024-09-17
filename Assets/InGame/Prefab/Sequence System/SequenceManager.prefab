@@ -731,11 +731,13 @@ MonoBehaviour:
         - rid: 3800739415883513953
         - rid: 3800739415883513952
         - rid: 3800739415883513954
+        - rid: 6819318849308196878
         - rid: 3800739415883513955
         - rid: 3800739415883513956
         - rid: 3800739415883513957
         - rid: 3800739415883513958
         - rid: 3800739415883513959
+        - rid: 6819318849308196879
     - rid: 3800739415883513938
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1337,6 +1339,14 @@ MonoBehaviour:
         _cueSheetName: VOICE
         _cueName: VOICE_Operator_Common_02
         _delaySec: 0
+    - rid: 6819318849308196878
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 3
+    - rid: 6819318849308196879
+      type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _actionType: 0
     - rid: 8390642849261813762
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1866,7 +1876,7 @@ MonoBehaviour:
     - rid: 8390642849261813867
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 20
+        _totalSec: 22
     - rid: 8390642849261813868
       type: {class: EnemyManagerPlayNpcEventSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -2279,5 +2289,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
-  _isSkip: 0
+  _isSkip: 1
   _startSequence: 8
