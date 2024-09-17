@@ -13,7 +13,7 @@ namespace IronRain.SequenceSystem
     {
         [OpenScriptButton(typeof(QTESetEnemyIDSequence))]
         [Description("QTEを始める前に呼ぶ処理")]
-        [Header("盾持ちとQTEを行うSequence")]
+        [Header("盾持ちとQTEを行うSequence"), SerializeField]
         private int _sequenceId;
 
         private EnemyManager _enemyManager;
