@@ -14,6 +14,8 @@ public class LaunchManager : MonoBehaviour
     [Header("テストフラグ")]
     [SerializeField]
     private bool _isTest;
+    [Header("起動シーケンスのシェーダー")]
+    [SerializeField] GameObject _launchShader;
     [Header("WeaponUiManager")]
     [SerializeField] WeaponUiManager _weaponUiManager;
     [Header("CenterCircle")]
@@ -120,6 +122,7 @@ public class LaunchManager : MonoBehaviour
 
         _pokeCollision.SetActive(false);
         _weaponCollider.SetActive(false);
+        _launchShader.SetActive(false);
     }
 
     // Update is called once per frame
@@ -215,6 +218,7 @@ public class LaunchManager : MonoBehaviour
         //Debug.Log("再生された");
         _launchPlayableDirector.Play();
         StartCoroutine(WaitActiveUi());
+        _launchShader.SetActive(true);
         //var buttonColor = _mapUiAnimation.gameObject.GetComponent<RawImage>().color;
         //buttonColor.a = 1;
         //_mapUiAnimation.gameObject.GetComponent<RawImage>().color = buttonColor;
@@ -330,5 +334,6 @@ public class LaunchManager : MonoBehaviour
         _isTouch = true;
         _pokeCollision.SetActive(true);
         _weaponCollider.SetActive(true);
+        _launchShader.SetActive(true);
     }
 }
