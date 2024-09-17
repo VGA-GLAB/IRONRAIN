@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,8 +24,14 @@ namespace IronRain.SequenceSystem
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             var index = _soundSequenceManager.UnregisterIndex(_id);
-            
-            CriAudioManager.Instance.SE.Stop(index);
+            try
+            {
+                CriAudioManager.Instance.CockpitSE.Stop(index);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{e.Message}\n{e.Source}\n{e.StackTrace}");
+            }
             
             return UniTask.CompletedTask;
         }
