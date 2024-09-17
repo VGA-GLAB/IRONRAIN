@@ -71,21 +71,21 @@ namespace IronRain.Player
         {
             var current = (float)_hp / _maxHp;
 
-            if (current < _param.Crack1)
+            if(current < _param.Crack4)
             {
-                _materialController.Crack(WindowMaterialController.CrackType.Type1);
-            }
-            else if (current < _param.Crack2)
-            {
-                _materialController.Crack(WindowMaterialController.CrackType.Type2);
+                _materialController.Crack(WindowMaterialController.CrackType.Type4);
             }
             else if (current < _param.Crack3)
             {
                 _materialController.Crack(WindowMaterialController.CrackType.Type3);
             }
-            else if (current < _param.Crack4)
+            else if (current < _param.Crack2)
             {
-                _materialController.Crack(WindowMaterialController.CrackType.Type4);
+                _materialController.Crack(WindowMaterialController.CrackType.Type2);
+            }
+            else if (current < _param.Crack1)
+            {
+                _materialController.Crack(WindowMaterialController.CrackType.Type1);
             }
             else
             {
