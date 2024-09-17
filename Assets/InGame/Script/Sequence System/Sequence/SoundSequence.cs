@@ -30,10 +30,12 @@ namespace IronRain.SequenceSystem
         }
 
         private SequenceData.SoundSequenceManager _soundSequenceManager;
-
+        private Transform _voiceTransform;
+        
         public void SetData(SequenceData data)
         {
             _soundSequenceManager = data.SoundManager;
+            _voiceTransform = data.VoiceTransform;
         }
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
@@ -57,7 +59,7 @@ namespace IronRain.SequenceSystem
             }
             else
             {
-                index = CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
+                index = CriAudioManager.Instance.CockpitSE.Play3D(_voiceTransform.position, _cueSheetName, _cueName);
             }
             
             if (_id > -1) _soundSequenceManager.RegisterIndex(_id, index);
