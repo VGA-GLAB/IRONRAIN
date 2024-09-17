@@ -167,7 +167,6 @@ namespace Enemy.Boss.BladeAttack
 
                     acc = -Ref.Body.Forward * Brake;
                 }
-
             }
             else
             {

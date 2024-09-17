@@ -15,13 +15,13 @@ namespace Enemy.Boss
 
         public QteEventState(RequiredRef requiredRef) : base(requiredRef)
         {
-            _steps = new BossActionStep[13];
-            _steps[12] = new CompleteStep(requiredRef, null);
-            _steps[11] = new PenetrateStep(requiredRef, _steps[12]);
-            _steps[10] = new FinalChargeStep(requiredRef, _steps[11]);
-            _steps[9] = new SecondKnockBackStep(requiredRef, _steps[10]);
-            _steps[8] = new SecondCombatStep(requiredRef, _steps[9]);
-            _steps[7] = new SecondChargeStep(requiredRef, _steps[8]);
+            _steps = new BossActionStep[10];
+            _steps[9] = new CompleteStep(requiredRef, null);
+            _steps[8] = new PenetrateStep(requiredRef, _steps[9]);
+            _steps[7] = new FinalChargeStep(requiredRef, _steps[8]);
+            //_steps[9] = new SecondKnockBackStep(requiredRef, _steps[10]);
+            //_steps[8] = new SecondCombatStep(requiredRef, _steps[9]);
+            //_steps[7] = new SecondChargeStep(requiredRef, _steps[8]);
             _steps[6] = new FirstKnockBackStep(requiredRef, _steps[7]);
             _steps[5] = new FirstCombatStep(requiredRef, _steps[6]);
             _steps[4] = new BreakLeftArmStep(requiredRef, _steps[5]);
