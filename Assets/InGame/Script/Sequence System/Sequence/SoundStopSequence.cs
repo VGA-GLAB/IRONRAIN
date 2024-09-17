@@ -40,7 +40,7 @@ namespace IronRain.SequenceSystem
         {
             var index = _soundSequenceManager.UnregisterIndex(_id);
             
-            CriAudioManager.Instance.SE.Stop(index);
+            CriAudioManager.Instance.CockpitSE.Stop(index);
         }
     }
 }
