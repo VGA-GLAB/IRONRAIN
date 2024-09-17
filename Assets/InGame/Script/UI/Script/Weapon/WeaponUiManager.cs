@@ -119,11 +119,19 @@ public class WeaponUiManager : MonoBehaviour
         //武器Uiの切り替え
         if (WeaponUiState == WeaponUiState.Assault)
         {
-            _assultUiGameObject.transform.SetAsLastSibling();
+            //_assultUiGameObject.transform.SetAsLastSibling();
+            CanvasGroup assultCanvasGroup = _assultUiGameObject.GetComponent<CanvasGroup>();
+            CanvasGroup rocketLauncherCanvasGroup = _rocketLauncherUiGameObject.GetComponent<CanvasGroup>();
+            assultCanvasGroup.alpha = 1f;
+            rocketLauncherCanvasGroup.alpha = 0f;
         }
         else
         {
-            _rocketLauncherUiGameObject.transform.SetAsLastSibling();
+            //_rocketLauncherUiGameObject.transform.SetAsLastSibling();
+            CanvasGroup assultCanvasGroup = _assultUiGameObject.GetComponent<CanvasGroup>();
+            CanvasGroup rocketLauncherCanvasGroup = _rocketLauncherUiGameObject.GetComponent<CanvasGroup>();
+            assultCanvasGroup.alpha = 0f;
+            rocketLauncherCanvasGroup.alpha = 1f;
         }
 
         if (_weaponController != null)
@@ -174,15 +182,25 @@ public class WeaponUiManager : MonoBehaviour
     /// </summary>
     public void ChangeWeapon()
     {
-        if (WeaponUiState == WeaponUiState.Assault)
+        var currentWeapon = _weaponController.WeaponModel.CurrentWeapon;
+        PlayerWeaponType playerWeaponType = currentWeapon.WeaponParam.WeaponType;
+        if (playerWeaponType == PlayerWeaponType.AssaultRifle)
         {
-            _rocketLauncherUiGameObject.transform.SetAsLastSibling();
-            WeaponUiState = WeaponUiState.RocketLauncher;
+            //_rocketLauncherUiGameObject.transform.SetAsLastSibling();
+            CanvasGroup assultCanvasGroup = _assultUiGameObject.GetComponent<CanvasGroup>();
+            CanvasGroup rocketLauncherCanvasGroup = _rocketLauncherUiGameObject.GetComponent<CanvasGroup>();
+            assultCanvasGroup.alpha = 1f;
+            rocketLauncherCanvasGroup.alpha = 0f;
+            //WeaponUiState = WeaponUiState.RocketLauncher;
         }
         else
         {
-            _assultUiGameObject.transform.SetAsLastSibling();
-            WeaponUiState = WeaponUiState.Assault;
+            //_assultUiGameObject.transform.SetAsLastSibling();
+            CanvasGroup assultCanvasGroup = _assultUiGameObject.GetComponent<CanvasGroup>();
+            CanvasGroup rocketLauncherCanvasGroup = _rocketLauncherUiGameObject.GetComponent<CanvasGroup>();
+            assultCanvasGroup.alpha = 0f;
+            rocketLauncherCanvasGroup.alpha = 1f;
+            //WeaponUiState = WeaponUiState.Assault;
         }
     }
 

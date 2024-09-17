@@ -14,6 +14,8 @@ public class LaunchManager : MonoBehaviour
     [Header("テストフラグ")]
     [SerializeField]
     private bool _isTest;
+    [Header("WeaponUiManager")]
+    [SerializeField] WeaponUiManager _weaponUiManager;
     [Header("CenterCircle")]
     [SerializeField] private GameObject _centerCircle;
     [Header("音を鳴らす位置")]
@@ -273,7 +275,8 @@ public class LaunchManager : MonoBehaviour
     private void FinishAnimation(VideoPlayer vp, CanvasGroup canvasGroup0, CanvasGroup canvasGroup1, VideoPlayer videoPlayer)
     {
         canvasGroup0.alpha = 1f;
-        canvasGroup1.alpha = 1f;
+        canvasGroup1.alpha = 0f;
+        _weaponUiManager.ChangeWeapon();
         videoPlayer.gameObject.SetActive(false);
     }
 
@@ -319,8 +322,7 @@ public class LaunchManager : MonoBehaviour
     {
         _activeUiObject.gameObject.SetActive(false);
         _centerCircle.SetActive(false);
-        _launcherUi.alpha = 1;
-        _assultUi.alpha = 1;
+        _weaponUiManager.ChangeWeapon();
         _rocketLauncherUi.alpha = 1;
         _announceUi.alpha = 1;
         _detailUi.alpha = 1;
