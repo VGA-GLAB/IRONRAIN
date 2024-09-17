@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -75,7 +75,7 @@ namespace IronRain.SequenceSystem
             }
             else
             {
-                index = CriAudioManager.Instance.SE.Play(_cueSheetName, _cueName);
+                index = CriAudioManager.Instance.CockpitSE.Play3D(_voiceTransform.position, _cueSheetName, _cueName);
             }
             
             if (_id > -1) _soundSequenceManager.RegisterIndex(_id, index);
