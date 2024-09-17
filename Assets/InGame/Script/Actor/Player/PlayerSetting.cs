@@ -36,9 +36,22 @@ namespace IronRain.Player
             public float ChangeWeaponCt => _changeWeaponCt;
             public float QteGoDistance => _qteGoDistance;
             public float QteGoDistanceTime => _qteGoDistanceTime;
+            public float Crack1 => _crack1;
+            public float Crack2 => _crack2;
+            public float Crack3 => _crack3;
+            public float Crack4 => _crack4;
 
             [Header("PlayerのHp")]
             [SerializeField] private int _hp;
+            [Header("===ビビに関する設定===")]
+            [Header("ビビがはいる割合１番目")]
+            [SerializeField] private float _crack1;
+            [Header("ビビがはいる割合2番目")]
+            [SerializeField] private float _crack2;
+            [Header("ビビがはいる割合3番目")]
+            [SerializeField] private float _crack3;
+            [Header("ビビがはいる割合4番目")]
+            [SerializeField] private float _crack4;
             [Header("===Playerの移動設定===")]
             [Header("スピード")]
             [SerializeField] private int _speed;
