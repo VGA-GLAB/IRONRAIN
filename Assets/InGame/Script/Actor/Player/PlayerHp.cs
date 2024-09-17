@@ -20,10 +20,12 @@ namespace IronRain.Player
         private int _maxHp;
         private PlayerEnvroment _playerEnvroment;
         private Tween _shakeTween;
+        private PlayerSetting.PlayerParams _param;
 
         public void Setup(PlayerEnvroment playerEnvroment)
         {
             _playerEnvroment = playerEnvroment;
+            _param = playerEnvroment.PlayerSetting.PlayerParamsData;
             _hp = _playerEnvroment.PlayerSetting.PlayerParamsData.Hp;
             _maxHp = _hp;
         }
@@ -69,19 +71,19 @@ namespace IronRain.Player
         {
             var current = (float)_hp / _maxHp;
 
-            if (current < 0.8F)
+            if (current < _param.Crack1)
             {
                 _materialController.Crack(WindowMaterialController.CrackType.Type1);
             }
-            else if (current < 0.6F)
+            else if (current < _param.Crack2)
             {
                 _materialController.Crack(WindowMaterialController.CrackType.Type2);
             }
-            else if (current < 0.4F)
+            else if (current < _param.Crack3)
             {
                 _materialController.Crack(WindowMaterialController.CrackType.Type3);
             }
-            else if (current < 0.2F)
+            else if (current < _param.Crack4)
             {
                 _materialController.Crack(WindowMaterialController.CrackType.Type4);
             }
