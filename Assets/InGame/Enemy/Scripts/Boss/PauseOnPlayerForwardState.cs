@@ -1,4 +1,5 @@
 ﻿using Enemy.Boss.PauseOnPlayerForward;
+using Enemy.Funnel;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -83,6 +84,10 @@ namespace Enemy.Boss.PauseOnPlayerForward
 
         protected override void Enter()
         {
+            foreach (FunnelController f in Ref.Funnels)
+            {
+                f.FireEnable(false);
+            }
         }
 
         protected override BattleActionStep Stay()
@@ -92,6 +97,11 @@ namespace Enemy.Boss.PauseOnPlayerForward
             if (resume.IsWaitingExecute())
             {
                 resume.Execute();
+
+                foreach (FunnelController f in Ref.Funnels)
+                {
+                    f.FireEnable(true);
+                }
 
                 return Next[0];
             }
