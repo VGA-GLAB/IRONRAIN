@@ -9,6 +9,14 @@ Shader "Custom/2DGlitch"
         _FrameRate ("FrameRate", Range(0.1, 30)) = 15
         _Frequency ("Frequency", Range(0, 1)) = 0.1
         [PowerSlider(1.5)]_GlitchStrength ("Strengh", Range(0, 1)) = 0.1
+
+        [HideInInspector]_StencilComp ("Stencil Comparison", Float) = 8
+        [HideInInspector]_Stencil ("Stencil ID", Float) = 0
+        [HideInInspector]_StencilOp ("Stencil Operation", Float) = 0
+        [HideInInspector]_StencilWriteMask ("Stencil Write Mask", Float) = 255
+        [HideInInspector]_StencilReadMask ("Stencil Read Mask", Float) = 255
+        [HideInInspector]_ColorMask ("Color Mask", Float) = 15
+        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
     }
     SubShader
     {
@@ -20,6 +28,20 @@ Shader "Custom/2DGlitch"
         {
 
             Blend SrcAlpha OneMinusSrcAlpha
+
+            Stencil
+            {
+                Ref [_Stencil]
+                Comp [_StencilComp]
+                Pass [_StencilOp]
+                ReadMask [_StencilReadMask]
+                WriteMask [_StencilWriteMask]
+            }   
+            Cull Off
+            ZWrite Off
+            ZTest [unity_GUIZTestMode]
+            ColorMask [_ColorMask]
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
