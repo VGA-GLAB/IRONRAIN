@@ -910,8 +910,8 @@ MonoBehaviour:
         - rid: 6819318849308196888
         - rid: 6819318849308196899
         - rid: 6819318849308196900
-        - rid: 3800739415883513972
         - rid: 6819318849308196905
+        - rid: 3800739415883513972
         - rid: 3800739415883513973
         - rid: 6819318849308196886
         - rid: 3800739415883513974
@@ -1425,7 +1425,13 @@ MonoBehaviour:
     - rid: 6819318849308196907
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 1.5
+        _totalSec: 1
+    - rid: 6819318849308196912
+      type: {class: ShakeSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _shakeDuration: 1
+        _shakeStrength: 0.1
+        _isWaitShake: 0
     - rid: 8390642849261813762
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -2233,6 +2239,7 @@ MonoBehaviour:
         - rid: 6819318827970461786
         - rid: 6819318821456707635
         - rid: 6819318821456707642
+        - rid: 6819318849308196912
         - rid: 6819318849308196907
         - rid: 6819318821456707672
     - rid: 8390642934176809066
