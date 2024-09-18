@@ -916,6 +916,8 @@ MonoBehaviour:
         - rid: 6819318849308196886
         - rid: 3800739415883513974
         - rid: 3800739415883513975
+        - rid: 3800739431952678913
+        - rid: 3800739431952678915
     - rid: 3800739415883513964
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -982,7 +984,7 @@ MonoBehaviour:
     - rid: 3800739415883513975
       type: {class: ChangeTextBoxSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
-        _totalSec: 9999999
+        _totalSec: 0
         _clearText: 1
         _text: "\u304A\u75B2\u308C\u69D8\u3067\u3057\u305F\uFF01\n\u30D8\u30C3\u30C9\u30BB\u30C3\u30C8\u30FBVR\u3092\u53D6\u308A\u5916\u3057\u3066\u304F\u3060\u3055\u3044"
         _oneCharDuration: 0.05
@@ -1004,6 +1006,20 @@ MonoBehaviour:
       type: {class: WaitSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 2
+    - rid: 3800739431952678912
+      type: {class: WaitKeyboardSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences: []
+        _key: 33
+    - rid: 3800739431952678913
+      type: {class: WaitKeyboardSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _waitSequences: []
+        _key: 32
+    - rid: 3800739431952678915
+      type: {class: LoadSceneSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _loadSceneName: ChaseScene
     - rid: 6819318821456707584
       type: {class: SoundSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1179,8 +1195,8 @@ MonoBehaviour:
       data:
         _totalSec: 5
         _announceUiType: 1
-        _cueSheetName: VOICE_Operator_Chase_08
-        _cueName: VOICE
+        _cueSheetName: VOICE
+        _cueName: VOICE_Operator_Chase_08
         _delaySec: 10
     - rid: 6819318827970461774
       type: {class: StartBlinkSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
@@ -1438,6 +1454,7 @@ MonoBehaviour:
         _groupName: PrepareStartSequence
         _isSkip: 0
         _sequences:
+        - rid: 3800739431952678912
         - rid: 8390642849261813763
         - rid: 8390642849261813764
         - rid: 8390642849261813765
@@ -2372,5 +2389,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
-  _isSkip: 0
+  _isSkip: 1
   _startSequence: 10
