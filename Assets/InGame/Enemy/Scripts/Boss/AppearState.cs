@@ -36,6 +36,7 @@ namespace Enemy.Boss
             Vector3 p = Ref.Body.Position;
             int jetSe = AudioWrapper.PlaySE(p, "SE_Boss_Jet");
             Ref.BlackBoard.JetSE = jetSe;
+            Ref.BlackBoard.IsJetSePlaying = true;
         }
 
         protected override void Exit()

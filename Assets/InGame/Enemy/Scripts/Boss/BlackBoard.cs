@@ -98,5 +98,6 @@ namespace Enemy.Boss
         // SE
         public int ThrusterSE { get; set; }
         public int JetSE { get; set; }
+        public bool IsJetSePlaying { get; set; }
     }
 }

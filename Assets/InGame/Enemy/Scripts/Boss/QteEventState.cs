@@ -40,7 +40,11 @@ namespace Enemy.Boss
             TurnToPlayer(isReset: true);
 
             // QTEが始まったらファンネルに攻撃をやめさせる。
-            foreach (FunnelController f in Ref.Funnels) f.FireEnable(false);
+            foreach (FunnelController f in Ref.Funnels)
+            {
+                f.FireEnable(false);
+                f.Damage(int.MaxValue / 2, "QTE");
+            }
         }
 
         protected override void OnExit()
@@ -530,6 +534,7 @@ namespace Enemy.Boss.Qte
 
             int jet = Ref.BlackBoard.JetSE;
             AudioWrapper.StopSE(jet);
+            Ref.BlackBoard.IsJetSePlaying = false;
 
             Vector3 p = Ref.Body.Position;
             AudioWrapper.PlaySE(p, "SE_Kill");
