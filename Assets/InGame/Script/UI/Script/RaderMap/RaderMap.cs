@@ -559,23 +559,23 @@ public class RaderMap : MonoBehaviour
     /// </summary>
     public void StartPurgeSequence()
     {
-        //パネルタッチ音を鳴らす
-        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
-        //ミニマップを非表示にする
-        _miniMapCanvasGroup.alpha = 0;
-        //パージUiを表示する
-        _purgeUiCanvasGroup.alpha = 1;
+        ////パネルタッチ音を鳴らす
+        //CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        ////ミニマップを非表示にする
+        //_miniMapCanvasGroup.alpha = 0;
+        ////パージUiを表示する
+        //_purgeUiCanvasGroup.alpha = 1;
     }
 
 
     public void EndPurgeSequence()
     {
-        //パネルタッチ音を鳴らす
-        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
-        //パージUiを非表示する
-        _purgeUiCanvasGroup.alpha = 0;
-        //ミニマップを非表示にする
-        _miniMapCanvasGroup.alpha = 1;
+        ////パネルタッチ音を鳴らす
+        //CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
+        ////パージUiを非表示する
+        //_purgeUiCanvasGroup.alpha = 0;
+        ////ミニマップを非表示にする
+        //_miniMapCanvasGroup.alpha = 1;
     }
 
     Tweener tweener;
