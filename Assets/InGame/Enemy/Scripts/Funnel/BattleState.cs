@@ -24,6 +24,7 @@ namespace Enemy.Funnel
             _hovering = Random.Range(-1.0f, 1.0f);
 
             PlayDamageSE();
+            UpdateSePosition();
         }
 
         protected override void Exit()
@@ -32,6 +33,7 @@ namespace Enemy.Funnel
             Ref.BlackBoard.IsFireEnabled = false;
 
             PlayDamageSE();
+            UpdateSePosition();
         }
 
         protected override void Stay()
@@ -41,6 +43,7 @@ namespace Enemy.Funnel
             Look();
             Fire();
             Hovering();
+            UpdateSePosition();
 
             bool isDead = !Ref.BlackBoard.IsAlive;
             if (isDead) { TryChangeState(StateKey.Return); return; }
@@ -134,6 +137,13 @@ namespace Enemy.Funnel
             float dt = Ref.BlackBoard.PausableDeltaTime;
             _hovering += dt;
             Ref.Body.OffsetWarp(Vector3.up * h);
+        }
+
+        private void UpdateSePosition()
+        {
+            Vector3 p = Ref.Body.Position;
+            int fly = Ref.BlackBoard.FlySeIndex;
+            AudioWrapper.UpdateSePosition(p, fly);
         }
     }
 }

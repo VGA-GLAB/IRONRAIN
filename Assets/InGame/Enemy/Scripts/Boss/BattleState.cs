@@ -61,12 +61,15 @@ namespace Enemy.Boss
             }
         }
 
-        // スラスターとジェットパックのSEの位置を更新
+        // ジェットパックのSEの位置を更新
         private void UpdateSePosition()
         {
-            Vector3 p = Ref.Body.Position;
-            int jet = Ref.BlackBoard.JetSE;
-            AudioWrapper.UpdateSePosition(p, jet);
+            if (Ref.BlackBoard.IsJetSePlaying)
+            {
+                Vector3 p = Ref.Body.Position;
+                int jet = Ref.BlackBoard.JetSE;
+                AudioWrapper.UpdateSePosition(p, jet);
+            }
         }
 
         /// <summary>
