@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -42,6 +42,7 @@ namespace IronRain.SequenceSystem
                 {
                     try
                     {
+                        Debug.Log("SequenceChange " + i.ToString());
                         var index = i;
                         await _sequences[i]
                             .PlayAsync(ct, exceptionHandler + (x => ExceptionReceiver(x, index)));
@@ -56,6 +57,11 @@ namespace IronRain.SequenceSystem
 
         private void ExceptionReceiver(Exception e, int index)
         {
+            if (e is OperationCanceledException)
+            {
+                return;
+            }
+
             Debug.LogError($"{_groupName}の Element{index}");
             throw e;
         }

@@ -92,7 +92,11 @@ namespace IronRain.SequenceSystem
                         await _currentSequence.PlayAsync(ct, x =>ExceptionReceiver(x, i));
                     }
                 }
-                catch (Exception e) when (e is not OperationCanceledException)
+                catch (OperationCanceledException e)
+                {
+                    Debug.Log("Canceled");
+                }
+                catch (Exception e)// when (e is not OperationCanceledException)
                 {
                     ExceptionReceiver(e, i);
                 }
@@ -101,7 +105,12 @@ namespace IronRain.SequenceSystem
 
         private void ExceptionReceiver(Exception e, int index)
         {
-            Debug.LogError($"Sequence Element{index}でエラー");
+            if (e is OperationCanceledException)
+            {
+                return;
+            }
+
+            Debug.LogError($"Sequence Element{index}でエラー" + e);
             throw e;
         }
     }
