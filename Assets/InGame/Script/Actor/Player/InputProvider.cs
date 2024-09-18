@@ -115,8 +115,8 @@ public class InputProvider
         _inputMap.Toggle.Toggle6.performed += context => ExecuteInput(InputType.Toggle6, InputMode.Enter);
         _inputMap.Toggle.Toggle6.canceled += context => ExecuteInput(InputType.Toggle6, InputMode.Exit);
 
-        _threeLeverSerialHandler.Start("COM7");
-        _fourLeverSerialHandler.Start("COM8");
+        _threeLeverSerialHandler.Start("COM4");
+        _fourLeverSerialHandler.Start("COM5");
 
         _threeLeverSerialHandler.OnDataReceived += (string message) =>
         {
