@@ -18,7 +18,7 @@ namespace Enemy
         [SerializeField] private int _damage = 1;
 
         private Transform _rotate;
-        private AnimationEvent _animationEvent;
+        protected AnimationEvent _animationEvent;
         private IOwnerTime _owner;
 
         private float Radius
@@ -50,12 +50,16 @@ namespace Enemy
         {
             _animationEvent.OnMeleeAttackStart += EnableHitBox;
             _animationEvent.OnMeleeAttackEnd += DisableHitBox;
+
+            OnOnEnable();
         }
 
         private void OnDisable()
         {
             _animationEvent.OnMeleeAttackStart -= EnableHitBox;
             _animationEvent.OnMeleeAttackEnd -= DisableHitBox;
+
+            OnOnDisable();
         }
 
         private void OnDrawGizmosSelected()
@@ -63,6 +67,9 @@ namespace Enemy
             // 攻撃範囲。
             GizmosUtils.WireCircle(Origin(), Radius, Color.red);
         }
+
+        protected virtual void OnOnEnable() { }
+        protected virtual void OnOnDisable() { }
 
         // 判定の有効化
         private void EnableHitBox()

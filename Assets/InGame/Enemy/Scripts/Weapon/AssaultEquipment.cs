@@ -7,7 +7,7 @@ namespace Enemy
         protected override void OnShoot()
         {
             Vector3 p = transform.position;
-            AudioWrapper.PlaySE(p, "SE_AssaultRifle");
+            AudioWrapper.PlaySE(p, "SE_Enemy_AssaultRifle");
         }
     }
 }

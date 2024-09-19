@@ -15,6 +15,9 @@ namespace Enemy
         private float _lerp;
         private float _diff;
         private float _targetX;
+        private int _seIndex;
+
+        [SerializeField] private string _seName;
 
         protected override void OnShoot(Vector3 direction)
         {
@@ -28,6 +31,13 @@ namespace Enemy
             _lerp = 0;
             _diff = _start.magnitude;
             _targetX = target.position.x;
+
+            if (_seName != string.Empty)
+            {
+                // 発射音
+                Vector3 p = transform.position;
+                _seIndex = AudioWrapper.PlaySE(p, _seName);
+            }
         }
 
         protected override void StayShooting(float deltaTime)
@@ -39,6 +49,11 @@ namespace Enemy
 
             _lerp += _speed / _diff * deltaTime;
             _lerp = Mathf.Clamp01(_lerp);
+
+            if (_seName != string.Empty)
+            {
+                AudioWrapper.UpdateSePosition(transform.position, _seIndex);
+            }
         }
     }
 }
