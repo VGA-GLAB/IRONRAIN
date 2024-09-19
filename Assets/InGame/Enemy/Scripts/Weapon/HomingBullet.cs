@@ -8,11 +8,13 @@ namespace Enemy
     {
         [Range(0, 10)]
         [SerializeField] private int _homingPower = 1;
+        [SerializeField] private string _seName; 
 
         private Transform _player;
         private Vector3 _initial;
         private Vector3 _velocity;
         bool _isHoming;
+        private int _seIndex;
 
         protected override void OnShoot(Vector3 direction)
         {
@@ -20,6 +22,13 @@ namespace Enemy
             _initial = direction;
             _velocity = direction;
             _isHoming = true;
+
+            if (_seName != string.Empty)
+            {
+                // 発射音
+                Vector3 p = transform.position;
+                _seIndex = AudioWrapper.PlaySE(p, _seName);
+            }
         }
 
         // 現状使っていないが、一応オーバーライドしておく。
@@ -48,6 +57,11 @@ namespace Enemy
             }
 
             _transform.position += _velocity * Time.deltaTime * _speed;
+
+            if (_seName != string.Empty)
+            {
+                AudioWrapper.UpdateSePosition(transform.position, _seIndex);
+            }
         }
 
         private static float Angle(in Vector3 a, in Vector3 b)

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using System.Collections;
 
 namespace Enemy.Boss
 {
@@ -11,12 +12,12 @@ namespace Enemy.Boss
     public class BossEffects
     {
         [SerializeField] private Effect _thruster;
-        [SerializeField] private Effect _destroyed;
+        [SerializeField] private Effect[] _destroyed;
         [SerializeField] private Effect _trail;
         [SerializeField] private Effect _weaponCrash;
 
         public Effect Thruster => _thruster;
-        public Effect Destroyed => _destroyed;
+        public Effect[] Destroyed => _destroyed;
         public Effect Trail => _trail;
         public Effect WeaponCrash => _weaponCrash;
     }
@@ -30,7 +31,11 @@ namespace Enemy.Boss
         {
             _effects = requiredRef.Effects;
             _ownerTime = requiredRef.BlackBoard;
+
+            Ref = requiredRef;
         }
+
+        private RequiredRef Ref { get; }
 
         /// <summary>
         /// スラスターの有効化/無効化
@@ -59,7 +64,28 @@ namespace Enemy.Boss
         /// </summary>
         public void PlayDestroyed()
         {
-            if (_effects.Destroyed != null) _effects.Destroyed.Play(_ownerTime);
+            if (_effects.Destroyed != null)
+            {
+                Ref.Transform.GetComponent<BossController>().StartCoroutine(PlayDestroyedAsync());
+            }
+        }
+
+        private IEnumerator PlayDestroyedAsync()
+        {
+            for (int i = 0; i < _effects.Destroyed.Length - 1; i++)
+            {
+                _effects.Destroyed[i].Play(_ownerTime);
+                Vector3 p = Ref.Body.Position;
+                AudioWrapper.PlaySE(p, "SE_Kill");
+                
+                yield return new WaitForSeconds(0.33f);
+            }
+
+            // 最後のものだけ遅延して鳴らす。
+            yield return new WaitForSeconds(0.67f);
+            _effects.Destroyed[^1].Play();
+            Vector3 q = Ref.Body.Position;
+            AudioWrapper.PlaySE(q, "SE_Kill");
         }
 
         /// <summary>

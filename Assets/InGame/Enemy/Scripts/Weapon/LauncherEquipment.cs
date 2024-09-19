@@ -6,9 +6,7 @@ namespace Enemy
     {
         protected override void OnShoot()
         {
-            // 発射音
-            Vector3 p = transform.position;
-            AudioWrapper.PlaySE(p, "SE_RocketLauncher");
+            // ロケランはサウンドの指示により、弾の方に音を移動。
         }
     }
 }
