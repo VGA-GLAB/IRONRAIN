@@ -15,6 +15,7 @@ namespace IronRain.Player
         [SerializeField] private float _bossBattleSpeed;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private ParticleSystem[] _particleArray;
+        [SerializeField] private VfxEffect _effect;
         [SerializeField] private SphereCollider _sphereCollider;
         [SerializeField] private Vector3 _offset;
         [Tooltip("ロックオンしている敵")]
@@ -45,6 +46,11 @@ namespace IronRain.Player
 
         private void Start()
         {
+            if (_effect != null) 
+            {
+                _effect.Play();
+            }
+            
             if (!_shootingTarget)
             {
                 //Debug.LogError($"shootingTargetがNullです");
