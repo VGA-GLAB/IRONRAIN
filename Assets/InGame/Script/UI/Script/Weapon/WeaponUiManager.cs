@@ -367,10 +367,10 @@ public class WeaponUiManager : MonoBehaviour
                 IsRocketLauncherReload = true;
                 // DoTweenを使ってゲージのfillAmountをアニメーション
                 Sequence sequence = DOTween.Sequence();
-                sequence.Append(_rocketLauncherBulletWeaponGauge.DOFillAmount(1, _assultReloadTime)
+                sequence.Append(_rocketLauncherBulletWeaponGauge.DOFillAmount(1, _rocketLauncherReloadTime)
                         .SetEase(Ease.Linear))
                     .SetLink(this.gameObject);
-                sequence.Join(_rocketLauncherBulletCircleGauge.DOFillAmount(1, _assultReloadTime)
+                sequence.Join(_rocketLauncherBulletCircleGauge.DOFillAmount(1, _rocketLauncherReloadTime)
                     .SetEase(Ease.Linear)
                     .OnUpdate(() => UpdatePercentageText(WeaponUiState.RocketLauncher)).OnComplete(() =>
                     {
