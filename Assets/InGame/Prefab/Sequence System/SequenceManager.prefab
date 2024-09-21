@@ -68,6 +68,7 @@ MonoBehaviour:
   - rid: 3800739415883513937
   - rid: 8390642849261813929
   - rid: 3800739259115372552
+  - rid: 8390643066849722412
   - rid: 8390642934176809060
   - rid: 3800739415883513963
   references:
@@ -737,6 +738,7 @@ MonoBehaviour:
         - rid: 3800739415883513957
         - rid: 3800739415883513958
         - rid: 3800739415883513959
+        - rid: 6819318933048524800
         - rid: 6819318849308196879
     - rid: 3800739415883513938
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
@@ -1451,6 +1453,16 @@ MonoBehaviour:
         _shakeDuration: 1
         _shakeStrength: 0.1
         _isWaitShake: 0
+    - rid: 6819318933048524800
+      type: {class: RemovePlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _removeState: 512
+    - rid: 6819318933048524801
+      type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
+      data:
+        _totalSec: 0
+        _addState: 32
     - rid: 8390642849261813762
       type: {class: SequenceGroup, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -1638,6 +1650,7 @@ MonoBehaviour:
         - rid: 6819318827970461834
         - rid: 8390642849261813807
         - rid: 8390642849261813808
+        - rid: 6819318933048524801
         - rid: 6819318827970461720
         - rid: 8390642849261813809
     - rid: 8390642849261813804
@@ -1707,7 +1720,7 @@ MonoBehaviour:
       type: {class: AddPlayerStateSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _totalSec: 0
-        _addState: 40
+        _addState: 8
     - rid: 8390642849261813813
       type: {class: EnemyManagerDetectPlayerSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
@@ -2353,6 +2366,8 @@ MonoBehaviour:
       type: {class: ChangeIconSequence, ns: IronRain.SequenceSystem, asm: Assembly-CSharp}
       data:
         _actionType: 0
+    - rid: 8390643066849722412
+      type: {class: RecordCompleteSequence, ns: IronRain, asm: Assembly-CSharp}
 --- !u!114 &9212650041395911106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2409,5 +2424,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manager: {fileID: 9212650041395911106}
   _playOnStart: 1
-  _isSkip: 0
-  _startSequence: 8
+  _isSkip: 1
+  _startSequence: 10
