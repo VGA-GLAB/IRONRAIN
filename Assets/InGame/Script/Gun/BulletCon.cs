@@ -87,10 +87,6 @@ namespace IronRain.Player
                 StopAllCoroutines();
                 _pool.ReleaseBullet(this);
             }
-            else if (!playerCon)
-            {
-                _pool.ReleaseBullet(this);
-            }
         }
 
         public void SetVisible(bool isVisible)

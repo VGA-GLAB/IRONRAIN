@@ -11,7 +11,7 @@ public class FFmpegConcatenate : MonoBehaviour
 {
 #if UNITY_EDITOR
 
-
+    [SerializeField] bool _isVideoCombination;
     // private string videoFilesDirectory = @"C:\Users\vantan\Desktop\IronRain\Assets\Recordings\Videos";
 
     // 動画ファイルのディレクトリを指定
@@ -26,6 +26,11 @@ public class FFmpegConcatenate : MonoBehaviour
 
     public void ConcatenateVideos()
     {
+        if (!_isVideoCombination) return;
+        if(!Directory.Exists(videoFilesDirectory + "\\IronRainOutput"))
+        {
+            Directory.CreateDirectory(videoFilesDirectory + "\\IronRainOutput");
+        }
         // ファイルリストを含むテキストファイルを作成
         string fileListPath = Path.Combine(videoFilesDirectory, "IronRainOutput\\filelist.txt");
         using (StreamWriter sw = new StreamWriter(fileListPath))
