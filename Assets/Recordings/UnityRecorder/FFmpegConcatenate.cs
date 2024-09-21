@@ -26,6 +26,10 @@ public class FFmpegConcatenate : MonoBehaviour
 
     public void ConcatenateVideos()
     {
+        if(!Directory.Exists(videoFilesDirectory + "\\IronRainOutput"))
+        {
+            Directory.CreateDirectory(videoFilesDirectory + "\\IronRainOutput");
+        }
         // ファイルリストを含むテキストファイルを作成
         string fileListPath = Path.Combine(videoFilesDirectory, "IronRainOutput\\filelist.txt");
         using (StreamWriter sw = new StreamWriter(fileListPath))
