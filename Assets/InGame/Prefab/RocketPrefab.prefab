@@ -107,8 +107,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.91124356
-  m_Center: {x: 0, y: 0, z: -0.28124356}
+  m_Radius: 1.4964707
+  m_Center: {x: 0.112000704, y: 0.18102336, z: -0.28124356}
 --- !u!120 &7876707459902431421
 LineRenderer:
   serializedVersion: 2
@@ -117,7 +117,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6348920230107005041}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -253,8 +253,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 350
+  _bossBattleSpeed: 50
   _rb: {fileID: 4246290431388295697}
   _particleArray: []
+  _effect: {fileID: 1936101426373160085}
   _sphereCollider: {fileID: 4101072675191191800}
   _offset: {x: 0, y: 0, z: 0}
 --- !u!54 &4246290431388295697
@@ -336,17 +338,117 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2656725519932587021, guid: c5f7836697fe7044b8224eea06f0a653, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.92
+      objectReference: {fileID: 0}
     - target: {fileID: 5511358779046005315, guid: c5f7836697fe7044b8224eea06f0a653, type: 3}
       propertyPath: m_Name
       value: WpMD_rocket_bomb_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 751152431222916150, guid: c5f7836697fe7044b8224eea06f0a653, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7900906526599149336}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5f7836697fe7044b8224eea06f0a653, type: 3}
 --- !u!4 &202582407412378021 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 751152431222916150, guid: c5f7836697fe7044b8224eea06f0a653, type: 3}
   m_PrefabInstance: {fileID: 622365948031561107}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7040019458895218317
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 202582407412378021}
+    m_Modifications:
+    - target: {fileID: 871029563102536966, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563102536967, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633686, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_Name
+      value: Effect_BulletTrail_Launcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 871029563793633686, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8893841361406585368, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+--- !u!114 &1936101426373160085 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8893841361406585368, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+  m_PrefabInstance: {fileID: 7040019458895218317}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd5386e63da6eea4c9905cbd518750a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &7900906526599149336 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 871029563793633685, guid: 11f8a088e19bce6488ab9c34b7357696, type: 3}
+  m_PrefabInstance: {fileID: 7040019458895218317}
   m_PrefabAsset: {fileID: 0}
