@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -19,6 +19,13 @@ namespace IronRain.SequenceSystem
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
+            // 音の停止処理
+            CriAudioManager.Instance.SE.StopAll();
+            CriAudioManager.Instance.CockpitSE.StopAll();
+            CriAudioManager.Instance.BGM.StopAll();
+            CriAudioManager.Instance.AmbientBGM.StopAll();
+            CriAudioManager.Instance.Voice.StopAll();
+
             await SceneManager.LoadSceneAsync(_loadSceneName).ToUniTask(cancellationToken: ct);
         }
 
