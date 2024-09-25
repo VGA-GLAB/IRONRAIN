@@ -11,7 +11,7 @@ public class FFmpegConcatenate : MonoBehaviour
 {
 #if UNITY_EDITOR
 
-    [SerializeField] bool _isVideoCombination;
+    [SerializeField] bool _isVideoCombination = true;
     // private string videoFilesDirectory = @"C:\Users\vantan\Desktop\IronRain\Assets\Recordings\Videos";
 
     // 動画ファイルのディレクトリを指定
