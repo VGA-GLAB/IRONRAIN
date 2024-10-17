@@ -23,13 +23,20 @@ public class SideBarController : MonoBehaviour
     /// 現在の値
     /// </summary>
     private float _currentValue;
-    
+
+    private LaunchManager _launchManager;
+
     // Start is called before the first frame update
     private void Awake()
     {
         //ゲージを初期化する
         _gaugeImage.fillAmount = _defaultFiillAmount;
         _currentValue = _defaultFiillAmount;
+        _launchManager = GameObject.FindObjectOfType<LaunchManager>();
+        if (_launchManager != null)
+        {
+            _launchManager.SkipLaunchUIEvent += SkipAction;
+        }
     }
 
     /// <summary>
@@ -47,5 +54,15 @@ public class SideBarController : MonoBehaviour
                 _gaugeImage.fillAmount = Mathf.Clamp(_currentValue, 0f, 1f);
             })
             .SetLink(this.gameObject);
+    }
+
+    private void SkipAction()
+    {
+        StartGaugeAnimation();
+    }
+
+    private void OnDisable()
+    {
+        _launchManager.SkipLaunchUIEvent -= SkipAction;
     }
 }
