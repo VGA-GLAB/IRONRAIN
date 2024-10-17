@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 public class PulseController : MonoBehaviour
 {
@@ -11,6 +12,17 @@ public class PulseController : MonoBehaviour
     [Header("スタート位置")] [SerializeField] private float _startPositionX;
     [Header("リセット位置")] [SerializeField] private float _resetPositionX;
     private bool _isStart;
+
+    private LaunchManager _launchManager;
+
+    private void Awake()
+    {
+        _launchManager = GameObject.FindObjectOfType<LaunchManager>();
+        if (_launchManager != null)
+        {
+            _launchManager.SkipLaunchUIEvent += SkipAction;
+        }
+    }
 
     private void Update()
     {
@@ -41,8 +53,14 @@ public class PulseController : MonoBehaviour
         _isStart = true;
     }
 
+    private void SkipAction()
+    {
+        StartScroll();
+    }
+
     private void OnDisable()
     {
+        _launchManager.SkipLaunchUIEvent -= SkipAction;
         _isStart = false;
     }
 }

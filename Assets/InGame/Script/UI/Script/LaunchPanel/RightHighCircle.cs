@@ -17,13 +17,19 @@ public class RightHighCircle : MonoBehaviour
     [Header("変化後の%")] [SerializeField, Range(0, 1)]
     private float _targetFiillAmount;
 
-    
+    private LaunchManager _launchManager;
+
     private void Awake()
     {
         //ゲージを初期化
         _gaugeImage.fillAmount = 0.0f;
         //文字の初期化
         _percentText.text = "0%";
+        _launchManager = GameObject.FindObjectOfType<LaunchManager>();
+        if(_launchManager != null)
+        {
+            _launchManager.SkipLaunchUIEvent += SkipAction;
+        }
     }
     /// <summary>
     /// ゲージを動かす処理
@@ -42,5 +48,16 @@ public class RightHighCircle : MonoBehaviour
     {
         int percentage = Mathf.RoundToInt(_gaugeImage.fillAmount * 100);
         _percentText.text = percentage.ToString() + "%";
+    }
+
+    private void SkipAction()
+    {
+        _gaugeImage.fillAmount = _targetFiillAmount;
+        _percentText.text = _targetFiillAmount * 100 + "%";
+    }
+
+    private void OnDisable()
+    {
+        _launchManager.SkipLaunchUIEvent -= SkipAction;
     }
 }

@@ -50,21 +50,24 @@ public class LaunchManager : MonoBehaviour
 
     [Header("最初に透明にしたいオブジェクト")]
     [Header("起動Ui")]
-    [SerializeField]private CanvasGroup _launcherUi;
+    [SerializeField] private CanvasGroup _launcherUi;
     [Header("武器Ui２種")]
-    [SerializeField]private CanvasGroup _assultUi;
-    [SerializeField]private CanvasGroup _rocketLauncherUi;
+    [SerializeField] private CanvasGroup _assultUi;
+    [SerializeField] private CanvasGroup _rocketLauncherUi;
     [Header("アナウンス")]
-    [SerializeField]private CanvasGroup _announceUi;
+    [SerializeField] private CanvasGroup _announceUi;
     [Header("詳細Ui")]
-    [SerializeField]private CanvasGroup _detailUi;
+    [SerializeField] private CanvasGroup _detailUi;
     [Header("ミニマップ")]
-    [SerializeField]private CanvasGroup _minimapUi;
-
+    [SerializeField] private CanvasGroup _minimapUi;
     [Header("ボタンアニメーションの終了後に消える間隔")]
     [SerializeField] private float _buttonAnimationInterval = 0.1f;
     [Header("アニメーションを再生する間隔")] [SerializeField]
     private float _animationInterval = 0.1f;
+    /// <summary>
+    /// スキップ時に起動UIの処理を行うイベント
+    /// </summary>
+    public Action SkipLaunchUIEvent;
     // Start is called before the first frame update
     void Start()
     {
@@ -331,9 +334,11 @@ public class LaunchManager : MonoBehaviour
         _announceUi.alpha = 1;
         _detailUi.alpha = 1;
         _minimapUi.alpha = 1;
+        _launcherUi.alpha = 1;
         _isTouch = true;
         _pokeCollision.SetActive(true);
         _weaponCollider.SetActive(true);
         _launchShader.SetActive(true);
+        SkipLaunchUIEvent?.Invoke();
     }
 }
