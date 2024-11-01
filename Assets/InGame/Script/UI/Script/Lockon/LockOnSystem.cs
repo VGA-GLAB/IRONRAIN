@@ -32,14 +32,13 @@ public class LockOnSystem : MonoBehaviour
     [Header("中心から離れ過ぎている場合にLineRendereを消す距離")]
     [SerializeField] private float _limitLineRendereDistance = 100;
 
-    [Header("マウス用")] 
-    [SerializeField] private bool _isMouseFlag;
     [SerializeField, Tooltip("Rayのレイヤーマスク")]
     LayerMask _layerMask;
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
     [SerializeField, Tooltip("マウス時のあたり判定")] private float _mouseTargetRadius = 1.0f;
     private bool _isMouseMultiLock;
     private bool _isMultiLock;
+    private bool _isButtonSelect;
 
     private bool _isSelect;
     private bool _isFinsishMultiLock;
@@ -59,17 +58,12 @@ public class LockOnSystem : MonoBehaviour
 
         // タッチパネルに触れて対象をロックオン。
         _event.WhenSelect.AddListener(Touch);
-
-        if (_isMouseFlag)
-        {
-            _targetRadius = _mouseTargetRadius;
-        }
     }
 
     private void Update()
     {
-       //マウス用のタッチ処理
-        if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock && _isMouseFlag)
+        //マウス用のタッチ処理
+        if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock)
         {
             var raderMap = GameObject.FindObjectOfType<RaderMap>();
             var nowLockEnemy = raderMap.GetRockEnemy;
@@ -86,6 +80,18 @@ public class LockOnSystem : MonoBehaviour
             {
                 raderMap.PanelRock(lockOnEnemy);
             }  
+        }
+
+        if(Input.GetKeyDown(KeyCode.M) && _isMultiLock)
+        {
+            if(_isButtonSelect)
+            {
+                ButtonAllLockOn();
+            }
+            else
+            {
+                OnButtonSelectFlag();
+            }
         }
     }
 
@@ -121,11 +127,8 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
-        if (!_isMouseFlag)
-        {
-            //パネルに触れた時の音
-            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
-        }
+        //パネルに触れた時の音
+        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
 
         //マルチロック時は処理を行わない
         if (_isMultiLock)
@@ -179,10 +182,9 @@ public class LockOnSystem : MonoBehaviour
             _isMultiLock = true;
 
             // パネルを指で突くまで待つ。
-            if (!_isMouseFlag)
-            {
-                await UniTask.WaitUntil(() => _isSelect, cancellationToken: token);
-            }
+            await UniTask.WaitUntil(() => _isSelect || _isButtonSelect, cancellationToken: token);
+
+            _isButtonSelect = true;
 
             // Targetの数は実行中に増減するのでマルチロックする直前にリスト化する。
             AllTargets(_targets, _parent);
@@ -196,92 +198,47 @@ public class LockOnSystem : MonoBehaviour
             //マルチロックフラグを立てる
             _isMouseMultiLock = true;
         }
-        
-        // パネルをなぞっている状態。
-        if (_isMouseFlag)
+
+        while (_isSelect)
         {
-            while (_isMouseMultiLock)
+            await UniTask.Yield();
+            // カーソルの位置を指先に合わせる。
+            FingertipCursor(_fingertip, _cursor);
+            Transform minDisTarget = null;
+            float minDistance = float.MaxValue;
+            // カーソルと接触しているTargetを一時的に保持。
+            foreach (Transform t in _targets)
             {
-                await UniTask.Yield();
-                if (Input.GetKeyDown(KeyCode.M) && _isMouseMultiLock)
+                if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
                 {
-                    _isMouseMultiLock = false;
-                    foreach(Transform transform in _targets)
+                    if (!_temp.Contains(t))
                     {
-                        CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
-                        _temp.Add(transform);
-                        var enemyUi = transform.GetComponent<EnemyUi>();
-                        enemyUi.LockOnUi.SetActive(true);
-                    }
-                }     
-            }
-        }
-        else
-        {
-            while (_isSelect)
-            {
-                await UniTask.Yield();
-                // カーソルの位置を指先に合わせる。
-                FingertipCursor(_fingertip, _cursor);
-                Transform minDisTarget = null;
-                float minDistance = float.MaxValue;
-                // カーソルと接触しているTargetを一時的に保持。
-                foreach (Transform t in _targets)
-                {
-                    if (IsCollision(_cursor, t, _cursorRadius, _targetRadius))
-                    {
-                        if (!_temp.Contains(t))
+                        //カーソルに近い物を判定する
+                        float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
+                        if (dis <= minDistance)
                         {
-                            //カーソルに近い物を判定する
-                            float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
-                            if (dis <= minDistance)
-                            {
-                                minDistance = dis;
-                                minDisTarget = t;
-                            }
+                            minDistance = dis;
+                            minDisTarget = t;
                         }
                     }
                 }
+            }
 
-                //ターゲットを追加する
-                if (minDisTarget != null)
-                {
-                    _temp.Add(minDisTarget);
-                    var enemyUi = minDisTarget.GetComponent<EnemyUi>();
-                    enemyUi.LockOnUi.SetActive(true);
-                    CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
-                }
-
-                ////ラインレンダラーを設定
-                //_lineRenderer.positionCount = 0;
-                ////ラインレンダラーの更新
-                //if (_temp.Count >= 1)
-                //{
-                //    foreach (Transform transform in _temp)
-                //    {
-                //        _lineRenderer.positionCount++;
-                //        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, transform.position);
-                //    }
-                //}
+            //ターゲットを追加する
+            if (minDisTarget != null)
+            {
+                _temp.Add(minDisTarget);
+                var enemyUi = minDisTarget.GetComponent<EnemyUi>();
+                enemyUi.LockOnUi.SetActive(true);
+                CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
             }
         }
         
         await UniTask.Yield();
-        
-        //RaderMap radermap = FindObjectOfType<RaderMap>();
-        //return radermap.Enemies;
-
 
         // _tempがより少ない場合に再帰的にMultiLockOnAsyncを呼び出す
         if (_temp.Count < _targets.Count && !token.IsCancellationRequested)
         {
-            //foreach (Transform t in _temp)
-            //{
-            //    //TargetのロックオンUiをオンにする
-            //    var enemyUi = t.GetComponent<EnemyUi>();
-            //    enemyUi.LockOnUi.SetActive(false);
-            //}
-
             // ビジーウェイティングを避けるために、ここでディレイを導入することを検討
             await UniTask.Delay(500, cancellationToken: token);
 
@@ -292,6 +249,7 @@ public class LockOnSystem : MonoBehaviour
         // パネルから指を離したタイミングで、なぞったTargetに対応した敵を返す。
         //LineRendererReset();
         _isFinsishMultiLock = true;
+        _isButtonSelect = false;
         LockOnEnemies(_temp, _lockOn);
         
         return _lockOn;
@@ -327,39 +285,19 @@ public class LockOnSystem : MonoBehaviour
     // パネル上のカーソルのxy座標を指先に合わせる。
     private void FingertipCursor(Transform[] fingertip, Transform cursor)
     {
-
         ////カーソルに近い方の指の位置を登録する
         Vector3 fingerPostion = cursor.position;
-        if (_isMouseFlag)
+        
+        if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
+            Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
         {
-            //Rayを飛ばすスタート位置を決める
-            var rayStartPosition = _rayOrigin.transform.position;
-            var mousePos = Input.mousePosition;
-            mousePos.z = 10f;
-            //マウスでRayを飛ばす方向を決める
-            var worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-            var direction = (worldMousePos - rayStartPosition).normalized;
-            //Hitしたオブジェクト格納用
-            RaycastHit hit;
-            //Debug.DrawRay(rayStartPosition, direction, Color.red);
-            if (Physics.Raycast(rayStartPosition, direction, out hit, Mathf.Infinity, _layerMask))
-            {
-                //Debug.Log("あたった");
-                fingerPostion = hit.point;
-            }
+            fingerPostion = fingertip[0].position;
         }
         else
         {
-            if (Vector3.SqrMagnitude(fingertip[0].position - cursor.position) <
-                Vector3.SqrMagnitude(fingertip[1].position - cursor.position))
-            {
-                fingerPostion = fingertip[0].position;
-            }
-            else
-            {
-                fingerPostion = fingertip[1].position;
-            }
+            fingerPostion = fingertip[1].position;
         }
+
         cursor.position = fingerPostion;
     }
 
@@ -403,6 +341,25 @@ public class LockOnSystem : MonoBehaviour
         }
 
         return true;
+    }
+
+    //ボタン操作で全てをロックする関数
+    private void ButtonAllLockOn()
+    {
+        _isMouseMultiLock = false;
+        foreach (Transform transform in _targets)
+        {
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
+            _temp.Add(transform);
+            var enemyUi = transform.GetComponent<EnemyUi>();
+            enemyUi.LockOnUi.SetActive(true);
+        }
+    }
+
+    //ボタンでマルチロック判定をオンにする時に使う
+    private void OnButtonSelectFlag()
+    {
+        _isButtonSelect = true; 
     }
 
     private IEnumerator LockonCortinue(int count)
