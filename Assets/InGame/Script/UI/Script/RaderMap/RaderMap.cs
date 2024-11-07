@@ -1,40 +1,29 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum IndicationUiType
-{
-    None,
-    PushOutsideLever,
-    PullOutsideLever,
-    ControllerTrigger,
-    ControllerWeaponChange,
-    ControllerMove,
-    PushThrottle,
-    PullThrottle,
-    ThrottleTrigger,
-    Toggle
-}
-
+/// <summary>
+/// レーダーマップのコントローラー
+/// </summary>
 public class RaderMap : MonoBehaviour
 {
-    [SerializeField, Header("IndicationUi")] private GameObject _indicationUi;
-    [SerializeField, Header("IndicationUiCanvas")] private GameObject _indicationUiCanvas;
-    [SerializeField, Header("LeverUi")] private Image _leverUi;
-    [SerializeField, Header("ControllerUi")] private Image _contrllerUi;
-    [SerializeField, Header("ThrottleUi")] private Image _throttleUi;
-    [SerializeField, Header("IndicationScriptableObject")] private IndicationUiScriptableObject _indicationUiScriptableObject;
-    [SerializeField, Header("点滅間隔")] private float _indicationUiDuration = 1f;
-    [SerializeField, Header("点滅時の最低アルファ値")] private float _indicationUiMinAlpha = 0.2f;
-    [SerializeField, Header("大きくなるまでの時間")] private float _scaleInterval = 0.5f;
-    [SerializeField, Header("消えるまでの時間")] private float _bunshInterval = 0.5f;
-    [SerializeField, Header("MiniMapのCanvasGroup")] private CanvasGroup _miniMapCanvasGroup;
-    [SerializeField, Header("PurgeUiのCanvasGroup")] private CanvasGroup _purgeUiCanvasGroup;
+    [SerializeField, Header("操作説明パネルのUI")] private CanvasGroup _indicationUI;
+    [SerializeField] private Image _indicationIconArea;
+    [SerializeField] private IndicationUiScriptableObject _indicationUiSprites;
+    [SerializeField, Header("点滅間隔")] private float _indicationUiDuration;
+    [SerializeField, Header("点滅時の最低アルファ値")] private float _indicationUiMinAlpha;
+    [SerializeField, Header("操作説明パネル拡大にかける時間")] private float _scaleInterval;
+    [SerializeField, Header("操作説明パネル縮小にかける時間")] private float _bunshInterval = 0.5f;
+    private GameObject _indicationUICanvas; //_indicationUIの子オブジェクトについているオブジェクト
+    private Tween _indicationUiTween;
+
+    [SerializeField] private CanvasGroup _miniMapCanvasGroup;
+    [SerializeField] private CanvasGroup _purgeUiCanvasGroup;
+
     [SerializeField, Header("音を鳴らす位置")] private Transform _soundTransform;
     [SerializeField, Header("プレイヤーの位置")] private Transform _player;
     [SerializeField, Header("レーダーの中心のオブジェクト")] private Image _center;
@@ -44,6 +33,8 @@ public class RaderMap : MonoBehaviour
     [SerializeField, Header("X座標の倍率")] private float _horizontalMagnification = 1f;
     [SerializeField, Header("Y座標の倍率")] private float _verticalMagnification = 1f;
     [SerializeField, Header("ロックオン可能距離")] private float _rockonDis = 100f;
+
+    [Tooltip("ボス戦関連")]
     [SerializeField, Header("ボス戦でのUiの位置")] private Vector3 _bossPosition;
     [SerializeField, Header("ボス戦フラグ")] public bool IsBossScene = false;
     [SerializeField, Header("ボス戦でのレーダーの半径")] private float _bossRadius = 0.001f;
@@ -61,9 +52,7 @@ public class RaderMap : MonoBehaviour
     private GameObject _bossGameObject;
 
     private GameObject _nearEnemy;
-    private Coroutine _blinkCoroutine;
     private Dictionary<GameObject, Image> _enemyMaps = new();
-    private Tweener _tweener;
 
     /// <summary>Centerからのオフセット</summary>
     private Vector3 _offset;
@@ -77,31 +66,27 @@ public class RaderMap : MonoBehaviour
     /// <summary>マルチロック時のエネミー </summary>
     public List<GameObject> MultiLockEnemies { get; } = new();
 
-    /// <summary>
-    /// タッチ判定
-    /// </summary>
+    /// <summary>タッチ判定</summary>
     private bool _isTouch = false;
 
-    /// <summary>
-    /// タッチパネルシーケンスに入った時に呼ぶ処理
-    /// </summary>
+    /// <summary>タッチパネルシーケンスに入った時に呼ぶ処理</summary>
     private bool _isStartTouchPanel = false;
 
     void Start()
     {
-        CanvasGroup canvasGroup = _indicationUi.GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 0;
         _offset = _center.GetComponent<RectTransform>().anchoredPosition3D;
+        _indicationUICanvas = _indicationUI.gameObject.transform.GetChild(0).gameObject;
+        _indicationUI.gameObject.SetActive(false);
         _purgeUiCanvasGroup.alpha = 0;
     }
 
     void Update()
     {
-        if (!IsBossScene)
+        if (!IsBossScene) //ボス戦以外
         {
             for (int i = 0; i < Enemies.Count; i++)
             {
-                AgentScript agent = Enemies[i].GetComponent<AgentScript>();
+                AgentScript agent = Enemies[i].GetComponent<AgentScript>();///////
 
                 Vector3 enemyDir = Enemies[i].transform.position;
                 //敵の高さとプレイヤーの高さを合わせる
@@ -117,13 +102,13 @@ public class RaderMap : MonoBehaviour
                     enemyDir.z * _radius * _verticalMagnification + _offset.y, _offset.z);
             }
         }
-        else
+        else //ボス戦時
         {
-            if (!_isForwardBoss)
+            if (!_isForwardBoss) //正面用のボスUiフラグ
             {
                 for (int i = 0; i < Enemies.Count; i++)
                 {
-                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();
+                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();//////////
 
                     Vector3 enemyDir = Enemies[i].transform.position;
                     //敵の高さとプレイヤーの高さを合わせる
@@ -154,7 +139,7 @@ public class RaderMap : MonoBehaviour
                 //ボス戦用のUi処理
                 for (int i = 0; i < Enemies.Count; i++)
                 {
-                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();
+                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();/////////
 
                     if (agent.IsBoss)
                     {
@@ -200,7 +185,7 @@ public class RaderMap : MonoBehaviour
                     //真ん中を決める
                     for (int i = 0; i < totalFunnels; i++)
                     {
-                        AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();
+                        AgentScript agent = sortedFunnels[i].GetComponent<AgentScript>();////////
                         Vector3 enemyDir = sortedFunnels[i].transform.position;
                         // ボスから敵への方向を計算
                         enemyDir = sortedFunnels[i].transform.position - _bossGameObject.transform.position;
@@ -242,24 +227,31 @@ public class RaderMap : MonoBehaviour
         }
     }
 
-    /// <summary>エネミーが生成された時に呼ぶメソッド</summary>
+    /// <summary>
+    /// エネミーが生成された時に呼ばれる。
+    /// エネミーのアイコンを表示する。
+    /// </summary>
     public void GenerateEnemy(GameObject enemy)
     {
         AgentScript agent = enemy.GetComponent<AgentScript>();
-        agent.RaderMap = this;
+        agent.RaderMap = this; //ここいらないかも
+
         //エネミーのUIを登録
         var enemyUi = Instantiate(agent.Image, _center.transform.parent);
         var uiObj = enemyUi.gameObject.GetComponent<EnemyUi>();
         uiObj.Enemy = enemy;
-        if (!_enemyMaps.ContainsKey(enemy))
+        if (!_enemyMaps.ContainsKey(enemy)) //enemy オブジェクトが_enemyMapsのキーになかったら
         {
-            _enemyMaps.Add(enemy, enemyUi);
+            _enemyMaps.Add(enemy, enemyUi);　//ディクショナリ
             agent.RectTransform = enemyUi.GetComponent<RectTransform>();
             Enemies.Add(enemy);
         }
     }
 
-    /// <summary> エネミーが倒された時に呼ばれるメソッド</summary>
+    /// <summary> 
+    /// エネミーが倒された時に呼ばれる。
+    /// レーダーマップからアイコンを消す。
+    /// </summary>
     public void DestroyEnemy(GameObject enemy)
     {
         if (_enemyMaps.ContainsKey(enemy))
@@ -270,7 +262,9 @@ public class RaderMap : MonoBehaviour
         }
     }
 
-    /// <summary>プレイヤーから１番近い敵のゲームオブジェクトを返すメソッド</summary>
+    /// <summary>
+    /// プレイヤーから１番近い敵のゲームオブジェクトを返す
+    /// </summary>
     private (GameObject obj, float) NearEnemy()
     {
         _nearEnemy = null;
@@ -457,174 +451,45 @@ public class RaderMap : MonoBehaviour
         await UniTask.WaitUntil(() => _isTouch, cancellationToken: ct);
     }
 
-    /// <summary>チュートリアルアイコンの変更</summary>
+    /// <summary>
+    /// 操作説明パネル（レバーの動かし方などを説明しているパネル）
+    /// のアイコンを変更します
+    /// </summary>
     public void ChangeIndicationUi(IndicationUiType type)
     {
-        StopBlinking();
-        CanvasGroup canvasGrop = _indicationUi.GetComponent<CanvasGroup>();
-        switch (type)
+        if (type == IndicationUiType.None)
         {
-            case IndicationUiType.None:
-                _tweener.Kill();
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.zero, _bunshInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => canvasGrop.alpha = 0); // スケールダウン完了後にアルファ値を0にする
-                break;
-            case IndicationUiType.PushOutsideLever:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(true);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(false);
-                _leverUi.sprite = _indicationUiScriptableObject.PushOutsideLever;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_leverUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.PullOutsideLever:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(true);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(false);
-                _leverUi.sprite = _indicationUiScriptableObject.PullOutsideLever;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_leverUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.ControllerTrigger:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(true);
-                _throttleUi.gameObject.SetActive(false);
-                _contrllerUi.sprite = _indicationUiScriptableObject.ControllerTrigger;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_contrllerUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.ControllerWeaponChange:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(true);
-                _throttleUi.gameObject.SetActive(false);
-                _contrllerUi.sprite = _indicationUiScriptableObject.ControllerWeaponChange;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_contrllerUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.ControllerMove:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(true);
-                _throttleUi.gameObject.SetActive(false);
-                _contrllerUi.sprite = _indicationUiScriptableObject.ContorllerMove;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_contrllerUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.PushThrottle:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(true);
-                _throttleUi.sprite = _indicationUiScriptableObject.PushThrottle;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_throttleUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.PullThrottle:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(true);
-                _throttleUi.sprite = _indicationUiScriptableObject.PullThrottle;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_throttleUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.ThrottleTrigger:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(false);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(true);
-                _throttleUi.sprite = _indicationUiScriptableObject.ThrottleTrigger;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_throttleUi)); // スケールアップ完了後に点滅開始
-                break;
-            case IndicationUiType.Toggle:
-                canvasGrop.alpha = 1;
-                _leverUi.gameObject.SetActive(true);
-                _contrllerUi.gameObject.SetActive(false);
-                _throttleUi.gameObject.SetActive(false);
-                _leverUi.sprite = _indicationUiScriptableObject.Toggle;
-                // スケールを0から1にアニメーションさせ、完了したら点滅を開始
-                _indicationUiCanvas.transform.localScale = Vector3.zero; // 初期スケールを0に設定
-                _tweener = _indicationUiCanvas.transform.DOScale(Vector3.one, _scaleInterval)
-                    .SetAutoKill(true) // 0.5秒でスケール1にする
-                    .OnComplete(() => StartBlinking(_leverUi)); // スケールアップ完了後に点滅開始
-                break;
+            _indicationUiTween.Kill();
+            _indicationUiTween = _indicationUICanvas.transform.DOScale(Vector3.zero, _bunshInterval)
+                .OnComplete(() => _indicationIconArea.gameObject.SetActive(false));
+        }
+        else
+        {
+            _indicationIconArea.gameObject.SetActive(true);
+            Sprite sprite = type switch
+            {
+                IndicationUiType.PushOutsideLever => _indicationUiSprites.PushOutsideLever,
+                IndicationUiType.PullOutsideLever => _indicationUiSprites.PullOutsideLever,
+                IndicationUiType.ControllerTrigger => _indicationUiSprites.ControllerTrigger,
+                IndicationUiType.ControllerWeaponChange => _indicationUiSprites.ControllerWeaponChange,
+                IndicationUiType.ControllerMove => _indicationUiSprites.ContorllerMove,
+                IndicationUiType.PushThrottle => _indicationUiSprites.PushThrottle,
+                IndicationUiType.ThrottleTrigger => _indicationUiSprites.ThrottleTrigger,
+                IndicationUiType.Toggle => _indicationUiSprites.Toggle,
+                _ => null
+            };
+
+            _indicationIconArea.sprite = sprite;
+            _indicationIconArea.color = new Color(255, 255, 255, 1);
+
+            //パネルの操作（拡大→UIを点滅させる）
+            _indicationUICanvas.transform.localScale = Vector3.zero;
+            _indicationUICanvas.transform.DOScale(Vector3.one, _scaleInterval)
+                .OnComplete(() => _indicationUiTween = _indicationIconArea.DOFade(_indicationUiMinAlpha, _indicationUiDuration).SetEase(Ease.Flash).SetLoops(-1, LoopType.Yoyo));
         }
     }
 
-    private void StartBlinking(Image image)
-    {
-        if (_blinkCoroutine == null)
-        {
-            _blinkCoroutine = StartCoroutine(BlinkImage(image, _indicationUiDuration));
-        }
-    }
-
-    private void StopBlinking()
-    {
-        if (_blinkCoroutine != null)
-        {
-            StopCoroutine(_blinkCoroutine);
-            _blinkCoroutine = null;
-        }
-    }
-
-    private IEnumerator BlinkImage(Image image, float duration)
-    {
-        while (true) // 無限ループで点滅させる
-        {
-            // フェードアウト
-            yield return FadeImage(image, 1f, _indicationUiMinAlpha, duration);
-            // フェードイン
-            yield return FadeImage(image, _indicationUiMinAlpha, 1f, duration);
-        }
-    }
-
-    private IEnumerator FadeImage(Image image, float startAlpha, float endAlpha, float duration)
-    {
-        Color color = image.color;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            color.a = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
-            image.color = color;
-            yield return null;
-        }
-
-        color.a = endAlpha;
-        image.color = color;
-    }
+    #region 保留
     /// <summary>パージシーケンスが始まる時に呼ぶ処理</summary>
     public void StartPurgeSequence()
     {
@@ -646,4 +511,22 @@ public class RaderMap : MonoBehaviour
         ////ミニマップを非表示にする
         //_miniMapCanvasGroup.alpha = 1;
     }
+    #endregion
+}
+
+/// <summary>
+/// 操作説明パネルで表示させたい操作
+/// </summary>
+public enum IndicationUiType
+{
+    None,
+    PushOutsideLever,
+    PullOutsideLever,
+    ControllerTrigger,
+    ControllerWeaponChange,
+    ControllerMove,
+    PushThrottle,
+    PullThrottle,
+    ThrottleTrigger,
+    Toggle
 }
