@@ -8,11 +8,11 @@ public class LineRendererDraw : MonoBehaviour
     [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
 
     /// <summary>頂点の数 </summary>
-    private int _posCount = 0;
+    private int _posCount;
     /// <summary>頂点を生成する最低間隔 </summary>
     private float _interval = 0.1f;
     /// <summary>ボタンを押しているかのフラグ </summary>
-    private bool IsInput = false;
+    private bool _isInput;
 
 
     private void Start()
@@ -23,7 +23,7 @@ public class LineRendererDraw : MonoBehaviour
 
     private void Update()
     {
-        if (!IsInput)
+        if (!_isInput)
             return;
 
         var rayStartPosition = _origin.transform.position;
@@ -37,19 +37,14 @@ public class LineRendererDraw : MonoBehaviour
             //pos.z = _panel.transform.position.z;
             //SetPosition(Camera.main.ScreenToWorldPoint(pos));
             SetPosition(pos);
-            Debug.Log("線を書く");
         }
     }
 
-    /// <summary>
-    /// 線を伸ばすメソッド
-    /// </summary>
-    /// <param name="pos">マウスの位置</param>
+    // 線を伸ばすメソッド
     private void SetPosition(Vector3 pos)
     {
         if (!PosCheck(pos)) 
         {
-            Debug.Log("だめ");
             return;
         }
         _posCount++;
@@ -58,11 +53,7 @@ public class LineRendererDraw : MonoBehaviour
             
     }
 
-    /// <summary>
-    /// 頂点を増やしてもよいかを判定するメソッド
-    /// </summary>
-    /// <param name="pos">現在のマウスポジション</param>
-    /// <returns>頂点を増やすかの判定</returns>
+    //頂点を増やしてもよいかを判定するメソッド
     private bool PosCheck(Vector3 pos)
     {
         if (_posCount == 0)
@@ -77,7 +68,7 @@ public class LineRendererDraw : MonoBehaviour
 
     private void LineStart()
     {
-        IsInput = true;
+        _isInput = true;
     }
 
     private void LineEnd()
@@ -85,8 +76,6 @@ public class LineRendererDraw : MonoBehaviour
         //ラインレンダラーを初期化
         _lineRenderer.positionCount = 0;
         _posCount = 0;
-        IsInput = false;
-        Debug.Log("線を消す");
+        _isInput = false;
     }
-
 }

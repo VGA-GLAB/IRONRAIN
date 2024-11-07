@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using Oculus.Interaction;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -11,13 +10,13 @@ public class MultilockSystemDebugger : MonoBehaviour
     [SerializeField] private InteractableUnityEventWrapper _button;
     [SerializeField] private Text _text;
 
-    private LockOnSystem _multilock;
+    private LockOnSystem _multiLock;
 
     private bool _isButtonPushed;
 
     private void Start()
     {
-        _multilock = FindAnyObjectByType<LockOnSystem>();
+        _multiLock = FindAnyObjectByType<LockOnSystem>();
 
         // 状態のフラグ操作をコールバックに登録。
         _button.WhenSelect.AddListener(OnButtonPushed);
@@ -32,7 +31,7 @@ public class MultilockSystemDebugger : MonoBehaviour
 
             _text.text = "Running...";
 
-            MultilockAsync(this.GetCancellationTokenOnDestroy()).Forget();
+            MultiLockAsync(this.GetCancellationTokenOnDestroy()).Forget();
         }
     }
 
@@ -41,9 +40,9 @@ public class MultilockSystemDebugger : MonoBehaviour
         _isButtonPushed = false;
     }
 
-    private async UniTaskVoid MultilockAsync(CancellationToken token)
+    private async UniTaskVoid MultiLockAsync(CancellationToken token)
     {
-        List<GameObject> result = await _multilock.MultiLockOnAsync(token);
+        List<GameObject> result = await _multiLock.MultiLockOnAsync(token);
 
         if (result == null)
         {

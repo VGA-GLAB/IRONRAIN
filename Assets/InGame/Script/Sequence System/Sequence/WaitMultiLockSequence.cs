@@ -24,7 +24,7 @@ namespace IronRain.SequenceSystem
             this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
             
             var enemy = await _lockSystem.MultiLockOnAsync(ct);
-            _raderMap.MultiLockon(enemy);
+            _raderMap.MultiLockOn(enemy);
 
             loopCts.Cancel();
         }

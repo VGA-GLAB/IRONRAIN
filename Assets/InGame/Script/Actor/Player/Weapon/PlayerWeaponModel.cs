@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace IronRain.Player
@@ -17,7 +18,7 @@ namespace IronRain.Player
 
         [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
         [SerializeField] private RootMotion.FinalIK.FABRIK _fabrIk;
-        [SerializeField] private RaderMap _raderMap;
+        [FormerlySerializedAs("rederMap")] [FormerlySerializedAs("_raderMap")] [SerializeField] private RaderMap raderMap;
         [SerializeField] private float _aimSpeed;
         [SerializeField] private Transform _defaultAimTarget;
         [SerializeField] private Transform _homingMissilePos;
@@ -54,9 +55,9 @@ namespace IronRain.Player
         public void Update()
         {
             Shot();
-            if (_raderMap.GetRockEnemy != null)
+            if (raderMap.GetRockEnemy != null)
             {
-                _fabrIk.solver.target = _raderMap.GetRockEnemy.transform;
+                _fabrIk.solver.target = raderMap.GetRockEnemy.transform;
             }
             else 
             {
@@ -121,7 +122,7 @@ namespace IronRain.Player
         public void MulchShot()
         {
             _lockOnSystem.FinishMultiLock();
-            var enemys = _playerEnvroment.RaderMap.MultiLockEnemys; 
+            var enemys = _playerEnvroment.RaderMap.MultiLockEnemies; 
             for (int i = 0; i < enemys.Count; i++) 
             {
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Missile_Fire");

@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class RockonSensor : MonoBehaviour
+public class LockOnSensor : MonoBehaviour
 {
-    /// <summary>現在Rockonしているオブジェクト </summary>
+    // 現在LockOnしているオブジェクト
     private GameObject _nowTarget;
-    /// <summary>感知できる敵のリスト </summary>
+    // 感知できる敵のリスト
     private List<GameObject> _enemyList;
 
     void Start()
@@ -16,11 +15,10 @@ public class RockonSensor : MonoBehaviour
     }
 
     //colliderを使う場合の索敵処理
-
     private void OnTriggerStay(Collider col)
     {
         //敵が索敵範囲内に入ったら処理を行う
-        if (col.tag == "Enemy" && !_enemyList.Contains(col.gameObject))
+        if (col.CompareTag("Enemy") && !_enemyList.Contains(col.gameObject))
         {
             _enemyList.Add(col.gameObject);
         }
@@ -34,7 +32,7 @@ public class RockonSensor : MonoBehaviour
     //敵が索敵範囲を出たら行う処理
     private void OnTriggerExit(Collider col)
     {
-        if (col.tag == "Enemy" && _enemyList.Contains(col.gameObject))
+        if (col.CompareTag("Enemy") && _enemyList.Contains(col.gameObject))
         {
             if (col.gameObject == _nowTarget)
             {
@@ -45,20 +43,14 @@ public class RockonSensor : MonoBehaviour
     }
 
     //colliderを使う場合の処理終了
-
-
-    /// <summary>
-    /// 現在のロックオンオブジェクトを返すメソッド
-    /// </summary>
+    /// <summary>現在のロックオンオブジェクトを返すメソッド </summary>
     /// <returns>ロックオンされているオブジェクト</returns>
     public GameObject GetNowTarget()
     {
         return _nowTarget;
     }
 
-    /// <summary>
-    /// ロックオンオブジェクトがない場合にセットするメソッド
-    /// </summary>
+    /// <summary>ロックオンオブジェクトがない場合にセットするメソッド</summary>
     public void SetNowTarget()
     {
         foreach (var enemy in _enemyList)
@@ -70,10 +62,8 @@ public class RockonSensor : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ロックオンオブジェクトを切り替える
-    /// </summary>
-    public void RockonSwitch()
+    /// <summary>ロックオンオブジェクトを切り替える </summary>
+    public void LockOnSwitch()
     {
         if (_enemyList.IndexOf(_nowTarget) != _enemyList.Count - 1)
         {
@@ -85,9 +75,7 @@ public class RockonSensor : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// マルチロック時に索敵範囲のエネミーを返す
-    /// </summary>
+    /// <summary>マルチロック時に索敵範囲のエネミーを返す</summary>
     /// <returns>索敵範囲のエネミー</returns>
     public List<GameObject> GetEnemyList()
     {

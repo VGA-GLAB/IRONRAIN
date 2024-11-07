@@ -43,8 +43,8 @@ namespace IronRain.SequenceSystem
         public EnemyManager EnemyManager => _enemyManager;
         [SerializeField] private LockOnSystem _lockSystem;
         public LockOnSystem LockSystem => _lockSystem;
-        [SerializeField] private RaderMap _raderMapMap;
-        public RaderMap RaderMap => _raderMapMap;
+        [FormerlySerializedAs("rederMapMap")] [FormerlySerializedAs("_raderMapMap")] [SerializeField] private RaderMap raderMapMap;
+        public RaderMap RaderMap => raderMapMap;
         [SerializeField] private AnnounceUiController _announceUiController;
         public AnnounceUiController AnnounceUiController => _announceUiController;
         [SerializeField] private PlayerAnimation _playerAnimation;
