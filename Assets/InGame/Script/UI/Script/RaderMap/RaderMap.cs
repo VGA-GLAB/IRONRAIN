@@ -86,7 +86,7 @@ public class RaderMap : MonoBehaviour
         {
             for (int i = 0; i < Enemies.Count; i++)
             {
-                AgentScript agent = Enemies[i].GetComponent<AgentScript>();///////
+                AgentScript agent = Enemies[i].GetComponent<AgentScript>();
 
                 Vector3 enemyDir = Enemies[i].transform.position;
                 //敵の高さとプレイヤーの高さを合わせる
@@ -108,7 +108,7 @@ public class RaderMap : MonoBehaviour
             {
                 for (int i = 0; i < Enemies.Count; i++)
                 {
-                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();//////////
+                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();
 
                     Vector3 enemyDir = Enemies[i].transform.position;
                     //敵の高さとプレイヤーの高さを合わせる
@@ -127,7 +127,7 @@ public class RaderMap : MonoBehaviour
             else
             {
                 //ファンネル
-                List<GameObject> fannels = new List<GameObject>();
+                List<GameObject> fannels = new();
                 //ボスのx軸
                 float bossXPosition = 0f;
                 float bossYPosition = 0f;
@@ -139,7 +139,7 @@ public class RaderMap : MonoBehaviour
                 //ボス戦用のUi処理
                 for (int i = 0; i < Enemies.Count; i++)
                 {
-                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();/////////
+                    AgentScript agent = Enemies[i].GetComponent<AgentScript>();
 
                     if (agent.IsBoss)
                     {
