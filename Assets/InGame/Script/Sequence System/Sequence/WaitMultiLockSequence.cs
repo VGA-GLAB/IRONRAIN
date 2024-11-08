@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -7,7 +7,7 @@ namespace IronRain.SequenceSystem
     public class WaitMultiLockSequence : AbstractWaitSequence
     {
         private LockOnSystem _lockSystem;
-        private RaderMap _raderMap;
+        private RadarMap _raderMap;
         
         public override void SetData(SequenceData data)
         {

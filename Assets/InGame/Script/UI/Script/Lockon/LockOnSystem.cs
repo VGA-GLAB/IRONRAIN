@@ -21,7 +21,7 @@ public class LockOnSystem : MonoBehaviour
     [SerializeField, Tooltip("Rayのレイヤーマスク")] LayerMask _layerMask;
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
     [SerializeField, Tooltip("マウス時のあたり判定")] private float _mouseTargetRadius = 1.0f;
-    [SerializeField] private RaderMap _radarMap;
+    [SerializeField] private RadarMap _radarMap;
     private bool _isMouseMultiLock;
     private bool _isMultiLock;
     private bool _isButtonSelect;
@@ -77,8 +77,8 @@ public class LockOnSystem : MonoBehaviour
             {
                 CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
                 _temp.Add(targetTransform);
-                EnemyUi enemyUI = targetTransform.GetComponent<EnemyUi>();
-                enemyUI.LockOnUi.SetActive(true);
+                TargetIcon enemyUI = targetTransform.GetComponent<TargetIcon>();
+                enemyUI.LockOnUI.SetActive(true);
             }
             //ButtonAllLockOn();
         }
@@ -123,14 +123,14 @@ public class LockOnSystem : MonoBehaviour
         AllTargets(_targets, _parent);
 
         float minDistance = float.MaxValue;
-        EnemyUi minEnemyUi = null;
+        TargetIcon minEnemyUi = null;
 
         foreach (Transform t in _targets)
         {
             // Targetに触れているかチェック
             if (!IsCollision(_cursor, t, _cursorRadius, _targetRadius)) continue;
            
-            if (!t.TryGetComponent(out EnemyUi ui)) continue;
+            if (!t.TryGetComponent(out TargetIcon ui)) continue;
             // カーソルに近い物を判定する
             float dis = Vector3.SqrMagnitude(t.position - _cursor.position);
             if (!(dis <= minDistance))
@@ -195,8 +195,8 @@ public class LockOnSystem : MonoBehaviour
             if (minDisTarget != null)
             {
                 _temp.Add(minDisTarget);
-                var enemyUi = minDisTarget.GetComponent<EnemyUi>();
-                enemyUi.LockOnUi.SetActive(true);
+                var enemyUi = minDisTarget.GetComponent<TargetIcon>();
+                enemyUi.LockOnUI.SetActive(true);
                 CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
             }
         }
@@ -235,9 +235,9 @@ public class LockOnSystem : MonoBehaviour
         // TargetオブジェクトはEnemyUiスクリプトを持っているのでそれで判定。
         foreach (Transform child in parent)
         {
-            if (child.TryGetComponent(out EnemyUi enemy))
+            if (child.TryGetComponent(out TargetIcon enemy))
             {
-                enemy.LockOnUi.SetActive(false);
+                enemy.LockOnUI.SetActive(false);
                 targets.Add(enemy.gameObject.transform);
             }
         }
@@ -268,7 +268,7 @@ public class LockOnSystem : MonoBehaviour
         // それぞれのTargetが、対応したEnemyへの参照を持っている。  
         foreach (Transform t in temp)
         {
-            if (t.TryGetComponent(out EnemyUi ui))
+            if (t.TryGetComponent(out TargetIcon ui))
             {
                 lockOn.Add(ui.Enemy);
             }

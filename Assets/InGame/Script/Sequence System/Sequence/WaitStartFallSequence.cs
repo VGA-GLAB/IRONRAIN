@@ -8,7 +8,7 @@ namespace IronRain.SequenceSystem
     public sealed class WaitStartFallSequence : ISequence
     {
         private PlayerController _playerController;
-        private RaderMap _raderMap;
+        private RadarMap _raderMap;
         
         public void SetData(SequenceData data)
         {

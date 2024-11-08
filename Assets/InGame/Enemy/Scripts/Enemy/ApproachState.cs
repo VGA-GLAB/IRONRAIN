@@ -19,7 +19,7 @@ namespace Enemy
 
             // レーダーマップに表示させる。
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyGenerate();
+            if (agent != null) agent.EnemyIconInst();
 
             // スラスター、トレイルの有効化。
             Ref.Effector.ThrusterEnable(true);

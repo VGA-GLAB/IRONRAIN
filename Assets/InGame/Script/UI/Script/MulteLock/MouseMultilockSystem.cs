@@ -22,7 +22,7 @@ public class MouseMultiLockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
     [SerializeField] private PlayerController _playerController;
 
     // レーダーマップ
-    private RaderMap _raderMap;
+    private RadarMap _raderMap;
 
     // ロックオンしたUI
     private HashSet<GameObject> _lockUi = new();
@@ -32,7 +32,7 @@ public class MouseMultiLockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
     private void Awake()
     {
         //レーダーテストを検索する
-        _raderMap = FindObjectOfType(typeof(RaderMap)).GetComponent<RaderMap>();
+        _raderMap = FindObjectOfType(typeof(RadarMap)).GetComponent<RadarMap>();
     }
 
     private void LateUpdate()
@@ -66,7 +66,7 @@ public class MouseMultiLockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
         RaycastHit hit;
         if (Physics.Raycast(rayStartPosition, direction, out hit, _rayDis, _layerMask))
         {
-            if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
+            if (hit.collider.gameObject.TryGetComponent(out TargetIcon enemyUi))
             {
                 if (!_lockOnEnemy.Contains(enemyUi.Enemy))
                 {

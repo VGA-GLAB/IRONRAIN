@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,9 +12,9 @@ namespace IronRain.SequenceSystem
         [OpenScriptButton(typeof(ChangeIconSequence))]
         [Description("説明用のアイコン操作するSequence")]
         [Header("やりたい操作"), SerializeField]
-        private IndicationUiType _actionType;
+        private IndicationUIType _actionType;
 
-        private RaderMap _raderMap;
+        private RadarMap _raderMap;
         
         public void SetData(SequenceData data)
         {
@@ -23,14 +23,14 @@ namespace IronRain.SequenceSystem
 
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
-            _raderMap.ChangeIndicationUi(_actionType);
+            _raderMap._indicationPanelController.ChangeIndicationUI(_actionType);
             
             return UniTask.CompletedTask;
         }
 
         public void Skip()
         {
-            _raderMap.ChangeIndicationUi(_actionType);
+            _raderMap._indicationPanelController.ChangeIndicationUI(_actionType);
         }
     }
 }
