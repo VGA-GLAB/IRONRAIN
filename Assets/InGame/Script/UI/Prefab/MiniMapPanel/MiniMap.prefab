@@ -1304,11 +1304,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14bfd18f098cf440b2e715734787792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _indicationUi: {fileID: 0}
-  _indicationUiCanvas: {fileID: 0}
-  _leverUi: {fileID: 0}
-  _contrllerUi: {fileID: 0}
-  _throttleUi: {fileID: 0}
+  _indicationUI: {fileID: 0}
+  _indicationIconArea: {fileID: 0}
+  _indicationSprite: []
   _indicationUiScriptableObject: {fileID: 0}
   _indicationUiDuration: 1
   _indicationUiMinAlpha: 0.2
@@ -1316,7 +1314,6 @@ MonoBehaviour:
   _bunshInterval: 0.5
   _miniMapCanvasGroup: {fileID: 0}
   _purgeUiCanvasGroup: {fileID: 0}
-  Enemies: []
   _soundTransform: {fileID: 0}
   _player: {fileID: 0}
   _center: {fileID: 2628360163047122436}
@@ -1337,6 +1334,7 @@ MonoBehaviour:
   _isForwardBoss: 0
   _origin: {fileID: 0}
   _sightAngle: 120
+  Enemies: []
 --- !u!114 &9125558011877229230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1362,7 +1360,6 @@ MonoBehaviour:
   _cursorRadius: 0.0025
   _targetRadius: 0.025
   _limitLineRendereDistance: 100
-  _isMouseFlag: 1
   _layerMask:
     serializedVersion: 2
     m_Bits: 32
