@@ -12,8 +12,8 @@ public class RadarMap : MonoBehaviour
     public IndicationPanelController _indicationPanelController; //シーケンスの編集が必要になるので仮置き
 
     [SerializeField, Header("音を鳴らす位置")] private Transform _soundTransform;
-    [Header("プレイヤーの位置")] public Transform _playerTransform;
-    [Header("自機アイコン")] public Image _ownIcon;
+    [SerializeField, Header("プレイヤーの位置")] private Transform _playerTransform;
+    [SerializeField, Header("自機アイコン")] private Image _ownIcon;
     [SerializeField, Header("レーダーの端までの長さ")] private float _raderLength;
     [SerializeField, Header("レーダーの半径")] private float _radius;
     [SerializeField, Header("縮尺")] private float _scaleFactor;
@@ -34,15 +34,19 @@ public class RadarMap : MonoBehaviour
     [SerializeField, Tooltip("視野角の基準点")] private Transform _origin;
     [SerializeField, Tooltip("視野角（度数法）")] private float _sightAngle;
 
-
     private GameObject _nearEnemy;
     public Dictionary<GameObject, Image> _enemyMaps = new();
 
+    /// <summary>プレイヤーの位置</summary>
+    public Transform PlayerTransform { get { return _playerTransform; } }
     /// <summary>レーダーマップの半径</summary>
     public float Radius { get { return _radius; } }
 
     /// <summary>自機のアイコンからの補正</summary>
     public Vector3 Offset { get { return _offset; } }
+
+    /// <summary>自機アイコンの位置</summary>
+    public Transform OwnIconTranform { get { return _ownIcon.gameObject.transform; } }
 
     /// <summary>現在ロックされているエネミー</summary>
     public GameObject GetRockEnemy { get; private set; }
@@ -58,6 +62,7 @@ public class RadarMap : MonoBehaviour
 
     /// <summary>タッチパネルシーケンスに入った時に呼ぶ処理</summary>
     private bool _isStartTouchPanel = false;
+
 
     void Start()
     {
@@ -100,7 +105,7 @@ public class RadarMap : MonoBehaviour
         if (GetRockEnemy != null) //ロックオンしていて、ロックオン状態かつ視野角に収まっていたらreturn
         {
             var agent = GetRockEnemy.GetComponent<AgentScript>();
-            if (agent.IsRockon && IsVisible(agent.gameObject))
+            if (agent.IsRockOn && IsVisible(agent.gameObject))
                 return;
         }
 
@@ -117,7 +122,7 @@ public class RadarMap : MonoBehaviour
 
         AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
         NearestEnemy = nearEnemy.Item2;
-        agentScript.IsRockon = true; //アイコンをロックオン状態にする
+        agentScript.IsRockOn = true; //アイコンをロックオン状態にする
 
         var rocknUi = _enemyMaps[agentScript.gameObject].gameObject.GetComponent<TargetIcon>();
         rocknUi.LockOnUI.SetActive(true);
@@ -172,7 +177,7 @@ public class RadarMap : MonoBehaviour
     {
         var enemyAgent = enemyObject.GetComponent<AgentScript>();
 
-        if (enemyAgent.IsRockon)
+        if (enemyAgent.IsRockOn)
         {
             ResetUi(); //全てのエネミーのロックオンを外す
         }
@@ -186,7 +191,7 @@ public class RadarMap : MonoBehaviour
             if (!_enemyMaps.ContainsKey(enemyAgent.gameObject))
                 return;
 
-            enemyAgent.IsRockon = true;
+            enemyAgent.IsRockOn = true;
 
             var rockonUi = _enemyMaps[enemyAgent.gameObject].gameObject.GetComponent<TargetIcon>();
             rockonUi.LockOn();
@@ -206,7 +211,7 @@ public class RadarMap : MonoBehaviour
         foreach (var enemy in Enemies)
         {
             var agent = enemy.GetComponent<AgentScript>();
-            agent.IsRockon = false;
+            agent.IsRockOn = false;
             var enemyUi = _enemyMaps[enemy].gameObject.GetComponent<TargetIcon>();
             enemyUi.LockOff();
         }
@@ -244,7 +249,7 @@ public class RadarMap : MonoBehaviour
 
             var agentScript = enemy.GetComponent<AgentScript>();
             MultiLockEnemies.Add(enemy);
-            agentScript.IsRockon = true;
+            agentScript.IsRockOn = true;
 
             var enemyUi = _enemyMaps[enemy].gameObject.GetComponent<TargetIcon>();
             enemyUi.LockOn();

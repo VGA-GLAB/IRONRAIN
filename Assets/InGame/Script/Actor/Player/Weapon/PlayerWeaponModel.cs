@@ -18,7 +18,7 @@ namespace IronRain.Player
 
         [SerializeField] private List<PlayerWeaponBase> _playerWeaponList = new();
         [SerializeField] private RootMotion.FinalIK.FABRIK _fabrIk;
-        [FormerlySerializedAs("rederMap")] [FormerlySerializedAs("_raderMap")] [SerializeField] private RadarMap raderMap;
+        [SerializeField] private RadarMap raderMap;
         [SerializeField] private float _aimSpeed;
         [SerializeField] private Transform _defaultAimTarget;
         [SerializeField] private Transform _homingMissilePos;

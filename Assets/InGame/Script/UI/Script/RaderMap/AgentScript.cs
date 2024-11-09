@@ -10,17 +10,18 @@ public class AgentScript : MonoBehaviour
     /// <summary>マップに表示するイメージの位置 </summary>
     [NonSerialized] public RectTransform RectTransform;
     /// <summary>表示するレーダーマップ </summary>
-    [NonSerialized] public RadarMap RaderMap;
+    [NonSerialized] public RadarMap RadarMap;
     /// <summary>レーダーマップ上に表示するアイコン</summary>
-    [SerializeField] public Image Image;
-    /// <summary>ロックオン状態かどうか </summary>
-    public bool IsRockon = false;
+    [SerializeField] public Image Icon;
 
     [SerializeField, Tooltip("テスト用")] private bool _isTest = false;
 
+    /// <summary>ロックオン状態かどうか </summary>
+    public bool IsRockOn { get; set; }
+
     private void Awake()
     {
-        RaderMap = FindObjectOfType<RadarMap>(); //レーダーテストを検索する
+        RadarMap = FindAnyObjectByType<RadarMap>(); //レーダーテストを検索する
     }
 
     private void Start()
@@ -36,16 +37,16 @@ public class AgentScript : MonoBehaviour
     /// </summary>
     public void EnemyIconInst()
     {
-        if (RaderMap != null)
+        if (RadarMap != null)
         {
-            var enemyIcon = Instantiate(Image, RaderMap._ownIcon.transform.parent);
+            var enemyIcon = Instantiate(Icon, RadarMap.OwnIconTranform.parent);
             var uiObj = enemyIcon.gameObject.GetComponent<TargetIcon>();
             uiObj.Enemy = gameObject;
-            if (!RaderMap._enemyMaps.ContainsKey(gameObject)) //自身が_enemyMapsのキーになかったら
+            if (!RadarMap._enemyMaps.ContainsKey(gameObject)) //自身が_enemyMapsのキーになかったら
             {
-                RaderMap._enemyMaps.Add(gameObject, enemyIcon);
+                RadarMap._enemyMaps.Add(gameObject, enemyIcon);
                 RectTransform = enemyIcon.GetComponent<RectTransform>();
-                RaderMap.Enemies.Add(gameObject);
+                RadarMap.Enemies.Add(gameObject);
             }
         }
     }
@@ -54,13 +55,13 @@ public class AgentScript : MonoBehaviour
     /// </summary>
     public void EnemyIconDestory()
     {
-        if (RaderMap != null)
+        if (RadarMap != null)
         {
-            if (RaderMap._enemyMaps.ContainsKey(gameObject))
+            if (RadarMap._enemyMaps.ContainsKey(gameObject))
             {
-                Destroy(RaderMap._enemyMaps[gameObject].gameObject);
-                RaderMap._enemyMaps.Remove(gameObject);
-                RaderMap.Enemies.Remove(gameObject);
+                Destroy(RadarMap._enemyMaps[gameObject].gameObject);
+                RadarMap._enemyMaps.Remove(gameObject);
+                RadarMap.Enemies.Remove(gameObject);
             }
         }
     }

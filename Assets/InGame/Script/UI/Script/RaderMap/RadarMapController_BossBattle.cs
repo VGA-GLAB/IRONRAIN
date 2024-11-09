@@ -69,8 +69,8 @@ public class RadarMapController_BossBattle : MonoBehaviour
     /// </summary>
     private void BossIconCtrl()
     {
-        Vector3 bossDir = _bossGameObject.transform.position - _radarMap._playerTransform.position;
-        bossDir = Quaternion.Inverse(_radarMap._playerTransform.rotation) * bossDir; // ベクトルをプレイヤーに合わせて回転
+        Vector3 bossDir = _bossGameObject.transform.position - _radarMap.PlayerTransform.position;
+        bossDir = Quaternion.Inverse(_radarMap.PlayerTransform.rotation) * bossDir; // ベクトルをプレイヤーに合わせて回転
         _bossAgent.RectTransform.anchoredPosition3D = new Vector3(
             bossDir.x * _radarMap.Radius + _radarMap.Offset.x,
             bossDir.z * _radarMap.Radius + _radarMap.Offset.y, _radarMap.Offset.z); //アンカーをセット
