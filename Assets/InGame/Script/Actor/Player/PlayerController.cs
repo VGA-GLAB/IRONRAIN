@@ -14,7 +14,7 @@ namespace IronRain.Player
 
         [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
         [SerializeField] private PlayerSetting _playerSetting;
-        [SerializeField] private RaderMap _playerMap;
+        [SerializeField] private RadarMap _playerMap;
         [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
         [SerializeField] private PlayerAnimation _playerAnimation;
         [SerializeField] private PlayerSound _playerSound;

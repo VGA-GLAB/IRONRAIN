@@ -21,7 +21,7 @@ public class MultiLockSystem : MonoBehaviour
     // 前回のdrag位置
     private Vector3 _preDragPos;
     // レーダーマップ 
-    private RaderMap _raderMap;
+    private RadarMap _raderMap;
     /// <summary>ロックオンしたUI </summary>
     private HashSet<GameObject> _lockUI = new();
     private int _posCount;
@@ -30,7 +30,7 @@ public class MultiLockSystem : MonoBehaviour
     private void Awake()
     {
         //レーダーテストを検索する
-        _raderMap = FindObjectOfType<RaderMap>();
+        _raderMap = FindObjectOfType<RadarMap>();
     }
 
     // Update is called once per frame
@@ -86,7 +86,7 @@ public class MultiLockSystem : MonoBehaviour
                 _preDragPos = currentDragPosition;
             }
             
-            if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
+            if (hit.collider.gameObject.TryGetComponent(out TargetIcon enemyUi))
             {
                 //Debug.Log("当たった");
                 if (!_lockOnEnemy.Contains(enemyUi.Enemy))

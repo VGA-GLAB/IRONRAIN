@@ -73,7 +73,7 @@ namespace Enemy.Boss.Appear
         {
             // 登場後、戦闘開始と同時にレーダーマップに表示。
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyGenerate();
+            if (agent != null) agent.EnemyIconInst();
 
             Ref.Effector.ThrusterEnable(true);
             Ref.Effector.TrailEnable(true);

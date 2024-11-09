@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "IndicationUiScriptableObject", menuName = "ScriptableObjects/IndicationUi")]
 public class IndicationUiScriptableObject : ScriptableObject

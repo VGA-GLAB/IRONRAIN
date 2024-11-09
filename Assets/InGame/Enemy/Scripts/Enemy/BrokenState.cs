@@ -26,7 +26,7 @@ namespace Enemy
 
             // レーダーマップから消す。
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyDestory();
+            if (agent != null) agent.EnemyIconDestory();
 
             // 再生するアニメーション名が敵の種類によって違う。
             EnemyType type = Ref.EnemyParams.Type;

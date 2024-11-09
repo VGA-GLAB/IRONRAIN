@@ -27,7 +27,7 @@ namespace Enemy.Funnel
             Ref.BlackBoard.CurrentState = StateKey.Return;
 
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyDestory();
+            if (agent != null) agent.EnemyIconDestory();
 
             _currentStep = _steps[0];
         }
