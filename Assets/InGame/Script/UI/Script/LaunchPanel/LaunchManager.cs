@@ -173,7 +173,7 @@ public class LaunchManager : MonoBehaviour
             collider.enabled = true;
         }
 
-        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonCotroller button))
+        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonController button))
         {
             button._isButtonActive = true;
         }
@@ -314,7 +314,7 @@ public class LaunchManager : MonoBehaviour
             collider.enabled = true;
         }
 
-        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonCotroller button))
+        if (_activeUiButton.gameObject.TryGetComponent(out ActivationButtonController button))
         {
             button._isButtonActive = true;
         }

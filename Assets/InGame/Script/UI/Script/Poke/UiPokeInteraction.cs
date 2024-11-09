@@ -96,7 +96,7 @@ public class UiPokeInteraction : MonoBehaviour
             if (dist <= r)
             {
                 //g.transform.localScale = Vector3.one * 1.2f;
-                var enemyUi = g.GetComponent<EnemyUi>();
+                var enemyUi = g.GetComponent<TargetIcon>();
                 enemyUi.OnButton();
                 break;
             }

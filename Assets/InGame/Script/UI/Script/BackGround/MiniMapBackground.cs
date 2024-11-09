@@ -1,15 +1,11 @@
 ﻿using Oculus.Interaction;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MiniMapBackground : MonoBehaviour
 {
-    [Header("Poke時のイベントを発火する。")]
-    [SerializeField] private InteractableUnityEventWrapper _pokeCollision;
-    [Header("Poke時のイベントを反映する。")]
-    [SerializeField] private Image _background;
+    [SerializeField,Header("Poke時のイベントを発火する。")] private InteractableUnityEventWrapper _pokeCollision;
+    [SerializeField,Header("Poke時のイベントを反映する。")] private Image _background;
 
     void Start()
     {

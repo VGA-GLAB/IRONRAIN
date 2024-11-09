@@ -53,7 +53,7 @@ namespace IronRain.Player
 
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.MultiLockOn)) 
             {
-                _playerEnvroment.RaderMap.NearEnemyLockon();
+                _playerEnvroment.RaderMap.NearEnemyLockOn();
             }
             //次の発射までの計算
             _currentTime += Time.deltaTime;

@@ -15,8 +15,7 @@ namespace Enemy
 
             // レーダーマップから消す。
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyDestory();
-
+            if (agent != null) agent.EnemyIconDestory();
             Always();
         }
 

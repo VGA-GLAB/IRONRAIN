@@ -23,7 +23,7 @@ namespace Enemy.Funnel
             Ref.BlackBoard.CurrentState = StateKey.Expand;
 
             AgentScript agent = Ref.AgentScript;
-            if (agent != null) agent.EnemyGenerate();
+            if (agent != null) agent.EnemyIconInst();
 
             Ref.Effector.TrailEnable(true);
 

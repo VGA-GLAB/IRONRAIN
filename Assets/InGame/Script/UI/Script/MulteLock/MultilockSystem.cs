@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 using IronRain.Player;
 
-public class MultilockSystem : MonoBehaviour
+public class MultiLockSystem : MonoBehaviour
 {
     [SerializeField, Tooltip("Rayを飛ばす起点")] GameObject _rayOrigin;
 
@@ -12,28 +11,26 @@ public class MultilockSystem : MonoBehaviour
     public bool IsMultilock;
 
     /// <summary>敵のUIリスト </summary>
-    public HashSet<GameObject> LockOnEnemy = new HashSet<GameObject>();
+    private HashSet<GameObject> _lockOnEnemy = new();
     [SerializeField, Tooltip("使用するLineRenderer")] private LineRenderer _lineRenderer;
     [FormerlySerializedAs("_rayDis")] [SerializeField, Tooltip("Rayの距離")] private float _rayDistance = 10f;
     [SerializeField] private PlayerController _playerController;
-    [SerializeField, Tooltip("Rayのレイヤーマスク")]
-    LayerMask _layerMask;
+    [SerializeField, Tooltip("Rayのレイヤーマスク")] LayerMask _layerMask;
 
-    [SerializeField, Tooltip("ドラッグした時に音がなる距離")]
-    private float _dragDistance = 0.1f;
-    /// <summary>前回のdrag位置 </summary>
+    [SerializeField, Tooltip("ドラッグした時に音がなる距離")] private float _dragDistance = 0.1f;
+    // 前回のdrag位置
     private Vector3 _preDragPos;
-    /// <summary>レーダーマップ </summary>
-    private RaderMap _raderMap;
-    /// <summary>ロックオンしたUi </summary>
-    private HashSet<GameObject> _lockUi = new HashSet<GameObject>();
+    // レーダーマップ 
+    private RadarMap _raderMap;
+    /// <summary>ロックオンしたUI </summary>
+    private HashSet<GameObject> _lockUI = new();
     private int _posCount;
     private bool _isFirstTouch = true;
     
     private void Awake()
     {
         //レーダーテストを検索する
-        _raderMap = FindObjectOfType<RaderMap>();
+        _raderMap = FindObjectOfType<RadarMap>();
     }
 
     // Update is called once per frame
@@ -50,11 +47,11 @@ public class MultilockSystem : MonoBehaviour
         _posCount = 0;
         _lineRenderer.positionCount = _posCount;
         //ラインレンダラーの更新
-        if (_lockUi.Count < 1)
+        if (_lockUI.Count < 1)
             return;
-        _lineRenderer.positionCount = _lockUi.Count;
+        _lineRenderer.positionCount = _lockUI.Count;
 
-        foreach (GameObject obj in _lockUi)
+        foreach (GameObject obj in _lockUI)
         {
             _posCount++;
             _lineRenderer.positionCount = _posCount;
@@ -62,9 +59,7 @@ public class MultilockSystem : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// エネミーを探す処理
-    /// </summary>
+    // エネミーを探す処理
     private void SerchEnemy()
     {
         //Rayを飛ばすスタート位置を決める
@@ -91,58 +86,53 @@ public class MultilockSystem : MonoBehaviour
                 _preDragPos = currentDragPosition;
             }
             
-            if (hit.collider.gameObject.TryGetComponent(out EnemyUi enemyUi))
+            if (hit.collider.gameObject.TryGetComponent(out TargetIcon enemyUi))
             {
                 //Debug.Log("当たった");
-                if (!LockOnEnemy.Contains(enemyUi.Enemy))
+                if (!_lockOnEnemy.Contains(enemyUi.Enemy))
                 {
                     //ターゲットをロックしたときに出す音
                     CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
                 }
-                LockOnEnemy.Add(enemyUi.Enemy);
-                _lockUi.Add(enemyUi.gameObject);
+                _lockOnEnemy.Add(enemyUi.Enemy);
+                _lockUI.Add(enemyUi.gameObject);
             }
         }
         else
         {
-            EndMultilockAction();
+            EndMultiLockAction();
         }
-        //Debug.DrawRay(rayStartPosition, direction, Color.blue);
     }
 
-    /// <summary>
-    /// マルチロックのスタート時に呼ばれる
-    /// </summary>
-    public void MultilockOnStart()
+    /// <summary>マルチロックのスタート時に呼ばれる</summary>
+    public void MultiLockOnStart()
     {
         IsMultilock = true;
     }
     
-    /// <summary>
-    /// マルチロックの終了時に呼ばれる
-    /// </summary>
-    private void EndMultilockAction()
+    /// <summary>マルチロックの終了時に呼ばれる</summary>
+    private void EndMultiLockAction()
     {
         if (IsMultilock)
         {
             //プレイヤーを攻撃可能にする
             _playerController.PlayerEnvroment.RemoveState(PlayerStateType.NonAttack);
             
-            if (LockOnEnemy.Count > 0)
+            if (_lockOnEnemy.Count > 0)
             {
                 //LockOnEnemy = LockOnEnemy.Distinct().ToList();
                // _raderMap.MultiLockon(LockOnEnemy);
             }
             IsMultilock = false;
-            LockOnEnemy.Clear();
+            _lockOnEnemy.Clear();
         }
-        _lockUi.Clear();
+        _lockUI.Clear();
         _isFirstTouch = true;
     }
 
-    public void EnemyDestory(GameObject enemy)
+    public void EnemyDestroy(GameObject enemy)
     {
-        LockOnEnemy.Remove(enemy);
-        _lockUi.Remove(enemy);
+        _lockOnEnemy.Remove(enemy);
+        _lockUI.Remove(enemy);
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -6,7 +6,7 @@ namespace IronRain.SequenceSystem
 {
     public class WaitPanelTouchSequence : AbstractWaitSequence
     {
-        private RaderMap _raderMap;
+        private RadarMap _raderMap;
         
         public override void SetData(SequenceData data)
         {

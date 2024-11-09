@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
@@ -7,7 +7,7 @@ namespace IronRain.SequenceSystem
     public class WaitMultiLockSequence : AbstractWaitSequence
     {
         private LockOnSystem _lockSystem;
-        private RaderMap _raderMap;
+        private RadarMap _raderMap;
         
         public override void SetData(SequenceData data)
         {
@@ -24,7 +24,7 @@ namespace IronRain.SequenceSystem
             this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
             
             var enemy = await _lockSystem.MultiLockOnAsync(ct);
-            _raderMap.MultiLockon(enemy);
+            _raderMap.MultiLockOn(enemy);
 
             loopCts.Cancel();
         }

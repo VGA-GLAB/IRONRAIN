@@ -10,18 +10,18 @@ namespace mouse
         [SerializeField, Tooltip("Rayを飛ばすオブジェクト")] private GameObject _origin;
         //[SerializeField, Tooltip("Rayの長さ")] private float _rayDistance = 100f;
         [SerializeField, Tooltip("RayのLayerMask")] private LayerMask _layerMask;
-        private MouseMultilockSystem _mouseMultilockSystem;
+        private MouseMultiLockSystem _mouseMultiLockSystem;
 
-        /// <summary>頂点の数 </summary>
+        // 頂点の数 
         private int _posCount = 0;
-        /// <summary>頂点を生成する最低間隔 </summary>
+        // 頂点を生成する最低間隔 
         private float _interval = 0.1f;
         /// <summary>ボタンを押しているかのフラグ </summary>
         //private bool IsInput = false;
 
         private void Start()
         {
-            _mouseMultilockSystem = FindObjectOfType(typeof(MouseMultilockSystem)).GetComponent<MouseMultilockSystem>();
+            _mouseMultiLockSystem = FindObjectOfType(typeof(MouseMultiLockSystem)).GetComponent<MouseMultiLockSystem>();
         }
         public void OnDrag(PointerEventData eventData)
         {
@@ -39,7 +39,6 @@ namespace mouse
                 //pos.z = _panel.transform.position.z;
                 //SetPosition(Camera.main.ScreenToWorldPoint(pos));
                 SetPosition(pos);
-                //Debug.Log("線を書く");
             }
             
         }
@@ -49,15 +48,11 @@ namespace mouse
             LineEnd();
         }
 
-        /// <summary>
-        /// 線を伸ばすメソッド
-        /// </summary>
-        /// <param name="pos">マウスの位置</param>
+        // 線を伸ばすメソッド
         private void SetPosition(Vector3 pos)
         {
             if (!PosCheck(pos))
             {
-                //Debug.Log("だめ");
                 return;
             }
             _posCount++;
@@ -66,11 +61,7 @@ namespace mouse
 
         }
 
-        /// <summary>
-        /// 頂点を増やしてもよいかを判定するメソッド
-        /// </summary>
-        /// <param name="pos">現在のマウスポジション</param>
-        /// <returns>頂点を増やすかの判定</returns>
+        // 頂点を増やしてもよいかを判定するメソッド
         private bool PosCheck(Vector3 pos)
         {
             if (_posCount == 0)
@@ -94,13 +85,8 @@ namespace mouse
             _lineRenderer.positionCount = 0;
             _posCount = 0;
             //IsInput = false;
-           // Debug.Log("線を消す");
         }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            
-        }
+        public void OnPointerDown(PointerEventData eventData) { }
     }
 }
-
