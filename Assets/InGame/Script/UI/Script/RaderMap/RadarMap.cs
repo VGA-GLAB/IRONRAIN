@@ -12,7 +12,6 @@ public class RadarMap : MonoBehaviour
     public IndicationPanelController _indicationPanelController; //シーケンスの編集が必要になるので仮置き
 
     [SerializeField, Header("音を鳴らす位置")] private Transform _soundTransform;
-    [SerializeField, Header("プレイヤーの位置")] private Transform _playerTransform;
     [SerializeField, Header("自機アイコン")] private Image _ownIcon;
     [SerializeField, Header("レーダーの端までの長さ")] private float _raderLength;
     [SerializeField, Header("レーダーの半径")] private float _radius;
@@ -22,6 +21,7 @@ public class RadarMap : MonoBehaviour
     [SerializeField, Header("ロックオン可能距離")] private float _rockonDistance;
     /// <summary>自機のアイコンからの補正</summary>
     private Vector3 _offset;
+    private Transform _playerTransform;
 
     [Tooltip("ボス戦関連")]
     [SerializeField, Header("ボス戦フラグ")] public bool IsBossScene = false;
@@ -66,6 +66,7 @@ public class RadarMap : MonoBehaviour
 
     void Start()
     {
+        _playerTransform = GameObject.FindWithTag("Player").transform;
         _offset = _ownIcon.GetComponent<RectTransform>().anchoredPosition3D;
         _bossRadarMapCtrl = GetComponent<RadarMapController_BossBattle>();
     }

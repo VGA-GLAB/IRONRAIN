@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class TargetIcon : MonoBehaviour
 {
-    public GameObject Enemy;
+    [NonSerialized] public GameObject Enemy;
     /// <summary>表示するレーダーマップ </summary>
     [NonSerialized] public RadarMap RaderMap;
     [NonSerialized] public GameObject LockOnUI;
