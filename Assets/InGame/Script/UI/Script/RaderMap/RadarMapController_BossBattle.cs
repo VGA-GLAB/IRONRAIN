@@ -19,10 +19,6 @@ public class RadarMapController_BossBattle : MonoBehaviour
     public List<AgentScript> _fannels = new(); //ファンネルのアイコン
 
     private RadarMap _radarMap;
-    
-    //ボスのx軸
-    private float _bossXPos = 0f;
-    private float _bossYPos = 0f;
 
     private void Start()
     {
@@ -76,9 +72,6 @@ public class RadarMapController_BossBattle : MonoBehaviour
         _bossAgent.EnemyIconRectTransform.anchoredPosition3D = new Vector3(
             bossDir.x * _radarMap.Radius + _radarMap.Offset.x,
             bossDir.z * _radarMap.Radius + _radarMap.Offset.y, _radarMap.Offset.z); //アンカーをセット
-
-        _bossXPos = bossDir.x * _radarMap.Radius + _radarMap.Offset.x;
-        _bossYPos = bossDir.z * _radarMap.Radius + _radarMap.Offset.y;
     }
 
     /// <summary>

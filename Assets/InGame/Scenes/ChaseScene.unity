@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.027140828, g: 0.03371563, b: 0.046712402, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1225,6 +1225,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5132740912069421527, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
       insertIndex: 5
+      addedObject: {fileID: 1871494242}
+    - targetCorrespondingSourceObject: {fileID: 5132740912069421527, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
+      insertIndex: 6
       addedObject: {fileID: 1871494241}
   m_SourcePrefab: {fileID: 100100000, guid: 23d8a73f67e02134fb6a9c862d0a3548, type: 3}
 --- !u!4 &63516656 stripped
@@ -34248,6 +34251,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 63516660}
     - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _sequenceData.radarMap
+      value: 
+      objectReference: {fileID: 63516657}
+    - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _sequenceData._recorder
       value: 
       objectReference: {fileID: 1857628111}
@@ -34271,6 +34278,10 @@ PrefabInstance:
       propertyPath: _sequenceData._concatenate
       value: 
       objectReference: {fileID: 1857628109}
+    - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
+      propertyPath: _sequenceData._multiLockOn
+      value: 
+      objectReference: {fileID: 1871494242}
     - target: {fileID: 9212650041395911106, guid: c2d20873edba9fc4c9109feda461c6d3, type: 3}
       propertyPath: _sequenceData._raderMapMap
       value: 
@@ -40189,6 +40200,19 @@ MonoBehaviour:
   _sightAngle: 120
   _rockonDistance: 100000
   _radarMap: {fileID: 63516657}
+--- !u!114 &1871494242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871494234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6bd057dfdd8ad47b35199b55767b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radarMap: {fileID: 63516657}
 --- !u!1 &1881535790 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8876107570692932524, guid: 1ec507e051606b7479ddda919508cf03, type: 3}
@@ -41027,6 +41051,10 @@ PrefabInstance:
       propertyPath: _playerMap
       value: 
       objectReference: {fileID: 63516657}
+    - target: {fileID: 5692810097513904217, guid: 17c072d6bfaa2434181d7e4b66796ece, type: 3}
+      propertyPath: _multiLockOn
+      value: 
+      objectReference: {fileID: 1871494242}
     - target: {fileID: 5692810097513904217, guid: 17c072d6bfaa2434181d7e4b66796ece, type: 3}
       propertyPath: _tutorialTextBoxController
       value: 

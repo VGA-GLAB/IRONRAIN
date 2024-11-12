@@ -15,6 +15,7 @@ namespace IronRain.Player
         [SerializeField] private List<PlayerComponentBase> _playerStateList = new();
         [SerializeField] private PlayerSetting _playerSetting;
         [SerializeField] private RadarMap _playerMap;
+        [SerializeField] private MultiLockOn _multiLockOn;
         [SerializeField] private TutorialTextBoxController _tutorialTextBoxController;
         [SerializeField] private PlayerAnimation _playerAnimation;
         [SerializeField] private PlayerSound _playerSound;
@@ -31,7 +32,7 @@ namespace IronRain.Player
 
         private void SetUp()
         {
-            _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap,
+            _playerEnvroment = new PlayerEnvroment(transform, _playerSetting, _playerMap, _multiLockOn,
                 _playerStateList, _playerAnimation, _tutorialTextBoxController, _animationEventProvider);
 
             for (int i = 0; i < _playerStateList.Count; i++)

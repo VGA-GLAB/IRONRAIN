@@ -11,7 +11,7 @@ namespace IronRain.SequenceSystem
         public override void SetData(SequenceData data)
         {
             base.SetData(data);
-            _raderMap = data.RaderMap;
+            _raderMap = data.RadarMap;
         }
 
         public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)

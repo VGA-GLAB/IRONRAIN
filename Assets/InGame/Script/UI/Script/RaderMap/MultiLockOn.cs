@@ -1,16 +1,18 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// マルチロックオン時のUIを管理します
 /// </summary>
-public class MultiLockOn
+public class MultiLockOn : MonoBehaviour
 {
     [SerializeField] private RadarMap _radarMap;
     public List<GameObject> MultiLockEnemies { get; } = new(); //マルチロック時のエネミー 
 
+
     public void LockOn(List<GameObject> enemies)
     {
+        Debug.Log("ロックオンが呼ばれました");
         _radarMap.ResetUI(); //全てのエネミーのロックオンを外す
 
         if (MultiLockEnemies != null)　MultiLockEnemies.Clear();

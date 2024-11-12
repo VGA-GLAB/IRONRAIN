@@ -28,9 +28,8 @@ public class RadarMap : MonoBehaviour
     public Dictionary<GameObject, Image> _enemyMaps = new();
     public List<AgentScript> Enemies = new();
 
-    private RadarMapController_BossBattle _bossRadarMapCtrl;
+    public RadarMapController_BossBattle _bossRadarMapCtrl;
     public LockOn LockOn;
-    public MultiLockOn MultiLockOn;
 
     public Transform PlayerTransform { get { return _playerTransform; } } //プレイヤーの位置
     public float Radius { get { return _radius; } } //レーダーの半径

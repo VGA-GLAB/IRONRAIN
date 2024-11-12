@@ -8,12 +8,14 @@ namespace IronRain.SequenceSystem
     {
         private LockOnSystem _lockSystem;
         private RadarMap _raderMap;
+        private MultiLockOn _multiLockOn;
         
         public override void SetData(SequenceData data)
         {
             base.SetData(data);
             _lockSystem = data.LockSystem;
-            _raderMap = data.RaderMap;
+            _raderMap = data.RadarMap;
+            _multiLockOn = data.MultiLockOn;
         }
 
         public override async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
@@ -22,10 +24,10 @@ namespace IronRain.SequenceSystem
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, loopCts.Token);
 
             this.PlayWaitingSequenceAsync(linkedCts.Token, exceptionHandler).Forget();
-            
-            var enemy = await _lockSystem.MultiLockOnAsync(ct);
-            _raderMap.MultiLockOn.LockOn(enemy);
 
+            var enemy = await _lockSystem.MultiLockOnAsync(ct);
+            _multiLockOn.LockOn(enemy);
+            
             loopCts.Cancel();
         }
 

@@ -66,6 +66,7 @@ public class AgentScript : MonoBehaviour
                 Destroy(RadarMap._enemyMaps[gameObject].gameObject);
                 RadarMap._enemyMaps.Remove(gameObject);
                 RadarMap.Enemies.Remove(gameObject.GetComponent<AgentScript>());
+                RadarMap._bossRadarMapCtrl._fannels.Remove(gameObject.GetComponent<AgentScript>());
             }
         }
     }
