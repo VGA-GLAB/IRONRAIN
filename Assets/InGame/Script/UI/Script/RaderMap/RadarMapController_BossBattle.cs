@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -13,10 +13,10 @@ public class RadarMapController_BossBattle : MonoBehaviour
     [SerializeField, Header("ボス戦でのファンネルの縦方向の位置補正")] private float _heightLeverage;
     [SerializeField, Header("ボス戦でのファンネルの横間隔の最低値")] private float _widthInterval;
     [SerializeField, Header("正面用のボスUIフラグ")] private bool _isForwardBoss;
-    
+
     [SerializeField] private GameObject _bossGameObject;
-    public AgentScript _bossAgent; //ボスのアイコン
-    public List<AgentScript> _fannels = new(); //ファンネルのアイコン
+    [NonSerialized] public AgentScript _bossAgent; //ボスのアイコン
+     public List<AgentScript> _funnels = new(); //ファンネルのアイコン
 
     private RadarMap _radarMap;
 
@@ -27,12 +27,12 @@ public class RadarMapController_BossBattle : MonoBehaviour
 
     private void Update()
     {
-        if(_bossAgent.EnemyIconRectTransform != null)
+        if (_bossAgent.EnemyIconRectTransform != null)
         {
             BossIconCtrl();
         }
-        
-        if (_fannels.Count > 0 && _bossGameObject != null)
+
+        if (_funnels.Count > 0 && _bossGameObject != null)
         {
             FuunelIconCtrl();
         }
@@ -47,9 +47,9 @@ public class RadarMapController_BossBattle : MonoBehaviour
         if (_bossAgent == null) Debug.Log("_bossAgentが取得できていません");
     }
 
-    [ContextMenu("FunnelDeployment")]
+    [ContextMenu("FuunelDeployment")]
     /// <summary>
-    /// ファンネル展開時に1回だけ呼びたい
+    /// ファンネルのアイコンを取得する
     /// </summary>
     public void FuunelDeployment()
     {
@@ -57,7 +57,7 @@ public class RadarMapController_BossBattle : MonoBehaviour
         {
             if (_radarMap.Enemies[i].name != "Boss_8055_Boss_Boss") //ボス以外（ファンネルを取得）
             {
-                _fannels.Add(_radarMap.Enemies[i]);
+                _funnels.Add(_radarMap.Enemies[i]);
             }
         }
     }
@@ -80,17 +80,17 @@ public class RadarMapController_BossBattle : MonoBehaviour
     private void FuunelIconCtrl()
     {
 
-        float totalWidth = (_fannels.Count - 1) * _widthInterval;
+        float totalWidth = (_funnels.Count - 1) * _widthInterval;
 
-        for (int i = 0; i < _fannels.Count; i++)
+        for (int i = 0; i < _funnels.Count; i++)
         {
-            Vector3 funnelDir = _fannels[i].transform.position - _radarMap.PlayerTransform.position;
+            Vector3 funnelDir = _funnels[i].transform.position - _radarMap.PlayerTransform.position;
             funnelDir = Quaternion.Inverse(_radarMap.PlayerTransform.rotation) * funnelDir;
 
             // 各ファンネルの水平位置を中央に対して間隔を持たせて配置
             float xOffset = -totalWidth / 2 + i * _widthInterval;
 
-            _fannels[i].EnemyIconRectTransform.anchoredPosition3D = new Vector3(
+            _funnels[i].EnemyIconRectTransform.anchoredPosition3D = new Vector3(
                 funnelDir.x * _radarMap.Radius + _radarMap.Offset.x + xOffset,
                 funnelDir.z * _radarMap.Radius + _radarMap.Offset.y, _radarMap.Offset.z);
         }

@@ -24,12 +24,12 @@ public class RadarMap : MonoBehaviour
     [SerializeField, Header("ボス戦でのUIの位置")] private Vector3 _bossPosition;
     [SerializeField, Header("ボス戦でのレーダーの半径")] private float _bossRadius = 0.001f;
     [SerializeField, Header("ボス戦でのレーダーの端までの長さ")] private float _bossRaderLength = 120f;
-    
+
     public Dictionary<GameObject, Image> _enemyMaps = new();
     public List<AgentScript> Enemies = new();
 
-    public RadarMapController_BossBattle _bossRadarMapCtrl;
-    public LockOn LockOn;
+    [SerializeField] private LockOn _lockOn;
+    private RadarMapController_BossBattle _bossRadarMapCtrl;
 
     public Transform PlayerTransform { get { return _playerTransform; } } //プレイヤーの位置
     public float Radius { get { return _radius; } } //レーダーの半径
@@ -39,6 +39,9 @@ public class RadarMap : MonoBehaviour
     
     public bool _isTouch = false;
     public bool _isStartTouchPanel = false; //タッチパネルシーケンスに入った時に呼ぶ処理
+
+    public RadarMapController_BossBattle BossRadarMap { get { return _bossRadarMapCtrl; } }
+    public LockOn LockOn { get { return _lockOn; } }
 
     private void Start()
     {

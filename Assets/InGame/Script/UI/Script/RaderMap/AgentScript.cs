@@ -9,14 +9,12 @@ public class AgentScript : MonoBehaviour
 {
     /// <summary>マップに表示するイメージの位置 </summary>
     [NonSerialized] public RectTransform EnemyIconRectTransform;
-    /// <summary>表示するレーダーマップ </summary>
+
     [NonSerialized] public RadarMap RadarMap;
-    /// <summary>レーダーマップ上に表示するアイコン</summary>
     [SerializeField] public Image Icon;
 
     [SerializeField, Tooltip("テスト用")] private bool _isTest = false;
 
-    /// <summary>ロックオン状態かどうか </summary>
     public bool IsRockOn { get; set; }
 
     private void Awake()
@@ -66,7 +64,7 @@ public class AgentScript : MonoBehaviour
                 Destroy(RadarMap._enemyMaps[gameObject].gameObject);
                 RadarMap._enemyMaps.Remove(gameObject);
                 RadarMap.Enemies.Remove(gameObject.GetComponent<AgentScript>());
-                RadarMap._bossRadarMapCtrl._fannels.Remove(gameObject.GetComponent<AgentScript>());
+                RadarMap.BossRadarMap._funnels.Remove(gameObject.GetComponent<AgentScript>());
             }
         }
     }

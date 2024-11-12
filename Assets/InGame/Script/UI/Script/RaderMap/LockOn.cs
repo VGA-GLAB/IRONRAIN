@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
-    
     [SerializeField, Header("音を鳴らす位置")] private Transform _soundTransform;
     private GameObject _nearEnemy;
     
@@ -118,8 +117,6 @@ public class LockOn : MonoBehaviour
             if (_radarMap._isStartTouchPanel) _radarMap._isTouch = true;
         }
     }
-
-    
 
     //視野角をギズモ化
     private void OnDrawGizmos()

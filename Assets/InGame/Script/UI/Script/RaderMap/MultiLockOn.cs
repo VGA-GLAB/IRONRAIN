@@ -12,7 +12,6 @@ public class MultiLockOn : MonoBehaviour
 
     public void LockOn(List<GameObject> enemies)
     {
-        Debug.Log("ロックオンが呼ばれました");
         _radarMap.ResetUI(); //全てのエネミーのロックオンを外す
 
         if (MultiLockEnemies != null)　MultiLockEnemies.Clear();
