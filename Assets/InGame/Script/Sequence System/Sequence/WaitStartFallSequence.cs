@@ -19,9 +19,9 @@ namespace IronRain.SequenceSystem
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             // UIの処理をする
-            _raderMap.StartPurgeSequence();
+            //_raderMap.StartPurgeSequence();
             await _playerController.SeachState<PlayerStoryEvent>().StartFall();
-            _raderMap.EndPurgeSequence();
+            //_raderMap.EndPurgeSequence();
         }
 
         public void Skip() { }

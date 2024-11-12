@@ -68,14 +68,14 @@ public class MouseMultiLockSystem : MonoBehaviour, IPointerDownHandler, IDragHan
         {
             if (hit.collider.gameObject.TryGetComponent(out TargetIcon enemyUi))
             {
-                if (!_lockOnEnemy.Contains(enemyUi.Enemy))
+                if (!_lockOnEnemy.Contains(enemyUi.gameObject))
                 {
                     //ターゲットをロックしたときに出す音
                     CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
                 }
 
-                _lockOnEnemy.Add(enemyUi.Enemy);
-                _lockUi.Add(enemyUi.gameObject);
+                _lockOnEnemy.Add(enemyUi.gameObject);
+                _lockUi.Add(enemyUi.LockOnUI);
             }
         }
     }

@@ -1,41 +1,37 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// レーダーマップ上に表示される敵アイコンを管理
 /// </summary>
 public class TargetIcon : MonoBehaviour
 {
-    [NonSerialized] public GameObject Enemy;
-    /// <summary>表示するレーダーマップ </summary>
-    [NonSerialized] public RadarMap RaderMap;
-    [NonSerialized] public GameObject LockOnUI;
+    [SerializeField] private RadarMap _radarMap;
+    private GameObject _enemyIcon;
+    private GameObject _lockOnUI;
 
+    public GameObject LockOnUI { get { return _lockOnUI; } }  
+    public GameObject EnemyIcon { get; set; }
 
     private void Awake()
     {
-        RaderMap = FindObjectOfType<RadarMap>(); //レーダーテストを検索する
-        LockOnUI = gameObject.transform.GetChild(1).gameObject;
+        _lockOnUI = gameObject.transform.GetChild(1).gameObject;
         LockOff();
     }
 
-    /// <summary>
-    /// 触れたときに呼ばれる処理
-    /// </summary>
     public void OnButton()
     {
-        RaderMap.PanelRock(Enemy);
+        _radarMap.LockOn.PanelRock(gameObject);
     }
 
     /// <summary>ロックオンアイコンを表示する</summary>
     public void LockOn()
     {
-        LockOnUI.SetActive(true);
+        _lockOnUI.SetActive(true);
     }
 
     /// <summary>ロックオンアイコンを非表示にする</summary>
     public void LockOff()
     {
-        LockOnUI.SetActive(false);
+        _lockOnUI.SetActive(false);
     }
 }

@@ -55,9 +55,9 @@ namespace IronRain.Player
         public void Update()
         {
             Shot();
-            if (raderMap.GetRockEnemy != null)
+            if (raderMap.LockOn.GetRockEnemy != null)
             {
-                _fabrIk.solver.target = raderMap.GetRockEnemy.transform;
+                _fabrIk.solver.target = raderMap.LockOn.GetRockEnemy.transform;
             }
             else 
             {
@@ -122,7 +122,7 @@ namespace IronRain.Player
         public void MulchShot()
         {
             _lockOnSystem.FinishMultiLock();
-            var enemys = _playerEnvroment.RaderMap.MultiLockEnemies; 
+            var enemys = _playerEnvroment.RaderMap.MultiLockOn.MultiLockEnemies; 
             for (int i = 0; i < enemys.Count; i++) 
             {
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Missile_Fire");

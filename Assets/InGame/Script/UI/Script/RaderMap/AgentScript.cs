@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class AgentScript : MonoBehaviour
 {
     /// <summary>マップに表示するイメージの位置 </summary>
-    [NonSerialized] public RectTransform RectTransform;
+    [NonSerialized] public RectTransform EnemyIconRectTransform;
     /// <summary>表示するレーダーマップ </summary>
     [NonSerialized] public RadarMap RadarMap;
     /// <summary>レーダーマップ上に表示するアイコン</summary>
@@ -40,14 +40,18 @@ public class AgentScript : MonoBehaviour
         if (RadarMap != null)
         {
             var enemyIcon = Instantiate(Icon, RadarMap.OwnIconTranform.parent);
+            EnemyIconRectTransform = enemyIcon.gameObject.GetComponent<RectTransform>();
             var uiObj = enemyIcon.gameObject.GetComponent<TargetIcon>();
-            uiObj.Enemy = gameObject;
+            uiObj.EnemyIcon = gameObject;
+
+            
             if (!RadarMap._enemyMaps.ContainsKey(gameObject)) //自身が_enemyMapsのキーになかったら
             {
                 RadarMap._enemyMaps.Add(gameObject, enemyIcon);
-                RectTransform = enemyIcon.GetComponent<RectTransform>();
-                RadarMap.Enemies.Add(gameObject);
+                EnemyIconRectTransform = enemyIcon.GetComponent<RectTransform>();
+                RadarMap.Enemies.Add(gameObject.GetComponent<AgentScript>());
             }
+            
         }
     }
     /// <summary>
@@ -61,7 +65,7 @@ public class AgentScript : MonoBehaviour
             {
                 Destroy(RadarMap._enemyMaps[gameObject].gameObject);
                 RadarMap._enemyMaps.Remove(gameObject);
-                RadarMap.Enemies.Remove(gameObject);
+                RadarMap.Enemies.Remove(gameObject.GetComponent<AgentScript>());
             }
         }
     }
