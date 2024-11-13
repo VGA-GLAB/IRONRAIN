@@ -89,13 +89,13 @@ public class MultiLockSystem : MonoBehaviour
             if (hit.collider.gameObject.TryGetComponent(out TargetIcon enemyUi))
             {
                 //Debug.Log("当たった");
-                if (!_lockOnEnemy.Contains(enemyUi.Enemy))
+                if (!_lockOnEnemy.Contains(enemyUi.gameObject))
                 {
                     //ターゲットをロックしたときに出す音
                     CriAudioManager.Instance.SE.Play("SE", "SE_Targeting");
                 }
-                _lockOnEnemy.Add(enemyUi.Enemy);
-                _lockUI.Add(enemyUi.gameObject);
+                _lockOnEnemy.Add(enemyUi.gameObject);
+                _lockUI.Add(enemyUi.LockOnUI);
             }
         }
         else

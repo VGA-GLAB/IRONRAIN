@@ -33,9 +33,8 @@ public class LockOnSystem : MonoBehaviour
     private HashSet<Transform> _temp = new();
 
     private void Start()
-    {
-        // 線を非表示にする。
-        _lineRenderer.positionCount = 0;
+    { 
+        _lineRenderer.positionCount = 0; // 線を非表示にする。
         // 状態のフラグ操作をコールバックに登録。
         _event.WhenSelect.AddListener(() => _isSelect = true);
         _event.WhenUnselect.AddListener(() => _isSelect = false);
@@ -49,20 +48,20 @@ public class LockOnSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock)
         {
             //RadarMap radarMap = FindObjectOfType<RadarMap>();
-            GameObject nowLockEnemy = _radarMap.GetRockEnemy;
+            GameObject nowLockEnemy = _radarMap.LockOn.GetRockEnemy;
             // ToDo:GameObjectから直接型指定 
             GameObject lockOnEnemy = null;
-            foreach(GameObject enemy in _radarMap.Enemies)
+            foreach(AgentScript enemy in _radarMap.Enemies)
             {
-                if(nowLockEnemy != enemy)
+                if(nowLockEnemy != enemy.gameObject)
                 {
-                    lockOnEnemy = enemy;
+                    lockOnEnemy = enemy.gameObject;
                     break;
                 }
             }
             if(lockOnEnemy != null)
             {
-                _radarMap.PanelRock(lockOnEnemy);
+                _radarMap.LockOn.PanelRock(lockOnEnemy);
             }  
         }
 
@@ -270,7 +269,7 @@ public class LockOnSystem : MonoBehaviour
         {
             if (t.TryGetComponent(out TargetIcon ui))
             {
-                lockOn.Add(ui.Enemy);
+                lockOn.Add(ui.EnemyIcon);
             }
         }
     }

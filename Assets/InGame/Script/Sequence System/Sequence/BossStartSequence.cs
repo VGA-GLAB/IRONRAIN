@@ -17,7 +17,7 @@ namespace IronRain.SequenceSystem
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             // BossStart処理
-            _data.RaderMap.BossBattleStart();
+            _data.RadarMap.BossBattleStart();
             _data.PlayerController.SeachState<PlayerStoryEvent>().BossStart();
             _data.EnemyManager.BossStart();
 
@@ -26,7 +26,7 @@ namespace IronRain.SequenceSystem
 
         public void Skip()
         {
-            _data.RaderMap.BossBattleStart();
+            _data.RadarMap.BossBattleStart();
             _data.PlayerController.SeachState<PlayerStoryEvent>().BossStart();
             _data.EnemyManager.BossStart();
         }

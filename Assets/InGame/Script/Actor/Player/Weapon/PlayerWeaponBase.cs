@@ -53,7 +53,7 @@ namespace IronRain.Player
 
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.MultiLockOn)) 
             {
-                _playerEnvroment.RaderMap.NearEnemyLockOn();
+                _playerEnvroment.RaderMap.LockOn.NearEnemyLockOn();
             }
             //次の発射までの計算
             _currentTime += Time.deltaTime;
@@ -74,7 +74,7 @@ namespace IronRain.Player
                 var storyEvent = _playerEnvroment.SeachState<PlayerStoryEvent>();
                 var bulletCon = _bulletPool.GetBullet(_params.WeaponType);
                 bulletCon.SetUp(
-                    _playerEnvroment.RaderMap.GetRockEnemy,
+                    _playerEnvroment.RaderMap.LockOn.GetRockEnemy,
                     _params.ShotDamage,
                     _playerEnvroment.PlayerTransform.forward,
                     _params.WeaponType,

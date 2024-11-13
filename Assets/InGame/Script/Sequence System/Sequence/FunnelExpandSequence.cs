@@ -8,10 +8,12 @@ namespace IronRain.SequenceSystem
     public sealed class FunnelExpandSequence : ISequence
     {
         private EnemyManager _enemyManager;
+        private RadarMap _radarMap;
         
         public void SetData(SequenceData data)
         {
             _enemyManager = data.EnemyManager;
+            _radarMap = data.RadarMap;
         }
 
         public UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)

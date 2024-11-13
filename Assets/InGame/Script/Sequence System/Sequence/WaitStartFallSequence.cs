@@ -13,15 +13,15 @@ namespace IronRain.SequenceSystem
         public void SetData(SequenceData data)
         {
             _playerController = data.PlayerController;
-            _raderMap = data.RaderMap;
+            _raderMap = data.RadarMap;
         }
 
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             // UIの処理をする
-            _raderMap.StartPurgeSequence();
+            //_raderMap.StartPurgeSequence();
             await _playerController.SeachState<PlayerStoryEvent>().StartFall();
-            _raderMap.EndPurgeSequence();
+            //_raderMap.EndPurgeSequence();
         }
 
         public void Skip() { }
