@@ -5,6 +5,7 @@ using IronRain.Player;
 
 namespace IronRain.SequenceSystem
 {
+    // ボス戦のスタート処理
     public sealed class BossStartSequence : ISequence
     {
         private SequenceData _data;
