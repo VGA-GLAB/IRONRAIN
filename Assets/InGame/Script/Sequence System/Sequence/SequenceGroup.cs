@@ -33,7 +33,6 @@ namespace IronRain.SequenceSystem
             if (_isSkip)
             {
                 Skip();
-
                 await UniTask.CompletedTask;
             }
             else
@@ -42,14 +41,13 @@ namespace IronRain.SequenceSystem
                 {
                     try
                     {
-                        Debug.Log("SequenceChange " + i.ToString());
-                        var index = i;
+                        Debug.Log($"SequenceChange {i}");
                         await _sequences[i]
-                            .PlayAsync(ct, exceptionHandler + (x => ExceptionReceiver(x, index)));
+                            .PlayAsync(ct, exceptionHandler + (ex => ExceptionReceiver(ex, i)));
                     }
                     catch (Exception e) when (e is not OperationCanceledException)
                     {
-                        ExceptionReceiver(e, i);
+                        exceptionHandler?.Invoke(e);
                     }
                 }
             }
@@ -59,11 +57,11 @@ namespace IronRain.SequenceSystem
         {
             if (e is OperationCanceledException)
             {
+                // キャンセル例外は無視
                 return;
             }
 
-            Debug.LogError($"{_groupName}の Element{index}");
-            throw e;
+            Debug.LogError($"{_groupName}の Element{index}でエラーが発生 : {e.Message}");
         }
 
         public void Skip()

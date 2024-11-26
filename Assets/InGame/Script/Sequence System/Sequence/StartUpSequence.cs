@@ -30,18 +30,17 @@ namespace IronRain.SequenceSystem
         [SerializeField] private MoveTargetSequence _moveOutside;
         
         
-        private SequenceData _data;
+        //private SequenceData _data;
         
-        public void SetParams(float totalSec, int eventNum)
-        {
-            _totalSec = totalSec;
-            _eventNum = eventNum;
-        }
+        // public void SetParams(float totalSec, int eventNum)
+        // {
+        //     _totalSec = totalSec;
+        //     _eventNum = eventNum;
+        // }
 
         public void SetData(SequenceData data)
         {
-            _data = data;
-            
+            //_data = data;
             _waitToggleSequence.SetData(data);
             _monitorSequence.SetData(data);
             _openFirstDoor.SetData(data);
