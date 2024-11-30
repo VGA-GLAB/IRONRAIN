@@ -9,17 +9,18 @@ using System.Threading;
 
 namespace Enemy
 {
+    // 敵の行動を管理する
     public class EnemyManager : MonoBehaviour
     {
         // 登録されたボス。
         private BossController _boss;
         // 登録された敵。
-        private HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
+        private HashSet<EnemyController> _enemies = new();
         // 登録されたNPC。
-        private HashSet<BuddyNpcController> _npcs = new HashSet<BuddyNpcController>();
+        private HashSet<BuddyNpcController> _npcs = new();
         // 登録された敵に対して命令。
         // 命令の処理を呼び出す度に書き換えて使いまわす。
-        private EnemyOrder _order = new EnemyOrder();
+        private EnemyOrder _order = new();
 
         private void Awake()
         {
@@ -84,14 +85,14 @@ namespace Enemy
             return enemies.Count > 0;
         }
 
-        /// <summary>
-        /// シーン上に存在する敵の数を返す。
-        /// 生存中の個体のみ、死亡している場合はカウントされない。
-        /// </summary>
-        public int EnemyCount()
-        {
-            return _enemies.Where(e => e.BlackBoard.IsAlive).Count();
-        }
+        // /// <summary>
+        // /// シーン上に存在する敵の数を返す。
+        // /// 生存中の個体のみ、死亡している場合はカウントされない。
+        // /// </summary>
+        // public int EnemyCount()
+        // {
+        //     return _enemies.Where(e => e.BlackBoard.IsAlive).Count();
+        // }
 
         /// <summary>
         /// 引数で指定したシーケンスに登場する敵が全員死亡しているかを判定する。

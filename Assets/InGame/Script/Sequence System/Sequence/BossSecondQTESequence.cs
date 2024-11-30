@@ -17,7 +17,6 @@ namespace IronRain.SequenceSystem
         public async UniTask PlayAsync(CancellationToken ct, Action<Exception> exceptionHandler = null)
         {
             //_data.EnemyManager.BossSecondQte();
-            
             await _data.PlayerController.SeachState<PlayerQTE>().QTEModel.StartQTE(Guid.Empty, QteType.BossQte2);
         }
 

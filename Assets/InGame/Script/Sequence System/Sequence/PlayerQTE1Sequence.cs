@@ -54,8 +54,6 @@ namespace IronRain.SequenceSystem
             await qteModel.BossQte1Callseparately(_qteType, qteCts.Token);
         }
 
-        public override void Skip()
-        {
-        }
+        public override void Skip() { }
     }
 }

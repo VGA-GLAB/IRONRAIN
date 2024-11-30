@@ -21,8 +21,6 @@ namespace IronRain.SequenceSystem
             await _data.PlayerController.SeachState<PlayerQTE>().QTEModel.StartQTE(Guid.Empty, QteType.BossQte1);
         }
 
-        public void Skip()
-        {
-        }
+        public void Skip() { }
     }
 }

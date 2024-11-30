@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace IronRain.SequenceSystem
 {
+    // シーケンスの管理　スキップの処理　例外処理　デバッグロジックを管理
     public class SequencePlayer : MonoBehaviour
     {
         private enum Sequence
@@ -54,53 +55,59 @@ namespace IronRain.SequenceSystem
         }
 
         public void Play() => PlayAsync(this.GetCancellationTokenOnDestroy()).Forget();
-        
-        public async UniTask PlayAsync(CancellationToken ct)
+
+        private async UniTask PlayAsync(CancellationToken ct)
         {
-            var sequences = _manager.GetSequences();
-
-            // スキップする際にそのSequenceがあるか、そしてそのSequenceのインデックスを取得する
-            int startIndex = 0;
-
-            foreach (var seq in sequences)
+            if (_sequences == null || _sequences.Length == 0)
             {
-                if (seq is SequenceGroup group && group.GroupName == _startSequence.ToString())
-                {
-                    break;
-                }
-
-                startIndex++;
+                Debug.LogWarning("シーケンスが存在しません。シーケンスを確認してください");
+                return;
             }
 
-            if (startIndex >= sequences.Length)
-            {
-                startIndex = 0;
-            }
+            // スキップ開始インデックスを計算
+            int startIndex = GetStartIndex();
+
             
-            for (int i = 0; i < sequences.Length; i++)
+            for (int i = 0; i < _sequences.Length; i++)
             {
-                _currentSequence = sequences[i];
+                _currentSequence = _sequences[i];
+                Debug.Log($"[{i}/{_sequences.Length}] シーケンス開始: {_currentSequence.GetType().Name}");
                 
                 try
                 {
                     if (_isSkip && i < startIndex)
                     {
+                        Debug.Log($"シーケンスをスキップ: {_currentSequence.GetType().Name}");
                         _currentSequence.Skip();
                     }
                     else
                     {
-                        await _currentSequence.PlayAsync(ct, x =>ExceptionReceiver(x, i));
+                        await _currentSequence.PlayAsync(ct, ex =>ExceptionReceiver(ex, i));
                     }
                 }
-                catch (OperationCanceledException e)
+                catch (OperationCanceledException)
                 {
-                    Debug.Log("Canceled");
+                    Debug.LogWarning("シーケンスがキャンセルされました。");
                 }
-                catch (Exception e)// when (e is not OperationCanceledException)
+                catch (Exception e)
                 {
                     ExceptionReceiver(e, i);
                 }
             }
+        }
+
+        private int GetStartIndex()
+        {
+            // スタートシーケンス名に対応するインデックスを探す
+            for (int i = 0; i < _sequences.Length; i++)
+            {
+                if (_sequences[i] is SequenceGroup group && group.GroupName == _startSequence.ToString())
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
         private void ExceptionReceiver(Exception e, int index)
@@ -110,7 +117,7 @@ namespace IronRain.SequenceSystem
                 return;
             }
 
-            Debug.LogError($"Sequence Element{index}でエラー" + e);
+            Debug.LogError($"シーケンス {index} でエラーが発生しています: {e.GetType().Name} - {e.Message}\n{e.StackTrace}");
             throw e;
         }
     }
