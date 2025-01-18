@@ -1,11 +1,14 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>ドローンの挙動</summary>
 public class DroneMove : MonoBehaviour
 {
-    [SerializeField, Header("最大目標地点")] private Vector3 maxTargetPosition;
-    [SerializeField, Header("最小目標地点")] private Vector3 minTargetPosition;
+    [SerializeField, Header("X座標の最大値")] private float maxValueX;
+    [SerializeField, Header("X座標の最小値")] private float minValueX;
+    [SerializeField, Header("Y座標の最大値")] private float maxValueY;
+    [SerializeField, Header("Y座標の最小値")] private float minValueY;
     [SerializeField, Header("タイプ")] private DroneType type;
     [SerializeField, Header("移動速度")] private float moveSpeed;
     
@@ -13,12 +16,12 @@ public class DroneMove : MonoBehaviour
     
     private enum DroneType
     {
-        Horizontal, Vertical, Crossing
+        Random, Crossing, Turning
     }
 
     private void Start()
     {
-        _targetPosition = maxTargetPosition;
+        _targetPosition = GetRandomTargetPosition();
     }
 
     private void Update()
@@ -30,37 +33,37 @@ public class DroneMove : MonoBehaviour
     {
         Action moveAction = type switch
         {
-            DroneType.Horizontal => HorizontalMove,
-            DroneType.Vertical => VerticalMove,
+            DroneType.Random => RandomMove,
             DroneType.Crossing => CrossingMove,
+            DroneType.Turning => TurningMove,
             _ => throw new NotSupportedException("Invalid Drone Type")
         };
         
         moveAction.Invoke();
     }
 
-    private void HorizontalMove()
+    private void RandomMove()
     {
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, _targetPosition, moveSpeed * Time.deltaTime);
         
         if (Vector3.Distance(transform.localPosition, _targetPosition) < 0.01f)
         {
-            _targetPosition = (_targetPosition == maxTargetPosition) ? minTargetPosition : maxTargetPosition;
-        }
-    }
-
-    private void VerticalMove()
-    {
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, _targetPosition, moveSpeed * Time.deltaTime);
-        
-        if (Vector3.Distance(transform.localPosition, _targetPosition) < 0.01f)
-        {
-            _targetPosition = (_targetPosition == maxTargetPosition) ? minTargetPosition : maxTargetPosition;
+            _targetPosition = GetRandomTargetPosition();
         }
     }
 
     private void CrossingMove()
     {
         
+    }
+
+    private void TurningMove()
+    {
+        
+    }
+
+    private Vector3 GetRandomTargetPosition()
+    {
+        return new Vector3(Random.Range(minValueX, maxValueX), Random.Range(minValueY, maxValueY), 0);
     }
 }
