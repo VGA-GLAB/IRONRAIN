@@ -11,17 +11,22 @@ public class DroneMove : MonoBehaviour
     [SerializeField, Header("Y座標の最小値")] private float minValueY;
     [SerializeField, Header("タイプ")] private DroneType type;
     [SerializeField, Header("移動速度")] private float moveSpeed;
+    [SerializeField, Header("ボスの位置")] private Transform boss;
+    [SerializeField, Header("オフセット")] private Vector3 offset;
     
     private Vector3 _targetPosition;
+    private float _angle;
+    private Quaternion _initialRotation;
     
     private enum DroneType
     {
-        Random, Crossing, Turning
+        Random, Turning
     }
 
     private void Start()
     {
         _targetPosition = GetRandomTargetPosition();
+        _initialRotation = transform.rotation;
     }
 
     private void Update()
@@ -34,7 +39,6 @@ public class DroneMove : MonoBehaviour
         Action moveAction = type switch
         {
             DroneType.Random => RandomMove,
-            DroneType.Crossing => CrossingMove,
             DroneType.Turning => TurningMove,
             _ => throw new NotSupportedException("Invalid Drone Type")
         };
@@ -52,14 +56,11 @@ public class DroneMove : MonoBehaviour
         }
     }
 
-    private void CrossingMove()
-    {
-        
-    }
-
     private void TurningMove()
     {
-        
+        _angle += moveSpeed * Time.deltaTime;
+        offset = Quaternion.Euler(0f, _angle, 0f) * offset;
+        transform.position = boss.position + offset;
     }
 
     private Vector3 GetRandomTargetPosition()
