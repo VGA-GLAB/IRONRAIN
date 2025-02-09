@@ -1,24 +1,27 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CheckPoint : MonoBehaviour
 {
-    [FormerlySerializedAs("_buildingTest")] [SerializeField] private Building _building;
-    
+   [SerializeField] private Building _building;
+   [SerializeField] private GameObject _effect;
+
     private bool _isChecked;
+    private ParticleSystem _particleSystem;
 
     private void Start()
     {
         _isChecked = false;
+        _particleSystem = _effect.GetComponent<ParticleSystem>();
     }
+
     // コライダーにぶつかった時にビルのAnimationを実行する
     private void OnTriggerEnter(Collider other)
     {
-        if(_isChecked)
+        if (_isChecked || !other.CompareTag("Player"))
             return;
-        
+
+        _particleSystem.Play();
         _building.StartBuildingAnimation();
-        Debug.Log("チェックポイントを通過");
         _isChecked = true;
     }
 }

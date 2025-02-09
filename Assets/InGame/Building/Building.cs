@@ -1,61 +1,59 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
-// 建物を破壊するサンプルクラス
 public class Building : MonoBehaviour
 {
-    // ToDo : アタッチされた時に同時に回転を設定できるようにしたい
-    [SerializeField] private GameObject _buildingPrefab;
     [SerializeField] private GameObject _buildingTower;
-    [SerializeField] private float _collisionTimer;
-    [SerializeField] private float _fallTime;
-    [SerializeField] private float _power;
+    [SerializeField,Header("倒れるまでの時間")] private float _fallTime;
+    [SerializeField,Header("加える力の量")] private float _power;
+    [SerializeField,Header("建物が倒れてから消える時間")] private float _destroyTime;
     
     private Rigidbody _rb;
-    
-
-    // タイマーが0になったときのイベント
-    private Action _onTimerZero;
-    
-    private void OnDisable()
-    {
-        _onTimerZero -= AddForce;
-    }
 
     private void Awake()
     {
         Initialize();
     }
     
+    // ctsを発行する必要もないのでUnityのメソッドを使用
+    // これによりUnityが勝手に中断処理を行ってくれる
     public void StartBuildingAnimation()
     {
-        _onTimerZero += AddForce;
-        StartCoroutine(TimerCoroutine());
+        StartCoroutine(FallBuildingCoroutine());
+        Debug.Log("aaa");
     }
 
     private void Initialize()
     {
         _rb = _buildingTower.GetComponent<Rigidbody>();
+        _rb.isKinematic = true;
     }
 
-    // ctsを発行する必要もないのでUnityのメソッドを使用
-    // これによりUnityが勝手に中断処理を行ってくれる
-    private IEnumerator TimerCoroutine()
+    private IEnumerator FallBuildingCoroutine()
     {
-        while (_collisionTimer > 0)
+        Debug.Log("bbb");
+        // 物理演算を有効化
+        _rb.isKinematic = false;
+        // 回転摩擦を低めに設定
+        _rb.angularDrag = 0.1f; 
+
+        // 重心を下げる
+        _rb.centerOfMass = new Vector3(0, -1f, 0);
+
+        // 経過時間
+        float elapsed = 0f;
+
+        while (elapsed < _fallTime)
         {
-            yield return new WaitForSeconds(Time.deltaTime);
-            _collisionTimer -= Time.deltaTime;
+            // 時間経過に応じてトルクを加える
+            float torqueForce = Mathf.Lerp(0, _power, elapsed / _fallTime);
+            // 瞬間的な力を加える
+            _rb.AddTorque(Vector3.forward * torqueForce, ForceMode.Impulse); 
+
+            elapsed += Time.deltaTime;
+            yield return null;
         }
         
-        Debug.Log("タイマーが0になりました");
-        _onTimerZero?.Invoke();
-    }
-
-    private void AddForce()
-    {
-        Debug.Log("力を加えた");
-        _rb.AddForce(_buildingTower.transform.right * _power);
+        Destroy(gameObject,_destroyTime);
     }
 }
