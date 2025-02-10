@@ -7,19 +7,17 @@ using UnityEngine.Pool;
 public class LockOnIcon : MonoBehaviour
 {
     [SerializeField] private LockOn _lockOn; // ロックオン機能
-    [SerializeField] private GameObject _playerWeponContoller;
     [SerializeField] private LockOnIconView _iconPrefab; // ロックオンアイコンのプレハブ
-
+    
     private PlayerWeaponController _playerWeapon;
     private IObjectPool<LockOnIconView> _iconPool; //ロックオンアイコンのオブジェクトプール
     private List<LockOnIconView> _activeIcons = new List<LockOnIconView>(); // アクティブなアイコンリスト
-    private LockOnType _currentLockOnType = LockOnType.LockOn; // 現在のロックオンモード
     private ReactiveProperty<Transform > _currentTarget = new ReactiveProperty<Transform>(); // 現在ロックオン中のターゲット
 
     private void Start()
     {
-        _playerWeapon = _playerWeponContoller.GetComponent<PlayerWeaponController>();
-        _playerWeapon.WeaponModel.OnWeaponChange += HandleWeaponChange; // 武器切り替え時のイベントを購読
+        //_playerWeapon = _playerWeponContoller.GetComponent<PlayerWeaponController>();
+        //_playerWeapon.WeaponModel.OnWeaponChange += HandleWeaponChange; // 武器切り替え時のイベントを購読
 
         // オブジェクトプールの初期化
         _iconPool = new ObjectPool<LockOnIconView>(
@@ -50,12 +48,62 @@ public class LockOnIcon : MonoBehaviour
         //ターゲットが変更されたときにアイコンの更新処理を呼び出す
         _currentTarget.Subscribe(_ => UpdateLockOnIcons()).AddTo(this); 
     }
-
-    private void OnDestroy()
+    
+    /// <summary>
+    /// ロックオンアイコンを更新する
+    /// </summary>
+    private void UpdateLockOnIcons()
     {
-        _playerWeapon.WeaponModel.OnWeaponChange -= HandleWeaponChange; // 購読解除
+        if (_lockOn.GetRockEnemy != null)
+        {
+            Transform target = _lockOn.GetRockEnemy.transform;
+            
+            ReleaseLockOnIcons();
+            
+            // プールから取り出す
+            LockOnIconView icon = _iconPool.Get();
+            _activeIcons.Add(icon);
+            
+            // アイコンの座標をセットする
+            icon.transform.SetParent(target);
+            icon.transform.localPosition = Vector3.zero;
+            icon.transform.localScale = Vector3.one;
+            
+            icon.Initialize();
+            
+            // 敵死亡時のイベントを購読
+            icon.OnRelease += ReleaseLockOnIcons;
+        }
     }
 
+    /// <summary>
+    /// 敵死亡時にアイコンをプールに戻す処理
+    /// </summary>
+    private void ReleaseLockOnIcons(LockOnIconView icon)
+    {
+        _iconPool.Release(icon);
+        _activeIcons.Remove(icon);
+        icon.OnRelease -= ReleaseLockOnIcons; // 敵死亡時のイベント購読解除
+    }
+
+    /// <summary>
+    /// 表示中の全てのアイコンをプールに戻す処理
+    /// </summary>
+    private void ReleaseLockOnIcons()
+    {
+        foreach (var icon in _activeIcons)
+        {
+            _iconPool.Release(icon);
+            icon.OnRelease -= ReleaseLockOnIcons; // 敵死亡時のイベント購読解除
+        }
+        _activeIcons.Clear();
+    }
+    
+    /*
+    ロックオンモード切り替え用
+     
+    [SerializeField] private GameObject _playerWeponContoller;
+    
     /// <summary>
     /// 武器が変更されたときロックオンモードを変更する
     /// </summary>
@@ -77,65 +125,9 @@ public class LockOnIcon : MonoBehaviour
         UpdateLockOnIcons(); //アイコン表示を更新する
     }
     
-    /// <summary>
-    /// ロックオンアイコンを更新する
-    /// </summary>
-    private void UpdateLockOnIcons()
+    private void OnDestroy()
     {
-        if (_lockOn.GetRockEnemy != null)
-        {
-            Transform target = _lockOn.GetRockEnemy.transform;
-            
-            // ロックオンモードが正面限定の場合、アイコンを1つに保つためリセット処理を行う
-            if (_currentLockOnType == LockOnType.FrontOnly)
-            {
-                ReleaseLockOnIcons();
-            }
-            
-            // 既にターゲットに対応するアイコンがある場合、以降の処理は行わない
-            if (_activeIcons.Exists(icon => icon.transform.parent == target))
-            {
-                Debug.Log($"ターゲット {target.name} には既にロックオンアイコンが表示されています");
-                return;
-            }
-            
-            // プールから取り出す
-            LockOnIconView icon = _iconPool.Get();
-            _activeIcons.Add(icon);
-            
-            // アイコンの座標をセットする
-            icon.transform.SetParent(target);
-            icon.transform.localPosition = Vector3.zero;
-            icon.transform.localScale = Vector3.one;
-            
-            icon.Initialize();
-            
-            // 敵死亡時のイベントを購読
-            icon.OnEnemyBroken += ReleaseLockOnIcons;
-        }
+        //_playerWeapon.WeaponModel.OnWeaponChange -= HandleWeaponChange; // 購読解除
     }
-
-    /// <summary>
-    /// 敵死亡時にアイコンをプールに戻す処理
-    /// </summary>
-    private void ReleaseLockOnIcons(LockOnIconView icon)
-    {
-        Debug.Log("死亡時のイベント");
-        _iconPool.Release(icon);
-        _activeIcons.Remove(icon);
-        icon.OnEnemyBroken -= ReleaseLockOnIcons; // 敵死亡時のイベント購読解除
-    }
-
-    /// <summary>
-    /// 表示中の全てのアイコンをプールに戻す処理
-    /// </summary>
-    private void ReleaseLockOnIcons()
-    {
-        foreach (var icon in _activeIcons)
-        {
-            _iconPool.Release(icon);
-            icon.OnEnemyBroken -= ReleaseLockOnIcons; // 敵死亡時のイベント購読解除
-        }
-        _activeIcons.Clear();
-    }
+    */
 }
