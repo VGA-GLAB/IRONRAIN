@@ -1,70 +1,34 @@
+using System;
+using Enemy;
+using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LockOnIconView : MonoBehaviour
 {
-    [SerializeField] private RectTransform _canvasRect;
     [SerializeField] private Sprite _lockOnIcon; // ロックオンアイコンのスプライト
     [SerializeField] private Image _icon;
-    private Transform _target; //ターゲットのTranscorm
+    public event Action<LockOnIconView> OnEnemyBroken; //敵が死亡した時に発火するイベント
     
-    private void Start()
-    {
-        _icon.sprite = _lockOnIcon;
-        Debug.Log($"{gameObject.name} 初期化完了");
-    }
+    private EnemyController _enemyController;
+    private IDisposable _enemySubscription;
     
-    private void Update()
+    public void Initialize()
     {
-        if (_target != null)
-        {
-            SetTargetPosition();
-        }
-    }
-    
-    /// <summary>
-    /// ターゲットを設定する
-    /// </summary>
-    public void SetTarget(Transform target)
-    {
-        _target = target;
-        SetTargetPosition();
-        Show();
-    }
+        _icon.sprite = _lockOnIcon; // スプライトを書き換える
+        _enemyController = GetComponentInParent<EnemyController>();
 
-    /// <summary>
-    /// 位置を変更する
-    /// </summary>
-    public void SetTargetPosition()
-    {
-        if (_target == null) return;
-
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(_target.position);
-        if (screenPos.z > 0) // カメラの後ろにいる場合は無視
-        {
-            RectTransformUtility.ScreenPointToWorldPointInRectangle(_canvasRect, screenPos, Camera.main, out Vector3 worldPos);
-            transform.position = worldPos;
-        }
-        else
-        {
-            Hide();
-        }
-    }
-    
-    /// <summary>
-    /// ロックオンアイコンを表示する
-    /// </summary>
-    private void Show()
-    {
-        _icon.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// ロックオンアイコンを非表示にする
-    /// </summary>
-    public void Hide()
-    {
-        _icon.gameObject.SetActive(false);
+        _enemySubscription?.Dispose();
+        
+        // 敵が死亡したタイミングでアイコンをプールに戻すための処理
+        _enemySubscription = Observable.EveryUpdate()
+            .Where(_ => !_enemyController.BlackBoard.IsAlive) 
+            .Take(1)
+            .Subscribe(_ =>
+            {
+                OnEnemyBroken?.Invoke(this); // 敵が死亡した時のイベントを発火
+                _enemySubscription.Dispose(); // 以降購読は不要なので解除しておく
+            })
+            .AddTo(this);
     }
 }
