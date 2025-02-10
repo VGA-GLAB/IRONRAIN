@@ -13,91 +13,84 @@ public class LockOnIconView : MonoBehaviour
     [SerializeField] private Vector3 _offset = new Vector3(0, 4.25f, -2.5f); // 通常エネミー/ボス用のオフセット
     [SerializeField] private Vector3 _funnelOffset = new Vector3(0, -0.88f, -2f); // ファンネル用のオフセット
     public event Action<LockOnIconView> OnRelease; // 照準UIを非表示にするイベント
+    private IDisposable _enemySubscription;
     
     private Enemy.BlackBoard _enemyBlackBoard;
     private Enemy.Boss.BlackBoard _bossBlackBoard;
     private Enemy.Funnel.BlackBoard _funnelBlackBoard;
-    private IDisposable _enemySubscription;
     
     public void Initialize()
     {
         _icon.sprite = _lockOnIcon; // スプライトを書き換える
-        
-        _enemyBlackBoard = GetComponentInParent<EnemyController>()?.BlackBoard as Enemy.BlackBoard;
+        IdentifyEnemyType();
+    }
+    
+    /// <summary>
+    /// 敵の種類を判断してアイコンの位置の書き換えとイベント発火のタイミングを設定する
+    /// </summary>
+    private void IdentifyEnemyType()
+    {
+        // 親オブジェクトからコンポーネントを取得する
+        var enemyController = GetComponentInParent<EnemyController>();
+        var bossController = enemyController == null ? GetComponentInParent<BossController>() : null;
+        var funnelController = (enemyController == null && bossController == null) ? GetComponentInParent<FunnelController>() : null;
 
-        if (_enemyBlackBoard != null)
+        if (enemyController != null)
         {
-            _icon.rectTransform.localPosition = _offset;
-            NormalEnemy(); // 通常エネミーの処理
+            // 通常エネミーは死亡した時にイベント発火するように設定
+            _enemyBlackBoard = enemyController.BlackBoard as Enemy.BlackBoard;
+            SetIconPositionAndScale(_offset, Vector3.one);
+            SubscribeToEnemyState(() => !_enemyBlackBoard.IsAlive);
         }
-        else
+        else if (bossController != null)
         {
-            _bossBlackBoard = GetComponentInParent<BossController>()?.BlackBoard as Enemy.Boss.BlackBoard;
-
-            if (_bossBlackBoard != null)
-            {
-                _icon.rectTransform.localPosition = _offset;
-                Boss(); // ボスの処理
-            }
-            else
-            {
-                _icon.rectTransform.localPosition = _funnelOffset;
-                transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-                Funnel();
-            }
+            // ボスはQTEが始まったタイミングでイベント発火するように設定
+            _bossBlackBoard = bossController.BlackBoard as Enemy.Boss.BlackBoard;
+            SetIconPositionAndScale(_offset, Vector3.one);
+            SubscribeToEnemyState(() => _bossBlackBoard.IsQteStarted);
         }
+        else if (funnelController != null)
+        {
+            // ファンネルは小さいので特別に位置と拡大率を変更した後、死亡した時にイベント発火するように設定
+            _funnelBlackBoard = funnelController.Perception.Ref.BlackBoard;
+            SetIconPositionAndScale(_funnelOffset, new Vector3(0.4f, 0.4f, 0.4f));
+            SubscribeToEnemyState(() => !_funnelBlackBoard.IsAlive);
+        }
+    }
+    
+    /// <summary>
+    /// アイコンのオフセットとスケールを変更する
+    /// </summary>
+    private void SetIconPositionAndScale(Vector3 position, Vector3 scale)
+    {
+        _icon.rectTransform.localPosition = position;
+        transform.localScale = scale;
     }
 
     /// <summary>
-    /// 通常エネミー（アサルト/バズーカ/盾）の照準UIの管理
+    /// エネミーの状態を監視して登録されているタイミングでUIを非表示にするためのイベントを発火
     /// </summary>
-    private void NormalEnemy()
+    private void SubscribeToEnemyState(Func<bool> condition)
     {
-        _enemySubscription?.Dispose();
+        DisposeSubscription();
         
-        // 敵が死亡したタイミングでアイコンをプールに戻すための処理
         _enemySubscription = Observable.EveryUpdate()
-            .Where(_ => !_enemyBlackBoard.IsAlive) 
+            .Where(_ => condition())
             .Take(1)
             .Subscribe(_ =>
             {
                 OnRelease?.Invoke(this);
-                _enemySubscription.Dispose(); // 以降購読は不要なので解除しておく
+                DisposeSubscription();
             })
             .AddTo(this);
     }
-
-    private void Boss()
+    
+    /// <summary>
+    /// 購読をリセットする
+    /// </summary>
+    private void DisposeSubscription()
     {
         _enemySubscription?.Dispose();
-        
-        // QTEが開始されたタイミングで
-        _enemySubscription = Observable.EveryUpdate()
-            .Where(_ => _bossBlackBoard.IsQteStarted) 
-            .Take(1)
-            .Subscribe(_ =>
-            {
-                OnRelease?.Invoke(this);
-                _enemySubscription.Dispose(); // 以降購読は不要なので解除しておく
-            })
-            .AddTo(this);
-    }
-
-    private void Funnel()
-    {
-        _funnelBlackBoard = GetComponentInParent<FunnelController>()?.Perception.Ref.BlackBoard;
-        
-        _enemySubscription?.Dispose();
-        
-        // 敵が死亡したタイミングでアイコンをプールに戻すための処理
-        _enemySubscription = Observable.EveryUpdate()
-            .Where(_ => !_funnelBlackBoard.IsAlive) 
-            .Take(1)
-            .Subscribe(_ =>
-            {
-                OnRelease?.Invoke(this);
-                _enemySubscription.Dispose(); // 以降購読は不要なので解除しておく
-            })
-            .AddTo(this);
+        _enemySubscription = null;
     }
 }

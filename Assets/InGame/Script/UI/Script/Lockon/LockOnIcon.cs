@@ -9,17 +9,21 @@ public class LockOnIcon : MonoBehaviour
     [SerializeField] private LockOn _lockOn; // ロックオン機能
     [SerializeField] private LockOnIconView _iconPrefab; // ロックオンアイコンのプレハブ
     
-    private PlayerWeaponController _playerWeapon;
     private IObjectPool<LockOnIconView> _iconPool; //ロックオンアイコンのオブジェクトプール
     private List<LockOnIconView> _activeIcons = new List<LockOnIconView>(); // アクティブなアイコンリスト
     private ReactiveProperty<Transform > _currentTarget = new ReactiveProperty<Transform>(); // 現在ロックオン中のターゲット
 
     private void Start()
     {
-        //_playerWeapon = _playerWeponContoller.GetComponent<PlayerWeaponController>();
-        //_playerWeapon.WeaponModel.OnWeaponChange += HandleWeaponChange; // 武器切り替え時のイベントを購読
+        InitializePool();
+        SubscribeToTargetChanges();
+    }
 
-        // オブジェクトプールの初期化
+    /// <summary>
+    /// オブジェクトプールの初期化を行う
+    /// </summary>
+    private void InitializePool()
+    {
         _iconPool = new ObjectPool<LockOnIconView>(
             createFunc: () => Instantiate(_iconPrefab, transform), //子オブジェクトに追加
             actionOnGet: icon => icon.gameObject.SetActive(true),
@@ -33,22 +37,23 @@ public class LockOnIcon : MonoBehaviour
             defaultCapacity: 3, // 初期サイズ
             maxSize: 10 // 最大サイズ
         );
-        
-        Observable
-            .EveryUpdate()
-            .Subscribe(_ =>
-            {
-                if (_lockOn.GetRockEnemy != null)
-                {
-                    _currentTarget.Value = _lockOn.GetRockEnemy.transform;
-                }
-            })
-            .AddTo(this);
-        
-        //ターゲットが変更されたときにアイコンの更新処理を呼び出す
-        _currentTarget.Subscribe(_ => UpdateLockOnIcons()).AddTo(this); 
     }
     
+    /// <summary>
+    /// ターゲット変更を監視・変更時の処理の購読を行う
+    /// </summary>
+    private void SubscribeToTargetChanges()
+    {
+        Observable
+            .EveryUpdate()
+            .Where(_ => _lockOn.GetRockEnemy != null)
+            .Subscribe(_ => _currentTarget.Value = _lockOn.GetRockEnemy.transform)
+            .AddTo(this);
+
+        //ターゲットが変更されたときにアイコンの更新処理を呼び出す
+        _currentTarget.Subscribe(_ => UpdateLockOnIcons()).AddTo(this);
+    }
+
     /// <summary>
     /// ロックオンアイコンを更新する
     /// </summary>
@@ -98,36 +103,4 @@ public class LockOnIcon : MonoBehaviour
         }
         _activeIcons.Clear();
     }
-    
-    /*
-    ロックオンモード切り替え用
-     
-    [SerializeField] private GameObject _playerWeponContoller;
-    
-    /// <summary>
-    /// 武器が変更されたときロックオンモードを変更する
-    /// </summary>
-    private void HandleWeaponChange()
-    {
-        switch (_playerWeapon.WeaponModel.CurrentWeapon.WeaponParam.WeaponType)
-        {
-            case PlayerWeaponType.AssaultRifle:
-                _currentLockOnType = LockOnType.FrontOnly; //アサルトライフルは正面限定
-                break;
-            case PlayerWeaponType.RocketLauncher:
-                _currentLockOnType = LockOnType.LockOn; //バズーカはロックオン中の敵
-                break;
-            default:
-                Debug.LogWarning($"登録されていない武器種です。ロックオンのモードが変更できません");
-                break;
-        }
-        
-        UpdateLockOnIcons(); //アイコン表示を更新する
-    }
-    
-    private void OnDestroy()
-    {
-        //_playerWeapon.WeaponModel.OnWeaponChange -= HandleWeaponChange; // 購読解除
-    }
-    */
 }
