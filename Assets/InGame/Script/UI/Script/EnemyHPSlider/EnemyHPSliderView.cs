@@ -17,14 +17,25 @@ public class EnemyHPSliderView : MonoBehaviour
     {
         _bb = bb;
         _enemyMaxHp = maxHp;
+        
         // スライダーの値を変更する
         _slider.fillAmount = (float)_bb.Hp / _enemyMaxHp;
         
+        gameObject.SetActive(true);
     }
 
     private void Update()
     {
-        _slider.fillAmount = (float)_bb.Hp / _enemyMaxHp;
-        Debug.Log(_bb?.Hp);
+        if(_bb == null) return; // 黒板がnullなら処理を行わない
+
+        if (!_bb.IsAlive) // 敵が死んだタイミングで非表示にして、黒板の参照をやめる
+        {
+            _bb = null;
+            gameObject.SetActive(false);
+            return;
+        }
+        
+        float fillAmount = (float)_bb.Hp / _enemyMaxHp; // 0.0 ～ 1.0
+        _slider.fillAmount = 0.2f + (fillAmount * 0.8f); // 画像に合わせて 0.2 ～ 1.0 にスケール
     }
 }
