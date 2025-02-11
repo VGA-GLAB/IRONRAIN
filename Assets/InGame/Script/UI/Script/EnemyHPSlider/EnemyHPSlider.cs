@@ -20,14 +20,15 @@ public class EnemyHPSlider : MonoBehaviour
     /// </summary>
     private void SubscribeToTargetChanges()
     {
-        Observable
-            .EveryUpdate()
-            .Where(_ => _lockOn.GetRockEnemy != null)
-            .Subscribe(_ => _currentTarget.Value = _lockOn.GetRockEnemy.transform)
+        _lockOn
+            .ObserveEveryValueChanged(lockOn => lockOn.GetRockEnemy)
+            .Subscribe(enemy => _currentTarget.Value = enemy?.transform)
             .AddTo(this);
 
         //ターゲットが変更されたときにアイコンの更新処理を呼び出す
-        _currentTarget.Subscribe(_ => UpdateLockOnIcons()).AddTo(this);
+        _currentTarget
+            .Subscribe(_ => UpdateLockOnIcons())
+            .AddTo(this);
     }
 
     /// <summary>
@@ -35,33 +36,60 @@ public class EnemyHPSlider : MonoBehaviour
     /// </summary>
     private void UpdateLockOnIcons()
     {
-        if(_lockOn.GetRockEnemy == null) return;
+        // ロックオン中の敵がいない場合、スライダーを非表示に。以降の処理は行わない
+        if (_lockOn.GetRockEnemy == null)
+        {
+            _view.gameObject.SetActive(false);
+            return;
+        }
         
-        // スライダーの操作を行う
-        _view.transform.SetParent(_lockOn.GetRockEnemy.transform);
+        SetViewParent(_lockOn.GetRockEnemy.transform); // スライダーオブジェクトを操作する
+        
+        // ロックオン中の敵が通常エネミーかファンネルなら、HPスライダーを設定してtrueを返す
+        if (TrySetEnemy() || TrySetFunnel()) return;
+        
+        _view.gameObject.SetActive(false); // その他（ボス）はスライダーを非表示にする
+    }
+    
+    /// <summary>
+    /// スライダーオブジェクトをターゲットの子オブジェクトに追加
+    /// </summary>
+    private void SetViewParent(Transform parent)
+    {
+        _view.transform.SetParent(parent);
         _view.transform.localPosition = Vector3.zero;
         _view.transform.localRotation = Quaternion.identity;
-        
-        // 対象の黒板と最大HPを取得する
-        
+    }
+
+    /// <summary>
+    /// 通常エネミーのHPスライダーを設定
+    /// </summary>
+    private bool TrySetEnemy()
+    {
         if (_lockOn.GetRockEnemy.TryGetComponent(out EnemyController enemyController))
         {
-            // 通常エネミーの処理
             Enemy.BlackBoard enemyBB = enemyController.BlackBoard as Enemy.BlackBoard;
             EnemyParams enemyParam = _lockOn.GetRockEnemy.GetComponent<EnemyParams>();
             _view.Initialize(enemyBB, enemyParam.MaxHp); //スライダーの値をセットする
+            return true;
         }
-        else if (_lockOn.GetRockEnemy.TryGetComponent(out FunnelController funnelController))
+        
+        return false;
+    }
+
+    /// <summary>
+    /// ファンネルのHPスライダーを設定
+    /// </summary>
+    private bool TrySetFunnel()
+    {
+        if (_lockOn.GetRockEnemy.TryGetComponent(out FunnelController funnelController))
         {
-            // ファンネルの処理
             Enemy.Funnel.BlackBoard funnelBB = funnelController.Perception.Ref.BlackBoard;
             FunnelParams funnelParam = _lockOn.GetRockEnemy.GetComponent<FunnelParams>();
             _view.Initialize(funnelBB, funnelParam.MaxHp);
+            return true;
         }
-        else
-        {
-            // その他（ボス）はスライダーを非表示にする
-            _view.gameObject.SetActive(false);
-        }
+
+        return false;
     }
 }
