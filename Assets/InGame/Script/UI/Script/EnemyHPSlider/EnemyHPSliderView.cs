@@ -42,6 +42,8 @@ public class EnemyHPSliderView : MonoBehaviour
         }
         
         _slider.fillAmount = CalculateFillAmount(); // スライダーの値を設定
+        UpdateFillAmount();
+        
         gameObject.SetActive(true);
     }
     
