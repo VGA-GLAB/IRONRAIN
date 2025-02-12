@@ -48,7 +48,7 @@ namespace Enemy
         {
             PlayDamageSE();
             Hovering();
-            Move();
+            //Move();
             LeftRightMoveAnimation();
             ForwardBackMoveAnimation();
         }
