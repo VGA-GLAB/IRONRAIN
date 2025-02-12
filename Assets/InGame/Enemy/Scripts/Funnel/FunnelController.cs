@@ -13,6 +13,8 @@ namespace Enemy.Funnel
 
         private Perception _perception;
         private StateMachine _stateMachine;
+        
+        public Perception Perception => _perception;
 
         // ボスを登録するまで動かさないフラグ。
         private bool _isRegistered;
