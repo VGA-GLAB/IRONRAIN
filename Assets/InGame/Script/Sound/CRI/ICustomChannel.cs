@@ -67,4 +67,7 @@ using UnityEngine;
         /// <summary>AISACの値を設定する</summary>
         /// <param name="value"></param>
         public void SetAisac(string controlName, float value);
+
+        /// <summary> プレーヤーの3Dポジショニングを解除する </summary>
+        public void Reset3DPlayer();
     }

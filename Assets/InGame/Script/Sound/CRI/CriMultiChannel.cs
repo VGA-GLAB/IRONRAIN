@@ -44,6 +44,7 @@ public class CriMultiChannel : AbstractCriChannel, ICustomChannel
             var temp3dData = new CriAtomEx3dSource();
 
             temp3dData.SetPosition(playSoundWorldPos.x, playSoundWorldPos.y, playSoundWorldPos.z);
+            temp3dData.Update();
             // リスナーとソースを設定
             _player.Set3dListener(_listener);
             _player.Set3dSource(temp3dData);
@@ -79,6 +80,16 @@ public class CriMultiChannel : AbstractCriChannel, ICustomChannel
 
         public void Update3DPos(Vector3 playSoundWorldPos, int index)
         {
+            if (!_cueData.ContainsKey(index))
+            {
+                Debug.LogError($"Index : {index} に対応する音が_cueData内に存在しません(MultiChannel)");
+                return;
+            }
+            if (_player.GetStatus() == CriAtomExPlayer.Status.PlayEnd)
+            {
+                Debug.LogWarning($"{_cueData[index].CueInfo.name} の再生が終了しているため、音源の位置更新を停止しています(MultiChannel)");
+                return;
+            }
             if (index <= -1 || _cueData[index].Source == null) return;
 
             _cueData[index].UpdateCurrentVector(playSoundWorldPos);
@@ -170,5 +181,11 @@ public class CriMultiChannel : AbstractCriChannel, ICustomChannel
         {
             _player.SetAisacControl(controlName, value);
             _player.UpdateAll();
+        }
+        
+        public void Reset3DPlayer()
+        {
+            StopAll();
+            _player.Set3dSource(null);
         }
 }
