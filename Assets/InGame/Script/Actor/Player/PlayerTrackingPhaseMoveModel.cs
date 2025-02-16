@@ -114,6 +114,12 @@ namespace IronRain.Player
                 if (_currentLane - 1 == _params.RestrictionLane) _savePos = _transform.position;
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Evasion");
             }
+
+            if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
+            {
+                //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
+                _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+            }
         }
 
         /// <summary>

@@ -32,6 +32,8 @@ namespace IronRain.Player
         private PlayerEnvroment _playerEnvroment;
         private CancellationToken _rootCancellOnDestroy;
 
+        public int CurrentWeaponIndex => _currentWeaponIndex;
+
         public void SetUp(PlayerEnvroment env, CancellationToken token)
         {
             _playerEnvroment = env;

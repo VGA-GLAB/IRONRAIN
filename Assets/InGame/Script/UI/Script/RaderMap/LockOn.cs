@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using IronRain.Player;
+using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
@@ -8,8 +10,12 @@ public class LockOn : MonoBehaviour
     [SerializeField, Tooltip("視野角の基準点")] private Transform _origin;
     [SerializeField, Tooltip("視野角（度数法）")] private float _sightAngle;
     [SerializeField, Header("ロックオン可能距離")] private float _rockonDistance;
+    [SerializeField, Header("アサルトライフルでロックオン可能な範囲")] private float _arLockOnDirection = 0.3f; // ブラッシュアップで追加
     
     [SerializeField] private RadarMap _radarMap;
+    [SerializeField] private PlayerWeaponController _playerWeaponController;
+
+    public PlayerWeaponController PlayerWeaponController => _playerWeaponController;
     
     /// <summary>現在ロックされているエネミー</summary>
     public GameObject GetRockEnemy { get; private set; }
@@ -27,7 +33,13 @@ public class LockOn : MonoBehaviour
         }
 
         _radarMap.ResetUI();　//全てのエネミーのロックオンを外す
-
+        
+        if (_playerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
+        {
+            AssaultLockOn();　//装備中の武器がアサルトライフルの場合の処理
+            return;
+        }
+        
         var nearEnemy = NearEnemy(); //敵がいなかったら
         
         if (nearEnemy.obj is null)
@@ -37,16 +49,17 @@ public class LockOn : MonoBehaviour
             return;
         }
 
-        AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
-        var rockOnUI = _radarMap._enemyMaps[agentScript.gameObject].gameObject.GetComponent<TargetIcon>();
-        NearestEnemy = nearEnemy.Item2;
-        agentScript.IsRockOn = true;
-        rockOnUI.LockOnUI.SetActive(true); //アイコンをロックオン状態にする
-        
-        if (nearEnemy.obj != GetRockEnemy)　//前のターゲットと違うかを判定
+        TargetIconChange(nearEnemy);
+    }
+    
+    /// <summary>アサルトライフルのロックオン処理</summary>
+    public void AssaultLockOn()
+    {
+        Debug.Log("呼び出された");
+        var nearEnemy = NearEnemy(); //アサルトライフルのロックオンで敵を検索
+        if (nearEnemy.obj != null) 
         {
-            GetRockEnemy = nearEnemy.obj;
-            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");　//ターゲットが切り替わる音を出す
+            TargetIconChange(nearEnemy);
         }
     }
 
@@ -84,7 +97,8 @@ public class LockOn : MonoBehaviour
         float cosHalfSight = Mathf.Cos(_sightAngle / 2 * Mathf.Deg2Rad);  //視野角（の半分）の余弦
         float cosTarget = Vector3.Dot(selfDir, targetDir.normalized); // 自身とターゲットへの向きの内積計算
 
-        return cosTarget > cosHalfSight && targetDis < _rockonDistance; //視野角の判定
+        return _playerWeaponController.WeaponModel.CurrentWeaponIndex == 0 ? cosTarget > _arLockOnDirection : cosTarget > cosHalfSight
+            && targetDis < _rockonDistance; //視野角の判定
     }
 
     /// <summary>Panelを押したときのロックオン処理</summary>
@@ -115,6 +129,22 @@ public class LockOn : MonoBehaviour
 
             CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");　//ターゲットが切り替わる音を出す
             if (_radarMap._isStartTouchPanel) _radarMap._isTouch = true;
+        }
+    }
+    
+    /// <summary>ターゲットアイコンを更新する</summary>
+    private void TargetIconChange((GameObject obj, float) nearEnemy)
+    {
+        AgentScript agentScript = nearEnemy.obj.GetComponent<AgentScript>();
+        var rockOnUI = _radarMap._enemyMaps[agentScript.gameObject].gameObject.GetComponent<TargetIcon>();
+        NearestEnemy = nearEnemy.Item2;
+        agentScript.IsRockOn = true;
+        rockOnUI.LockOnUI.SetActive(true); //アイコンをロックオン状態にする
+        
+        if (nearEnemy.obj != GetRockEnemy)　//前のターゲットと違うかを判定
+        {
+            GetRockEnemy = nearEnemy.obj;
+            CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");　//ターゲットが切り替わる音を出す
         }
     }
 
