@@ -62,20 +62,23 @@ namespace Enemy
             if (_lerp >= Duration + _randomDelay)
             {
                 Vector3 p = Ref.BlackBoard.Slot.Point;
-                p.x = _endX;
+                //p.x = _endX;
+                p.x = Ref.Body.Position.x;
                 Ref.Body.Warp(p);
 
                 UpdateDestination();
 
                 // プレイヤーが移動していない場合はアニメーションさせない。
                 // 移動開始位置と終了位置を比較し、左右に移動する場合は-1もしくは1、移動しない場合は0。
-                _sign = System.Math.Sign(_startX - _endX);
+                // _sign = System.Math.Sign(_startX - _endX);
+                _sign = 0;
             }
             else
             {
                 // x軸の値をLerpで操作することで左右移動する。
                 Vector3 p = Ref.BlackBoard.Slot.Point;
-                p.x = Mathf.Lerp(_startX, _endX, _lerp);
+                //p.x = Mathf.Lerp(_startX, _endX, _lerp);
+                p.x = Ref.Body.Position.x;
                 Ref.Body.Warp(p);
             }
         }
