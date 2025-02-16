@@ -17,29 +17,11 @@ public class LockOn : MonoBehaviour
     [SerializeField] private PlayerWeaponController _playerWeaponController;
     
     private bool _isPanelLocking = false; //ロックオンパネルで敵をロックしているか
-    // ロックオン対象（変更可能）
-    private readonly ReactiveProperty<GameObject> _panelLockedOnEnemy = new ReactiveProperty<GameObject>();
     
     /// <summary>現在ロックされているエネミー</summary>
     public GameObject GetRockEnemy { get; private set; }
     public float NearestEnemy { get; private set; }
     public PlayerWeaponController PlayerWeaponController => _playerWeaponController;
-    
-    private void Start()
-    {
-        // ロックオン対象のアクティブ状態を監視
-        _panelLockedOnEnemy
-            .Where(enemy => enemy != null) // null の監視を防ぐ
-            .Select(enemy => enemy.activeSelf)
-            .DistinctUntilChanged() // 変化があったときのみ実行
-            .Where(isActive => !isActive) // false（非アクティブ）になったら
-            .Subscribe(_ =>
-            {
-                Debug.Log("ロックオン対象が非アクティブになりました！");
-                NearEnemyLockOn();
-            })
-            .AddTo(this); // コンポーネントが破棄されたら自動解除
-    }
 
     /// <summary>エネミー死亡時にGetRockEnemyが自分なら参照を外す処理</summary>
     public void ResetLockOn(AgentScript agent)
@@ -47,7 +29,6 @@ public class LockOn : MonoBehaviour
         if (agent.gameObject == GetRockEnemy)
         {
             GetRockEnemy = null;
-            Debug.Log("リセット");
         }
     }
     
@@ -96,12 +77,11 @@ public class LockOn : MonoBehaviour
         
         if (nearEnemy.obj != null)
         {
-            Debug.Log("アイコンを変える");
             TargetIconChange(nearEnemy); //敵がいたらアイコンを移動させる
         }
         else
         {
-            Debug.Log("リセット");
+            //TODO:リセットのタイミングをStateMachineでの呼び出し以外の方法に変更する
             GetRockEnemy = null;
             _radarMap.ResetUI(); //敵がいなかったらUIを非表示にする
         }
@@ -118,7 +98,6 @@ public class LockOn : MonoBehaviour
         {
             if (!IsVisible(_radarMap.Enemies[i].gameObject)) continue; //視野角内にいなかったら次
 
-            Debug.Log("通った" + _radarMap.Enemies[i].gameObject.name);
             float distance = Vector3.Distance(_radarMap.Enemies[i].transform.position, _radarMap._playerTransform.transform.position);
             if (distance < nearDistance)
             {
@@ -155,11 +134,9 @@ public class LockOn : MonoBehaviour
         {
             _radarMap.ResetUI(); //全てのエネミーのロックオンを外す
             _isPanelLocking = false; //パネルでのロックオン状態を解除
-            _panelLockedOnEnemy.Value = null;
         }
         else //まだロックオンされていなかった場合
         {
-            Debug.Log("パネルタッチロックオン");
             if (!IsVisible(enemyObject)) //視野角内にあるかを判定する
                 return;
 
@@ -182,8 +159,6 @@ public class LockOn : MonoBehaviour
             
             //タッチパネルロックオンを記録する
             _isPanelLocking = true;
-            _panelLockedOnEnemy.Value = enemyAgent.gameObject;
-            Debug.Log("ロック中の敵" + _panelLockedOnEnemy.Value);
         }
     }
     
