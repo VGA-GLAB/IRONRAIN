@@ -16,7 +16,7 @@ public class RadarMapController_BossBattle : MonoBehaviour
 
     [SerializeField] private GameObject _bossGameObject;
     [NonSerialized] public AgentScript _bossAgent; //ボスのアイコン
-     public List<AgentScript> _funnels = new(); //ファンネルのアイコン
+     public List<Transform> _funnels = new(); //ファンネルのアイコン
 
     private RadarMap _radarMap;
 
@@ -84,13 +84,14 @@ public class RadarMapController_BossBattle : MonoBehaviour
 
         for (int i = 0; i < _funnels.Count; i++)
         {
+            AgentScript agentScript = _funnels[i].GetComponent<AgentScript>();
             Vector3 funnelDir = _funnels[i].transform.position - _radarMap.PlayerTransform.position;
             funnelDir = Quaternion.Inverse(_radarMap.PlayerTransform.rotation) * funnelDir;
 
             // 各ファンネルの水平位置を中央に対して間隔を持たせて配置
             float xOffset = -totalWidth / 2 + i * _widthInterval;
-
-            _funnels[i].EnemyIconRectTransform.anchoredPosition3D = new Vector3(
+            
+            agentScript.EnemyIconRectTransform.anchoredPosition3D = new Vector3(
                 funnelDir.x * _radarMap.Radius + _radarMap.Offset.x + xOffset,
                 funnelDir.z * _radarMap.Radius + _radarMap.Offset.y, _radarMap.Offset.z);
         }

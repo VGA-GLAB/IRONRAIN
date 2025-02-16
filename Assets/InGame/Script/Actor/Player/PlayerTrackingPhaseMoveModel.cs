@@ -70,7 +70,7 @@ namespace IronRain.Player
         private void Move()
         {
             ThrusterMove();
-
+            
             if (!_playerEnvroment.PlayerState.HasFlag(PlayerStateType.NonMoveForward))
             {
                 _rb.velocity = _transform.forward * _params.Speed * ProvidePlayerInformation.TimeScale;
@@ -103,6 +103,12 @@ namespace IronRain.Player
                     _savePos = _transform.position;
                 }
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Evasion");
+                
+                if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
+                {
+                    //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
+                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+                }
             }
             //右スラスター
             else if (_rightController.ControllerDir.x == 1)
@@ -113,12 +119,11 @@ namespace IronRain.Player
                 _currentLane++;
                 if (_currentLane - 1 == _params.RestrictionLane) _savePos = _transform.position;
                 CriAudioManager.Instance.SE.Play3D(_playerEnvroment.PlayerTransform.position, "SE", "SE_Evasion");
-            }
-
-            if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
-            {
-                //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
-                _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+                if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
+                {
+                    //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
+                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+                }
             }
         }
 

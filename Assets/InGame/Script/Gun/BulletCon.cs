@@ -66,26 +66,10 @@ namespace IronRain.Player
         private void Update()
         {
             ///一旦完全追従に
-            /// ブラッシュアップ版での変更：武器がアサルトライフルの時は正面に銃弾を飛ばす
-            if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf && _weaponType != PlayerWeaponType.AssaultRifle)
+            if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf )
             {
                 transform.LookAt(_shootingTarget.position + _offset);
                 _rb.velocity = transform.forward * GetSpeed() * ProvidePlayerInformation.TimeScale;
-            }
-            else if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf && _weaponType == PlayerWeaponType.AssaultRifle)
-            {
-                if (Mathf.Abs(_horizontalDot) < _arLockOnDirection)
-                {
-                    // 範囲内にいる場合、ロックオンを行う
-                    transform.LookAt(_shootingTarget.position + _offset);
-                    _rb.velocity = transform.forward * GetSpeed() * ProvidePlayerInformation.TimeScale;
-                }
-                else
-                {
-                    // 範囲内にいない場合、銃弾は正面に飛ばす
-                    _rb.velocity = _shotDir * GetSpeed() * ProvidePlayerInformation.TimeScale;
-                }
-                
             }
             else if (_shootingTarget && _lockOnEnemy && !_lockOnEnemy.activeSelf)
             {

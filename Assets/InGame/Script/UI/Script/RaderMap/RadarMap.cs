@@ -26,7 +26,7 @@ public class RadarMap : MonoBehaviour
     [SerializeField, Header("ボス戦でのレーダーの端までの長さ")] private float _bossRaderLength = 120f;
 
     public Dictionary<GameObject, Image> _enemyMaps = new();
-    public List<AgentScript> Enemies = new();
+    public List<Transform> Enemies = new();
 
     [SerializeField] private LockOn _lockOn;
     private RadarMapController_BossBattle _bossRadarMapCtrl;
@@ -60,10 +60,11 @@ public class RadarMap : MonoBehaviour
     {
         for (int i = 0; i < Enemies.Count; i++)
         {
+            AgentScript agentScript = Enemies[i].GetComponent<AgentScript>();
             Vector3 enemyDir = Enemies[i].transform.position - _playerTransform.position; //敵と自身のベクトルを求める
             enemyDir = Quaternion.Inverse(_playerTransform.rotation) * enemyDir; // ベクトルをプレイヤーに合わせて回転
             enemyDir *= _scaleFactor; //縮尺に合わせる
-            Enemies[i].EnemyIconRectTransform.anchoredPosition3D = new Vector3(
+            agentScript.EnemyIconRectTransform.anchoredPosition3D = new Vector3(
                 enemyDir.x * _radius * horizontalMag + _offset.x,
                 enemyDir.z * _radius * verticalMag + _offset.y, _offset.z);
         }

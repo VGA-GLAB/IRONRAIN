@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IronRain.Player;
 using UniRx;
@@ -44,14 +45,15 @@ public class LockOnIcon : MonoBehaviour
     /// </summary>
     private void SubscribeToTargetChanges()
     {
-        Observable
-            .EveryUpdate()
-            .Where(_ => _lockOn.GetRockEnemy != null)
-            .Subscribe(_ => _currentTarget.Value = _lockOn.GetRockEnemy.transform)
+        _lockOn
+            .ObserveEveryValueChanged(lockOn => lockOn.GetRockEnemy)
+            .Subscribe(target => _currentTarget.Value = target?.transform)
             .AddTo(this);
 
         //ターゲットが変更されたときにアイコンの更新処理を呼び出す
-        _currentTarget.Subscribe(_ => UpdateLockOnIcons()).AddTo(this);
+        _currentTarget
+            .Subscribe(_ => UpdateLockOnIcons())
+            .AddTo(this);
     }
 
     /// <summary>
@@ -59,26 +61,29 @@ public class LockOnIcon : MonoBehaviour
     /// </summary>
     private void UpdateLockOnIcons()
     {
-        if (_lockOn.GetRockEnemy != null)
+        // ロックオン中の敵がいない場合、アイコンを全て非表示にする
+        if (_lockOn.GetRockEnemy == null)
         {
-            Transform target = _lockOn.GetRockEnemy.transform;
-            
-            ReleaseLockOnIcons();
-            
-            // プールから取り出す
-            LockOnIconView icon = _iconPool.Get();
-            _activeIcons.Add(icon);
-            
-            // アイコンの座標をセットする
-            icon.transform.SetParent(target);
-            icon.transform.localPosition = Vector3.zero;
-            icon.transform.localScale = Vector3.one;
-            
-            icon.Initialize();
-            
-            // 敵死亡時のイベントを購読
-            icon.OnRelease += ReleaseLockOnIcons;
+            ReleaseLockOnIconIcons();
+            return;
         }
+        
+        ReleaseLockOnIconIcons();
+
+        // プールから取り出す
+        LockOnIconView icon = _iconPool.Get();
+        _activeIcons.Add(icon);
+
+        // アイコンの座標をセットする
+        icon.transform.SetParent(_lockOn.GetRockEnemy.transform);
+        icon.transform.localPosition = Vector3.zero;
+        icon.transform.localScale = Vector3.one;
+
+        icon.Initialize();
+
+        // 敵死亡時のイベントを購読
+        icon.OnRelease += ReleaseLockOnIcons;
+
     }
 
     /// <summary>
@@ -94,7 +99,7 @@ public class LockOnIcon : MonoBehaviour
     /// <summary>
     /// 表示中の全てのアイコンをプールに戻す処理
     /// </summary>
-    private void ReleaseLockOnIcons()
+    private void ReleaseLockOnIconIcons()
     {
         foreach (var icon in _activeIcons)
         {
