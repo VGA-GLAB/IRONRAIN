@@ -149,7 +149,8 @@ public class LockOn : MonoBehaviour
     public void PanelRock(GameObject enemyObject)
     {
         var enemyAgent = enemyObject.GetComponent<AgentScript>();
-
+        if (_radarMap._isStartTouchPanel) _radarMap._isTouch = true; //タッチパネルシーケンスを進める処理
+        
         if (enemyAgent.IsRockOn) //既にロックオンされていた場合
         {
             _radarMap.ResetUI(); //全てのエネミーのロックオンを外す
@@ -177,7 +178,7 @@ public class LockOn : MonoBehaviour
             NearestEnemy = Vector3.Distance(enemyAgent.gameObject.transform.position, _radarMap._playerTransform.transform.position);
 
             CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Targeting");　//ターゲットが切り替わる音を出す
-            if (_radarMap._isStartTouchPanel) _radarMap._isTouch = true;
+            // if (_radarMap._isStartTouchPanel) _radarMap._isTouch = true;
             
             //タッチパネルロックオンを記録する
             _isPanelLocking = true;
