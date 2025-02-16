@@ -2,6 +2,7 @@
 using Oculus.Interaction;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 両手の人差し指でパネルを突く前提。
@@ -47,11 +48,13 @@ public class LockOnSystem : MonoBehaviour
         //マウス用のタッチ処理
         if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock)
         {
+            _targets = _radarMap.Enemies;
+            
             //RadarMap radarMap = FindObjectOfType<RadarMap>();
             GameObject nowLockEnemy = _radarMap.LockOn.GetRockEnemy;
             // ToDo:GameObjectから直接型指定 
             GameObject lockOnEnemy = null;
-            foreach(AgentScript enemy in _radarMap.Enemies)
+            foreach(Transform enemy in _radarMap.Enemies)
             {
                 if(nowLockEnemy != enemy.gameObject)
                 {
@@ -70,6 +73,8 @@ public class LockOnSystem : MonoBehaviour
 
         if(_isButtonSelect)
         {
+            _targets = _radarMap.Enemies;
+            
             // ボタン操作で全てをロックする
             _isMouseMultiLock = false;
             foreach (Transform targetTransform in _targets)
@@ -110,6 +115,8 @@ public class LockOnSystem : MonoBehaviour
     // この処理はマルチロック中も呼び出されているので注意。
     private void Touch()
     {
+        _targets = _radarMap.Enemies;
+        
         // パネルに触れた時の音
         CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Panel_Tap");
 
@@ -149,6 +156,8 @@ public class LockOnSystem : MonoBehaviour
     /// <summary>マルチロックが終わるまで待つ。タッチパネルを指でなぞり、触れたUIに対応する敵をロックオンする。</summary>
     public async UniTask<List<GameObject>> MultiLockOnAsync(CancellationToken token)
     {
+        _targets = _radarMap.Enemies;
+        
         //１回目のマルチロックオン時のみ呼び出す
         if(!_isMultiLock)
         {
