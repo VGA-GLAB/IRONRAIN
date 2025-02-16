@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Enemy;
+using UnityEngine.Serialization;
 
 namespace IronRain.Player
 {
@@ -18,7 +19,8 @@ namespace IronRain.Player
         [SerializeField] private VfxEffect _effect;
         [SerializeField] private SphereCollider _sphereCollider;
         [SerializeField] private Vector3 _offset;
-        [SerializeField] private float _arLockOnDirection = 3f; // アサルトライフルでロックオン可能な範囲
+        [Tooltip("コライダーを適用しておく時間")]
+        [SerializeField] private float _useColliderTime = 0.7f;
         [Tooltip("ロックオンしている敵")]
         private GameObject _lockOnEnemy;
 
@@ -92,6 +94,7 @@ namespace IronRain.Player
                 effect.gameObject.transform.position = other.ClosestPoint(this.transform.position);
                 effect.SetUp(_pool);
                 StopAllCoroutines();
+                _sphereCollider.enabled = true; //コライダーを戻しておく
                 _pool.ReleaseBullet(this);
             }
         }
@@ -134,9 +137,14 @@ namespace IronRain.Player
 
         private IEnumerator BulletRelese()
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(_useColliderTime);
+
+            _sphereCollider.enabled = false; //一定時間経過でコライダーを消す（未登場の敵に当たらないように）
+            
+            yield return new WaitForSeconds(2 - _useColliderTime);
             if (enabled)
             {
+                _sphereCollider.enabled = true; //コライダーを戻しておく
                 _pool.ReleaseBullet(this);
             }
         }
