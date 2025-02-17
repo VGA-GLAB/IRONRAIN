@@ -107,7 +107,7 @@ namespace IronRain.Player
                 if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
                 {
                     //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
-                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn(nextPoint);
                 }
             }
             //右スラスター
@@ -122,7 +122,7 @@ namespace IronRain.Player
                 if (_playerEnvroment.RaderMap.LockOn.PlayerWeaponController.WeaponModel.CurrentWeaponIndex == 0)
                 {
                     //アサルトライフルの場合、正面に敵がいるか検索してロックオンを更新する
-                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn();
+                    _playerEnvroment.RaderMap.LockOn.AssaultLockOn(nextPoint);
                 }
             }
         }
