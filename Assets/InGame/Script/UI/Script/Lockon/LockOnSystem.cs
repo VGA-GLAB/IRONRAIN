@@ -48,33 +48,40 @@ public class LockOnSystem : MonoBehaviour
         //マウス用のタッチ処理
         if (Input.GetKeyDown(KeyCode.N) && !_isMouseMultiLock)
         {
-            _targets = _radarMap.Enemies;
-            
-            //RadarMap radarMap = FindObjectOfType<RadarMap>();
             GameObject nowLockEnemy = _radarMap.LockOn.GetRockEnemy;
-            // ToDo:GameObjectから直接型指定 
             GameObject lockOnEnemy = null;
-            foreach(Transform enemy in _radarMap.Enemies)
+
+            foreach (Transform enemy in _radarMap.Enemies)
             {
-                if(nowLockEnemy != enemy.gameObject)
+                if (nowLockEnemy != enemy.gameObject)
                 {
                     lockOnEnemy = enemy.gameObject;
                     break;
                 }
             }
-            if(lockOnEnemy != null)
+
+            if (lockOnEnemy != null)
             {
                 _radarMap.LockOn.PanelRock(lockOnEnemy);
-            }  
+            }
         }
 
-        if (!Input.GetKeyDown(KeyCode.M) || !_isMultiLock)
-            return;
+        /*
+        Debug.Log("マルチロックオンシーケンス中か" + _isMultiLock);
+        if (!_isMultiLock)
+        {
+            Debug.Log("マルチロックオン中じゃない");
+            return; //マルチロックシーケンス中でなければ以降の処理は行わない
+        }
 
-        if(_isButtonSelect)
+        Debug.Log("isMultiLockはtrueになっている");
+
+        //マルチロックオンの処理
+        //Mキーが押されたタイミングで処理が行われる
+        if (Input.GetKeyDown(KeyCode.M) && _isButtonSelect)
         {
             _targets = _radarMap.Enemies;
-            
+
             // ボタン操作で全てをロックする
             _isMouseMultiLock = false;
             foreach (Transform targetTransform in _targets)
@@ -86,11 +93,14 @@ public class LockOnSystem : MonoBehaviour
             }
             //ButtonAllLockOn();
         }
-        else
+        else if (Input.GetKeyDown(KeyCode.M) && !_isButtonSelect)
         {
             // ボタンでマルチロック判定をオンにする
-            _isButtonSelect = true; 
+            _isButtonSelect = true;
+            Debug.Log("マルチロック判定オン");
         }
+
+        */
     }
 
     private void LateUpdate()
@@ -156,16 +166,18 @@ public class LockOnSystem : MonoBehaviour
     /// <summary>マルチロックが終わるまで待つ。タッチパネルを指でなぞり、触れたUIに対応する敵をロックオンする。</summary>
     public async UniTask<List<GameObject>> MultiLockOnAsync(CancellationToken token)
     {
-        _targets = _radarMap.Enemies;
-        
         //１回目のマルチロックオン時のみ呼び出す
         if(!_isMultiLock)
         {
             _isMultiLock = true;
+            
             // パネルを指で突くまで待つ。
-            await UniTask.WaitUntil(() => _isSelect || _isButtonSelect, cancellationToken: token);
+            await UniTask.WaitUntil(() => _isSelect || Input.GetKeyDown(KeyCode.M), cancellationToken: token);
+            
+            Debug.Log("パネルを指でついた");
             _isButtonSelect = true;
             // Targetの数は実行中に増減するのでマルチロックする直前にリスト化する。
+            _targets = _radarMap.Enemies;
             AllTargets(_targets, _parent);
             // パネルをなぞっている間に接触したTargetを一時的に保持しておくコレクション。
             _temp.Clear();
@@ -173,10 +185,26 @@ public class LockOnSystem : MonoBehaviour
             _lineRenderer.positionCount = 0;
             _isMouseMultiLock = true;
         }
+        else
+        {
+            _targets = _radarMap.Enemies;
+
+            // ボタン操作で全てをロックする
+            _isMouseMultiLock = false;
+            foreach (Transform targetTransform in _targets)
+            {
+                CriAudioManager.Instance.CockpitSE.Play3D(_soundTransform.position, "SE", "SE_Lockon");
+                _temp.Add(targetTransform);
+                TargetIcon enemyUI = targetTransform.GetComponent<TargetIcon>();
+                enemyUI.LockOnUI.SetActive(true);
+            }
+            //ButtonAllLockOn();
+        }
 
         while (_isSelect)
         {
             await UniTask.Yield();
+            
             // カーソルの位置を指先に合わせる。
             FingertipCursor(_fingertip, _cursor);
             Transform minDisTarget = null;
@@ -216,6 +244,7 @@ public class LockOnSystem : MonoBehaviour
         {
             // ビジーウェイティングを避けるために、ここでディレイを導入することを検討
             await UniTask.Delay(500, cancellationToken: token);
+            
             // 再度ロックオンのロジックを実行
             await MultiLockOnAsync(token);
         }
@@ -230,7 +259,7 @@ public class LockOnSystem : MonoBehaviour
     /// <summary>LineRendererをリセットする</summary>
     public void FinishMultiLock()
     {
-        _isMultiLock = false;
+        //_isMultiLock = false;
         _lineRenderer.positionCount = 0;
         _temp.Clear();
     }

@@ -80,9 +80,9 @@ public class RadarMap : MonoBehaviour
 
         //ボス戦用のレーダーマップのクラスを使えるようにする
         _bossRadarMapCtrl.enabled = true;
-        _bossRadarMapCtrl.BossBattleStart();
+        _bossRadarMapCtrl.BossBattleRadarMapInitialize();
     }
-
+    
     /// <summary>すべてのUIをリセットする</summary>
     public void ResetUI()
     {

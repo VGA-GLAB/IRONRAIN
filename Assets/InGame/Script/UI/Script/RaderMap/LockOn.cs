@@ -2,6 +2,7 @@
 using IronRain.Player;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class LockOn : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class LockOn : MonoBehaviour
     
     [SerializeField, Tooltip("視野角の基準点")] private Transform _origin;
     [SerializeField, Tooltip("視野角（度数法）")] private float _sightAngle;
+    [SerializeField, Header("アサルトライフルでロックオン可能な視野角（度数法）")] private float _arLockOnAngle = 30f;
     [SerializeField, Header("ロックオン可能距離")] private float _rockonDistance;
-    [SerializeField, Header("アサルトライフルでロックオン可能な範囲")] private float _arLockOnDirection = 0.3f;
     
     [SerializeField] private RadarMap _radarMap;
     [SerializeField] private PlayerWeaponController _playerWeaponController;
@@ -148,7 +149,7 @@ public class LockOn : MonoBehaviour
         {
             var targetARDir = enemy.transform.position - _nextPos; //ターゲットまでのベクトルと距離
             var targetARDis = targetARDir.magnitude;
-            float cosARHalfSight = Mathf.Cos(_arLockOnDirection / 2 * Mathf.Deg2Rad); //視野角（の半分）の余弦
+            float cosARHalfSight = Mathf.Cos(_arLockOnAngle / 2 * Mathf.Deg2Rad); //視野角（の半分）の余弦
             float cosARTarget = Vector3.Dot(selfDir, targetARDir.normalized); // 自身とターゲットへの向きの内積計算
             
             return cosARTarget > cosARHalfSight && targetARDis < _rockonDistance; //視野角の判定
