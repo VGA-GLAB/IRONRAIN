@@ -70,7 +70,7 @@ namespace Enemy
 
                 // プレイヤーが移動していない場合はアニメーションさせない。
                 // 移動開始位置と終了位置を比較し、左右に移動する場合は-1もしくは1、移動しない場合は0。
-                // _sign = System.Math.Sign(_startX - _endX);
+                //_sign = System.Math.Sign(_startX - _endX);
                 _sign = 0;
             }
             else
@@ -94,6 +94,16 @@ namespace Enemy
             _blend = Mathf.Clamp(_blend, -1, 1);
             _blend = Mathf.MoveTowards(_blend, _sign, dt * Speed);
             LeftRightMoveAnimation(_blend);
+
+            //敵の回転処理
+            // 角度の変化が小さい場合は処理をスキップ
+            float angleDifference = Vector3.Angle(Ref.Body.Forward, Ref.BlackBoard.PlayerDirection);
+            
+            if (angleDifference < 1.0f) // 1度未満なら無視（適宜調整）
+            {
+                return;
+            }
+            Ref.Body.LookForward(Ref.BlackBoard.PlayerDirection);
         }
 
         // 前後移動のアニメーション。
