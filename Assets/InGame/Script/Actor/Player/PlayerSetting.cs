@@ -24,7 +24,7 @@ namespace IronRain.Player
         {
             public float Speed => _speed;
             public float ThrusterMoveNum => _thrusterMoveNum;
-            public int ThrusterMoveTime => _thrusterMoveTime;
+            public float ThrusterMoveTime => _thrusterMoveTime;
             public int RestrictionLane => _restrictionLane;
             public int ForcingMoveLane => _forcingMoveLane;
             //public float ReturnLaneStrengthMagnification => _returnLaneStrengthMagnification;
@@ -58,7 +58,7 @@ namespace IronRain.Player
             [Header("１回のスラスターの移動量")]
             [SerializeField] private float _thrusterMoveNum;
             [Header("何秒間でスラスターで移動するか")]
-            [SerializeField] private int _thrusterMoveTime;
+            [SerializeField] private float _thrusterMoveTime;
             [Header("どのレーンから制限をかけるか")]
             [SerializeField] private int _restrictionLane;
             [Header("どのレーンから強制移動を始めるか")]
