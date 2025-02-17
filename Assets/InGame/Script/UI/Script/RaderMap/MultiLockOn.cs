@@ -8,8 +8,7 @@ public class MultiLockOn : MonoBehaviour
 {
     [SerializeField] private RadarMap _radarMap;
     public List<GameObject> MultiLockEnemies { get; } = new(); //マルチロック時のエネミー 
-
-
+    
     public void LockOn(List<GameObject> enemies)
     {
         _radarMap.ResetUI(); //全てのエネミーのロックオンを外す
@@ -18,11 +17,7 @@ public class MultiLockOn : MonoBehaviour
 
         foreach (var enemy in enemies)
         {
-            if (!_radarMap._enemyMaps.ContainsKey(enemy))
-            {
-                continue;
-            }
-            else
+            if (_radarMap._enemyMaps.ContainsKey(enemy))
             {
                 MultiLockEnemies.Add(enemy);
                 AgentScript agentScript = enemy.GetComponent<AgentScript>(); 

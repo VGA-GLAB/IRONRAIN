@@ -9,7 +9,7 @@ public class TargetIcon : MonoBehaviour
     private GameObject _enemyIcon;
     private GameObject _lockOnUI;
 
-    public GameObject LockOnUI { get { return _lockOnUI; } }  
+    public GameObject LockOnUI => _lockOnUI;
     public GameObject EnemyIcon { get; set; }
 
     private void Awake()

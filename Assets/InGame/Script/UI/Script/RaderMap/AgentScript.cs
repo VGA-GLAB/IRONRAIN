@@ -41,13 +41,13 @@ public class AgentScript : MonoBehaviour
             EnemyIconRectTransform = enemyIcon.gameObject.GetComponent<RectTransform>();
             var uiObj = enemyIcon.gameObject.GetComponent<TargetIcon>();
             uiObj.EnemyIcon = gameObject;
-
+            RadarMap.LockOn.AssaultLockOn();
             
             if (!RadarMap._enemyMaps.ContainsKey(gameObject)) //自身が_enemyMapsのキーになかったら
             {
                 RadarMap._enemyMaps.Add(gameObject, enemyIcon);
                 EnemyIconRectTransform = enemyIcon.GetComponent<RectTransform>();
-                RadarMap.Enemies.Add(gameObject.GetComponent<AgentScript>());
+                RadarMap.Enemies.Add(gameObject.GetComponent<Transform>());
             }
             
         }
@@ -63,8 +63,13 @@ public class AgentScript : MonoBehaviour
             {
                 Destroy(RadarMap._enemyMaps[gameObject].gameObject);
                 RadarMap._enemyMaps.Remove(gameObject);
-                RadarMap.Enemies.Remove(gameObject.GetComponent<AgentScript>());
-                RadarMap.BossRadarMap._funnels.Remove(gameObject.GetComponent<AgentScript>());
+                RadarMap.Enemies.Remove(gameObject.GetComponent<Transform>());
+                RadarMap.BossRadarMap._funnels.Remove(gameObject.GetComponent<Transform>());
+                
+                //ロックオンの処理
+                RadarMap.LockOn.ResetLockOn(this);
+                RadarMap.LockOn.AssaultLockOn();
+                RadarMap.LockOn.NearEnemyLockOn();
             }
         }
     }

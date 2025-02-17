@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Enemy;
+using UnityEngine.Serialization;
 
 namespace IronRain.Player
 {
@@ -18,6 +19,8 @@ namespace IronRain.Player
         [SerializeField] private VfxEffect _effect;
         [SerializeField] private SphereCollider _sphereCollider;
         [SerializeField] private Vector3 _offset;
+        [Tooltip("コライダーを適用しておく時間")]
+        [SerializeField] private float _useColliderTime = 0.7f;
         [Tooltip("ロックオンしている敵")]
         private GameObject _lockOnEnemy;
 
@@ -27,6 +30,7 @@ namespace IronRain.Player
         private PlayerWeaponType _weaponType;
         private ObjectPool _pool;
         private bool _isBossBattle;
+        private float _horizontalDot; // トリガーされたときの銃弾とエネミーの座標の内積
 
         public void SetUp(GameObject enemy, int damege, Vector3 shotDir, PlayerWeaponType weaponType, ObjectPool pool, bool isBossBattle)
         {
@@ -42,6 +46,11 @@ namespace IronRain.Player
                 _shootingTarget = shootingTarget;
             }
 
+            if (_lockOnEnemy != null)
+            {
+                Vector3 toEnemy = _lockOnEnemy.transform.position - transform.position;
+                _horizontalDot = Vector3.Dot(transform.right, toEnemy.normalized); 
+            }
         }
 
         private void Start()
@@ -59,7 +68,7 @@ namespace IronRain.Player
         private void Update()
         {
             ///一旦完全追従に
-            if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf)
+            if (_shootingTarget && _lockOnEnemy && _lockOnEnemy.activeSelf )
             {
                 transform.LookAt(_shootingTarget.position + _offset);
                 _rb.velocity = transform.forward * GetSpeed() * ProvidePlayerInformation.TimeScale;
@@ -85,6 +94,7 @@ namespace IronRain.Player
                 effect.gameObject.transform.position = other.ClosestPoint(this.transform.position);
                 effect.SetUp(_pool);
                 StopAllCoroutines();
+                _sphereCollider.enabled = true; //コライダーを戻しておく
                 _pool.ReleaseBullet(this);
             }
         }
@@ -127,9 +137,14 @@ namespace IronRain.Player
 
         private IEnumerator BulletRelese()
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(_useColliderTime);
+
+            _sphereCollider.enabled = false; //一定時間経過でコライダーを消す（未登場の敵に当たらないように）
+            
+            yield return new WaitForSeconds(2 - _useColliderTime);
             if (enabled)
             {
+                _sphereCollider.enabled = true; //コライダーを戻しておく
                 _pool.ReleaseBullet(this);
             }
         }
