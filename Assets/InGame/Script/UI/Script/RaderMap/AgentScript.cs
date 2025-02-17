@@ -64,7 +64,7 @@ public class AgentScript : MonoBehaviour
                 Destroy(RadarMap._enemyMaps[gameObject].gameObject);
                 RadarMap._enemyMaps.Remove(gameObject);
                 RadarMap.Enemies.Remove(gameObject.GetComponent<Transform>());
-                RadarMap.BossRadarMap._funnels.Remove(gameObject.GetComponent<Transform>());
+                RadarMap.BossRadarMap.Funnels.Remove(gameObject.GetComponent<Transform>());
                 
                 //ロックオンの処理
                 RadarMap.LockOn.ResetLockOn(this);

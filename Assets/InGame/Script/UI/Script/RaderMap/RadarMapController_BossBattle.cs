@@ -16,7 +16,10 @@ public class RadarMapController_BossBattle : MonoBehaviour
 
     [SerializeField] private GameObject _bossGameObject;
     [NonSerialized] public AgentScript _bossAgent; //ボスのアイコン
-    public List<Transform> _funnels = new(); //ファンネルのアイコン
+
+    private float _initialTotalWidth; //ドローン展開時のTotalWidth
+    private Dictionary<Transform, float> _initialXOffsets = new Dictionary<Transform, float>();
+    public List<Transform> Funnels = new(); //ファンネルのアイコン
 
     private RadarMap _radarMap;
     private ReactiveProperty<int> _enemyCountProp = new ReactiveProperty<int>(); //レーダーマップのエネミーリストの要素数
@@ -30,7 +33,7 @@ public class RadarMapController_BossBattle : MonoBehaviour
         
         _enemyCountProp.Value = _radarMap.Enemies.Count;
 
-        if (_funnels.Count > 0 && _bossGameObject != null)
+        if (Funnels.Count > 0 && _bossGameObject != null)
         {
             FunnelIconCtrl();
         }
@@ -71,8 +74,17 @@ public class RadarMapController_BossBattle : MonoBehaviour
         {
             if (enemy.name != "Boss_8055_Boss_Boss") //ボス以外（ファンネルを取得）
             {
-                _funnels.Add(enemy);
+                Funnels.Add(enemy);
             }
+        }
+        
+        int funnelCount = Funnels.Count - 1;
+        _initialTotalWidth =  funnelCount * _widthInterval; //初期のTotalWidthを保存しておく
+        for (int i = 0; i < Funnels.Count; i++)
+        {
+            //float xOffset = -_initialTotalWidth / 2 + i * _widthInterval;
+            float xOffset = (i - funnelCount / 2.0f) * _widthInterval;
+            _initialXOffsets[Funnels[i]] = xOffset;
         }
     }
 
@@ -93,16 +105,14 @@ public class RadarMapController_BossBattle : MonoBehaviour
     /// </summary>
     private void FunnelIconCtrl()
     {
-        float totalWidth = (_funnels.Count - 1) * _widthInterval;
-
-        for (int i = 0; i < _funnels.Count; i++)
+        for (int i = 0; i < Funnels.Count; i++)
         {
-            AgentScript agentScript = _funnels[i].GetComponent<AgentScript>();
-            Vector3 funnelDir = _funnels[i].transform.position - _radarMap.PlayerTransform.position;
+            AgentScript agentScript = Funnels[i].GetComponent<AgentScript>();
+            Vector3 funnelDir = Funnels[i].transform.position - _radarMap.PlayerTransform.position;
             funnelDir = Quaternion.Inverse(_radarMap.PlayerTransform.rotation) * funnelDir;
             
             // 各ファンネルの水平位置を中央に対して間隔を持たせて配置
-            float xOffset = -totalWidth / 2 + i * _widthInterval;
+            float xOffset = _initialXOffsets.ContainsKey(Funnels[i]) ? _initialXOffsets[Funnels[i]] : 0f;
             
             agentScript.EnemyIconRectTransform.anchoredPosition3D = new Vector3(
                 -(funnelDir.x * _radarMap.Radius + _radarMap.Offset.x + xOffset),
