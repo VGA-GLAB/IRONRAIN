@@ -45,6 +45,7 @@ public class AbstractCriChannel
         _tokenSource.Cancel();
         _volume.OnVolumeChanged -= UpdateVolume;
         _masterVolume.OnVolumeChanged -= UpdateMasterVolume;
+        _player.Set3dSource(null);
         _player.Dispose();
 
         foreach (var source in _3dSources)
@@ -129,7 +130,7 @@ public class AbstractCriChannel
             return;
         }
 
-        while (_cueData[index].Playback.GetStatus() == CriAtomExPlayback.Status.Playing)
+        while (_cueData[index].Playback.GetStatus() != CriAtomExPlayback.Status.Playing)
         {
             await UniTask.WaitForSeconds(_cueData[index].CueInfo.length / 1000F,
                 cancellationToken: _cueData[index].CancellationTokenSource.Token);
